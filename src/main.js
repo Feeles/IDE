@@ -20,5 +20,5 @@ const h4p = (...args) =>
 h4p.init = init;
 h4p.Feeles = Feeles;
 
-// export
-module.exports = h4p;
+// Global export
+window[EXPORT_VAR_NAME] = h4p;

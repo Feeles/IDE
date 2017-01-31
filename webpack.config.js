@@ -13,7 +13,6 @@ const CORE_CDN_PREFIX = 'https://embed.hackforplay.xyz/open-source/core/' + core
 const config = {
   entry: {
     h4p: [
-      'babel-polyfill',
       'whatwg-fetch',
       './src/main'
     ],
@@ -21,27 +20,25 @@ const config = {
   output: {
     path: __dirname + '/dist/',
     filename: '[name].js',
-    library: exportVarName,
-    libraryTarget: 'umd',
   },
   module: {
     loaders: [
       {
         test: /\.(jsx?)$/,
-        loaders: ["babel"],
+        loaders: ["babel-loader"],
         exclude: /node_modules|lib/,
       },
       {
         test: /\.css$/,
-        loaders: ["style", "css"]
+        loaders: ["style-loader", "css-loader"]
       },
       {
         test: /\.html$/,
-        loaders: ["handlebars"]
+        loaders: ["handlebars-loader"]
       },
       {
         test: /\.json$/,
-        loaders: ["json"]
+        loaders: ["json-loader"]
       }
     ]
   },
