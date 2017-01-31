@@ -27,20 +27,20 @@ const config = {
     loaders: [
       {
         test: /\.(jsx?)$/,
-        loaders: ["babel"],
+        loaders: ["babel-loader"],
         exclude: /node_modules|lib/,
       },
       {
         test: /\.css$/,
-        loaders: ["style", "css"]
+        loaders: ["style-loader", "css-loader"]
       },
       {
         test: /\.html$/,
-        loaders: ["handlebars"]
+        loaders: ["handlebars-loader"]
       },
       {
         test: /\.json$/,
-        loaders: ["json"]
+        loaders: ["json-loader"]
       }
     ]
   },
