@@ -20,8 +20,6 @@ const config = {
   output: {
     path: __dirname + '/dist/',
     filename: '[name].js',
-    library: exportVarName,
-    libraryTarget: 'umd',
   },
   module: {
     loaders: [
