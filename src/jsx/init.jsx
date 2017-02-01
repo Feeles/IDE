@@ -14,10 +14,8 @@ export default (props) => {
     }
   });
 
-  return Array.from(
-    document.querySelectorAll(`.${CSS_PREFIX}app`)
-  ).map(appRoot => {
-
+  const appRoot = document.querySelector(`.${CSS_PREFIX}app`);
+  if (appRoot) {
     const files = [
       ...document.querySelectorAll('script' + appRoot.getAttribute('data-target'))
     ].map(makeFromElement);
@@ -26,6 +24,6 @@ export default (props) => {
       <RootComponent files={files} rootElement={appRoot} {...props} />,
       appRoot
     );
-  });
+  }
 
 };
