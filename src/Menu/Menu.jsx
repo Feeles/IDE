@@ -45,6 +45,11 @@ const getStyles = (props, context) => {
     popoutIcon: {
       transform: isPopout ? 'rotate(180deg)' : '',
     },
+    projectName: {
+      color: palette.alternateTextColor,
+      fontSize: '.8rem',
+      fontWeight: 600,
+    },
   };
 };
 
@@ -63,6 +68,7 @@ export default class Menu extends PureComponent {
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
     showMonitor: PropTypes.bool.isRequired,
+    localforageInstance: PropTypes.object,
   };
 
   static contextTypes = {
@@ -192,6 +198,9 @@ export default class Menu extends PureComponent {
         >
           <FileCloudUpload color={alternateTextColor} />
         </IconButton>
+        <div style={{ flexGrow: 1 }}></div>
+        <div style={styles.projectName}>{this.props.localforageInstance &&
+          this.props.localforageInstance._dbInfo.storeName}</div>
       </div>
     );
   }
