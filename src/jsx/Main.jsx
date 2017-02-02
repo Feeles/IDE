@@ -93,6 +93,7 @@ class Main extends Component {
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
     inlineScriptId: PropTypes.string,
+    localforageInstance: PropTypes.object,
 
     connectDropTarget: PropTypes.func.isRequired,
   };
@@ -101,6 +102,7 @@ class Main extends Component {
     monitorWidth: this.rootWidth / 2,
     monitorHeight: this.rootHeight,
     isResizing: false,
+    monitorType: MonitorTypes.Default,
 
     files: this.props.files,
     reboot: false,
@@ -114,7 +116,7 @@ class Main extends Component {
     port: null,
     coreString: null,
 
-    monitorType: MonitorTypes.Default,
+    localforageInstance: this.props.localforageInstance
   };
 
   get rootWidth() {
