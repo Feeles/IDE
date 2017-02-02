@@ -9,7 +9,6 @@ export default class _File {
   static defaultOptions = {};
 
   static visible = [
-    'key',
     'name',
     'moduleName',
     'type',
