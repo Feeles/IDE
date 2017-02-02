@@ -26,20 +26,20 @@ export default class AboutDialog extends PureComponent {
   };
 
   state = {
-    inputCoreVersion: null,
+    inputSrc: null,
   };
 
-  handleCoreVersionInput = (event) => {
-    const inputCoreVersion = event.target.value;
-    this.setState({ inputCoreVersion });
+  handleSrcInput = (event) => {
+    const inputSrc = event.target.value;
+    this.setState({ inputSrc });
   };
 
-  handleChangeVersion = async () => {
+  handleChangeSrc = async () => {
 
     const file = await SourceFile.cdn({
       getConfig: this.props.getConfig,
       files: this.props.files,
-      src: CORE_CDN_PREFIX + this.state.inputCoreVersion + '.js',
+      src: this.state.inputSrc,
     });
 
     const url = URL.createObjectURL(file.blob);
@@ -52,9 +52,6 @@ export default class AboutDialog extends PureComponent {
       onRequestClose,
       localization: { aboutDialog },
     } = this.props;
-    const {
-      inputCoreVersion,
-    } = this.state;
 
     const { left } = getStyles(this.props);
 
@@ -82,13 +79,13 @@ export default class AboutDialog extends PureComponent {
                 <TableRowColumn>
                   <TextField
                     id="ver"
-                    defaultValue={CORE_VERSION}
-                    onChange={this.handleCoreVersionInput}
+                    defaultValue={CORE_CDN_URL}
+                    onChange={this.handleSrcInput}
                   />
                   <FlatButton primary
                     label={aboutDialog.change}
-                    disabled={!inputCoreVersion}
-                    onTouchTap={this.handleChangeVersion}
+                    disabled={!this.state.inputSrc}
+                    onTouchTap={this.handleChangeSrc}
                   />
                 </TableRowColumn>
               </TableRow>
