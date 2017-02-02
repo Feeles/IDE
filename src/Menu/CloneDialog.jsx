@@ -191,30 +191,42 @@ export default class CloneDialog extends PureComponent {
 
   };
 
-  handleLoad = (app, openInNewTab) => {
+  handleLoad = async (app, openInNewTab) => {
     const tab = openInNewTab ? window.open('', '_blank') : null;
     if (openInNewTab && tab) {
       this.setState({ processing: true });
     }
 
-    Promise.resolve()
-      .then(() => localforage.getItem(app.htmlKey))
-      .then((blob) => {
-        if (openInNewTab) {
-          if (!tab) {
-            throw this.props.localization.cloneDialog.failedToOpenTab;
-          }
-          tab.location.href = URL.createObjectURL(blob);
-          this.setState({ processing: false });
-        } else {
-          location.href = URL.createObjectURL(blob);
+    const setURL = (url) => {
+      if (openInNewTab) {
+        if (!tab) {
+          alert(this.props.localization.cloneDialog.failedToOpenTab);
+          return;
         }
-      })
-      .catch((err) => {
-        alert(err.message);
-        throw err;
-      });
+        tab.location.href = url;
+        this.setState({ processing: false });
+      } else {
+        location.href = url;
+      }
+    };
 
+    // Can I use ServiceWorker proxy?
+    if (navigator.serviceWorker &&
+      navigator.serviceWorker.controller &&
+      navigator.serviceWorker.controller.state === 'activated') {
+      // ServiceWorker proxy enabled.
+
+      // Required unique title of project to proxy it
+      if (!app.title) {
+        alert(this.props.localization.cloneDialog.titleIsRequired);
+        return;
+      }
+      setURL(`${location.origin}/${app.title}/`);
+    } else {
+      // TODO: Bundle HTML with separated files.
+      const blob = await localforage.getItem(app.htmlKey);
+      setURL(URL.createObjectURL(blob));
+    }
   };
 
   handleRemove = (app) => {
