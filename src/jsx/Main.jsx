@@ -93,6 +93,7 @@ class Main extends Component {
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
     inlineScriptId: PropTypes.string,
+    localforageInstance: PropTypes.object,
 
     connectDropTarget: PropTypes.func.isRequired,
   };
@@ -101,6 +102,7 @@ class Main extends Component {
     monitorWidth: this.rootWidth / 2,
     monitorHeight: this.rootHeight,
     isResizing: false,
+    monitorType: MonitorTypes.Default,
 
     files: this.props.files,
     reboot: false,
@@ -114,7 +116,7 @@ class Main extends Component {
     port: null,
     coreString: null,
 
-    monitorType: MonitorTypes.Default,
+    localforageInstance: this.props.localforageInstance
   };
 
   get rootWidth() {
@@ -196,6 +198,12 @@ class Main extends Component {
       .filter((item) => item !== remove);
 
     await this.setStatePromise({ files });
+
+    if (this.state.localforageInstance) {
+      await this.state.localforageInstance
+        .setItem(file.name, file.serialize());
+    }
+
     return file;
   };
 
@@ -211,6 +219,12 @@ class Main extends Component {
       .concat(nextFile);
 
     await this.setStatePromise({ files });
+
+    if (this.state.localforageInstance) {
+      await this.state.localforageInstance
+        .setItem(nextFile.name, nextFile.serialize());
+    }
+
     return nextFile;
   };
 
@@ -497,6 +511,7 @@ class Main extends Component {
       coreString: this.state.coreString,
       saveAs: this.saveAs,
       showMonitor,
+      localforageInstance: this.props.localforageInstance,
     };
 
     const readmeProps = {

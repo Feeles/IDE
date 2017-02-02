@@ -54,6 +54,7 @@ export default class BinaryFile extends _File {
       change.hash = this.hash;
     }
     const seed = Object.assign(this.serialize(), change);
+    seed.key = this.key;
 
     return new BinaryFile(seed);
   }

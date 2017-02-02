@@ -13,6 +13,7 @@ class RootComponent extends Component {
     files: PropTypes.array.isRequired,
     rootElement: PropTypes.object.isRequired,
     inlineScriptId: PropTypes.string,
+    localforageInstance: PropTypes.object,
   };
 
   state = {
@@ -91,6 +92,7 @@ class RootComponent extends Component {
         files={this.state.files}
         rootElement={rootElement}
         rootStyle={getComputedStyle(rootElement)}
+        localforageInstance={this.props.localforageInstance}
       />
     );
   }

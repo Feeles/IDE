@@ -81,6 +81,7 @@ export default class SourceFile extends _File {
     }
 
     const seed = Object.assign(this.serialize(), change);
+    seed.key = this.key;
 
     return new this.constructor(seed);
   }
