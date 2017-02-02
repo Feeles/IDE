@@ -1,7 +1,7 @@
 {
-  "name": "h4p",
+  "name": "FeelesIDE",
   "version": "0.1.0",
-  "description": "A new public interface to learn programming",
+  "description": "The hackable and serializable IDE to make learning material",
   "main": "dist/h4p.js",
   "scripts": {
     "start": "webpack-dev-server --inline",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/teramotodaiki/h4p.git"
+    "url": "git+https://github.com/Feeles/IDE.git"
   },
   "keywords": [
     "h4p",
@@ -18,9 +18,9 @@
   "author": "teramotodaiki",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/teramotodaiki/h4p/issues"
+    "url": "https://github.com/Feeles/IDE/issues"
   },
-  "homepage": "https://github.com/teramotodaiki/h4p#readme",
+  "homepage": "https://github.com/Feeles/IDE#readme",
   "devDependencies": {
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
