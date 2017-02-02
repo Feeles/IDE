@@ -148,7 +148,7 @@ class Main extends Component {
       // From indexedDB stored project
       const {storeName} = this.props.localforageInstance._dbInfo;
 
-      const projects = await localforage.getItem(KEY_PROJECTS);
+      const projects = await localforage.getItem(KEY_PROJECTS) || [];
       this.setState({
         project: projects.find((item) => item.storeName === storeName),
       });
