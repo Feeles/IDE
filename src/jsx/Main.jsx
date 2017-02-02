@@ -548,7 +548,8 @@ class Main extends Component {
       coreString: this.state.coreString,
       saveAs: this.saveAs,
       showMonitor,
-      localforageInstance: this.props.localforageInstance,
+      project: this.state.project,
+      updateProject: this.updateProject,
     };
 
     const readmeProps = {

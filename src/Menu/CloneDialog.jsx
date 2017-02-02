@@ -46,6 +46,8 @@ export default class CloneDialog extends PureComponent {
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
+    project: PropTypes.object,
+    updateProject: PropTypes.func.isRequired,
   };
 
   state = {
@@ -229,29 +231,41 @@ export default class CloneDialog extends PureComponent {
 
   };
 
-  handleTitleChange = (app, title) => {
-    this.setState({ processing: true });
+  handleTitleChange = async (app, title) => {
+    try {
+      this.setState({ processing: true });
 
-    const apps = this.state.apps
-      .map((item) => {
-        if (item.htmlKey === app.htmlKey) {
-          return Object.assign({}, app, { title });
+      if (this.props.project && this.props.project.storeName === app.storeName) {
+        // Modify current project
+        await this.props.updateProject({ title })
+        this.setState({
+          apps: await localforage.getItem(KEY_APPS),
+        });
+      } else {
+        if (this.state.apps.some((item) => item.title === title)) {
+          // Same name found.
+          throw `${title} is exist.`;
         }
-        return item;
-      });
+        // Modify others
+        const apps = this.state.apps
+          .map((item) => {
+            if (item.storeName === app.storeName) {
+              return {...item, title};
+            }
+            return item;
+          });
+        await localforage.setItem(KEY_APPS, apps);
+        this.setState({ apps });
+      }
 
-    Promise.resolve()
-      .then(() => localforage.setItem(KEY_APPS, apps))
-      .then(() => this.setState({
-        apps,
-        processing: false,
-      }))
-      .catch((err) => {
-        alert(this.props.localization.cloneDialog.failedToRename);
-        this.setState({ processing: false });
-        throw err;
-      });
+    } catch (e) {
+      console.error(e);
+      alert(this.props.localization.cloneDialog.failedToRename);
 
+    } finally {
+      this.setState({ processing: false });
+
+    }
   };
 
   renderAppCards(isSave) {
