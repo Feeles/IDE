@@ -198,6 +198,12 @@ class Main extends Component {
       .filter((item) => item !== remove);
 
     await this.setStatePromise({ files });
+
+    if (this.state.localforageInstance) {
+      await this.state.localforageInstance
+        .setItem(file.name, file.serialize());
+    }
+
     return file;
   };
 
@@ -213,6 +219,12 @@ class Main extends Component {
       .concat(nextFile);
 
     await this.setStatePromise({ files });
+
+    if (this.state.localforageInstance) {
+      await this.state.localforageInstance
+        .setItem(nextFile.name, nextFile.serialize());
+    }
+
     return nextFile;
   };
 
