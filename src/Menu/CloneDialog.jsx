@@ -24,7 +24,7 @@ const BundleTypes = [
   'cdn'
 ];
 
-const KEY_APPS = 'apps';
+export const KEY_APPS = 'apps';
 
 const gen = (template, begin, array) => {
   for (let i = 0; i < array.length + 1; i++) {

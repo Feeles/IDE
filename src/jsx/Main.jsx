@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import localforage from 'localforage';
 import { DropTarget } from 'react-dnd';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { faintBlack } from 'material-ui/styles/colors';
@@ -32,6 +33,7 @@ import {
   EditorCard,
   CreditsCard,
 } from '../Cards/';
+import {KEY_APPS} from '../Menu/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -116,7 +118,7 @@ class Main extends Component {
     port: null,
     coreString: null,
 
-    localforageInstance: this.props.localforageInstance
+    project: null,
   };
 
   get rootWidth() {
@@ -140,6 +142,18 @@ class Main extends Component {
 
     return multiple ? files.filter(pred) : files.find(pred);
   };
+
+  async componentWillMount() {
+    if (this.props.localforageInstance) {
+      // From indexedDB stored project
+      const {storeName} = this.props.localforageInstance._dbInfo;
+
+      const projects = await localforage.getItem(KEY_APPS);
+      this.setState({
+        project: projects.find((item) => item.storeName === storeName),
+      });
+    }
+  }
 
   componentDidMount() {
     const {
@@ -199,8 +213,8 @@ class Main extends Component {
 
     await this.setStatePromise({ files });
 
-    if (this.state.localforageInstance) {
-      await this.state.localforageInstance
+    if (this.props.localforageInstance) {
+      await this.props.localforageInstance
         .setItem(file.name, file.serialize());
     }
 
@@ -220,8 +234,8 @@ class Main extends Component {
 
     await this.setStatePromise({ files });
 
-    if (this.state.localforageInstance) {
-      await this.state.localforageInstance
+    if (this.props.localforageInstance) {
+      await this.props.localforageInstance
         .setItem(nextFile.name, nextFile.serialize());
     }
 
