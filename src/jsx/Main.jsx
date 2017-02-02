@@ -201,6 +201,7 @@ class Main extends Component {
   }
 
   addFile = async (file) => {
+    const timestamp = new Date().getTime();
     await 1; // Be async
     const remove = this.inspection(file);
     if (file === remove) {
@@ -216,12 +217,16 @@ class Main extends Component {
     if (this.props.localforageInstance) {
       await this.props.localforageInstance
         .setItem(file.name, file.serialize());
+      await this.updateProject({
+        updated: timestamp,
+      });
     }
 
     return file;
   };
 
   putFile = async (prevFile, nextFile) => {
+    const timestamp = new Date().getTime();
     await 1; // Be async
     const remove = this.inspection(nextFile);
     if (remove === nextFile) {
@@ -237,6 +242,9 @@ class Main extends Component {
     if (this.props.localforageInstance) {
       await this.props.localforageInstance
         .setItem(nextFile.name, nextFile.serialize());
+      await this.updateProject({
+        updated: timestamp,
+      });
     }
 
     return nextFile;
@@ -368,7 +376,7 @@ class Main extends Component {
     return null;
   };
 
-  updateProject = async ({ title }) => {
+  updateProject = async ({ title, updated }) => {
     const {storeName} = this.props.localforageInstance._dbInfo;
     const projects = await localforage.getItem(KEY_APPS);
     const current = projects.find((item) => item.storeName === storeName);
@@ -383,6 +391,11 @@ class Main extends Component {
       }
       // Temporaly updating
       Object.assign(current, { title });
+    }
+    // Update updated time
+    if (typeof updated === 'number') {
+      // Temporaly updating
+      Object.assign(current, { updated });
     }
 
     await localforage.setItem(KEY_APPS, projects);
