@@ -12,7 +12,9 @@ import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
-import { lightBlue100, red100, brown50, red400 } from 'material-ui/styles/colors';
+import {
+  lightBlue100, red100, brown50, red400, fullWhite,
+} from 'material-ui/styles/colors';
 
 
 import { SourceFile } from '../File/';
@@ -291,6 +293,7 @@ export default class CloneDialog extends PureComponent {
 
     const {
       localization,
+      project,
     } = this.props;
 
     const styles = {
@@ -302,12 +305,14 @@ export default class CloneDialog extends PureComponent {
         overflow: 'scroll',
         backgroundColor: brown50,
       },
-      card: {
+      card: (current) => ({
         marginTop: 16,
         borderStyle: 'solid',
         borderWidth: 1,
         borderColor: isSave ? lightBlue100 : red100,
-      },
+        backgroundColor: !current ? fullWhite :
+          isSave ? lightBlue100 : red100,
+      }),
       remove: {
         color: red400,
       },
@@ -323,7 +328,7 @@ export default class CloneDialog extends PureComponent {
         <RaisedButton fullWidth
           key={'new_app'}
           label={localization.cloneDialog.saveInNew}
-          style={styles.card}
+          style={styles.card(false)}
           icon={<ContentAddCircle />}
           disabled={this.state.processing}
           onTouchTap={this.handleCreate}
@@ -332,7 +337,7 @@ export default class CloneDialog extends PureComponent {
       {this.state.apps.map((app, i) => (
         <Card
           key={app.htmlKey}
-          style={styles.card}
+          style={styles.card(project && project.storeName === app.storeName)}
         >
           <CardHeader showExpandableButton
             title={(
