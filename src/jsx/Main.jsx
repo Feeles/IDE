@@ -33,7 +33,7 @@ import {
   EditorCard,
   CreditsCard,
 } from '../Cards/';
-import {KEY_APPS} from '../Menu/';
+import {KEY_PROJECTS} from '../Menu/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -148,7 +148,7 @@ class Main extends Component {
       // From indexedDB stored project
       const {storeName} = this.props.localforageInstance._dbInfo;
 
-      const projects = await localforage.getItem(KEY_APPS);
+      const projects = await localforage.getItem(KEY_PROJECTS);
       this.setState({
         project: projects.find((item) => item.storeName === storeName),
       });
@@ -378,7 +378,7 @@ class Main extends Component {
 
   updateProject = async ({ title, updated }) => {
     const {storeName} = this.props.localforageInstance._dbInfo;
-    const projects = await localforage.getItem(KEY_APPS);
+    const projects = await localforage.getItem(KEY_PROJECTS);
     const current = projects.find((item) => item.storeName === storeName);
 
     // Update title
@@ -398,7 +398,7 @@ class Main extends Component {
       Object.assign(current, { updated });
     }
 
-    await localforage.setItem(KEY_APPS, projects);
+    await localforage.setItem(KEY_PROJECTS, projects);
     await this.setStatePromise({ project: current });
 
     return current;

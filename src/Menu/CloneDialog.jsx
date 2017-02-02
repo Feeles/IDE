@@ -26,7 +26,7 @@ const BundleTypes = [
   'cdn'
 ];
 
-export const KEY_APPS = 'apps';
+export const KEY_PROJECTS = 'apps';
 
 export default class CloneDialog extends PureComponent {
 
@@ -51,7 +51,7 @@ export default class CloneDialog extends PureComponent {
 
   async componentWillMount() {
     this.setState({
-      apps: await localforage.getItem(KEY_APPS) || [],
+      apps: await localforage.getItem(KEY_PROJECTS) || [],
     });
   }
 
@@ -152,7 +152,7 @@ export default class CloneDialog extends PureComponent {
     try {
 
       await localforage.setItem(app.htmlKey, html.blob);
-      await localforage.setItem(KEY_APPS, apps);
+      await localforage.setItem(KEY_PROJECTS, apps);
 
       // File separated store
       const project = localforage.createInstance({
@@ -229,7 +229,7 @@ export default class CloneDialog extends PureComponent {
 
     Promise.resolve()
       .then(() => localforage.removeItem(app.htmlKey))
-      .then(() => localforage.setItem(KEY_APPS, apps))
+      .then(() => localforage.setItem(KEY_PROJECTS, apps))
       .then(() => this.setState({
         apps,
         processing: false,
@@ -250,7 +250,7 @@ export default class CloneDialog extends PureComponent {
         // Modify current project
         await this.props.updateProject({ title })
         this.setState({
-          apps: await localforage.getItem(KEY_APPS),
+          apps: await localforage.getItem(KEY_PROJECTS),
         });
       } else {
         if (this.state.apps.some((item) => item.title === title)) {
@@ -265,7 +265,7 @@ export default class CloneDialog extends PureComponent {
             }
             return item;
           });
-        await localforage.setItem(KEY_APPS, apps);
+        await localforage.setItem(KEY_PROJECTS, apps);
         this.setState({ apps });
       }
 
