@@ -164,6 +164,15 @@ export default class CloneDialog extends PureComponent {
       await localforage.setItem(app.htmlKey, html.blob);
       await localforage.setItem(KEY_APPS, apps);
 
+      // File separated store
+      const project = localforage.createInstance({
+        name: 'projects',
+        storeName: app.storeName,
+      });
+      for (const file of this.props.files) {
+        await project.setItem(file.name, file.serialize());
+      }
+
       this.setState({
         apps,
         processing: false,
