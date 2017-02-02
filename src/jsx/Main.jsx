@@ -368,6 +368,29 @@ class Main extends Component {
     return null;
   };
 
+  updateProject = async ({ title }) => {
+    const {storeName} = this.props.localforageInstance._dbInfo;
+    const projects = await localforage.getItem(KEY_APPS);
+    const current = projects.find((item) => item.storeName === storeName);
+
+    // Update title
+    if (typeof title === 'string') {
+      for (const project of projects) {
+        if (project.title === title) {
+          // Same title is found, Do nothing
+          return this.state.project;
+        }
+      }
+      // Temporaly updating
+      Object.assign(current, { title });
+    }
+
+    await localforage.setItem(KEY_APPS, projects);
+    await this.setStatePromise({ project: current });
+
+    return current;
+  };
+
   resize = ((waitFlag = false) =>
   (monitorWidth, monitorHeight, forceFlag = false) => {
     monitorWidth = Math.max(0, Math.min(this.rootWidth, monitorWidth));
