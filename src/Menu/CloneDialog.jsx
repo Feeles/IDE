@@ -57,12 +57,10 @@ export default class CloneDialog extends PureComponent {
     processing: false,
   };
 
-  componentDidMount() {
-
-    localforage.getItem(KEY_APPS)
-      .then((apps) => apps || [])
-      .then((apps) => this.setState({ apps }));
-
+  async componentWillMount() {
+    this.setState({
+      apps: await localforage.getItem(KEY_APPS) || [],
+    });
   }
 
   handleClone = async () => {
