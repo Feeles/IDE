@@ -1,4 +1,5 @@
 import React, { PropTypes, PureComponent } from 'react';
+import localforage from 'localforage';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -68,7 +69,8 @@ export default class Menu extends PureComponent {
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
     showMonitor: PropTypes.bool.isRequired,
-    localforageInstance: PropTypes.object,
+    project: PropTypes.object,
+    updateProject: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -80,6 +82,8 @@ export default class Menu extends PureComponent {
       coreString: this.props.coreString,
       files: this.props.files,
       saveAs: this.props.saveAs,
+      project: this.props.project,
+      updateProject: this.props.updateProject,
     });
   };
 
@@ -199,8 +203,8 @@ export default class Menu extends PureComponent {
           <FileCloudUpload color={alternateTextColor} />
         </IconButton>
         <div style={{ flexGrow: 1 }}></div>
-        <div style={styles.projectName}>{this.props.localforageInstance &&
-          this.props.localforageInstance._dbInfo.storeName}</div>
+        <div style={styles.projectName}>{this.props.project &&
+          this.props.project.title}</div>
       </div>
     );
   }
