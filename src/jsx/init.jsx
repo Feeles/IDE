@@ -22,7 +22,7 @@ export default async (props = {}) => {
 
   props.rootElement = props.rootElement || document.querySelector(`.${CSS_PREFIX}app`);
 
-  if (props.project) {
+  if (typeof props.project === 'string') {
     // From localforage
     const store = localforage.createInstance({
       name: 'projects',
