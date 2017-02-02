@@ -203,8 +203,8 @@ export default class Menu extends PureComponent {
           <FileCloudUpload color={alternateTextColor} />
         </IconButton>
         <div style={{ flexGrow: 1 }}></div>
-        <div style={styles.projectName}>{this.props.localforageInstance &&
-          this.props.localforageInstance._dbInfo.storeName}</div>
+        <div style={styles.projectName}>{this.props.project &&
+          this.props.project.title}</div>
       </div>
     );
   }
