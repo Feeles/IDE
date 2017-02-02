@@ -125,16 +125,15 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleCreate = () => {
-    const titles = this.state.apps.map((item) => item.title);
+    const identifier = this.props.getConfig('ogp')['og:title'] || '';
+    const storeName = `${identifier}@${new Date().getTime()}`;
 
-    Promise.resolve()
-      .then(() => localforage.keys())
-      .then((keys) => this.handleSave({
-        htmlKey: gen((n) => `app_${n}`, new Date().getTime(), keys),
-        title: '',
-        created: new Date().getTime(),
-      }));
-
+    return this.handleSave({
+      storeName,
+      htmlKey: storeName, // Backword compatibility
+      title: '',
+      created: new Date().getTime(),
+    });
   };
 
   handleSave = async (app) => {
