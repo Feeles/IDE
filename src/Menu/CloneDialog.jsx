@@ -12,7 +12,9 @@ import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
-import { lightBlue100, red100, brown50, red400 } from 'material-ui/styles/colors';
+import {
+  lightBlue100, red100, brown50, red400, fullWhite,
+} from 'material-ui/styles/colors';
 
 
 import { SourceFile } from '../File/';
@@ -24,17 +26,7 @@ const BundleTypes = [
   'cdn'
 ];
 
-const KEY_APPS = 'apps';
-
-const gen = (template, begin, array) => {
-  for (let i = 0; i < array.length + 1; i++) {
-    const name = template(begin + i);
-    if (array.includes(name)) {
-      continue;
-    }
-    return name;
-  }
-};
+export const KEY_PROJECTS = 'projects';
 
 export default class CloneDialog extends PureComponent {
 
@@ -46,21 +38,21 @@ export default class CloneDialog extends PureComponent {
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
+    project: PropTypes.object,
+    updateProject: PropTypes.func.isRequired,
   };
 
   state = {
     bundleType: BundleTypes[0],
     error: null,
-    apps: null,
+    projects: null,
     processing: false,
   };
 
-  componentDidMount() {
-
-    localforage.getItem(KEY_APPS)
-      .then((apps) => apps || [])
-      .then((apps) => this.setState({ apps }));
-
+  async componentWillMount() {
+    this.setState({
+      projects: await localforage.getItem(KEY_PROJECTS) || [],
+    });
   }
 
   handleClone = async () => {
@@ -125,19 +117,18 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleCreate = () => {
-    const titles = this.state.apps.map((item) => item.title);
+    const identifier = this.props.getConfig('ogp')['og:title'] || '';
+    const storeName = `${identifier}@${new Date().getTime()}`;
 
-    Promise.resolve()
-      .then(() => localforage.keys())
-      .then((keys) => this.handleSave({
-        htmlKey: gen((n) => `app_${n}`, new Date().getTime(), keys),
-        title: '',
-        created: new Date().getTime(),
-      }));
-
+    return this.handleSave({
+      storeName,
+      htmlKey: storeName, // Backword compatibility
+      title: '',
+      created: new Date().getTime(),
+    });
   };
 
-  handleSave = async (app) => {
+  handleSave = async (project) => {
     this.setState({ processing: true });
 
     const html = await SourceFile.embed({
@@ -146,31 +137,40 @@ export default class CloneDialog extends PureComponent {
       coreString: this.props.coreString,
     });
 
-    app = Object.assign({}, app, {
+    project = Object.assign({}, project, {
       size: html.blob.size,
       updated: new Date().getTime(),
       CORE_VERSION,
       CORE_CDN_URL,
     });
 
-    const previous = this.state.apps.find((item) => item.htmlKey === app.htmlKey);
-    const apps = previous ?
-      this.state.apps.map((item) => item === previous ? app : item) :
-      [app].concat(this.state.apps);
+    const previous = this.state.projects.find((item) => item.storeName === project.storeName);
+    const projects = previous ?
+      this.state.projects.map((item) => item === previous ? project : item) :
+      [project].concat(this.state.projects);
 
     try {
 
-      await localforage.setItem(app.htmlKey, html.blob);
-      await localforage.setItem(KEY_APPS, apps);
+      await localforage.setItem(project.htmlKey, html.blob);
+      await localforage.setItem(KEY_PROJECTS, projects);
+
+      // File separated store
+      const store = localforage.createInstance({
+        name: 'projects',
+        storeName: project.storeName,
+      });
+      for (const file of this.props.files) {
+        await store.setItem(file.name, file.serialize());
+      }
 
       this.setState({
-        apps,
+        projects,
         processing: false,
       });
 
     } catch (e) {
 
-      await localforage.removeItem(app.htmlKey);
+      await localforage.removeItem(project.htmlKey);
 
       alert(this.props.localization.cloneDialog.failedToSave);
       this.setState({
@@ -181,45 +181,57 @@ export default class CloneDialog extends PureComponent {
 
   };
 
-  handleLoad = (app, openInNewTab) => {
+  handleLoad = async (project, openInNewTab) => {
     const tab = openInNewTab ? window.open('', '_blank') : null;
     if (openInNewTab && tab) {
       this.setState({ processing: true });
     }
 
-    Promise.resolve()
-      .then(() => localforage.getItem(app.htmlKey))
-      .then((blob) => {
-        if (openInNewTab) {
-          if (!tab) {
-            throw this.props.localization.cloneDialog.failedToOpenTab;
-          }
-          tab.location.href = URL.createObjectURL(blob);
-          this.setState({ processing: false });
-        } else {
-          location.href = URL.createObjectURL(blob);
+    const setURL = (url) => {
+      if (openInNewTab) {
+        if (!tab) {
+          alert(this.props.localization.cloneDialog.failedToOpenTab);
+          return;
         }
-      })
-      .catch((err) => {
-        alert(err.message);
-        throw err;
-      });
+        tab.location.href = url;
+        this.setState({ processing: false });
+      } else {
+        location.href = url;
+      }
+    };
 
+    // Can I use ServiceWorker proxy?
+    if (navigator.serviceWorker &&
+      navigator.serviceWorker.controller &&
+      navigator.serviceWorker.controller.state === 'activated') {
+      // ServiceWorker proxy enabled.
+
+      // Required unique title of project to proxy it
+      if (!project.title) {
+        alert(this.props.localization.cloneDialog.titleIsRequired);
+        return;
+      }
+      setURL(`${location.origin}/${project.title}/`);
+    } else {
+      // TODO: Bundle HTML with separated files.
+      const blob = await localforage.getItem(project.htmlKey);
+      setURL(URL.createObjectURL(blob));
+    }
   };
 
-  handleRemove = (app) => {
+  handleRemove = (project) => {
     if (!confirm(this.props.localization.common.cannotBeUndone)) {
       return;
     }
     this.setState({ processing: true });
 
-    const apps = this.state.apps.filter((item) => item.htmlKey !== app.htmlKey);
+    const projects = this.state.projects.filter((item) => item.htmlKey !== project.htmlKey);
 
     Promise.resolve()
-      .then(() => localforage.removeItem(app.htmlKey))
-      .then(() => localforage.setItem(KEY_APPS, apps))
+      .then(() => localforage.removeItem(project.htmlKey))
+      .then(() => localforage.setItem(KEY_PROJECTS, projects))
       .then(() => this.setState({
-        apps,
+        projects,
         processing: false,
       }))
       .catch((err) => {
@@ -230,34 +242,46 @@ export default class CloneDialog extends PureComponent {
 
   };
 
-  handleTitleChange = (app, title) => {
-    this.setState({ processing: true });
+  handleTitleChange = async (project, title) => {
+    try {
+      this.setState({ processing: true });
 
-    const apps = this.state.apps
-      .map((item) => {
-        if (item.htmlKey === app.htmlKey) {
-          return Object.assign({}, app, { title });
+      if (this.props.project && this.props.project.storeName === project.storeName) {
+        // Modify current project
+        await this.props.updateProject({ title })
+        this.setState({
+          projects: await localforage.getItem(KEY_PROJECTS),
+        });
+      } else {
+        if (this.state.projects.some((item) => item.title === title)) {
+          // Same name found.
+          throw `${title} is exist.`;
         }
-        return item;
-      });
+        // Modify others
+        const projects = this.state.projects
+          .map((item) => {
+            if (item.storeName === project.storeName) {
+              return {...item, title};
+            }
+            return item;
+          });
+        await localforage.setItem(KEY_PROJECTS, projects);
+        this.setState({ projects });
+      }
 
-    Promise.resolve()
-      .then(() => localforage.setItem(KEY_APPS, apps))
-      .then(() => this.setState({
-        apps,
-        processing: false,
-      }))
-      .catch((err) => {
-        alert(this.props.localization.cloneDialog.failedToRename);
-        this.setState({ processing: false });
-        throw err;
-      });
+    } catch (e) {
+      console.error(e);
+      alert(this.props.localization.cloneDialog.failedToRename);
 
+    } finally {
+      this.setState({ processing: false });
+
+    }
   };
 
-  renderAppCards(isSave) {
+  renderProjectCards(isSave) {
     if (
-      !this.state.apps ||
+      !this.state.projects ||
       !this.props.coreString
     ) {
       return (
@@ -269,6 +293,7 @@ export default class CloneDialog extends PureComponent {
 
     const {
       localization,
+      project,
     } = this.props;
 
     const styles = {
@@ -280,12 +305,14 @@ export default class CloneDialog extends PureComponent {
         overflow: 'scroll',
         backgroundColor: brown50,
       },
-      card: {
+      card: (current) => ({
         marginTop: 16,
         borderStyle: 'solid',
         borderWidth: 1,
         borderColor: isSave ? lightBlue100 : red100,
-      },
+        backgroundColor: !current ? fullWhite :
+          isSave ? lightBlue100 : red100,
+      }),
       remove: {
         color: red400,
       },
@@ -299,41 +326,41 @@ export default class CloneDialog extends PureComponent {
       <div style={styles.container}>
       {isSave ? (
         <RaisedButton fullWidth
-          key={'new_app'}
+          key={'new_project'}
           label={localization.cloneDialog.saveInNew}
-          style={styles.card}
+          style={styles.card(false)}
           icon={<ContentAddCircle />}
           disabled={this.state.processing}
           onTouchTap={this.handleCreate}
         />
       ) : null}
-      {this.state.apps.map((app, i) => (
+      {this.state.projects.map((item, i) => (
         <Card
-          key={app.htmlKey}
-          style={styles.card}
+          key={item.storeName}
+          style={styles.card(project && project.storeName === item.storeName)}
         >
           <CardHeader showExpandableButton
             title={(
               <EditableLabel id="title"
-                defaultValue={app.title}
+                defaultValue={item.title}
                 tapTwiceQuickly={localization.common.tapTwiceQuickly}
-                onEditEnd={(text) => this.handleTitleChange(app, text)}
+                onEditEnd={(text) => this.handleTitleChange(item, text)}
               />
             )}
-            subtitle={new Date(app.updated).toLocaleString()}
+            subtitle={new Date(item.updated).toLocaleString()}
           />
           <CardText expandable>
             <div>
               <span style={styles.label}>{localization.cloneDialog.created}</span>
-              {new Date(app.created).toLocaleString()}
+              {new Date(item.created).toLocaleString()}
             </div>
             <div>
               <span style={styles.label}>{localization.cloneDialog.updated}</span>
-              {new Date(app.updated).toLocaleString()}
+              {new Date(item.updated).toLocaleString()}
             </div>
             <div>
               <span style={styles.label}>{localization.cloneDialog.size}</span>
-              {`${(app.size / 1024 / 1024).toFixed(2)}MB`}
+              {`${(item.size / 1024 / 1024).toFixed(2)}MB`}
             </div>
           </CardText>
         {isSave ? (
@@ -342,14 +369,14 @@ export default class CloneDialog extends PureComponent {
               label={localization.cloneDialog.overwriteSave}
               icon={<ContentSave />}
               disabled={this.state.processing}
-              onTouchTap={() => this.handleSave(app)}
+              onTouchTap={() => this.handleSave(item)}
             />
             <FlatButton
               label={localization.cloneDialog.remove}
               icon={<ActionDelete color={red400} />}
               labelStyle={styles.remove}
               disabled={this.state.processing}
-              onTouchTap={() => this.handleRemove(app)}
+              onTouchTap={() => this.handleRemove(item)}
             />
           </CardActions>
         ) : (
@@ -358,13 +385,13 @@ export default class CloneDialog extends PureComponent {
               label={localization.cloneDialog.openOnThisTab}
               icon={<ActionOpenInBrowser />}
               disabled={this.state.processing}
-              onTouchTap={() => this.handleLoad(app, false)}
+              onTouchTap={() => this.handleLoad(item, false)}
             />
             <FlatButton
               label={localization.cloneDialog.openInNewTab}
               icon={<ActionOpenInNew />}
               disabled={this.state.processing}
-              onTouchTap={() => this.handleLoad(app, true)}
+              onTouchTap={() => this.handleLoad(item, true)}
             />
           </CardActions>
         )}
@@ -422,11 +449,11 @@ export default class CloneDialog extends PureComponent {
         <Tabs>
           <Tab label={localization.cloneDialog.saveTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.saveHeader}</h1>
-            {this.renderAppCards(true)}
+            {this.renderProjectCards(true)}
           </Tab>
           <Tab label={localization.cloneDialog.loadTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.loadHeader}</h1>
-            {this.renderAppCards(false)}
+            {this.renderProjectCards(false)}
           </Tab>
           <Tab label={localization.cloneDialog.cloneTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.cloneHeader}</h1>

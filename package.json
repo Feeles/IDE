@@ -1,7 +1,7 @@
 {
-  "name": "h4p",
+  "name": "FeelesIDE",
   "version": "0.1.0",
-  "description": "A new public interface to learn programming",
+  "description": "The hackable and serializable IDE to make learning material",
   "main": "dist/h4p.js",
   "scripts": {
     "start": "webpack-dev-server --inline",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/teramotodaiki/h4p.git"
+    "url": "git+https://github.com/Feeles/IDE.git"
   },
   "keywords": [
     "h4p",
@@ -18,9 +18,9 @@
   "author": "teramotodaiki",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/teramotodaiki/h4p/issues"
+    "url": "https://github.com/Feeles/IDE/issues"
   },
-  "homepage": "https://github.com/teramotodaiki/h4p#readme",
+  "homepage": "https://github.com/Feeles/IDE#readme",
   "devDependencies": {
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
@@ -42,7 +42,6 @@
   "dependencies": {
     "babel-runtime": "^6.18.0",
     "babel-standalone": "^6.18.1",
-    "es6-promise": "^4.0.5",
     "handlebars-loader": "^1.4.0",
     "js-beautify": "^1.6.4",
     "localforage": "^1.4.3",
@@ -58,7 +57,7 @@
     "react-dom": "^15.3.2",
     "react-player": "^0.14.1",
     "react-popout": "^0.5.3",
-    "react-tap-event-plugin": "^1.0.0",
-    "whatwg-fetch": "^1.0.0"
+    "react-tap-event-plugin": "^2.0.0",
+    "whatwg-fetch": "^2.0.2"
   }
 }

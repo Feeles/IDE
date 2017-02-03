@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
+import localforage from 'localforage';
 import { DropTarget } from 'react-dnd';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { faintBlack } from 'material-ui/styles/colors';
@@ -33,6 +34,7 @@ import {
   EditorCard,
   CreditsCard,
 } from '../Cards/';
+import {KEY_PROJECTS} from '../Menu/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -94,6 +96,7 @@ class Main extends Component {
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
     inlineScriptId: PropTypes.string,
+    localforageInstance: PropTypes.object,
 
     connectDropTarget: PropTypes.func.isRequired,
   };
@@ -102,6 +105,7 @@ class Main extends Component {
     monitorWidth: this.rootWidth / 2,
     monitorHeight: this.rootHeight,
     isResizing: false,
+    monitorType: MonitorTypes.Default,
 
     files: this.props.files,
     reboot: false,
@@ -115,7 +119,7 @@ class Main extends Component {
     port: null,
     coreString: null,
 
-    monitorType: MonitorTypes.Default,
+    project: null,
   };
 
   get rootWidth() {
@@ -139,6 +143,18 @@ class Main extends Component {
 
     return multiple ? files.filter(pred) : files.find(pred);
   };
+
+  async componentWillMount() {
+    if (this.props.localforageInstance) {
+      // From indexedDB stored project
+      const {storeName} = this.props.localforageInstance._dbInfo;
+
+      const projects = await localforage.getItem(KEY_PROJECTS) || [];
+      this.setState({
+        project: projects.find((item) => item.storeName === storeName),
+      });
+    }
+  }
 
   componentDidMount() {
     const {
@@ -186,6 +202,7 @@ class Main extends Component {
   }
 
   addFile = async (file) => {
+    const timestamp = new Date().getTime();
     await 1; // Be async
     const remove = this.inspection(file);
     if (file === remove) {
@@ -197,10 +214,20 @@ class Main extends Component {
       .filter((item) => item !== remove);
 
     await this.setStatePromise({ files });
+
+    if (this.props.localforageInstance) {
+      await this.props.localforageInstance
+        .setItem(file.name, file.serialize());
+      await this.updateProject({
+        updated: timestamp,
+      });
+    }
+
     return file;
   };
 
   putFile = async (prevFile, nextFile) => {
+    const timestamp = new Date().getTime();
     await 1; // Be async
     const remove = this.inspection(nextFile);
     if (remove === nextFile) {
@@ -212,6 +239,15 @@ class Main extends Component {
       .concat(nextFile);
 
     await this.setStatePromise({ files });
+
+    if (this.props.localforageInstance) {
+      await this.props.localforageInstance
+        .setItem(nextFile.name, nextFile.serialize());
+      await this.updateProject({
+        updated: timestamp,
+      });
+    }
+
     return nextFile;
   };
 
@@ -339,6 +375,34 @@ class Main extends Component {
     }
 
     return null;
+  };
+
+  updateProject = async ({ title, updated }) => {
+    const {storeName} = this.props.localforageInstance._dbInfo;
+    const projects = await localforage.getItem(KEY_PROJECTS);
+    const current = projects.find((item) => item.storeName === storeName);
+
+    // Update title
+    if (typeof title === 'string') {
+      for (const project of projects) {
+        if (project.title === title) {
+          // Same title is found, Do nothing
+          return this.state.project;
+        }
+      }
+      // Temporaly updating
+      Object.assign(current, { title });
+    }
+    // Update updated time
+    if (typeof updated === 'number') {
+      // Temporaly updating
+      Object.assign(current, { updated });
+    }
+
+    await localforage.setItem(KEY_PROJECTS, projects);
+    await this.setStatePromise({ project: current });
+
+    return current;
   };
 
   resize = ((waitFlag = false) =>
@@ -498,6 +562,8 @@ class Main extends Component {
       coreString: this.state.coreString,
       saveAs: this.saveAs,
       showMonitor,
+      project: this.state.project,
+      updateProject: this.updateProject,
     };
 
     const mediaProps = {
