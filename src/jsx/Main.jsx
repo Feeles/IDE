@@ -120,6 +120,7 @@ class Main extends Component {
     coreString: null,
 
     project: null,
+    localforageInstance: null,
   };
 
   get rootWidth() {
@@ -151,6 +152,7 @@ class Main extends Component {
 
       const projects = await localforage.getItem(KEY_PROJECTS) || [];
       this.setState({
+        localforageInstance,
         project: projects.find((item) => item.storeName === storeName),
       });
     }
@@ -215,8 +217,8 @@ class Main extends Component {
 
     await this.setStatePromise({ files });
 
-    if (this.props.localforageInstance) {
-      await this.props.localforageInstance
+    if (this.state.localforageInstance) {
+      await this.state.localforageInstance
         .setItem(file.name, file.serialize());
       await this.updateProject({
         updated: timestamp,
@@ -240,14 +242,13 @@ class Main extends Component {
 
     await this.setStatePromise({ files });
 
-    if (this.props.localforageInstance) {
-      await this.props.localforageInstance
+    if (this.state.localforageInstance) {
+      await this.state.localforageInstance
         .setItem(nextFile.name, nextFile.serialize());
       await this.updateProject({
         updated: timestamp,
       });
     }
-
     return nextFile;
   };
 
@@ -382,6 +383,10 @@ class Main extends Component {
     if (!this.state.project) {
       await this.setStatePromise({
         project: update,
+        localforageInstance: localforage.createInstance({
+          name: 'projects',
+          storeName: update.storeName,
+        }),
       });
       return this.updateProject(update);
     }
@@ -393,7 +398,7 @@ class Main extends Component {
       projects.push(current);
     }
 
-    if (typeof update.title === 'string') {
+    if (update.title) {
       // Check title confliction
       if (
         projects.some(item => item.title === update.title && item.storeName !== update.storeName)
