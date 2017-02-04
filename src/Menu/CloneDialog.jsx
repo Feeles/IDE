@@ -278,126 +278,62 @@ export default class CloneDialog extends PureComponent {
     }
   };
 
-  renderProjectCards(isSave) {
-    if (
-      !this.state.projects ||
-      !this.props.coreString
-    ) {
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <CircularProgress size={120} />
-        </div>
-      );
-    }
-
+  renderProjectCard(item, styles) {
     const {
       localization,
     } = this.props;
 
-    const styles = {
-      container: {
-        margin: 16,
-        padding: 8,
-        paddingBottom: 16,
-        maxHeight: '20rem',
-        overflow: 'scroll',
-        backgroundColor: brown50,
-      },
-      card: (current) => ({
-        marginTop: 16,
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderColor: isSave ? lightBlue100 : red100,
-        backgroundColor: !current ? fullWhite :
-          isSave ? lightBlue100 : red100,
-      }),
-      remove: {
-        color: red400,
-      },
-      label: {
-        fontWeight: 600,
-        marginRight: '1rem',
-      },
-    };
-
     return (
-      <div style={styles.container}>
-      {this.hasSaved ? (
-        <span>{localization.cloneDialog.autoSaved}</span>
-      ) :
-      isSave ? (
-        <RaisedButton fullWidth
-          key={'new_project'}
-          label={localization.cloneDialog.saveInNew}
-          style={styles.card(false)}
-          icon={<ContentAddCircle />}
-          disabled={this.state.processing}
-          onTouchTap={this.handleCreate}
+      <Card
+        key={item.storeName}
+        style={styles.card}
+      >
+        <CardHeader showExpandableButton
+          title={(
+            <EditableLabel id="title"
+              defaultValue={item.title}
+              tapTwiceQuickly={localization.common.tapTwiceQuickly}
+              onEditEnd={(text) => this.handleTitleChange(item, text)}
+            />
+          )}
+          subtitle={new Date(item.updated).toLocaleString()}
         />
-      ) : null}
-      {this.state.projects.map((item, i) => (
-        <Card
-          key={item.storeName}
-          style={styles.card(this.hasSaved && this.state.currentProject.storeName === item.storeName)}
-        >
-          <CardHeader showExpandableButton
-            title={(
-              <EditableLabel id="title"
-                defaultValue={item.title}
-                tapTwiceQuickly={localization.common.tapTwiceQuickly}
-                onEditEnd={(text) => this.handleTitleChange(item, text)}
-              />
-            )}
-            subtitle={new Date(item.updated).toLocaleString()}
+        <CardText expandable>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.created}</span>
+            {new Date(item.created).toLocaleString()}
+          </div>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.updated}</span>
+            {new Date(item.updated).toLocaleString()}
+          </div>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.size}</span>
+            {`${(item.size / 1024 / 1024).toFixed(2)}MB`}
+          </div>
+        </CardText>
+        <CardActions>
+          <FlatButton
+            label={localization.cloneDialog.openOnThisTab}
+            icon={<ActionOpenInBrowser />}
+            disabled={this.state.processing}
+            onTouchTap={() => this.handleLoad(item, false)}
           />
-          <CardText expandable>
-            <div>
-              <span style={styles.label}>{localization.cloneDialog.created}</span>
-              {new Date(item.created).toLocaleString()}
-            </div>
-            <div>
-              <span style={styles.label}>{localization.cloneDialog.updated}</span>
-              {new Date(item.updated).toLocaleString()}
-            </div>
-            <div>
-              <span style={styles.label}>{localization.cloneDialog.size}</span>
-              {`${(item.size / 1024 / 1024).toFixed(2)}MB`}
-            </div>
-          </CardText>
-        {isSave ? (
-          <CardActions>
-            <FlatButton
-              label={localization.cloneDialog.overwriteSave}
-              icon={<ContentSave />}
-              disabled={this.state.processing}
-            />
-            <FlatButton
-              label={localization.cloneDialog.remove}
-              icon={<ActionDelete color={red400} />}
-              labelStyle={styles.remove}
-              disabled={this.state.processing}
-              onTouchTap={() => this.handleRemove(item)}
-            />
-          </CardActions>
-        ) : (
-          <CardActions>
-            <FlatButton
-              label={localization.cloneDialog.openOnThisTab}
-              icon={<ActionOpenInBrowser />}
-              disabled={this.state.processing}
-              onTouchTap={() => this.handleLoad(item, false)}
-            />
-            <FlatButton
-              label={localization.cloneDialog.openInNewTab}
-              icon={<ActionOpenInNew />}
-              disabled={this.state.processing}
-              onTouchTap={() => this.handleLoad(item, true)}
-            />
-          </CardActions>
-        )}
-        </Card>
-      ))}
-      </div>
+          <FlatButton
+            label={localization.cloneDialog.openInNewTab}
+            icon={<ActionOpenInNew />}
+            disabled={this.state.processing}
+            onTouchTap={() => this.handleLoad(item, true)}
+          />
+          <FlatButton
+            label={localization.cloneDialog.remove}
+            icon={<ActionDelete color={red400} />}
+            labelStyle={styles.remove}
+            disabled={this.state.processing}
+            onTouchTap={() => this.handleRemove(item)}
+          />
+        </CardActions>
+      </Card>
     );
   }
 
@@ -408,7 +344,10 @@ export default class CloneDialog extends PureComponent {
       localization,
       coreString,
     } = this.props;
-    const { bundleType } = this.state;
+    const {
+      bundleType,
+      currentProject,
+    } = this.state;
 
     const styles = {
       body: {
@@ -428,6 +367,24 @@ export default class CloneDialog extends PureComponent {
       },
       center: {
         textAlign: 'center',
+      },
+      container: {
+        margin: 16,
+        padding: 8,
+        paddingBottom: 16,
+        height: '20rem',
+        overflow: 'scroll',
+        backgroundColor: brown50,
+      },
+      card: {
+        marginTop: 16,
+      },
+      remove: {
+        color: red400,
+      },
+      label: {
+        fontWeight: 600,
+        marginRight: '1rem',
       },
     };
 
@@ -449,11 +406,47 @@ export default class CloneDialog extends PureComponent {
         <Tabs>
           <Tab label={localization.cloneDialog.saveTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.saveHeader}</h1>
-            {this.renderProjectCards(true)}
+            <div style={styles.container}>
+            {this.hasSaved ? [
+              <span key="">{localization.cloneDialog.autoSaved}</span>,
+              <Card
+                key="current"
+                style={styles.card}
+              >
+                <CardHeader
+                  title={(
+                    <EditableLabel id="title"
+                      defaultValue={currentProject.title}
+                      tapTwiceQuickly={localization.common.tapTwiceQuickly}
+                      onEditEnd={(text) => this.handleTitleChange(currentProject, text)}
+                    />
+                  )}
+                  subtitle={new Date(currentProject.updated).toLocaleString()}
+                />
+              </Card>
+            ] : (
+              <RaisedButton fullWidth
+                key={'new_project'}
+                label={localization.cloneDialog.saveInNew}
+                style={styles.card}
+                icon={<ContentAddCircle />}
+                disabled={this.state.processing}
+                onTouchTap={this.handleCreate}
+              />
+            )}
+            </div>
           </Tab>
           <Tab label={localization.cloneDialog.loadTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.loadHeader}</h1>
-            {this.renderProjectCards(false)}
+            {!this.state.projects || !this.props.coreString ? (
+              <div style={{ textAlign: 'center' }}>
+                <CircularProgress size={120} />
+              </div>
+            ) : (
+              <div style={styles.container}>
+              {this.state.projects.map((item) => this.renderProjectCard(item, styles))}
+              </div>
+            )}
           </Tab>
           <Tab label={localization.cloneDialog.cloneTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.cloneHeader}</h1>
