@@ -219,27 +219,34 @@ export default class CloneDialog extends PureComponent {
     }
   };
 
-  handleRemove = (project) => {
+  handleRemove = async (project) => {
     if (!confirm(this.props.localization.common.cannotBeUndone)) {
       return;
     }
     this.setState({ processing: true });
 
-    const projects = this.state.projects.filter((item) => item.htmlKey !== project.htmlKey);
-
-    Promise.resolve()
-      .then(() => localforage.removeItem(project.htmlKey))
-      .then(() => localforage.setItem(KEY_PROJECTS, projects))
-      .then(() => this.setState({
-        projects,
-        processing: false,
-      }))
-      .catch((err) => {
-        alert(this.props.localization.cloneDialog.failedToRemove);
-        this.setState({ processing: false });
-        throw err;
+    try {
+      // Backword compatibility
+      await localforage.removeItem(project.htmlKey);
+      // Remove store
+      const store = localforage.createInstance({
+        name: 'projects',
+        storeName: project.storeName,
       });
+      await store.clear();
+      // Update projects list
+      const projects = this.state.projects
+        .filter((item) => item.storeName !== project.storeName);
 
+      await localforage.setItem(KEY_PROJECTS, projects);
+      this.setState({ projects });
+
+    } catch (e) {
+      alert(this.props.localization.cloneDialog.failedToRemove);
+
+    }
+
+    this.setState({ processing: false });
   };
 
   handleTitleChange = async (project, title) => {
