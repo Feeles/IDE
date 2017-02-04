@@ -47,7 +47,12 @@ export default class CloneDialog extends PureComponent {
     error: null,
     projects: null,
     processing: false,
+    currentProject: this.props.project,
   };
+
+  get hasSaved() {
+    return !!this.state.currentProject;
+  }
 
   async componentWillMount() {
     this.setState({
@@ -116,23 +121,14 @@ export default class CloneDialog extends PureComponent {
     this.setState({ bundleType });
   };
 
-  handleCreate = () => {
-    if (this.props.project) {
+  handleCreate = async () => {
+    if (this.hasSaved) {
       return;
     }
+    this.setState({ processing: true });
+
     const identifier = this.props.getConfig('ogp')['og:title'] || '';
     const storeName = `${identifier}@${new Date().getTime()}`;
-
-    return this.handleSave({
-      storeName,
-      htmlKey: storeName, // Backword compatibility
-      title: '',
-      created: new Date().getTime(),
-    });
-  };
-
-  handleSave = async (project) => {
-    this.setState({ processing: true });
 
     const html = await SourceFile.embed({
       getConfig: this.props.getConfig,
@@ -140,23 +136,20 @@ export default class CloneDialog extends PureComponent {
       coreString: this.props.coreString,
     });
 
-    project = {
-      ...project,
-      size: html.blob.size,
-      updated: new Date().getTime(),
-      CORE_VERSION,
-      CORE_CDN_URL,
-    };
-
-    const previous = this.state.projects.find((item) => item.storeName === project.storeName);
-    const projects = previous ?
-      this.state.projects.map((item) => item === previous ? project : item) :
-      [project].concat(this.state.projects);
-
     try {
+      const project = await this.props.updateProject({
+        storeName,
+        htmlKey: storeName, // Backword compatibility
+        title: '',
+        created: new Date().getTime(),
+        size: html.blob.size,
+        updated: new Date().getTime(),
+        CORE_VERSION,
+        CORE_CDN_URL,
+      });
 
+      // Backword compatibility
       await localforage.setItem(project.htmlKey, html.blob);
-      await localforage.setItem(KEY_PROJECTS, projects);
 
       // File separated store
       const store = localforage.createInstance({
@@ -167,18 +160,16 @@ export default class CloneDialog extends PureComponent {
         await store.setItem(file.name, file.serialize());
       }
 
-      this.setState({ projects });
+      this.setState({
+        currentProject: project,
+        projects: [project].concat(this.state.projects),
+      });
 
     } catch (e) {
-
-      await localforage.removeItem(project.htmlKey);
-
       alert(this.props.localization.cloneDialog.failedToSave);
 
     }
-
     this.setState({ processing: false });
-
   };
 
   handleLoad = async (project, openInNewTab) => {
@@ -253,10 +244,11 @@ export default class CloneDialog extends PureComponent {
     try {
       this.setState({ processing: true });
 
-      if (this.props.project && this.props.project.storeName === project.storeName) {
+      if (this.hasSaved && this.state.currentProject.storeName === project.storeName) {
         // Modify current project
-        await this.props.updateProject({ title })
+        const currentProject = await this.props.updateProject({ title });
         this.setState({
+          currentProject,
           projects: await localforage.getItem(KEY_PROJECTS),
         });
       } else {
@@ -286,128 +278,62 @@ export default class CloneDialog extends PureComponent {
     }
   };
 
-  renderProjectCards(isSave) {
-    if (
-      !this.state.projects ||
-      !this.props.coreString
-    ) {
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <CircularProgress size={120} />
-        </div>
-      );
-    }
-
+  renderProjectCard(item, styles) {
     const {
       localization,
-      project,
     } = this.props;
 
-    const styles = {
-      container: {
-        margin: 16,
-        padding: 8,
-        paddingBottom: 16,
-        maxHeight: '20rem',
-        overflow: 'scroll',
-        backgroundColor: brown50,
-      },
-      card: (current) => ({
-        marginTop: 16,
-        borderStyle: 'solid',
-        borderWidth: 1,
-        borderColor: isSave ? lightBlue100 : red100,
-        backgroundColor: !current ? fullWhite :
-          isSave ? lightBlue100 : red100,
-      }),
-      remove: {
-        color: red400,
-      },
-      label: {
-        fontWeight: 600,
-        marginRight: '1rem',
-      },
-    };
-
     return (
-      <div style={styles.container}>
-      {this.props.project ? (
-        <span>{localization.cloneDialog.autoSaved}</span>
-      ) :
-      isSave ? (
-        <RaisedButton fullWidth
-          key={'new_project'}
-          label={localization.cloneDialog.saveInNew}
-          style={styles.card(false)}
-          icon={<ContentAddCircle />}
-          disabled={this.state.processing}
-          onTouchTap={this.handleCreate}
+      <Card
+        key={item.storeName}
+        style={styles.card}
+      >
+        <CardHeader showExpandableButton
+          title={(
+            <EditableLabel id="title"
+              defaultValue={item.title}
+              tapTwiceQuickly={localization.common.tapTwiceQuickly}
+              onEditEnd={(text) => this.handleTitleChange(item, text)}
+            />
+          )}
+          subtitle={new Date(item.updated).toLocaleString()}
         />
-      ) : null}
-      {this.state.projects.map((item, i) => (
-        <Card
-          key={item.storeName}
-          style={styles.card(project && project.storeName === item.storeName)}
-        >
-          <CardHeader showExpandableButton
-            title={(
-              <EditableLabel id="title"
-                defaultValue={item.title}
-                tapTwiceQuickly={localization.common.tapTwiceQuickly}
-                onEditEnd={(text) => this.handleTitleChange(item, text)}
-              />
-            )}
-            subtitle={new Date(item.updated).toLocaleString()}
+        <CardText expandable>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.created}</span>
+            {new Date(item.created).toLocaleString()}
+          </div>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.updated}</span>
+            {new Date(item.updated).toLocaleString()}
+          </div>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.size}</span>
+            {`${(item.size / 1024 / 1024).toFixed(2)}MB`}
+          </div>
+        </CardText>
+        <CardActions>
+          <FlatButton
+            label={localization.cloneDialog.openOnThisTab}
+            icon={<ActionOpenInBrowser />}
+            disabled={this.state.processing}
+            onTouchTap={() => this.handleLoad(item, false)}
           />
-          <CardText expandable>
-            <div>
-              <span style={styles.label}>{localization.cloneDialog.created}</span>
-              {new Date(item.created).toLocaleString()}
-            </div>
-            <div>
-              <span style={styles.label}>{localization.cloneDialog.updated}</span>
-              {new Date(item.updated).toLocaleString()}
-            </div>
-            <div>
-              <span style={styles.label}>{localization.cloneDialog.size}</span>
-              {`${(item.size / 1024 / 1024).toFixed(2)}MB`}
-            </div>
-          </CardText>
-        {isSave ? (
-          <CardActions>
-            <FlatButton
-              label={localization.cloneDialog.overwriteSave}
-              icon={<ContentSave />}
-              disabled={this.state.processing}
-              onTouchTap={() => this.handleSave(item)}
-            />
-            <FlatButton
-              label={localization.cloneDialog.remove}
-              icon={<ActionDelete color={red400} />}
-              labelStyle={styles.remove}
-              disabled={this.state.processing}
-              onTouchTap={() => this.handleRemove(item)}
-            />
-          </CardActions>
-        ) : (
-          <CardActions>
-            <FlatButton
-              label={localization.cloneDialog.openOnThisTab}
-              icon={<ActionOpenInBrowser />}
-              disabled={this.state.processing}
-              onTouchTap={() => this.handleLoad(item, false)}
-            />
-            <FlatButton
-              label={localization.cloneDialog.openInNewTab}
-              icon={<ActionOpenInNew />}
-              disabled={this.state.processing}
-              onTouchTap={() => this.handleLoad(item, true)}
-            />
-          </CardActions>
-        )}
-        </Card>
-      ))}
-      </div>
+          <FlatButton
+            label={localization.cloneDialog.openInNewTab}
+            icon={<ActionOpenInNew />}
+            disabled={this.state.processing}
+            onTouchTap={() => this.handleLoad(item, true)}
+          />
+          <FlatButton
+            label={localization.cloneDialog.remove}
+            icon={<ActionDelete color={red400} />}
+            labelStyle={styles.remove}
+            disabled={this.state.processing}
+            onTouchTap={() => this.handleRemove(item)}
+          />
+        </CardActions>
+      </Card>
     );
   }
 
@@ -418,7 +344,10 @@ export default class CloneDialog extends PureComponent {
       localization,
       coreString,
     } = this.props;
-    const { bundleType } = this.state;
+    const {
+      bundleType,
+      currentProject,
+    } = this.state;
 
     const styles = {
       body: {
@@ -438,6 +367,24 @@ export default class CloneDialog extends PureComponent {
       },
       center: {
         textAlign: 'center',
+      },
+      container: {
+        margin: 16,
+        padding: 8,
+        paddingBottom: 16,
+        height: '20rem',
+        overflow: 'scroll',
+        backgroundColor: brown50,
+      },
+      card: {
+        marginTop: 16,
+      },
+      remove: {
+        color: red400,
+      },
+      label: {
+        fontWeight: 600,
+        marginRight: '1rem',
       },
     };
 
@@ -459,11 +406,47 @@ export default class CloneDialog extends PureComponent {
         <Tabs>
           <Tab label={localization.cloneDialog.saveTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.saveHeader}</h1>
-            {this.renderProjectCards(true)}
+            <div style={styles.container}>
+            {this.hasSaved ? [
+              <span key="">{localization.cloneDialog.autoSaved}</span>,
+              <Card
+                key="current"
+                style={styles.card}
+              >
+                <CardHeader
+                  title={(
+                    <EditableLabel id="title"
+                      defaultValue={currentProject.title}
+                      tapTwiceQuickly={localization.common.tapTwiceQuickly}
+                      onEditEnd={(text) => this.handleTitleChange(currentProject, text)}
+                    />
+                  )}
+                  subtitle={new Date(currentProject.updated).toLocaleString()}
+                />
+              </Card>
+            ] : (
+              <RaisedButton fullWidth
+                key={'new_project'}
+                label={localization.cloneDialog.saveInNew}
+                style={styles.card}
+                icon={<ContentAddCircle />}
+                disabled={this.state.processing}
+                onTouchTap={this.handleCreate}
+              />
+            )}
+            </div>
           </Tab>
           <Tab label={localization.cloneDialog.loadTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.loadHeader}</h1>
-            {this.renderProjectCards(false)}
+            {!this.state.projects || !this.props.coreString ? (
+              <div style={{ textAlign: 'center' }}>
+                <CircularProgress size={120} />
+              </div>
+            ) : (
+              <div style={styles.container}>
+              {this.state.projects.map((item) => this.renderProjectCard(item, styles))}
+              </div>
+            )}
           </Tab>
           <Tab label={localization.cloneDialog.cloneTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.cloneHeader}</h1>
