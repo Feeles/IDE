@@ -47,7 +47,12 @@ export default class CloneDialog extends PureComponent {
     error: null,
     projects: null,
     processing: false,
+    currentProject: this.props.project,
   };
+
+  get hasSaved() {
+    return !!this.state.currentProject;
+  }
 
   async componentWillMount() {
     this.setState({
@@ -117,7 +122,7 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleCreate = () => {
-    if (this.props.project) {
+    if (this.hasSaved) {
       return;
     }
     const identifier = this.props.getConfig('ogp')['og:title'] || '';
@@ -331,7 +336,7 @@ export default class CloneDialog extends PureComponent {
 
     return (
       <div style={styles.container}>
-      {this.props.project ? (
+      {this.hasSaved ? (
         <span>{localization.cloneDialog.autoSaved}</span>
       ) :
       isSave ? (
@@ -347,7 +352,7 @@ export default class CloneDialog extends PureComponent {
       {this.state.projects.map((item, i) => (
         <Card
           key={item.storeName}
-          style={styles.card(project && project.storeName === item.storeName)}
+          style={styles.card(this.hasSaved && this.state.currentProject.storeName === item.storeName)}
         >
           <CardHeader showExpandableButton
             title={(
