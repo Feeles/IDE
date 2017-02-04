@@ -252,11 +252,23 @@ class Main extends Component {
     return nextFile;
   };
 
-  deleteFile = (...targets) => new Promise((resolve, reject) => {
+  deleteFile = async (...targets) => {
+    const timestamp = new Date().getTime();
+    await 1; // Be async
+
     const keys = targets.map((item) => item.key);
     const files = this.state.files.filter((item) => !keys.includes(item.key));
-    this.setState({ files }, () => resolve());
-  });
+    await this.setStatePromise({ files });
+
+    if (this.state.localforageInstance) {
+      for (const {name} of targets) {
+        await this.state.localforageInstance.removeItem(name);
+      }
+      await this.updateProject({
+        updated: timestamp,
+      });
+    }
+  };
 
   _configs = new Map();
   getConfig = (key) => {
