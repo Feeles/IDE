@@ -152,7 +152,7 @@ class Main extends Component {
 
       const projects = await localforage.getItem(KEY_PROJECTS) || [];
       this.setState({
-        localforageInstance,
+        localforageInstance: this.props.localforageInstance,
         project: projects.find((item) => item.storeName === storeName),
       });
     }
