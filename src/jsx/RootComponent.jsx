@@ -24,20 +24,18 @@ class RootComponent extends Component {
     return this.props.files.length - this.state.files.length;
   }
 
-  componentWillMount() {
-    (async () => {
-      for (const promise of this.props.files) {
+  async componentWillMount() {
+    for (const promise of this.props.files) {
 
-        const file = await promise;
+      const file = await promise;
 
-        this.setState({
-          files: this.state.files.concat(file),
-        });
+      this.setState({
+        files: this.state.files.concat(file),
+      });
 
-        await this.wait();
+      await this.wait();
 
-      }
-    })();
+    }
   }
 
   async wait() {

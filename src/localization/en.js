@@ -39,6 +39,7 @@ export default {
     failedToOpenTab: 'Failed to open an app because new tab is blocked!!',
     failedToRename: 'Failed to rename this app.',
     titleIsRequired: 'Project title is required to open via URL.',
+    autoSaved: 'It is automatically saved ;)',
   },
   saveDialog: {
     title: 'You need to download it manually, because Your browser does not support HTML5!',

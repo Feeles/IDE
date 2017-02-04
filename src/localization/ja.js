@@ -40,6 +40,7 @@ export default {
     failedToOpenTab: 'ポップアップがブロックされたため、アプリの読み込みに失敗しました',
     failedToRename: 'アプリの名前を変更できませんでした',
     titleIsRequired: 'プロジェクトにはタイトルを必ずつけてください',
+    autoSaved: 'オートセーブされています',
   },
   saveDialog: {
     title: 'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',
