@@ -377,28 +377,33 @@ class Main extends Component {
     return null;
   };
 
-  updateProject = async ({ title, updated }) => {
-    const {storeName} = this.props.localforageInstance._dbInfo;
-    const projects = await localforage.getItem(KEY_PROJECTS);
-    const current = projects.find((item) => item.storeName === storeName);
+  updateProject = async (update) => {
+    // Register new project
+    if (!this.state.project) {
+      await this.setStatePromise({
+        project: update,
+      });
+      return this.updateProject(update);
+    }
 
-    // Update title
-    if (typeof title === 'string') {
-      for (const project of projects) {
-        if (project.title === title) {
-          // Same title is found, Do nothing
-          return this.state.project;
-        }
+    const projects = await localforage.getItem(KEY_PROJECTS) || [];
+    const found = projects.find((item) => item.storeName === this.state.project.storeName);
+    const current = found || this.state.project;
+    if (!found) {
+      projects.push(current);
+    }
+
+    if (typeof update.title === 'string') {
+      // Check title confliction
+      if (
+        projects.some(item => item.title === update.title && item.storeName !== update.storeName)
+      ) {
+        return current;
       }
-      // Temporaly updating
-      Object.assign(current, { title });
-    }
-    // Update updated time
-    if (typeof updated === 'number') {
-      // Temporaly updating
-      Object.assign(current, { updated });
     }
 
+    // Update
+    Object.assign(current, update);
     await localforage.setItem(KEY_PROJECTS, projects);
     await this.setStatePromise({ project: current });
 
