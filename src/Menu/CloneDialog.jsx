@@ -117,6 +117,9 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleCreate = () => {
+    if (this.props.project) {
+      return;
+    }
     const identifier = this.props.getConfig('ogp')['og:title'] || '';
     const storeName = `${identifier}@${new Date().getTime()}`;
 
@@ -321,7 +324,10 @@ export default class CloneDialog extends PureComponent {
 
     return (
       <div style={styles.container}>
-      {isSave ? (
+      {this.props.project ? (
+        <span>{localization.cloneDialog.autoSaved}</span>
+      ) :
+      isSave ? (
         <RaisedButton fullWidth
           key={'new_project'}
           label={localization.cloneDialog.saveInNew}
