@@ -137,12 +137,13 @@ export default class CloneDialog extends PureComponent {
       coreString: this.props.coreString,
     });
 
-    project = Object.assign({}, project, {
+    project = {
+      ...project,
       size: html.blob.size,
       updated: new Date().getTime(),
       CORE_VERSION,
       CORE_CDN_URL,
-    });
+    };
 
     const previous = this.state.projects.find((item) => item.storeName === project.storeName);
     const projects = previous ?
@@ -163,21 +164,17 @@ export default class CloneDialog extends PureComponent {
         await store.setItem(file.name, file.serialize());
       }
 
-      this.setState({
-        projects,
-        processing: false,
-      });
+      this.setState({ projects });
 
     } catch (e) {
 
       await localforage.removeItem(project.htmlKey);
 
       alert(this.props.localization.cloneDialog.failedToSave);
-      this.setState({
-        processing: false,
-      });
 
     }
+
+    this.setState({ processing: false });
 
   };
 
