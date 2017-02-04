@@ -121,23 +121,14 @@ export default class CloneDialog extends PureComponent {
     this.setState({ bundleType });
   };
 
-  handleCreate = () => {
+  handleCreate = async () => {
     if (this.hasSaved) {
       return;
     }
+    this.setState({ processing: true });
+
     const identifier = this.props.getConfig('ogp')['og:title'] || '';
     const storeName = `${identifier}@${new Date().getTime()}`;
-
-    return this.handleSave({
-      storeName,
-      htmlKey: storeName, // Backword compatibility
-      title: '',
-      created: new Date().getTime(),
-    });
-  };
-
-  handleSave = async (project) => {
-    this.setState({ processing: true });
 
     const html = await SourceFile.embed({
       getConfig: this.props.getConfig,
@@ -145,23 +136,20 @@ export default class CloneDialog extends PureComponent {
       coreString: this.props.coreString,
     });
 
-    project = {
-      ...project,
-      size: html.blob.size,
-      updated: new Date().getTime(),
-      CORE_VERSION,
-      CORE_CDN_URL,
-    };
-
-    const previous = this.state.projects.find((item) => item.storeName === project.storeName);
-    const projects = previous ?
-      this.state.projects.map((item) => item === previous ? project : item) :
-      [project].concat(this.state.projects);
-
     try {
+      const project = await this.props.updateProject({
+        storeName,
+        htmlKey: storeName, // Backword compatibility
+        title: '',
+        created: new Date().getTime(),
+        size: html.blob.size,
+        updated: new Date().getTime(),
+        CORE_VERSION,
+        CORE_CDN_URL,
+      });
 
+      // Backword compatibility
       await localforage.setItem(project.htmlKey, html.blob);
-      await localforage.setItem(KEY_PROJECTS, projects);
 
       // File separated store
       const store = localforage.createInstance({
@@ -172,18 +160,16 @@ export default class CloneDialog extends PureComponent {
         await store.setItem(file.name, file.serialize());
       }
 
-      this.setState({ projects });
+      this.setState({
+        currentProject: project,
+        projects: [project].concat(this.state.projects),
+      });
 
     } catch (e) {
-
-      await localforage.removeItem(project.htmlKey);
-
       alert(this.props.localization.cloneDialog.failedToSave);
 
     }
-
     this.setState({ processing: false });
-
   };
 
   handleLoad = async (project, openInNewTab) => {
@@ -258,10 +244,11 @@ export default class CloneDialog extends PureComponent {
     try {
       this.setState({ processing: true });
 
-      if (this.props.project && this.props.project.storeName === project.storeName) {
+      if (this.hasSaved && this.state.currentProject.storeName === project.storeName) {
         // Modify current project
-        await this.props.updateProject({ title })
+        const currentProject = await this.props.updateProject({ title });
         this.setState({
+          currentProject,
           projects: await localforage.getItem(KEY_PROJECTS),
         });
       } else {
@@ -305,7 +292,6 @@ export default class CloneDialog extends PureComponent {
 
     const {
       localization,
-      project,
     } = this.props;
 
     const styles = {
@@ -384,7 +370,6 @@ export default class CloneDialog extends PureComponent {
               label={localization.cloneDialog.overwriteSave}
               icon={<ContentSave />}
               disabled={this.state.processing}
-              onTouchTap={() => this.handleSave(item)}
             />
             <FlatButton
               label={localization.cloneDialog.remove}
