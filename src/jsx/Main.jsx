@@ -503,7 +503,7 @@ class Main extends Component {
   };
 
   openFileDialog = () => console.error('openFileDialog has not be declared');
-  handleFileDialog = (ref) => this.openFileDialog = ref.open;
+  handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
   render() {
     const {
