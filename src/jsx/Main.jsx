@@ -388,7 +388,7 @@ class Main extends Component {
 
     const projects = await localforage.getItem(KEY_PROJECTS) || [];
     const found = projects.find((item) => item.storeName === this.state.project.storeName);
-    const current = found || this.state.project;
+    const current = found || {...this.state.project};
     if (!found) {
       projects.push(current);
     }
