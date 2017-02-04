@@ -71,6 +71,7 @@ export default class Menu extends PureComponent {
     showMonitor: PropTypes.bool.isRequired,
     project: PropTypes.object,
     updateProject: PropTypes.func.isRequired,
+    launchIDE: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -84,6 +85,7 @@ export default class Menu extends PureComponent {
       saveAs: this.props.saveAs,
       project: this.props.project,
       updateProject: this.props.updateProject,
+      launchIDE: this.props.launchIDE,
     });
   };
 

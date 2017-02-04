@@ -40,6 +40,7 @@ export default class CloneDialog extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     project: PropTypes.object,
     updateProject: PropTypes.func.isRequired,
+    launchIDE: PropTypes.func.isRequired,
   };
 
   state = {
@@ -204,9 +205,9 @@ export default class CloneDialog extends PureComponent {
       }
       setURL(`${location.origin}/${project.title}/`);
     } else {
-      // TODO: Bundle HTML with separated files.
-      const blob = await localforage.getItem(project.htmlKey);
-      setURL(URL.createObjectURL(blob));
+      this.props.launchIDE({
+        project: project.storeName
+      });
     }
   };
 

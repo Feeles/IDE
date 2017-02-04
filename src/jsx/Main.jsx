@@ -95,6 +95,7 @@ class Main extends Component {
   static propTypes = {
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
+    launchIDE: PropTypes.func.isRequired,
     inlineScriptId: PropTypes.string,
     localforageInstance: PropTypes.object,
 
@@ -586,6 +587,7 @@ class Main extends Component {
       showMonitor,
       project: this.state.project,
       updateProject: this.updateProject,
+      launchIDE: this.props.launchIDE,
     };
 
     const mediaProps = {
