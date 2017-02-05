@@ -18,7 +18,7 @@ const mdComponents = [
     validate(tag, props) {
       return tag === 'a' && isValidURL(props.href);
     },
-    render(tag, props, children, mdStyles) {
+    render(tag, props, children, component, mdStyles) {
       return (
         <a {...props} style={mdStyles.a} target="_blank">
           {children}
@@ -34,26 +34,27 @@ const mdComponents = [
     validate(tag, props) {
       return tag === 'a';
     },
-    render(tag, props, children, mdStyles) {
-      const touchTap = () => {
-        const found = props.findFile(href);
-        if (found) {
-          const getFile = () => props.findFile(item => item.key === found.key);
-          props.selectTab(new Tab({ getFile }));
-        }
+    render(tag, props, children, component, mdStyles) {
+      const onTouchTap = (event) => {
+        event.stopPropagation();
+        component.props.setLocation({
+          href: props.href,
+        });
       };
-      return <a {...props}
-        href="javascript:void(0)"
-        style={mdStyles.a}
-        onTouchTap={touchTap}
-      >{children}</a>;
+      return (
+        <a key={props.key}
+          href="javascript: void(0)"
+          style={mdStyles.a}
+          onTouchTap={onTouchTap}
+        >{children}</a>
+      );
     }
   }, {
     // 外部リンク画像
     validate(tag, props) {
       return tag === 'img' && isValidURL(props.src);
     },
-    render(tag, props, children, mdStyles) {
+    render(tag, props, children, component, mdStyles) {
       return <img {...props} style={mdStyles.img} />;
     }
   }, {
@@ -61,35 +62,34 @@ const mdComponents = [
     validate(tag, props) {
       return tag === 'img';
     },
-    render(tag, props, children, mdStyles) {
-      const file = props.findFile(props.src);
+    render(tag, props, children, component, mdStyles) {
+      const file = component.props.findFile(props.src);
       if (!file) {
-        return <span {...props}>{props.alt}</span>
+        return <span {...props}>{props.alt}</span>;
       }
-      if (file.is('image')) {
-        return <img {...props} style={mdStyles.img} src={file.blobURL} />
+      if (file.is('blob')) {
+        return <img {...props} style={mdStyles.img} src={file.blobURL} />;
       }
-      if (file.is('html')) {
-        const onTouchTap = (event) => {
-          event.stopPropagation();
-          this.props.setLocation({
-            href: file.name,
-          });
-        };
-        return (
-          <a key={props.key}
-            href="javascript: void(0)"
-            onTouchTap={onTouchTap}
-          >{props.alt}</a>
-        );
-      }
+
+      const touchTap = () => {
+        event.stopPropagation();
+        const getFile = () => component.props.findFile(item => item.key === file.key);
+        component.props.selectTab(new Tab({ getFile }));
+      };
+      return (
+        <a {...props}
+          href="javascript:void(0)"
+          style={mdStyles.a}
+          onTouchTap={touchTap}
+        >{props.alt}</a>
+      );
     }
   }, {
     // インタプリタ
     validate(tag, props) {
       return tag === 'pre';
     },
-    render(tag, props, children, mdStyles) {
+    render(tag, props, children, component, mdStyles) {
       return (
         <ShotFrame
           key={props.key}
@@ -182,7 +182,7 @@ export default class Readme extends PureComponent {
     const onIterate = (tag, props, children) => {
       for (const {validate, render} of mdComponents) {
         if (validate(tag, props)) {
-          return render(tag, props, children, mdStyles);
+          return render(tag, props, children, this, mdStyles);
         }
       }
       if (tag in mdStyles) {
