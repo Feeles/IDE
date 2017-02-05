@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
@@ -21,13 +22,16 @@ const mdComponents = [
     },
     render(tag, props, children, component, mdStyles) {
       return (
-        <a {...props} style={mdStyles.a} target="_blank">
-          {children}
-          <ActionOpenInNew
-            style={mdStyles.iconStyle}
-            color={mdStyles.iconColor}
-          />
-        </a>
+        <RaisedButton primary
+          key={props.key}
+          label={children}
+          href={props.href}
+          labelPosition="before"
+          target="_blank"
+          style={mdStyles.raisedButton}
+          labelStyle={mdStyles.raisedButtonLabel}
+          icon={<ActionOpenInNew />}
+        />
       );
     },
   }, {
@@ -36,18 +40,19 @@ const mdComponents = [
       return tag === 'a';
     },
     render(tag, props, children, component, mdStyles) {
-      const onTouchTap = (event) => {
-        event.stopPropagation();
+      const onTouchTap = () => {
         component.props.setLocation({
           href: props.href,
         });
       };
       return (
-        <a key={props.key}
-          href="javascript: void(0)"
-          style={mdStyles.a}
+        <RaisedButton primary
+          key={props.key}
+          label={children}
+          style={mdStyles.raisedButton}
+          labelStyle={mdStyles.raisedButtonLabel}
           onTouchTap={onTouchTap}
-        >{children}</a>
+        />
       );
     }
   }, {
@@ -73,23 +78,19 @@ const mdComponents = [
       }
 
       // Edit file
-      const touchTap = () => {
-        event.stopPropagation();
+      const onTouchTap = () => {
         const getFile = () => component.props.findFile(item => item.key === file.key);
         component.props.selectTab(new Tab({ getFile }));
       };
       return (
-        <a {...props}
-          href="javascript:void(0)"
-          style={mdStyles.a}
-          onTouchTap={touchTap}
-        >
-          <EditorModeEdit
-            style={mdStyles.iconStyle}
-            color={mdStyles.iconColor}
-          />
-          {props.alt}
-        </a>
+        <RaisedButton primary
+          key={props.key}
+          label={props.alt}
+          icon={<EditorModeEdit />}
+          style={mdStyles.raisedButton}
+          labelStyle={mdStyles.raisedButtonLabel}
+          onTouchTap={onTouchTap}
+        />
       );
     }
   }, {
@@ -151,19 +152,17 @@ const mdStyle = (props, state, context) => {
       padding: '.2em',
       borderRadius: 2,
     },
-    a: {
-      backgroundColor: palette.primary1Color,
-      color: palette.alternateTextColor,
-      borderRadius: 2,
-      textDecoration: 'none',
-      padding: '.4em',
-      lineHeight: 2,
-    },
     iconStyle: {
       transform: 'scale(0.6)',
       verticalAlign: 'middle',
     },
     iconColor: palette.alternateTextColor,
+    raisedButton: {
+      margin: 4,
+    },
+    raisedButtonLabel: {
+      textTransform: 'none',
+    },
   };
 };
 
