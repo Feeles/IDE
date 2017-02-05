@@ -38,7 +38,7 @@ export default {
     failedToSave: 'アプリの保存に失敗しました',
     failedToRemove: 'アプリの削除に失敗しました',
     failedToOpenTab: 'ポップアップがブロックされたため、アプリの読み込みに失敗しました',
-    failedToRename: 'アプリの名前を変更できませんでした',
+    failedToRename: '同じタイトルのプロジェクトを二つ作ることはできません',
     titleIsRequired: 'プロジェクトにはタイトルを必ずつけてください',
     autoSaved: 'オートセーブされています',
   },

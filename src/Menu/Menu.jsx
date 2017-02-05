@@ -71,6 +71,7 @@ export default class Menu extends PureComponent {
     showMonitor: PropTypes.bool.isRequired,
     project: PropTypes.object,
     updateProject: PropTypes.func.isRequired,
+    launchIDE: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -84,6 +85,7 @@ export default class Menu extends PureComponent {
       saveAs: this.props.saveAs,
       project: this.props.project,
       updateProject: this.props.updateProject,
+      launchIDE: this.props.launchIDE,
     });
   };
 
@@ -203,8 +205,12 @@ export default class Menu extends PureComponent {
           <FileCloudUpload color={alternateTextColor} />
         </IconButton>
         <div style={{ flexGrow: 1 }}></div>
-        <div style={styles.projectName}>{this.props.project &&
-          this.props.project.title}</div>
+        <div style={styles.projectName}>
+        {this.props.project && (
+          this.props.project.title ||
+          <i>NO TITLE</i>
+        )}
+        </div>
       </div>
     );
   }

@@ -95,6 +95,7 @@ class Main extends Component {
   static propTypes = {
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
+    launchIDE: PropTypes.func.isRequired,
     inlineScriptId: PropTypes.string,
     localforageInstance: PropTypes.object,
 
@@ -152,7 +153,7 @@ class Main extends Component {
 
       const projects = await localforage.getItem(KEY_PROJECTS) || [];
       this.setState({
-        localforageInstance,
+        localforageInstance: this.props.localforageInstance,
         project: projects.find((item) => item.storeName === storeName),
       });
     }
@@ -252,11 +253,23 @@ class Main extends Component {
     return nextFile;
   };
 
-  deleteFile = (...targets) => new Promise((resolve, reject) => {
+  deleteFile = async (...targets) => {
+    const timestamp = new Date().getTime();
+    await 1; // Be async
+
     const keys = targets.map((item) => item.key);
     const files = this.state.files.filter((item) => !keys.includes(item.key));
-    this.setState({ files }, () => resolve());
-  });
+    await this.setStatePromise({ files });
+
+    if (this.state.localforageInstance) {
+      for (const {name} of targets) {
+        await this.state.localforageInstance.removeItem(name);
+      }
+      await this.updateProject({
+        updated: timestamp,
+      });
+    }
+  };
 
   _configs = new Map();
   getConfig = (key) => {
@@ -403,7 +416,7 @@ class Main extends Component {
       if (
         projects.some(item => item.title === update.title && item.storeName !== update.storeName)
       ) {
-        return current;
+        throw new Error(this.state.localization.cloneDialog.failedToRename);
       }
     }
 
@@ -491,7 +504,7 @@ class Main extends Component {
   };
 
   openFileDialog = () => console.error('openFileDialog has not be declared');
-  handleFileDialog = (ref) => this.openFileDialog = ref.open;
+  handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
   render() {
     const {
@@ -574,6 +587,7 @@ class Main extends Component {
       showMonitor,
       project: this.state.project,
       updateProject: this.updateProject,
+      launchIDE: this.props.launchIDE,
     };
 
     const mediaProps = {

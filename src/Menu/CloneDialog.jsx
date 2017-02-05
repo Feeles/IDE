@@ -19,6 +19,7 @@ import {
 
 import { SourceFile } from '../File/';
 import EditableLabel from '../jsx/EditableLabel';
+import isServiceWorkerEnabled from '../js/isServiceWorkerEnabled';
 
 const BundleTypes = [
   'embed',
@@ -40,6 +41,7 @@ export default class CloneDialog extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     project: PropTypes.object,
     updateProject: PropTypes.func.isRequired,
+    launchIDE: PropTypes.func.isRequired,
   };
 
   state = {
@@ -130,26 +132,21 @@ export default class CloneDialog extends PureComponent {
     const identifier = this.props.getConfig('ogp')['og:title'] || '';
     const storeName = `${identifier}@${new Date().getTime()}`;
 
-    const html = await SourceFile.embed({
-      getConfig: this.props.getConfig,
-      files: this.props.files,
-      coreString: this.props.coreString,
-    });
+    let sumOfBlobSize = 0;
+    for (const file of this.props.files) {
+      sumOfBlobSize += file.blob.size;
+    }
 
     try {
       const project = await this.props.updateProject({
         storeName,
-        htmlKey: storeName, // Backword compatibility
         title: '',
         created: new Date().getTime(),
-        size: html.blob.size,
+        size: sumOfBlobSize,
         updated: new Date().getTime(),
         CORE_VERSION,
         CORE_CDN_URL,
       });
-
-      // Backword compatibility
-      await localforage.setItem(project.htmlKey, html.blob);
 
       // File separated store
       const store = localforage.createInstance({
@@ -173,52 +170,50 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleLoad = async (project, openInNewTab) => {
-    const tab = openInNewTab ? window.open('', '_blank') : null;
-    if (openInNewTab && tab) {
-      this.setState({ processing: true });
-    }
+    const {
+      localization,
+    } = this.props;
 
-    const setURL = (url) => {
-      if (openInNewTab) {
-        if (!tab) {
-          alert(this.props.localization.cloneDialog.failedToOpenTab);
-          return;
+    if (isServiceWorkerEnabled) {
+      try {
+        if (!project.title) {
+          // Required unique title of project to proxy it
+          throw new Error(localization.cloneDialog.titleIsRequired);
         }
-        tab.location.href = url;
-        this.setState({ processing: false });
-      } else {
-        location.href = url;
-      }
-    };
 
-    // Can I use ServiceWorker proxy?
-    if (navigator.serviceWorker &&
-      navigator.serviceWorker.controller &&
-      navigator.serviceWorker.controller.state === 'activated') {
-      // ServiceWorker proxy enabled.
+        if (openInNewTab) {
+          const tab = window.open(`../${project.title}/`, '_blank');
+          if (!tab) {
+            throw new Error(localization.cloneDialog.failedToOpenTab);
+          }
+        } else {
+          location.href = `../${project.title}/`;
+        }
 
-      // Required unique title of project to proxy it
-      if (!project.title) {
-        alert(this.props.localization.cloneDialog.titleIsRequired);
-        return;
+      } catch (e) {
+        console.error(e);
+        if (e.message) {
+          alert(e.message);
+        }
       }
-      setURL(`${location.origin}/${project.title}/`);
     } else {
-      // TODO: Bundle HTML with separated files.
-      const blob = await localforage.getItem(project.htmlKey);
-      setURL(URL.createObjectURL(blob));
+      this.props.launchIDE({
+        project: project.storeName
+      });
     }
   };
 
   handleRemove = async (project) => {
-    if (!confirm(this.props.localization.common.cannotBeUndone)) {
+    const {
+      localization,
+    } = this.props;
+
+    if (!confirm(localization.common.cannotBeUndone)) {
       return;
     }
     this.setState({ processing: true });
 
     try {
-      // Backword compatibility
-      await localforage.removeItem(project.htmlKey);
       // Remove store
       const store = localforage.createInstance({
         name: 'projects',
@@ -233,7 +228,7 @@ export default class CloneDialog extends PureComponent {
       this.setState({ projects });
 
     } catch (e) {
-      alert(this.props.localization.cloneDialog.failedToRemove);
+      alert(localization.cloneDialog.failedToRemove);
 
     }
 
@@ -241,6 +236,10 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleTitleChange = async (project, title) => {
+    const {
+      localization,
+    } = this.props;
+
     try {
       this.setState({ processing: true });
 
@@ -254,7 +253,7 @@ export default class CloneDialog extends PureComponent {
       } else {
         if (this.state.projects.some((item) => item.title === title)) {
           // Same name found.
-          throw `${title} is exist.`;
+          throw new Error(localization.cloneDialog.failedToRename);
         }
         // Modify others
         const projects = this.state.projects
@@ -270,7 +269,9 @@ export default class CloneDialog extends PureComponent {
 
     } catch (e) {
       console.error(e);
-      alert(this.props.localization.cloneDialog.failedToRename);
+      if (e.message) {
+        alert(e.message);
+      }
 
     } finally {
       this.setState({ processing: false });
@@ -322,7 +323,7 @@ export default class CloneDialog extends PureComponent {
           <FlatButton
             label={localization.cloneDialog.openInNewTab}
             icon={<ActionOpenInNew />}
-            disabled={this.state.processing}
+            disabled={this.state.processing || !isServiceWorkerEnabled}
             onTouchTap={() => this.handleLoad(item, true)}
           />
           <FlatButton
