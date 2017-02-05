@@ -19,11 +19,12 @@ export default async (script) => {
   };
   const credits = script.hasAttribute('data-credits') ?
     JSON.parse(script.getAttribute('data-credits')) : [];
+  const lastModified = +script.getAttribute('data-last-modified') || 0;
 
   const text = decode(script.textContent);
 
   if (validateType('text', type)) {
-    return new SourceFile({ type, name, text, options, credits });
+    return new SourceFile({ type, name, text, options, credits, lastModified });
   }
 
   if (validateType('blob', type)) {
@@ -35,7 +36,7 @@ export default async (script) => {
     const blob = new Blob([byteArray.buffer], { type });
     const hash = md5(byteArray);
 
-    return new BinaryFile({ type, name, blob, options, credits, hash });
+    return new BinaryFile({ type, name, blob, options, credits, hash, lastModified });
   }
 
   throw 'Unknown File Type ' + type;
