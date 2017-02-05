@@ -1,6 +1,9 @@
 import React, { PureComponent, PropTypes } from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
+import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
 
 import MDReactComponent from '../../lib/MDReactComponent';
@@ -10,6 +13,105 @@ import ShotFrame from './ShotFrame';
 
 const BarHeight = 36;
 
+
+const mdComponents = [
+  {
+    // 外部リンク
+    validate(tag, props) {
+      return tag === 'a' && isValidURL(props.href);
+    },
+    render(tag, props, children, component, mdStyles) {
+      return (
+        <RaisedButton primary
+          key={props.key}
+          label={children}
+          href={props.href}
+          labelPosition="before"
+          target="_blank"
+          style={mdStyles.raisedButton}
+          labelStyle={mdStyles.raisedButtonLabel}
+          icon={<ActionOpenInNew />}
+        />
+      );
+    },
+  }, {
+    // Feeles 内リンク
+    validate(tag, props) {
+      return tag === 'a';
+    },
+    render(tag, props, children, component, mdStyles) {
+      const onTouchTap = () => {
+        component.props.setLocation({
+          href: props.href,
+        });
+      };
+      return (
+        <RaisedButton primary
+          key={props.key}
+          label={children}
+          style={mdStyles.raisedButton}
+          labelStyle={mdStyles.raisedButtonLabel}
+          onTouchTap={onTouchTap}
+        />
+      );
+    }
+  }, {
+    // 外部リンク画像
+    validate(tag, props) {
+      return tag === 'img' && isValidURL(props.src);
+    },
+    render(tag, props, children, component, mdStyles) {
+      return <img {...props} style={mdStyles.img} />;
+    }
+  }, {
+    // Feeles 内画像
+    validate(tag, props) {
+      return tag === 'img';
+    },
+    render(tag, props, children, component, mdStyles) {
+      const file = component.props.findFile(props.src);
+      if (!file) {
+        return <span {...props}>{props.alt}</span>;
+      }
+      if (file.is('blob')) {
+        return <img {...props} style={mdStyles.img} src={file.blobURL} />;
+      }
+
+      // Edit file
+      const onTouchTap = () => {
+        const getFile = () => component.props.findFile(item => item.key === file.key);
+        component.props.selectTab(new Tab({ getFile }));
+      };
+      return (
+        <RaisedButton primary
+          key={props.key}
+          label={props.alt}
+          icon={<EditorModeEdit />}
+          style={mdStyles.raisedButton}
+          labelStyle={mdStyles.raisedButtonLabel}
+          onTouchTap={onTouchTap}
+        />
+      );
+    }
+  }, {
+    // インタプリタ
+    validate(tag, props) {
+      return tag === 'pre';
+    },
+    render(tag, props, children, component, mdStyles) {
+      return (
+        <ShotFrame
+          key={props.key}
+          text={children[0].props.children[0] || ''}
+          onShot={this.props.onShot}
+          localization={localization}
+          getConfig={getConfig}
+          completes={completes}
+        />
+      );
+    }
+  }
+];
 
 const mdStyle = (props, state, context) => {
   const {
@@ -50,6 +152,17 @@ const mdStyle = (props, state, context) => {
       padding: '.2em',
       borderRadius: 2,
     },
+    iconStyle: {
+      transform: 'scale(0.6)',
+      verticalAlign: 'middle',
+    },
+    iconColor: palette.alternateTextColor,
+    raisedButton: {
+      margin: 4,
+    },
+    raisedButtonLabel: {
+      textTransform: 'none',
+    },
   };
 };
 
@@ -70,99 +183,22 @@ export default class Readme extends PureComponent {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  renderIterate(tag, props, children) {
-    const {
-      findFile,
-      selectTab,
-      getConfig,
-      localization,
-      completes,
-    } = this.props;
-
-    if (['blockquote', 'table', 'th', 'td', 'code'].includes(tag)) {
-      return React.createElement(tag, props, children);
-    }
-    if (tag === 'a') {
-      const href = decodeURIComponent(props.href);
-      if (!isValidURL(href)) {
-        props = Object.assign({}, props, {
-          href: 'javascript:void(0)',
-          onTouchTap: () => {
-            const found = findFile(href);
-            if (found) {
-              const getFile = () => findFile(({key}) => key === found.key);
-              selectTab(new Tab({ getFile }));
-            }
-          },
-        });
-      } else {
-        props = {...props, target: '_blank'};
-      }
-
-      return <a {...props}>{children}</a>;
-    }
-    if (tag === 'img') {
-      if (!isValidURL(props.src)) {
-        const file = findFile(decodeURIComponent(props.src));
-        if (!file) {
-          return <span {...props}>{props.alt}</span>
-        }
-        if (file.is('image')) {
-          return <img {...props} src={file.blobURL} />
-        }
-        if (file.is('html')) {
-          const onTouchTap = (event) => {
-            event.stopPropagation();
-            this.props.setLocation({
-              href: file.name,
-            });
-          };
-          return (
-            <a key={props.key}
-              href="javascript: void(0)"
-              onTouchTap={onTouchTap}
-            >{props.alt}</a>
-          );
-        }
-      }
-      return <img {...props} />
-    }
-    if (tag === 'pre') {
-      return (
-        <ShotFrame
-          key={props.key}
-          text={children[0].props.children[0] || ''}
-          onShot={this.props.onShot}
-          localization={localization}
-          getConfig={getConfig}
-          completes={completes}
-        />
-      );
-    }
-
-    return null;
-
-  };
-
   render() {
-    const {
-      file,
-    } = this.props;
-
-    const {
-      prepareStyles,
-    } = this.context.muiTheme;
-
     const mdStyles = mdStyle(this.props, this.state, this.context);
 
     const onIterate = (tag, props, children) => {
-      if (mdStyles[tag]) {
-        const style = prepareStyles(
-          Object.assign({}, props.style || {}, mdStyles[tag])
-        );
-        props = Object.assign({}, props, { style });
+      for (const {validate, render} of mdComponents) {
+        if (validate(tag, props)) {
+          return render(tag, props, children, this, mdStyles);
+        }
       }
-      return this.renderIterate(tag, props, children);
+      if (tag in mdStyles) {
+        props = {...props, style: mdStyles[tag]};
+      }
+      if (children.length < 1) {
+        children = null;
+      }
+      return React.createElement(tag, props, children);
     };
 
     const styles = {
@@ -174,7 +210,7 @@ export default class Readme extends PureComponent {
 
     return (
       <MDReactComponent
-        text={file.text}
+        text={this.props.file.text}
         style={styles.root}
         onIterate={onIterate}
       />
@@ -182,9 +218,11 @@ export default class Readme extends PureComponent {
   }
 }
 
-
-function isValidURL(text) {
-  const a = document.createElement('a');
-  a.href = text;
-  return a.host && a.host != window.location.host;
+function isValidURL(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
