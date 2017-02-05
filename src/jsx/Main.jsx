@@ -205,7 +205,7 @@ class Main extends Component {
   }
 
   addFile = async (file) => {
-    const timestamp = new Date().getTime();
+    const timestamp = file.lastModified || Date.now();
     await 1; // Be async
     const remove = this.inspection(file);
     if (file === remove) {
@@ -230,7 +230,7 @@ class Main extends Component {
   };
 
   putFile = async (prevFile, nextFile) => {
-    const timestamp = new Date().getTime();
+    const timestamp = nextFile.lastModified || Date.now();
     await 1; // Be async
     const remove = this.inspection(nextFile);
     if (remove === nextFile) {
