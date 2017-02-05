@@ -12,6 +12,98 @@ import ShotFrame from './ShotFrame';
 const BarHeight = 36;
 
 
+const mdComponents = [
+  {
+    // 外部リンク
+    validate(tag, props) {
+      return tag === 'a' && isValidURL(props.href);
+    },
+    render(tag, props, children, mdStyles) {
+      return (
+        <a {...props} style={mdStyles.a} target="_blank">
+          {children}
+          <ActionOpenInNew
+            style={mdStyles.iconStyle}
+            color={mdStyles.iconColor}
+          />
+        </a>
+      );
+    },
+  }, {
+    // Feeles 内リンク
+    validate(tag, props) {
+      return tag === 'a';
+    },
+    render(tag, props, children, mdStyles) {
+      const touchTap = () => {
+        const found = props.findFile(href);
+        if (found) {
+          const getFile = () => props.findFile(item => item.key === found.key);
+          props.selectTab(new Tab({ getFile }));
+        }
+      };
+      return <a {...props}
+        href="javascript:void(0)"
+        style={mdStyles.a}
+        onTouchTap={touchTap}
+      >{children}</a>;
+    }
+  }, {
+    // 外部リンク画像
+    validate(tag, props) {
+      return tag === 'img' && isValidURL(props.src);
+    },
+    render(tag, props, children, mdStyles) {
+      return <img {...props} style={mdStyles.img} />;
+    }
+  }, {
+    // Feeles 内画像
+    validate(tag, props) {
+      return tag === 'img';
+    },
+    render(tag, props, children, mdStyles) {
+      const file = props.findFile(props.src);
+      if (!file) {
+        return <span {...props}>{props.alt}</span>
+      }
+      if (file.is('image')) {
+        return <img {...props} style={mdStyles.img} src={file.blobURL} />
+      }
+      if (file.is('html')) {
+        const onTouchTap = (event) => {
+          event.stopPropagation();
+          this.props.setLocation({
+            href: file.name,
+          });
+        };
+        return (
+          <a key={props.key}
+            href="javascript: void(0)"
+            onTouchTap={onTouchTap}
+          >{props.alt}</a>
+        );
+      }
+    }
+  }, {
+    // インタプリタ
+    validate(tag, props) {
+      return tag === 'pre';
+    },
+    render(tag, props, children, mdStyles) {
+      return (
+        <ShotFrame
+          key={props.key}
+          text={children[0].props.children[0] || ''}
+          onShot={this.props.onShot}
+          localization={localization}
+          getConfig={getConfig}
+          completes={completes}
+        />
+      );
+    }
+  }
+];
+
 const mdStyle = (props, state, context) => {
   const {
     palette,
@@ -59,6 +151,11 @@ const mdStyle = (props, state, context) => {
       padding: '.4em',
       lineHeight: 2,
     },
+    iconStyle: {
+      transform: 'scale(0.6)',
+      verticalAlign: 'middle',
+    },
+    iconColor: palette.alternateTextColor,
   };
 };
 
@@ -79,109 +176,22 @@ export default class Readme extends PureComponent {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  renderIterate(tag, props, children) {
-    const {
-      findFile,
-      selectTab,
-      getConfig,
-      localization,
-      completes,
-    } = this.props;
-
-    if (['blockquote', 'table', 'th', 'td', 'code'].includes(tag)) {
-      return React.createElement(tag, props, children);
-    }
-    if (tag === 'a') {
-      const href = decodeURIComponent(props.href);
-      if (isValidURL(href)) {
-        const iconStyle = {
-          transform: 'scale(0.6)',
-          verticalAlign: 'middle',
-        };
-        return (
-          <a {...props} target="_blank">
-            {children}
-            <ActionOpenInNew
-              style={iconStyle}
-              color={this.context.muiTheme.palette.alternateTextColor}
-            />
-          </a>
-        );
-      }
-      const touchTap = () => {
-        const found = findFile(href);
-        if (found) {
-          const getFile = () => findFile(item => item.key === found.key);
-          selectTab(new Tab({ getFile }));
-        }
-      };
-      return <a {...props}
-        href="javascript:void(0)"
-        onTouchTap={touchTap}
-      >{children}</a>;
-    }
-    if (tag === 'img') {
-      if (!isValidURL(props.src)) {
-        const file = findFile(decodeURIComponent(props.src));
-        if (!file) {
-          return <span {...props}>{props.alt}</span>
-        }
-        if (file.is('image')) {
-          return <img {...props} src={file.blobURL} />
-        }
-        if (file.is('html')) {
-          const onTouchTap = (event) => {
-            event.stopPropagation();
-            this.props.setLocation({
-              href: file.name,
-            });
-          };
-          return (
-            <a key={props.key}
-              href="javascript: void(0)"
-              onTouchTap={onTouchTap}
-            >{props.alt}</a>
-          );
-        }
-      }
-      return <img {...props} />
-    }
-    if (tag === 'pre') {
-      return (
-        <ShotFrame
-          key={props.key}
-          text={children[0].props.children[0] || ''}
-          onShot={this.props.onShot}
-          localization={localization}
-          getConfig={getConfig}
-          completes={completes}
-        />
-      );
-    }
-
-    return null;
-
-  };
-
   render() {
-    const {
-      file,
-    } = this.props;
-
-    const {
-      prepareStyles,
-    } = this.context.muiTheme;
-
     const mdStyles = mdStyle(this.props, this.state, this.context);
 
     const onIterate = (tag, props, children) => {
-      if (mdStyles[tag]) {
-        const style = prepareStyles(
-          Object.assign({}, props.style || {}, mdStyles[tag])
-        );
-        props = Object.assign({}, props, { style });
+      for (const {validate, render} of mdComponents) {
+        if (validate(tag, props)) {
+          return render(tag, props, children, mdStyles);
+        }
       }
-      return this.renderIterate(tag, props, children);
+      if (tag in mdStyles) {
+        props = {...props, style: mdStyles[tag]};
+      }
+      if (children.length < 1) {
+        children = null;
+      }
+      return React.createElement(tag, props, children);
     };
 
     const styles = {
@@ -193,7 +203,7 @@ export default class Readme extends PureComponent {
 
     return (
       <MDReactComponent
-        text={file.text}
+        text={this.props.file.text}
         style={styles.root}
         onIterate={onIterate}
       />
@@ -201,9 +211,11 @@ export default class Readme extends PureComponent {
   }
 }
 
-
-function isValidURL(text) {
-  const a = document.createElement('a');
-  a.href = text;
-  return a.host && a.host != window.location.host;
+function isValidURL(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
