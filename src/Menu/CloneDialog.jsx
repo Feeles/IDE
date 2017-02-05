@@ -136,6 +136,10 @@ export default class CloneDialog extends PureComponent {
       files: this.props.files,
       coreString: this.props.coreString,
     });
+    let sumOfBlobSize = 0;
+    for (const file of this.props.files) {
+      sumOfBlobSize += file.blob.size;
+    }
 
     try {
       const project = await this.props.updateProject({
@@ -143,7 +147,7 @@ export default class CloneDialog extends PureComponent {
         htmlKey: storeName, // Backword compatibility
         title: '',
         created: new Date().getTime(),
-        size: html.blob.size,
+        size: sumOfBlobSize,
         updated: new Date().getTime(),
         CORE_VERSION,
         CORE_CDN_URL,
