@@ -12,6 +12,7 @@ export default class _File {
     'name',
     'moduleName',
     'type',
+    'lastModified',
     'options',
     'credits',
     'sign'
@@ -119,6 +120,10 @@ export default class _File {
 
   get error() {
     return this.constructor._babelError.get(this);
+  }
+
+  get lastModified() {
+    return this.props.lastModified || 0;
   }
 
   is(name) {
