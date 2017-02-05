@@ -131,11 +131,6 @@ export default class CloneDialog extends PureComponent {
     const identifier = this.props.getConfig('ogp')['og:title'] || '';
     const storeName = `${identifier}@${new Date().getTime()}`;
 
-    const html = await SourceFile.embed({
-      getConfig: this.props.getConfig,
-      files: this.props.files,
-      coreString: this.props.coreString,
-    });
     let sumOfBlobSize = 0;
     for (const file of this.props.files) {
       sumOfBlobSize += file.blob.size;
@@ -144,7 +139,6 @@ export default class CloneDialog extends PureComponent {
     try {
       const project = await this.props.updateProject({
         storeName,
-        htmlKey: storeName, // Backword compatibility
         title: '',
         created: new Date().getTime(),
         size: sumOfBlobSize,
@@ -152,9 +146,6 @@ export default class CloneDialog extends PureComponent {
         CORE_VERSION,
         CORE_CDN_URL,
       });
-
-      // Backword compatibility
-      await localforage.setItem(project.htmlKey, html.blob);
 
       // File separated store
       const store = localforage.createInstance({
@@ -226,8 +217,6 @@ export default class CloneDialog extends PureComponent {
     this.setState({ processing: true });
 
     try {
-      // Backword compatibility
-      await localforage.removeItem(project.htmlKey);
       // Remove store
       const store = localforage.createInstance({
         name: 'projects',
