@@ -110,7 +110,7 @@ class Main extends Component {
 
     files: this.props.files,
     reboot: false,
-    href: '',
+    href: 'index.html',
 
     tabs: [],
 
@@ -487,7 +487,7 @@ class Main extends Component {
     }
   };
 
-  setLocation = ({ href = '' } = { href: '' }) => {
+  setLocation = ({ href = 'index.html' } = { href: 'index.html' }) => {
     this.setState({
       reboot: true,
       monitorType: maxByPriority(this.state.monitorType, MonitorTypes.Default),

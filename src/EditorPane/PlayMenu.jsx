@@ -35,7 +35,7 @@ export default class PlayMenu extends PureComponent {
 
     if (files.length === 0) {
       this.props.setLocation({
-        href: '',
+        href: 'index.html',
       });
       return;
     }
