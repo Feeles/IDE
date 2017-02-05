@@ -67,7 +67,7 @@ export default class BinaryFile extends _File {
         ...this.sign,
         timestamp: Date.now(),
         hash: this.hash,
-      })
+      });
       serialized.credits = JSON.stringify(credits);
     } else {
       serialized.credits = JSON.stringify(this.credits);
