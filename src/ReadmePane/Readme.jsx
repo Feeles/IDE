@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
+import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 
 
 import MDReactComponent from '../../lib/MDReactComponent';
@@ -92,22 +93,32 @@ export default class Readme extends PureComponent {
     }
     if (tag === 'a') {
       const href = decodeURIComponent(props.href);
-      if (!isValidURL(href)) {
-        props = Object.assign({}, props, {
-          href: 'javascript:void(0)',
-          onTouchTap: () => {
-            const found = findFile(href);
-            if (found) {
-              const getFile = () => findFile(({key}) => key === found.key);
-              selectTab(new Tab({ getFile }));
-            }
-          },
-        });
-      } else {
-        props = {...props, target: '_blank'};
+      if (isValidURL(href)) {
+        const iconStyle = {
+          transform: 'scale(0.6)',
+          verticalAlign: 'middle',
+        };
+        return (
+          <a {...props} target="_blank">
+            {children}
+            <ActionOpenInNew
+              style={iconStyle}
+              color={this.context.muiTheme.palette.alternateTextColor}
+            />
+          </a>
+        );
       }
-
-      return <a {...props}>{children}</a>;
+      const touchTap = () => {
+        const found = findFile(href);
+        if (found) {
+          const getFile = () => findFile(item => item.key === found.key);
+          selectTab(new Tab({ getFile }));
+        }
+      };
+      return <a {...props}
+        href="javascript:void(0)"
+        onTouchTap={touchTap}
+      >{children}</a>;
     }
     if (tag === 'img') {
       if (!isValidURL(props.src)) {
