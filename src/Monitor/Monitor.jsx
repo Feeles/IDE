@@ -144,10 +144,6 @@ export default class Monitor extends PureComponent {
     return this.props.isPopout ? this.popoutFrame : this.inlineFrame;
   }
 
-  get href() {
-    return this.props.href || 'index.html';
-  }
-
   prevent = Promise.resolve();
   async start () {
     const _prevent = this.prevent;
@@ -188,7 +184,7 @@ export default class Monitor extends PureComponent {
       });
     const processedFiles = await Promise.all(buildProcess);
 
-    const htmlFile = this.props.findFile(this.href) || SourceFile.html();
+    const htmlFile = this.props.findFile(this.props.href) || SourceFile.html();
 
     const html = await registerHTML(
       htmlFile.text,
