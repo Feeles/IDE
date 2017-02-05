@@ -116,6 +116,7 @@ export default class SourceFile extends _File {
             type: file.type,
             name: file.name || SourceFile.defaultProps.name,
             text: e.target.result,
+            lastModified: file.lastModified,
           })
         );
       };

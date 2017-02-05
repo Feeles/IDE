@@ -99,6 +99,7 @@ export default class BinaryFile extends _File {
         name: file.name || BinaryFile.defaultProps.name,
         blob: file,
         hash,
+        lastModified: file.lastModified,
       }));
   }
 
