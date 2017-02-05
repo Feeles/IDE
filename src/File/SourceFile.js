@@ -62,7 +62,7 @@ export default class SourceFile extends _File {
         .find((config) => config.test.test(this.name));
       const defaultValue = model ? model.defaultValue : {};
       try {
-        this._json = Object.assign({}, defaultValue, parse(this.text));
+        this._json = {...defaultValue, ...parse(this.text)};
       } catch (e) {
         return {};
       }
@@ -79,8 +79,7 @@ export default class SourceFile extends _File {
     if (!change.text && this.hash) {
       change.hash = this.hash;
     }
-
-    const seed = Object.assign(this.serialize(), change);
+    const seed = {...this.serialize(), ...change};
     seed.key = this.key;
 
     return new this.constructor(seed);
@@ -90,13 +89,12 @@ export default class SourceFile extends _File {
     const serialized = this.serialize();
     serialized.composed = encode(this.text);
     if (this.sign && this.sign === this.credit) {
-      const sign = Object.assign({}, this.sign, {
-        timestamp: new Date().getTime(),
+      const credits = this.credits.concat({
+        ...this.sign,
+        timestamp: Date.now(),
         hash: this.hash,
       });
-      serialized.credits = JSON.stringify(
-        this.credits.concat(sign)
-      );
+      serialized.credits = JSON.stringify(credits);
     } else {
       serialized.credits = JSON.stringify(this.credits);
     }

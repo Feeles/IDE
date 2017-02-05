@@ -31,7 +31,7 @@ export default class BinaryFile extends _File {
   constructor(props) {
     if (props.blob && !props.blobURL) {
       const blobURL = URL.createObjectURL(props.blob);
-      props = Object.assign({}, props, { blobURL });
+      props = {...props, blobURL};
     }
 
     super(props);
@@ -53,7 +53,7 @@ export default class BinaryFile extends _File {
     if (!change.blob && this.hash) {
       change.hash = this.hash;
     }
-    const seed = Object.assign(this.serialize(), change);
+    const seed = {...this.serialize(), ...change};
     seed.key = this.key;
 
     return new BinaryFile(seed);
@@ -62,13 +62,12 @@ export default class BinaryFile extends _File {
   async compose() {
     const serialized = this.serialize();
     if (this.sign && this.sign === this.credit) {
-      const sign = Object.assign({}, this.sign, {
-        timestamp: new Date().getTime(),
+      const credits = this.credits.concat({
+        ...this.sign,
+        timestamp: Date.now(),
         hash: this.hash,
-      });
-      serialized.credits = JSON.stringify(
-        this.credits.concat(sign)
-      );
+      })
+      serialized.credits = JSON.stringify(credits);
     } else {
       serialized.credits = JSON.stringify(this.credits);
     }
