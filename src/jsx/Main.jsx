@@ -416,7 +416,7 @@ class Main extends Component {
       if (
         projects.some(item => item.title === update.title && item.storeName !== update.storeName)
       ) {
-        return current;
+        throw new Error(this.state.localization.cloneDialog.failedToRename);
       }
     }
 

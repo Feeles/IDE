@@ -37,7 +37,7 @@ export default {
     failedToSave: 'Failed to save this app.',
     failedToRemove: 'Failed to remove this app.',
     failedToOpenTab: 'Failed to open an app because new tab is blocked!!',
-    failedToRename: 'Failed to rename this app.',
+    failedToRename: 'It is not possible to create two projects with the same title.',
     titleIsRequired: 'Project title is required to open via URL.',
     autoSaved: 'It is automatically saved ;)',
   },

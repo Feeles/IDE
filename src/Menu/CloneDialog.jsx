@@ -212,7 +212,11 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleRemove = async (project) => {
-    if (!confirm(this.props.localization.common.cannotBeUndone)) {
+    const {
+      localization,
+    } = this.props;
+
+    if (!confirm(localization.common.cannotBeUndone)) {
       return;
     }
     this.setState({ processing: true });
@@ -234,7 +238,7 @@ export default class CloneDialog extends PureComponent {
       this.setState({ projects });
 
     } catch (e) {
-      alert(this.props.localization.cloneDialog.failedToRemove);
+      alert(localization.cloneDialog.failedToRemove);
 
     }
 
@@ -242,6 +246,10 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleTitleChange = async (project, title) => {
+    const {
+      localization,
+    } = this.props;
+
     try {
       this.setState({ processing: true });
 
@@ -255,7 +263,7 @@ export default class CloneDialog extends PureComponent {
       } else {
         if (this.state.projects.some((item) => item.title === title)) {
           // Same name found.
-          throw `${title} is exist.`;
+          throw new Error(localization.cloneDialog.failedToRename);
         }
         // Modify others
         const projects = this.state.projects
@@ -271,7 +279,9 @@ export default class CloneDialog extends PureComponent {
 
     } catch (e) {
       console.error(e);
-      alert(this.props.localization.cloneDialog.failedToRename);
+      if (e.message) {
+        alert(e.message);
+      }
 
     } finally {
       this.setState({ processing: false });
