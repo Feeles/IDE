@@ -19,6 +19,7 @@ import {
 
 import { SourceFile } from '../File/';
 import EditableLabel from '../jsx/EditableLabel';
+import isServiceWorkerEnabled from '../js/isServiceWorkerEnabled';
 
 const BundleTypes = [
   'embed',
@@ -169,36 +170,32 @@ export default class CloneDialog extends PureComponent {
   };
 
   handleLoad = async (project, openInNewTab) => {
-    const tab = openInNewTab ? window.open('', '_blank') : null;
-    if (openInNewTab && tab) {
-      this.setState({ processing: true });
-    }
+    const {
+      localization,
+    } = this.props;
 
-    const setURL = (url) => {
-      if (openInNewTab) {
-        if (!tab) {
-          alert(this.props.localization.cloneDialog.failedToOpenTab);
-          return;
+    if (isServiceWorkerEnabled) {
+      try {
+        if (!project.title) {
+          // Required unique title of project to proxy it
+          throw new Error(localization.cloneDialog.titleIsRequired);
         }
-        tab.location.href = url;
-        this.setState({ processing: false });
-      } else {
-        location.href = url;
-      }
-    };
 
-    // Can I use ServiceWorker proxy?
-    if (navigator.serviceWorker &&
-      navigator.serviceWorker.controller &&
-      navigator.serviceWorker.controller.state === 'activated') {
-      // ServiceWorker proxy enabled.
+        if (openInNewTab) {
+          const tab = window.open(`../${project.title}/`, '_blank');
+          if (!tab) {
+            throw new Error(localization.cloneDialog.failedToOpenTab);
+          }
+        } else {
+          location.href = `../${project.title}/`;
+        }
 
-      // Required unique title of project to proxy it
-      if (!project.title) {
-        alert(this.props.localization.cloneDialog.titleIsRequired);
-        return;
+      } catch (e) {
+        console.error(e);
+        if (e.message) {
+          alert(e.message);
+        }
       }
-      setURL(`${location.origin}/${project.title}/`);
     } else {
       this.props.launchIDE({
         project: project.storeName
@@ -326,7 +323,7 @@ export default class CloneDialog extends PureComponent {
           <FlatButton
             label={localization.cloneDialog.openInNewTab}
             icon={<ActionOpenInNew />}
-            disabled={this.state.processing}
+            disabled={this.state.processing || !isServiceWorkerEnabled}
             onTouchTap={() => this.handleLoad(item, true)}
           />
           <FlatButton
