@@ -207,22 +207,14 @@ export default class SourceFile extends _File {
 <html>
     <head>
         <meta charset="utf-8">
-        <title></title>
-        <style media="screen">
-        body {
-          margin: 0;
-          padding: 0;
-          border: 0 none;
-          overflow: hidden;
-        }
-        </style>
-        <script src="main.js"></script>
+        <title>404 Not Found</title>
     </head>
-    <body>
+    <body style="background-color: white;">
+      File Not Found
     </body>
 </html>`;
     return new SourceFile({
-      name: 'index.html',
+      name: '404.html',
       type: 'text/html',
       text,
     });

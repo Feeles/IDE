@@ -88,10 +88,12 @@ export default async (html, findFile, scriptFiles, env) => {
 
   // 5. a 要素の href 属性を feeles.replace に差し替える
   for (const node of [...doc.links]) {
-    const file = findFile(node.getAttribute('href'));
-    if (!file) continue;
-
-    node.setAttribute('href', `javascript: feeles.replace('${file.name}')`);
+    if (node.getAttribute('target') === '_blank') {
+      // 別タブで開くリンクはリプレイスしない
+      continue;
+    }
+    const href = node.getAttribute('href') || '';
+    node.setAttribute('href', `javascript: feeles.replace('${href}')`);
   }
 
   return doc.documentElement.outerHTML;
