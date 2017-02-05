@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
 
 import MDReactComponent from '../../lib/MDReactComponent';
@@ -71,6 +72,7 @@ const mdComponents = [
         return <img {...props} style={mdStyles.img} src={file.blobURL} />;
       }
 
+      // Edit file
       const touchTap = () => {
         event.stopPropagation();
         const getFile = () => component.props.findFile(item => item.key === file.key);
@@ -81,7 +83,13 @@ const mdComponents = [
           href="javascript:void(0)"
           style={mdStyles.a}
           onTouchTap={touchTap}
-        >{props.alt}</a>
+        >
+          <EditorModeEdit
+            style={mdStyles.iconStyle}
+            color={mdStyles.iconColor}
+          />
+          {props.alt}
+        </a>
       );
     }
   }, {
