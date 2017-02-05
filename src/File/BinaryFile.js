@@ -55,6 +55,7 @@ export default class BinaryFile extends _File {
     }
     const seed = {...this.serialize(), ...change};
     seed.key = this.key;
+    seed.lastModified = Date.now();
 
     return new BinaryFile(seed);
   }

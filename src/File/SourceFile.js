@@ -81,6 +81,7 @@ export default class SourceFile extends _File {
     }
     const seed = {...this.serialize(), ...change};
     seed.key = this.key;
+    seed.lastModified = Date.now();
 
     return new this.constructor(seed);
   }
