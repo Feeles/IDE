@@ -138,6 +138,9 @@ export default class ReadmeCard extends PureComponent {
         marginRight: -8,
         fontSize: '.5rem',
       },
+      dropDown: {
+        verticalAlign: 'bottom',
+      },
       underline: {
         display: 'none',
       },
@@ -149,6 +152,7 @@ export default class ReadmeCard extends PureComponent {
       </span>,
       <DropDownMenu key="dropDown"
         value={selectedFile.key}
+        style={styles.dropDown}
         underlineStyle={styles.underline}
         onChange={this.handleSelect}
       >
