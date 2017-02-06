@@ -5,8 +5,8 @@ const personalDB = new Dexie('personal');
 
 // DB migrations
 personalDB.version(1).stores({
-  projects: '++id, &title, size, created, updated, CORE_VERSION, CORE_CDN_URL',
-  files: '++id, [projectId+fileName], serializedFile',
+  projects: '++id, &title, size, created, updated',
+  files: '++id, [projectId+fileName]',
 });
 
 export default personalDB;
