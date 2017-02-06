@@ -45,6 +45,9 @@ export async function readProject(title) {
   const project = await personalDB.projects
     .where('title').equalsIgnoreCase(title)
     .first();
+  if (!project) {
+    return null;
+  }
   // select * from files where projectId=project.id;
   const query = personalDB.files
     .where('[projectId+fileName]').between([project.id, ''], [project.id, '\uffff']);
