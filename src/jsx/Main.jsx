@@ -205,8 +205,8 @@ class Main extends Component {
   }
 
   addFile = async (file) => {
-    const timestamp = file.lastModified || Date.now();
     await 1; // Be async
+    const timestamp = file.lastModified || Date.now();
     const remove = this.inspection(file);
     if (file === remove) {
       return file;
@@ -230,8 +230,8 @@ class Main extends Component {
   };
 
   putFile = async (prevFile, nextFile) => {
-    const timestamp = nextFile.lastModified || Date.now();
     await 1; // Be async
+    const timestamp = nextFile.lastModified || Date.now();
     const remove = this.inspection(nextFile);
     if (remove === nextFile) {
       return prevFile;
@@ -254,8 +254,8 @@ class Main extends Component {
   };
 
   deleteFile = async (...targets) => {
-    const timestamp = new Date().getTime();
     await 1; // Be async
+    const timestamp = Date.now();
 
     const keys = targets.map((item) => item.key);
     const files = this.state.files.filter((item) => !keys.includes(item.key));
