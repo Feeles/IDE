@@ -25,8 +25,8 @@ export async function createProject(serializedFiles = []) {
     size,
     created: timestamp,
     updated: timestamp,
-    CORE_VERSION,
-    CORE_CDN_URL,
+    CORE_VERSION: CORE_VERSION,
+    CORE_CDN_URL: CORE_CDN_URL,
   };
   project.id = await personalDB.projects.add(project);
   // Insert files of project
