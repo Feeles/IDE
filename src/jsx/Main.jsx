@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
-import localforage from 'localforage';
 import { DropTarget } from 'react-dnd';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { faintBlack } from 'material-ui/styles/colors';
@@ -13,6 +12,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 
+import {
+  putFile,
+} from '../database/';
 import { BinaryFile, SourceFile, configs } from '../File/';
 import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
@@ -34,7 +36,6 @@ import {
   EditorCard,
   CreditsCard,
 } from '../Cards/';
-import {KEY_PROJECTS} from '../Menu/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -95,9 +96,9 @@ class Main extends Component {
   static propTypes = {
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
+    project: PropTypes.object,
     launchIDE: PropTypes.func.isRequired,
     inlineScriptId: PropTypes.string,
-    localforageInstance: PropTypes.object,
 
     connectDropTarget: PropTypes.func.isRequired,
   };
@@ -120,8 +121,7 @@ class Main extends Component {
     port: null,
     coreString: null,
 
-    project: null,
-    localforageInstance: null,
+    project: this.props.project,
   };
 
   get rootWidth() {
@@ -145,19 +145,6 @@ class Main extends Component {
 
     return multiple ? files.filter(pred) : files.find(pred);
   };
-
-  async componentWillMount() {
-    if (this.props.localforageInstance) {
-      // From indexedDB stored project
-      const {storeName} = this.props.localforageInstance._dbInfo;
-
-      const projects = await localforage.getItem(KEY_PROJECTS) || [];
-      this.setState({
-        localforageInstance: this.props.localforageInstance,
-        project: projects.find((item) => item.storeName === storeName),
-      });
-    }
-  }
 
   componentDidMount() {
     const {
@@ -218,14 +205,9 @@ class Main extends Component {
 
     await this.setStatePromise({ files });
 
-    if (this.state.localforageInstance) {
-      await this.state.localforageInstance
-        .setItem(file.name, file.serialize());
-      await this.updateProject({
-        updated: timestamp,
-      });
+    if (this.state.project) {
+      await putFile(this.state.project.id, file);
     }
-
     return file;
   };
 
@@ -243,12 +225,8 @@ class Main extends Component {
 
     await this.setStatePromise({ files });
 
-    if (this.state.localforageInstance) {
-      await this.state.localforageInstance
-        .setItem(nextFile.name, nextFile.serialize());
-      await this.updateProject({
-        updated: timestamp,
-      });
+    if (this.state.project) {
+      await putFile(this.state.project.id, nextFile);
     }
     return nextFile;
   };
@@ -261,13 +239,9 @@ class Main extends Component {
     const files = this.state.files.filter((item) => !keys.includes(item.key));
     await this.setStatePromise({ files });
 
-    if (this.state.localforageInstance) {
-      for (const {name} of targets) {
-        await this.state.localforageInstance.removeItem(name);
-      }
-      await this.updateProject({
-        updated: timestamp,
-      });
+    if (this.state.project) {
+      const fileNames = targets.map((item) => item.name);
+      await deleteFile(this.state.project.id, ...fileNames);
     }
   };
 
@@ -391,42 +365,9 @@ class Main extends Component {
     return null;
   };
 
-  updateProject = async (update) => {
-    // Register new project
-    if (!this.state.project) {
-      await this.setStatePromise({
-        project: update,
-        localforageInstance: localforage.createInstance({
-          name: 'projects',
-          storeName: update.storeName,
-        }),
-      });
-      return this.updateProject(update);
-    }
-
-    const projects = await localforage.getItem(KEY_PROJECTS) || [];
-    const found = projects.find((item) => item.storeName === this.state.project.storeName);
-    const current = found || {...this.state.project};
-    if (!found) {
-      projects.push(current);
-    }
-
-    if (update.title) {
-      // Check title confliction
-      if (
-        projects.some(item => item.title === update.title && item.storeName !== update.storeName)
-      ) {
-        throw new Error(this.state.localization.cloneDialog.failedToRename);
-      }
-    }
-
-    // Update
-    Object.assign(current, update);
-    await localforage.setItem(KEY_PROJECTS, projects);
-    await this.setStatePromise({ project: current });
-
-    return current;
-  };
+  setProject = (project) => this.setStatePromise({
+    project,
+  });
 
   resize = ((waitFlag = false) =>
   (monitorWidth, monitorHeight, forceFlag = false) => {
@@ -586,7 +527,7 @@ class Main extends Component {
       saveAs: this.saveAs,
       showMonitor,
       project: this.state.project,
-      updateProject: this.updateProject,
+      setProject: this.setProject,
       launchIDE: this.props.launchIDE,
     };
 

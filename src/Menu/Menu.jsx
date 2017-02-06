@@ -1,5 +1,4 @@
 import React, { PropTypes, PureComponent } from 'react';
-import localforage from 'localforage';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
@@ -70,7 +69,7 @@ export default class Menu extends PureComponent {
     saveAs: PropTypes.func.isRequired,
     showMonitor: PropTypes.bool.isRequired,
     project: PropTypes.object,
-    updateProject: PropTypes.func.isRequired,
+    setProject: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
   };
 
@@ -84,7 +83,7 @@ export default class Menu extends PureComponent {
       files: this.props.files,
       saveAs: this.props.saveAs,
       project: this.props.project,
-      updateProject: this.props.updateProject,
+      setProject: this.props.setProject,
       launchIDE: this.props.launchIDE,
     });
   };
