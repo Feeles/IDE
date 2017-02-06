@@ -206,7 +206,7 @@ class Main extends Component {
     await this.setStatePromise({ files });
 
     if (this.state.project) {
-      await putFile(this.state.project.id, file);
+      await putFile(this.state.project.id, file.serialize());
     }
     return file;
   };
@@ -226,7 +226,7 @@ class Main extends Component {
     await this.setStatePromise({ files });
 
     if (this.state.project) {
-      await putFile(this.state.project.id, nextFile);
+      await putFile(this.state.project.id, nextFile.serialize());
     }
     return nextFile;
   };

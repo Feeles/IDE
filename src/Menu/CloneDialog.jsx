@@ -133,7 +133,9 @@ export default class CloneDialog extends PureComponent {
     this.setState({ processing: true });
 
     try {
-      const project = await createProject(this.props.files);
+      const project = await createProject(
+        this.props.files.map((item) => item.serialize())
+      );
       await this.props.setProject(project);
 
       this.setState({

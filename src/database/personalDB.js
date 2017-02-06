@@ -11,13 +11,13 @@ personalDB.version(1).stores({
 
 export default personalDB;
 
-export async function createProject(files = []) {
+export async function createProject(serializedFiles = []) {
   await 1; // Be async
   const timestamp = Date.now();
 
   let size = 0;
-  for (const file of files) {
-    size += file.blob.size;
+  for (const file of serializedFiles) {
+    size += file.blob ? file.blob.size : file.text.length;
   }
   // Create project
   const project = {
@@ -31,10 +31,10 @@ export async function createProject(files = []) {
   project.id = await personalDB.projects.add(project);
   // Insert files of project
   await personalDB.files.bulkAdd(
-    files.map(file => ({
+    serializedFiles.map(item => ({
       projectId: project.id,
-      fileName: file.name,
-      serializedFile: file.serialize(),
+      fileName: item.name,
+      serializedFile: item,
     }))
   );
   // Plain object has "id"
@@ -80,33 +80,34 @@ export async function deleteProject(projectId) {
 }
 
 // Create or Update file
-export async function putFile(projectId, file) {
+export async function putFile(projectId, serializedFile) {
   // Update project's timestamp
   await personalDB.projects
     .where(':id').equals(projectId)
     .modify({
-      updated: file.lastModified || Date.now(),
+      updated: serializedFile.lastModified || Date.now(),
     });
 
-  // Query file by compound index
-  const query = await personalDB.files
-    .where('[projectId+fileName]').equalsIgnoreCase(projectId, file.name);
+  const found = await personalDB.files
+    .where('[projectId+fileName]').equals([projectId, serializedFile.name])
+    .first();
 
-  if (!query.clone().first()) {
+  if (!found) {
     // Any files found, so create new.
     const added = {
       projectId,
-      fileName: file.name,
-      serializedFile: file.serialize(),
+      fileName: serializedFile.name,
+      serializedFile,
     };
     added.id = await personalDB.files.add(added);
     return added;
   } else {
     // A file found, so modify it.
-    await query.modify({
-      serializedFile: file.serialize(),
+    await personalDB.files.where(':id').equals(found.id).modify({
+      serializedFile,
     });
-    return file;
+
+    return serializedFile;
   }
 }
 
@@ -115,7 +116,7 @@ export async function deleteFile(projectId, ...fileNames) {
   await personalDB.projects
     .where(projectId)
     .modify({
-      updated: file.lastModified || Date.now(),
+      updated: Date.now(),
     });
   // Delete files included fileNames
   await personalDB.files
