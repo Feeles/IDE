@@ -83,7 +83,7 @@ export async function deleteProject(projectId) {
 export async function putFile(projectId, file) {
   // Update project's timestamp
   await personalDB.projects
-    .where(projectId)
+    .where(':id').equals(projectId)
     .modify({
       updated: file.lastModified || Date.now(),
     });
