@@ -2,10 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
-import localforage from 'localforage';
 import { grey100, grey500 } from 'material-ui/styles/colors';
 
 
+import {
+  readProject,
+} from '../database/';
 import {
   makeFromElement,
   BinaryFile,
@@ -18,14 +20,16 @@ class RootComponent extends Component {
 
   static propTypes = {
     rootElement: PropTypes.object.isRequired,
-    project: PropTypes.string,
+    // A string as title of project opened
+    title: PropTypes.string,
     inlineScriptId: PropTypes.string,
   };
 
   state = {
     last: Infinity,
     files: [],
-    localforageInstance: null,
+    // An object has project info
+    project: null,
   };
 
   setStatePromise(nextState) {
@@ -36,14 +40,13 @@ class RootComponent extends Component {
 
   async componentWillMount() {
     const {
-      project,
+      title,
       rootElement,
     } = this.props;
 
-    if (typeof project === 'string') {
-      // From localforage
-      this.launchIDE({ project });
-
+    if (typeof title === 'string') {
+      // From indexedDB
+      this.launchIDE({ title });
     } else {
       // from script elements
       const query = rootElement.getAttribute('data-target');
@@ -58,27 +61,28 @@ class RootComponent extends Component {
           await this.wait();
         }
       }
-
     }
   }
 
-  launchIDE = async ({ project }) => {
-    const store = localforage.createInstance({
-      name: 'projects',
-      storeName: project,
-    });
+  launchIDE = async ({ title }) => {
+    const {
+      project,
+      query,
+      length,
+    } = await readProject(title);
 
     this.setState({
-      last: await store.length(),
+      last: length,
       files: [],
-      localforageInstance: store,
+      project,
     });
 
-    await store.iterate((value, key) => {
-      if (validateType('blob', value.type)) {
-        this.progress(new BinaryFile(value));
+    query.each(value => {
+      const seed = value.serializedFile;
+      if (validateType('blob', seed.type)) {
+        this.progress(new BinaryFile(seed));
       } else {
-        this.progress(new SourceFile(value));
+        this.progress(new SourceFile(seed));
       }
     });
   };
@@ -151,7 +155,7 @@ class RootComponent extends Component {
         files={this.state.files}
         rootElement={rootElement}
         rootStyle={getComputedStyle(rootElement)}
-        localforageInstance={this.state.localforageInstance}
+        project={this.state.project}
         launchIDE={this.launchIDE}
       />
     );
