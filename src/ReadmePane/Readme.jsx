@@ -103,10 +103,10 @@ const mdComponents = [
         <ShotFrame
           key={props.key}
           text={children[0].props.children[0] || ''}
-          onShot={this.props.onShot}
-          localization={localization}
-          getConfig={getConfig}
-          completes={completes}
+          onShot={component.props.onShot}
+          localization={component.props.localization}
+          getConfig={component.props.getConfig}
+          completes={component.props.completes}
         />
       );
     }
