@@ -77,7 +77,7 @@ export default class AboutDialog extends PureComponent {
                 {aboutDialog.changeVersion}
                 </TableRowColumn>
                 <TableRowColumn>
-                  <TextField
+                  <TextField multiLine
                     id="ver"
                     defaultValue={CORE_CDN_URL}
                     onChange={this.handleSrcInput}
