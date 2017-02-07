@@ -42,7 +42,7 @@ const mdComponents = [
     render(tag, props, children, component, mdStyles) {
       const onTouchTap = () => {
         component.props.setLocation({
-          href: props.href,
+          href: decodeURIComponent(props.href),
         });
       };
       return (
@@ -69,7 +69,7 @@ const mdComponents = [
       return tag === 'img';
     },
     render(tag, props, children, component, mdStyles) {
-      const file = component.props.findFile(props.src);
+      const file = component.props.findFile(decodeURIComponent(props.src));
       if (!file) {
         return <span {...props}>{props.alt}</span>;
       }
@@ -103,10 +103,10 @@ const mdComponents = [
         <ShotFrame
           key={props.key}
           text={children[0].props.children[0] || ''}
-          onShot={this.props.onShot}
-          localization={localization}
-          getConfig={getConfig}
-          completes={completes}
+          onShot={component.props.onShot}
+          localization={component.props.localization}
+          getConfig={component.props.getConfig}
+          completes={component.props.completes}
         />
       );
     }
