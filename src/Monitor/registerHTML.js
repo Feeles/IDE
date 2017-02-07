@@ -93,7 +93,8 @@ export default async (html, findFile, scriptFiles, env) => {
       continue;
     }
     const href = node.getAttribute('href') || '';
-    node.setAttribute('href', `javascript: feeles.replace('${href}')`);
+    node.setAttribute('href', '#');
+    node.setAttribute('onclick', `feeles.replace('${href}')`);
   }
 
   return doc.documentElement.outerHTML;
