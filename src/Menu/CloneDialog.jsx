@@ -59,9 +59,18 @@ export default class CloneDialog extends PureComponent {
     return !!this.state.currentProject;
   }
 
-  async componentWillMount() {
+  componentWillMount() {
+    this.refreshState();
+  }
+
+  async refreshState(nextProject) {
+    const projects = await personalDB.projects.toArray();
     this.setState({
-      projects: await personalDB.projects.toArray(),
+      projects,
+      currentProject: nextProject || (this.hasSaved ?
+        projects.find(item => item.id === this.state.currentProject.id) :
+        null
+      ),
     });
   }
 
@@ -137,11 +146,7 @@ export default class CloneDialog extends PureComponent {
         this.props.files.map((item) => item.serialize())
       );
       await this.props.setProject(project);
-
-      this.setState({
-        currentProject: project,
-        projects: [project].concat(this.state.projects),
-      });
+      await this.refreshState(project);
 
     } catch (e) {
       console.log(e);
@@ -200,10 +205,9 @@ export default class CloneDialog extends PureComponent {
     try {
       // Delete project and all included files
       await deleteProject(project.id);
+      await this.props.setProject(null);
       // Update project list
-      this.setState({
-        projects: await personalDB.projects.toArray(),
-      });
+      await this.refreshState();
 
     } catch (e) {
       console.error(e);
@@ -225,10 +229,11 @@ export default class CloneDialog extends PureComponent {
       if (this.hasSaved && this.state.currentProject.id === project.id) {
         // Reset current project
         await this.props.setProject(nextProject);
-        this.setState({
-          currentProject: nextProject,
-        });
+        await this.refreshState(nextProject);
+      }else {
+        await this.refreshState();
       }
+
     } catch (e) {
       console.error(e);
       if (typeof e === 'string') {

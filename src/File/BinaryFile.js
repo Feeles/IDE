@@ -21,8 +21,7 @@ export default class BinaryFile extends _File {
   }
 
   static visible = _File.visible.concat(
-    'blob',
-    'blobURL'
+    'blob'
   );
 
   static watchProps = _File.watchProps.concat(

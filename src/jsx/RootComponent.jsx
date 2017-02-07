@@ -124,8 +124,10 @@ class RootComponent extends Component {
         color: 'white',
       },
       count: {
-        fontSize: '.5rem',
         color: grey500,
+        fontSize: '.5rem',
+        fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
+        wordBreak: 'break-all',
       },
     };
 
