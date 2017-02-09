@@ -3,6 +3,7 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
@@ -129,7 +130,7 @@ export default class Menu extends PureComponent {
     const {
       isPopout,
       togglePopout,
-      localization: { menu },
+      localization,
       setLocalization,
       getConfig,
     } = this.props;
@@ -149,7 +150,7 @@ export default class Menu extends PureComponent {
           iconButtonElement={(
             <IconButton
               tooltipPosition="top-center"
-              tooltip={menu.language}
+              tooltip={localization.menu.language}
             >
               <ActionLanguage color={alternateTextColor} />
             </IconButton>
@@ -170,7 +171,7 @@ export default class Menu extends PureComponent {
         </IconMenu>
         <IconButton
           tooltipPosition="top-center"
-          tooltip={menu.popout}
+          tooltip={localization.menu.popout}
           onTouchTap={togglePopout}
           style={styles.button}
           iconStyle={styles.popoutIcon}
@@ -179,7 +180,7 @@ export default class Menu extends PureComponent {
         </IconButton>
         <IconButton
           tooltipPosition="top-center"
-          tooltip={menu.clone}
+          tooltip={localization.menu.clone}
           disabled={!this.props.coreString}
           onTouchTap={this.handleClone}
           style={styles.button}
@@ -188,7 +189,7 @@ export default class Menu extends PureComponent {
         </IconButton>
         <IconButton
           tooltipPosition="top-center"
-          tooltip={menu.aboutFeeles}
+          tooltip={localization.menu.aboutFeeles}
           onTouchTap={this.handleAbout}
           style={styles.button}
         >
@@ -196,7 +197,7 @@ export default class Menu extends PureComponent {
         </IconButton>
         <IconButton
           tooltipPosition="top-center"
-          tooltip={menu.deploy}
+          tooltip={localization.menu.deploy}
           disabled={!canDeploy || !this.props.coreString}
           onTouchTap={this.handleDeploy}
           style={styles.button}
@@ -204,12 +205,19 @@ export default class Menu extends PureComponent {
           <FileCloudUpload color={alternateTextColor} />
         </IconButton>
         <div style={{ flexGrow: 1 }}></div>
-        <div style={styles.projectName}>
-        {this.props.project && (
-          this.props.project.title ||
-          <i>NO TITLE</i>
-        )}
-        </div>
+      {this.props.project && (
+        this.props.project.title ? (
+          <div style={styles.projectName}>
+          {this.props.project.title}
+          </div>
+        ) : (
+          <FlatButton
+            label={localization.cloneDialog.setTitle}
+            labelStyle={{ color: alternateTextColor }}
+            onTouchTap={this.handleClone}
+          />
+        )
+      )}
       </div>
     );
   }

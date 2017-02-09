@@ -381,8 +381,10 @@ export default class CloneDialog extends PureComponent {
                 <CardHeader
                   title={(
                     <EditableLabel id="title"
+                      openImmediately
                       defaultValue={currentProject.title}
                       tapTwiceQuickly={localization.common.tapTwiceQuickly}
+                      hintText={localization.cloneDialog.setTitle}
                       onEditEnd={(text) => this.handleTitleChange(currentProject, text)}
                     />
                   )}
