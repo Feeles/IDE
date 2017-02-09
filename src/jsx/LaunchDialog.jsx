@@ -83,7 +83,7 @@ export default class LaunchDialog extends PureComponent {
         </CardText>
         <CardActions>
           <FlatButton
-            label={localization.cloneDialog.openOnThisTab}
+            label={localization.launchDialog.openProject}
             icon={<ActionOpenInBrowser />}
             disabled={this.state.processing}
             onTouchTap={() => this.launchIDE({
@@ -132,15 +132,15 @@ export default class LaunchDialog extends PureComponent {
     return (
       <Dialog modal
         open={this.props.open}
-        title="Projects are found"
+        title={localization.launchDialog.title}
       >
         <div style={styles.container}>
         {this.state.projects.map(this.renderProjectCard, this)}
         </div>
         <div style={{ textAlign: 'center' }}>
-          or
+        {localization.common.or}
           <RaisedButton primary
-            label="Start new"
+            label={localization.launchDialog.startNew}
             style={styles.button}
             onTouchTap={this.launchFromElements}
           />
