@@ -16,8 +16,9 @@ import {
   validateType
 } from '../File/';
 import getLocalization from '../localization/';
-import Main from './Main';
 import getCustomTheme from '../js/getCustomTheme';
+import Main from './Main';
+import LaunchDialog from './LaunchDialog';
 
 class RootComponent extends Component {
 
@@ -37,6 +38,7 @@ class RootComponent extends Component {
       navigator.languages || [navigator.language]
     )),
     muiTheme: getCustomTheme({}),
+    openDialog: false,
   };
 
   setStatePromise(nextState) {
@@ -54,7 +56,9 @@ class RootComponent extends Component {
       // From indexedDB
       this.launchIDE({ title });
     } else {
-      this.launchFromElements();
+      this.setState({
+        openDialog: true,
+      });
     }
   }
 
@@ -81,7 +85,7 @@ class RootComponent extends Component {
     });
   };
 
-  async launchFromElements() {
+  launchFromElements = async () => {
     // from script elements
     const query = this.props.rootElement.getAttribute('data-target');
     const elements = document.querySelectorAll(`script${query}`);
@@ -95,7 +99,7 @@ class RootComponent extends Component {
         await this.wait();
       }
     }
-  }
+  };
 
   wait() {
     return new Promise((resolve, reject) => {
@@ -112,15 +116,17 @@ class RootComponent extends Component {
     });
   }
 
-  setLocalization = (localization) => {
-    this.setState({ localization });
-  };
+  setLocalization = (localization) => this.setState({
+    localization
+  });
 
-  setMuiTheme = (theme) => {
-    this.setState({
-      muiTheme: getCustomTheme(theme),
-    });
-  };
+  setMuiTheme = (theme) => this.setState({
+    muiTheme: getCustomTheme(theme),
+  });
+
+  closeDialog = () => this.setState({
+    openDialog: false,
+  });
 
   renderLoading = () => {
     const {
@@ -137,11 +143,11 @@ class RootComponent extends Component {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: grey100,
-        fontFamily: 'cursive',
       },
       header: {
         fontWeight: 100,
         color: 'white',
+        fontFamily: 'cursive',
       },
       count: {
         color: grey500,
@@ -159,21 +165,25 @@ class RootComponent extends Component {
           {'='.repeat(files.length) + '+' + '-'.repeat(last - 1)}
         </span>
       ) : null}
+        <LaunchDialog
+          open={this.state.openDialog}
+          localization={this.state.localization}
+          launchIDE={this.launchIDE}
+          launchFromElements={this.launchFromElements}
+          onRequestClose={this.closeDialog}
+        />
       </div>
     );
   };
 
   render() {
-    if (this.state.last > 0) {
-      return this.renderLoading();
-    }
-
     const {
       rootElement,
     } = this.props;
 
     return (
       <MuiThemeProvider muiTheme={this.state.muiTheme}>
+      {this.state.last > 0 ? this.renderLoading() : (
         <Main
           files={this.state.files}
           rootElement={rootElement}
@@ -185,6 +195,7 @@ class RootComponent extends Component {
           muiTheme={this.state.muiTheme}
           setMuiTheme={this.setMuiTheme}
         />
+      )}
       </MuiThemeProvider>
     );
   }
