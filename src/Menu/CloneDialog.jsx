@@ -163,14 +163,8 @@ export default class CloneDialog extends PureComponent {
       localization,
     } = this.props;
 
-    if (!project.title) {
-      // Required unique title of project to proxy it
-      alert(localization.cloneDialog.titleIsRequired);
-      return;
-    }
-
-    if (isServiceWorkerEnabled) {
-      try {
+    try {
+      if (isServiceWorkerEnabled) {
         if (openInNewTab) {
           const tab = window.open(`../${project.title}/`, '_blank');
           if (!tab) {
@@ -179,16 +173,16 @@ export default class CloneDialog extends PureComponent {
         } else {
           location.href = `../${project.title}/`;
         }
-      } catch (e) {
-        console.error(e);
-        if (e.message) {
-          alert(e.message);
-        }
+      } else {
+        await this.props.launchIDE({
+          title: project.title
+        });
       }
-    } else {
-      this.props.launchIDE({
-        title: project.title
-      });
+    } catch (e) {
+      console.error(e);
+      if (e.message) {
+        alert(e.message);
+      }
     }
   };
 
@@ -381,8 +375,10 @@ export default class CloneDialog extends PureComponent {
                 <CardHeader
                   title={(
                     <EditableLabel id="title"
+                      openImmediately={!currentProject.title}
                       defaultValue={currentProject.title}
                       tapTwiceQuickly={localization.common.tapTwiceQuickly}
+                      hintText={localization.cloneDialog.setTitle}
                       onEditEnd={(text) => this.handleTitleChange(currentProject, text)}
                     />
                   )}

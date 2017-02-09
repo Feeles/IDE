@@ -40,6 +40,7 @@ export default {
     failedToRename: 'It is not possible to create two projects with the same title.',
     titleIsRequired: 'Project title is required to open via URL.',
     autoSaved: 'It is automatically saved ;)',
+    setTitle: 'Please set title',
   },
   saveDialog: {
     title: 'You need to download it manually, because Your browser does not support HTML5!',

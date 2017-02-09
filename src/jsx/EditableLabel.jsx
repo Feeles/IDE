@@ -25,11 +25,13 @@ const getStyles = (props, context) => {
 export default class EditableLabel extends Component {
 
   static propTypes = Object.assign({
+    openImmediately: PropTypes.bool.isRequired,
     tapTwiceQuickly: PropTypes.string.isRequired,
     onEditEnd: PropTypes.func,
   }, TextField.propTypes);
 
   static defaultProps = {
+    openImmediately: false,
     tapTwiceQuickly: 'Tap twice quickly',
   };
 
@@ -38,7 +40,7 @@ export default class EditableLabel extends Component {
   };
 
   state = {
-    isEditing: false
+    isEditing: this.props.openImmediately,
   };
 
   touched = false;
@@ -59,6 +61,12 @@ export default class EditableLabel extends Component {
       this.setState({ isEditing: false });
     }
   };
+
+  componentDidMount() {
+    if (this.props.openImmediately && this.input) {
+      this.input.focus();
+    }
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.input) return;
@@ -94,6 +102,7 @@ export default class EditableLabel extends Component {
     const props = Object.assign({}, this.props);
     delete props.onEditEnd;
     delete props.tapTwiceQuickly;
+    delete props.openImmediately;
 
     return isEditing ? (
       <TextField

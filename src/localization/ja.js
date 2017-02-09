@@ -41,6 +41,7 @@ export default {
     failedToRename: '同じタイトルのプロジェクトを二つ作ることはできません',
     titleIsRequired: 'プロジェクトにはタイトルを必ずつけてください',
     autoSaved: 'オートセーブされています',
+    setTitle: 'タイトルをつけてください',
   },
   saveDialog: {
     title: 'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',

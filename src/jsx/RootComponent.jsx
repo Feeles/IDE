@@ -63,6 +63,13 @@ class RootComponent extends Component {
   }
 
   launchIDE = async ({ title }) => {
+    if (!title) {
+      // Required unique title of project to proxy it
+      throw new Error(
+        this.state.localization.cloneDialog.titleIsRequired,
+      );
+    }
+
     const {
       project,
       query,
