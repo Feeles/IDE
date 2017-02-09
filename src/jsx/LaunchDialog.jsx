@@ -12,10 +12,9 @@ import {
 
 import {
   personalDB,
-  createProject,
   updateProject,
-  deleteProject,
 } from '../database/';
+import EditableLabel from '../jsx/EditableLabel';
 
 export default class LaunchDialog extends PureComponent {
 
@@ -43,14 +42,42 @@ export default class LaunchDialog extends PureComponent {
     }
   }
 
-  launchIDE({ title }) {
-    this.props.onRequestClose();
-    this.props.launchIDE({ title });
+  async launchIDE({ title }) {
+    try {
+      await this.props.launchIDE({ title });
+      this.props.onRequestClose();
+
+    } catch (e) {
+      console.error(e);
+      if (e.message) {
+        alert(e.message);
+      }
+    }
   }
 
   launchFromElements = () => {
-    this.props.onRequestClose();
     this.props.launchFromElements();
+    this.props.onRequestClose();
+  };
+
+  handleTitleChange = async (project, title) => {
+    const {
+      localization,
+    } = this.props;
+
+    try {
+      const nextProject = await updateProject(project.id, { title });
+
+      this.setState({
+        projects: await personalDB.projects.toArray(),
+      });
+
+    } catch (e) {
+      console.error(e);
+      if (typeof e === 'string') {
+        alert(localization.cloneDialog[e]);
+      }
+    }
   };
 
   renderProjectCard(item, styles) {
@@ -64,7 +91,13 @@ export default class LaunchDialog extends PureComponent {
         style={styles.card}
       >
         <CardHeader showExpandableButton
-          title={item.title}
+          title={(
+            <EditableLabel id="title"
+              defaultValue={item.title}
+              tapTwiceQuickly={localization.common.tapTwiceQuickly}
+              onEditEnd={(text) => this.handleTitleChange(item, text)}
+            />
+          )}
           subtitle={new Date(item.updated).toLocaleString()}
         />
         <CardText expandable>
