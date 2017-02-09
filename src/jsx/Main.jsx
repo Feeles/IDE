@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import { DropTarget } from 'react-dnd';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { faintBlack } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -16,7 +15,6 @@ import {
   putFile,
 } from '../database/';
 import { BinaryFile, SourceFile, configs } from '../File/';
-import getCustomTheme from '../js/getCustomTheme';
 import EditorPane, { codemirrorStyle } from '../EditorPane/';
 import Hierarchy from '../Hierarchy/';
 import Monitor, { MonitorTypes, maxByPriority } from '../Monitor/';
@@ -100,6 +98,7 @@ class Main extends Component {
     inlineScriptId: PropTypes.string,
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
+    setMuiTheme: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
   };
@@ -267,6 +266,13 @@ class Main extends Component {
     const configFile = this.findFile((file) => (
       !file.options.isTrashed && test.test(file.name)
     ), false);
+
+    // Update Mui theme
+    if (key === 'palette') {
+      this.props.setMuiTheme({
+        palette: config,
+      });
+    }
 
     const indent = '    ';
     const text = JSON.stringify(config, null, indent);
@@ -562,9 +568,7 @@ class Main extends Component {
 
     const userStyle = this.findFile('feeles/codemirror.css');
 
-    return (
-      <MuiThemeProvider muiTheme={getCustomTheme({ palette: this.getConfig('palette') })}>
-      {connectDropTarget(
+    return connectDropTarget(
         <div style={styles.root}>
           <div style={styles.dropCover}></div>
           <div style={styles.left}>
@@ -602,8 +606,6 @@ class Main extends Component {
             <style>{userStyle.text}</style>
           ) : null}
         </div>
-      )}
-      </MuiThemeProvider>
     );
   }
 }

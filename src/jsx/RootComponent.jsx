@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { grey100, grey500 } from 'material-ui/styles/colors';
 
 
@@ -16,6 +17,7 @@ import {
 } from '../File/';
 import getLocalization from '../localization/';
 import Main from './Main';
+import getCustomTheme from '../js/getCustomTheme';
 
 class RootComponent extends Component {
 
@@ -34,6 +36,7 @@ class RootComponent extends Component {
     localization: getLocalization(...(
       navigator.languages || [navigator.language]
     )),
+    muiTheme: getCustomTheme({}),
   };
 
   setStatePromise(nextState) {
@@ -113,6 +116,12 @@ class RootComponent extends Component {
     this.setState({ localization });
   };
 
+  setMuiTheme = (theme) => {
+    this.setState({
+      muiTheme: getCustomTheme(theme),
+    });
+  };
+
   renderLoading = () => {
     const {
       last,
@@ -164,15 +173,19 @@ class RootComponent extends Component {
     } = this.props;
 
     return (
-      <Main
-        files={this.state.files}
-        rootElement={rootElement}
-        rootStyle={getComputedStyle(rootElement)}
-        project={this.state.project}
-        launchIDE={this.launchIDE}
-        localization={this.state.localization}
-        setLocalization={this.setLocalization}
-      />
+      <MuiThemeProvider muiTheme={this.state.muiTheme}>
+        <Main
+          files={this.state.files}
+          rootElement={rootElement}
+          rootStyle={getComputedStyle(rootElement)}
+          project={this.state.project}
+          launchIDE={this.launchIDE}
+          localization={this.state.localization}
+          setLocalization={this.setLocalization}
+          muiTheme={this.state.muiTheme}
+          setMuiTheme={this.setMuiTheme}
+        />
+      </MuiThemeProvider>
     );
   }
 }
