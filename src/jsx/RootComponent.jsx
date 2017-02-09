@@ -38,29 +38,16 @@ class RootComponent extends Component {
     });
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const {
       title,
-      rootElement,
     } = this.props;
 
     if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
     } else {
-      // from script elements
-      const query = rootElement.getAttribute('data-target');
-      const elements = document.querySelectorAll(`script${query}`);
-      this.setState({
-        last: elements.length,
-      });
-
-      for (const item of Array.from(elements)) {
-        this.progress(await makeFromElement(item));
-        if (Math.random() < 0.1 || this.state.last === 1) {
-          await this.wait();
-        }
-      }
+      this.launchFromElements();
     }
   }
 
@@ -86,6 +73,22 @@ class RootComponent extends Component {
       }
     });
   };
+
+  async launchFromElements() {
+    // from script elements
+    const query = this.props.rootElement.getAttribute('data-target');
+    const elements = document.querySelectorAll(`script${query}`);
+    this.setState({
+      last: elements.length,
+    });
+
+    for (const item of Array.from(elements)) {
+      this.progress(await makeFromElement(item));
+      if (Math.random() < 0.1 || this.state.last === 1) {
+        await this.wait();
+      }
+    }
+  }
 
   wait() {
     return new Promise((resolve, reject) => {
