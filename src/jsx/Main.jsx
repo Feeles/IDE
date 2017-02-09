@@ -2,7 +2,6 @@ import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import { DropTarget } from 'react-dnd';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { faintBlack } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -16,8 +15,6 @@ import {
   putFile,
 } from '../database/';
 import { BinaryFile, SourceFile, configs } from '../File/';
-import getLocalization from '../localization/';
-import getCustomTheme from '../js/getCustomTheme';
 import EditorPane, { codemirrorStyle } from '../EditorPane/';
 import Hierarchy from '../Hierarchy/';
 import Monitor, { MonitorTypes, maxByPriority } from '../Monitor/';
@@ -99,6 +96,9 @@ class Main extends Component {
     project: PropTypes.object,
     launchIDE: PropTypes.func.isRequired,
     inlineScriptId: PropTypes.string,
+    localization: PropTypes.object.isRequired,
+    setLocalization: PropTypes.func.isRequired,
+    setMuiTheme: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
   };
@@ -115,9 +115,6 @@ class Main extends Component {
 
     tabs: [],
 
-    localization: getLocalization(...(
-      navigator.languages || [navigator.language]
-    )),
     port: null,
     coreString: null,
 
@@ -150,7 +147,6 @@ class Main extends Component {
     const {
       inlineScriptId,
     } = this.props;
-    const { localization } = this.state;
 
     document.title = this.getConfig('ogp')['og:title'];
 
@@ -271,6 +267,13 @@ class Main extends Component {
       !file.options.isTrashed && test.test(file.name)
     ), false);
 
+    // Update Mui theme
+    if (key === 'palette') {
+      this.props.setMuiTheme({
+        palette: config,
+      });
+    }
+
     const indent = '    ';
     const text = JSON.stringify(config, null, indent);
     if (configFile) {
@@ -355,7 +358,7 @@ class Main extends Component {
 
     if (conflict) {
       // TODO: FileDialog instead of.
-      if (confirm(this.state.localization.common.conflict)) {
+      if (confirm(this.props.localization.common.conflict)) {
         return conflict;
       } else {
         return newFile;
@@ -440,10 +443,6 @@ class Main extends Component {
     return this.setState({ isResizing })
   };
 
-  setLocalization = (localization) => {
-    this.setState({ localization });
-  };
-
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
@@ -457,7 +456,6 @@ class Main extends Component {
       dialogContent,
       monitorWidth, monitorHeight, isResizing,
       reboot,
-      localization,
       port,
     } = this.state;
     const showMonitor = this.state.monitorType === MonitorTypes.Default;
@@ -467,7 +465,7 @@ class Main extends Component {
     const commonProps = {
       files,
       isResizing,
-      localization,
+      localization: this.props.localization,
       getConfig: this.getConfig,
       setConfig: this.setConfig,
       findFile: this.findFile,
@@ -518,7 +516,7 @@ class Main extends Component {
 
     const menuProps = {
       togglePopout: this.handleTogglePopout,
-      setLocalization: this.setLocalization,
+      setLocalization: this.props.setLocalization,
       openFileDialog: this.openFileDialog,
       isPopout: this.state.monitorType === MonitorTypes.Popout,
       monitorWidth,
@@ -570,9 +568,7 @@ class Main extends Component {
 
     const userStyle = this.findFile('feeles/codemirror.css');
 
-    return (
-      <MuiThemeProvider muiTheme={getCustomTheme({ palette: this.getConfig('palette') })}>
-      {connectDropTarget(
+    return connectDropTarget(
         <div style={styles.root}>
           <div style={styles.dropCover}></div>
           <div style={styles.left}>
@@ -593,6 +589,8 @@ class Main extends Component {
             monitorHeight={monitorHeight}
             onSizer={this.setResizing}
             showMonitor={showMonitor}
+            // Be Update (won't use)
+            files={files}
           />
           <div style={styles.right}>
             <EditorPane {...commonProps} {...editorPaneProps} />
@@ -601,7 +599,7 @@ class Main extends Component {
           </div>
           <FileDialog
             ref={this.handleFileDialog}
-            localization={localization}
+            localization={this.props.localization}
             getConfig={this.getConfig}
             setConfig={this.setConfig}
           />
@@ -610,8 +608,6 @@ class Main extends Component {
             <style>{userStyle.text}</style>
           ) : null}
         </div>
-      )}
-      </MuiThemeProvider>
     );
   }
 }

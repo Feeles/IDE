@@ -24,7 +24,7 @@ export const defaultPalette = {
   backgroundColor: fade(random(bgColors), 0.15),
 };
 
-export default ({ palette }) => {
+export default ({ palette = {} }) => {
 
   const {
     backgroundColor,

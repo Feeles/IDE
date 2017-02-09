@@ -53,6 +53,11 @@ export default {
     changeVersion: 'バージョンを変更',
     change: '変更',
   },
+  launchDialog: {
+    title: 'プロジェクトが見つかりました',
+    openProject: 'このプロジェクトを開く',
+    startNew: 'あたらしく始める',
+  },
   editorMenu: {
     lineWrapping: '行のおり返し',
     tabVisibility: 'インデントの表示',
@@ -126,6 +131,7 @@ export default {
     cannotBeUndone: 'この操作は取り消せません',
     editFile: '書きかえる',
     conflict: '同じ名前のファイルがすでに存在します。上書きしますか？',
+    or: 'または',
   },
   editor: {
     undo: 'もどす',

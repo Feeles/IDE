@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { grey100, grey500 } from 'material-ui/styles/colors';
 
 
@@ -14,7 +15,10 @@ import {
   SourceFile,
   validateType
 } from '../File/';
+import getLocalization from '../localization/';
+import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
+import LaunchDialog from './LaunchDialog';
 
 class RootComponent extends Component {
 
@@ -30,6 +34,11 @@ class RootComponent extends Component {
     files: [],
     // An object has project info
     project: null,
+    localization: getLocalization(...(
+      navigator.languages || [navigator.language]
+    )),
+    muiTheme: getCustomTheme({}),
+    openDialog: false,
   };
 
   setStatePromise(nextState) {
@@ -38,29 +47,18 @@ class RootComponent extends Component {
     });
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     const {
       title,
-      rootElement,
     } = this.props;
 
     if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
     } else {
-      // from script elements
-      const query = rootElement.getAttribute('data-target');
-      const elements = document.querySelectorAll(`script${query}`);
       this.setState({
-        last: elements.length,
+        openDialog: true,
       });
-
-      for (const item of Array.from(elements)) {
-        this.progress(await makeFromElement(item));
-        if (Math.random() < 0.1 || this.state.last === 1) {
-          await this.wait();
-        }
-      }
     }
   }
 
@@ -87,6 +85,22 @@ class RootComponent extends Component {
     });
   };
 
+  launchFromElements = async () => {
+    // from script elements
+    const query = this.props.rootElement.getAttribute('data-target');
+    const elements = document.querySelectorAll(`script${query}`);
+    this.setState({
+      last: elements.length,
+    });
+
+    for (const item of Array.from(elements)) {
+      this.progress(await makeFromElement(item));
+      if (Math.random() < 0.1 || this.state.last === 1) {
+        await this.wait();
+      }
+    }
+  };
+
   wait() {
     return new Promise((resolve, reject) => {
       requestAnimationFrame(resolve);
@@ -101,6 +115,18 @@ class RootComponent extends Component {
       };
     });
   }
+
+  setLocalization = (localization) => this.setState({
+    localization
+  });
+
+  setMuiTheme = (theme) => this.setState({
+    muiTheme: getCustomTheme(theme),
+  });
+
+  closeDialog = () => this.setState({
+    openDialog: false,
+  });
 
   renderLoading = () => {
     const {
@@ -117,11 +143,11 @@ class RootComponent extends Component {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: grey100,
-        fontFamily: 'cursive',
       },
       header: {
         fontWeight: 100,
         color: 'white',
+        fontFamily: 'cursive',
       },
       count: {
         color: grey500,
@@ -139,27 +165,38 @@ class RootComponent extends Component {
           {'='.repeat(files.length) + '+' + '-'.repeat(last - 1)}
         </span>
       ) : null}
+        <LaunchDialog
+          open={this.state.openDialog}
+          localization={this.state.localization}
+          launchIDE={this.launchIDE}
+          launchFromElements={this.launchFromElements}
+          onRequestClose={this.closeDialog}
+        />
       </div>
     );
   };
 
   render() {
-    if (this.state.last > 0) {
-      return this.renderLoading();
-    }
-
     const {
       rootElement,
     } = this.props;
 
     return (
-      <Main
-        files={this.state.files}
-        rootElement={rootElement}
-        rootStyle={getComputedStyle(rootElement)}
-        project={this.state.project}
-        launchIDE={this.launchIDE}
-      />
+      <MuiThemeProvider muiTheme={this.state.muiTheme}>
+      {this.state.last > 0 ? this.renderLoading() : (
+        <Main
+          files={this.state.files}
+          rootElement={rootElement}
+          rootStyle={getComputedStyle(rootElement)}
+          project={this.state.project}
+          launchIDE={this.launchIDE}
+          localization={this.state.localization}
+          setLocalization={this.setLocalization}
+          muiTheme={this.state.muiTheme}
+          setMuiTheme={this.setMuiTheme}
+        />
+      )}
+      </MuiThemeProvider>
     );
   }
 }

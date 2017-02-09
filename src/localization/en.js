@@ -59,6 +59,11 @@ export default {
     add: 'Add',
     cancel: 'Cancel',
   },
+  LaunchDialog: {
+    title: 'Projects are found',
+    openProject: 'Open this project',
+    startNew: 'Start new',
+  },
   editorMenu: {
     lineWrapping: 'Line Wrapping',
     tabVisibility: 'Tab Visibility',
@@ -126,6 +131,7 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     cannotBeUndone: 'This operation can not be undone',
     editFile: 'Edit File',
     conflict: 'A file with the same name already exists. Do you want to overwrite it?',
+    or: 'or',
   },
   editor: {
     undo: 'Undo',
