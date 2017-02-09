@@ -589,6 +589,8 @@ class Main extends Component {
             monitorHeight={monitorHeight}
             onSizer={this.setResizing}
             showMonitor={showMonitor}
+            // Be Update (won't use)
+            files={files}
           />
           <div style={styles.right}>
             <EditorPane {...commonProps} {...editorPaneProps} />
