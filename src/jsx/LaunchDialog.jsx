@@ -160,6 +160,13 @@ export default class LaunchDialog extends PureComponent {
       button: {
         marginLeft: 8,
       },
+      card: {
+        marginTop: 16,
+      },
+      label: {
+        fontWeight: 600,
+        marginRight: '1rem',
+      },
     };
 
     return (
@@ -168,7 +175,7 @@ export default class LaunchDialog extends PureComponent {
         title={localization.launchDialog.title}
       >
         <div style={styles.container}>
-        {this.state.projects.map(this.renderProjectCard, this)}
+        {this.state.projects.map(item => this.renderProjectCard(item, styles))}
         </div>
         <div style={{ textAlign: 'center' }}>
         {localization.common.or}
