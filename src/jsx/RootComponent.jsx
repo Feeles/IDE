@@ -14,6 +14,7 @@ import {
   SourceFile,
   validateType
 } from '../File/';
+import getLocalization from '../localization/';
 import Main from './Main';
 
 class RootComponent extends Component {
@@ -30,6 +31,9 @@ class RootComponent extends Component {
     files: [],
     // An object has project info
     project: null,
+    localization: getLocalization(...(
+      navigator.languages || [navigator.language]
+    )),
   };
 
   setStatePromise(nextState) {
@@ -105,6 +109,10 @@ class RootComponent extends Component {
     });
   }
 
+  setLocalization = (localization) => {
+    this.setState({ localization });
+  };
+
   renderLoading = () => {
     const {
       last,
@@ -162,6 +170,8 @@ class RootComponent extends Component {
         rootStyle={getComputedStyle(rootElement)}
         project={this.state.project}
         launchIDE={this.launchIDE}
+        localization={this.state.localization}
+        setLocalization={this.setLocalization}
       />
     );
   }
