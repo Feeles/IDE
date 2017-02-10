@@ -140,7 +140,7 @@ class Main extends Component {
         (file.name === name || file.moduleName === name)
       );
 
-    return multiple ? files.filter(pred) : files.find(pred);
+    return multiple ? files.filter(pred) : files.find(pred) || null;
   };
 
   componentDidMount() {
