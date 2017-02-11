@@ -32,6 +32,7 @@ import {
   EnvCard,
   EditorCard,
   CreditsCard,
+  ShotCard,
 } from '../Cards/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
@@ -140,7 +141,7 @@ class Main extends Component {
         (file.name === name || file.moduleName === name)
       );
 
-    return multiple ? files.filter(pred) : files.find(pred);
+    return multiple ? files.filter(pred) : files.find(pred) || null;
   };
 
   componentDidMount() {
@@ -539,6 +540,10 @@ class Main extends Component {
       setLocation: this.setLocation,
     };
 
+    const shotProps = {
+      port: this.state.port,
+    };
+
     const snippetProps = {
       tabs,
       selectTab: this.selectTab,
@@ -573,6 +578,7 @@ class Main extends Component {
           <div style={styles.dropCover}></div>
           <div style={styles.left}>
             <div style={styles.scroll}>
+              <ShotCard {...commonProps} {...shotProps} />
               <MediaCard {...commonProps} {...mediaProps} />
               <ReadmeCard {...commonProps} {...readmeProps} />
               <SnippetCard {...commonProps} {...snippetProps} />
