@@ -4,6 +4,7 @@ import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import ReactCodeMirror from 'react-codemirror';
 
 
 import MDReactComponent from '../../lib/MDReactComponent';
@@ -13,6 +14,21 @@ import ShotFrame from './ShotFrame';
 
 const BarHeight = 36;
 
+const codemirrorOptions = {
+  lineNumbers: true,
+  mode: 'javascript',
+  matchBrackets: true,
+  keyMap: 'sublime',
+  scrollbarStyle: 'simple',
+  foldGutter: true,
+  foldOptions: {
+    widget: "✧⟣❃⟢✧",
+    minFoldSize: 1,
+    scanUp: false,
+  },
+  gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+  readOnly: true,
+};
 
 const mdComponents = [
   {
@@ -99,15 +115,20 @@ const mdComponents = [
       return tag === 'pre';
     },
     render(tag, props, children, component, mdStyles) {
+      const code = children[0].props.children[0] || '';
+      const containerStyle = {
+        position: 'relative',
+        height: Math.min(20, code.split('\n').length) + 'rem',
+        paddingBottom: 8,
+      };
+
       return (
-        <ShotFrame
-          key={props.key}
-          text={children[0].props.children[0] || ''}
-          onShot={component.props.onShot}
-          localization={component.props.localization}
-          getConfig={component.props.getConfig}
-          completes={component.props.completes}
-        />
+        <div key={props.key + code} style={containerStyle}>
+          <ReactCodeMirror
+            value={code}
+            options={codemirrorOptions}
+          />
+        </div>
       );
     }
   }
