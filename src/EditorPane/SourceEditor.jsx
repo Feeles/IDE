@@ -158,17 +158,16 @@ class SourceEditor extends PureComponent {
       this.props.file.set({ text })
     );
 
-    try {
-      await file.babel(babelrc);
-    } catch (e) {
-      await this.props.selectTabFromFile(file);
-      throw e;
-    } finally {
-      this.setState({
-        loading: false,
+    // Like a watching
+    file.babel(babelrc)
+      .catch((err) => {
+        this.props.selectTabFromFile(file);
+        throw e;
       });
-    }
 
+    this.setState({
+      loading: false,
+    });
   };
 
   handleUndo = () => {
