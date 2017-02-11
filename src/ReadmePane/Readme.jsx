@@ -9,7 +9,8 @@ import ReactCodeMirror from 'react-codemirror';
 
 import MDReactComponent from '../../lib/MDReactComponent';
 import { Tab } from '../ChromeTab/';
-import { Editor } from '../EditorPane/';
+
+// Shot Frame は beta-3d で一旦廃止したが、今後拡張構文で利用させる可能性もあるので、実装を残しておく
 import ShotFrame from './ShotFrame';
 
 const BarHeight = 36;
