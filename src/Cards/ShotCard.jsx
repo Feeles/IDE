@@ -136,7 +136,7 @@ export default class ShotCard extends PureComponent {
         file: shotFile,
       });
 
-      if (this.codemirror) {
+      if (this.codemirror && shotFile) {
         // ここで file を setState しただけでは
         // ReactCodeMirror の componentWillReceiveProps に入らず
         // エディタが更新されない. [バグ？]
