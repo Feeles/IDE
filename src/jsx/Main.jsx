@@ -13,6 +13,7 @@ injectTapEventPlugin();
 
 import {
   putFile,
+  deleteFile,
 } from '../database/';
 import { BinaryFile, SourceFile, configs } from '../File/';
 import EditorPane, { codemirrorStyle } from '../EditorPane/';
