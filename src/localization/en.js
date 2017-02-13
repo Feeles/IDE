@@ -112,7 +112,8 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     shoot: 'After rewriting, send the code',
     restore: 'Restore',
   },
-  hierarchy: {
+  hierarchyCard: {
+    title: 'Files',
     emptyTrashBox: 'Empty trash',
   },
   snippet: {

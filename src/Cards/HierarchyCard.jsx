@@ -15,6 +15,9 @@ export default class HierarchyCard extends PureComponent {
 
     return (
       <Card initiallyExpanded style={commonRoot}>
+        <CardHeader actAsExpander showExpandableButton
+          title={this.props.localization.hierarchyCard.title}
+        />
         <CardMedia expandable >
           <Hierarchy {...this.props} />
         </CardMedia>
