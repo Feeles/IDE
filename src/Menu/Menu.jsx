@@ -222,7 +222,11 @@ export default class Menu extends PureComponent {
           />
         ))}
         </IconMenu>
-        <Drawer open={this.state.open}>
+        <Drawer
+          open={this.state.open}
+          docked={false}
+          onRequestChange={(open) => this.setState({open})}
+        >
           <AppBar
             iconElementLeft={<IconButton><NavigationArrowBack /></IconButton>}
             onLeftIconButtonTouchTap={this.handleToggleDrawer}
