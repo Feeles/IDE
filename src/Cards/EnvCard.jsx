@@ -8,7 +8,7 @@ import EnvItem from './EnvItem';
 import { commonRoot } from './commonStyles';
 import EditFile from './EditFile';
 
-export default class EnvPane extends PureComponent {
+export default class EnvCard extends PureComponent {
 
   static propTypes = {
     files: PropTypes.array.isRequired,
