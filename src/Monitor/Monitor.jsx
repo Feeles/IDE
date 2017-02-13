@@ -28,11 +28,11 @@ const getStyle = (props, context, state) => {
 
   return {
     root: {
-      flex: '1 1 auto',
+      // tmp
+      width: '100%',
+      height: 500,
+
       opacity: 1,
-      minWidth: 0,
-      minHeight: 0,
-      position: 'relative',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
@@ -100,6 +100,10 @@ export default class Monitor extends PureComponent {
   };
 
   popoutClosed = false;
+
+  componentDidMount() {
+    this.props.setLocation();
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.files !== nextProps.files && this.state.port) {

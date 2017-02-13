@@ -204,8 +204,6 @@ class Main extends Component {
         })
         .then((coreString) => this.setState({ coreString }));
     }
-
-    this.setState({ reboot: true });
   }
 
   componentDidUpdate() {
