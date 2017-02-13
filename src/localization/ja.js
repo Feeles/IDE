@@ -166,5 +166,8 @@ export default {
     title: '功労者',
     subtitle: `これらのコードにかかわってきた全ての人々`,
   },
+  mediaCard: {
+    title: 'メディア',
+  },
 
 };

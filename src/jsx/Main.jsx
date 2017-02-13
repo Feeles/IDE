@@ -108,6 +108,7 @@ class Main extends Component {
 
     project: this.props.project,
 
+    column: 2,
     cards: [{
       name: 'MonitorCard',
       visible: true,
@@ -543,18 +544,15 @@ class Main extends Component {
     const orderedCardInfo = [...this.state.cards];
     orderedCardInfo.sort((a, b) => a.order - b.order);
 
-    const left = orderedCardInfo.filter(item => item.visible && item.order % 2 === 1);
-    const right = orderedCardInfo.filter(item => item.visible && item.order % 2 === 0);
-
-    const leftCards = left.map((info, key) => {
-      return React.createElement(Cards[info.name], {
-        key,
-        ...commonProps,
-        ...cardProps[info.name],
-      });
+    const left = orderedCardInfo.filter(item => {
+      return item.visible && item.order % this.state.column === 1;
     });
+    const right = orderedCardInfo.filter(item => {
+      return item.visible && item.order % this.state.column === 0;
+    });
+    const hidden = orderedCardInfo.filter(item => item.visible === false);
 
-    const rightCards = right.map((info, key) => {
+    const renderCards = (cards) => cards.map((info, key) => {
       return React.createElement(Cards[info.name], {
         key,
         ...commonProps,
@@ -583,7 +581,7 @@ class Main extends Component {
           />
           <div style={styles.container}>
             <div style={styles.left}>
-            {leftCards}
+            {renderCards(left)}
             </div>
             <Sizer
               monitorWidth={monitorWidth}
@@ -593,9 +591,10 @@ class Main extends Component {
               files={files}
             />
             <div style={styles.right}>
-            {rightCards}
+            {renderCards(right)}
             </div>
           </div>
+          {renderCards(hidden)}
           <FileDialog
             ref={this.handleFileDialog}
             localization={this.props.localization}

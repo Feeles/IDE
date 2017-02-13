@@ -166,5 +166,8 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     title: 'Contributors',
     subtitle: `Everyone who contributed to these codes`,
   },
+  mediaCard: {
+    title: 'Media',
+  },
 
 };
