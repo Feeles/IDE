@@ -27,8 +27,7 @@ const getStyles = (props, context) => {
     preview: {
       flex: '1 1 auto',
       borderRadius: '0 0 0 4px',
-      backgroundColor: props.showMonitor ?
-         palette.accent1Color : palette.primary1Color,
+      backgroundColor: palette.primary1Color,
     },
   };
 

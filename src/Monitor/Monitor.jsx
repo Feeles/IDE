@@ -28,8 +28,8 @@ const getStyle = (props, context, state) => {
 
   return {
     root: {
-      flex: props.show ? '1 1 auto' : '0 0 0',
-      opacity: props.show ? 1 : 0,
+      flex: '1 1 auto',
+      opacity: 1,
       minWidth: 0,
       minHeight: 0,
       position: 'relative',
@@ -56,8 +56,7 @@ const getStyle = (props, context, state) => {
       borderRadius: 0,
       opacity: state.progress < 1 ? 1 : 0,
     },
-    progressColor: props.show ?
-       palette.accent1Color : palette.primary1Color,
+    progressColor: palette.primary1Color,
   };
 };
 

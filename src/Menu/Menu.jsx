@@ -36,8 +36,7 @@ const getStyles = (props, context) => {
       alignItems: 'center',
       zIndex: 400,
       overflow: monitorWidth < 100 ? 'hidden' : 'visible',
-      backgroundColor: showMonitor ?
-         palette.accent1Color : palette.primary1Color,
+      backgroundColor: palette.primary1Color,
     },
     button: {
       marginRight: 20,
