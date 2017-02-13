@@ -6,29 +6,30 @@ import transitions from 'material-ui/styles/transitions';
 
 import DragTypes from '../utils/dragTypes';
 
-export const SizerWidth = 4;
+export const SizerWidth = 24;
 
 const getStyles = (props, context) => {
 
   const {
     palette,
+    paper,
   } = context.muiTheme;
 
   return {
     root: {
       flex: '0 0 auto',
       width: SizerWidth,
-      paddingTop: 4,
-      paddingBottom: 4,
+      marginTop: 4,
+      marginBottom: 4,
       display: 'flex',
-      overflow: 'hidden',
       cursor: 'col-resize',
       zIndex: 200,
     },
     preview: {
       flex: '1 1 auto',
-      borderRadius: '0 0 0 4px',
       backgroundColor: palette.primary1Color,
+      borderRadius: SizerWidth / 2,
+      boxShadow: paper.zDepthShadows[1],
     },
   };
 
