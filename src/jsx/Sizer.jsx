@@ -6,7 +6,7 @@ import transitions from 'material-ui/styles/transitions';
 
 import DragTypes from '../utils/dragTypes';
 
-export const SizerWidth = 24;
+export const SizerWidth = 4;
 
 const getStyles = (props, context) => {
 
@@ -18,6 +18,7 @@ const getStyles = (props, context) => {
     root: {
       flex: '0 0 auto',
       width: SizerWidth,
+      paddingTop: 4,
       paddingBottom: 4,
       display: 'flex',
       overflow: 'hidden',

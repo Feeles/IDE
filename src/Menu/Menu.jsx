@@ -1,9 +1,10 @@
 import React, { PropTypes, PureComponent } from 'react';
-import Paper from 'material-ui/Paper';
+import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
+import Drawer from 'material-ui/Drawer';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
@@ -28,17 +29,12 @@ const getStyles = (props, context) => {
 
   return {
     root: {
-      flex: '0 0 auto',
       display: 'flex',
-      flexDirection: 'row-reverse',
       flexWrap: 'wrap',
       alignItems: 'center',
-      zIndex: 400,
-      overflow: monitorWidth < 100 ? 'hidden' : 'visible',
-      backgroundColor: palette.primary1Color,
     },
     button: {
-      marginRight: 20,
+      marginLeft: 20,
       zIndex: 2,
     },
     popoutIcon: {
@@ -142,29 +138,21 @@ export default class Menu extends PureComponent {
     const canDeploy = !!getConfig('provider').publishUrl;
 
     return (
-      <div style={styles.root}>
-        <IconMenu
-          iconButtonElement={(
-            <IconButton
-              tooltip={localization.menu.language}
-            >
-              <ActionLanguage color={alternateTextColor} />
-            </IconButton>
-          )}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          style={styles.button}
-        >
-        {acceptedLanguages.map(lang => (
-          <MenuItem
-            key={lang.accept[0]}
-            primaryText={lang.native}
-            onTouchTap={() => setLocalization(
-              getLocalization(lang.accept[0])
-            )}
+      <AppBar style={styles.root}>
+        <div style={{ flexGrow: 1 }}></div>
+      {this.props.project && (
+        this.props.project.title ? (
+          <div style={styles.projectName}>
+          {this.props.project.title}
+          </div>
+        ) : (
+          <FlatButton
+            label={localization.cloneDialog.setTitle}
+            labelStyle={{ color: alternateTextColor }}
+            onTouchTap={this.handleClone}
           />
-        ))}
-        </IconMenu>
+        )
+      )}
         <IconButton
           tooltip={localization.menu.popout}
           onTouchTap={togglePopout}
@@ -196,21 +184,29 @@ export default class Menu extends PureComponent {
         >
           <FileCloudUpload color={alternateTextColor} />
         </IconButton>
-        <div style={{ flexGrow: 1 }}></div>
-      {this.props.project && (
-        this.props.project.title ? (
-          <div style={styles.projectName}>
-          {this.props.project.title}
-          </div>
-        ) : (
-          <FlatButton
-            label={localization.cloneDialog.setTitle}
-            labelStyle={{ color: alternateTextColor }}
-            onTouchTap={this.handleClone}
+        <IconMenu
+          iconButtonElement={(
+            <IconButton
+              tooltip={localization.menu.language}
+            >
+              <ActionLanguage color={alternateTextColor} />
+            </IconButton>
+          )}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          style={styles.button}
+        >
+        {acceptedLanguages.map(lang => (
+          <MenuItem
+            key={lang.accept[0]}
+            primaryText={lang.native}
+            onTouchTap={() => setLocalization(
+              getLocalization(lang.accept[0])
+            )}
           />
-        )
-      )}
-      </div>
+        ))}
+        </IconMenu>
+      </AppBar>
     );
   }
 }
