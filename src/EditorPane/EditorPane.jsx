@@ -1,7 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react';
 import IconButton from 'material-ui/IconButton';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
-import ActionSwapVert from 'material-ui/svg-icons/action/swap-vert';
 import transitions from 'material-ui/styles/transitions';
 
 
@@ -19,26 +18,25 @@ const getStyles = (props, context) => {
 
   return {
     root: {
-      flex: props.show ? '1 1 auto' : '0 0 0',
-      opacity: props.show ? 1 : 0,
+      position: 'relative',
+      height: '90vh',
+      width: '100%',
+      opacity: 1,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
       overflow: 'hidden',
       fontFamily,
       transition: transitions.easeOut(),
-      // for IE11
-      height: props.show ? '100%' : 0,
     },
     tabContainer: {
       display: 'flex',
       alignItems: 'flex-end',
       height: 32,
       paddingTop: spacing.desktopGutterMini,
-      paddingRight: spacing.desktopGutterLess,
+      paddingRight: 7,
       paddingBottom: 10,
-      paddingLeft: 10,
-      marginRight: spacing.desktopGutterMore,
+      paddingLeft: 7,
       marginBottom: -10,
       overflow: 'hidden',
       zIndex: 10,
@@ -47,17 +45,12 @@ const getStyles = (props, context) => {
       flex: '1 1 auto',
       position: 'relative',
     },
-    swap: {
-      position: 'absolute',
-      right: 0,
-    },
   };
 };
 
 export default class EditorPane extends PureComponent {
 
   static propTypes = {
-    show: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     tabs: PropTypes.array.isRequired,
     putFile: PropTypes.func.isRequired,
@@ -72,7 +65,6 @@ export default class EditorPane extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
     reboot: PropTypes.bool.isRequired,
-    toggleMonitor: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -81,9 +73,6 @@ export default class EditorPane extends PureComponent {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.isResizing) {
-      return false;
-    }
-    if (!this.props.show && !nextProps.show) {
       return false;
     }
     return true;
@@ -148,7 +137,7 @@ export default class EditorPane extends PureComponent {
   };
 
   render() {
-    if (!this.props.tabs.length && this.props.show) {
+    if (!this.props.tabs.length) {
       return this.renderBackground();
     }
 
@@ -171,9 +160,6 @@ export default class EditorPane extends PureComponent {
 
     return (
     <div style={styles.root}>
-      <IconButton style={styles.swap} onTouchTap={this.props.toggleMonitor}>
-        <ActionSwapVert />
-      </IconButton>
       <div style={styles.tabContainer}>
       {tabs.slice(0, MAX_TAB).map((tab) => (
         <ChromeTab

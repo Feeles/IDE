@@ -134,7 +134,8 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     conflict: 'A file with the same name already exists. Do you want to overwrite it?',
     or: 'or',
   },
-  editor: {
+  editorCard: {
+    title: 'Editor',
     undo: 'Undo',
     save: 'Save',
     play: 'Play',
@@ -153,7 +154,7 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     title: 'Tiny Screen',
     subtitle: `You can write code while watching the screen of the application`,
   },
-  editorCard: {
+  customizeCard: {
     title: 'Editor Preference',
     subtitle: `Let's customize the editor to your favorite`,
     detail: `Click here for details`,

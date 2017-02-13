@@ -7,7 +7,7 @@ const MonitorTypes = {
   // If editor is not shown
   Default: Symbol('Default'),
   // Won't show
-  None: Symbol('None'),
+  // None: Symbol('None'),
 };
 
 export default MonitorTypes;
@@ -26,6 +26,6 @@ export function maxByPriority (...types) {
     }
   }
 
-  return MonitorTypes.None;
+  return MonitorTypes.Default;
 
 };

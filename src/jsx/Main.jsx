@@ -30,9 +30,10 @@ import {
   MonitorCard,
   PaletteCard,
   EnvCard,
-  EditorCard,
+  CustomizeCard,
   CreditsCard,
   ShotCard,
+  EditorCard,
 } from '../Cards/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
@@ -295,21 +296,16 @@ class Main extends Component {
       return item;
     });
 
-    const monitorType = this.state.monitorType === MonitorTypes.Default ?
-      MonitorTypes.None : this.state.monitorType;
-
     const found = tabs.find((item) => item.is(tab));
     if (found) {
       const replace = found.select(true);
       this.setState({
         tabs: tabs.map((item) => item === found ? replace : item),
-        monitorType,
       }, () => resolve(replace));
     } else {
       if (!tab.isSelected) tab = tab.select(true);
       this.setState({
         tabs: tabs.concat(tab),
-        monitorType,
       }, () => resolve(tab));
     }
   });
@@ -395,7 +391,7 @@ class Main extends Component {
     this.setState({
       reboot: !isPopout,
       monitorType: isPopout ?
-        MonitorTypes.None : MonitorTypes.Popout,
+        MonitorTypes.Default : MonitorTypes.Popout,
     });
   };
 
@@ -406,30 +402,6 @@ class Main extends Component {
       monitorType: isCard ?
         MonitorTypes.Default : MonitorTypes.Card,
     });
-  };
-
-  handleToggleMonitorScreen = () => {
-    switch (this.state.monitorType) {
-      case MonitorTypes.Popout:
-      case MonitorTypes.Card:
-        this.setState({
-          reboot: true,
-          monitorType: MonitorTypes.Default,
-        });
-        break;
-      case MonitorTypes.Default:
-        this.setState({
-          reboot: false,
-          monitorType: MonitorTypes.None,
-        });
-        break;
-      case MonitorTypes.None:
-        this.setState({
-          reboot: false,
-          monitorType: MonitorTypes.Default,
-        });
-        break;
-    }
   };
 
   setLocation = ({ href = 'index.html' } = { href: 'index.html' }) => {
@@ -490,7 +462,6 @@ class Main extends Component {
         this.rootHeight
       ),
       href: this.state.href,
-      toggleMonitor: this.handleToggleMonitorScreen,
     };
 
     const monitorProps = {
@@ -499,7 +470,6 @@ class Main extends Component {
       reboot,
       portRef: (port) => this.setState({ port }),
       togglePopout: this.handleTogglePopout,
-      toggleMonitor: this.handleToggleMonitorScreen,
       coreString: this.state.coreString,
       saveAs: this.saveAs,
       href: this.state.href,
@@ -553,7 +523,7 @@ class Main extends Component {
       selectTab: this.selectTab,
     };
 
-    const editorCardProps = {
+    const customizeCardProps = {
       selectTab: this.selectTab,
     };
 
@@ -578,6 +548,7 @@ class Main extends Component {
           <div style={styles.dropCover}></div>
           <div style={styles.left}>
             <div style={styles.scroll}>
+              <EditorCard {...commonProps} {...editorPaneProps} />
               <ShotCard {...commonProps} {...shotProps} />
               <MediaCard {...commonProps} {...mediaProps} />
               <ReadmeCard {...commonProps} {...readmeProps} />
@@ -585,7 +556,7 @@ class Main extends Component {
               <PaletteCard {...commonProps} />
               <CreditsCard {...commonProps} />
               <EnvCard {...commonProps} {...envCardProps} />
-              <EditorCard {...commonProps} {...editorCardProps} />
+              <CustomizeCard {...commonProps} {...customizeCardProps} />
               <MonitorCard {...commonProps} {...monitorCardProps} />
               <Hierarchy {...commonProps} {...hierarchyProps} />
             </div>
@@ -599,7 +570,6 @@ class Main extends Component {
             files={files}
           />
           <div style={styles.right}>
-            <EditorPane {...commonProps} {...editorPaneProps} />
             <Monitor {...commonProps} {...monitorProps} />
             <Menu {...commonProps} {...menuProps} />
           </div>

@@ -315,7 +315,7 @@ class SourceEditor extends PureComponent {
       ) : null}
         <div style={menuBar}>
           <FlatButton
-            label={localization.editor.undo}
+            label={localization.editorCard.undo}
             disabled={!this.state.hasHistory}
             style={barButton}
             labelStyle={barButtonLabel}
@@ -323,7 +323,7 @@ class SourceEditor extends PureComponent {
             onTouchTap={this.handleUndo}
           />
           <FlatButton
-            label={localization.editor.save}
+            label={localization.editorCard.save}
             disabled={!this.state.hasChanged}
             style={barButton}
             labelStyle={barButtonLabel}

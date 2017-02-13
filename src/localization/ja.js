@@ -134,7 +134,8 @@ export default {
     conflict: '同じ名前のファイルがすでに存在します。上書きしますか？',
     or: 'または',
   },
-  editor: {
+  editorCard: {
+    title: 'エディタ',
     undo: 'もどす',
     save: 'セーブ',
     play: 'プレイ',
@@ -153,7 +154,7 @@ export default {
     title: '小さなスクリーン',
     subtitle: `アプリの画面を見ながらコードを書くことができます`,
   },
-  editorCard: {
+  customizeCard: {
     title: 'エディタをカスタマイズ',
     subtitle: `自分好みにエディタをカスタマイズしましょう`,
     detail: `くわしくはこちら`,

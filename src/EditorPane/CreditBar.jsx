@@ -12,13 +12,13 @@ const getStyle = (props, context) => {
   } = context.muiTheme;
 
   return {
-    root: Object.assign({
+    root: {
       display: 'flex',
       justifyContent: 'space-between',
       padding: 4,
       borderTop: `1px solid ${palette.primary1Color}`,
-      backgroundColor: palette.canvasColor,
-    }, props.style),
+      ...props.style,
+    },
     smallButton: {
       height: '1rem',
       lineHeight: '1rem',

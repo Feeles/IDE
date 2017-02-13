@@ -133,7 +133,7 @@ export default class PlayMenu extends PureComponent {
     return (
       <div>
         <FlatButton primary
-          label={localization.editor.play}
+          label={localization.editorCard.play}
           style={styles.button}
           icon={<AVPlayCircleOutline />}
           onTouchTap={this.handlePlay}
