@@ -1,7 +1,6 @@
 import React, { PropTypes, PureComponent } from 'react';
 import IconButton from 'material-ui/IconButton';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
-import ActionSwapVert from 'material-ui/svg-icons/action/swap-vert';
 import transitions from 'material-ui/styles/transitions';
 
 
@@ -47,10 +46,6 @@ const getStyles = (props, context) => {
       flex: '1 1 auto',
       position: 'relative',
     },
-    swap: {
-      position: 'absolute',
-      right: 0,
-    },
   };
 };
 
@@ -71,7 +66,6 @@ export default class EditorPane extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
     reboot: PropTypes.bool.isRequired,
-    toggleMonitor: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -167,9 +161,6 @@ export default class EditorPane extends PureComponent {
 
     return (
     <div style={styles.root}>
-      <IconButton style={styles.swap} onTouchTap={this.props.toggleMonitor}>
-        <ActionSwapVert />
-      </IconButton>
       <div style={styles.tabContainer}>
       {tabs.slice(0, MAX_TAB).map((tab) => (
         <ChromeTab
