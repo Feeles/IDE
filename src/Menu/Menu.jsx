@@ -149,7 +149,6 @@ export default class Menu extends PureComponent {
         <IconMenu
           iconButtonElement={(
             <IconButton
-              tooltipPosition="top-center"
               tooltip={localization.menu.language}
             >
               <ActionLanguage color={alternateTextColor} />
@@ -170,7 +169,6 @@ export default class Menu extends PureComponent {
         ))}
         </IconMenu>
         <IconButton
-          tooltipPosition="top-center"
           tooltip={localization.menu.popout}
           onTouchTap={togglePopout}
           style={styles.button}
@@ -179,7 +177,6 @@ export default class Menu extends PureComponent {
           <OpenInBrowser color={alternateTextColor} />
         </IconButton>
         <IconButton
-          tooltipPosition="top-center"
           tooltip={localization.menu.clone}
           disabled={!this.props.coreString}
           onTouchTap={this.handleClone}
@@ -188,7 +185,6 @@ export default class Menu extends PureComponent {
           <FileDownload color={alternateTextColor} />
         </IconButton>
         <IconButton
-          tooltipPosition="top-center"
           tooltip={localization.menu.aboutFeeles}
           onTouchTap={this.handleAbout}
           style={styles.button}
@@ -196,7 +192,6 @@ export default class Menu extends PureComponent {
           <ActionAssignment color={alternateTextColor} />
         </IconButton>
         <IconButton
-          tooltipPosition="top-center"
           tooltip={localization.menu.deploy}
           disabled={!canDeploy || !this.props.coreString}
           onTouchTap={this.handleDeploy}

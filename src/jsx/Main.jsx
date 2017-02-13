@@ -54,9 +54,14 @@ const getStyle = (props, state, palette) => {
       width: '100%',
       height: '100%',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'stretch',
       backgroundColor: palette.backgroundColor,
       overflow: 'hidden',
+    },
+    container: {
+      display: 'flex',
+      alignItems: 'stretch',
     },
     left: {
       flex: shrinkLeft ? '0 0 auto' : '1 1 auto',
@@ -73,7 +78,6 @@ const getStyle = (props, state, palette) => {
       flex: shrinkLeft ? '1 1 auto' : '0 0 auto',
       boxSizing: 'border-box',
       width: shrinkRight ? 0 : state.monitorWidth,
-      height: '100%',
       paddingBottom: 4,
       display: 'flex',
       flexDirection: 'column',
@@ -547,32 +551,34 @@ class Main extends Component {
     return connectDropTarget(
         <div style={styles.root}>
           <div style={styles.dropCover}></div>
-          <div style={styles.left}>
-            <div style={styles.scroll}>
-              <EditorCard {...commonProps} {...editorPaneProps} />
-              <ShotCard {...commonProps} {...shotProps} />
-              <MediaCard {...commonProps} {...mediaProps} />
-              <ReadmeCard {...commonProps} {...readmeProps} />
-              <SnippetCard {...commonProps} {...snippetProps} />
-              <PaletteCard {...commonProps} />
-              <CreditsCard {...commonProps} />
-              <EnvCard {...commonProps} {...envCardProps} />
-              <CustomizeCard {...commonProps} {...customizeCardProps} />
-              <MonitorCard {...commonProps} {...monitorCardProps} />
-              <HierarchyCard {...commonProps} {...hierarchyProps} />
+          <Menu {...commonProps} {...menuProps} />
+          <div style={styles.container}>
+            <div style={styles.left}>
+              <div style={styles.scroll}>
+                <EditorCard {...commonProps} {...editorPaneProps} />
+                <ShotCard {...commonProps} {...shotProps} />
+                <MediaCard {...commonProps} {...mediaProps} />
+                <ReadmeCard {...commonProps} {...readmeProps} />
+                <SnippetCard {...commonProps} {...snippetProps} />
+                <PaletteCard {...commonProps} />
+                <CreditsCard {...commonProps} />
+                <EnvCard {...commonProps} {...envCardProps} />
+                <CustomizeCard {...commonProps} {...customizeCardProps} />
+                <MonitorCard {...commonProps} {...monitorCardProps} />
+                <HierarchyCard {...commonProps} {...hierarchyProps} />
+              </div>
             </div>
-          </div>
-          <Sizer
-            monitorWidth={monitorWidth}
-            monitorHeight={monitorHeight}
-            onSizer={this.setResizing}
-            showMonitor={showMonitor}
-            // Be Update (won't use)
-            files={files}
-          />
-          <div style={styles.right}>
-            <Monitor {...commonProps} {...monitorProps} />
-            <Menu {...commonProps} {...menuProps} />
+            <Sizer
+              monitorWidth={monitorWidth}
+              monitorHeight={monitorHeight}
+              onSizer={this.setResizing}
+              showMonitor={showMonitor}
+              // Be Update (won't use)
+              files={files}
+            />
+            <div style={styles.right}>
+              <Monitor {...commonProps} {...monitorProps} />
+            </div>
           </div>
           <FileDialog
             ref={this.handleFileDialog}
