@@ -19,15 +19,15 @@ const getStyles = (props, context) => {
     root: {
       flex: '0 0 auto',
       width: SizerWidth,
-      marginTop: 4,
+      marginTop: -12,
       marginBottom: 4,
       display: 'flex',
       cursor: 'col-resize',
-      zIndex: 200,
+      zIndex: 2000,
     },
     preview: {
       flex: '1 1 auto',
-      backgroundColor: palette.primary1Color,
+      backgroundColor: palette.accent1Color,
       borderRadius: SizerWidth / 2,
       boxShadow: paper.zDepthShadows[1],
     },
