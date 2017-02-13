@@ -36,10 +36,7 @@ export default class MonitorCard extends PureComponent {
   };
 
   get size() {
-    return this.props.rootWidth
-      - this.props.monitorWidth
-      - SizerWidth
-      - commonRoot.margin * 2;
+    return (this.props.rootWidth - this.props.monitorWidth - SizerWidth) / 4 * 3;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
