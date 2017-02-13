@@ -439,6 +439,16 @@ class Main extends Component {
     return this.setState({ isResizing })
   };
 
+  handleToggleCard = async (name) => {
+    const cards = this.state.cards.map((item) => {
+      if (item.name === name) {
+        return {...item, visible: !item.visible};
+      }
+      return item;
+    });
+    await this.setStatePromise({ cards });
+  };
+
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
@@ -567,6 +577,8 @@ class Main extends Component {
             saveAs={this.saveAs}
             project={this.state.project}
             setProject={this.setProject}
+            cards={this.state.cards}
+            toggleCard={this.handleToggleCard}
             launchIDE={this.props.launchIDE}
           />
           <div style={styles.container}>

@@ -40,7 +40,7 @@ export default class ReadmeCard extends PureComponent {
           new SourceFile({
             type: 'text/x-markdown',
             name: 'README.md',
-            text: this.props.localization.readme.text,
+            text: this.props.localization.readmeCard.text,
           })
         );
       })
@@ -148,7 +148,7 @@ export default class ReadmeCard extends PureComponent {
 
     return [
       <span key="index" style={styles.index}>
-      {localization.readme.index}
+      {localization.readmeCard.index}
       </span>,
       <DropDownMenu key="dropDown"
         value={selectedFile.key}
@@ -190,7 +190,7 @@ export default class ReadmeCard extends PureComponent {
       >
         <CardHeader showExpandableButton actAsExpander
           title={selectedFile.header}
-          subtitle={localization.readme.subtitle}
+          subtitle={localization.readmeCard.subtitle}
         />
         <CardText
           expandable

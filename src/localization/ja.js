@@ -72,7 +72,7 @@ export default {
     add: '作成',
     cancel: 'キャンセル',
   },
-  readme: {
+  readmeCard: {
     subtitle: 'まずはこれを読んでください',
     index: '目次',
     text: `# はじめに
@@ -108,7 +108,8 @@ export default {
 - ここに名前を書いて、お礼を言いましょう
 `,
   },
-  shot: {
+  shotCard: {
+    title: 'コードを送る',
     shoot: '書き換えたら、コードを送る',
     restore: '元に戻す',
   },
@@ -116,7 +117,7 @@ export default {
     title: 'ファイル',
     emptyTrashBox: '空にする',
   },
-  snippet: {
+  snippetCard: {
     title: 'アセット',
     subtitle: '右側のコードにドラッグ&ドロップします',
     fileNotSelected: 'ファイルが選択されていません',
@@ -142,12 +143,12 @@ export default {
     play: 'プレイ',
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
   },
-  env: {
+  envCard: {
     title: '環境変数',
     subtitle: 'かんきょうへんすう',
     remove: '削除',
   },
-  palette: {
+  paletteCard: {
     title: 'カラーパレット',
     subtitle: '気分に合わせて色を変えてみましょう',
   },

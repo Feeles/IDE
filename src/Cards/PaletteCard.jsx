@@ -163,8 +163,8 @@ export default class PalettePane extends PureComponent {
     return (
       <Card style={commonRoot}>
         <CardHeader showExpandableButton actAsExpander
-          title={localization.palette.title}
-          subtitle={localization.palette.subtitle}
+          title={localization.paletteCard.title}
+          subtitle={localization.paletteCard.subtitle}
         />
         <CardActions>
           <LayeredStyle

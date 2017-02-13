@@ -11,6 +11,8 @@ import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
+import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 
 
 import { BinaryFile, SourceFile } from '../File/';
@@ -64,11 +66,17 @@ export default class Menu extends PureComponent {
     saveAs: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
+    cards: PropTypes.array.isRequired,
+    toggleCard: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
+  };
+
+  state = {
+    open: false,
   };
 
   handleClone = () => {
@@ -119,6 +127,10 @@ export default class Menu extends PureComponent {
     }
   };
 
+  handleToggleDrawer = () => this.setState({
+    open: !this.state.open,
+  });
+
   render() {
     const {
       isPopout,
@@ -138,7 +150,11 @@ export default class Menu extends PureComponent {
     const canDeploy = !!getConfig('provider').publishUrl;
 
     return (
-      <AppBar style={styles.root}>
+      <AppBar
+        style={styles.root}
+        iconElementLeft={<IconButton><ActionDashboard /></IconButton>}
+        onLeftIconButtonTouchTap={this.handleToggleDrawer}
+      >
         <div style={{ flexGrow: 1 }}></div>
       {this.props.project && (
         this.props.project.title ? (
@@ -206,7 +222,29 @@ export default class Menu extends PureComponent {
           />
         ))}
         </IconMenu>
+        <Drawer open={this.state.open}>
+          <AppBar
+            iconElementLeft={<IconButton><NavigationArrowBack /></IconButton>}
+            onLeftIconButtonTouchTap={this.handleToggleDrawer}
+          />
+        {this.state.open ? this.props.cards
+          .filter(item => !item.visible)
+          .map(item => (
+          <MenuItem
+            key={item.name}
+            primaryText={localization[lowerCaseAtFirst(item.name)].title}
+            onTouchTap={() => {
+              this.props.toggleCard(item.name);
+              this.handleToggleDrawer();
+            }}
+          />
+        )) : null}
+        </Drawer>
       </AppBar>
     );
   }
+}
+
+function lowerCaseAtFirst(string) {
+  return string[0].toLowerCase() + string.substr(1);
 }

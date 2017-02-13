@@ -71,7 +71,7 @@ export default {
     darkness: 'Darkness',
     indentUnit4: '4 spaces indent',
   },
-  readme: {
+  readmeCard: {
     subtitle: 'Please read this first',
     index: 'Index',
     text: `# Introduction
@@ -108,7 +108,8 @@ Let's get started from there as there are various Feeles such as gaming Feeles
 - Let's write a name here and thank you.
 `,
   },
-  shot: {
+  shotCard: {
+    title: 'Send a code',
     shoot: 'After rewriting, send the code',
     restore: 'Restore',
   },
@@ -116,7 +117,7 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     title: 'Files',
     emptyTrashBox: 'Empty trash',
   },
-  snippet: {
+  snippetCard: {
     title: 'Assets',
     subtitle: 'Drag and drop it to the code on the right',
     fileNotSelected: 'File not selected',
@@ -142,12 +143,12 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
   },
-  env: {
+  envCard: {
     title: 'Environment Variables',
     subtitle: '',
     remove: 'Remove',
   },
-  palette: {
+  paletteCard: {
     title: 'Color Palette',
     subtitle: `Let's change the color according to your mood`,
   },

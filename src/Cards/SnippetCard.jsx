@@ -107,15 +107,15 @@ export default class SnippetCard extends PureComponent {
     } = this.props;
 
     const subtitle = this.state.fileKey ?
-      localization.snippet.subtitle :
-      localization.snippet.fileNotSelected;
+      localization.snippetCard.subtitle :
+      localization.snippetCard.fileNotSelected;
 
     return (
       <Card initiallyExpanded
         style={commonRoot}
       >
         <CardHeader actAsExpander showExpandableButton
-          title={localization.snippet.title}
+          title={localization.snippetCard.title}
           subtitle={subtitle}
         />
         <CardActions expandable >

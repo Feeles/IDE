@@ -68,8 +68,8 @@ export default class EnvCard extends PureComponent {
     return (
       <Card style={commonRoot}>
         <CardHeader showExpandableButton actAsExpander
-          title={localization.env.title}
-          subtitle={localization.env.subtitle}
+          title={localization.envCard.title}
+          subtitle={localization.envCard.subtitle}
         />
         <CardText expandable >
         {Object.keys(this.state.env).map((key) => (
