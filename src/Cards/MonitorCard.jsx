@@ -12,8 +12,6 @@ export default class MonitorCard extends PureComponent {
   static propTypes = {
     rootWidth: PropTypes.number.isRequired,
     monitorWidth: PropTypes.number.isRequired,
-    toggleTinyScreen: PropTypes.func.isRequired,
-    show: PropTypes.bool.isRequired,
     isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     reboot: PropTypes.bool.isRequired,
@@ -74,23 +72,19 @@ export default class MonitorCard extends PureComponent {
       },
     };
 
-    const monitorProps = Object.assign({}, this.props, {
+    const monitorProps = {
+      ...this.props,
       monitorWidth: this.state.size,
       monitorHeight: this.state.size,
-      isPopout: false,
-      togglePopout: () => {},
-    });
-    delete monitorProps.toggleTinyScreen;
+    };
 
     return (
-      <Card
-        expanded={this.props.show}
+      <Card initiallyExpanded
+        expanded={!this.props.isPopout}
         style={styles.root}
-        onExpandChange={this.props.toggleTinyScreen}
       >
         <CardHeader showExpandableButton actAsExpander
           title={localization.monitorCard.title}
-          subtitle={localization.monitorCard.subtitle}
         />
         <CardMedia expandable
           mediaStyle={styles.media}

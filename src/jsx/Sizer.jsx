@@ -27,8 +27,7 @@ const getStyles = (props, context) => {
     preview: {
       flex: '1 1 auto',
       borderRadius: '0 0 0 4px',
-      backgroundColor: props.showMonitor ?
-         palette.accent1Color : palette.primary1Color,
+      backgroundColor: palette.primary1Color,
     },
   };
 
@@ -40,7 +39,6 @@ class Sizer extends PureComponent {
     monitorWidth: PropTypes.number.isRequired,
     monitorHeight: PropTypes.number.isRequired,
     onSizer: PropTypes.func.isRequired,
-    showMonitor: PropTypes.bool.isRequired,
 
     connectDragSource: PropTypes.func.isRequired,
     connectDragPreview: PropTypes.func.isRequired,

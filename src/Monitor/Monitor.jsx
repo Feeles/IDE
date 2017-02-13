@@ -28,8 +28,8 @@ const getStyle = (props, context, state) => {
 
   return {
     root: {
-      flex: props.show ? '1 1 auto' : '0 0 0',
-      opacity: props.show ? 1 : 0,
+      flex: '1 1 auto',
+      opacity: 1,
       minWidth: 0,
       minHeight: 0,
       position: 'relative',
@@ -39,8 +39,6 @@ const getStyle = (props, context, state) => {
       overflow: 'hidden',
       zIndex: 300,
       transition: transitions.easeOut(),
-      // for IE11
-      height: props.show ? '100%' : 0,
     },
     swap: {
       position: 'absolute',
@@ -58,15 +56,13 @@ const getStyle = (props, context, state) => {
       borderRadius: 0,
       opacity: state.progress < 1 ? 1 : 0,
     },
-    progressColor: props.show ?
-       palette.accent1Color : palette.primary1Color,
+    progressColor: palette.primary1Color,
   };
 };
 
 export default class Monitor extends PureComponent {
 
   static propTypes = {
-    show: PropTypes.bool.isRequired,
     isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     isPopout: PropTypes.bool.isRequired,
@@ -344,7 +340,7 @@ export default class Monitor extends PureComponent {
   handleFrame = (ref) => {
     if (!ref) return;
 
-    if (this.props.show) {
+    if (!this.props.isPopout) {
       this.inlineFrame = ref;
     } else {
       this.popoutFrame = ref;
@@ -363,7 +359,6 @@ export default class Monitor extends PureComponent {
       error,
     } = this.state;
     const {
-      show,
       isPopout,
       reboot,
     } = this.props;

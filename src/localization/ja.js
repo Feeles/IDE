@@ -152,8 +152,7 @@ export default {
     subtitle: '気分に合わせて色を変えてみましょう',
   },
   monitorCard: {
-    title: '小さなスクリーン',
-    subtitle: `アプリの画面を見ながらコードを書くことができます`,
+    title: 'モニター',
   },
   customizeCard: {
     title: 'エディタをカスタマイズ',
