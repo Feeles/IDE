@@ -134,7 +134,8 @@ export default {
     conflict: '同じ名前のファイルがすでに存在します。上書きしますか？',
     or: 'または',
   },
-  editor: {
+  editorCard: {
+    title: 'エディタ',
     undo: 'もどす',
     save: 'セーブ',
     play: 'プレイ',

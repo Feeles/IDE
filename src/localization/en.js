@@ -134,7 +134,8 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     conflict: 'A file with the same name already exists. Do you want to overwrite it?',
     or: 'or',
   },
-  editor: {
+  editorCard: {
+    title: 'Editor',
     undo: 'Undo',
     save: 'Save',
     play: 'Play',

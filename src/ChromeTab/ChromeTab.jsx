@@ -164,7 +164,7 @@ export default class ChromeTabs extends PureComponent {
 
     const handleRightTouchTap = (e) => {
       e.stopPropagation();
-      if (!this.hasChanged || confirm(localization.editor.notice)) {
+      if (!this.hasChanged || confirm(localization.editorCard.notice)) {
         handleClose(tab);
       }
     };
