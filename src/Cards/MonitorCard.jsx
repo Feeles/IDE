@@ -31,26 +31,8 @@ export default class MonitorCard extends PureComponent {
     muiTheme: PropTypes.object.isRequired,
   };
 
-  state = {
-    size: this.size,
-  };
-
   get size() {
-    return (this.props.rootWidth - this.props.monitorWidth - SizerWidth) / 4 * 3;
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.isResizing && nextProps.isResizing) {
-      return false;
-    }
-
-    return true;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      size: this.size,
-    });
+    return (this.props.monitorWidth - SizerWidth) / 4 * 3;
   }
 
   handleExpandChange = (expand) => {
@@ -71,14 +53,14 @@ export default class MonitorCard extends PureComponent {
       media: {
         display: 'flex',
         width: '100%',
-        height: this.state.size,
+        height: this.size,
       },
     };
 
     const monitorProps = {
       ...this.props,
-      monitorWidth: this.state.size,
-      monitorHeight: this.state.size,
+      monitorWidth: this.size,
+      monitorHeight: this.size,
     };
 
     return (
