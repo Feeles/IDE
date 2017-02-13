@@ -22,7 +22,6 @@ const getStyles = (props, context) => {
 
   const {
     isPopout,
-    showMonitor,
     monitorWidth,
   } = props;
   const { palette } = context.muiTheme;
@@ -67,7 +66,6 @@ export default class Menu extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
-    showMonitor: PropTypes.bool.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,

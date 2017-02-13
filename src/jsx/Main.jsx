@@ -114,7 +114,7 @@ class Main extends Component {
     monitorWidth: this.rootWidth / 2,
     monitorHeight: this.rootHeight,
     isResizing: false,
-    monitorType: MonitorTypes.Default,
+    monitorType: MonitorTypes.Card,
 
     files: this.props.files,
     reboot: false,
@@ -396,23 +396,14 @@ class Main extends Component {
     this.setState({
       reboot: !isPopout,
       monitorType: isPopout ?
-        MonitorTypes.Default : MonitorTypes.Popout,
-    });
-  };
-
-  handleToggleTinyScreen = () => {
-    const isCard = this.state.monitorType === MonitorTypes.Card;
-    this.setState({
-      reboot: true,
-      monitorType: isCard ?
-        MonitorTypes.Default : MonitorTypes.Card,
+        MonitorTypes.Card : MonitorTypes.Popout,
     });
   };
 
   setLocation = ({ href = 'index.html' } = { href: 'index.html' }) => {
     this.setState({
       reboot: true,
-      monitorType: maxByPriority(this.state.monitorType, MonitorTypes.Default),
+      monitorType: maxByPriority(this.state.monitorType, MonitorTypes.Card),
       href,
     });
   };
@@ -436,7 +427,6 @@ class Main extends Component {
       reboot,
       port,
     } = this.state;
-    const showMonitor = this.state.monitorType === MonitorTypes.Default;
 
     const styles = getStyle(this.props, this.state, this.getConfig('palette'));
 
@@ -454,7 +444,6 @@ class Main extends Component {
     const isShrinked = (width, height) => width < 200 || height < 40;
 
     const editorPaneProps = {
-      show: this.state.monitorType !== MonitorTypes.Default,
       tabs,
       selectTab: this.selectTab,
       closeTab: this.closeTab,
@@ -467,18 +456,6 @@ class Main extends Component {
         this.rootHeight
       ),
       href: this.state.href,
-    };
-
-    const monitorProps = {
-      show: showMonitor,
-      isPopout: this.state.monitorType === MonitorTypes.Popout,
-      reboot,
-      portRef: (port) => this.setState({ port }),
-      togglePopout: this.handleTogglePopout,
-      coreString: this.state.coreString,
-      saveAs: this.saveAs,
-      href: this.state.href,
-      setLocation: this.setLocation,
     };
 
     const hierarchyProps = {
@@ -499,7 +476,6 @@ class Main extends Component {
       monitorHeight,
       coreString: this.state.coreString,
       saveAs: this.saveAs,
-      showMonitor,
       project: this.state.project,
       setProject: this.setProject,
       launchIDE: this.props.launchIDE,
@@ -535,9 +511,8 @@ class Main extends Component {
     const monitorCardProps = {
       rootWidth: this.rootWidth,
       monitorWidth,
-      toggleTinyScreen: this.handleToggleTinyScreen,
-      show: this.state.monitorType === MonitorTypes.Card,
-      isPopout: false,
+      isPopout: this.state.monitorType === MonitorTypes.Popout,
+      togglePopout: this.handleTogglePopout,
       reboot,
       portRef: (port) => this.setState({ port }),
       coreString: this.state.coreString,
@@ -564,7 +539,6 @@ class Main extends Component {
                 <CreditsCard {...commonProps} />
                 <EnvCard {...commonProps} {...envCardProps} />
                 <CustomizeCard {...commonProps} {...customizeCardProps} />
-                <MonitorCard {...commonProps} {...monitorCardProps} />
                 <HierarchyCard {...commonProps} {...hierarchyProps} />
               </div>
             </div>
@@ -572,12 +546,11 @@ class Main extends Component {
               monitorWidth={monitorWidth}
               monitorHeight={monitorHeight}
               onSizer={this.setResizing}
-              showMonitor={showMonitor}
               // Be Update (won't use)
               files={files}
             />
             <div style={styles.right}>
-              <Monitor {...commonProps} {...monitorProps} />
+              <MonitorCard {...commonProps} {...monitorCardProps} />
             </div>
           </div>
           <FileDialog

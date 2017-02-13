@@ -39,7 +39,6 @@ class Sizer extends PureComponent {
     monitorWidth: PropTypes.number.isRequired,
     monitorHeight: PropTypes.number.isRequired,
     onSizer: PropTypes.func.isRequired,
-    showMonitor: PropTypes.bool.isRequired,
 
     connectDragSource: PropTypes.func.isRequired,
     connectDragPreview: PropTypes.func.isRequired,

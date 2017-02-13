@@ -63,7 +63,6 @@ const getStyle = (props, context, state) => {
 export default class Monitor extends PureComponent {
 
   static propTypes = {
-    show: PropTypes.bool.isRequired,
     isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     isPopout: PropTypes.bool.isRequired,
@@ -360,7 +359,6 @@ export default class Monitor extends PureComponent {
       error,
     } = this.state;
     const {
-      show,
       isPopout,
       reboot,
     } = this.props;

@@ -5,7 +5,7 @@ const MonitorTypes = {
   // If monitor card is expanded
   Card: Symbol('Card'),
   // If editor is not shown
-  Default: Symbol('Default'),
+  // Default: Symbol('Default'),
   // Won't show
   // None: Symbol('None'),
 };
@@ -17,7 +17,6 @@ export function maxByPriority (...types) {
   const priority = [
     MonitorTypes.Popout,
     MonitorTypes.Card,
-    MonitorTypes.Default
   ];
 
   for (const type of priority) {
@@ -26,6 +25,6 @@ export function maxByPriority (...types) {
     }
   }
 
-  return MonitorTypes.Default;
+  return MonitorTypes.Card;
 
 };
