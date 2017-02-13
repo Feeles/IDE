@@ -24,19 +24,7 @@ import Sizer from './Sizer';
 import FileDialog, { SaveDialog, RenameDialog, DeleteDialog } from '../FileDialog/';
 import DragTypes from '../utils/dragTypes';
 import { Tab } from '../ChromeTab/';
-import {
-  MediaCard,
-  ReadmeCard,
-  SnippetCard,
-  MonitorCard,
-  PaletteCard,
-  EnvCard,
-  CustomizeCard,
-  CreditsCard,
-  ShotCard,
-  EditorCard,
-  HierarchyCard,
-} from '../Cards/';
+import * as Cards from '../Cards/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -53,12 +41,8 @@ const getStyle = (props, state, palette) => {
     root: {
       position: 'relative',
       width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch',
       backgroundColor: palette.backgroundColor,
-      overflow: 'hidden',
+      overflow: 'scroll',
     },
     container: {
       display: 'flex',
@@ -70,10 +54,6 @@ const getStyle = (props, state, palette) => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
-    },
-    scroll: {
-      overflowX: 'visible',
-      overflowY: 'scroll',
     },
     right: {
       flex: shrinkLeft ? '1 1 auto' : '0 0 auto',
@@ -127,6 +107,52 @@ class Main extends Component {
     coreString: null,
 
     project: this.props.project,
+
+    cards: [{
+      name: 'MonitorCard',
+      visible: true,
+      order: 0,
+    }, {
+      name: 'MediaCard',
+      visible: true,
+      order: 1,
+    }, {
+      name: 'ReadmeCard',
+      visible: true,
+      order: 2,
+    }, {
+      name: 'SnippetCard',
+      visible: true,
+      order: 3,
+    }, {
+      name: 'PaletteCard',
+      visible: false,
+      order: 4,
+    }, {
+      name: 'EnvCard',
+      visible: true,
+      order: 5,
+    }, {
+      name: 'CustomizeCard',
+      visible: false,
+      order: 6,
+    }, {
+      name: 'CreditsCard',
+      visible: false,
+      order: 7,
+    }, {
+      name: 'ShotCard',
+      visible: false,
+      order: 8,
+    }, {
+      name: 'EditorCard',
+      visible: false,
+      order: 9,
+    }, {
+      name: 'HierarchyCard',
+      visible: false,
+      order: 10,
+    }],
   };
 
   get rootWidth() {
@@ -444,104 +470,108 @@ class Main extends Component {
 
     const isShrinked = (width, height) => width < 200 || height < 40;
 
-    const editorPaneProps = {
-      tabs,
-      selectTab: this.selectTab,
-      closeTab: this.closeTab,
-      setLocation: this.setLocation,
-      openFileDialog: this.openFileDialog,
-      port,
-      reboot,
-      isShrinked: isShrinked(
-        this.rootWidth - monitorWidth,
-        this.rootHeight
-      ),
-      href: this.state.href,
-    };
-
-    const hierarchyProps = {
-      tabs,
-      deleteFile: this.deleteFile,
-      selectTab: this.selectTab,
-      closeTab: this.closeTab,
-      openFileDialog: this.openFileDialog,
-      saveAs: this.saveAs,
-    };
-
-    const menuProps = {
-      togglePopout: this.handleTogglePopout,
-      setLocalization: this.props.setLocalization,
-      openFileDialog: this.openFileDialog,
-      isPopout: this.state.monitorType === MonitorTypes.Popout,
-      monitorWidth,
-      monitorHeight,
-      coreString: this.state.coreString,
-      saveAs: this.saveAs,
-      project: this.state.project,
-      setProject: this.setProject,
-      launchIDE: this.props.launchIDE,
-    };
-
-    const mediaProps = {
-      port: this.state.port,
-    };
-
-    const readmeProps = {
-      selectTab: this.selectTab,
-      port: this.state.port,
-      setLocation: this.setLocation,
-    };
-
-    const shotProps = {
-      port: this.state.port,
-    };
-
-    const snippetProps = {
-      tabs,
-      selectTab: this.selectTab,
-    };
-
-    const envCardProps = {
-      selectTab: this.selectTab,
-    };
-
-    const customizeCardProps = {
-      selectTab: this.selectTab,
-    };
-
-    const monitorCardProps = {
-      rootWidth: this.rootWidth,
-      monitorWidth,
-      isPopout: this.state.monitorType === MonitorTypes.Popout,
-      togglePopout: this.handleTogglePopout,
-      reboot,
-      portRef: (port) => this.setState({ port }),
-      coreString: this.state.coreString,
-      saveAs: this.saveAs,
-      href: this.state.href,
-      setLocation: this.setLocation,
+    const cardProps = {
+      EditorCard: {
+        tabs,
+        selectTab: this.selectTab,
+        closeTab: this.closeTab,
+        setLocation: this.setLocation,
+        openFileDialog: this.openFileDialog,
+        port,
+        reboot,
+        isShrinked: isShrinked(
+          this.rootWidth - monitorWidth,
+          this.rootHeight
+        ),
+        href: this.state.href,
+      },
+      HierarchyCard: {
+        tabs,
+        deleteFile: this.deleteFile,
+        selectTab: this.selectTab,
+        closeTab: this.closeTab,
+        openFileDialog: this.openFileDialog,
+        saveAs: this.saveAs,
+      },
+      MediaCard: {
+        port: this.state.port,
+      },
+      ReadmeCard: {
+        selectTab: this.selectTab,
+        port: this.state.port,
+        setLocation: this.setLocation,
+      },
+      ShotCard: {
+        port: this.state.port,
+      },
+      SnippetCard: {
+        tabs,
+        selectTab: this.selectTab,
+      },
+      EnvCard: {
+        selectTab: this.selectTab,
+      },
+      CustomizeCard: {
+        selectTab: this.selectTab,
+      },
+      MonitorCard: {
+        rootWidth: this.rootWidth,
+        monitorWidth,
+        isPopout: this.state.monitorType === MonitorTypes.Popout,
+        togglePopout: this.handleTogglePopout,
+        reboot,
+        portRef: (port) => this.setState({ port }),
+        coreString: this.state.coreString,
+        saveAs: this.saveAs,
+        href: this.state.href,
+        setLocation: this.setLocation,
+      },
     };
 
     const userStyle = this.findFile('feeles/codemirror.css');
 
+    const orderedCardInfo = [...this.state.cards];
+    orderedCardInfo.sort((a, b) => a.order - b.order);
+
+    const left = orderedCardInfo.filter(item => item.visible && item.order % 2 === 1);
+    const right = orderedCardInfo.filter(item => item.visible && item.order % 2 === 0);
+
+    const leftCards = left.map((info, key) => {
+      return React.createElement(Cards[info.name], {
+        key,
+        ...commonProps,
+        ...cardProps[info.name],
+      });
+    });
+
+    const rightCards = right.map((info, key) => {
+      return React.createElement(Cards[info.name], {
+        key,
+        ...commonProps,
+        ...cardProps[info.name],
+      });
+    });
+
     return connectDropTarget(
         <div style={styles.root}>
           <div style={styles.dropCover}></div>
-          <Menu {...commonProps} {...menuProps} />
+          <Menu
+            {...commonProps}
+            togglePopout={this.handleTogglePopout}
+            setLocalization={this.props.setLocalization}
+            openFileDialog={this.openFileDialog}
+            isPopout={this.state.monitorType === MonitorTypes.Popout}
+            monitorWidth={monitorWidth}
+            monitorHeight={monitorHeight}
+            coreString={this.state.coreString}
+            saveAs={this.saveAs}
+            project={this.state.project}
+            setProject={this.setProject}
+            launchIDE={this.props.launchIDE}
+          />
           <div style={styles.container}>
             <div style={styles.left}>
-              <div style={styles.scroll}>
-                <EditorCard {...commonProps} {...editorPaneProps} />
-                <ShotCard {...commonProps} {...shotProps} />
-                <MediaCard {...commonProps} {...mediaProps} />
-                <ReadmeCard {...commonProps} {...readmeProps} />
-                <SnippetCard {...commonProps} {...snippetProps} />
-                <PaletteCard {...commonProps} />
-                <CreditsCard {...commonProps} />
-                <EnvCard {...commonProps} {...envCardProps} />
-                <CustomizeCard {...commonProps} {...customizeCardProps} />
-                <HierarchyCard {...commonProps} {...hierarchyProps} />
-              </div>
+            {leftCards}
             </div>
             <Sizer
               monitorWidth={monitorWidth}
@@ -551,7 +581,7 @@ class Main extends Component {
               files={files}
             />
             <div style={styles.right}>
-              <MonitorCard {...commonProps} {...monitorCardProps} />
+            {rightCards}
             </div>
           </div>
           <FileDialog
