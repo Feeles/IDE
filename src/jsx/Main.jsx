@@ -33,6 +33,7 @@ import {
   CustomizeCard,
   CreditsCard,
   ShotCard,
+  EditorCard,
 } from '../Cards/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
@@ -578,6 +579,7 @@ class Main extends Component {
           <div style={styles.dropCover}></div>
           <div style={styles.left}>
             <div style={styles.scroll}>
+              <EditorCard {...commonProps} {...editorPaneProps} />
               <ShotCard {...commonProps} {...shotProps} />
               <MediaCard {...commonProps} {...mediaProps} />
               <ReadmeCard {...commonProps} {...readmeProps} />
@@ -599,7 +601,6 @@ class Main extends Component {
             files={files}
           />
           <div style={styles.right}>
-            <EditorPane {...commonProps} {...editorPaneProps} />
             <Monitor {...commonProps} {...monitorProps} />
             <Menu {...commonProps} {...menuProps} />
           </div>

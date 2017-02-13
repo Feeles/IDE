@@ -7,3 +7,4 @@ export { default as SnippetCard } from './SnippetCard';
 export { default as CustomizeCard } from './CustomizeCard';
 export { default as CreditsCard } from './CreditsCard';
 export { default as ShotCard } from './ShotCard';
+export { default as EditorCard } from './EditorCard';

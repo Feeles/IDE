@@ -19,16 +19,16 @@ const getStyles = (props, context) => {
 
   return {
     root: {
-      flex: props.show ? '1 1 auto' : '0 0 0',
-      opacity: props.show ? 1 : 0,
+      position: 'relative',
+      height: '90vh',
+      width: '100%',
+      opacity: 1,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
       overflow: 'hidden',
       fontFamily,
       transition: transitions.easeOut(),
-      // for IE11
-      height: props.show ? '100%' : 0,
     },
     tabContainer: {
       display: 'flex',
@@ -57,7 +57,6 @@ const getStyles = (props, context) => {
 export default class EditorPane extends PureComponent {
 
   static propTypes = {
-    show: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     tabs: PropTypes.array.isRequired,
     putFile: PropTypes.func.isRequired,
@@ -81,9 +80,6 @@ export default class EditorPane extends PureComponent {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextProps.isResizing) {
-      return false;
-    }
-    if (!this.props.show && !nextProps.show) {
       return false;
     }
     return true;
@@ -148,7 +144,7 @@ export default class EditorPane extends PureComponent {
   };
 
   render() {
-    if (!this.props.tabs.length && this.props.show) {
+    if (!this.props.tabs.length) {
       return this.renderBackground();
     }
 
