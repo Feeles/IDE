@@ -152,8 +152,7 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     subtitle: `Let's change the color according to your mood`,
   },
   monitorCard: {
-    title: 'Tiny Screen',
-    subtitle: `You can write code while watching the screen of the application`,
+    title: 'Monitor',
   },
   customizeCard: {
     title: 'Editor Preference',

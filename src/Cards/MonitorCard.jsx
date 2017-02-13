@@ -85,7 +85,6 @@ export default class MonitorCard extends PureComponent {
       >
         <CardHeader showExpandableButton actAsExpander
           title={localization.monitorCard.title}
-          subtitle={localization.monitorCard.subtitle}
         />
         <CardMedia expandable
           mediaStyle={styles.media}
