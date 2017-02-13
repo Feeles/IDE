@@ -112,7 +112,8 @@ export default {
     shoot: '書き換えたら、コードを送る',
     restore: '元に戻す',
   },
-  hierarchy: {
+  hierarchyCard: {
+    title: 'ファイル',
     emptyTrashBox: '空にする',
   },
   snippet: {

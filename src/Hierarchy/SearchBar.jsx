@@ -108,6 +108,7 @@ export default class SearchBar extends PureComponent {
       putFile,
       onOpen,
       deleteAll,
+      localization,
     } = this.props;
     const { showTrashes, query } = this.state;
     const {
@@ -124,8 +125,6 @@ export default class SearchBar extends PureComponent {
       icon,
       empty,
     } = getStyles(this.props, this.context, this.state);
-
-    const { hierarchy } = this.props.localization;
 
     return (
       <div style={root}>
@@ -156,7 +155,7 @@ export default class SearchBar extends PureComponent {
         </Paper>
         {showTrashes ? (
           <RaisedButton secondary
-            label={hierarchy.emptyTrashBox}
+            label={localization.hierarchyCard.emptyTrashBox}
             icon={<ActionDeleteForever color={alternateTextColor} />}
             style={empty}
             onTouchTap={deleteAll}

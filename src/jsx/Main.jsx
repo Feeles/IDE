@@ -34,6 +34,7 @@ import {
   CreditsCard,
   ShotCard,
   EditorCard,
+  HierarchyCard,
 } from '../Cards/';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
@@ -558,7 +559,7 @@ class Main extends Component {
               <EnvCard {...commonProps} {...envCardProps} />
               <CustomizeCard {...commonProps} {...customizeCardProps} />
               <MonitorCard {...commonProps} {...monitorCardProps} />
-              <Hierarchy {...commonProps} {...hierarchyProps} />
+              <HierarchyCard {...commonProps} {...hierarchyProps} />
             </div>
           </div>
           <Sizer
