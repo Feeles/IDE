@@ -153,7 +153,7 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     title: 'Tiny Screen',
     subtitle: `You can write code while watching the screen of the application`,
   },
-  editorCard: {
+  customizeCard: {
     title: 'Editor Preference',
     subtitle: `Let's customize the editor to your favorite`,
     detail: `Click here for details`,

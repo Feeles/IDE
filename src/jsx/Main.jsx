@@ -30,7 +30,7 @@ import {
   MonitorCard,
   PaletteCard,
   EnvCard,
-  EditorCard,
+  CustomizeCard,
   CreditsCard,
   ShotCard,
 } from '../Cards/';
@@ -553,7 +553,7 @@ class Main extends Component {
       selectTab: this.selectTab,
     };
 
-    const editorCardProps = {
+    const customizeCardProps = {
       selectTab: this.selectTab,
     };
 
@@ -585,7 +585,7 @@ class Main extends Component {
               <PaletteCard {...commonProps} />
               <CreditsCard {...commonProps} />
               <EnvCard {...commonProps} {...envCardProps} />
-              <EditorCard {...commonProps} {...editorCardProps} />
+              <CustomizeCard {...commonProps} {...customizeCardProps} />
               <MonitorCard {...commonProps} {...monitorCardProps} />
               <Hierarchy {...commonProps} {...hierarchyProps} />
             </div>

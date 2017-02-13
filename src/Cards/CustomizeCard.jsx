@@ -8,7 +8,7 @@ import { commonRoot } from './commonStyles';
 import EditFile from './EditFile';
 import resolveOrigin from '../utils/resolveOrigin';
 
-export default class EditorCard extends PureComponent {
+export default class CustomizeCard extends PureComponent {
 
   static propTypes = {
     files: PropTypes.array.isRequired,
@@ -122,16 +122,16 @@ export default class EditorCard extends PureComponent {
     return (
       <Card style={commonRoot}>
         <CardHeader showExpandableButton actAsExpander
-          title={localization.editorCard.title}
-          subtitle={localization.editorCard.subtitle}
+          title={localization.customizeCard.title}
+          subtitle={localization.customizeCard.subtitle}
         />
         {this.renderBlock(
-          localization.editorCard.editor,
+          localization.customizeCard.editor,
           'http://codemirror.net/doc/manual.html#config',
           this.state.editorFileKey
         )}
         {this.renderBlock(
-          localization.editorCard.style,
+          localization.customizeCard.style,
           'http://codemirror.net/doc/manual.html#styling',
           this.state.cssFileKey
         )}

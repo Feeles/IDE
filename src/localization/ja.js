@@ -153,7 +153,7 @@ export default {
     title: '小さなスクリーン',
     subtitle: `アプリの画面を見ながらコードを書くことができます`,
   },
-  editorCard: {
+  customizeCard: {
     title: 'エディタをカスタマイズ',
     subtitle: `自分好みにエディタをカスタマイズしましょう`,
     detail: `くわしくはこちら`,
