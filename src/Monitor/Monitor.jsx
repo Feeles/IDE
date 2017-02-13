@@ -341,7 +341,7 @@ export default class Monitor extends PureComponent {
   handleFrame = (ref) => {
     if (!ref) return;
 
-    if (this.props.show) {
+    if (!this.props.isPopout) {
       this.inlineFrame = ref;
     } else {
       this.popoutFrame = ref;
