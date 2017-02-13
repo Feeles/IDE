@@ -56,6 +56,12 @@ export default class MonitorCard extends PureComponent {
     });
   }
 
+  handleExpandChange = (expand) => {
+    if (expand) {
+      this.props.setLocation();
+    }
+  };
+
   render() {
     const {
        localization,
@@ -79,9 +85,10 @@ export default class MonitorCard extends PureComponent {
     };
 
     return (
-      <Card initiallyExpanded
-        expanded={!this.props.isPopout}
+      <Card
+        initiallyExpanded
         style={styles.root}
+        onExpandChange={this.handleExpandChange}
       >
         <CardHeader showExpandableButton actAsExpander
           title={localization.monitorCard.title}
