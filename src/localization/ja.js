@@ -73,6 +73,7 @@ export default {
     cancel: 'キャンセル',
   },
   readmeCard: {
+    title: 'はじめに',
     subtitle: 'まずはこれを読んでください',
     index: '目次',
     text: `# はじめに
@@ -163,7 +164,7 @@ export default {
     style: `文字の色や背景色など`,
   },
   creditsCard: {
-    title: '功労者',
+    title: 'でんせつ',
     subtitle: `これらのコードにかかわってきた全ての人々`,
   },
   mediaCard: {

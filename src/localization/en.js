@@ -72,6 +72,7 @@ export default {
     indentUnit4: '4 spaces indent',
   },
   readmeCard: {
+    title: 'Getting Started',
     subtitle: 'Please read this first',
     index: 'Index',
     text: `# Introduction
@@ -163,7 +164,7 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     style: `Color of text and background ...etc`,
   },
   creditsCard: {
-    title: 'Contributors',
+    title: 'Legends',
     subtitle: `Everyone who contributed to these codes`,
   },
   mediaCard: {
