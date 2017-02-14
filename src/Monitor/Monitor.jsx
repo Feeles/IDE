@@ -30,7 +30,7 @@ const getStyle = (props, context, state) => {
     root: {
       // tmp
       width: '100%',
-      height: 500,
+      height: props.isPopout ? 0 : 500,
 
       opacity: 1,
       display: 'flex',

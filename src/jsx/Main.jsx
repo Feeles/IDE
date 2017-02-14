@@ -324,7 +324,7 @@ export default class Main extends Component {
   handleTogglePopout = () => {
     const isPopout = this.state.monitorType === MonitorTypes.Popout;
     this.setState({
-      reboot: !isPopout,
+      reboot: true,
       monitorType: isPopout ?
         MonitorTypes.Card : MonitorTypes.Popout,
     });
@@ -429,6 +429,7 @@ export default class Main extends Component {
       },
       MonitorCard: {
         setLocation: this.setLocation,
+        togglePopout: this.handleTogglePopout,
         monitorProps: {
           ...commonProps,
           rootWidth: this.rootWidth,
@@ -459,10 +460,8 @@ export default class Main extends Component {
         <div style={styles.root}>
           <Menu
             {...commonProps}
-            togglePopout={this.handleTogglePopout}
             setLocalization={this.props.setLocalization}
             openFileDialog={this.openFileDialog}
-            isPopout={this.state.monitorType === MonitorTypes.Popout}
             coreString={this.state.coreString}
             saveAs={this.saveAs}
             project={this.state.project}

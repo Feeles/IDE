@@ -8,7 +8,6 @@ import Drawer from 'material-ui/Drawer';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
-import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
@@ -22,10 +21,6 @@ import CloneDialog from './CloneDialog';
 
 
 const getStyles = (props, context) => {
-
-  const {
-    isPopout,
-  } = props;
   const { palette } = context.muiTheme;
 
   return {
@@ -39,9 +34,6 @@ const getStyles = (props, context) => {
       marginLeft: 20,
       zIndex: 2,
     },
-    popoutIcon: {
-      transform: isPopout ? 'rotate(180deg)' : '',
-    },
     projectName: {
       color: palette.alternateTextColor,
       fontSize: '.8rem',
@@ -54,9 +46,7 @@ export default class Menu extends PureComponent {
 
   static propTypes = {
     files: PropTypes.array.isRequired,
-    isPopout: PropTypes.bool.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    togglePopout: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
@@ -131,8 +121,6 @@ export default class Menu extends PureComponent {
 
   render() {
     const {
-      isPopout,
-      togglePopout,
       localization,
       setLocalization,
       getConfig,
@@ -167,14 +155,6 @@ export default class Menu extends PureComponent {
           />
         )
       )}
-        <IconButton
-          tooltip={localization.menu.popout}
-          onTouchTap={togglePopout}
-          style={styles.button}
-          iconStyle={styles.popoutIcon}
-        >
-          <OpenInBrowser color={alternateTextColor} />
-        </IconButton>
         <IconButton
           tooltip={localization.menu.clone}
           disabled={!this.props.coreString}

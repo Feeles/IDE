@@ -5,7 +5,6 @@ export default {
 
   menu: {
     shutdown: 'とじる',
-    popout: 'ポップアウト',
     env: 'envのせってい',
     language: '言語',
     clone: 'セーブ / ロード / クローン',

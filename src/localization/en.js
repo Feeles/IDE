@@ -5,7 +5,6 @@ export default {
 
   menu: {
     shutdown: 'Shutdown',
-    popout: 'Pop-out Screen',
     language: 'Language',
     clone: 'Save / Load / Clone',
     aboutFeeles: 'About Feeles',
