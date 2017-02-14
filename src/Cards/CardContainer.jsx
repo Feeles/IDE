@@ -9,7 +9,7 @@ import * as Cards from './';
 class CardContainer extends PureComponent {
 
   static propTypes = {
-    cards: PropTypes.array.isRequired,
+    getConfig: PropTypes.func.isRequired,
     rootWidth: PropTypes.number.isRequired,
     cardProps: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
@@ -52,9 +52,10 @@ class CardContainer extends PureComponent {
   }
 
   render() {
-    const {connectDropTarget, cards} = this.props;
+    const {connectDropTarget} = this.props;
 
-    const orderedCardInfo = [...this.props.cards];
+    const orderedCardInfo = Object.entries(this.props.getConfig('card'))
+      .map(([name, value]) => ({name, ...value}));
     orderedCardInfo.sort((a, b) => a.order - b.order);
 
     const column = 1 + (this.props.rootWidth > 991);

@@ -89,5 +89,56 @@ export default new Map([
           .map((scope) => snippets[scope])
           .reduce((p, c) => p.concat(c), []);
     },
-  }]
+  }],
+  ['card', {
+    test: /^feeles\/card\.json$/i,
+    multiple: false,
+    defaultValue: {
+      MonitorCard: {
+        visible: true,
+        order: 0
+      },
+      ShotCard: {
+        visible: false,
+        order: 1
+      },
+      EditorCard: {
+        visible: false,
+        order: 2
+      },
+      MediaCard: {
+        visible: false,
+        order: 3
+      },
+      CreditsCard: {
+        visible: false,
+        order: 4
+      },
+      ReadmeCard: {
+        visible: true,
+        order: 5
+      },
+      PaletteCard: {
+        visible: false,
+        order: 6
+      },
+      SnippetCard: {
+        visible: false,
+        order: 7
+      },
+      EnvCard: {
+        visible: false,
+        order: 8
+      },
+      HierarchyCard: {
+        visible: false,
+        order: 9
+      },
+      CustomizeCard: {
+        visible: false,
+        order: 10
+      },
+    },
+    defaultName: 'feeles/card.json',
+  }],
 ]);

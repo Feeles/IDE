@@ -65,7 +65,6 @@ export default class Menu extends PureComponent {
     saveAs: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
-    cards: PropTypes.array.isRequired,
     updateCard: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
   };
@@ -230,7 +229,8 @@ export default class Menu extends PureComponent {
             iconElementLeft={<IconButton><NavigationArrowBack /></IconButton>}
             onLeftIconButtonTouchTap={this.handleToggleDrawer}
           />
-        {this.state.open ? this.props.cards
+        {this.state.open ? Object.entries(this.props.getConfig('card'))
+          .map(([name, card]) => ({name, ...card}))
           .filter(item => !item.visible)
           .map(item => (
           <MenuItem
