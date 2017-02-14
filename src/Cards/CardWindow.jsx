@@ -11,10 +11,15 @@ export default class CardWindow extends PureComponent {
 
   static propTypes = {
     name: PropTypes.string.isRequired,
+    visible: PropTypes.bool.isRequired,
     localization: PropTypes.object.isRequired,
-    cards: PropTypes.array.isRequired,
-    toggleCard: PropTypes.func.isRequired,
-    isResizing: PropTypes.bool.isRequired
+    updateCard: PropTypes.func.isRequired,
+    isResizing: PropTypes.bool.isRequired,
+    actions: PropTypes.array.isRequired
+  };
+
+  static defaultProps = {
+    actions: []
   };
 
   state = {
@@ -23,7 +28,7 @@ export default class CardWindow extends PureComponent {
   };
 
   componentWillMount() {
-    if (this.props.initiallyExpanded) {
+    if (this.props.initiallyExpanded && this.props.visible) {
       this.toggleExpand();
     }
   }
@@ -32,8 +37,25 @@ export default class CardWindow extends PureComponent {
     if (this.props.isResizing && nextProps.isResizing) {
       return false;
     }
-
     return true;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.visible !== nextProps.visible) {
+      if (nextProps.visible && nextProps.initiallyExpanded) {
+        this.toggleExpand();
+      }
+      if (!nextProps.visible && this.state.expanded) {
+        this.toggleExpand();
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.visible && this.props.visible) {
+      location.hash = '';
+      location.hash = this.props.name;
+    }
   }
 
   get cardProps() {
@@ -47,12 +69,6 @@ export default class CardWindow extends PureComponent {
     return props;
   }
 
-  get card() {
-    return this.props.cards.find(item => {
-      return item.name === this.props.name;
-    }, this);
-  }
-
   toggleExpand = () => {
     this.setState(prevState => {
       const expanded = !prevState.expanded;
@@ -64,8 +80,7 @@ export default class CardWindow extends PureComponent {
   };
 
   closeCard = () => {
-    this.props.toggleCard(this.props.name);
-    this.toggleExpand();
+    this.props.updateCard(this.props.name, {visible: false});
   };
 
   renderExpandButton() {
@@ -89,15 +104,16 @@ export default class CardWindow extends PureComponent {
   }
 
   render() {
-    if (this.card.visible === false) {
-      return null;
+    if (!this.props.visible) {
+      return <div id={this.props.name}></div>;
     }
+
+    const {connectDragSource, connectDragPreview, isDragging} = this.props;
 
     const styles = {
       root: {
-        marginTop: 16,
-        marginLeft: 16,
-        marginRight: 16
+        padding: 16,
+        paddingBottom: 0
       },
       header: {
         display: 'flex',
@@ -120,6 +136,7 @@ export default class CardWindow extends PureComponent {
           <div style={styles.header}>
             <div style={styles.title}>{this.state.localized.title}</div>
             <div style={styles.blank}></div>
+            {this.props.actions}
             {this.renderExpandButton()}
             {this.renderCloseButton()}
           </div>
