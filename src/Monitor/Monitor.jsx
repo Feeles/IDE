@@ -396,7 +396,6 @@ export default class Monitor extends PureComponent {
         <Screen animation
           display={!isPopout}
           frameRef={this.handleFrame}
-          handleReload={this.handleReload}
           reboot={reboot}
           error={error}
         />
