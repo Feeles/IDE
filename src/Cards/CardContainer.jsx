@@ -12,12 +12,13 @@ class CardContainer extends PureComponent {
     cards: PropTypes.array.isRequired,
     rootWidth: PropTypes.number.isRequired,
     cardProps: PropTypes.object.isRequired,
+    updateCard: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired
   };
 
   state = {
-    column: 2,
     isResizing: false,
     rightSideWidth: this.props.rootWidth / 2
   };
@@ -35,35 +36,46 @@ class CardContainer extends PureComponent {
     waitFlag = true;
   })();
 
+  renderCards(cards) {
+    return cards.map((info, key) => {
+      return React.createElement(Cards[info.name], {
+        key,
+        cardPropsBag: {
+          ...info,
+          isResizing: this.state.isResizing,
+          localization: this.props.localization,
+          updateCard: this.props.updateCard,
+        },
+        ...this.props.cardProps[info.name]
+      });
+    });
+  }
+
   render() {
     const {connectDropTarget, cards} = this.props;
 
     const orderedCardInfo = [...this.props.cards];
     orderedCardInfo.sort((a, b) => a.order - b.order);
 
+    const column = 1 + (this.props.rootWidth > 991);
+
     const left = orderedCardInfo.filter(item => {
-      return item.visible && item.order % this.state.column === 1;
+      return item.order % column === 1;
     });
     const right = orderedCardInfo.filter(item => {
-      return item.visible && item.order % this.state.column === 0;
-    });
-    const hidden = orderedCardInfo.filter(item => item.visible === false);
-
-    const renderCards = (cards) => cards.map((info, key) => {
-      return React.createElement(Cards[info.name], {
-        key,
-        cardPropsBag: {
-          ...this.props.cardPropsBag,
-          name: info.name,
-          isResizing: this.state.isResizing
-        },
-        ...this.props.cardProps[info.name]
-      });
+      return item.order % column === 0;
     });
 
-    const shrinkLeft = false;
-    const shrinkRight = false;
-    const isResizing = (yes, no) => this.state.isResizing ? yes : no;
+    const isShrinkLeft = (yes, no) => {
+      if (column === 1) {
+        return yes;
+      }
+      return no;
+    };
+    const isShrinkRight = (yes, no) => no;
+    const isResizing = (yes, no) => this.state.isResizing
+      ? yes
+      : no;
 
     const styles = {
       container: {
@@ -72,40 +84,36 @@ class CardContainer extends PureComponent {
         alignItems: 'stretch'
       },
       left: {
-        flex: shrinkLeft
-          ? '0 0 auto'
-          : '1 1 auto',
+        flex: isShrinkLeft('0 0 auto', '1 1 auto'),
         width: 0,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
         overflow: 'scroll',
-        paddingBottom: 200
+        paddingBottom: 200,
+        zIndex: 1,
       },
       right: {
-        flex: shrinkLeft
-          ? '1 1 auto'
-          : '0 0 auto',
+        flex: isShrinkLeft('1 1 auto', '0 0 auto'),
         boxSizing: 'border-box',
-        width: shrinkRight
-          ? 0
-          : this.state.rightSideWidth,
+        width: isShrinkRight(0, this.state.rightSideWidth),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
         overflow: 'scroll',
-        paddingBottom: 200
+        paddingBottom: 200,
+        zIndex: 1,
       },
       dropCover: {
         position: 'absolute',
-        top: isResizing(0, '50%'),
-        left: isResizing(0, '50%'),
+        top: 0,
+        left: 0,
         opacity: isResizing(0.5, 0),
-        width: isResizing('100%', 0),
-        height: isResizing('100%', 0),
+        width: '100%',
+        height: '100%',
         backgroundColor: 'black',
-        zIndex: 1000,
-        transition: transitions.easeOut()
+        zIndex: isResizing(1000, 0),
+        transition: transitions.easeOut(null, 'opacity')
       }
     };
 
@@ -114,16 +122,17 @@ class CardContainer extends PureComponent {
         <div style={styles.dropCover}></div>
         <div style={styles.left}>
           <div>
-            {renderCards(left)}
+            {this.renderCards(left)}
           </div>
         </div>
-        <Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>
+        {column === 2
+          ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
+          : null}
         <div style={styles.right}>
           <div>
-            {renderCards(right)}
+            {this.renderCards(right)}
           </div>
         </div>
-        {renderCards(hidden)}
       </div>
     );
   }
