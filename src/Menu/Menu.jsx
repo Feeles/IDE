@@ -25,12 +25,12 @@ const getStyles = (props, context) => {
 
   const {
     isPopout,
-    monitorWidth,
   } = props;
   const { palette } = context.muiTheme;
 
   return {
     root: {
+      flex: '0 0 auto',
       display: 'flex',
       flexWrap: 'wrap',
       alignItems: 'center',
@@ -57,7 +57,6 @@ export default class Menu extends PureComponent {
     isPopout: PropTypes.bool.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     togglePopout: PropTypes.func.isRequired,
-    monitorWidth: PropTypes.number.isRequired,
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
@@ -67,7 +66,7 @@ export default class Menu extends PureComponent {
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
     cards: PropTypes.array.isRequired,
-    toggleCard: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
   };
 
@@ -238,7 +237,7 @@ export default class Menu extends PureComponent {
             key={item.name}
             primaryText={localization[lowerCaseAtFirst(item.name)].title}
             onTouchTap={() => {
-              this.props.toggleCard(item.name);
+              this.props.updateCard(item.name, {visible: true});
               this.handleToggleDrawer();
             }}
           />
