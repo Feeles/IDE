@@ -1,5 +1,6 @@
 import React, {PureComponent, PropTypes} from 'react';
-import {Card, CardHeader, CardText, CardActions} from 'material-ui/Card';
+import Card from './CardWindow';
+import {CardText, CardActions} from 'material-ui/Card';
 
 import {SourceFile} from '../File/';
 import {Tab} from '../ChromeTab/';
@@ -10,6 +11,7 @@ import EditFile from './EditFile';
 export default class EnvCard extends PureComponent {
 
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
@@ -59,8 +61,7 @@ export default class EnvCard extends PureComponent {
     const {localization} = this.props;
 
     return (
-      <Card style={commonRoot}>
-        <CardHeader showExpandableButton actAsExpander title={localization.envCard.title} subtitle={localization.envCard.subtitle}/>
+      <Card initiallyExpanded {...this.props.cardPropsBag}>
         <CardText expandable>
           {Object.keys(this.state.env).map((key) => (<EnvItem key={key} itemKey={key} item={this.state.env[key]} localization={localization} updateEnv={this.handleUpdateEnv}/>))}
         </CardText>

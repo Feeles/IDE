@@ -1,18 +1,19 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
+import Card from './CardWindow';
+import {CardText, CardActions} from 'material-ui/Card';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
 
 import ReadmePane from '../ReadmePane/';
 import { SourceFile } from '../File/';
-import { commonRoot } from './commonStyles';
 import EditFile from './EditFile';
 import shallowEqual from '../utils/shallowEqual';
 
 export default class ReadmeCard extends PureComponent {
 
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
@@ -185,13 +186,7 @@ export default class ReadmeCard extends PureComponent {
       },
     };
     return (
-      <Card initiallyExpanded
-        style={commonRoot}
-      >
-        <CardHeader showExpandableButton actAsExpander
-          title={selectedFile.header}
-          subtitle={localization.readmeCard.subtitle}
-        />
+      <Card initiallyExpanded {...this.props.cardPropsBag}>
         <CardText
           expandable
           style={styles.text}

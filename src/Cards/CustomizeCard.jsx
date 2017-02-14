@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
+import Card from './CardWindow';
+import { CardHeader } from 'material-ui/Card';
 
 
 import { SourceFile } from '../File/';
@@ -11,6 +12,7 @@ import resolveOrigin from '../utils/resolveOrigin';
 export default class CustomizeCard extends PureComponent {
 
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     getConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -120,21 +122,17 @@ export default class CustomizeCard extends PureComponent {
     } = this.props;
 
     return (
-      <Card style={commonRoot}>
-        <CardHeader showExpandableButton actAsExpander
-          title={localization.customizeCard.title}
-          subtitle={localization.customizeCard.subtitle}
-        />
-        {this.renderBlock(
-          localization.customizeCard.editor,
-          'http://codemirror.net/doc/manual.html#config',
-          this.state.editorFileKey
-        )}
-        {this.renderBlock(
-          localization.customizeCard.style,
-          'http://codemirror.net/doc/manual.html#styling',
-          this.state.cssFileKey
-        )}
+      <Card initiallyExpanded {...this.props.cardPropsBag}>
+      {this.renderBlock(
+        localization.customizeCard.editor,
+        'http://codemirror.net/doc/manual.html#config',
+        this.state.editorFileKey
+      )}
+      {this.renderBlock(
+        localization.customizeCard.style,
+        'http://codemirror.net/doc/manual.html#styling',
+        this.state.cssFileKey
+      )}
       </Card>
     );
   }

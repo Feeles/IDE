@@ -23,7 +23,7 @@ const getStyles = (props, context) => {
       marginBottom: 32,
       display: 'flex',
       cursor: 'col-resize',
-      zIndex: 2000,
+      zIndex: 1101,
     },
     preview: {
       flex: '1 1 auto',
@@ -38,8 +38,7 @@ const getStyles = (props, context) => {
 class Sizer extends PureComponent {
 
   static propTypes = {
-    monitorWidth: PropTypes.number.isRequired,
-    monitorHeight: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
     onSizer: PropTypes.func.isRequired,
 
     connectDragSource: PropTypes.func.isRequired,
@@ -89,8 +88,7 @@ class Sizer extends PureComponent {
 const spec = {
   beginDrag(props) {
     return {
-      width: props.monitorWidth,
-      height: props.monitorHeight,
+      width: props.width
     };
   },
 };

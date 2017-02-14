@@ -1,9 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
-import { DropTarget } from 'react-dnd';
-import { faintBlack } from 'material-ui/styles/colors';
-import transitions from 'material-ui/styles/transitions';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 // Needed for onTouchTap
@@ -20,16 +17,14 @@ import EditorPane, { codemirrorStyle } from '../EditorPane/';
 import Hierarchy from '../Hierarchy/';
 import Monitor, { MonitorTypes, maxByPriority } from '../Monitor/';
 import Menu from '../Menu/';
-import Sizer from './Sizer';
 import FileDialog, { SaveDialog, RenameDialog, DeleteDialog } from '../FileDialog/';
-import DragTypes from '../utils/dragTypes';
 import { Tab } from '../ChromeTab/';
 import * as Cards from '../Cards/';
+import CardContainer from '../Cards/CardContainer';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
 const getStyle = (props, state, palette) => {
-  const { isResizing } = state;
   const shrinkLeft = parseInt(props.rootStyle.width, 10) - state.monitorWidth < 200;
   const shrinkRight = state.monitorWidth < 100;
 
@@ -46,43 +41,10 @@ const getStyle = (props, state, palette) => {
       flexDirection: 'column',
       backgroundColor: palette.backgroundColor,
     },
-    container: {
-      flex: '1 1 auto',
-      display: 'flex',
-      alignItems: 'stretch',
-    },
-    left: {
-      flex: shrinkLeft ? '0 0 auto' : '1 1 auto',
-      width: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch',
-      overflow: 'scroll',
-      paddingBottom: 200,
-    },
-    right: {
-      flex: shrinkLeft ? '1 1 auto' : '0 0 auto',
-      boxSizing: 'border-box',
-      width: shrinkRight ? 0 : state.monitorWidth,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch',
-      overflow: 'scroll',
-      paddingBottom: 200,
-    },
-    dropCover: {
-      position: 'absolute',
-      opacity: isResizing ? 1 : 0,
-      width: isResizing ? '100%' : 0,
-      height: isResizing ? '100%' : 0,
-      backgroundColor: faintBlack,
-      zIndex: 2000,
-      transition: transitions.easeOut(null, 'opacity'),
-    },
   };
 };
 
-class Main extends Component {
+export default class Main extends Component {
 
   static propTypes = {
     files: PropTypes.array.isRequired,
@@ -93,14 +55,9 @@ class Main extends Component {
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     setMuiTheme: PropTypes.func.isRequired,
-
-    connectDropTarget: PropTypes.func.isRequired,
   };
 
   state = {
-    monitorWidth: this.rootWidth / 2,
-    monitorHeight: this.rootHeight,
-    isResizing: false,
     monitorType: MonitorTypes.Card,
 
     files: this.props.files,
@@ -113,53 +70,6 @@ class Main extends Component {
     coreString: null,
 
     project: this.props.project,
-
-    column: 2,
-    cards: [{
-      name: 'MonitorCard',
-      visible: true,
-      order: 0,
-    }, {
-      name: 'MediaCard',
-      visible: true,
-      order: 1,
-    }, {
-      name: 'ReadmeCard',
-      visible: true,
-      order: 2,
-    }, {
-      name: 'SnippetCard',
-      visible: true,
-      order: 3,
-    }, {
-      name: 'PaletteCard',
-      visible: false,
-      order: 4,
-    }, {
-      name: 'EnvCard',
-      visible: true,
-      order: 5,
-    }, {
-      name: 'CustomizeCard',
-      visible: false,
-      order: 6,
-    }, {
-      name: 'CreditsCard',
-      visible: false,
-      order: 7,
-    }, {
-      name: 'ShotCard',
-      visible: false,
-      order: 8,
-    }, {
-      name: 'EditorCard',
-      visible: false,
-      order: 9,
-    }, {
-      name: 'HierarchyCard',
-      visible: false,
-      order: 10,
-    }],
   };
 
   get rootWidth() {
@@ -315,6 +225,7 @@ class Main extends Component {
 
     const indent = '    ';
     const text = JSON.stringify(config, null, indent);
+
     if (configFile) {
       return this.putFile(configFile, configFile.set({ text }));
     } else {
@@ -345,6 +256,9 @@ class Main extends Component {
         tabs: tabs.concat(tab),
       }, () => resolve(tab));
     }
+
+    this.updateCard('EditorCard', {visible: true});
+    location.hash = 'EditorCard';
   });
 
   closeTab = (tab) => new Promise((resolve, reject) => {
@@ -392,6 +306,7 @@ class Main extends Component {
 
     if (conflict) {
       // TODO: FileDialog instead of.
+      console.log(newFile);
       if (confirm(this.props.localization.common.conflict)) {
         return conflict;
       } else {
@@ -405,23 +320,6 @@ class Main extends Component {
   setProject = (project) => this.setStatePromise({
     project,
   });
-
-  resize = ((waitFlag = false) =>
-  (monitorWidth, monitorHeight, forceFlag = false) => {
-    monitorWidth = Math.max(0, Math.min(this.rootWidth, monitorWidth));
-    monitorHeight = Math.max(0, Math.min(this.rootHeight, monitorHeight));
-    if (
-      waitFlag && !forceFlag ||
-      monitorWidth === this.state.monitorWidth &&
-      monitorHeight === this.state.monitorHeight
-    ) {
-      return;
-    }
-    this.setState({ monitorWidth, monitorHeight }, () => {
-      setTimeout(() => (waitFlag = false), 400);
-    });
-    waitFlag = true;
-  })();
 
   handleTogglePopout = () => {
     const isPopout = this.state.monitorType === MonitorTypes.Popout;
@@ -438,20 +336,13 @@ class Main extends Component {
       monitorType: maxByPriority(this.state.monitorType, MonitorTypes.Card),
       href,
     });
+    location.hash = 'MonitorCard';
   };
 
-  setResizing = (isResizing) => {
-    return this.setState({ isResizing })
-  };
-
-  handleToggleCard = async (name) => {
-    const cards = this.state.cards.map((item) => {
-      if (item.name === name) {
-        return {...item, visible: !item.visible};
-      }
-      return item;
-    });
-    await this.setStatePromise({ cards });
+  updateCard = async (name, props) => {
+    const nextCard = {...this.getConfig('card')};
+    nextCard[name] = {...nextCard[name], ...props};
+    await this.setConfig('card', nextCard);
   };
 
   openFileDialog = () => console.error('openFileDialog has not be declared');
@@ -460,12 +351,12 @@ class Main extends Component {
   render() {
     const {
       connectDropTarget,
+      localization,
     } = this.props;
 
     const {
       files, tabs,
       dialogContent,
-      monitorWidth, monitorHeight, isResizing,
       reboot,
       port,
     } = this.state;
@@ -474,8 +365,8 @@ class Main extends Component {
 
     const commonProps = {
       files,
-      isResizing,
-      localization: this.props.localization,
+      isResizing: false,
+      localization,
       getConfig: this.getConfig,
       setConfig: this.setConfig,
       findFile: this.findFile,
@@ -483,122 +374,110 @@ class Main extends Component {
       putFile: this.putFile,
     };
 
-    const isShrinked = (width, height) => width < 200 || height < 40;
-
     const cardProps = {
       EditorCard: {
-        tabs,
-        selectTab: this.selectTab,
-        closeTab: this.closeTab,
-        setLocation: this.setLocation,
-        openFileDialog: this.openFileDialog,
-        port,
-        reboot,
-        isShrinked: isShrinked(
-          this.rootWidth - monitorWidth,
-          this.rootHeight
-        ),
-        href: this.state.href,
+        editorProps: {
+          ...commonProps,
+          tabs,
+          selectTab: this.selectTab,
+          closeTab: this.closeTab,
+          setLocation: this.setLocation,
+          openFileDialog: this.openFileDialog,
+          port,
+          reboot,
+          href: this.state.href,
+        }
       },
       HierarchyCard: {
-        tabs,
-        deleteFile: this.deleteFile,
-        selectTab: this.selectTab,
-        closeTab: this.closeTab,
-        openFileDialog: this.openFileDialog,
-        saveAs: this.saveAs,
+        hierarchyProps: {
+          ...commonProps,
+          tabs,
+          deleteFile: this.deleteFile,
+          selectTab: this.selectTab,
+          closeTab: this.closeTab,
+          openFileDialog: this.openFileDialog,
+          saveAs: this.saveAs,
+        }
       },
       MediaCard: {
         port: this.state.port,
       },
       ReadmeCard: {
+        ...commonProps,
         selectTab: this.selectTab,
         port: this.state.port,
         setLocation: this.setLocation,
       },
       ShotCard: {
+        ...commonProps,
         port: this.state.port,
+        updateCard: this.updateCard,
       },
       SnippetCard: {
+        ...commonProps,
         tabs,
         selectTab: this.selectTab,
+        updateCard: this.updateCard,
       },
       EnvCard: {
+        ...commonProps,
         selectTab: this.selectTab,
       },
       CustomizeCard: {
+        ...commonProps,
         selectTab: this.selectTab,
       },
       MonitorCard: {
-        rootWidth: this.rootWidth,
-        monitorWidth,
-        isPopout: this.state.monitorType === MonitorTypes.Popout,
-        togglePopout: this.handleTogglePopout,
-        reboot,
-        portRef: (port) => this.setState({ port }),
-        coreString: this.state.coreString,
-        saveAs: this.saveAs,
-        href: this.state.href,
         setLocation: this.setLocation,
+        monitorProps: {
+          ...commonProps,
+          rootWidth: this.rootWidth,
+          isPopout: this.state.monitorType === MonitorTypes.Popout,
+          togglePopout: this.handleTogglePopout,
+          reboot,
+          portRef: (port) => this.setState({ port }),
+          coreString: this.state.coreString,
+          saveAs: this.saveAs,
+          href: this.state.href,
+          setLocation: this.setLocation,
+        }
       },
+      CreditsCard: {
+        files,
+        localization,
+      },
+      PaletteCard: {
+        getConfig: this.getConfig,
+        setConfig: this.setConfig,
+        localization
+      }
     };
 
     const userStyle = this.findFile('feeles/codemirror.css');
 
-    const orderedCardInfo = [...this.state.cards];
-    orderedCardInfo.sort((a, b) => a.order - b.order);
-
-    const left = orderedCardInfo.filter(item => {
-      return item.visible && item.order % this.state.column === 1;
-    });
-    const right = orderedCardInfo.filter(item => {
-      return item.visible && item.order % this.state.column === 0;
-    });
-    const hidden = orderedCardInfo.filter(item => item.visible === false);
-
-    const renderCards = (cards) => cards.map((info, key) => {
-      return React.createElement(Cards[info.name], {
-        key,
-        ...commonProps,
-        ...cardProps[info.name],
-      });
-    });
-
-    return connectDropTarget(
+    return (
         <div style={styles.root}>
-          <div style={styles.dropCover}></div>
           <Menu
             {...commonProps}
             togglePopout={this.handleTogglePopout}
             setLocalization={this.props.setLocalization}
             openFileDialog={this.openFileDialog}
             isPopout={this.state.monitorType === MonitorTypes.Popout}
-            monitorWidth={monitorWidth}
-            monitorHeight={monitorHeight}
             coreString={this.state.coreString}
             saveAs={this.saveAs}
             project={this.state.project}
             setProject={this.setProject}
             cards={this.state.cards}
-            toggleCard={this.handleToggleCard}
+            updateCard={this.updateCard}
             launchIDE={this.props.launchIDE}
           />
-          <div style={styles.container}>
-            <div style={styles.left}>
-            {renderCards(left)}
-            </div>
-            <Sizer
-              monitorWidth={monitorWidth}
-              monitorHeight={monitorHeight}
-              onSizer={this.setResizing}
-              // Be Update (won't use)
-              files={files}
-            />
-            <div style={styles.right}>
-            {renderCards(right)}
-            </div>
-          </div>
-          {renderCards(hidden)}
+          <CardContainer
+            getConfig={this.getConfig}
+            rootWidth={this.rootWidth}
+            cardProps={cardProps}
+            updateCard={this.updateCard}
+            localization={localization}
+          />
           <FileDialog
             ref={this.handleFileDialog}
             localization={this.props.localization}
@@ -613,32 +492,3 @@ class Main extends Component {
     );
   }
 }
-
-const spec = {
-  drop(props, monitor, component) {
-    const offset = monitor.getDifferenceFromInitialOffset();
-    const init = monitor.getItem();
-    component.resize(
-      init.width - offset.x,
-      init.height + offset.y,
-      true
-    );
-    return {};
-  },
-  hover(props, monitor, component) {
-    const offset = monitor.getDifferenceFromInitialOffset();
-    if (offset) {
-      const init = monitor.getItem();
-      component.resize(
-        init.width - offset.x,
-        init.height + offset.y
-      );
-    }
-  },
-};
-
-const collect = (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-});
-
-export default DropTarget(DragTypes.Sizer, spec, collect)(Main);

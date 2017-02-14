@@ -1,7 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import IconButton from 'material-ui/IconButton';
 import Chip from 'material-ui/Chip';
-import { Card, CardHeader, CardActions, CardText } from 'material-ui/Card';
+import Card from './CardWindow';
+import {CardActions, CardText} from 'material-ui/Card';
 import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
 
@@ -14,10 +15,12 @@ import EditFile from './EditFile';
 export default class SnippetCard extends PureComponent {
 
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     tabs: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
+    updateCard: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -38,24 +41,29 @@ export default class SnippetCard extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const selected = nextProps.tabs
-      .find((item) => item.isSelected);
-    const snippets = selected && this.props.getConfig('snippets')(selected.file);
+    if (this.props.tabs !== nextProps.tabs) {
+      const selected = nextProps.tabs
+        .find((item) => item.isSelected);
+      const snippets = selected && this.props.getConfig('snippets')(selected.file);
 
-    if (snippets && snippets.length) {
-      const snippetFiles = this.findSnippetFiles(snippets);
+      if (snippets && snippets.length) {
+        const snippetFiles = this.findSnippetFiles(snippets);
 
-      this.setState({
-        snippets,
-        snippetFiles,
-        fileKey: snippetFiles[0] && snippetFiles[0].key,
-      });
-    } else {
-      this.setState({
-        snippets: [],
-        snippetFiles: [],
-        fileKey: '',
-      });
+        this.setState({
+          snippets,
+          snippetFiles,
+          fileKey: snippetFiles[0] && snippetFiles[0].key,
+        });
+
+        this.props.updateCard('SnippetCard', {visible:true});
+
+      } else {
+        this.setState({
+          snippets: [],
+          snippetFiles: [],
+          fileKey: '',
+        });
+      }
     }
   }
 
@@ -111,13 +119,7 @@ export default class SnippetCard extends PureComponent {
       localization.snippetCard.fileNotSelected;
 
     return (
-      <Card initiallyExpanded
-        style={commonRoot}
-      >
-        <CardHeader actAsExpander showExpandableButton
-          title={localization.snippetCard.title}
-          subtitle={subtitle}
-        />
+      <Card initiallyExpanded {...this.props.cardPropsBag}>
         <CardActions expandable >
         {this.renderChips()}
         </CardActions>

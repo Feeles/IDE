@@ -1,32 +1,26 @@
-import React, { PureComponent, PropTypes } from 'react';
-import Paper from 'material-ui/Paper';
+import React, {PureComponent, PropTypes,} from 'react';
+import Card from './CardWindow';
+import {CardMedia} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import transitions from 'material-ui/styles/transitions';
-import { red50, red500 } from 'material-ui/styles/colors';
+import {red50, red500,} from 'material-ui/styles/colors';
 
-
-import { Editor } from '../EditorPane/';
-import { SourceFile } from '../File/';
-import { commonRoot } from './commonStyles';
+import {Editor} from '../EditorPane/';
+import {SourceFile} from '../File/';
 import shallowEqual from '../utils/shallowEqual';
 
-const durations = [600, 1400, 0];
+const durations = [600, 1400, 0,];
 
 const getStyle = (props, context, state) => {
-  const {
-    palette,
-    spacing,
-    prepareStyles,
-  } = context.muiTheme;
-  const { anim, height } = state;
+  const {palette, spacing, prepareStyles,} = context.muiTheme;
+  const {anim, height,} = state;
 
   return {
     root: {
-      ...commonRoot,
       display: 'flex',
       flexDirection: 'column',
     },
@@ -34,11 +28,19 @@ const getStyle = (props, context, state) => {
       boxSizing: 'border-box',
       width: '100%',
       height: Math.min(500, height + spacing.desktopGutterMore),
-      marginLeft: anim === 1 ? 400 : 0,
+      marginLeft: anim === 1
+        ? 400
+        : 0,
       transform: `
-        rotateZ(${anim === 1 ? 180 : 0}deg)
-        scaleY(${anim === 2 ? 0 : 1})`,
-      opacity: anim === 0 ? 1 : 0.1,
+        rotateZ(${anim === 1
+        ? 180
+        : 0}deg)
+        scaleY(${anim === 2
+          ? 0
+          : 1})`,
+      opacity: anim === 0
+        ? 1
+        : 0.1,
       transition: transitions.easeOut(durations[anim] + 'ms'),
     },
     menu: {
@@ -53,7 +55,9 @@ const getStyle = (props, context, state) => {
       marginRight: 9,
       marginBottom: 4,
       transform: `
-        rotateY(${anim === 0 ? 0 : 180}deg)`,
+        rotateY(${anim === 0
+        ? 0
+        : 180}deg)`,
     },
     label: {
       color: palette.secondaryTextColor,
@@ -74,15 +78,17 @@ const getStyle = (props, context, state) => {
 export default class ShotCard extends PureComponent {
 
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
+    updateCard: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -112,30 +118,28 @@ export default class ShotCard extends PureComponent {
         nextProps.port.addEventListener('message', this.handleMessage);
       }
     }
+
   }
 
   handleMessage = (event) => {
-    if (!event.data || !event.data.query) return;
-    const { query, value } = event.data;
+    if (!event.data || !event.data.query)
+      return;
+    const {query, value,} = event.data;
 
     // Completes
     if (query === 'complete') {
       if (!shallowEqual(value, this.state.completes)) {
-        this.setState({
-          completes: value,
-        });
+        this.setState({completes: value});
       }
     }
   };
 
   refreshFile() {
-    const shotFile = this.props.findFile('feeles/shot.js');
+    const shotFile = this.props.findFile('feeles/shot.js') || SourceFile.shot('');
 
-    if (this.props.file !== shotFile) {
-      this.setState({
-        file: shotFile,
-      });
+    this.setState({file: shotFile});
 
+    if (this.state.file !== shotFile) {
       if (this.codemirror && shotFile) {
         // ここで file を setState しただけでは
         // ReactCodeMirror の componentWillReceiveProps に入らず
@@ -154,15 +158,16 @@ export default class ShotCard extends PureComponent {
     return height;
   };
 
-
-  shoot = async () => {
+  shoot = async() => {
     if (this.state.anim !== 0) {
       return;
     }
 
     const transition = (anim, delay) => {
       return new Promise((resolve, reject) => {
-        this.setState({ anim }, () => {
+        this.setState({
+          anim
+        }, () => {
           setTimeout(() => resolve(), durations[anim] + 10);
         });
       });
@@ -187,16 +192,19 @@ export default class ShotCard extends PureComponent {
     }
 
     this.codemirror.setValue(this.state.file.text);
-    this.setState({
-      canRestore: false,
-      height: this.getHeight(),
-    });
+    this.setState({canRestore: false, height: this.getHeight(),});
+  };
+
+  handleExpand = (expand) => {
+    if (expand) {
+      this.props.updateCard('MonitorCard', {visible: true});
+    }
   };
 
   async handleShot() {
-    const text = this.codemirror ?
-      this.codemirror.getValue('\n') :
-      this.state.file.text;
+    const text = this.codemirror
+      ? this.codemirror.getValue('\n')
+      : this.state.file.text;
 
     await new Promise((resolve, reject) => {
       this.setState({
@@ -209,22 +217,15 @@ export default class ShotCard extends PureComponent {
       const babelrc = this.props.getConfig('babelrc');
       try {
         const file = await SourceFile.shot(text).babel(babelrc);
-        this.props.port.postMessage({
-          query: 'shot',
-          value: file.serialize(),
-        });
+        this.props.port.postMessage({query: 'shot', value: file.serialize(),});
 
       } catch (e) {
         console.error(e);
-        this.setState({
-          error: e,
-        });
+        this.setState({error: e});
       }
     }
 
-    this.setState({
-      loading: false,
-    });
+    this.setState({loading: false});
   };
 
   handleCodemirror = (ref) => {
@@ -232,62 +233,45 @@ export default class ShotCard extends PureComponent {
       return;
     }
     this.codemirror = ref;
-    this.setState({
-      height: this.getHeight(),
-    });
+    this.setState({height: this.getHeight()});
   };
 
   render() {
-    if (!this.state.file) {
-      return null;
-    }
-
-    const {
-      localization,
-      getConfig,
-    } = this.props;
-    const { anim } = this.state;
+    const {localization, getConfig,} = this.props;
+    const {anim} = this.state;
 
     const styles = getStyle(this.props, this.context, this.state);
 
     return (
-      <Paper style={styles.root}>
-      {this.state.error ? (
-        <pre style={styles.error}>{this.state.error.message}</pre>
-      ) : null}
-      {this.state.loading ? (
-        <LinearProgress />
-      ) : null}
-        <div style={styles.editor}>
-          <Editor isSelected isCared
-            file={this.state.file}
-            onChange={this.handleChange}
-            getConfig={getConfig}
-            codemirrorRef={this.handleCodemirror}
-            snippets={this.state.completes}
-          />
-        </div>
-        <div style={styles.menu}>
-          <FloatingActionButton mini
-            disabled={anim !== 0}
-            onTouchTap={this.shoot}
-            style={styles.shoot}
-          >
-          {anim === 0 ? (
-            <AvPlayArrow />
-          ) : (
-            <AvStop />
-          )}
-          </FloatingActionButton>
-          <span style={styles.label}>{localization.shot.shoot}</span>
-          <div style={{ flex: '1 1 auto' }}></div>
-          <FlatButton secondary
-            label={localization.shot.restore}
-            onTouchTap={this.handleRestore}
-            disabled={!this.state.canRestore}
-          />
-        </div>
-      </Paper>
+      <Card initiallyExpanded onExpandChange={this.handleExpand} {...this.props.cardPropsBag}>
+        <CardMedia expandable>
+          <div>
+            {this.state.error
+              ? (
+                <pre style={styles.error}>{this.state.error.message}</pre>
+              )
+              : null}
+            {this.state.loading
+              ? (<LinearProgress/>)
+              : null}
+            <div style={styles.editor}>
+              <Editor isSelected isCared file={this.state.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.state.completes}/>
+            </div>
+            <div style={styles.menu}>
+              <FloatingActionButton mini disabled={anim !== 0} onTouchTap={this.shoot} style={styles.shoot}>
+                {anim === 0
+                  ? (<AvPlayArrow/>)
+                  : (<AvStop/>)}
+              </FloatingActionButton>
+              <span style={styles.label}>{localization.shotCard.shoot}</span>
+              <div style={{
+                flex: '1 1 auto'
+              }}></div>
+              <FlatButton secondary label={localization.shotCard.restore} onTouchTap={this.handleRestore} disabled={!this.state.canRestore}/>
+            </div>
+          </div>
+        </CardMedia>
+      </Card>
     );
   }
 }

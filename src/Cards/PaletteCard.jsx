@@ -1,5 +1,6 @@
 import React, {PureComponent, PropTypes} from 'react';
-import {Card, CardHeader, CardActions, CardText} from 'material-ui/Card';
+import Card from './CardWindow';
+import {CardActions, CardText} from 'material-ui/Card';
 import Popover from 'material-ui/Popover';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
@@ -8,7 +9,6 @@ import {transparent, fullWhite} from 'material-ui/styles/colors';
 import {ChromePicker, TwitterPicker} from 'react-color';
 
 import {LayeredStyle} from '../PalettePane/';
-import {commonRoot} from './commonStyles';
 
 const getStyles = (props, context) => {
   const {palette, spacing} = context.muiTheme;
@@ -80,6 +80,7 @@ const getStyles = (props, context) => {
 export default class PalettePane extends PureComponent {
 
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
@@ -145,8 +146,7 @@ export default class PalettePane extends PureComponent {
     styles.label = prepareStyles(styles.label);
 
     return (
-      <Card style={commonRoot}>
-        <CardHeader showExpandableButton actAsExpander title={localization.paletteCard.title} subtitle={localization.paletteCard.subtitle}/>
+      <Card {...this.props.cardPropsBag}>
         <CardActions>
           <LayeredStyle styles={[
             prepareStyles(styles.html),
