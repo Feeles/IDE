@@ -4,8 +4,6 @@ export default {
   native: '日本語',
 
   menu: {
-    shutdown: 'とじる',
-    env: 'envのせってい',
     language: '言語',
     clone: 'セーブ / ロード / クローン',
     aboutFeeles: 'この Feeles について',
@@ -58,12 +56,6 @@ export default {
     openProject: 'このプロジェクトを開く',
     startNew: 'あたらしく始める',
   },
-  editorMenu: {
-    lineWrapping: '行のおり返し',
-    tabVisibility: 'インデントの表示',
-    darkness: 'ダークネス',
-    indentUnit4: '４文字ずつそろえる',
-  },
   addDialog: {
     title: 'ファイルを追加する',
     mimeType: 'MIME タイプ',
@@ -73,48 +65,15 @@ export default {
   },
   readmeCard: {
     title: 'はじめに',
-    subtitle: 'まずはこれを読んでください',
     index: '目次',
-    text: `# はじめに
-これは、ゲームやアプリを作るためのエディタです
-
-**Feeles** (フィーリス) と呼んでください
-
-## 画面の説明
-- 右半分は、 **アプリの画面** または **コードの画面** です
-- 左半分は、それ以外 (説明,アセット,フォルダなど) の画面です
-
-## 出来ること
-- HTML/CSS/javascript (ES6) を書くことができます
-  - [index.html](index.html) アプリのスタート地点
-  - [style.css](style.css) アプリのデザイン
-  - [main.js](main.js) アプリのメインプログラム
-- デスクトップにあるファイルを読み込めます
-  - 左側の一番下に **フォルダの画面** があるので、その中の **パソコンのアイコン** をクリック
-- データのセーブとロード、そしてクローンができます
-  - アプリの画面の下の方にある ↓ アイコンをクリック
-  - **HTMLファイルにしてダウンロードすることもできます。** これを Feeles では **クローン** と呼びます
-
-- - -
-
-この説明が残っているなら、おそらくこの Feeles は **空っぽのFeeles** です
-
-ゲームがうごく Feeles など、色んな Feeles があるので、まずはそこから始めましょう
-
-- - -
-## 謝辞
-- このアプリを作るとき、
-- おせわになった人がいたら、
-- ここに名前を書いて、お礼を言いましょう
-`,
   },
   shotCard: {
-    title: 'コードを送る',
-    shoot: '書き換えたら、コードを送る',
+    title: 'コード',
+    shoot: '書きかえたら、コードを送る',
     restore: '元に戻す',
   },
   hierarchyCard: {
-    title: 'ファイル',
+    title: 'フォルダ',
     emptyTrashBox: '空にする',
   },
   snippetCard: {
@@ -144,27 +103,23 @@ export default {
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
   },
   envCard: {
-    title: '環境変数',
-    subtitle: 'かんきょうへんすう',
+    title: 'パラメータ',
     remove: '削除',
   },
   paletteCard: {
-    title: 'カラーパレット',
-    subtitle: '気分に合わせて色を変えてみましょう',
+    title: 'カラー',
   },
   monitorCard: {
-    title: 'モニター',
+    title: 'スクリーン',
   },
   customizeCard: {
-    title: 'エディタをカスタマイズ',
-    subtitle: `自分好みにエディタをカスタマイズしましょう`,
+    title: 'カスタマイズ',
     detail: `くわしくはこちら`,
     editor: `タブや行の折り返しなど`,
     style: `文字の色や背景色など`,
   },
   creditsCard: {
-    title: 'でんせつ',
-    subtitle: `これらのコードにかかわってきた全ての人々`,
+    title: 'クレジット',
   },
   mediaCard: {
     title: 'メディア',

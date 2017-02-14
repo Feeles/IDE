@@ -41,7 +41,7 @@ export default class ReadmeCard extends PureComponent {
           new SourceFile({
             type: 'text/x-markdown',
             name: 'README.md',
-            text: this.props.localization.readmeCard.text,
+            text: '',
           })
         );
       })
