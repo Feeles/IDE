@@ -40,11 +40,14 @@ const getStyle = (props, state, palette) => {
 
     root: {
       position: 'relative',
-      width: '100%',
+      width: '100vw',
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
       backgroundColor: palette.backgroundColor,
-      overflow: 'scroll',
     },
     container: {
+      flex: '1 1 auto',
       display: 'flex',
       alignItems: 'stretch',
     },
@@ -54,15 +57,18 @@ const getStyle = (props, state, palette) => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
+      overflow: 'scroll',
+      paddingBottom: 200,
     },
     right: {
       flex: shrinkLeft ? '1 1 auto' : '0 0 auto',
       boxSizing: 'border-box',
       width: shrinkRight ? 0 : state.monitorWidth,
-      paddingBottom: 4,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
+      overflow: 'scroll',
+      paddingBottom: 200,
     },
     dropCover: {
       position: 'absolute',

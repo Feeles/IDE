@@ -20,7 +20,7 @@ const getStyles = (props, context) => {
       flex: '0 0 auto',
       width: SizerWidth,
       marginTop: -12,
-      marginBottom: 4,
+      marginBottom: 32,
       display: 'flex',
       cursor: 'col-resize',
       zIndex: 2000,
