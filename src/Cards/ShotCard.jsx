@@ -1,4 +1,4 @@
-import React, {PureComponent, PropTypes,} from 'react';
+import React, {PureComponent, PropTypes} from 'react';
 import Card from './CardWindow';
 import {CardMedia} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
@@ -7,22 +7,22 @@ import LinearProgress from 'material-ui/LinearProgress';
 import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import transitions from 'material-ui/styles/transitions';
-import {red50, red500,} from 'material-ui/styles/colors';
+import {red50, red500} from 'material-ui/styles/colors';
 
 import {Editor} from '../EditorPane/';
 import {SourceFile} from '../File/';
 import shallowEqual from '../utils/shallowEqual';
 
-const durations = [600, 1400, 0,];
+const durations = [600, 1400, 0];
 
 const getStyle = (props, context, state) => {
-  const {palette, spacing, prepareStyles,} = context.muiTheme;
-  const {anim, height,} = state;
+  const {palette, spacing, prepareStyles} = context.muiTheme;
+  const {anim, height} = state;
 
   return {
     root: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     },
     editor: {
       boxSizing: 'border-box',
@@ -41,7 +41,7 @@ const getStyle = (props, context, state) => {
       opacity: anim === 0
         ? 1
         : 0.1,
-      transition: transitions.easeOut(durations[anim] + 'ms'),
+      transition: transitions.easeOut(durations[anim] + 'ms')
     },
     menu: {
       position: 'relative',
@@ -49,7 +49,7 @@ const getStyle = (props, context, state) => {
       flexDirection: 'row-reverse',
       justifyContent: 'space-between',
       alignItems: 'flex-end',
-      height: 36,
+      height: 36
     },
     shoot: {
       marginRight: 9,
@@ -57,11 +57,11 @@ const getStyle = (props, context, state) => {
       transform: `
         rotateY(${anim === 0
         ? 0
-        : 180}deg)`,
+        : 180}deg)`
     },
     label: {
       color: palette.secondaryTextColor,
-      fontSize: '.8rem',
+      fontSize: '.8rem'
     },
     error: {
       flex: '0 1 auto',
@@ -70,8 +70,8 @@ const getStyle = (props, context, state) => {
       backgroundColor: red50,
       color: red500,
       fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
-      overflow: 'scroll',
-    },
+      overflow: 'scroll'
+    }
   };
 };
 
@@ -84,7 +84,7 @@ export default class ShotCard extends PureComponent {
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
-    updateCard: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -98,7 +98,7 @@ export default class ShotCard extends PureComponent {
     loading: false,
     canRestore: false,
     file: null,
-    completes: [],
+    completes: []
   };
 
   componentWillMount() {
@@ -124,7 +124,7 @@ export default class ShotCard extends PureComponent {
   handleMessage = (event) => {
     if (!event.data || !event.data.query)
       return;
-    const {query, value,} = event.data;
+    const {query, value} = event.data;
 
     // Completes
     if (query === 'complete') {
@@ -182,7 +182,7 @@ export default class ShotCard extends PureComponent {
   handleChange = (text) => {
     this.setState({
       canRestore: text !== this.state.file.text,
-      height: this.getHeight(),
+      height: this.getHeight()
     });
   };
 
@@ -192,7 +192,7 @@ export default class ShotCard extends PureComponent {
     }
 
     this.codemirror.setValue(this.state.file.text);
-    this.setState({canRestore: false, height: this.getHeight(),});
+    this.setState({canRestore: false, height: this.getHeight()});
   };
 
   handleExpand = (expand) => {
@@ -209,7 +209,7 @@ export default class ShotCard extends PureComponent {
     await new Promise((resolve, reject) => {
       this.setState({
         error: null,
-        loading: true,
+        loading: true
       }, resolve);
     });
 
@@ -217,7 +217,7 @@ export default class ShotCard extends PureComponent {
       const babelrc = this.props.getConfig('babelrc');
       try {
         const file = await SourceFile.shot(text).babel(babelrc);
-        this.props.port.postMessage({query: 'shot', value: file.serialize(),});
+        this.props.port.postMessage({query: 'shot', value: file.serialize()});
 
       } catch (e) {
         console.error(e);
@@ -237,7 +237,7 @@ export default class ShotCard extends PureComponent {
   };
 
   render() {
-    const {localization, getConfig,} = this.props;
+    const {localization, getConfig} = this.props;
     const {anim} = this.state;
 
     const styles = getStyle(this.props, this.context, this.state);
