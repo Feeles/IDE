@@ -430,6 +430,7 @@ export default class Main extends Component {
       MonitorCard: {
         setLocation: this.setLocation,
         togglePopout: this.handleTogglePopout,
+        isPopout: this.state.monitorType === MonitorTypes.Popout,
         monitorProps: {
           ...commonProps,
           rootWidth: this.rootWidth,

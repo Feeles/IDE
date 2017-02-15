@@ -2,10 +2,28 @@ import React, {PureComponent, PropTypes} from 'react';
 import Card from './CardWindow';
 import {CardMedia} from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
+import ActionSettings from 'material-ui/svg-icons/action/settings';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
+import DeviceDevices from 'material-ui/svg-icons/device/devices';
 
 import Monitor from '../Monitor/';
+
+const frameSizes = [
+  [480, 320],
+  [640, 480],
+  [720, 480],
+  [800, 600],
+  [1024, 768],
+  [1136, 640],
+  [1280, 720],
+  [1280, 800],
+  [1920, 1080],
+];
+
+const by = 'x';
 
 export default class MonitorCard extends PureComponent {
 
@@ -13,16 +31,28 @@ export default class MonitorCard extends PureComponent {
     cardPropsBag: PropTypes.object.isRequired,
     monitorProps: PropTypes.object.isRequired,
     setLocation: PropTypes.func.isRequired,
+    isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
   };
 
   state = {
-    frameWidth: 800,
-    frameHeight: 600,
+    frameWidth: 480,
+    frameHeight: 320,
   };
 
   get height() {
     return (this.state.frameHeight / this.state.frameWidth) * 100 >> 0;
+  }
+
+  changeSize(frameWidth, frameHeight) {
+    this.setState({frameWidth, frameHeight});
+  };
+
+  renderMenuItem([w, h]) {
+    const value = w + by + h;
+    return (
+      <MenuItem key={value} primaryText={value} onTouchTap={() => this.changeSize(w, h)} />
+    );
   }
 
   render() {
@@ -30,7 +60,6 @@ export default class MonitorCard extends PureComponent {
       flexible: {
         position: 'relative',
         width: '100%',
-        paddingTop: `${this.height}%`,
       },
       parent: {
         position: 'absolute',
@@ -40,18 +69,35 @@ export default class MonitorCard extends PureComponent {
         left: 0,
       }
     };
+    if (this.props.isPopout) {
+      styles.flexible.height = 8;
+    } else {
+      styles.flexible.paddingTop = this.height + '%';
+    }
+
+    const sizeValue = this.state.frameWidth + by + this.state.frameHeight;
 
     return (
       <Card
         initiallyExpanded
         {...this.props.cardPropsBag}
         actions={[
+          <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
+            <NavigationRefresh />
+          </IconButton>,
           <IconButton key="popout" onTouchTap={() => this.props.togglePopout()}>
             <OpenInBrowser />
           </IconButton>,
-          <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
-            <NavigationRefresh />
-          </IconButton>
+          <IconMenu
+            key="size"
+            iconButtonElement={<IconButton><ActionSettings /></IconButton>}
+          >
+            <MenuItem
+              primaryText={sizeValue}
+              leftIcon={<DeviceDevices />}
+              menuItems={frameSizes.map(this.renderMenuItem, this)}
+            />
+          </IconMenu>
         ]}
       >
         <CardMedia expandable style={styles.flexible}>

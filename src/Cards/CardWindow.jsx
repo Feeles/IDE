@@ -121,7 +121,11 @@ export default class CardWindow extends PureComponent {
         display: 'flex',
         alignItems: 'center',
         height: HeaderHeight,
-        paddingLeft: 8
+        paddingLeft: 8,
+        width: '100%',
+        boxSizing: 'border-box',
+        overflowX: 'scroll',
+        overflowY: 'hidden',
       },
       title: {
         flex: '0 0 auto',
