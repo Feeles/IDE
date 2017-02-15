@@ -16,7 +16,31 @@ export default class MonitorCard extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
   };
 
+  state = {
+    frameWidth: 800,
+    frameHeight: 600,
+  };
+
+  get height() {
+    return (this.state.frameHeight / this.state.frameWidth) * 100 >> 0;
+  }
+
   render() {
+    const styles = {
+      flexible: {
+        position: 'relative',
+        width: '100%',
+        paddingTop: `${this.height}%`,
+      },
+      parent: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        top: 0,
+        left: 0,
+      }
+    };
+
     return (
       <Card
         initiallyExpanded
@@ -30,8 +54,14 @@ export default class MonitorCard extends PureComponent {
           </IconButton>
         ]}
       >
-        <CardMedia expandable>
-          <Monitor {...this.props.monitorProps}/>
+        <CardMedia expandable style={styles.flexible}>
+          <div style={styles.parent}>
+            <Monitor
+              {...this.props.monitorProps}
+              frameWidth={this.state.frameWidth}
+              frameHeight={this.state.frameHeight}
+            />
+          </div>
         </CardMedia>
       </Card>
     );

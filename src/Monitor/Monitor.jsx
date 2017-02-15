@@ -13,7 +13,6 @@ import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
 
-const FramePadding = 8;
 
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
@@ -28,9 +27,8 @@ const getStyle = (props, context, state) => {
 
   return {
     root: {
-      // tmp
       width: '100%',
-      height: props.isPopout ? 0 : 500,
+      height: '100%',
 
       opacity: 1,
       display: 'flex',
@@ -78,6 +76,8 @@ export default class Monitor extends PureComponent {
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
+    frameWidth: PropTypes.number.isRequired,
+    frameHeight: PropTypes.number.isRequired,
   };
 
   static contextTypes = {
@@ -85,8 +85,6 @@ export default class Monitor extends PureComponent {
   };
 
   state = {
-    width: 300,
-    height: 150,
     progress: 0,
     error: null,
     port: null,
@@ -130,10 +128,6 @@ export default class Monitor extends PureComponent {
     }
     if (prevProps.isPopout && !this.props.isPopout) {
       this.popoutClosed = true; // Use delay
-    }
-
-    if (prevProps.isResizing && !this.props.isResizing) {
-      this.handleResize();
     }
   }
 
@@ -226,10 +220,6 @@ export default class Monitor extends PureComponent {
 
   handleMessage = ({ data }, reply) => {
     switch (data.query) {
-      case 'resize':
-        const { width, height } = data.value;
-        this.setState({ width, height }, this.handleResize);
-        break;
       case 'fetch':
         const file = this.props.findFile(data.value);
         if (file) {
@@ -270,7 +260,6 @@ export default class Monitor extends PureComponent {
   handlePopoutOpen = (...args) => {
     this.parent = window.open.apply(window, args);
     if (this.parent) {
-      this.parent.addEventListener('resize', this.handleResize);
       this.parent.addEventListener('load', () => {
 
         const out = this.popoutOptions.height !== this.parent.innerHeight;
@@ -301,49 +290,12 @@ export default class Monitor extends PureComponent {
   };
 
   handlePopoutClose = () => {
-    if (!this.props.isPopout) return;
-    if (this.parent) {
-      this.parent.removeEventListener('resize', this.handleResize);
-    }
-    if (!this.props.reboot) {
+    if (this.props.isPopout && !this.props.reboot) {
       this.props.togglePopout();
     }
   };
 
-  handleResize = () => {
-    const { width, height } = this.state;
-    const {
-      isPopout,
-      isResizing,
-    } = this.props;
-
-    if (!this.iframe ||
-      !this.iframe.parentNode ||
-      (isPopout && this.parent && this.parent.closed) ||
-      isResizing
-    ) {
-      return;
-    }
-
-    const rect = this.iframe.parentNode.parentNode.getBoundingClientRect();
-    const screenRect = {
-      width: rect.width - FramePadding * 2,
-      height: rect.height - FramePadding * 2,
-    };
-
-    this.iframe.width = width + 'px';
-    this.iframe.height = height + 'px';
-
-    const ratio = (size) => Math.max(size.height, 1) / Math.max(size.width, 1);
-    const scale = ratio(screenRect) > ratio({ width, height }) ?
-      screenRect.width / width : screenRect.height / height;
-
-    this.iframe.style.transform = `scale(${scale})`;
-  };
-
   handleFrame = (ref) => {
-    if (!ref) return;
-
     if (!this.props.isPopout) {
       this.inlineFrame = ref;
     } else {
@@ -384,6 +336,8 @@ export default class Monitor extends PureComponent {
           handleReload={this.handleReload}
           reboot={reboot}
           error={error}
+          width={this.props.frameWidth}
+          height={this.props.frameHeight}
         />
       </Popout>
     ) : null;
@@ -398,6 +352,8 @@ export default class Monitor extends PureComponent {
           frameRef={this.handleFrame}
           reboot={reboot}
           error={error}
+          width={this.props.frameWidth}
+          height={this.props.frameHeight}
         />
         <LinearProgress
           mode="determinate"

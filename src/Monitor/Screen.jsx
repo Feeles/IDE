@@ -6,6 +6,9 @@ import { SrcDocEnabled } from './setSrcDoc';
 import ErrorMessage from './ErrorMessage';
 import SvgButton from './SvgButton';
 
+const Padding = 8;
+const ScaleChangeMin = 0.02;
+
 export default class Screen extends PureComponent {
 
   static propTypes = {
@@ -15,6 +18,8 @@ export default class Screen extends PureComponent {
     frameRef: PropTypes.func.isRequired,
     handleReload: PropTypes.func,
     error: PropTypes.object,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -28,19 +33,57 @@ export default class Screen extends PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.reboot && !nextProps.reboot) {
-      this.setState({ loading: true }, () => {
-        setTimeout(() => {
-          this.setState({ loading: false });
-        }, 250);
-      });
+    if (this.props.reboot !== nextProps.reboot) {
+      if (!nextProps.reboot) {
+        this.setState({ loading: true }, () => {
+          setTimeout(() => {
+            this.setState({ loading: false });
+          }, 250);
+        });
+      }
+    }
+    if (this.iframe) {
+      this.iframe.width = `${nextProps.width}px`;
+      this.iframe.height = `${nextProps.height}px`;
     }
   }
+
+  _scale = 0;
+  handleUpdate = () => {
+    const {width, height} = this.props;
+
+    if (this.iframe && this.iframe.parentNode && this.iframe.parentNode.parentNode) {
+      const rect = this.iframe.parentNode.getBoundingClientRect();
+      const containerWidth = Math.max(0, rect.width - Padding);
+      const containerHeight = Math.max(0, rect.height - Padding);
+
+      const scale = containerHeight / containerWidth > height / width
+        ? containerWidth / width
+        : containerHeight / height;
+
+      if (Math.abs(this._scale - scale) >= ScaleChangeMin) {
+        this.iframe.style.transform = `scale(${scale})`;
+        this._scale = scale;
+      }
+    }
+    if (this.iframe) {
+      requestAnimationFrame(this.handleUpdate);
+    }
+  };
+
+  handleFrame = (ref) => {
+    this.iframe = ref;
+    this.props.frameRef(ref);
+
+    this._scale = 0;
+    if (this.iframe) {
+      requestAnimationFrame(this.handleUpdate);
+    }
+  };
 
   render() {
     const {
       display,
-      frameRef,
     } = this.props;
 
     const {
@@ -90,7 +133,9 @@ export default class Screen extends PureComponent {
         <iframe
           sandbox={sandbox}
           style={frameStyle}
-          ref={frameRef}
+          ref={this.handleFrame}
+          width={this.props.width}
+          height={this.props.height}
         ></iframe>
       )}
       </div>
