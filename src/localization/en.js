@@ -4,6 +4,7 @@ export default {
   native: 'English',
 
   menu: {
+    language: 'Launguage',
     clone: 'Save / Load / Clone',
     aboutFeeles: 'About Feeles',
     deploy: 'Deploy This App',
