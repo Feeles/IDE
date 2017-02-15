@@ -116,7 +116,10 @@ export default new Map([
       },
       ReadmeCard: {
         visible: true,
-        order: 5
+        order: 5,
+        init: {
+          fileName: 'README.md'
+        }
       },
       PaletteCard: {
         visible: false,

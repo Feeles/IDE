@@ -14,6 +14,7 @@ export default class CardWindow extends PureComponent {
   static propTypes = {
     name: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
+    init: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     isResizing: PropTypes.bool.isRequired,
@@ -21,6 +22,8 @@ export default class CardWindow extends PureComponent {
   };
 
   static defaultProps = {
+    visible: false,
+    init: {},
     actions: []
   };
 

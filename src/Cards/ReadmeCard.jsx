@@ -29,36 +29,23 @@ export default class ReadmeCard extends PureComponent {
     completes: [],
   };
 
-  componentDidMount() {
-    Promise.resolve()
-      .then(() => {
-        const readme = this.props.findFile('README.md');
-        if (readme) {
-          return Promise.resolve(readme);
-        }
-
-        return this.props.addFile(
-          new SourceFile({
-            type: 'text/x-markdown',
-            name: 'README.md',
-            text: '',
-          })
-        );
-      })
-      .then((selectedFile) => {
-        this.setState({ selectedFile });
+  componentWillMount() {
+    const {fileName} = this.props.getConfig('card').ReadmeCard.init || {};
+    if (fileName) {
+      this.setState({
+        selectedFile: this.props.findFile(fileName)
       });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.files !== nextProps.files &&
-      this.state.selectedFile
-    ) {
-      const key = this.state.selectedFile.key;
-      this.setState({
-        selectedFile: this.resolveFile(key),
-      });
+    if (this.props.files !== nextProps.files) {
+      // TODO: watch file
+      if (this.state.selectedFile) {
+        this.setState({
+          selectedFile: this.resolveFile(this.state.selectedFile.key)
+        });
+      }
     }
 
     if (this.props.port !== nextProps.port) {
