@@ -102,6 +102,7 @@ export default class ShotCard extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
+    // TODO: watch file
     if (this.props.files !== nextProps.files) {
       this.refreshFile();
     }
@@ -112,6 +113,17 @@ export default class ShotCard extends PureComponent {
       }
       if (nextProps.port) {
         nextProps.port.addEventListener('message', this.handleMessage);
+      }
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.file !== nextState.file && nextState.file) {
+      if (this.codemirror) {
+        // setState しただけでは
+        // ReactCodeMirror の componentWillReceiveProps に入らず
+        // エディタが更新されない. [バグ？]
+        this.codemirror.setValue(nextState.file.text);
       }
     }
   }
@@ -130,17 +142,15 @@ export default class ShotCard extends PureComponent {
   };
 
   refreshFile() {
-    const shotFile = this.props.findFile('feeles/shot.js') || SourceFile.shot('');
-
-    this.setState({file: shotFile});
-
-    if (this.state.file !== shotFile) {
-      if (this.codemirror && shotFile) {
-        // ここで file を setState しただけでは
-        // ReactCodeMirror の componentWillReceiveProps に入らず
-        // エディタが更新されない. [バグ？]
-        this.codemirror.setValue(shotFile.text);
-      }
+    if (this.state.file) {
+      this.setState({
+        file: this.props.findFile(item => item.key === this.state.file.key)
+      });
+    } else {
+      const {fileName} = this.props.getConfig('card').ShotCard.init || {};
+      this.setState({
+        file: this.props.findFile(fileName) || SourceFile.shot('')
+      });
     }
   }
 

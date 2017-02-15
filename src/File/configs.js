@@ -103,7 +103,10 @@ export default new Map([
       },
       ShotCard: {
         visible: false,
-        order: 1
+        order: 1,
+        init: {
+          fileName: 'main.js'
+        }
       },
       EditorCard: {
         visible: false,
