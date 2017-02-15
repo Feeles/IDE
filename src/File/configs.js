@@ -96,7 +96,10 @@ export default new Map([
     defaultValue: {
       MonitorCard: {
         visible: true,
-        order: 0
+        order: 0,
+        init: {
+          fileName: 'index.html'
+        }
       },
       ShotCard: {
         visible: false,
