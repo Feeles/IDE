@@ -18,6 +18,7 @@ import { BinaryFile, SourceFile } from '../File/';
 import getLocalization, { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
+import {CardIcons} from '../Cards/CardWindow';
 
 
 const getStyles = (props, context) => {
@@ -216,6 +217,7 @@ export default class Menu extends PureComponent {
           <MenuItem
             key={item.name}
             primaryText={localization[lowerCaseAtFirst(item.name)].title}
+            leftIcon={CardIcons[item.name]}
             onTouchTap={() => {
               this.props.updateCard(item.name, {visible: true});
               this.handleToggleDrawer();

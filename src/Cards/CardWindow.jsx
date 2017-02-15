@@ -5,6 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import ActionAccessibility from 'material-ui/svg-icons/action/accessibility';
 
 const HeaderHeight = 32;
 
@@ -16,7 +17,7 @@ export default class CardWindow extends PureComponent {
     localization: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     isResizing: PropTypes.bool.isRequired,
-    actions: PropTypes.array.isRequired,
+    actions: PropTypes.array.isRequired
   };
 
   static defaultProps = {
@@ -118,15 +119,19 @@ export default class CardWindow extends PureComponent {
       header: {
         display: 'flex',
         alignItems: 'center',
-        height: HeaderHeight
+        height: HeaderHeight,
+        paddingLeft: 8
       },
       title: {
         flex: '0 0 auto',
-        marginLeft: '1rem',
+        marginLeft: 6,
         fontSize: '.8rem'
       },
       blank: {
         flex: '1 1 auto'
+      },
+      a: {
+        display: 'inherit'
       }
     };
 
@@ -134,6 +139,7 @@ export default class CardWindow extends PureComponent {
       <Element name={this.props.name} style={styles.root}>
         <Card {...this.cardProps}>
           <div style={styles.header}>
+            <a href={'#' + this.props.name} style={styles.a}>{CardIcons[this.props.name]}</a>
             <div style={styles.title}>{this.state.localized.title}</div>
             <div style={styles.blank}></div>
             {this.props.actions}
@@ -150,3 +156,17 @@ export default class CardWindow extends PureComponent {
 function lowerCaseAtFirst(string) {
   return string[0].toLowerCase() + string.substr(1);
 }
+
+export const CardIcons = {
+  MonitorCard: <ActionAccessibility color="gray" />,
+  ShotCard: <ActionAccessibility color="gray" />,
+  EditorCard: <ActionAccessibility color="gray" />,
+  MediaCard: <ActionAccessibility color="gray" />,
+  CreditsCard: <ActionAccessibility color="gray" />,
+  ReadmeCard: <ActionAccessibility color="gray" />,
+  PaletteCard: <ActionAccessibility color="gray" />,
+  SnippetCard: <ActionAccessibility color="gray" />,
+  EnvCard: <ActionAccessibility color="gray" />,
+  HierarchyCard: <ActionAccessibility color="gray" />,
+  CustomizeCard: <ActionAccessibility color="gray" />,
+};
