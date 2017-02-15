@@ -415,9 +415,11 @@ export default class Main extends Component {
         setLocation: this.setLocation,
       },
       ShotCard: {
-        ...commonProps,
-        port: this.state.port,
         updateCard: this.updateCard,
+        shotProps: {
+          ...commonProps,
+          port: this.state.port,
+        }
       },
       SnippetCard: {
         ...commonProps,
