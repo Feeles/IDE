@@ -1,10 +1,14 @@
 import React, {PureComponent, PropTypes} from 'react';
+import {scroller} from 'react-scroll';
 import {DropTarget} from 'react-dnd';
 import transitions from 'material-ui/styles/transitions';
 
 import Sizer from './Sizer';
 import DragTypes from '../utils/dragTypes';
 import * as Cards from './';
+
+const LeftContainerId = 'CardContainerLeft';
+const RightContainerId = 'CardContainerRight';
 
 class CardContainer extends PureComponent {
 
@@ -22,6 +26,35 @@ class CardContainer extends PureComponent {
     isResizing: false,
     rightSideWidth: this.props.rootWidth / 2
   };
+
+  componentDidMount() {
+    window.addEventListener('hashchange', this.handleHashChange);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('hashchange', this.handleHashChange);
+  }
+
+  handleHashChange = () => {
+    if (!location.hash) return;
+    const name = location.hash.substr(1);
+    const card = this.props.getConfig('card')[name];
+    if (card) {
+      const containerId = card.order % this.column === 1
+        ? LeftContainerId
+        : RightContainerId;
+      scroller.scrollTo(name, {
+        containerId,
+        smooth: true,
+        ignoreCancelEvents: true,
+      });
+      location.hash = '';
+    }
+  };
+
+  get column() {
+    return 1 + (this.props.rootWidth > 991);
+  }
 
   resize = ((waitFlag = false) => (width, _, forceFlag = false) => {
     width = Math.max(0, Math.min(this.props.rootWidth, width));
@@ -54,21 +87,21 @@ class CardContainer extends PureComponent {
   render() {
     const {connectDropTarget} = this.props;
 
-    const orderedCardInfo = Object.entries(this.props.getConfig('card'))
-      .map(([name, value]) => ({name, ...value}));
+    const orderedCardInfo = Object.entries(this.props.getConfig('card')).map(([name, value]) => ({
+      name,
+      ...value
+    }));
     orderedCardInfo.sort((a, b) => a.order - b.order);
 
-    const column = 1 + (this.props.rootWidth > 991);
-
     const left = orderedCardInfo.filter(item => {
-      return item.order % column === 1;
+      return item.order % this.column === 1;
     });
     const right = orderedCardInfo.filter(item => {
-      return item.order % column === 0;
+      return item.order % this.column === 0;
     });
 
     const isShrinkLeft = (yes, no) => {
-      if (column === 1) {
+      if (this.column === 1) {
         return yes;
       }
       return no;
@@ -85,25 +118,24 @@ class CardContainer extends PureComponent {
         alignItems: 'stretch'
       },
       left: {
+        position: 'relative',
         flex: isShrinkLeft('0 0 auto', '1 1 auto'),
         width: 0,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
         overflow: 'scroll',
-        paddingBottom: 200,
-        zIndex: 1,
+        zIndex: 1
       },
       right: {
+        position: 'relative',
         flex: isShrinkLeft('1 1 auto', '0 0 auto'),
-        boxSizing: 'border-box',
         width: isShrinkRight(0, this.state.rightSideWidth),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
         overflow: 'scroll',
-        paddingBottom: 200,
-        zIndex: 1,
+        zIndex: 1
       },
       dropCover: {
         position: 'absolute',
@@ -121,18 +153,20 @@ class CardContainer extends PureComponent {
     return connectDropTarget(
       <div style={styles.container}>
         <div style={styles.dropCover}></div>
-        <div style={styles.left}>
-          <div>
-            {this.renderCards(left)}
-          </div>
+        <div id={LeftContainerId} style={styles.left}>
+          {this.renderCards(left)}
+          <div style={{
+            flex: '0 0 1000px'
+          }}></div>
         </div>
-        {column === 2
+        {this.column === 2
           ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
           : null}
-        <div style={styles.right}>
-          <div>
-            {this.renderCards(right)}
-          </div>
+        <div id={RightContainerId} style={styles.right}>
+          {this.renderCards(right)}
+          <div style={{
+            flex: '0 0 1000px'
+          }}></div>
         </div>
       </div>
     );

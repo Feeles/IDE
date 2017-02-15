@@ -1,4 +1,5 @@
 import React, {PureComponent, PropTypes} from 'react';
+import {Element} from 'react-scroll';
 import {Card} from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more';
@@ -15,7 +16,7 @@ export default class CardWindow extends PureComponent {
     localization: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     isResizing: PropTypes.bool.isRequired,
-    actions: PropTypes.array.isRequired
+    actions: PropTypes.array.isRequired,
   };
 
   static defaultProps = {
@@ -53,7 +54,6 @@ export default class CardWindow extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.visible && this.props.visible) {
-      location.hash = '';
       location.hash = this.props.name;
     }
   }
@@ -105,7 +105,7 @@ export default class CardWindow extends PureComponent {
 
   render() {
     if (!this.props.visible) {
-      return <div id={this.props.name}></div>;
+      return <Element name={this.props.name}></Element>;
     }
 
     const {connectDragSource, connectDragPreview, isDragging} = this.props;
@@ -131,7 +131,7 @@ export default class CardWindow extends PureComponent {
     };
 
     return (
-      <div id={this.props.name} style={styles.root}>
+      <Element name={this.props.name} style={styles.root}>
         <Card {...this.cardProps}>
           <div style={styles.header}>
             <div style={styles.title}>{this.state.localized.title}</div>
@@ -142,7 +142,7 @@ export default class CardWindow extends PureComponent {
           </div>
           {this.props.children}
         </Card>
-      </div>
+      </Element>
     );
   }
 }
