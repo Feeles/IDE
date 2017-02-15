@@ -142,12 +142,12 @@ export default class Main extends Component {
     if (file === remove) {
       return file;
     }
-    this._configs.clear();
     const files = this.state.files
       .concat(file)
       .filter((item) => item !== remove);
 
     await this.setStatePromise({ files });
+    this.resetConfig(file.name);
 
     if (this.state.project) {
       await putFile(this.state.project.id, file.serialize());
@@ -161,12 +161,12 @@ export default class Main extends Component {
     if (remove === nextFile) {
       return prevFile;
     }
-    this._configs.clear();
     const files = this.state.files
       .filter((item) => item !== remove && item.key !== prevFile.key)
       .concat(nextFile);
 
     await this.setStatePromise({ files });
+    this.resetConfig(prevFile.name);
 
     if (this.state.project) {
       await putFile(this.state.project.id, nextFile.serialize());
@@ -206,7 +206,7 @@ export default class Main extends Component {
   };
 
   setConfig = (key, config) => {
-    this._configs.delete(key);
+    this._configs.set(key, config);
 
     const { test, defaultName } = configs.get(key);
     const configFile = this.findFile((file) => (
@@ -232,6 +232,15 @@ export default class Main extends Component {
         text
       });
       return this.addFile(newFile);
+    }
+  };
+
+  resetConfig = (fileName) => {
+    // Refresh config
+    for (const [key, value] of configs.entries()) {
+      if (value.test.test(fileName)) {
+        this._configs.delete(key);
+      }
     }
   };
 
