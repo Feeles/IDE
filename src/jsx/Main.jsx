@@ -137,7 +137,6 @@ export default class Main extends Component {
   }
 
   addFile = async (file) => {
-    await 1; // Be async
     const timestamp = file.lastModified || Date.now();
     const remove = this.inspection(file);
     if (file === remove) {
@@ -157,7 +156,6 @@ export default class Main extends Component {
   };
 
   putFile = async (prevFile, nextFile) => {
-    await 1; // Be async
     const timestamp = nextFile.lastModified || Date.now();
     const remove = this.inspection(nextFile);
     if (remove === nextFile) {
@@ -177,7 +175,6 @@ export default class Main extends Component {
   };
 
   deleteFile = async (...targets) => {
-    await 1; // Be async
     const timestamp = Date.now();
 
     const keys = targets.map((item) => item.key);
