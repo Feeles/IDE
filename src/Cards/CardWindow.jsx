@@ -113,6 +113,7 @@ export default class CardWindow extends PureComponent {
 
     const styles = {
       root: {
+        direction: 'ltr',
         padding: 16,
         paddingBottom: 0
       },

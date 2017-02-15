@@ -6,6 +6,7 @@ import transitions from 'material-ui/styles/transitions';
 import Sizer from './Sizer';
 import DragTypes from '../utils/dragTypes';
 import * as Cards from './';
+import {CardIcons} from './CardWindow';
 
 const LeftContainerId = 'CardContainerLeft';
 const RightContainerId = 'CardContainerRight';
@@ -84,6 +85,16 @@ class CardContainer extends PureComponent {
     });
   }
 
+  renderIcons(cards) {
+    cards = cards.filter(info => info.visible);
+    if (cards.length < 2) return null;
+    return cards.map((info, key) => (
+      <a key={key} href={'#' + info.name}>
+        {CardIcons[info.name]}
+      </a>
+    ));
+  }
+
   render() {
     const {connectDropTarget} = this.props;
 
@@ -125,7 +136,8 @@ class CardContainer extends PureComponent {
         flexDirection: 'column',
         alignItems: 'stretch',
         overflow: 'scroll',
-        zIndex: 1
+        zIndex: 1,
+        direction: 'rtl'
       },
       right: {
         position: 'relative',
@@ -147,6 +159,17 @@ class CardContainer extends PureComponent {
         backgroundColor: 'black',
         zIndex: isResizing(1000, 0),
         transition: transitions.easeOut(null, 'opacity')
+      },
+      blank: {
+        flex: '0 0 1000px'
+      },
+      bar: {
+        flex: '0 0 16px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        overflow: 'visible',
+        zIndex: 2,
       }
     };
 
@@ -155,18 +178,20 @@ class CardContainer extends PureComponent {
         <div style={styles.dropCover}></div>
         <div id={LeftContainerId} style={styles.left}>
           {this.renderCards(left)}
-          <div style={{
-            flex: '0 0 1000px'
-          }}></div>
+          <div style={styles.blank}></div>
+        </div>
+        <div style={{...styles.bar, marginLeft: -16}}>
+          {this.renderIcons(left)}
         </div>
         {this.column === 2
           ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
           : null}
+        <div style={{...styles.bar, marginRight: -16}}>
+          {this.renderIcons(right)}
+        </div>
         <div id={RightContainerId} style={styles.right}>
           {this.renderCards(right)}
-          <div style={{
-            flex: '0 0 1000px'
-          }}></div>
+          <div style={styles.blank}></div>
         </div>
       </div>
     );
