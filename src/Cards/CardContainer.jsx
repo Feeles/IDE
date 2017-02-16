@@ -1,5 +1,5 @@
 import React, {PureComponent, PropTypes} from 'react';
-import {scroller} from 'react-scroll';
+import {Events, scroller} from 'react-scroll';
 import {DropTarget} from 'react-dnd';
 import transitions from 'material-ui/styles/transitions';
 
@@ -28,17 +28,40 @@ class CardContainer extends PureComponent {
     rightSideWidth: this.props.rootWidth / 2
   };
 
+  // react-scroll はイベント重複時に前のイベントをキャンセルしてしまう.
+  // もう一度スクロールさせるためにスタック(FILO)をのこす
+  _eventStack = [];
   componentDidMount() {
     window.addEventListener('hashchange', this.handleHashChange);
+    Events.scrollEvent.register('begin', (to) => {
+      if (!this._eventStack.includes(to)) {
+        this._eventStack.push(to);
+      }
+    });
+    const lastOf = (array) => array.length ? array[array.length - 1] : undefined;
+    Events.scrollEvent.register('end', (to) => {
+      if (lastOf(this._eventStack) === to) {
+        this._eventStack.pop();
+        if (lastOf(this._eventStack)) {
+          this.scrollToCard(lastOf(this._eventStack), true);
+        }
+      }
+    });
   }
 
   componentWillUnmount() {
     window.removeEventListener('hashchange', this.handleHashChange);
+    Events.scrollEvent.remove('begin');
+    Events.scrollEvent.remove('end');
   }
 
   handleHashChange = () => {
     if (!location.hash) return;
     const name = location.hash.substr(1);
+    this.scrollToCard(name);
+  };
+
+  scrollToCard = (name) => {
     const card = this.props.getConfig('card')[name];
     if (card) {
       const containerId = card.order % this.column === 1
@@ -79,6 +102,7 @@ class CardContainer extends PureComponent {
           isResizing: this.state.isResizing,
           localization: this.props.localization,
           updateCard: this.props.updateCard,
+          scrollToCard: this.scrollToCard,
         },
         ...this.props.cardProps[info.name]
       });

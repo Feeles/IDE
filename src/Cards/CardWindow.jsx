@@ -1,5 +1,5 @@
 import React, {PureComponent, PropTypes} from 'react';
-import {Element} from 'react-scroll';
+import {Element, scroller} from 'react-scroll';
 import {Card} from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more';
@@ -18,6 +18,7 @@ export default class CardWindow extends PureComponent {
     localization: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     isResizing: PropTypes.bool.isRequired,
+    scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired
   };
 
@@ -58,7 +59,7 @@ export default class CardWindow extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.visible && this.props.visible) {
-      location.hash = this.props.name;
+      this.props.scrollToCard(this.props.name);
     }
   }
 
