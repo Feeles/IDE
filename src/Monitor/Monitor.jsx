@@ -100,9 +100,9 @@ export default class Monitor extends PureComponent {
   popoutClosed = false;
 
   componentDidMount() {
-    const {fileName} = this.props.getConfig('card').MonitorCard.init || {};
+    const {src} = this.props.getConfig('card').MonitorCard.frame || {};
     this.props.setLocation({
-      href: fileName
+      href: src
     });
   }
 

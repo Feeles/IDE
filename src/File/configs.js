@@ -97,8 +97,9 @@ export default new Map([
       MonitorCard: {
         visible: true,
         order: 0,
-        init: {
-          fileName: 'index.html'
+        frame: {
+          src: 'index.html',
+          size: [800, 600]
         }
       },
       ShotCard: {

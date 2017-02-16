@@ -33,12 +33,23 @@ export default class MonitorCard extends PureComponent {
     setLocation: PropTypes.func.isRequired,
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
+    getConfig: PropTypes.func.isRequired
   };
 
   state = {
-    frameWidth: 480,
-    frameHeight: 320,
+    frameWidth: 300,
+    frameHeight: 150
   };
+
+  componentWillMount() {
+    const {size} = this.props.getConfig('card').MonitorCard.frame || {};
+    if (Array.isArray(size)) {
+      this.setState({
+        frameWidth: size[0],
+        frameHeight: size[1]
+      });
+    }
+  }
 
   get height() {
     return (this.state.frameHeight / this.state.frameWidth) * 100 >> 0;

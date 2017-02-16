@@ -439,6 +439,7 @@ export default class Main extends Component {
         setLocation: this.setLocation,
         togglePopout: this.handleTogglePopout,
         isPopout: this.state.monitorType === MonitorTypes.Popout,
+        getConfig: this.getConfig,
         monitorProps: {
           ...commonProps,
           rootWidth: this.rootWidth,

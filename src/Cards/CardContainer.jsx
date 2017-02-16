@@ -98,7 +98,8 @@ class CardContainer extends PureComponent {
       return React.createElement(Cards[info.name], {
         key,
         cardPropsBag: {
-          ...info,
+          name: info.name,
+          visible: info.visible,
           isResizing: this.state.isResizing,
           localization: this.props.localization,
           updateCard: this.props.updateCard,
