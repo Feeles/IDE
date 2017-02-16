@@ -125,6 +125,9 @@ export default class PlayMenu extends PureComponent {
         fontSize: '.8rem',
         opacity: .6,
       },
+      menu: {
+        maxHeight: 300
+      }
     };
 
     const current = this.state.entries
@@ -147,6 +150,7 @@ export default class PlayMenu extends PureComponent {
         >
           <Menu
             value={this.state.href}
+            style={styles.menu}
             onItemTouchTap={this.handleItemTouchTap}
           >
           {current && [

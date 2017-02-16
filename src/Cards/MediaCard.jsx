@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import {Card, CardMedia} from 'material-ui/Card';
+import Card from './CardWindow';
+import {CardMedia} from 'material-ui/Card';
 import ReactPlayer from 'react-player';
-
-import {commonRoot} from './commonStyles';
 
 export default class MediaCard extends Component {
 
@@ -39,15 +38,17 @@ export default class MediaCard extends Component {
   };
 
   render() {
-    if (!this.state.playerState.url) {
-      return null;
-    }
-
     return (
-      <Card initiallyExpanded style={commonRoot}>
+      <Card initiallyExpanded {...this.props.cardPropsBag}>
+      {this.state.playerState.url ? (
         <CardMedia>
           <ReactPlayer {...this.state.playerState}/>
         </CardMedia>
+      ) : (
+        <div>
+          URL not given
+        </div>
+      )}
       </Card>
     );
   }

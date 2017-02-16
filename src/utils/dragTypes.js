@@ -1,5 +1,5 @@
 export default {
-  File: 'File',
-  Sizer: 'Sizer',
-  Snippet: 'Snippet',
+  File : Symbol('File'),
+  Sizer : Symbol('Sizer'),
+  Snippet : Symbol('Snippet')
 };

@@ -1,18 +1,19 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Card, CardHeader, CardText, CardActions } from 'material-ui/Card';
+import Card from './CardWindow';
+import {CardText, CardActions} from 'material-ui/Card';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
 
 import ReadmePane from '../ReadmePane/';
 import { SourceFile } from '../File/';
-import { commonRoot } from './commonStyles';
 import EditFile from './EditFile';
 import shallowEqual from '../utils/shallowEqual';
 
 export default class ReadmeCard extends PureComponent {
 
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
@@ -28,36 +29,23 @@ export default class ReadmeCard extends PureComponent {
     completes: [],
   };
 
-  componentDidMount() {
-    Promise.resolve()
-      .then(() => {
-        const readme = this.props.findFile('README.md');
-        if (readme) {
-          return Promise.resolve(readme);
-        }
-
-        return this.props.addFile(
-          new SourceFile({
-            type: 'text/x-markdown',
-            name: 'README.md',
-            text: this.props.localization.readme.text,
-          })
-        );
-      })
-      .then((selectedFile) => {
-        this.setState({ selectedFile });
+  componentWillMount() {
+    const {fileName} = this.props.getConfig('card').ReadmeCard.init || {};
+    if (fileName) {
+      this.setState({
+        selectedFile: this.props.findFile(fileName)
       });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.props.files !== nextProps.files &&
-      this.state.selectedFile
-    ) {
-      const key = this.state.selectedFile.key;
-      this.setState({
-        selectedFile: this.resolveFile(key),
-      });
+    if (this.props.files !== nextProps.files) {
+      // TODO: watch file
+      if (this.state.selectedFile) {
+        this.setState({
+          selectedFile: this.resolveFile(this.state.selectedFile.key)
+        });
+      }
     }
 
     if (this.props.port !== nextProps.port) {
@@ -148,7 +136,7 @@ export default class ReadmeCard extends PureComponent {
 
     return [
       <span key="index" style={styles.index}>
-      {localization.readme.index}
+      {localization.readmeCard.index}
       </span>,
       <DropDownMenu key="dropDown"
         value={selectedFile.key}
@@ -185,13 +173,7 @@ export default class ReadmeCard extends PureComponent {
       },
     };
     return (
-      <Card initiallyExpanded
-        style={commonRoot}
-      >
-        <CardHeader showExpandableButton actAsExpander
-          title={selectedFile.header}
-          subtitle={localization.readme.subtitle}
-        />
+      <Card initiallyExpanded {...this.props.cardPropsBag}>
         <CardText
           expandable
           style={styles.text}

@@ -19,7 +19,7 @@ const getStyles = (props, context) => {
   return {
     root: {
       position: 'relative',
-      height: '90vh',
+      height: '80vh',
       width: '100%',
       opacity: 1,
       display: 'flex',
@@ -33,7 +33,6 @@ const getStyles = (props, context) => {
       display: 'flex',
       alignItems: 'flex-end',
       height: 32,
-      paddingTop: spacing.desktopGutterMini,
       paddingRight: 7,
       paddingBottom: 10,
       paddingLeft: 7,

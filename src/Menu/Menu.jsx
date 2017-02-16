@@ -1,48 +1,39 @@
 import React, { PropTypes, PureComponent } from 'react';
-import Paper from 'material-ui/Paper';
+import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
+import Drawer from 'material-ui/Drawer';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
-import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
+import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 
 
 import { BinaryFile, SourceFile } from '../File/';
 import getLocalization, { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
+import {CardIcons} from '../Cards/CardWindow';
 
 
 const getStyles = (props, context) => {
-
-  const {
-    isPopout,
-    monitorWidth,
-  } = props;
   const { palette } = context.muiTheme;
 
   return {
     root: {
       flex: '0 0 auto',
       display: 'flex',
-      flexDirection: 'row-reverse',
       flexWrap: 'wrap',
       alignItems: 'center',
-      zIndex: 400,
-      overflow: monitorWidth < 100 ? 'hidden' : 'visible',
-      backgroundColor: palette.primary1Color,
     },
     button: {
-      marginRight: 20,
+      marginLeft: 20,
       zIndex: 2,
-    },
-    popoutIcon: {
-      transform: isPopout ? 'rotate(180deg)' : '',
     },
     projectName: {
       color: palette.alternateTextColor,
@@ -56,10 +47,7 @@ export default class Menu extends PureComponent {
 
   static propTypes = {
     files: PropTypes.array.isRequired,
-    isPopout: PropTypes.bool.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    togglePopout: PropTypes.func.isRequired,
-    monitorWidth: PropTypes.number.isRequired,
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
@@ -68,11 +56,16 @@ export default class Menu extends PureComponent {
     saveAs: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired,
+  };
+
+  state = {
+    open: false,
   };
 
   handleClone = () => {
@@ -123,10 +116,12 @@ export default class Menu extends PureComponent {
     }
   };
 
+  handleToggleDrawer = () => this.setState({
+    open: !this.state.open,
+  });
+
   render() {
     const {
-      isPopout,
-      togglePopout,
       localization,
       setLocalization,
       getConfig,
@@ -142,37 +137,25 @@ export default class Menu extends PureComponent {
     const canDeploy = !!getConfig('provider').publishUrl;
 
     return (
-      <div style={styles.root}>
-        <IconMenu
-          iconButtonElement={(
-            <IconButton
-              tooltip={localization.menu.language}
-            >
-              <ActionLanguage color={alternateTextColor} />
-            </IconButton>
-          )}
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          style={styles.button}
-        >
-        {acceptedLanguages.map(lang => (
-          <MenuItem
-            key={lang.accept[0]}
-            primaryText={lang.native}
-            onTouchTap={() => setLocalization(
-              getLocalization(lang.accept[0])
-            )}
+      <AppBar
+        style={styles.root}
+        iconElementLeft={<IconButton><ActionDashboard /></IconButton>}
+        onLeftIconButtonTouchTap={this.handleToggleDrawer}
+      >
+        <div style={{ flexGrow: 1 }}></div>
+      {this.props.project && (
+        this.props.project.title ? (
+          <div style={styles.projectName}>
+          {this.props.project.title}
+          </div>
+        ) : (
+          <FlatButton
+            label={localization.cloneDialog.setTitle}
+            labelStyle={{ color: alternateTextColor }}
+            onTouchTap={this.handleClone}
           />
-        ))}
-        </IconMenu>
-        <IconButton
-          tooltip={localization.menu.popout}
-          onTouchTap={togglePopout}
-          style={styles.button}
-          iconStyle={styles.popoutIcon}
-        >
-          <OpenInBrowser color={alternateTextColor} />
-        </IconButton>
+        )
+      )}
         <IconButton
           tooltip={localization.menu.clone}
           disabled={!this.props.coreString}
@@ -196,21 +179,57 @@ export default class Menu extends PureComponent {
         >
           <FileCloudUpload color={alternateTextColor} />
         </IconButton>
-        <div style={{ flexGrow: 1 }}></div>
-      {this.props.project && (
-        this.props.project.title ? (
-          <div style={styles.projectName}>
-          {this.props.project.title}
-          </div>
-        ) : (
-          <FlatButton
-            label={localization.cloneDialog.setTitle}
-            labelStyle={{ color: alternateTextColor }}
-            onTouchTap={this.handleClone}
+        <IconMenu
+          iconButtonElement={(
+            <IconButton
+              tooltip={localization.menu.language}
+            >
+              <ActionLanguage color={alternateTextColor} />
+            </IconButton>
+          )}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          style={styles.button}
+        >
+        {acceptedLanguages.map(lang => (
+          <MenuItem
+            key={lang.accept[0]}
+            primaryText={lang.native}
+            onTouchTap={() => setLocalization(
+              getLocalization(lang.accept[0])
+            )}
           />
-        )
-      )}
-      </div>
+        ))}
+        </IconMenu>
+        <Drawer
+          open={this.state.open}
+          docked={false}
+          onRequestChange={(open) => this.setState({open})}
+        >
+          <AppBar
+            iconElementLeft={<IconButton><NavigationArrowBack /></IconButton>}
+            onLeftIconButtonTouchTap={this.handleToggleDrawer}
+          />
+        {this.state.open ? Object.entries(this.props.getConfig('card'))
+          .map(([name, card]) => ({name, ...card}))
+          .filter(item => !item.visible)
+          .map(item => (
+          <MenuItem
+            key={item.name}
+            primaryText={localization[lowerCaseAtFirst(item.name)].title}
+            leftIcon={CardIcons[item.name]}
+            onTouchTap={() => {
+              this.props.updateCard(item.name, {visible: true});
+              this.handleToggleDrawer();
+            }}
+          />
+        )) : null}
+        </Drawer>
+      </AppBar>
     );
   }
+}
+
+function lowerCaseAtFirst(string) {
+  return string[0].toLowerCase() + string.substr(1);
 }

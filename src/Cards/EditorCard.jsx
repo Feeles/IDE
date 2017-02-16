@@ -1,25 +1,22 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Card, CardHeader, CardMedia } from 'material-ui/Card';
+import Card from './CardWindow';
+import { CardMedia } from 'material-ui/Card';
 
 
-import {commonRoot} from './commonStyles';
 import EditorPane from '../EditorPane/';
 
 export default class EditorCard extends PureComponent {
 
   static propTypes = {
-    localization: PropTypes.object.isRequired,
+    cardPropsBag: PropTypes.object.isRequired,
+    editorProps: PropTypes.object.isRequired,
   };
 
   render() {
-
     return (
-      <Card initiallyExpanded style={commonRoot}>
-        <CardHeader actAsExpander showExpandableButton
-          title={this.props.localization.editorCard.title}
-        />
+      <Card initiallyExpanded {...this.props.cardPropsBag}>
         <CardMedia expandable >
-          <EditorPane {...this.props} />
+          <EditorPane {...this.props.editorProps} />
         </CardMedia>
       </Card>
     );

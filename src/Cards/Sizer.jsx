@@ -12,22 +12,24 @@ const getStyles = (props, context) => {
 
   const {
     palette,
+    paper,
   } = context.muiTheme;
 
   return {
     root: {
       flex: '0 0 auto',
       width: SizerWidth,
-      paddingBottom: 4,
+      marginTop: -12,
+      marginBottom: 32,
       display: 'flex',
-      overflow: 'hidden',
       cursor: 'col-resize',
-      zIndex: 200,
+      zIndex: 1101,
     },
     preview: {
       flex: '1 1 auto',
-      borderRadius: '0 0 0 4px',
-      backgroundColor: palette.primary1Color,
+      backgroundColor: palette.accent1Color,
+      borderRadius: SizerWidth / 2,
+      boxShadow: paper.zDepthShadows[1],
     },
   };
 
@@ -36,8 +38,7 @@ const getStyles = (props, context) => {
 class Sizer extends PureComponent {
 
   static propTypes = {
-    monitorWidth: PropTypes.number.isRequired,
-    monitorHeight: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
     onSizer: PropTypes.func.isRequired,
 
     connectDragSource: PropTypes.func.isRequired,
@@ -87,8 +88,7 @@ class Sizer extends PureComponent {
 const spec = {
   beginDrag(props) {
     return {
-      width: props.monitorWidth,
-      height: props.monitorHeight,
+      width: props.width
     };
   },
 };

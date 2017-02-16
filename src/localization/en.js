@@ -4,9 +4,7 @@ export default {
   native: 'English',
 
   menu: {
-    shutdown: 'Shutdown',
-    popout: 'Pop-out Screen',
-    language: 'Language',
+    language: 'Launguage',
     clone: 'Save / Load / Clone',
     aboutFeeles: 'About Feeles',
     deploy: 'Deploy This App',
@@ -65,58 +63,20 @@ export default {
     openProject: 'Open this project',
     startNew: 'Start new',
   },
-  editorMenu: {
-    lineWrapping: 'Line Wrapping',
-    tabVisibility: 'Tab Visibility',
-    darkness: 'Darkness',
-    indentUnit4: '4 spaces indent',
-  },
-  readme: {
-    subtitle: 'Please read this first',
+  readmeCard: {
+    title: 'Getting Started',
     index: 'Index',
-    text: `# Introduction
-This is an editor for making games and applications
-
-Please call me **Feeles**
-
-## Screen description
-- The right half is the **application screen** or **code screen**
-- The left half is the screen of the rest (explanation, asset, folder etc.)
-
-## Overview
-- HTML / CSS / javascript (ES 6) can be written
-  - [index.html](index.html) Starting point of the application
-  - [style.css](style.css) Design of the application
-  - [main.js](main.js) Main program of the application
-- You can load files on the desktop
-  - Since there is a **folder screen** at the bottom of the this side, **click the icon of the computer** in it
-- You can save and load data, and clone
-  - Click the ↓ icon at the bottom of the application screen
-  - It can also be **downloaded as an HTML file.** This is called **clone** in Feeles
-
-- - -
-
-If this explanation remains, this Feeles is probably **an empty Feeles**
-
-Let's get started from there as there are various Feeles such as gaming Feeles
-
-- - -
-
-## Acknowledgments
-- When making this application,
-- If there is a person who is inappropriate,
-- Let's write a name here and thank you.
-`,
   },
-  shot: {
+  shotCard: {
+    title: 'Quick Run',
     shoot: 'After rewriting, send the code',
     restore: 'Restore',
   },
   hierarchyCard: {
-    title: 'Files',
+    title: 'Folders',
     emptyTrashBox: 'Empty trash',
   },
-  snippet: {
+  snippetCard: {
     title: 'Assets',
     subtitle: 'Drag and drop it to the code on the right',
     fileNotSelected: 'File not selected',
@@ -142,28 +102,27 @@ Let's get started from there as there are various Feeles such as gaming Feeles
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
   },
-  env: {
-    title: 'Environment Variables',
-    subtitle: '',
+  envCard: {
+    title: 'Parameters',
     remove: 'Remove',
   },
-  palette: {
-    title: 'Color Palette',
-    subtitle: `Let's change the color according to your mood`,
+  paletteCard: {
+    title: 'Colors',
   },
   monitorCard: {
-    title: 'Monitor',
+    title: 'Screen',
   },
   customizeCard: {
-    title: 'Editor Preference',
-    subtitle: `Let's customize the editor to your favorite`,
+    title: 'Customize',
     detail: `Click here for details`,
     editor: `Tabs and line wrapping ...etc`,
     style: `Color of text and background ...etc`,
   },
   creditsCard: {
-    title: 'Contributors',
-    subtitle: `Everyone who contributed to these codes`,
+    title: 'Credits',
+  },
+  mediaCard: {
+    title: 'Media',
   },
 
 };

@@ -4,7 +4,7 @@ import transitions from 'material-ui/styles/transitions';
 
 export default (palette) => `
 textarea {
-  font-size: 16px !important; // In smartphone, will not scale automatically
+  font-size: 16px !important; /* In smartphone, will not scale automatically */
 }
 .ReactCodeMirror {
   position: absolute;
