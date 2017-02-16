@@ -68,7 +68,7 @@ export default {
     index: 'Index',
   },
   shotCard: {
-    title: 'Code',
+    title: 'Quick Run',
     shoot: 'After rewriting, send the code',
     restore: 'Restore',
   },

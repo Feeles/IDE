@@ -2,7 +2,6 @@ import React, {PureComponent, PropTypes} from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import LinearProgress from 'material-ui/LinearProgress';
-import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import transitions from 'material-ui/styles/transitions';
 import {red50, red500} from 'material-ui/styles/colors';
@@ -10,6 +9,7 @@ import {red50, red500} from 'material-ui/styles/colors';
 import Editor from './Editor';
 import {SourceFile} from '../File/';
 import shallowEqual from '../utils/shallowEqual';
+import {CardIcons} from '../Cards/CardWindow';
 
 const durations = [600, 1400, 0];
 
@@ -257,7 +257,7 @@ export default class ShotCard extends PureComponent {
         <div style={styles.menu}>
           <FloatingActionButton mini disabled={anim !== 0} onTouchTap={this.shoot} style={styles.shoot}>
             {anim === 0
-              ? (<AvPlayArrow/>)
+              ? CardIcons.ShotCard
               : (<AvStop/>)}
           </FloatingActionButton>
           <span style={styles.label}>{localization.shotCard.shoot}</span>

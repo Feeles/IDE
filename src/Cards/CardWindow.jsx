@@ -5,7 +5,19 @@ import IconButton from 'material-ui/IconButton';
 import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import ActionAccessibility from 'material-ui/svg-icons/action/accessibility';
+
+// Card Icons
+import ContentReply from 'material-ui/svg-icons/content/reply';
+import ContentCreate from 'material-ui/svg-icons/content/create';
+import ActionCopyright from 'material-ui/svg-icons/action/copyright';
+import ActionTouchApp from 'material-ui/svg-icons/action/touch-app';
+import ActionSettingsApplications from 'material-ui/svg-icons/action/settings-applications';
+import ImagePalette from 'material-ui/svg-icons/image/palette';
+import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
+import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
+import MapsMap from 'material-ui/svg-icons/maps/map';
+import NavigationApps from 'material-ui/svg-icons/navigation/apps';
+import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
 
 const HeaderHeight = 32;
 
@@ -165,15 +177,15 @@ function lowerCaseAtFirst(string) {
 }
 
 export const CardIcons = {
-  MonitorCard: <ActionAccessibility color="gray" />,
-  ShotCard: <ActionAccessibility color="gray" />,
-  EditorCard: <ActionAccessibility color="gray" />,
-  MediaCard: <ActionAccessibility color="gray" />,
-  CreditsCard: <ActionAccessibility color="gray" />,
-  ReadmeCard: <ActionAccessibility color="gray" />,
-  PaletteCard: <ActionAccessibility color="gray" />,
-  SnippetCard: <ActionAccessibility color="gray" />,
-  EnvCard: <ActionAccessibility color="gray" />,
-  HierarchyCard: <ActionAccessibility color="gray" />,
-  CustomizeCard: <ActionAccessibility color="gray" />,
+  MonitorCard: <HardwareDesktopWindows color="gray" />,
+  ShotCard: <ContentReply color="gray" style={{transform:'rotateY(180deg)'}} />,
+  EditorCard: <ContentCreate color="gray" />,
+  MediaCard: <AvMusicVideo color="gray" />,
+  CreditsCard: <ActionCopyright color="gray" />,
+  ReadmeCard: <MapsMap color="gray" />,
+  PaletteCard: <ImagePalette color="gray" />,
+  SnippetCard: <NavigationApps color="gray" />,
+  EnvCard: <ActionTouchApp color="gray" />,
+  HierarchyCard: <FileFolderOpen color="gray" />,
+  CustomizeCard: <ActionSettingsApplications color="gray" />,
 };

@@ -64,11 +64,11 @@ export default {
     cancel: 'キャンセル',
   },
   readmeCard: {
-    title: 'はじめに',
+    title: 'トリセツ',
     index: '目次',
   },
   shotCard: {
-    title: 'コード',
+    title: 'クイック',
     shoot: '書きかえたら、コードを送る',
     restore: '元に戻す',
   },
@@ -103,14 +103,14 @@ export default {
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
   },
   envCard: {
-    title: 'パラメータ',
+    title: 'スイッチ',
     remove: '削除',
   },
   paletteCard: {
     title: 'カラー',
   },
   monitorCard: {
-    title: 'スクリーン',
+    title: 'ガメン',
   },
   customizeCard: {
     title: 'カスタマイズ',
