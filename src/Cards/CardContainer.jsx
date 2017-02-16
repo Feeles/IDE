@@ -47,7 +47,7 @@ class CardContainer extends PureComponent {
       scroller.scrollTo(name, {
         containerId,
         smooth: true,
-        ignoreCancelEvents: true,
+        duration: 250,
       });
       location.hash = '';
     }
