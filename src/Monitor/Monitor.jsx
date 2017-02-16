@@ -123,7 +123,7 @@ export default class Monitor extends PureComponent {
       if (this.props.isPopout || this.popoutClosed) {
         // react-popoutがpopoutWindowにDOMをrenderした後でstartする必要がある
         // renderを補足するのは難しい&updateの度に何度もrenderされる=>delayを入れる
-        setTimeout(() => this.start(), 300);
+        setTimeout(() => this.start(), 500);
         this.popoutClosed = false;
       } else {
         this.start();
