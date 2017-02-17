@@ -340,7 +340,7 @@ export default class Main extends Component {
     this.setState((prevState) => ({
       reboot: true,
       monitorType: maxByPriority(prevState.monitorType, MonitorTypes.Card),
-      href: href || 'index.html',
+      href: href || prevState.href,
     }));
     location.hash = 'MonitorCard';
   };
