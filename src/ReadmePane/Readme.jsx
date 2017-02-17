@@ -58,9 +58,7 @@ const mdComponents = [
     },
     render(tag, props, children, component, mdStyles) {
       const onTouchTap = () => {
-        component.props.setLocation({
-          href: decodeURIComponent(props.href),
-        });
+        component.props.setLocation(decodeURIComponent(props.href));
       };
       return (
         <RaisedButton primary

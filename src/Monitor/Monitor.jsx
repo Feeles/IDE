@@ -101,9 +101,7 @@ export default class Monitor extends PureComponent {
 
   componentDidMount() {
     const {src} = this.props.getConfig('card').MonitorCard.frame || {};
-    this.props.setLocation({
-      href: src
-    });
+    this.props.setLocation(src);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -245,12 +243,10 @@ export default class Monitor extends PureComponent {
         });
         break;
       case 'reload':
-        this.handleReload();
+        this.props.setLocation();
         break;
       case 'replace':
-        this.props.setLocation({
-          href: data.value,
-        });
+        this.props.setLocation(data.value);
         break;
       case 'error':
         if (!this.state.error) {
@@ -306,12 +302,6 @@ export default class Monitor extends PureComponent {
     }
   };
 
-  handleReload = () => {
-    this.props.setLocation({
-      href: this.props.href,
-    });
-  };
-
   render() {
     const {
       progress,
@@ -336,7 +326,7 @@ export default class Monitor extends PureComponent {
       >
         <Screen display
           frameRef={this.handleFrame}
-          handleReload={this.handleReload}
+          handleReload={() => this.props.setLocation()}
           reboot={reboot}
           error={error}
           width={this.props.frameWidth}

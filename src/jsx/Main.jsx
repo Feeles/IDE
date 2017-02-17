@@ -336,12 +336,12 @@ export default class Main extends Component {
     });
   };
 
-  setLocation = ({ href = 'index.html' } = { href: 'index.html' }) => {
-    this.setState({
+  setLocation = (href) => {
+    this.setState((prevState) => ({
       reboot: true,
-      monitorType: maxByPriority(this.state.monitorType, MonitorTypes.Card),
-      href,
-    });
+      monitorType: maxByPriority(prevState.monitorType, MonitorTypes.Card),
+      href: href || prevState.href,
+    }));
     location.hash = 'MonitorCard';
   };
 

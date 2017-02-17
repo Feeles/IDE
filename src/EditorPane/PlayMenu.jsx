@@ -34,15 +34,11 @@ export default class PlayMenu extends PureComponent {
       .filter((file) => file.is('html'));
 
     if (files.length === 0) {
-      this.props.setLocation({
-        href: 'index.html',
-      });
+      this.props.setLocation();
       return;
     }
     if (files.length === 1) {
-      this.props.setLocation({
-        href: files[0].name,
-      });
+      this.props.setLocation(files[0].name);
       return;
     }
 
@@ -67,9 +63,7 @@ export default class PlayMenu extends PureComponent {
   };
 
   handleItemTouchTap = (event, menuItem) => {
-    this.props.setLocation({
-      href: menuItem.props.value,
-    });
+    this.props.setLocation(menuItem.props.value);
     this.setState({
       open: false,
     });
