@@ -157,6 +157,7 @@ class CardContainer extends PureComponent {
         position: 'relative',
         flex: isShrinkLeft('0 0 auto', '1 1 auto'),
         width: 0,
+        paddingRight: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
@@ -168,6 +169,7 @@ class CardContainer extends PureComponent {
         position: 'relative',
         flex: isShrinkLeft('1 1 auto', '0 0 auto'),
         width: isShrinkRight(0, this.state.rightSideWidth),
+        paddingLeft: 4,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
@@ -189,7 +191,7 @@ class CardContainer extends PureComponent {
         flex: '0 0 1000px'
       },
       bar: {
-        flex: '0 0 16px',
+        width: 0,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-around',
@@ -205,13 +207,13 @@ class CardContainer extends PureComponent {
           {this.renderCards(left)}
           <div style={styles.blank}></div>
         </div>
-        <div style={{...styles.bar, marginLeft: -16}}>
+        <div style={{...styles.bar, alignItems: 'flex-end'}}>
           {this.renderIcons(left)}
         </div>
         {this.column === 2
           ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
           : null}
-        <div style={{...styles.bar, marginRight: -16}}>
+        <div style={{...styles.bar, alignItems: 'flex-start'}}>
           {this.renderIcons(right)}
         </div>
         <div id={RightContainerId} style={styles.right}>
