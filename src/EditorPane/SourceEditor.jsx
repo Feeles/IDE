@@ -190,17 +190,11 @@ class SourceEditor extends PureComponent {
     });
   };
 
-  handleReload = () => {
-    this.setLocation({
-      href: this.props.href,
-    });
-  };
-
-  setLocation = async ({ href }) => {
+  setLocation = async (href) => {
 
     await this.handleSave();
 
-    return this.props.setLocation({ href });
+    return this.props.setLocation(href);
 
   };
 
@@ -304,7 +298,7 @@ class SourceEditor extends PureComponent {
     const props = Object.assign({}, this.props, {
       codemirrorRef: this.handleCodemirror,
       onChange: undefined,
-      handleRun: this.handleReload,
+      handleRun: () => this.props.setLocation(),
       showHint,
     });
 
