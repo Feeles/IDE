@@ -30,7 +30,19 @@ export default class LaunchDialog extends PureComponent {
     projects: null,
   };
 
-  async componentWillMount() {
+  componentWillMount() {
+    if (this.props.open) {
+      this.setup();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.open && nextProps.open) {
+      this.setup();
+    }
+  }
+
+  async setup() {
     const projects = await personalDB.projects.toArray();
 
     if (projects.length < 1) {

@@ -1,0 +1,110 @@
+[{
+    "name": "main.js",
+    "moduleName": "main",
+    "type": "text/javascript",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [],
+    "sign": null,
+    "text": "import message from 'sub/message';\n\n\ndocument.body.textContent = message;\n\n",
+    "isScript": true
+}, {
+    "name": "sub/message.js",
+    "moduleName": "sub/message",
+    "type": "text/javascript",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [],
+    "sign": null,
+    "text": "export default \"It's fine! :-)\";\n",
+    "isScript": true
+}, {
+    "name": "feeles/codemirror.css",
+    "moduleName": "feeles/codemirror",
+    "type": "text/css",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [],
+    "sign": null,
+    "text": ".CodeMirror {\n\tfont-family: Consolas, \"Liberation Mono\", Menlo, Courier, monospace;\n\tbackground-color: rgba(245, 245, 245, 1.0);\n\t/* Set 100% to Dark Mode */\n\tfilter: invert(0%);\n}\n\n.CodeMirror .cm-tab:before {\n\t/* Set visible to show tabs */\n\tvisibility: hidden;\n\tcontent: '••••';\n\tcolor: rgba(0, 0, 0, 0.1);\n\tborder-left: 1px solid rgba(0, 0, 0, 0.1);\n\tposition: absolute;\n}\n\n.CodeMirror-linenumber {\n\tcolor: rgba(153, 153, 153, 1.0);\n}",
+    "isScript": false
+}, {
+    "name": "snippets/sample.json",
+    "moduleName": "snippets/sample",
+    "type": "application/json",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [],
+    "sign": null,
+    "text": "{\n    \".source.js\": {\n        \"if\": {\n            \"prefix\": \"if\",\n            \"body\": `\nif (1 === 1) {\n\n}`,\n            \"description\": \"( ) の中の条件が正しいときだけ、{ } の中に入ります\",\n            \"leftLabel\": \"if 文\"\n        }\n    }\n}",
+    "isScript": false
+}, {
+    "name": "index.html",
+    "moduleName": "index",
+    "type": "text/html",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [],
+    "sign": null,
+    "text": "<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"utf-8\">\n        <title>Start</title>\n        <link rel=\"stylesheet\" href=\"style.css\">\n        <script src=\"lib/interrupt.js\"></script>\n        <script src=\"main.js\"></script>\n    </head>\n    <body>\n        <h1>LOADING...</h1>\n    </body>\n</html>",
+    "isScript": false
+}, {
+    "name": "style.css",
+    "moduleName": "style",
+    "type": "text/css",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [],
+    "sign": null,
+    "text": "body {\n    background-color: white;\n    margin: 0;\n    padding: 0;\n}",
+    "isScript": false
+}, {
+    "name": "lib/interrupt.js",
+    "moduleName": "lib/interrupt",
+    "type": "text/javascript",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [],
+    "sign": null,
+    "text": "const a_href = false;\nconst img_src = false;\nconst audio_src = false;\nconst script_src = false;\nconst xhr_url = false;\n\n// Hyper link\nif (a_href) {\n\tconst hrefLoader = (node, href, set) => {\n\t\tset(`javascript: feeles.replace('${href}');`);\n\t};\n\tinterruptSetter(HTMLAnchorElement, 'href', hrefLoader);\n}\n\n// Image source\nif (img_src) {\n\tinterruptSetter(HTMLImageElement, 'src', resourceLoader);\n}\n\n// Audio source\nif (audio_src) {\n\tinterruptSetter(HTMLAudioElement, 'src', resourceLoader);\n}\n\n// Script source\nif (script_src) {\n\tinterruptSetter(HTMLScriptElement, 'src', resourceLoader);\n}\n\n// XHR open()\nif (xhr_url) {\n\tinterruptXHR(XMLHttpRequest);\n}\n\n/**\n * @param node: HTMLElement\n * @param src: String\n * @param set: Function\n */\nfunction resourceLoader(node, src, set) {\n\n\tif (!isSameOrigin(src)) {\n\t\tset(src);\n\t\treturn;\n\t}\n\t// If relative path:\n\tfeeles.fetch(getFeelesName(src))\n\t\t.then(response => response.blob())\n\t\t.then((blob) => {\n\t\t\tconst url = URL.createObjectURL(blob);\n\t\t\tconst revokeHandler = () => {\n\t\t\t\tnode.removeEventListener('load', revokeHandler);\n\t\t\t\tnode.removeEventListener('error', revokeHandler);\n\t\t\t\tURL.revokeObjectURL(url);\n\t\t\t};\n\t\t\tnode.addEventListener('load', revokeHandler);\n\t\t\tnode.addEventListener('error', revokeHandler);\n\n\t\t\tset(url);\n\t\t});\n\n}\n\n/**\n * @param constructor: HTMLElement\n * @param attr: String\n * @param delegate: Function(\n *\t node: HTMLElement,\n *\t value: any,\n *\t set: Function\n * )\n */\nfunction interruptSetter(constructor, attr, delegate) {\n\n\tconst proto = constructor.prototype;\n\tconst desc = Object.getOwnPropertyDescriptor(proto, attr);\n\tObject.defineProperty(proto, attr, {\n\t\tset: function(value) {\n\t\t\tdelegate(this, value, desc.set.bind(this));\n\t\t}\n\t});\n\n}\n\n/**\n * @param constructor: XMLHttpRequest\n * @param attr: String\n * @param delegate: Function(\n *\t node: HTMLElement,\n *\t value: any,\n *\t set: Function\n * )\n */\nfunction interruptXHR(constructor) {\n\tconst {\n\t\topen,\n\t\tsend\n\t} = constructor.prototype;\n\n\tObject.defineProperty(constructor.prototype, 'open', {\n\t\tvalue: interruptOpen,\n\t});\n\n\tfunction interruptOpen(_method, _url, _async = true, _user = '', _password = '') {\n\t\tif (_async === false) {\n\t\t\tthrow new Error('feeles.XMLHttpRequest does not support synchronization requests.');\n\t\t}\n\t\tif (!isSameOrigin(_url)) {\n\t\t\topen.call(this, _method, _url, _async, _user, _password);\n\t\t\treturn;\n\t\t}\n\t\tthis.send = function(...sendArgs) {\n\t\t\tfeeles.fetch(getFeelesName(_url))\n\t\t\t\t.then((response) => response.blob())\n\t\t\t\t.then((blob) => {\n\t\t\t\t\tconst url = URL.createObjectURL(blob);\n\n\t\t\t\t\tconst revokeHandler = () => {\n\t\t\t\t\t\tthis.removeEventListener('load', revokeHandler);\n\t\t\t\t\t\tthis.removeEventListener('error', revokeHandler);\n\t\t\t\t\t\tthis.removeEventListener('abort', revokeHandler);\n\t\t\t\t\t\tURL.revokeObjectURL(url);\n\t\t\t\t\t};\n\n\t\t\t\t\tthis.addEventListener('load', revokeHandler);\n\t\t\t\t\tthis.addEventListener('error', revokeHandler);\n\t\t\t\t\tthis.addEventListener('abort', revokeHandler);\n\n\t\t\t\t\topen.call(this, _method, url, _async, _user, _password);\n\t\t\t\t\tsend.apply(this, sendArgs);\n\t\t\t\t});\n\t\t};\n\t}\n\n}\n\n\n\nconst currentOrigin = getOrigin('');\nconst baseURL = (() => {\n\tconst a = document.createElement('a');\n\ta.href = '';\n\n\tif (!a.href) {\n\t\treturn '';\n\t}\n\n\t// \tIf a.origin === \"null\" (e.g. Open in Blob URL), a.pathname doesn't work.\n\tif (a.origin === \"null\") {\n\t\treturn 'http://fake.origin/';\n\t}\n\n\tconst index = a.href.lastIndexOf('/');\n\treturn a.href.substr(0, index + 1);\n})();\n\n/**\n * @param url: String\n * @return String\n */\nfunction getFeelesName(url) {\n\tif (baseURL && typeof URL === 'function') {\n\t\tconst fullPath = new URL(url, baseURL).href;\n\t\treturn fullPath.substr(baseURL.length);\n\t}\n\treturn url;\n}\n\n/**\n * @param url: String\n * @return Boolean\n */\nfunction isSameOrigin(url) {\n\treturn getOrigin(url) === currentOrigin;\n}\n\n/**\n * @param url: String\n * @return String\n */\nfunction getOrigin(url) {\n\tconst a = document.createElement('a');\n\ta.href = url;\n\treturn a.origin;\n}",
+    "isScript": true
+}, {
+    "name": "README.md",
+    "moduleName": "README",
+    "type": "text/x-markdown",
+    "lastModified": 0,
+    "options": {
+        "isTrashed": false,
+        "noBabel": false
+    },
+    "credits": [{
+        "label": "(c) 2017 Teramoto Daiki",
+        "url": "https://github.com/teramotodaiki",
+        "timestamp": 1485063857129,
+        "hash": "4d9d3089679179aa98ff1d6a8a5a17b8"
+    }],
+    "sign": null,
+    "text": "# はじめに\nこれは、ゲームやアプリを作るためのエディタです\n\n**Feeles** (フィーリス) と呼んでください\n\n## 出来ること\n- HTML/CSS/javascript (ES6) を書くことができます\n  - ![index.html](index.html) アプリのスタート地点\n  - ![style.css](style.css) アプリのデザイン\n  - ![main.js](main.js) アプリのメインプログラム\n- デスクトップにあるファイルを読み込めます\n  - 左側の一番下に **フォルダの画面** があるので、その中の **パソコンのアイコン** をクリック\n- データのセーブとロード、そしてクローンができます\n  - アプリの画面の下の方にある ↓ アイコンをクリック\n  - **HTMLファイルにしてダウンロードすることもできます。** これを Feeles では **クローン** と呼びます\n\n- - -\n\nこの説明が残っているなら、おそらくこの Feeles は **空っぽのFeeles** です\n\nゲームがうごく Feeles など、色んな Feeles があるので、まずはそこから始めましょう\n\n- - -\n## 謝辞\n- このアプリを作るとき、\n- おせわになった人がいたら、\n- ここに名前を書いて、お礼を言いましょう\n",
+    "isScript": false
+}]

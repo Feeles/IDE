@@ -26,6 +26,8 @@ class RootComponent extends Component {
     rootElement: PropTypes.object.isRequired,
     // A string as title of project opened
     title: PropTypes.string,
+    // An URL string as JSON file provided
+    jsonURL: PropTypes.string,
     inlineScriptId: PropTypes.string,
   };
 
@@ -50,11 +52,17 @@ class RootComponent extends Component {
   componentWillMount() {
     const {
       title,
+      jsonURL
     } = this.props;
 
     if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
+
+    } else if (typeof jsonURL === 'string') {
+      // From fetching JSON
+      this.launchFromURL(jsonURL);
+
     } else {
       this.setState({
         openDialog: true,
@@ -104,6 +112,30 @@ class RootComponent extends Component {
       this.progress(await makeFromElement(item));
       if (Math.random() < 0.1 || this.state.last === 1) {
         await this.wait();
+      }
+    }
+  };
+
+  launchFromURL = async (url) => {
+    // from json file URL
+    const response = await fetch(url);
+    const text = await response.text();
+    const seeds = JSON.parse(text);
+
+    if (!Array.isArray(seeds)) {
+      throw 'Source JSON file must be an array. Could not open the URL.';
+    }
+
+    this.setState({
+      last: seeds.length,
+      files: []
+    });
+
+    for (const seed of seeds) {
+      if (validateType('blob', seed.type)) {
+        this.progress(new BinaryFile(seed));
+      } else {
+        this.progress(new SourceFile(seed));
       }
     }
   };
