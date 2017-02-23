@@ -20,3 +20,13 @@ h4p.Feeles = Feeles;
 
 // Global export
 window[EXPORT_VAR_NAME] = h4p;
+
+
+// Auto launch from meta tags
+const launch = document.querySelector('script[x-feeles-launch]');
+if (launch) {
+  const [type, arg] = launch.getAttribute('x-feeles-launch').split(',');
+  if (type && arg) {
+    h4p({[type]: arg});
+  }
+}
