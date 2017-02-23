@@ -85,34 +85,30 @@ export default class Menu extends PureComponent {
     });
   };
 
-  handleDeploy = () => {
-    const task = async (event) => {
-      if (event.source === popout) {
-        window.removeEventListener('message', task);
-        const [port] = event.ports;
-        const provider = event.data;
+  handleDeploy = async () => {
+    const serialized = JSON.stringify(
+      this.props.files.map(item => item.serialize())
+    );
 
-        await this.props.setConfig('provider', JSON.parse(provider));
+    const json = new File([serialized], 'index.json', {
+      type: 'application/json'
+    });
 
-        const html = await SourceFile.embed({
-          getConfig: this.props.getConfig,
-          files: this.props.files,
-          coreString: this.props.coreString,
-        });
+    const formData = new FormData();
+    formData.set('json', json);
+    formData.set('script_src', CORE_CDN_URL);
 
-        port.postMessage(html.text);
-      }
-    };
+    const origin = 'https://feeles-publisher.herokuapp.com';
+    const response = await fetch(origin + '/api/products', {
+      method: 'POST',
+      body: formData,
+      mode: 'cors'
+    });
 
-    window.addEventListener('message', task);
-
-    const popout = window.open(
-      this.props.getConfig('provider').publishUrl,
-      '_blank',
-      'width=400,height=400');
-
-    if (popout) {
-      window.addEventListener('unload', () => popout.close());
+    if (response.ok) {
+      const text = await response.text();
+      const {search} = JSON.parse(text);
+      window.open(origin + '/products/' + search);
     }
   };
 
@@ -173,7 +169,6 @@ export default class Menu extends PureComponent {
         </IconButton>
         <IconButton
           tooltip={localization.menu.deploy}
-          disabled={!canDeploy || !this.props.coreString}
           onTouchTap={this.handleDeploy}
           style={styles.button}
         >
