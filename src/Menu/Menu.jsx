@@ -97,9 +97,11 @@ export default class Menu extends PureComponent {
     const formData = new FormData();
     formData.set('json', json);
     formData.set('script_src', CORE_CDN_URL);
+    formData.set('organization_id', '2f8d7d90-fa51-11e6-afbf-f95c84f7b705');
+    formData.set('organization_password', 'password');
 
     const origin = 'https://feeles-publisher.herokuapp.com';
-    const response = await fetch(origin + '/api/products', {
+    const response = await fetch(origin + '/api/v1/products', {
       method: 'POST',
       body: formData,
       mode: 'cors'
@@ -109,6 +111,9 @@ export default class Menu extends PureComponent {
       const text = await response.text();
       const {search} = JSON.parse(text);
       window.open(origin + '/products/' + search);
+    } else {
+      const blob = await response.blob();
+      window.open(URL.createObjectURL(blob));
     }
   };
 
