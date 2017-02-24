@@ -99,7 +99,7 @@ export default class Menu extends PureComponent {
     formData.set('script_src', CORE_CDN_URL);
 
     const origin = 'https://feeles-publisher.herokuapp.com';
-    const response = await fetch(origin + '/api/products', {
+    const response = await fetch(origin + '/api/v1/products', {
       method: 'POST',
       body: formData,
       mode: 'cors'
