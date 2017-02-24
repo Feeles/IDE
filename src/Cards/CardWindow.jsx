@@ -139,7 +139,7 @@ export default class CardWindow extends PureComponent {
         paddingLeft: 8,
         width: '100%',
         boxSizing: 'border-box',
-        overflowX: 'scroll',
+        overflowX: 'auto',
         overflowY: 'hidden',
       },
       title: {

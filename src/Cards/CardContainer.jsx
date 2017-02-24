@@ -161,7 +161,8 @@ class CardContainer extends PureComponent {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        overflow: 'scroll',
+        overflowX: 'auto',
+        overflowY: 'scroll',
         zIndex: 1,
         direction: 'rtl'
       },
@@ -173,7 +174,8 @@ class CardContainer extends PureComponent {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        overflow: 'scroll',
+        overflowX: 'auto',
+        overflowY: 'scroll',
         zIndex: 1
       },
       dropCover: {
