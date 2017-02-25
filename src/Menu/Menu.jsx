@@ -8,10 +8,12 @@ import Drawer from 'material-ui/Drawer';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
+import FileCloudCircle from 'material-ui/svg-icons/file/cloud-circle';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import DeviceSettingsSystemDaydream from 'material-ui/svg-icons/device/settings-system-daydream';
 
 
 import { BinaryFile, SourceFile } from '../File/';
@@ -19,6 +21,8 @@ import getLocalization, { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
 import {CardIcons} from '../Cards/CardWindow';
+import { updateProject } from '../database/';
+import organization from '../organization';
 
 
 const getStyles = (props, context) => {
@@ -58,6 +62,8 @@ export default class Menu extends PureComponent {
     setProject: PropTypes.func.isRequired,
     updateCard: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
+    deployURL: PropTypes.string,
+    setDeployURL: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -66,6 +72,8 @@ export default class Menu extends PureComponent {
 
   state = {
     open: false,
+    password: null,
+    isDeploying: false,
   };
 
   handleClone = () => {
@@ -76,45 +84,64 @@ export default class Menu extends PureComponent {
       project: this.props.project,
       setProject: this.props.setProject,
       launchIDE: this.props.launchIDE,
+      deployURL: this.props.deployURL,
     });
   };
 
   handleAbout = () => {
     this.props.openFileDialog(AboutDialog, {
       files: this.props.files,
+      deployURL: this.props.deployURL,
     });
   };
 
   handleDeploy = async () => {
-    const serialized = JSON.stringify(
-      this.props.files.map(item => item.serialize())
-    );
+    if (this.state.isDeploying) return;
+    this.setState({isDeploying: true});
 
-    const json = new File([serialized], 'index.json', {
-      type: 'application/json'
-    });
+    const {
+      deployURL,
+      localization,
+    } = this.props;
 
-    const formData = new FormData();
-    formData.set('json', json);
-    formData.set('script_src', CORE_CDN_URL);
-    formData.set('organization_id', '2f8d7d90-fa51-11e6-afbf-f95c84f7b705');
-    formData.set('organization_password', 'password');
+    const password = this.state.password || prompt(localization.menu.enterPassword);
+    if (!password) {
+      this.setState({password: null});
+      return;
+    }
 
-    const origin = 'https://feeles-publisher.herokuapp.com';
-    const response = await fetch(origin + '/api/v1/products', {
-      method: 'POST',
-      body: formData,
+    const params = new URLSearchParams();
+    params.set('script_src', CORE_CDN_URL);
+    params.set('organization_id', organization.id);
+    params.set('organization_password', password);
+    const serialized = this.props.files.map(item => item.serialize());
+    params.set('json', JSON.stringify(serialized));
+
+    const actionURL = this.props.deployURL || organization.deployURL;
+
+    const response = await fetch(actionURL, {
+      method: this.props.deployURL ? 'PUT' : 'POST',
+      body: params,
       mode: 'cors'
     });
 
     if (response.ok) {
       const text = await response.text();
       const {search} = JSON.parse(text);
-      window.open(origin + '/products/' + search);
+      const api = new URL(actionURL);
+      const deployURL = `${api.origin}/api/v1/products/${search}`;
+      this.props.setDeployURL(deployURL);
+      if (this.props.project) {
+        await updateProject(this.props.project.id, {deployURL});
+      }
+      this.setState({password});
+      window.open(`${api.origin}/p/${search}`);
     } else {
-      const blob = await response.blob();
-      window.open(URL.createObjectURL(blob));
+      console.error(response);
+      alert(localization.menu.failedToDeploy);
     }
+
+    this.setState({isDeploying: false});
   };
 
   handleToggleDrawer = () => this.setState({
@@ -136,6 +163,12 @@ export default class Menu extends PureComponent {
     } = this.context.muiTheme;
 
     const canDeploy = !!getConfig('provider').publishUrl;
+
+    const DeployStateIcon = this.state.isDeploying
+      ? FileCloudCircle
+      : (this.props.deployURL
+      ? DeviceSettingsSystemDaydream
+      : FileCloudUpload);
 
     return (
       <AppBar
@@ -175,9 +208,10 @@ export default class Menu extends PureComponent {
         <IconButton
           tooltip={localization.menu.deploy}
           onTouchTap={this.handleDeploy}
+          disabled={this.state.isDeploying}
           style={styles.button}
         >
-          <FileCloudUpload color={alternateTextColor} />
+          <DeployStateIcon color={alternateTextColor} />
         </IconButton>
         <IconMenu
           iconButtonElement={(

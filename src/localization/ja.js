@@ -8,6 +8,8 @@ export default {
     clone: 'セーブ / ロード / クローン',
     aboutFeeles: 'この Feeles について',
     deploy: 'この作品をデプロイ',
+    enterPassword: 'パスワードを入力してください',
+    failedToDeploy: 'デプロイに失敗してしまいました...😢',
   },
   cloneDialog: {
     saveTitle: 'セーブ',

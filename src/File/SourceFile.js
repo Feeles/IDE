@@ -131,9 +131,13 @@ export default class SourceFile extends _File {
   static inlineScriptId = `feeles-inline-${CORE_VERSION}`;
   static coreLibFilename = `feeles-${CORE_VERSION}.js`;
 
-  static async embed({ files, coreString, getConfig }) {
+  static async embed({ files, coreString, getConfig, deployURL }) {
     const body = `
-    <script type="text/javascript" id="${SourceFile.inlineScriptId}">
+    <script
+      type="text/javascript"
+      id="${SourceFile.inlineScriptId}"
+` +   (deployURL ? `x-feeles-deploy="${deployURL}"` : '') + `
+    >
     ${coreString.replace(/\<\//g, '<\\/')}
     </script>
     <script type="text/javascript">
@@ -153,9 +157,13 @@ export default class SourceFile extends _File {
     });
   }
 
-  static async divide({ files, getConfig }) {
+  static async divide({ files, getConfig, deployURL }) {
     const head = `
-    <script async src="${SourceFile.coreLibFilename}"></script>
+    <script
+      async
+      src="${SourceFile.coreLibFilename}"
+` +   (deployURL ? `x-feeles-deploy="${deployURL}"` : '') + `
+    ></script>
 `;
     return new SourceFile({
       name: getConfig('ogp')['og:title'] + '.html',
@@ -170,9 +178,14 @@ export default class SourceFile extends _File {
     });
   }
 
-  static async cdn({ files, src = CORE_CDN_URL, getConfig }) {
+  static async cdn({ files, src = CORE_CDN_URL, getConfig, deployURL }) {
     const head = `
-    <script async src="${src}" onload="${EXPORT_VAR_NAME}()"></script>
+    <script
+      async
+      src="${src}"
+      onload="${EXPORT_VAR_NAME}()"
+` +   (deployURL ? `x-feeles-deploy="${deployURL}"` : '') + `
+    ></script>
 `;
     return new SourceFile({
       name: getConfig('ogp')['og:title'] + '.html',

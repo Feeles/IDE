@@ -23,6 +23,7 @@ export default class AboutDialog extends PureComponent {
     localization: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     getConfig: PropTypes.func.isRequired,
+    deployURL: PropTypes.string,
   };
 
   state = {
@@ -40,6 +41,7 @@ export default class AboutDialog extends PureComponent {
       getConfig: this.props.getConfig,
       files: this.props.files,
       src: this.state.inputSrc,
+      deployURL: this.props.deployURL,
     });
 
     const url = URL.createObjectURL(file.blob);

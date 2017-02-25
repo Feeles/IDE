@@ -8,6 +8,8 @@ export default {
     clone: 'Save / Load / Clone',
     aboutFeeles: 'About Feeles',
     deploy: 'Deploy This App',
+    enterPassword: 'Please enter the password',
+    failedToDeploy: 'Failed to deploy...😢',
   },
   cloneDialog: {
     saveTitle: 'Save',

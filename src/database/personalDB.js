@@ -27,6 +27,8 @@ export async function createProject(serializedFiles = []) {
     updated: timestamp,
     CORE_VERSION: CORE_VERSION,
     CORE_CDN_URL: CORE_CDN_URL,
+    // Remote project (product) deployment URL<string>
+    deployURL: null,
   };
   project.id = await personalDB.projects.add(project);
   // Insert files of project
@@ -64,9 +66,11 @@ export async function updateProject(projectId, update) {
     .first();
   const nextProject = {...prevProject, ...update};
 
-  const duplicated = await personalDB.projects
-    .where('title').equalsIgnoreCase(nextProject.title)
-    .first();
+  const duplicated = nextProject.title !== null
+    ? await personalDB.projects
+      .where('title').equalsIgnoreCase(nextProject.title)
+      .first()
+    : null;
   if (duplicated && duplicated.id !== nextProject.id) {
     // It is not possible to create two projects with the same title.
     throw 'failedToRename';
