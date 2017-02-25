@@ -55,6 +55,8 @@ export default class Main extends Component {
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     setMuiTheme: PropTypes.func.isRequired,
+    deployURL: PropTypes.string,
+    setDeployURL: PropTypes.func.isRequired,
   };
 
   state = {
@@ -479,6 +481,8 @@ export default class Main extends Component {
             cards={this.state.cards}
             updateCard={this.updateCard}
             launchIDE={this.props.launchIDE}
+            deployURL={this.props.deployURL}
+            setDeployURL={this.props.setDeployURL}
           />
           <CardContainer
             getConfig={this.getConfig}

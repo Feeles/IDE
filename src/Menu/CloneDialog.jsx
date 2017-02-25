@@ -45,6 +45,7 @@ export default class CloneDialog extends PureComponent {
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
+    deployURL: PropTypes.string,
   };
 
   state = {
@@ -83,6 +84,7 @@ export default class CloneDialog extends PureComponent {
           getConfig: this.props.getConfig,
           files: this.props.files,
           coreString: this.props.coreString,
+          deployURL: this.props.deployURL,
         })
       );
       this.props.onRequestClose();
@@ -94,6 +96,7 @@ export default class CloneDialog extends PureComponent {
         await SourceFile.divide({
           getConfig: this.props.getConfig,
           files: this.props.files,
+          deployURL: this.props.deployURL,
         })
       );
       break;
@@ -104,6 +107,7 @@ export default class CloneDialog extends PureComponent {
         await SourceFile.cdn({
           getConfig: this.props.getConfig,
           files: this.props.files,
+          deployURL: this.props.deployURL,
         })
       );
       this.props.onRequestClose();
@@ -121,6 +125,7 @@ export default class CloneDialog extends PureComponent {
     const divide = await SourceFile.divide({
       getConfig: this.props.getConfig,
       files: this.props.files,
+      deployURL: this.props.deployURL,
     });
     const library = await SourceFile.library({
       coreString: this.props.coreString,
@@ -147,6 +152,11 @@ export default class CloneDialog extends PureComponent {
       );
       await this.props.setProject(project);
       await this.refreshState(project);
+
+      const {deployURL} = this.props;
+      if (deployURL) {
+        const next = await updateProject(project.id, {deployURL});
+      }
 
     } catch (e) {
       console.log(e);

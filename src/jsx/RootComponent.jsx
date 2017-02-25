@@ -28,6 +28,8 @@ class RootComponent extends Component {
     title: PropTypes.string,
     // An URL string as JSON file provided
     jsonURL: PropTypes.string,
+    // An URL string to continuous deploying
+    deployURL: PropTypes.string,
     inlineScriptId: PropTypes.string,
   };
 
@@ -41,6 +43,8 @@ class RootComponent extends Component {
     )),
     muiTheme: getCustomTheme({}),
     openDialog: false,
+    // continuous deploying URL (if null, do first deployment)
+    deployURL: null,
   };
 
   setStatePromise(nextState) {
@@ -54,6 +58,13 @@ class RootComponent extends Component {
       title,
       jsonURL
     } = this.props;
+
+    const deployInfo = document.querySelector('script[x-feeles-deploy]');
+    if (deployInfo) {
+      this.setState({
+        deployURL: deployInfo.getAttribute('x-feeles-deploy')
+      });
+    }
 
     if (typeof title === 'string') {
       // From indexedDB
@@ -88,6 +99,7 @@ class RootComponent extends Component {
       last: length,
       files: [],
       project,
+      deployURL: project.deployURL,
     });
 
     query.each(value => {
@@ -233,6 +245,8 @@ class RootComponent extends Component {
           setLocalization={this.setLocalization}
           muiTheme={this.state.muiTheme}
           setMuiTheme={this.setMuiTheme}
+          deployURL={this.state.deployURL}
+          setDeployURL={deployURL => this.setState({deployURL})}
         />
       )}
       </MuiThemeProvider>
