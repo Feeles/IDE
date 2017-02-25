@@ -8,7 +8,7 @@ import configs from './configs';
 import { SourceEditor } from '../EditorPane/';
 import download from '../html/download';
 import composeOgp from './composeOgp';
-import { encode } from './sanitizeHTML';
+import { encode, decode } from './sanitizeHTML';
 
 export default class SourceFile extends _File {
 
@@ -33,6 +33,15 @@ export default class SourceFile extends _File {
   static watchProps = _File.watchProps.concat(
     'isScript'
   );
+
+  constructor(props) {
+    if (props.composed && !props.text) {
+      const text = decode(props.composed);
+      props = {...props, text};
+    }
+
+    super(props);
+  }
 
   get text() {
     return this.props.text;
@@ -88,6 +97,7 @@ export default class SourceFile extends _File {
 
   compose() {
     const serialized = this.serialize();
+    delete serialized.text;
     serialized.composed = encode(this.text);
     if (this.sign && this.sign === this.credit) {
       const credits = this.credits.concat({

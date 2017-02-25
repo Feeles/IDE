@@ -6,7 +6,6 @@ import {
   SourceFile,
   validateType
 } from './';
-import { decode } from './sanitizeHTML';
 
 export default async (script) => {
   await 1; // Be asynchronus.
@@ -21,22 +20,14 @@ export default async (script) => {
     JSON.parse(script.getAttribute('data-credits')) : [];
   const lastModified = +script.getAttribute('data-last-modified') || 0;
 
-  const text = decode(script.textContent);
+  const composed = script.textContent;
 
   if (validateType('text', type)) {
-    return new SourceFile({ type, name, text, options, credits, lastModified });
+    return new SourceFile({ type, name, options, credits, lastModified, composed });
   }
 
   if (validateType('blob', type)) {
-    const bin = atob(text);
-    let byteArray = new Uint8Array(bin.length);
-    for (let i = bin.length - 1; i >= 0; i--) {
-      byteArray[i] = bin.charCodeAt(i);
-    }
-    const blob = new Blob([byteArray.buffer], { type });
-    const hash = md5(byteArray);
-
-    return new BinaryFile({ type, name, blob, options, credits, hash, lastModified });
+    return new BinaryFile({ type, name, options, credits, hash, lastModified, composed });
   }
 
   throw 'Unknown File Type ' + type;

@@ -4,7 +4,7 @@ import md5 from 'md5';
 
 import _File from './_File';
 import { Preview } from '../EditorPane/';
-import { encode } from './sanitizeHTML';
+import { encode, decode } from './sanitizeHTML';
 
 export default class BinaryFile extends _File {
 
@@ -28,6 +28,17 @@ export default class BinaryFile extends _File {
   );
 
   constructor(props) {
+    if (props.composed) {
+      const bin = atob(decode(props.composed));
+      let byteArray = new Uint8Array(bin.length);
+      for (let i = bin.length - 1; i >= 0; i--) {
+        byteArray[i] = bin.charCodeAt(i);
+      }
+      const blob = new Blob([byteArray.buffer], {type: props.type});
+      const hash = md5(byteArray);
+      props = {...props, blob, hash};
+    }
+
     if (props.blob && !props.blobURL) {
       const blobURL = URL.createObjectURL(props.blob);
       props = {...props, blobURL};
@@ -61,6 +72,7 @@ export default class BinaryFile extends _File {
 
   async compose() {
     const serialized = this.serialize();
+    delete serialized.blob;
     if (this.sign && this.sign === this.credit) {
       const credits = this.credits.concat({
         ...this.sign,
