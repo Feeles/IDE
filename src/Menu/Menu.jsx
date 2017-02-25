@@ -141,6 +141,11 @@ export default class Menu extends PureComponent {
     } else {
       console.error(response);
       alert(localization.menu.failedToDeploy);
+      if (process.env.NODE_ENV !== 'production') {
+        window.open(
+          URL.createObjectURL(await response.blob())
+        );
+      }
     }
 
     this.setState({isDeploying: false});
