@@ -115,8 +115,9 @@ export default class Menu extends PureComponent {
     params.set('script_src', CORE_CDN_URL);
     params.set('organization_id', organization.id);
     params.set('organization_password', password);
-    const serialized = this.props.files.map(item => item.serialize());
-    params.set('json', JSON.stringify(serialized));
+
+    const composed = await Promise.all(this.props.files.map(item => item.compose()));
+    params.set('json', JSON.stringify(composed));
 
     const actionURL = this.props.deployURL || organization.deployURL;
 
