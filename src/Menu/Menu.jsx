@@ -97,7 +97,6 @@ export default class Menu extends PureComponent {
 
   handleDeploy = async () => {
     if (this.state.isDeploying) return;
-    this.setState({isDeploying: true});
 
     const {
       deployURL,
@@ -109,6 +108,8 @@ export default class Menu extends PureComponent {
       this.setState({password: null});
       return;
     }
+
+    this.setState({isDeploying: true});
 
     const params = new URLSearchParams();
     params.set('script_src', CORE_CDN_URL);
