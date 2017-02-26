@@ -101,6 +101,7 @@ export default class Menu extends PureComponent {
     const {
       deployURL,
       localization,
+      getConfig,
     } = this.props;
 
     const password = this.state.password || prompt(localization.menu.enterPassword);
@@ -113,6 +114,7 @@ export default class Menu extends PureComponent {
 
     const params = new URLSearchParams();
     params.set('script_src', CORE_CDN_URL);
+    params.set('ogp', JSON.stringify(getConfig('ogp')));
     params.set('organization_id', organization.id);
     params.set('organization_password', password);
 
