@@ -1,6 +1,6 @@
 import { defaultPalette } from '../js/getCustomTheme';
 import { Snippet } from '../SnippetPane/';
-
+import organization from '../organization';
 
 export default new Map([
   ['codemirror', {
@@ -56,9 +56,7 @@ export default new Map([
   ['ogp', {
     test: /^feeles\/ogp\.json$/i,
     multiple: false,
-    defaultValue: {
-      'og:title': 'My App',
-    },
+    defaultValue: {},
     defaultName: 'feeles/ogp.json',
   }],
   ['snippets', {

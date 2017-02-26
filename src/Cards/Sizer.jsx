@@ -19,11 +19,11 @@ const getStyles = (props, context) => {
     root: {
       flex: '0 0 auto',
       width: SizerWidth,
-      marginTop: -12,
+      marginTop: -4,
       marginBottom: 32,
       display: 'flex',
       cursor: 'col-resize',
-      zIndex: 1101,
+      zIndex: 1,
     },
     preview: {
       flex: '1 1 auto',

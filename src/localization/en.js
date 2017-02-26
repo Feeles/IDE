@@ -5,11 +5,19 @@ export default {
 
   menu: {
     language: 'Launguage',
-    clone: 'Save / Load / Clone',
+    clone: 'Save and Load',
     aboutFeeles: 'About Feeles',
-    deploy: 'Deploy This App',
+    deploy: 'Publish this app',
+    share: 'Share',
+    copyURL: 'Copy public link',
+    update: 'Update published app',
+    unlink: 'Unlink from published app',
     enterPassword: 'Please enter the password',
     failedToDeploy: 'Failed to deploy...😢',
+    linkCopied: 'Link is copied! 📎 ',
+    published: 'Your app was published! 🎉 ',
+    goToSee: 'Go to see 👀',
+    confirmUnlink: '⚠️ CONFIRM: Your published app will be NOT deleted.',
   },
   cloneDialog: {
     saveTitle: 'Save',
@@ -64,6 +72,16 @@ export default {
     title: 'Projects are found',
     openProject: 'Open this project',
     startNew: 'Start new',
+  },
+  metaDialog: {
+    back: 'Back',
+    next: 'Next',
+    appearance: 'Appearance when Shared',
+    creator: 'Creator Information',
+    publish: 'Publish and share it!',
+    creatorConfirm: 'Filling is optional. Do not write personal information!',
+    nickname: 'Nickname',
+    twitterId: 'Twitter ID',
   },
   readmeCard: {
     title: 'Getting Started',

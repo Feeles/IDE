@@ -11,6 +11,7 @@ import {
   decomposeColor
 } from 'material-ui/utils/colorManipulator';
 
+import organization from '../organization';
 
 const bgColors = [redA100, pinkA100, purpleA100, deepPurpleA100, indigoA100, blueA100, lightBlueA100, cyanA100, tealA100, greenA100, lightGreenA100, limeA100, yellowA100, amberA100, orangeA100, deepOrangeA100, brown100, blueGrey100];
 
@@ -22,6 +23,7 @@ export const defaultPalette = {
   primary1Color: random(themeColors),
   accent1Color: random(themeColors),
   backgroundColor: fade(random(bgColors), 0.15),
+  ...organization.palette,
 };
 
 export default ({ palette = {} }) => {
@@ -31,7 +33,7 @@ export default ({ palette = {} }) => {
     canvasColor,
     primary1Color,
     accent1Color
-  } = Object.assign({}, defaultPalette, palette);
+  } = {...defaultPalette, ...palette};
 
   const theme = {
     primary1Color,
@@ -53,7 +55,7 @@ export default ({ palette = {} }) => {
     backgroundColor,
   };
 
-  palette = Object.assign({}, theme, palette);
+  palette = {...theme, ...palette};
 
   return getMuiTheme({ palette });
 };

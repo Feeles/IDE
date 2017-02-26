@@ -26,7 +26,6 @@ export default class CardWindow extends PureComponent {
   static propTypes = {
     name: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
-    localization: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     isResizing: PropTypes.bool.isRequired,
     scrollToCard: PropTypes.func.isRequired,
@@ -40,7 +39,6 @@ export default class CardWindow extends PureComponent {
 
   state = {
     expanded: false,
-    localized: this.props.localization[lowerCaseAtFirst(this.props.name)]
   };
 
   componentWillMount() {
@@ -160,7 +158,6 @@ export default class CardWindow extends PureComponent {
         <Card {...this.cardProps}>
           <div style={styles.header}>
             <a href={'#' + this.props.name} style={styles.a}>{CardIcons[this.props.name]}</a>
-            <div style={styles.title}>{this.state.localized.title}</div>
             <div style={styles.blank}></div>
             {this.props.actions}
             {this.renderExpandButton()}

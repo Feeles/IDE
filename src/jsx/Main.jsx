@@ -101,7 +101,7 @@ export default class Main extends Component {
       inlineScriptId,
     } = this.props;
 
-    document.title = this.getConfig('ogp')['og:title'];
+    document.title = this.getConfig('ogp')['og:title'] || '';
 
     if (inlineScriptId) {
       const inlineLib = document.getElementById(inlineScriptId);
@@ -129,7 +129,7 @@ export default class Main extends Component {
       this.setState({ reboot: false });
     }
 
-    document.title = this.getConfig('ogp')['og:title'];
+    document.title = this.getConfig('ogp')['og:title'] || '';
   }
 
   async setStatePromise(state) {

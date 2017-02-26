@@ -17,8 +17,8 @@ export default class FileDialog extends Component {
     new Promise((resolve, reject) => {
       props = Object.assign({}, this.props, props, {
         resolve, reject,
-        onRequestClose: () => {
-          resolve();
+        onRequestClose: (value) => {
+          resolve(value);
           this.setState({ dialogInstance: null });
         },
       });
