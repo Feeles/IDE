@@ -5,11 +5,17 @@ export default {
 
   menu: {
     language: 'Launguage',
-    clone: 'Save / Load / Clone',
+    clone: 'Save and Load',
     aboutFeeles: 'About Feeles',
-    deploy: 'Deploy This App',
+    deploy: 'Publish this app',
+    share: 'Share',
+    copyURL: 'Copy public link',
+    update: 'Update published app',
+    unlink: 'Unlink from published app',
     enterPassword: 'Please enter the password',
     failedToDeploy: 'Failed to deploy...😢',
+    linkCopied: 'Link is copied! 📎 ',
+    confirmUnlink: '⚠️ CONFIRM: Your published app will be NOT deleted.',
   },
   cloneDialog: {
     saveTitle: 'Save',

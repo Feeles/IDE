@@ -5,6 +5,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
+import Snackbar from 'material-ui/Snackbar';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
@@ -13,7 +14,9 @@ import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import DeviceSettingsSystemDaydream from 'material-ui/svg-icons/device/settings-system-daydream';
+import SocialShare from 'material-ui/svg-icons/social/share';
+import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
+import ContentLink from 'material-ui/svg-icons/content/link';
 
 
 import { BinaryFile, SourceFile } from '../File/';
@@ -35,6 +38,9 @@ const getStyles = (props, context) => {
       flexWrap: 'wrap',
       alignItems: 'center',
     },
+    leftIcon: {
+      marginTop: 0,
+    },
     button: {
       marginLeft: 20,
       zIndex: 2,
@@ -43,6 +49,11 @@ const getStyles = (props, context) => {
       color: palette.alternateTextColor,
       fontSize: '.8rem',
       fontWeight: 600,
+    },
+    hidden: {
+      opacity: 0,
+      width: 1,
+      height: 1,
     },
   };
 };
@@ -74,7 +85,17 @@ export default class Menu extends PureComponent {
     open: false,
     password: null,
     isDeploying: false,
+    openSnackbar: false,
   };
+
+  get shareURL() {
+    if (!this.props.deployURL) {
+      return '';
+    }
+    const url = new URL(this.props.deployURL);
+    const {origin, pathname} = url;
+    return `${origin}/p/${pathname.split('/').reverse()[0]}`;
+  }
 
   handleClone = () => {
     this.props.openFileDialog(CloneDialog, {
@@ -153,6 +174,29 @@ export default class Menu extends PureComponent {
     this.setState({isDeploying: false});
   };
 
+  handleShare = () => {
+    if (!this.input || !this.shareURL) return;
+
+    this.input.value = this.shareURL;
+    this.input.select();
+    if (document.execCommand('copy')) {
+      this.setState({openSnackbar: true});
+    }
+  };
+
+  handleRequestClose = () => {
+    this.setState({openSnackbar: false});
+  };
+
+  handleUnlink = async () => {
+    if (confirm(this.props.localization.menu.confirmUnlink)) {
+      this.props.setDeployURL(null);
+      if (this.props.project) {
+        await updateProject(this.props.project.id, {deployURL: null});
+      }
+    }
+  };
+
   handleToggleDrawer = () => this.setState({
     open: !this.state.open,
   });
@@ -175,13 +219,12 @@ export default class Menu extends PureComponent {
 
     const DeployStateIcon = this.state.isDeploying
       ? FileCloudCircle
-      : (this.props.deployURL
-      ? DeviceSettingsSystemDaydream
-      : FileCloudUpload);
+      : FileCloudUpload;
 
     return (
       <AppBar
         style={styles.root}
+        iconStyleLeft={styles.leftIcon}
         iconElementLeft={<IconButton><ActionDashboard /></IconButton>}
         onLeftIconButtonTouchTap={this.handleToggleDrawer}
       >
@@ -214,6 +257,34 @@ export default class Menu extends PureComponent {
         >
           <ActionAssignment color={alternateTextColor} />
         </IconButton>
+      {this.props.deployURL ? (
+        <IconMenu
+          iconButtonElement={(
+            <IconButton tooltip={localization.menu.share}>
+              <SocialShare color={alternateTextColor} />
+            </IconButton>
+          )}
+          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          style={styles.button}
+        >
+          <MenuItem leftIcon={<ContentLink />} onTouchTap={this.handleShare}>
+            {localization.menu.copyURL}
+            <input style={styles.hidden} ref={ref => this.input = ref} />
+          </MenuItem>
+          <MenuItem
+            primaryText={localization.menu.update}
+            leftIcon={<DeployStateIcon />}
+            onTouchTap={this.handleDeploy}
+            disabled={this.state.isDeploying}
+          />
+          <MenuItem
+            primaryText={localization.menu.unlink}
+            leftIcon={<NotificationSyncDisabled />}
+            onTouchTap={this.handleUnlink}
+          />
+        </IconMenu>
+      ) : (
         <IconButton
           tooltip={localization.menu.deploy}
           onTouchTap={this.handleDeploy}
@@ -222,6 +293,7 @@ export default class Menu extends PureComponent {
         >
           <DeployStateIcon color={alternateTextColor} />
         </IconButton>
+      )}
         <IconMenu
           iconButtonElement={(
             <IconButton
@@ -268,6 +340,12 @@ export default class Menu extends PureComponent {
           />
         )) : null}
         </Drawer>
+        <Snackbar
+          open={this.state.openSnackbar}
+          message={localization.menu.linkCopied + this.shareURL}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
       </AppBar>
     );
   }
