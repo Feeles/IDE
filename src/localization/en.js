@@ -79,6 +79,8 @@ export default {
     appearance: 'Appearance when Shared',
     creator: 'Creator Information',
     publish: 'Publish and share it!',
+    title: 'Title',
+    description: 'description',
     creatorConfirm: 'Filling is optional. Do not write personal information!',
     nickname: 'Nickname',
     twitterId: 'Twitter ID',

@@ -72,6 +72,8 @@ export default {
     appearance: '見た目',
     creator: 'クリエータについて',
     publish: '公開する',
+    title: 'タイトル',
+    description: '説明文',
     creatorConfirm: '入力は任意です。個人情報は書かないで下さい！',
     nickname: 'ニックネーム',
     twitterId: 'ツイッター ID',

@@ -191,6 +191,7 @@ class EditOGP extends PureComponent {
   };
 
   render() {
+    const {localization} = this.props;
     const ogp = this.props.getConfig('ogp');
 
     const styles = {
@@ -214,8 +215,11 @@ class EditOGP extends PureComponent {
         width: '100%',
       },
       innerHeader: {
-        paddingTop: 6,
+        paddingTop: 8,
         paddingBottom: 0,
+      },
+      textField: {
+        marginTop: -16,
       },
       description: {
         fontSize: 14,
@@ -258,19 +262,21 @@ class EditOGP extends PureComponent {
           </CardMedia>
           <CardHeader
             title={
-              <TextField fullWidth
-                id="1"
+              <TextField id="" fullWidth
+                floatingLabelText={localization.metaDialog.title}
                 hintText={organization.placeholder['og:title']}
                 defaultValue={ogp['og:title']}
+                style={styles.textField}
                 onChange={this.handleChangeTitle}
               />
             }
             subtitle={
-              <TextField fullWidth multiLine rows={2}
-                id="2"
+              <TextField id="" fullWidth multiLine rows={2}
+                floatingLabelText={localization.metaDialog.description}
                 hintText={organization.placeholder['og:description']}
                 defaultValue={ogp['og:description']}
                 hintStyle={styles.description}
+                style={styles.textField}
                 onChange={this.handleChangeDescription}
               />
             }
