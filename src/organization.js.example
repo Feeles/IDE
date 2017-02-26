@@ -6,6 +6,7 @@ export default {
     'og:title': '',
   	'og:url': '',
   	'og:description': '',
+    'og:author': '',
   	'og:image': '',
   	'og:image:width': 300,
   	'og:image:height': 150,
@@ -14,9 +15,10 @@ export default {
   	'twitter:title': '',
   	'twitter:description': '',
   	'twitter:image': ''
+    'twitter:author': '@',
   },
   images: [
-  
+
   ],
   palette: {
 
