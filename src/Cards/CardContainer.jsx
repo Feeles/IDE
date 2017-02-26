@@ -101,7 +101,6 @@ class CardContainer extends PureComponent {
           name: info.name,
           visible: info.visible,
           isResizing: this.state.isResizing,
-          localization: this.props.localization,
           updateCard: this.props.updateCard,
           scrollToCard: this.scrollToCard,
         },
