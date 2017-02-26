@@ -1,7 +1,23 @@
 export default {
-  title: 'DEMO',
+  title: '',
   id: '',
   deployURL: '',
+  placeholder: {
+    'og:title': '',
+  	'og:url': '',
+  	'og:description': '',
+  	'og:image': '',
+  	'og:image:width': 300,
+  	'og:image:height': 150,
+  	'twitter:card': 'summary_large_image',
+  	'twitter:site': '',
+  	'twitter:title': '',
+  	'twitter:description': '',
+  	'twitter:image': ''
+  },
+  images: [
+  
+  ],
   palette: {
 
   },

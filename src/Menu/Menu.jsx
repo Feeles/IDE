@@ -23,7 +23,7 @@ import { BinaryFile, SourceFile } from '../File/';
 import getLocalization, { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
-import ShareDialog from './ShareDialog';
+import MetaDialog from './MetaDialog';
 import {CardIcons} from '../Cards/CardWindow';
 import { updateProject } from '../database/';
 import organization from '../organization';
@@ -118,13 +118,13 @@ export default class Menu extends PureComponent {
   };
 
   handleDeploy = async () => {
-    if (this.state.isDeploying) return;
+    const {localization} = this.props;
 
-    const {
-      deployURL,
-      localization,
-      getConfig,
-    } = this.props;
+    const result = await this.props.openFileDialog(MetaDialog, {
+      getConfig: this.props.getConfig,
+      setConfig: this.props.setConfig,
+    });
+    if (!result) return;
 
     const password = this.state.password || prompt(localization.menu.enterPassword);
     if (!password) {
@@ -136,7 +136,7 @@ export default class Menu extends PureComponent {
 
     const params = new URLSearchParams();
     params.set('script_src', CORE_CDN_URL);
-    params.set('ogp', JSON.stringify(getConfig('ogp')));
+    params.set('ogp', JSON.stringify(this.props.getConfig('ogp')));
     params.set('organization_id', organization.id);
     params.set('organization_password', password);
 
