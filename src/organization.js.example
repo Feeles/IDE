@@ -1,4 +1,8 @@
 export default {
+  title: 'DEMO',
   id: '',
-  deployURL: ''
+  deployURL: '',
+  palette: {
+
+  },
 };

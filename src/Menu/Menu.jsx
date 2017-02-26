@@ -23,6 +23,7 @@ import { BinaryFile, SourceFile } from '../File/';
 import getLocalization, { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
+import ShareDialog from './ShareDialog';
 import {CardIcons} from '../Cards/CardWindow';
 import { updateProject } from '../database/';
 import organization from '../organization';
@@ -223,6 +224,7 @@ export default class Menu extends PureComponent {
 
     return (
       <AppBar
+        title={organization.title}
         style={styles.root}
         iconStyleLeft={styles.leftIcon}
         iconElementLeft={<IconButton><ActionDashboard /></IconButton>}
