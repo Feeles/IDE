@@ -269,7 +269,7 @@ class EditOGP extends PureComponent {
                 hintText={organization.placeholder['og:description']}
                 defaultValue={ogp['og:description']}
                 hintStyle={styles.description}
-                onChange={this.handleChangeTitle}
+                onChange={this.handleChangeDescription}
               />
             }
             style={styles.innerHeader}
