@@ -67,10 +67,11 @@ export default class MetaDialog extends PureComponent {
 
   render() {
     const {stepIndex} = this.state;
+    const {localization} = this.props;
 
     const actions = [
-      <FlatButton key="1" label="Back" disabled={stepIndex < 1} onTouchTap={this.back} />,
-      <RaisedButton key="2" primary label="Next" onTouchTap={this.next} />,
+      <FlatButton key="1" label={localization.metaDialog.back} onTouchTap={this.back} />,
+      <RaisedButton key="2" primary label={localization.metaDialog.next} onTouchTap={this.next} />,
     ];
 
     const styles = {
@@ -90,17 +91,17 @@ export default class MetaDialog extends PureComponent {
         <Stepper linear={false} activeStep={stepIndex}>
           <Step>
             <StepButton onTouchTap={() => this.setState({stepIndex: 0})}>
-              Appearance when Shared
+              {localization.metaDialog.appearance}
             </StepButton>
           </Step>
           <Step>
             <StepButton onTouchTap={() => this.setState({stepIndex: 1})}>
-              About Creator (You)
+              {localization.metaDialog.creator}
             </StepButton>
           </Step>
           <Step>
             <StepButton onTouchTap={() => this.setState({stepIndex: 2})}>
-              Publish and share it!
+              {localization.metaDialog.publish}
             </StepButton>
           </Step>
         </Stepper>

@@ -66,6 +66,13 @@ export default {
     openProject: 'このプロジェクトを開く',
     startNew: 'あたらしく始める',
   },
+  metaDialog: {
+    back: 'もどる',
+    next: '次へ',
+    appearance: '見た目',
+    creator: 'クリエータについて',
+    publish: '公開する',
+  },
   addDialog: {
     title: 'ファイルを追加する',
     mimeType: 'MIME タイプ',

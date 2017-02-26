@@ -73,6 +73,13 @@ export default {
     openProject: 'Open this project',
     startNew: 'Start new',
   },
+  metaDialog: {
+    back: 'Back',
+    next: 'Next',
+    appearance: 'Appearance when Shared',
+    creator: 'About Creator',
+    publish: 'Publish and share it!',
+  },
   readmeCard: {
     title: 'Getting Started',
     index: 'Index',
