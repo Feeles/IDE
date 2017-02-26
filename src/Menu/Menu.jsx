@@ -18,6 +18,7 @@ import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import SocialShare from 'material-ui/svg-icons/social/share';
 import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import ContentLink from 'material-ui/svg-icons/content/link';
+import TwitterIcon from '../utils/TwitterIcon';
 
 
 import { BinaryFile, SourceFile } from '../File/';
@@ -199,6 +200,21 @@ export default class Menu extends PureComponent {
     }
   };
 
+  handleShareTwitter = () => {
+    const params = new URLSearchParams();
+    params.set('url', this.shareURL);
+    if (organization.hashtags) {
+      params.set('hashtags', organization.hashtags);
+    }
+    const windowParams = [
+      `width=550`,
+      `height=420`,
+      `left=${Math.round((screen.width / 2) - (550 / 2))}`,
+      `top=${screen.height > 550 ? Math.round((screen.height / 2) - (420 / 2)) : 0}`,
+    ];
+    window.open(`https://twitter.com/intent/tweet?${params}`, '_blank', windowParams.join());
+  };
+
   handleRequestClose = () => {
     this.setState({notice: null});
   };
@@ -290,6 +306,11 @@ export default class Menu extends PureComponent {
             {localization.menu.copyURL}
             <input style={styles.hidden} ref={ref => this.input = ref} />
           </MenuItem>
+          <MenuItem
+            primaryText={localization.menu.tweet}
+            leftIcon={<TwitterIcon />}
+            onTouchTap={this.handleShareTwitter}
+          />
           <MenuItem
             primaryText={localization.menu.update}
             leftIcon={<DeployStateIcon />}

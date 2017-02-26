@@ -10,6 +10,7 @@ export default {
     deploy: 'この作品を公開',
     share: 'シェアする',
     copyURL: '公開リンクをコピー',
+    tweet: 'ツイートする',
     update: '公開作品をアップデート',
     unlink: '公開作品とのリンクを解除',
     enterPassword: 'パスワードを入力してください',

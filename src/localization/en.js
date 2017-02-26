@@ -10,6 +10,7 @@ export default {
     deploy: 'Publish this app',
     share: 'Share',
     copyURL: 'Copy public link',
+    tweet: 'Tweet',
     update: 'Update published app',
     unlink: 'Unlink from published app',
     enterPassword: 'Please enter the password',
