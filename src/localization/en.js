@@ -15,6 +15,8 @@ export default {
     enterPassword: 'Please enter the password',
     failedToDeploy: 'Failed to deploy...😢',
     linkCopied: 'Link is copied! 📎 ',
+    published: 'Your app was published! 🎉 ',
+    goToSee: 'Go to see 👀',
     confirmUnlink: '⚠️ CONFIRM: Your published app will be NOT deleted.',
   },
   cloneDialog: {

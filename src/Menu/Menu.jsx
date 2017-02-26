@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import Snackbar from 'material-ui/Snackbar';
+import CircularProgress from 'material-ui/CircularProgress';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
@@ -56,6 +57,10 @@ const getStyles = (props, context) => {
       width: 1,
       height: 1,
     },
+    progress: {
+      marginLeft: 20,
+      padding: 12,
+    },
   };
 };
 
@@ -86,7 +91,7 @@ export default class Menu extends PureComponent {
     open: false,
     password: null,
     isDeploying: false,
-    openSnackbar: false,
+    notice: null,
   };
 
   get shareURL() {
@@ -160,8 +165,16 @@ export default class Menu extends PureComponent {
       if (this.props.project) {
         await updateProject(this.props.project.id, {deployURL});
       }
-      this.setState({password});
-      window.open(`${api.origin}/p/${search}`);
+
+      this.setState({
+        password,
+        notice: {
+          message: localization.menu.published,
+          action: localization.menu.goToSee,
+          autoHideDuration: 20000,
+          onActionTouchTap: () => window.open(`${api.origin}/p/${search}`),
+        }
+      });
     } else {
       console.error(response);
       alert(localization.menu.failedToDeploy);
@@ -181,12 +194,13 @@ export default class Menu extends PureComponent {
     this.input.value = this.shareURL;
     this.input.select();
     if (document.execCommand('copy')) {
-      this.setState({openSnackbar: true});
+      const message = this.props.localization.menu.linkCopied + this.shareURL;
+      this.setState({notice: {message}});
     }
   };
 
   handleRequestClose = () => {
-    this.setState({openSnackbar: false});
+    this.setState({notice: null});
   };
 
   handleUnlink = async () => {
@@ -259,7 +273,9 @@ export default class Menu extends PureComponent {
         >
           <ActionAssignment color={alternateTextColor} />
         </IconButton>
-      {this.props.deployURL ? (
+      {this.state.isDeploying ? (
+        <CircularProgress size={24} style={styles.progress} color={alternateTextColor} />
+      ) : this.props.deployURL ? (
         <IconMenu
           iconButtonElement={(
             <IconButton tooltip={localization.menu.share}>
@@ -343,10 +359,12 @@ export default class Menu extends PureComponent {
         )) : null}
         </Drawer>
         <Snackbar
-          open={this.state.openSnackbar}
-          message={localization.menu.linkCopied + this.shareURL}
+          open={this.state.notice !== null}
+          message=""
           autoHideDuration={4000}
+          style={styles.snackbar}
           onRequestClose={this.handleRequestClose}
+          {...this.state.notice}
         />
       </AppBar>
     );
