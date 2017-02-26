@@ -58,6 +58,7 @@ export default class MetaDialog extends PureComponent {
     const bag = {
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
+      localization: this.props.localization,
     };
     switch (this.state.stepIndex) {
       case 0: return <EditOGP {...bag} />;
@@ -287,15 +288,43 @@ class EditAuthor extends PureComponent {
   static propTypes = {
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired,
+  };
+
+  handleChangeNickname = (event, text) => {
+    this.props.setConfig('ogp', {
+      ...this.props.getConfig('ogp'),
+      'og:author': text,
+    });
+  };
+
+  handleChangeTwitterId = (event, text) => {
+    this.props.setConfig('ogp', {
+      ...this.props.getConfig('ogp'),
+      'twitter:author': text,
+    });
   };
 
   render() {
+    const {localization} = this.props;
     const ogp = this.props.getConfig('ogp');
 
     return (
       <div>
-        <h1>Author</h1>
-        {JSON.stringify(ogp)}
+        <h1>{localization.metaDialog.creator}</h1>
+        <h4>{localization.metaDialog.creatorConfirm}</h4>
+        <TextField id="" fullWidth
+          floatingLabelText={localization.metaDialog.nickname}
+          hintText={organization.placeholder['og:author']}
+          defaultValue={ogp['og:author']}
+          onChange={this.handleChangeNickname}
+        />
+        <TextField id="" fullWidth
+          floatingLabelText={localization.metaDialog.twitterId}
+          hintText={organization.placeholder['twitter:author']}
+          defaultValue={ogp['twitter:author']}
+          onChange={this.handleChangeTwitterId}
+        />
       </div>
     );
   }

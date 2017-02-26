@@ -77,8 +77,11 @@ export default {
     back: 'Back',
     next: 'Next',
     appearance: 'Appearance when Shared',
-    creator: 'About Creator',
+    creator: 'Creator Information',
     publish: 'Publish and share it!',
+    creatorConfirm: 'Filling is optional. Do not write personal information!',
+    nickname: 'Nickname',
+    twitterId: 'Twitter ID',
   },
   readmeCard: {
     title: 'Getting Started',

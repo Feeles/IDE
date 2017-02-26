@@ -72,6 +72,9 @@ export default {
     appearance: '見た目',
     creator: 'クリエータについて',
     publish: '公開する',
+    creatorConfirm: '入力は任意です。個人情報は書かないで下さい！',
+    nickname: 'ニックネーム',
+    twitterId: 'ツイッター ID',
   },
   addDialog: {
     title: 'ファイルを追加する',
