@@ -27,7 +27,7 @@ export default async (script) => {
   }
 
   if (validateType('blob', type)) {
-    return new BinaryFile({ type, name, options, credits, hash, lastModified, composed });
+    return new BinaryFile({ type, name, options, credits, lastModified, composed });
   }
 
   throw 'Unknown File Type ' + type;
