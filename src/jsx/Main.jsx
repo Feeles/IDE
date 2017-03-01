@@ -96,6 +96,12 @@ export default class Main extends Component {
     return multiple ? files.filter(pred) : files.find(pred) || null;
   };
 
+  componentWillMount() {
+    this.props.setMuiTheme({
+      palette: this.getConfig('palette'),
+    });
+  }
+
   componentDidMount() {
     const {
       inlineScriptId,
