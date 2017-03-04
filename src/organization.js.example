@@ -14,7 +14,7 @@ export default {
   	'twitter:site': '',
   	'twitter:title': '',
   	'twitter:description': '',
-  	'twitter:image': ''
+  	'twitter:image': '',
     'twitter:author': '@',
   },
   images: [
