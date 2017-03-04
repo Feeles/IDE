@@ -8,7 +8,6 @@ import {red50, red500} from 'material-ui/styles/colors';
 
 import Editor from './Editor';
 import {SourceFile} from '../File/';
-import shallowEqual from '../utils/shallowEqual';
 import {CardIcons} from '../Cards/CardWindow';
 
 const durations = [600, 1400, 0];
@@ -81,6 +80,8 @@ export default class ShotCard extends PureComponent {
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
+    file: PropTypes.object,
+    completes: PropTypes.array,
   };
 
   static contextTypes = {
@@ -93,64 +94,16 @@ export default class ShotCard extends PureComponent {
     error: null,
     loading: false,
     canRestore: false,
-    file: null,
-    completes: []
   };
 
-  componentWillMount() {
-    this.refreshFile();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // TODO: watch file
-    if (this.props.files !== nextProps.files) {
-      this.refreshFile();
-    }
-
-    if (this.props.port !== nextProps.port) {
-      if (this.props.port) {
-        this.props.port.removeEventListener('message', this.handleMessage);
-      }
-      if (nextProps.port) {
-        nextProps.port.addEventListener('message', this.handleMessage);
-      }
-    }
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    if (this.state.file !== nextState.file && nextState.file) {
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.props.file !== nextProps.file && nextProps.file) {
       if (this.codemirror) {
         // setState しただけでは
         // ReactCodeMirror の componentWillReceiveProps に入らず
         // エディタが更新されない. [バグ？]
-        this.codemirror.setValue(nextState.file.text);
+        this.codemirror.setValue(nextProps.file.text);
       }
-    }
-  }
-
-  handleMessage = (event) => {
-    if (!event.data || !event.data.query)
-      return;
-    const {query, value} = event.data;
-
-    // Completes
-    if (query === 'complete') {
-      if (!shallowEqual(value, this.state.completes)) {
-        this.setState({completes: value});
-      }
-    }
-  };
-
-  refreshFile() {
-    if (this.state.file) {
-      this.setState({
-        file: this.props.findFile(item => item.key === this.state.file.key)
-      });
-    } else {
-      const {fileName} = this.props.getConfig('card').ShotCard.init || {};
-      this.setState({
-        file: this.props.findFile(fileName) || SourceFile.shot('')
-      });
     }
   }
 
@@ -186,24 +139,24 @@ export default class ShotCard extends PureComponent {
 
   handleChange = (text) => {
     this.setState({
-      canRestore: text !== this.state.file.text,
+      canRestore: text !== this.props.file.text,
       height: this.getHeight()
     });
   };
 
   handleRestore = () => {
-    if (!this.state.file || !this.codemirror) {
+    if (!this.props.file || !this.codemirror) {
       return;
     }
 
-    this.codemirror.setValue(this.state.file.text);
+    this.codemirror.setValue(this.props.file.text);
     this.setState({canRestore: false, height: this.getHeight()});
   };
 
   async handleShot() {
     const text = this.codemirror
       ? this.codemirror.getValue('\n')
-      : this.state.file.text;
+      : this.props.file.text;
 
     await new Promise((resolve, reject) => {
       this.setState({
@@ -236,6 +189,9 @@ export default class ShotCard extends PureComponent {
   };
 
   render() {
+    if (!this.props.file) {
+      return null;
+    }
     const {localization, getConfig} = this.props;
     const {anim} = this.state;
 
@@ -252,7 +208,7 @@ export default class ShotCard extends PureComponent {
           ? (<LinearProgress/>)
           : null}
         <div style={styles.editor}>
-          <Editor isSelected isCared file={this.state.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.state.completes}/>
+          <Editor isSelected isCared file={this.props.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.props.completes}/>
         </div>
         <div style={styles.menu}>
           <FloatingActionButton mini disabled={anim !== 0} onTouchTap={this.shoot} style={styles.shoot}>
