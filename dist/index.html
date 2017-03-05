@@ -32,9 +32,14 @@
 <!--
 import message from 'sub/message';
 
-
 document.body.textContent = message;
 
+(function () {
+    /* ____/ assets/sample.json \____ */
+
+
+    /* \____ assets/sample.json ____/ */
+})();
 
 -->
     </script>
@@ -82,6 +87,19 @@ if (1 === 1) {
         }
     }
 }
+-->
+    </script>
+    <script class="example1" name="assets/sample.json" data-type="application/json" type="hack">
+<!--
+[{
+    "label": "if",
+    "code": "if (true) {\n}\n",
+    "description": "( ) の中の条件が正しいときだけ、{ } の中に入ります"
+}, {
+    "label": "hello",
+    "code": "let item1 = 'hello';\ndocument.body.textContent = item1;\nconst item2 = 'hello';\ndocument.body.textContent = item2;\n",
+    "description": "画面に hello と表示します"
+}]
 -->
     </script>
     <script class="example1" name="index.html" data-type="text/html" type="hack">
