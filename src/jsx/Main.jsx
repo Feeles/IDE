@@ -419,6 +419,7 @@ export default class Main extends Component {
       },
       MediaCard: {
         port: this.state.port,
+        updateCard: this.updateCard,
       },
       ReadmeCard: {
         ...commonProps,

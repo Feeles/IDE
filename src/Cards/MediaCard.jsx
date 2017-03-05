@@ -6,7 +6,8 @@ import ReactPlayer from 'react-player';
 export default class MediaCard extends Component {
 
   static propTypes = {
-    port: PropTypes.object
+    port: PropTypes.object,
+    updateCard: PropTypes.func.isRequired,
   };
 
   state = {
@@ -34,6 +35,7 @@ export default class MediaCard extends Component {
     // Media
     if (query === 'media') {
       this.setState({playerState: value});
+      this.props.updateCard('MediaCard', {visible: true});
     }
   };
 
