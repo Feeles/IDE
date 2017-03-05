@@ -6,7 +6,7 @@ import { SrcDocEnabled } from './setSrcDoc';
 import ErrorMessage from './ErrorMessage';
 import SvgButton from './SvgButton';
 
-const Padding = 8;
+const Padding = 1;
 const ScaleChangeMin = 0.02;
 
 export default class Screen extends PureComponent {
