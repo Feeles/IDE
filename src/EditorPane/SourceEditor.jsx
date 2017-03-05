@@ -1,20 +1,29 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { DropTarget } from 'react-dnd';
 import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+import IconButton from 'material-ui/IconButton';
 import LinearProgress from 'material-ui/LinearProgress';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { red50, red500 } from 'material-ui/styles/colors';
+import transitions from 'material-ui/styles/transitions';
+import { fade } from 'material-ui/utils/colorManipulator';
 import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
+import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
+import { emphasize } from 'material-ui/utils/colorManipulator';
 import { Pos } from 'codemirror';
+import beautify from 'js-beautify';
 
 
 import DragTypes from '../utils/dragTypes';
 import Editor from './Editor';
 import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
+import AssetButton from './AssetButton';
 
 
-const getStyle = (props, context) => {
+const getStyle = (props, state, context) => {
   const {
     palette,
   } = context.muiTheme;
@@ -46,6 +55,7 @@ const getStyle = (props, context) => {
       display: 'flex',
       backgroundColor: palette.canvasColor,
       borderBottom: `1px solid ${palette.primary1Color}`,
+      zIndex: 3,
     },
     barButton: {
       padding: 0,
@@ -58,10 +68,35 @@ const getStyle = (props, context) => {
     progress: {
       borderRadius: 0,
     },
+    assetContainer: {
+      position: 'absolute',
+      width: '100%',
+      height: state.assetFileName ? '100%' : 0,
+      boxSizing: 'border-box',
+      overflow: 'hidden',
+      zIndex: 2,
+      transition: transitions.easeOut(),
+    },
+    scroller: {
+      width: '100%',
+      height: '100%',
+      overflowX: 'auto',
+      overflowY: 'scroll',
+      display: 'flex',
+      flexWrap: 'wrap',
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.25),
+    },
+    closeAsset: {
+      position: 'absolute',
+      right: 10,
+      bottom: 10,
+    },
   };
 };
 
-class SourceEditor extends PureComponent {
+export default class SourceEditor extends PureComponent {
 
   static propTypes = {
     file: PropTypes.object.isRequired,
@@ -76,9 +111,6 @@ class SourceEditor extends PureComponent {
     putFile: PropTypes.func.isRequired,
     closeSelectedTab: PropTypes.func.isRequired,
     selectTabFromFile: PropTypes.func.isRequired,
-
-    connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
   };
 
   static contextTypes = {
@@ -92,10 +124,13 @@ class SourceEditor extends PureComponent {
     loading: false,
     snippets: [],
 
-    prevDoc: null,
-    previewFrom: null,
-    previewTo: null,
+    assetFileName: null,
+    assetLineNumber: 0,
+    appendToHead: true,
+    classNameStyles: [],
   };
+
+  _widgets = new Map();
 
   componentWillMount() {
     this.setState({
@@ -104,27 +139,6 @@ class SourceEditor extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.isOver !== nextProps.isOver && this.codemirror) {
-      if (nextProps.isOver) {
-        // enter
-        this.setState({
-          prevDoc: this.codemirror.getDoc().copy(true),
-          previewFrom: null,
-          previewTo: null,
-        });
-      } else {
-        // Leave
-        this.codemirror.setValue(
-          this.state.prevDoc.getValue('\n')
-        );
-        this.setState({
-          prevDoc: null,
-          previewFrom: null,
-          previewTo: null,
-        });
-      }
-    }
-
     this.setState({
       snippets: nextProps.getConfig('snippets')(nextProps.file),
     });
@@ -132,9 +146,32 @@ class SourceEditor extends PureComponent {
 
   componentDidMount() {
     if (this.codemirror) {
-      this.codemirror.on('change', this.handleChange);
+      this.codemirror.on('beforeChange', this.handleIndexReplacement);
+      this.codemirror.on('change', this.handleIndentLine);
+      this.codemirror.on('change', (cm) => this.setState({
+        hasHistory: cm.historySize().undo > 0,
+        hasChanged: cm.getValue('\n') !== this.props.file.text,
+      }));
+      this.codemirror.on('change', this.handleUpdateWidget);
+      this.codemirror.on('update', this.handleRenderWidget);
+
       this.codemirror.clearHistory();
+      this.handleUpdateWidget(this.codemirror);
     }
+  }
+
+  get assets() {
+    if (this.state.assetFileName) {
+      const file = this.props.findFile(this.state.assetFileName);
+      if (file) {
+        try {
+          return JSON.parse(file.text);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    return [];
   }
 
   handleSave = async () => {
@@ -176,18 +213,81 @@ class SourceEditor extends PureComponent {
     }
 
     this.codemirror.undo();
-    this.handleChange();
   };
 
-  handleChange = () => {
-    if (!this.codemirror) {
-      return;
-    }
+  handleUpdateWidget = (cm, change) => {
+    const {
+      paper,
+      palette,
+    } = this.context.muiTheme;
 
-    this.setState({
-      hasHistory: this.codemirror.historySize().undo > 0,
-      hasChanged: this.codemirror.getValue('\n') !== this.props.file.text,
-    });
+    this._widgets.clear();
+    for (const [line, text] of cm.getValue('\n').split('\n').entries()) {
+      this.updateWidget(cm, line, text);
+    }
+  };
+
+  updateWidget = (cm, line, text) => {
+    // Syntax: ____/ assets/sample.json \____
+    const begin = /\_{4,}\/(.*)\\\_{4,}/.exec(text);
+    // Syntax: \____ assets/sample.json ____/
+    const end = /\\\_{4,}(.*)\_{4,}\//.exec(text);
+
+    if (begin || end) {
+      const element = document.createElement('span');
+      element.textContent = text.replace(/\t/g, '    ');
+      element.classList.add(`Feeles-asset-opener-${begin ? 'begin' : 'end'}`);
+      element.onclick = () => {
+        this.setState({
+          assetFileName: (begin || end)[1].trim(),
+          assetLineNumber: line + (begin ? 1 : 0),
+          appendToHead: !!begin,
+        });
+      };
+      this._widgets.set(line, element);
+    }
+  };
+
+  handleRenderWidget = (cm) => {
+    // remove old widgets
+    for (const widget of [...document.querySelectorAll('.Feeles-asset-opener-begin,.Feeles-asset-opener-end')]) {
+      if (widget.parentNode) {
+        widget.parentNode.removeChild(widget);
+      }
+    }
+    // render new widgets
+    for (const [i, element] of this._widgets.entries()) {
+      cm.addWidget(new Pos(i, 0), element);
+    }
+  };
+
+  handleIndexReplacement = (cm, change) => {
+    if (!['asset', 'paste'].includes(change.origin)) return;
+    // item{N} のような変数を探す. e.g. From "const item1 = 'hello';", into [1]
+    // 戻り値は Array<Number>
+    const sourceIndexes = searchItemIndexes(change.text.join('\n'));
+    if (sourceIndexes.length < 1) return;
+
+    // すでに使われている変数と, 被っていないか調べる
+    const usedIndexes = searchItemIndexes(cm.getValue('\n'));
+    const duplicatedIndexes = sourceIndexes.filter(i => usedIndexes.includes(i));
+
+    if (duplicatedIndexes.length > 0) {
+      let _next = 0; // 使えるインデックスを探すカーソル. 効率化のために残す
+      let _replaced = change.text.join('\n'); // ひとつずつ置換していくためのバッファ
+      for (const i of duplicatedIndexes) {
+        // update next
+        for (_next++; usedIndexes.includes(_next) && _next < 10000; _next++);
+        const from = new RegExp(`item${i}`, 'g');
+        const to = `item${_next}`;
+        _replaced = _replaced.replace(from, to);
+      }
+      change.update(change.from, change.to, _replaced.split('\n'));
+    }
+  };
+
+  handleAssetClose = () => {
+    this.setState({assetFileName: null});
   };
 
   setLocation = async (href) => {
@@ -205,68 +305,55 @@ class SourceEditor extends PureComponent {
     this.codemirror = ref;
   };
 
+  handleAssetInsert = ({code, description}) => {
+    const {assetLineNumber} = this.state;
+    const pos = new Pos(assetLineNumber, 0);
+    const end = new Pos(pos.line + code.split('\n').length, 0);
+    code = this.state.appendToHead ? '\n' + code : code + '\n';
+    this.codemirror.replaceRange(code, pos, pos, 'asset');
+    // トランジション（フェードイン）
+    const fadeInMarker = this.codemirror.markText(pos, end, {
+      className: `emphasize-${Date.now()}`,
+      clearOnEnter: true,
+    });
+    this.emphasizeTextMarker(fadeInMarker);
 
-  _queue = null; // Single queue of async function to invoke later
-  _processing = false; // State of process
-  async handlePreview(...args) {
-    if (this._processing) {
-      this._queue = () => this.handlePreview(...args);
-      return;
-    }
-
-    this._processing = true;
-    await this.renderPreview(...args);
-    this._processing = false;
-
-    const next = this._queue;
-    this._queue = null;
-    if (next) next();
-
+    this.handleAssetClose();
   };
 
-  async renderPreview(snippet, pos) {
-    const {
-      prevDoc,
-      previewFrom,
-      previewTo,
-    } = this.state;
-
-    if (
-      previewFrom  && pos.line >= previewFrom.line - 1 &&
-      previewTo    && pos.line <= previewTo.line ||
-      !prevDoc || !this.codemirror
-    ) {
-
-      // Abort
-      return new Promise((resolve, reject) => {
-        requestAnimationFrame(resolve);
-      });
-
-    }
-
-    // Update
-    this.codemirror.setValue(prevDoc.getValue('\n'));
-
-    if (previewFrom && previewTo && pos.line >= previewTo.line) {
-      // Except preview area
-      pos.line -= previewTo.line - previewFrom.line + 1;
-    }
-
-    const self = { from: pos, to: pos, asset: true };
-
-    const { from, to } = snippet.hint(this.codemirror, self, snippet);
-
-    this.codemirror.markText(from, to, {
-      css: 'opacity: 0.5;',
+  emphasizeTextMarker = async (textMarker) => {
+    const begin = {
+      className: textMarker.className,
+      style: `opacity: 0; background-color: rgba(0,0,0,1)`
+    };
+    const end = {
+      className: textMarker.className,
+      style: `opacity: 1; background-color: rgba(0,0,0,0.1); transition: ${transitions.easeOut()}`
+    };
+    textMarker.on('clear', () => {
+      this.setState(prevState => ({
+        classNameStyles: prevState.classNameStyles.filter(item => begin !== item && end !== item),
+      }));
     });
 
-    this.setState({
-      previewFrom: from,
-      previewTo: to,
-    });
+    this.setState(prevState => ({
+      classNameStyles: prevState.classNameStyles.concat(begin),
+    }));
+    await wait(500);
+    this.setState(prevState => ({
+      classNameStyles: prevState.classNameStyles.map(item => item === begin ? end : item),
+    }));
+  };
 
-    await new Promise((resolve, reject) => setTimeout(resolve, 500));
-  }
+  handleIndentLine = (cm, change) => {
+    if (!['asset', 'paste'].includes(change.origin)) return;
+    const {from} = change;
+    const to = new Pos(from.line + change.text.length, 0);
+    // インデント
+    for (let line = from.line; line < to.line; line++) {
+      cm.indentLine(line, 'prev');
+    }
+  };
 
   render() {
     const {
@@ -282,16 +369,7 @@ class SourceEditor extends PureComponent {
       showHint,
     } = this.state;
 
-    const {
-      root,
-      error,
-      editorContainer,
-      menuBar,
-      barButton,
-      barButtonLabel,
-      progressColor,
-      progress,
-    } = getStyle(this.props, this.context);
+    const styles = getStyle(this.props, this.state, this.context);
 
     const snippets = getConfig('snippets')(file);
 
@@ -303,24 +381,28 @@ class SourceEditor extends PureComponent {
     });
 
     return (
-      <div style={root}>
+      <div style={styles.root}>
+        <style>
+        {this.state.classNameStyles.map(item =>
+          `.${item.className} { ${item.style} } `)}
+        </style>
       {file.error ? (
-        <pre style={error}>{file.error.message}</pre>
+        <pre style={styles.error}>{file.error.message}</pre>
       ) : null}
-        <div style={menuBar}>
+        <div style={styles.menuBar}>
           <FlatButton
             label={localization.editorCard.undo}
             disabled={!this.state.hasHistory}
-            style={barButton}
-            labelStyle={barButtonLabel}
+            style={styles.barButton}
+            labelStyle={styles.barButtonLabel}
             icon={<HardwareKeyboardBackspace />}
             onTouchTap={this.handleUndo}
           />
           <FlatButton
             label={localization.editorCard.save}
             disabled={!this.state.hasChanged}
-            style={barButton}
-            labelStyle={barButtonLabel}
+            style={styles.barButton}
+            labelStyle={styles.barButtonLabel}
             icon={<ContentSave />}
             onTouchTap={this.handleSave}
           />
@@ -334,18 +416,32 @@ class SourceEditor extends PureComponent {
         </div>
       {this.state.loading ? (
         <LinearProgress
-          color={progressColor}
-          style={progress}
+          color={styles.progressColor}
+          style={styles.progress}
         />
       ) : null}
-      {connectDropTarget(
-        <div style={editorContainer}>
+        <div style={styles.editorContainer}>
+          <div style={styles.assetContainer}>
+            <div style={styles.scroller}>
+              {this.assets.map((item, i) => (
+                <AssetButton
+                  {...item}
+                  key={i}
+                  onTouchTap={this.handleAssetInsert}
+                  findFile={this.props.findFile}
+                  localization={this.props.localization}
+                />
+              ))}
+            </div>
+            <FloatingActionButton secondary style={styles.closeAsset} onTouchTap={this.handleAssetClose}>
+              <NavigationExpandLess />
+            </FloatingActionButton>
+          </div>
           <Editor
             {...props}
             snippets={this.state.snippets}
           />
         </div>
-      )}
         <CreditBar
           file={file}
           openFileDialog={this.props.openFileDialog}
@@ -358,38 +454,19 @@ class SourceEditor extends PureComponent {
   }
 }
 
-const spec = {
-  hover(props, monitor, component) {
-    if (!component.codemirror) return;
+function wait(millisec) {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, millisec);
+  });
+}
 
-    const { codemirror } = component;
-    const { snippet } = monitor.getItem();
+function searchItemIndexes(text, limit = 1000) {
+  let regExp = /(const|let)\sitem(\d+)\s/g;
+  text = beautify(text);
 
-    const { x, y } = monitor.getClientOffset();
-    const { line, ch } = codemirror.coordsChar({ left: x, top: y + 10 });
-
-    component.handlePreview(snippet, new Pos(line - 1, ch));
-  },
-  drop(props, monitor, component) {
-    if (monitor.getDropResult() || !component.codemirror) return;
-
-    const { snippet } = monitor.getItem();
-    const { codemirror, state } = component;
-
-    const pos = new Pos(state.previewFrom.line - 1, 0);
-
-    codemirror.swapDoc(state.prevDoc);
-    snippet.hint(codemirror, { from: pos, to: pos, asset: true }, snippet);
-
-    component.handleSave();
-
-    return {};
+  const indexes = [];
+  for (let i = 0, result = null; (result = regExp.exec(text)) && i < limit; i++) {
+    indexes.push(+result[2]);
   }
-};
-
-const collect = (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver({ shallow: true }),
-});
-
-export default DropTarget(DragTypes.Snippet, spec, collect)(SourceEditor);
+  return indexes;
+}

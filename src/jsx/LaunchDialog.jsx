@@ -168,6 +168,8 @@ export default class LaunchDialog extends PureComponent {
         height: '20rem',
         overflow: 'scroll',
         backgroundColor: brown50,
+        overflowX: 'auto',
+        overflowY: 'scroll',
       },
       button: {
         marginLeft: 8,
@@ -186,16 +188,16 @@ export default class LaunchDialog extends PureComponent {
         open={this.props.open}
         title={localization.launchDialog.title}
       >
-        <div style={styles.container}>
-        {this.state.projects.map(item => this.renderProjectCard(item, styles))}
-        </div>
         <div style={{ textAlign: 'center' }}>
-        {localization.common.or}
           <RaisedButton primary
             label={localization.launchDialog.startNew}
             style={styles.button}
             onTouchTap={this.launchFromElements}
           />
+          {localization.common.or}
+        </div>
+        <div style={styles.container}>
+        {this.state.projects.map(item => this.renderProjectCard(item, styles))}
         </div>
       </Dialog>
     );

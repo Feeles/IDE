@@ -124,6 +124,7 @@ export default {
     save: 'セーブ',
     play: 'プレイ',
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
+    insert: '中に入れる',
   },
   envCard: {
     title: 'スイッチ',

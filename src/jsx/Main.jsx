@@ -59,6 +59,10 @@ export default class Main extends Component {
     setDeployURL: PropTypes.func.isRequired,
   };
 
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired,
+  };
+
   state = {
     monitorType: MonitorTypes.Card,
 
@@ -415,6 +419,7 @@ export default class Main extends Component {
       },
       MediaCard: {
         port: this.state.port,
+        updateCard: this.updateCard,
       },
       ReadmeCard: {
         ...commonProps,
@@ -503,7 +508,7 @@ export default class Main extends Component {
             getConfig={this.getConfig}
             setConfig={this.setConfig}
           />
-            <style>{codemirrorStyle(this.getConfig('palette'))}</style>
+            <style>{codemirrorStyle(this.context.muiTheme)}</style>
           {userStyle ? (
             <style>{userStyle.text}</style>
           ) : null}

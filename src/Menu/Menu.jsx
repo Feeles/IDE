@@ -140,20 +140,23 @@ export default class Menu extends PureComponent {
 
     this.setState({isDeploying: true});
 
-    const params = new URLSearchParams();
-    params.set('script_src', CORE_CDN_URL);
-    params.set('ogp', JSON.stringify(this.props.getConfig('ogp')));
-    params.set('organization_id', organization.id);
-    params.set('organization_password', password);
-
+    try {
     const composed = await Promise.all(this.props.files.map(item => item.compose()));
-    params.set('json', JSON.stringify(composed));
-
     const actionURL = this.props.deployURL || organization.deployURL;
 
     const response = await fetch(actionURL, {
       method: this.props.deployURL ? 'PUT' : 'POST',
-      body: params,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        json: JSON.stringify(composed),
+        script_src: CORE_CDN_URL,
+        ogp: JSON.stringify(this.props.getConfig('ogp')),
+        organization_id: organization.id,
+        organization_password: password,
+      }),
       mode: 'cors'
     });
 
@@ -177,13 +180,16 @@ export default class Menu extends PureComponent {
         }
       });
     } else {
-      console.error(response);
       alert(localization.menu.failedToDeploy);
       if (process.env.NODE_ENV !== 'production') {
         window.open(
           URL.createObjectURL(await response.blob())
         );
       }
+    }
+
+    } catch (e) {
+      console.error(e);
     }
 
     this.setState({isDeploying: false});
