@@ -146,6 +146,7 @@ export default class Menu extends PureComponent {
     params.set('organization_id', organization.id);
     params.set('organization_password', password);
 
+    try {
     const composed = await Promise.all(this.props.files.map(item => item.compose()));
     params.set('json', JSON.stringify(composed));
 
@@ -177,13 +178,16 @@ export default class Menu extends PureComponent {
         }
       });
     } else {
-      console.error(response);
       alert(localization.menu.failedToDeploy);
       if (process.env.NODE_ENV !== 'production') {
         window.open(
           URL.createObjectURL(await response.blob())
         );
       }
+    }
+
+    } catch (e) {
+      console.error(e);
     }
 
     this.setState({isDeploying: false});
