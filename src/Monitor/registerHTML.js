@@ -1,4 +1,5 @@
 import screenJs from '../../lib/screen';
+import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
 
 
 /**
@@ -15,6 +16,7 @@ import screenJs from '../../lib/screen';
  * 3. screenJs のすぐ下で、全てのスクリプトを define する
  * 4. スクリプトタグの src 属性を requirejs を Data URL に差し替える
  * 5. a 要素の href 属性を feeles.replace の Data URL に差し替える
+ * 6. regeneratorRuntime
  */
 export default async (html, findFile, scriptFiles, env) => {
 
@@ -96,6 +98,9 @@ export default async (html, findFile, scriptFiles, env) => {
     node.setAttribute('href', '#');
     node.setAttribute('onclick', `feeles.replace('${href}')`);
   }
+
+  // 6. regeneratorRuntime
+  appendScript(regeneratorRuntimePolyfill);
 
   return doc.documentElement.outerHTML;
 
