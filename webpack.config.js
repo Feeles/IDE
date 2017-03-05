@@ -14,6 +14,7 @@ const config = {
   entry: {
     h4p: [
       'whatwg-fetch',
+      './lib/url-search-params',
       './src/main'
     ],
   },
