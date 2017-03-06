@@ -362,7 +362,7 @@ export default class SourceEditor extends PureComponent {
     const to = new Pos(from.line + change.text.length, 0);
     // インデント
     for (let line = from.line; line < to.line; line++) {
-      cm.indentLine(line, 'prev');
+      cm.indentLine(line);
     }
   };
 
