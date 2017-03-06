@@ -323,6 +323,11 @@ export default class SourceEditor extends PureComponent {
       clearOnEnter: true,
     });
     this.emphasizeTextMarker(fadeInMarker);
+    // スクロール
+    this.codemirror.scrollIntoView({
+      from: pos,
+      to: end
+    }, 10);
 
     this.handleAssetClose();
   };
