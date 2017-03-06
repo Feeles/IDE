@@ -327,6 +327,9 @@ export default class SourceEditor extends PureComponent {
       from: pos,
       to: end
     }, 10);
+    // カーソル (挿入直後に undo したときスクロールが上に戻るのを防ぐ)
+    this.codemirror.focus();
+    this.codemirror.setCursor(end);
 
     this.handleAssetClose();
   };
