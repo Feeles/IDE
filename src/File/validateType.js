@@ -23,7 +23,8 @@ const metas = [
     mimes.get('css'),
     mimes.get('javascript'),
     mimes.get('json'),
-    mimes.get('markdown')
+    mimes.get('markdown'),
+    mimes.get('glsl')
   ]],
   ['blob', [
     mimes.get('image'),
