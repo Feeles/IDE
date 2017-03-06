@@ -270,7 +270,6 @@ export default class SourceEditor extends PureComponent {
       // item{N} のような変数を探す. e.g. From "const item1 = 'hello';", into [1]
       // 戻り値は Array<Number>
       const sourceIndexes = searchItemIndexes(change.text.join('\n'), keyword);
-      console.log(sourceIndexes);
       if (sourceIndexes.length < 1) continue;
 
       // すでに使われている変数と, 被っていないか調べる
