@@ -265,26 +265,30 @@ export default class SourceEditor extends PureComponent {
 
   handleIndexReplacement = (cm, change) => {
     if (!['asset', 'paste'].includes(change.origin)) return;
-    // item{N} のような変数を探す. e.g. From "const item1 = 'hello';", into [1]
-    // 戻り値は Array<Number>
-    const sourceIndexes = searchItemIndexes(change.text.join('\n'));
-    if (sourceIndexes.length < 1) return;
 
-    // すでに使われている変数と, 被っていないか調べる
-    const usedIndexes = searchItemIndexes(cm.getValue('\n'));
-    const duplicatedIndexes = sourceIndexes.filter(i => usedIndexes.includes(i));
+    for (const keyword of ['item', 'map']) {
+      // item{N} のような変数を探す. e.g. From "const item1 = 'hello';", into [1]
+      // 戻り値は Array<Number>
+      const sourceIndexes = searchItemIndexes(change.text.join('\n'), keyword);
+      console.log(sourceIndexes);
+      if (sourceIndexes.length < 1) continue;
 
-    if (duplicatedIndexes.length > 0) {
-      let _next = 0; // 使えるインデックスを探すカーソル. 効率化のために残す
-      let _replaced = change.text.join('\n'); // ひとつずつ置換していくためのバッファ
-      for (const i of duplicatedIndexes) {
-        // update next
-        for (_next++; usedIndexes.includes(_next) && _next < 10000; _next++);
-        const from = new RegExp(`item${i}`, 'g');
-        const to = `item${_next}`;
-        _replaced = _replaced.replace(from, to);
+      // すでに使われている変数と, 被っていないか調べる
+      const usedIndexes = searchItemIndexes(cm.getValue('\n'), keyword);
+      const duplicatedIndexes = sourceIndexes.filter(i => usedIndexes.includes(i));
+
+      if (duplicatedIndexes.length > 0) {
+        let _next = 0; // 使えるインデックスを探すカーソル. 効率化のために残す
+        let _replaced = change.text.join('\n'); // ひとつずつ置換していくためのバッファ
+        for (const i of duplicatedIndexes) {
+          // update next
+          for (_next++; usedIndexes.includes(_next) && _next < 10000; _next++);
+          const from = new RegExp(`${keyword}${i}`, 'g');
+          const to = `${keyword}${_next}`;
+          _replaced = _replaced.replace(from, to);
+        }
+        change.update(change.from, change.to, _replaced.split('\n'));
       }
-      change.update(change.from, change.to, _replaced.split('\n'));
     }
   };
 
@@ -462,8 +466,8 @@ function wait(millisec) {
   });
 }
 
-function searchItemIndexes(text, limit = 1000) {
-  let regExp = /(const|let)\sitem(\d+)\s/g;
+function searchItemIndexes(text, keyword, limit = 1000) {
+  const regExp = new RegExp(String.raw`(const|let)\s${keyword}(\d+)\s`, 'g');
   text = beautify(text);
 
   const indexes = [];
