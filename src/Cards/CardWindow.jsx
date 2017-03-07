@@ -16,7 +16,6 @@ import ImagePalette from 'material-ui/svg-icons/image/palette';
 import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
 import MapsMap from 'material-ui/svg-icons/maps/map';
-import NavigationApps from 'material-ui/svg-icons/navigation/apps';
 import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
 
 const HeaderHeight = 32;
@@ -182,7 +181,6 @@ export const CardIcons = {
   CreditsCard: <ActionCopyright color="gray" />,
   ReadmeCard: <MapsMap color="gray" />,
   PaletteCard: <ImagePalette color="gray" />,
-  SnippetCard: <NavigationApps color="gray" />,
   EnvCard: <ActionTouchApp color="gray" />,
   HierarchyCard: <FileFolderOpen color="gray" />,
   CustomizeCard: <ActionSettingsApplications color="gray" />,

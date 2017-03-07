@@ -99,12 +99,6 @@ export default {
     title: 'フォルダ',
     emptyTrashBox: '空にする',
   },
-  snippetCard: {
-    title: 'アセット',
-    subtitle: '右側のコードにドラッグ&ドロップします',
-    fileNotSelected: 'ファイルが選択されていません',
-    readMore: 'もっと読む',
-  },
   credit: {
     writeAuthorName: '作者の名前を入れる',
     credits: 'クレジット',

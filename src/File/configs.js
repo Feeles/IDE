@@ -1,5 +1,5 @@
 import { defaultPalette } from '../js/getCustomTheme';
-import { Snippet } from '../SnippetPane/';
+import Snippet from './Snippet';
 import organization from '../organization';
 
 export default new Map([
@@ -130,7 +130,7 @@ export default new Map([
         visible: false,
         order: 6
       },
-      SnippetCard: {
+      HierarchyCard: {
         visible: false,
         order: 7
       },
@@ -138,13 +138,9 @@ export default new Map([
         visible: false,
         order: 8
       },
-      HierarchyCard: {
-        visible: false,
-        order: 9
-      },
       CustomizeCard: {
         visible: false,
-        order: 10
+        order: 9
       },
     },
     defaultName: 'feeles/card.json',
