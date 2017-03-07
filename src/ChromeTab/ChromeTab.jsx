@@ -177,6 +177,11 @@ export default class ChromeTabs extends PureComponent {
       this.setState({ closerMouseOver: false });
     };
 
+    const label = this.props.tabs
+      .some(item => item !== tab && item.label === tab.label)
+      ? tab.file.name
+      : tab.label;
+
     return (
       <div style={prepareStyles(styles.root)} ref={this.handleRef}>
         <div style={prepareStyles(styles.left)}></div>
@@ -188,9 +193,9 @@ export default class ChromeTabs extends PureComponent {
             <a
               href="#"
               style={prepareStyles(styles.label)}
-              title={this.props.file.moduleName || this.props.file.name}
+              title={this.props.file.name}
             >
-            {tab.label}
+            {label}
             </a>
             <IconButton
               style={styles.rightButton}
