@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
+import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import { fade } from 'material-ui/utils/colorManipulator';
 
 
@@ -32,15 +33,6 @@ export default class PlayMenu extends PureComponent {
   handlePlay = (event) => {
     const files = this.props.getFiles()
       .filter((file) => file.is('html'));
-
-    if (files.length === 0) {
-      this.props.setLocation();
-      return;
-    }
-    if (files.length === 1) {
-      this.props.setLocation(files[0].name);
-      return;
-    }
 
     const parser = new DOMParser();
     const entries = files
@@ -109,6 +101,15 @@ export default class PlayMenu extends PureComponent {
         backgroundColor: palette.primary1Color,
         borderRadius: 0,
       },
+      dropDown: {
+        marginLeft: -16,
+        minWidth: 32,
+        padding: 0,
+        lineHeight: 2,
+        color: palette.alternateTextColor,
+        backgroundColor: palette.primary1Color,
+        borderRadius: 0,
+      },
       current: {
         backgroundColor: fade(palette.primary1Color, 0.1),
         marginTop: -8,
@@ -133,6 +134,11 @@ export default class PlayMenu extends PureComponent {
           label={localization.editorCard.play}
           style={styles.button}
           icon={<AVPlayCircleOutline />}
+          onTouchTap={() => this.props.setLocation()}
+        />
+        <FlatButton primary
+          style={styles.dropDown}
+          icon={<NavigationArrowDropDown />}
           onTouchTap={this.handlePlay}
         />
         <Popover
