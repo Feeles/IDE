@@ -70,13 +70,17 @@ export default class ReadmeCard extends PureComponent {
         });
       }
     }
-    // Readme
-    if (query === 'readme') {
+    if (query === 'readme' && value) {
+      // feeles.openReamde()
       const selectedFile = this.props.findFile(value);
       if (!selectedFile) {
         throw `Not Found Error: feeles.openReamde("${value}")`;
       }
       this.setState({ selectedFile });
+      this.props.updateCard('ReadmeCard', {visible: true});
+    } else if (query === 'readme') {
+      // feeles.closeReadme()
+      this.props.updateCard('ReadmeCard', {visible: false});
     }
   };
 

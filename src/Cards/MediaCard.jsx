@@ -32,10 +32,13 @@ export default class MediaCard extends Component {
       return;
     const {query, value} = event.data;
 
-    // Media
-    if (query === 'media') {
+    if (query === 'media' && value) {
+      // feeles.openMedia()
       this.setState({playerState: value});
       this.props.updateCard('MediaCard', {visible: true});
+    } else if (query === 'media') {
+      // feeles.closeMedia()
+      this.props.updateCard('MediaCard', {visible: false});
     }
   };
 
