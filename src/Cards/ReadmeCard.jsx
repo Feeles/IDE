@@ -22,6 +22,7 @@ export default class ReadmeCard extends PureComponent {
     localization: PropTypes.object.isRequired,
     port: PropTypes.object,
     setLocation: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired,
   };
 
   state = {

@@ -394,6 +394,7 @@ export default class Main extends Component {
 
     const cardProps = {
       EditorCard: {
+        updateCard: this.updateCard,
         editorProps: {
           ...commonProps,
           tabs,
@@ -426,6 +427,7 @@ export default class Main extends Component {
         selectTab: this.selectTab,
         port: this.state.port,
         setLocation: this.setLocation,
+        updateCard: this.updateCard,
       },
       ShotCard: {
         updateCard: this.updateCard,

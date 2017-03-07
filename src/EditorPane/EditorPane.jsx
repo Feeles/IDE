@@ -165,7 +165,7 @@ export default class EditorPane extends PureComponent {
           key={tab.key}
           tab={tab}
           file={tab.file}
-          length={tabs.length}
+          tabs={tabs}
           isSelected={tab.isSelected}
           isResizing={this.props.isResizing}
           localization={localization}

@@ -20,7 +20,7 @@ const getStyles = (props, context, state) => {
 
   const tabHeight = TabHeight + (isSelected ? 1 : 0);
   const tabWidth = Math.min(MaxTabWidth, Math.max(MinTabWidth,
-    parseInt(containerStyle.width) / props.length
+    parseInt(containerStyle.width) / props.tabs.length
   ));
   const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
   const backgroundColor = fade(isSelected ?
@@ -99,7 +99,7 @@ export default class ChromeTabs extends PureComponent {
   static propTypes = {
     tab: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
-    length: PropTypes.number.isRequired,
+    tabs: PropTypes.array.isRequired,
     isSelected: PropTypes.bool.isRequired,
     isResizing: PropTypes.bool.isRequired,
     handleSelect: PropTypes.func.isRequired,
@@ -177,6 +177,11 @@ export default class ChromeTabs extends PureComponent {
       this.setState({ closerMouseOver: false });
     };
 
+    const label = this.props.tabs
+      .some(item => item !== tab && item.label === tab.label)
+      ? tab.file.name
+      : tab.label;
+
     return (
       <div style={prepareStyles(styles.root)} ref={this.handleRef}>
         <div style={prepareStyles(styles.left)}></div>
@@ -188,9 +193,9 @@ export default class ChromeTabs extends PureComponent {
             <a
               href="#"
               style={prepareStyles(styles.label)}
-              title={this.props.file.moduleName || this.props.file.name}
+              title={this.props.file.name}
             >
-            {tab.label}
+            {label}
             </a>
             <IconButton
               style={styles.rightButton}
