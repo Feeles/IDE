@@ -426,6 +426,7 @@ export default class Main extends Component {
         selectTab: this.selectTab,
         port: this.state.port,
         setLocation: this.setLocation,
+        updateCard: this.updateCard,
       },
       ShotCard: {
         updateCard: this.updateCard,
