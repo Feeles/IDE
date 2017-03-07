@@ -46,15 +46,17 @@ export default class ShotCard extends PureComponent {
     const {query, value} = event.data || {};
     if (!query) return;
 
-    // feeles.openCode()
-    if (query === 'code') {
+    if (query === 'code' && value) {
+      // feeles.openCode()
       const file = this.props.shotProps.findFile(value);
       this.setState({file});
       this.props.updateCard('ShotCard', {visible: true});
+    } else if (query === 'code') {
+      // feeles.closeCode()
+      this.props.updateCard('ShotCard', {visible: false});
     }
-
-    // feeles.exports
     if (query === 'complete') {
+      // feeles.exports
       if (!shallowEqual(value, this.state.completes)) {
         this.setState({completes: value});
       }
