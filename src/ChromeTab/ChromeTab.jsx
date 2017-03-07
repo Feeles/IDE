@@ -20,7 +20,7 @@ const getStyles = (props, context, state) => {
 
   const tabHeight = TabHeight + (isSelected ? 1 : 0);
   const tabWidth = Math.min(MaxTabWidth, Math.max(MinTabWidth,
-    parseInt(containerStyle.width) / props.length
+    parseInt(containerStyle.width) / props.tabs.length
   ));
   const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
   const backgroundColor = fade(isSelected ?
@@ -99,7 +99,7 @@ export default class ChromeTabs extends PureComponent {
   static propTypes = {
     tab: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
-    length: PropTypes.number.isRequired,
+    tabs: PropTypes.array.isRequired,
     isSelected: PropTypes.bool.isRequired,
     isResizing: PropTypes.bool.isRequired,
     handleSelect: PropTypes.func.isRequired,
