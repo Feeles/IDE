@@ -394,6 +394,7 @@ export default class Main extends Component {
 
     const cardProps = {
       EditorCard: {
+        updateCard: this.updateCard,
         editorProps: {
           ...commonProps,
           tabs,

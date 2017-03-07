@@ -4,12 +4,54 @@ import { CardMedia } from 'material-ui/Card';
 
 
 import EditorPane from '../EditorPane/';
+import { Tab } from '../ChromeTab/';
 
 export default class EditorCard extends PureComponent {
 
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     editorProps: PropTypes.object.isRequired,
+    updateCard: PropTypes.func.isRequired,
+  };
+
+  // port が渡されることを前提とした実装, 今のままではあまりよくない
+  // カード本体の Mount, Update にアクセスできるクラスと、EditorPane を統合すべき
+  // でなければ EditorCard が show のときしか port をハンドルできない
+  componentWillMount() {
+    if (this.props.ShotPane && this.props.editorProps.port) {
+      this.handlePort(null, this.props.editorProps.port);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.editorProps !== nextProps.editorProps) {
+      this.handlePort(this.props.editorProps.port, nextProps.editorProps.port);
+    }
+  }
+
+  handlePort = (prevPort, nextPort) => {
+    if (prevPort) {
+      prevPort.removeEventListener('message', this.handleMessage);
+    }
+    if (nextPort) {
+      nextPort.addEventListener('message', this.handleMessage);
+    }
+  };
+
+  // TODO: この辺の処理は共通化した方がよさそう
+  handleMessage = (event) => {
+    const {query, value} = event.data || {};
+    if (!query) return;
+
+    if (query === 'editor' && value) {
+      // feeles.openEditor()
+      const getFile = () => this.props.editorProps.findFile(value);
+      this.props.editorProps.selectTab(new Tab({ getFile }));
+      this.props.updateCard('EditorCard', {visible: true});
+    } else if (query === 'editor') {
+      // feeles.closeEditor()
+      this.props.updateCard('EditorCard', {visible: false});
+    }
   };
 
   render() {
