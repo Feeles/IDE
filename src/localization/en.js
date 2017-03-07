@@ -99,12 +99,6 @@ export default {
     title: 'Folders',
     emptyTrashBox: 'Empty trash',
   },
-  snippetCard: {
-    title: 'Assets',
-    subtitle: 'Drag and drop it to the code on the right',
-    fileNotSelected: 'File not selected',
-    readMore: 'Read more',
-  },
   credit: {
     writeAuthorName: 'Write author name',
     credits: 'Credits',

@@ -434,12 +434,6 @@ export default class Main extends Component {
           port: this.state.port,
         }
       },
-      SnippetCard: {
-        ...commonProps,
-        tabs,
-        selectTab: this.selectTab,
-        updateCard: this.updateCard,
-      },
       EnvCard: {
         ...commonProps,
         selectTab: this.selectTab,
