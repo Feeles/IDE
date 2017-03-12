@@ -28,7 +28,7 @@ const getStyles = (props, context) => {
     root: isRoot ? {
       paddingTop: 16,
       paddingRight: 0,
-      paddingBottom: 0,
+      paddingBottom: 80,
       paddingLeft: 16,
     } : {
       display: 'flex',

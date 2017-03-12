@@ -1,17 +1,23 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { emphasize, fade } from 'material-ui/utils/colorManipulator';
 
 
 import DirCard from './DirCard';
 import getHierarchy from './getHierarchy';
 
 const getStyles = (props, context) => {
-  const { fontFamily } = context.muiTheme;
+  const { fontFamily, palette } = context.muiTheme;
 
   return {
     root: {
       boxSizing: 'border-box',
       width: '100%',
       fontFamily,
+      maxHeight: '65vh',
+      paddingBottom: 40,
+      overflowX: 'hidden',
+      overflowY: 'scroll',
+      backgroundColor: fade(emphasize(palette.canvasColor, 1), 0.07),
     },
   };
 };

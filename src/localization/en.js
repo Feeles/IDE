@@ -77,9 +77,7 @@ export default {
   metaDialog: {
     back: 'Back',
     next: 'Next',
-    appearance: 'Appearance when Shared',
     creator: 'Creator Information',
-    publish: 'Publish and share it!',
     title: 'Title',
     description: 'description',
     creatorConfirm: 'Filling is optional. Do not write personal information!',
