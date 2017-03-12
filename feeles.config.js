@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-const CORE_VERSION = 'beta-6d';
+const CORE_VERSION = require('./version');
 const corePrefix = 'h4p-';
 const CORE_NAME = corePrefix + CORE_VERSION;
 
