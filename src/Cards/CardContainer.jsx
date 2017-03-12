@@ -150,7 +150,8 @@ class CardContainer extends PureComponent {
       container: {
         flex: '1 1 auto',
         display: 'flex',
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        height: 0,
       },
       left: {
         position: 'relative',
