@@ -175,6 +175,9 @@ export default class ReadmeCard extends PureComponent {
     const styles = {
       text: {
         paddingTop: 0,
+        maxHeight: '65vh',
+        overflowX: 'hidden',
+        overflowY: 'scroll',
       },
     };
     return (
