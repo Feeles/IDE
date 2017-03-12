@@ -111,7 +111,6 @@ class CardContainer extends PureComponent {
 
   renderIcons(cards) {
     cards = cards.filter(info => info.visible);
-    if (cards.length < 2) return null;
     return cards.map((info, key) => (
       <a key={key} href={'#' + info.name}>
         {CardIcons[info.name]}
@@ -152,17 +151,18 @@ class CardContainer extends PureComponent {
         display: 'flex',
         alignItems: 'stretch',
         height: 0,
+        overflow: 'hidden',
       },
       left: {
         position: 'relative',
         flex: isShrinkLeft('0 0 auto', '1 1 auto'),
         width: 0,
         paddingRight: 4,
+        marginLeft: -12,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        overflowX: 'auto',
-        overflowY: 'scroll',
+        overflow: 'hidden',
         zIndex: 1,
         direction: 'rtl'
       },
@@ -171,11 +171,11 @@ class CardContainer extends PureComponent {
         flex: isShrinkLeft('1 1 auto', '0 0 auto'),
         width: isShrinkRight(0, this.state.rightSideWidth),
         paddingLeft: 4,
+        marginRight: -12,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        overflowX: 'auto',
-        overflowY: 'scroll',
+        overflow: 'hidden',
         zIndex: 1
       },
       dropCover: {
