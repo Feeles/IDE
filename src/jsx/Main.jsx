@@ -51,7 +51,6 @@ export default class Main extends Component {
     rootStyle: PropTypes.object.isRequired,
     project: PropTypes.object,
     launchIDE: PropTypes.func.isRequired,
-    inlineScriptId: PropTypes.string,
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     setMuiTheme: PropTypes.func.isRequired,
@@ -107,21 +106,16 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
-    const {
-      inlineScriptId,
-    } = this.props;
-
     document.title = this.getConfig('ogp')['og:title'] || '';
 
-    if (inlineScriptId) {
-      const inlineLib = document.getElementById(inlineScriptId);
-      if (inlineLib) {
-        this.setState({
-          coreString: inlineLib.textContent,
-        });
-      } else {
-        throw `Missing script element has id="${inlineScriptId}"`;
-      }
+    const chromosome =
+      document.getElementById(INLINE_SCRIPT_ID) ||
+      document.getElementById(this.props.inlineScriptId); // backword compatibility
+
+    if (chromosome) {
+      this.setState({
+        coreString: chromosome.textContent,
+      });
     } else {
       fetch(CORE_CDN_URL, { mode: 'cors' })
         .then(response => {
