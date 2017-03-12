@@ -180,7 +180,7 @@ export default class Hierarchy extends PureComponent {
           localization={localization}
         />
         <Root files={files.filter(filter)} {...transfer} />
-        <FloatingActionButton
+        <FloatingActionButton mini
           style={button}
           onClick={this.handleAdd}
         >
