@@ -30,7 +30,6 @@ class RootComponent extends Component {
     jsonURL: PropTypes.string,
     // An URL string to continuous deploying
     deployURL: PropTypes.string,
-    inlineScriptId: PropTypes.string,
   };
 
   state = {

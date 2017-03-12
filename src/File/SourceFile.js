@@ -138,20 +138,19 @@ export default class SourceFile extends _File {
     return new SourceFile({ type: 'text/javascript', name: '', text });
   }
 
-  static inlineScriptId = `feeles-inline-${CORE_VERSION}`;
   static coreLibFilename = `feeles-${CORE_VERSION}.js`;
 
   static async embed({ files, coreString, getConfig, deployURL }) {
     const body = `
     <script
       type="text/javascript"
-      id="${SourceFile.inlineScriptId}"
+      id=${INLINE_SCRIPT_ID}
 ` +   (deployURL ? `x-feeles-deploy="${deployURL}"` : '') + `
     >
     ${coreString.replace(/\<\//g, '<\\/')}
     </script>
     <script type="text/javascript">
-    ${EXPORT_VAR_NAME}({ inlineScriptId: "${SourceFile.inlineScriptId}" });
+    ${EXPORT_VAR_NAME}();
     </script>
 `;
     return new SourceFile({
@@ -213,7 +212,7 @@ export default class SourceFile extends _File {
   static async library({ coreString }) {
     const text = `(function() {
   var e = document.createElement('script');
-  e.id = "${SourceFile.inlineScriptId}";
+  e.id = ${INLINE_SCRIPT_ID};
   e.textContent = decodeURIComponent("${encodeURIComponent(coreString)}");
   document.body.appendChild(e);
   ${EXPORT_VAR_NAME}();

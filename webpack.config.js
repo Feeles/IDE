@@ -12,11 +12,15 @@ const CORE_CDN_PREFIX = 'https://embed.hackforplay.xyz/open-source/core/' + core
 
 const config = {
   entry: {
-    h4p: [
+    main: [
       'whatwg-fetch',
       './lib/url-search-params',
       './src/main'
     ],
+    'h4p': [
+      'whatwg-fetch',
+      'entry-point-dev'
+    ]
   },
   output: {
     path: __dirname + '/dist/',
@@ -52,6 +56,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
+      INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName),
       CORE_VERSION: JSON.stringify(CORE_VERSION),
@@ -68,11 +73,5 @@ const config = {
     port: process.env.PORT
   },
 };
-
-if (process.env.NODE_ENV === 'production') {
-
-  // for browser (& upload CDN)
-  config.entry[CORE_NAME] = config.entry.h4p;
-}
 
 module.exports = config;
