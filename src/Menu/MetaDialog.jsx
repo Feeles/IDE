@@ -1,6 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
-import {Stepper, Step, StepButton} from 'material-ui/Stepper';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -89,23 +88,6 @@ export default class MetaDialog extends PureComponent {
         bodyStyle={styles.dialog}
         onRequestClose={() => this.props.onRequestClose(false)}
       >
-        <Stepper linear={false} activeStep={stepIndex}>
-          <Step>
-            <StepButton onTouchTap={() => this.setState({stepIndex: 0})}>
-              {localization.metaDialog.appearance}
-            </StepButton>
-          </Step>
-          <Step>
-            <StepButton onTouchTap={() => this.setState({stepIndex: 1})}>
-              {localization.metaDialog.creator}
-            </StepButton>
-          </Step>
-          <Step>
-            <StepButton onTouchTap={() => this.setState({stepIndex: 2})}>
-              {localization.metaDialog.publish}
-            </StepButton>
-          </Step>
-        </Stepper>
         {this.renderStep()}
       </Dialog>
     );
