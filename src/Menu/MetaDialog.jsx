@@ -120,7 +120,7 @@ class EditOGP extends PureComponent {
     await this.props.setConfig('ogp', {
       ...this.props.getConfig('ogp'),
       'og:title': text,
-      'twitter:title': text,
+      'twitter:title': text || '...',
     });
     this.forceUpdate();
   };
@@ -129,7 +129,7 @@ class EditOGP extends PureComponent {
     await this.props.setConfig('ogp', {
       ...this.props.getConfig('ogp'),
       'og:description': text,
-      'twitter:description': text,
+      'twitter:description': text || '...',
     });
     this.forceUpdate();
   };

@@ -56,7 +56,7 @@ export default new Map([
   ['ogp', {
     test: /^feeles\/ogp\.json$/i,
     multiple: false,
-    defaultValue: {},
+    defaultValue: organization.placeholder,
     defaultName: 'feeles/ogp.json',
   }],
   ['snippets', {
