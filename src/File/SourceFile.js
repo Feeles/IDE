@@ -152,16 +152,14 @@ export default class SourceFile extends _File {
     <script
       type="text/javascript"
       id=${INLINE_SCRIPT_ID}
-` +   (deployURL ? `x-feeles-deploy="${deployURL}"` : '') + `
+      x-feeles-launch=","
+      ${deployURL ? `x-feeles-deploy=${deployURL}` : ''}
     >
     ${coreString.replace(/\<\//g, '<\\/')}
     </script>
-    <script type="text/javascript">
-    ${EXPORT_VAR_NAME}();
-    </script>
 `;
     return new SourceFile({
-      name: getConfig('ogp')['og:title'] + '.html',
+      name: (getConfig('ogp')['og:title'] || 'index') + '.html',
       type: 'text/html',
       text: download({
         CSS_PREFIX,
@@ -178,11 +176,12 @@ export default class SourceFile extends _File {
     <script
       async
       src="${SourceFile.coreLibFilename}"
-` +   (deployURL ? `x-feeles-deploy="${deployURL}"` : '') + `
+      x-feeles-launch=","
+      ${deployURL ? `x-feeles-deploy=${deployURL}` : ''}
     ></script>
 `;
     return new SourceFile({
-      name: getConfig('ogp')['og:title'] + '.html',
+      name: (getConfig('ogp')['og:title'] || 'index') + '.html',
       type: 'text/html',
       text: download({
         CSS_PREFIX,
@@ -199,12 +198,12 @@ export default class SourceFile extends _File {
     <script
       async
       src="${src}"
-      onload="${EXPORT_VAR_NAME}()"
-` +   (deployURL ? `x-feeles-deploy="${deployURL}"` : '') + `
+      x-feeles-launch=" , "
+      ${deployURL ? `x-feeles-deploy=${deployURL}` : ''}
     ></script>
 `;
     return new SourceFile({
-      name: getConfig('ogp')['og:title'] + '.html',
+      name: (getConfig('ogp')['og:title'] || 'index') + '.html',
       type: 'text/html',
       text: download({
         CSS_PREFIX,
@@ -217,17 +216,10 @@ export default class SourceFile extends _File {
   }
 
   static async library({ coreString }) {
-    const text = `(function() {
-  var e = document.createElement('script');
-  e.id = ${INLINE_SCRIPT_ID};
-  e.textContent = decodeURIComponent("${encodeURIComponent(coreString)}");
-  document.body.appendChild(e);
-  ${EXPORT_VAR_NAME}();
-})();`;
     return new SourceFile({
       name: SourceFile.coreLibFilename,
       type: 'text/javascript',
-      text,
+      text: coreString,
     });
   }
 
