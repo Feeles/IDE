@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FeelesWebpackPlugin = require('./feeles-webpack-plugin');
 
 const exportVarName = process.env.EXPORT_VAR_NAME || "h4p";
 const cssPrefix = process.env.CSS_PREFIX || (exportVarName + "__");
@@ -66,7 +67,11 @@ const config = {
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false
-    })
+    }),
+    new FeelesWebpackPlugin({
+      path: 'mount',
+      ignore: /\.DS_Store$/,
+    }),
   ],
   devServer: {
     contentBase: 'dist',
