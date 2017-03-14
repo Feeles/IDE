@@ -22,14 +22,16 @@ An open source IDE for giving code to people.  
 ES: ECMA Script, The standardized modern javascript
 
 Try it out!
-- [Empty Feeles](http://teramotodaiki.github.io/h4p/dist/)
+- [Empty Feeles (latest version)](https://feeles.github.io/IDE/dist/)
 (English or Japanese 🍔)
 - [HackforPlay on Feeles](https://teramotodaiki.github.io/hackforplay-on-feeles/)
 (Japanese only 🍣)
 - [Pixi.js (in development)](https://tenonno.github.io/RPG-2/)
 (Japanese only 🍣)
 
-Features
+
+## Features
+
 - Work on browser (Chrome/FireFox/Safari/Opera/~~IE11~~) 💻
   - **Standalone**. Just open HTML and it works.
   - If you put the file inside, it behaves like a web server. 🎩
@@ -46,13 +48,17 @@ Features
 - Change the theme color according to your mood
 and more…
 
-In the future ⤴️
-- Documentation
-  - Progress: 😭
-- Run on `ServiceWorker`
-  - Completely behaves like a web server
-  - It will released from constraints of Origin
-- Portal site working on docker container
-  - Upload contents and share it together! 🍺
+
+## Contribute
+
+1. Clone or Fork this repo.
+2. `cd (installed directory)`
+3. `npm install && npm start`
+4. `open http://localhost:(port)` usually port is 8080.
+
+- `src/`
+  - An application students use made with React.js.
+- `mount/`
+  - An application students **modify** and run on Feeles.
 
 > *Translated by <https://translate.google.com>*

@@ -20,7 +20,7 @@
 ES: ECMA Script, 規格化されたモダンな JavaScript , その総称
 
 Try it out!
-- [空の Feeles](http://teramotodaiki.github.io/h4p/dist/)
+- [空の Feeles (最新版)](http://teramotodaiki.github.io/h4p/dist/)
 (日本語/英語対応 🍔)
 - [HackforPlay on Feeles](https://teramotodaiki.github.io/hackforplay-on-feeles/)
 (日本語のみ 🍣)
@@ -28,7 +28,8 @@ Try it out!
 (日本語のみ 🍣)
 
 
-できること
+## できること
+
 - ブラウザ (Chrome/FireFox/Safari/Opera/~~IE11~~) で動きます 💻
   - **スタンドアロン** で動作します。HTML ファイルを開くだけ。
   - IDE の中にファイルを入れると、 Web サーバーのようにふるまいます 🎩
@@ -45,14 +46,17 @@ Try it out!
 - 気分に合わせてテーマカラーを変更できます
 などなど…
 
-これからやること ⤴️
-- Documentation
-  - 進捗: 😭
-- `ServiceWorker` 上で動作
-  - より Web サーバーらしくふるまえるように
-  - オリジンの制約から解放されるように
-- (Docker 上で動く) ポータルサイト
-  - コンテンツをアップロードしてみんなでシェアしましょう! 🍺
+## IDE を作成する
+
+1. このリポジトリを Fork または Clone します
+2. ディレクトリを移動します `cd (installed directory)`
+3. npm コマンドを実行します `npm install && npm start`
+4. localhost をブラウザで開きます `open http://localhost:(port)` ポートは通常 8080 です
+
+- `src/`
+  - 生徒が使うアプリケーションで、 React.js で作られています
+- `mount/`
+  - 生徒が **作り変えて**、Feeles 上で動作するアプリケーションです
 
 > この文章（日本語）が原文です  
 English: <https://github.com/teramotodaiki/h4p/blob/master/README.md>
