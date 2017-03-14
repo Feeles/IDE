@@ -3,6 +3,8 @@ export default function separate(fullpath) {
   fullpath = fullpath.replace(/\s/g, '');
   // Path separator
   fullpath = fullpath.replace(/:/g, '/');
+  // Path cannot empty
+  fullpath = fullpath.replace(/^\/+/, '');
 
   const pathLength = fullpath.lastIndexOf('/') + 1;
   const path = fullpath.substr(0, pathLength);

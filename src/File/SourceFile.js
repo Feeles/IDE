@@ -36,7 +36,14 @@ export default class SourceFile extends _File {
 
   constructor(props) {
     if (props.composed && !props.text) {
-      const text = decode(props.composed);
+      let text = '';
+      try {
+        // base64 encode された文字列の展開
+        text = decodeURIComponent(escape(atob(props.composed)));
+      } catch (e) {
+        // 旧仕様（sanitizeHTML）で compose された文字列の展開 (backword compatibility)
+        text = decode(props.composed);
+      }
       props = {...props, text};
     }
 
