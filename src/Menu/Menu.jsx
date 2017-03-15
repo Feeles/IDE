@@ -29,7 +29,7 @@ import MetaDialog from './MetaDialog';
 import {CardIcons} from '../Cards/CardWindow';
 import { updateProject } from '../database/';
 import organization from '../organization';
-
+import debugWindow from '../utils/debugWindow';
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -181,11 +181,7 @@ export default class Menu extends PureComponent {
       });
     } else {
       alert(localization.menu.failedToDeploy);
-      if (process.env.NODE_ENV !== 'production') {
-        window.open(
-          URL.createObjectURL(await response.blob())
-        );
-      }
+      debugWindow(response);
     }
 
     } catch (e) {
@@ -206,19 +202,79 @@ export default class Menu extends PureComponent {
     }
   };
 
-  handleShareTwitter = () => {
-    const params = new URLSearchParams();
-    params.set('url', this.shareURL);
-    if (organization.hashtags) {
-      params.set('hashtags', organization.hashtags);
+  handleShareTwitter = async () => {
+    const {
+      localization,
+    } = this.props;
+
+    if (confirm(localization.menu.haveTwitter)) {
+      const params = new URLSearchParams();
+      params.set('url', this.shareURL);
+      if (organization.hashtags) {
+        params.set('hashtags', organization.hashtags);
+      }
+      const tweetIntent = `https://twitter.com/intent/tweet?${params}`;
+      window.open(tweetIntent, '_blank', [
+        `width=550`,
+        `height=420`,
+        `left=${Math.round((screen.width / 2) - (550 / 2))}`,
+        `top=${screen.height > 550 ? Math.round((screen.height / 2) - (420 / 2)) : 0}`,
+      ].join());
+
+      return;
     }
-    const windowParams = [
-      `width=550`,
-      `height=420`,
-      `left=${Math.round((screen.width / 2) - (550 / 2))}`,
-      `top=${screen.height > 550 ? Math.round((screen.height / 2) - (420 / 2)) : 0}`,
-    ];
-    window.open(`https://twitter.com/intent/tweet?${params}`, '_blank', windowParams.join());
+
+    const password = this.state.password || prompt(localization.menu.enterPassword);
+    if (!password) {
+      this.setState({password: null});
+      return;
+    }
+
+    this.setState({isDeploying: true});
+
+    try {
+      const url = new URL(this.props.deployURL);
+      const search = url.pathname.split('/').pop();
+      const response = await fetch(`${url.origin}/api/v1/tweets`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          search,
+          status: [
+            this.props.getConfig('ogp')['og:description'],
+            'by ' + this.props.getConfig('ogp')['og:author'],
+            `${url.origin}/p/${search}`,
+            '#' + organization.hashtags.replace(/\,\s*/g, ' #'),
+          ].join(' '),
+          organization_password: password,
+        }),
+      });
+
+      if (response.ok) {
+        const text = await response.text();
+        const result = JSON.parse(text);
+        const userIntent = `https://twitter.com/intent/user?user_id=${result.user_id}`
+        this.setState({
+          password,
+          notice: {
+            message: localization.menu.tweeted,
+            action: localization.menu.viewTwitter,
+            autoHideDuration: 20000,
+            onActionTouchTap: () => window.open(userIntent, '_blank'),
+          }
+        });
+      } else {
+        alert(localization.menu.failedToTweet);
+        debugWindow(response);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    this.setState({isDeploying: false});
   };
 
   handleRequestClose = () => {
