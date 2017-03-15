@@ -121,10 +121,7 @@ class RootComponent extends Component {
     });
 
     for (const item of Array.from(elements)) {
-      this.progress(await makeFromElement(item));
-      if (Math.random() < 0.1 || this.state.last === 1) {
-        await this.wait();
-      }
+      await this.progress(await makeFromElement(item));
     }
   };
 
@@ -145,21 +142,20 @@ class RootComponent extends Component {
 
     for (const seed of seeds) {
       if (validateType('blob', seed.type)) {
-        this.progress(new BinaryFile(seed));
+        await this.progress(new BinaryFile(seed));
       } else {
-        this.progress(new SourceFile(seed));
+        await this.progress(new SourceFile(seed));
       }
     }
   };
 
-  wait() {
-    return new Promise((resolve, reject) => {
-      requestAnimationFrame(resolve);
-    });
-  }
-
-  progress(file) {
-    this.setState((prevState) => {
+  async progress(file) {
+    if (Math.random() < 0.1 || this.state.last === 1) {
+      await new Promise((resolve, reject) => {
+        requestAnimationFrame(resolve);
+      });
+    }
+    this.setState(prevState => {
       return {
         last: prevState.last - 1,
         files: prevState.files.concat(file),
@@ -205,6 +201,7 @@ class RootComponent extends Component {
         fontSize: '.5rem',
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
         wordBreak: 'break-all',
+        marginBottom: '1.5rem',
       },
     };
 
@@ -217,14 +214,14 @@ class RootComponent extends Component {
           ? title.getAttribute('content')
           : (document.title || '❤️')
         }</h1>
-      {last < Infinity ? (
-        <span style={styles.count}>
-          {'='.repeat(files.length) + '+' + '-'.repeat(last - 1)}
-        </span>
-      ) : null}
       {author && (
         <h2 style={styles.header}>{author.getAttribute('content')}</h2>
       )}
+      {last < Infinity ? (
+        <span style={styles.count}>
+          {indicator(files.length, last)}
+        </span>
+      ) : null}
         <span style={styles.header}>Made with Feeles</span>
         <LaunchDialog
           open={this.state.openDialog}
@@ -274,3 +271,10 @@ class RootComponent extends Component {
 
 const dndBackend = 'ontouchend' in document ? TouchBackend : HTML5Backend;
 export default DragDropContext(dndBackend)(RootComponent);
+
+function indicator(val, last) {
+  const length = 32;
+  const sum = Math.max(1, val + last) + 0.00001;
+  const progress = Math.floor(val / sum * length);
+  return '='.repeat(progress) + '+' + '-'.repeat(length - 1 - progress);
+}
