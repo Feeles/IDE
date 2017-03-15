@@ -4,6 +4,15 @@ import Dexie from 'dexie';
 const personalDB = new Dexie('personal');
 
 // DB migrations
+personalDB.version(2).stores({
+  projects: '++id, &title, size, created, updated, url',
+  files: '++id, [projectId+fileName]',
+}).upgrade(() => {
+  personalDB.projects.toCollection().modify ((project) => {
+    project.url = '';
+  });
+});
+
 personalDB.version(1).stores({
   projects: '++id, &title, size, created, updated',
   files: '++id, [projectId+fileName]',
@@ -25,6 +34,7 @@ export async function createProject(serializedFiles = []) {
     size,
     created: timestamp,
     updated: timestamp,
+    url: location.origin + location.pathname,
     CORE_VERSION: CORE_VERSION,
     CORE_CDN_URL: CORE_CDN_URL,
     // Remote project (product) deployment URL<string>
