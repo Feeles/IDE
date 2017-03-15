@@ -5,6 +5,7 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
+import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
@@ -33,6 +34,7 @@ export default class MonitorCard extends PureComponent {
     setLocation: PropTypes.func.isRequired,
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
+    toggleFullScreen: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired
   };
 
@@ -95,6 +97,9 @@ export default class MonitorCard extends PureComponent {
         actions={[
           <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
             <NavigationRefresh />
+          </IconButton>,
+          <IconButton key="fullscreen" onTouchTap={() => this.props.toggleFullScreen()}>
+            <NavigationFullscreen />
           </IconButton>,
           <IconButton key="popout" onTouchTap={() => this.props.togglePopout()}>
             <OpenInBrowser />
