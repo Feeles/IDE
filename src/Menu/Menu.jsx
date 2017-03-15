@@ -12,7 +12,7 @@ import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
 import FileCloudCircle from 'material-ui/svg-icons/file/cloud-circle';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
-import ActionAssignment from 'material-ui/svg-icons/action/assignment';
+import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import SocialShare from 'material-ui/svg-icons/social/share';
@@ -353,13 +353,6 @@ export default class Menu extends PureComponent {
         >
           <FileDownload color={alternateTextColor} />
         </IconButton>
-        <IconButton
-          tooltip={localization.menu.aboutFeeles}
-          onTouchTap={this.handleAbout}
-          style={styles.button}
-        >
-          <ActionAssignment color={alternateTextColor} />
-        </IconButton>
       {this.state.isDeploying ? (
         <CircularProgress size={24} style={styles.progress} color={alternateTextColor} />
       ) : this.props.deployURL ? (
@@ -449,6 +442,15 @@ export default class Menu extends PureComponent {
             }}
           />
         )) : null}
+          <MenuItem
+            key="Version"
+            primaryText={localization.menu.version}
+            leftIcon={<ActionHistory />}
+            onTouchTap={() => {
+              this.handleAbout();
+              this.handleToggleDrawer();
+            }}
+          />
         </Drawer>
         <Snackbar
           open={this.state.notice !== null}

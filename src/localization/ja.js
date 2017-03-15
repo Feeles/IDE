@@ -23,6 +23,7 @@ export default {
     tweeted: 'ツイートできました! 🎉 ',
     viewTwitter: 'サイトを見に行く',
     failedToTweet: 'ツイートに失敗していました...😢',
+    version: 'バージョン',
   },
   cloneDialog: {
     saveTitle: 'セーブ',
