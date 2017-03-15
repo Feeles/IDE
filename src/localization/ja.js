@@ -84,7 +84,6 @@ export default {
   },
   addDialog: {
     title: 'ファイルを追加する',
-    mimeType: 'MIME タイプ',
     fileName: 'ファイル名',
     add: '作成',
     cancel: 'キャンセル',
