@@ -3,7 +3,8 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { grey100, grey500 } from 'material-ui/styles/colors';
+import { grey300, grey700 } from 'material-ui/styles/colors';
+import transitions from 'material-ui/styles/transitions';
 
 
 import {
@@ -192,16 +193,15 @@ class RootComponent extends Component {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: grey100,
       },
       header: {
         marginTop: 0,
         fontWeight: 100,
         color: 'white',
-        fontFamily: 'cursive',
+        fontFamily: '"Apple Chancery", cursive',
       },
       count: {
-        color: grey500,
+        color: grey700,
         fontSize: '.5rem',
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
         wordBreak: 'break-all',
@@ -218,7 +218,7 @@ class RootComponent extends Component {
           : (document.title || '❤️')
         }</h1>
       {last < Infinity ? (
-        <span key="0" style={styles.count}>
+        <span style={styles.count}>
           {'='.repeat(files.length) + '+' + '-'.repeat(last - 1)}
         </span>
       ) : null}
@@ -233,6 +233,13 @@ class RootComponent extends Component {
           launchFromElements={this.launchFromElements}
           onRequestClose={this.closeDialog}
         />
+        <style>{`
+          html, body {
+            background-color: ${grey300};
+            transition: ${transitions.easeOut('4000ms')};
+          }
+        `}
+        </style>
       </div>
     );
   };
