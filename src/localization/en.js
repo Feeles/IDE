@@ -23,6 +23,7 @@ export default {
     tweeted: 'Successed tweeting! 🎉 ',
     viewTwitter: 'View web site',
     failedToTweet: 'Failed tweeting...😢 server error.',
+    version: 'Version',
   },
   cloneDialog: {
     saveTitle: 'Save',
