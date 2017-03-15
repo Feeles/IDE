@@ -62,6 +62,10 @@ const getStyles = (props, context) => {
       marginLeft: 20,
       padding: 12,
     },
+    visits: {
+      color: palette.alternateTextColor,
+      fontSize: '.8rem',
+    },
   };
 };
 
@@ -314,6 +318,8 @@ export default class Menu extends PureComponent {
       ? FileCloudCircle
       : FileCloudUpload;
 
+    const visits = document.querySelector('script[x-feeles-visits]');
+
     return (
       <AppBar
         title={organization.title}
@@ -335,6 +341,9 @@ export default class Menu extends PureComponent {
             onTouchTap={this.handleClone}
           />
         )
+      )}
+      {visits && (
+        <div style={styles.visits}>{visits.getAttribute('x-feeles-visits')} PV</div>
       )}
         <IconButton
           tooltip={localization.menu.clone}
