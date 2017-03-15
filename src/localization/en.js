@@ -69,7 +69,6 @@ export default {
   },
   addDialog: {
     title: 'Add new file',
-    mimeType: 'MIME Type',
     fileName: 'File name',
     add: 'Add',
     cancel: 'Cancel',

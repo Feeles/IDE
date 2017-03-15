@@ -33,7 +33,8 @@ export default class MetaDialog extends PureComponent {
     const {stepIndex, isDeploying} = this.state;
     if (prevState.stepIndex !== stepIndex && stepIndex === 2) {
       // Close this dialog and start uploading
-      this.props.onRequestClose(true);
+      this.props.resolve(true);
+      this.props.onRequestClose();
     }
   }
 
@@ -45,7 +46,8 @@ export default class MetaDialog extends PureComponent {
 
   back = () => {
     if (this.state.stepIndex === 0) {
-      this.props.onRequestClose(false);
+      this.props.resolve(false);
+      this.props.onRequestClose();
       return;
     }
     this.setState(prevState => ({
@@ -86,7 +88,7 @@ export default class MetaDialog extends PureComponent {
       <Dialog open
         actions={actions}
         bodyStyle={styles.dialog}
-        onRequestClose={() => this.props.onRequestClose(false)}
+        onRequestClose={this.props.onRequestClose}
       >
         {this.renderStep()}
       </Dialog>

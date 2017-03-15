@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
-import AutoComplete from 'material-ui/AutoComplete';
 import TextField from 'material-ui/TextField';
-
+import CodeMirror from 'codemirror';
+import 'codemirror/mode/meta';
 
 import { SourceFile } from '../File/';
-import { MimeTypes } from '../EditorPane/';
 import { Confirm, Abort } from './Buttons';
 
 const getSeed = (type) => {
@@ -24,36 +23,26 @@ export default class AddDialog extends Component {
   };
 
   state = {
-    mimeTypes: Object.keys(MimeTypes),
-    type: '',
     name: '',
   };
 
   handleAdd = () => {
-    const { name, type } = this.state;
+    const {name} = this.state;
+    const {mime} = CodeMirror.findModeByFileName(name) || {mime: 'text/plane'};
 
     this.props.resolve(
       new SourceFile({
         name,
-        type,
-        text: getSeed(type)
+        type: mime,
+        text: getSeed(mime),
       })
     );
 
     this.props.onRequestClose();
   };
 
-  handleUpdateType = (type) => {
-    this.setState({ type });
-  };
-
   handleUpdateName = (event, name) => {
     this.setState({ name });
-  };
-
-  cancel = () => {
-    this.props.reject();
-    this.props.onRequestClose();
   };
 
   render() {
@@ -62,7 +51,7 @@ export default class AddDialog extends Component {
     } = this.props;
 
     const actions = [
-      <Abort label={localization.addDialog.cancel} onTouchTap={this.cancel} />,
+      <Abort label={localization.addDialog.cancel} onTouchTap={this.props.onRequestClose} />,
       <Confirm label={localization.addDialog.add} onTouchTap={this.handleAdd} />
     ];
 
@@ -72,16 +61,8 @@ export default class AddDialog extends Component {
         actions={actions}
         modal={false}
         open={true}
-        onRequestClose={this.cancel}
+        onRequestClose={this.props.onRequestClose}
       >
-        <AutoComplete fullWidth
-          searchText={this.state.type}
-          floatingLabelText={localization.addDialog.mimeType}
-          hintText="text/javascript"
-          dataSource={this.state.mimeTypes}
-          onUpdateInput={this.handleUpdateType}
-          onNewRequest={this.handleUpdateType}
-        />
         <TextField fullWidth
           value={this.state.name}
           floatingLabelText={localization.addDialog.fileName}
