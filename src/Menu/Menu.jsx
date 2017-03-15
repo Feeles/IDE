@@ -29,7 +29,7 @@ import MetaDialog from './MetaDialog';
 import {CardIcons} from '../Cards/CardWindow';
 import { updateProject } from '../database/';
 import organization from '../organization';
-
+import debugWindow from '../utils/debugWindow';
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -181,11 +181,7 @@ export default class Menu extends PureComponent {
       });
     } else {
       alert(localization.menu.failedToDeploy);
-      if (process.env.NODE_ENV !== 'production') {
-        window.open(
-          URL.createObjectURL(await response.blob())
-        );
-      }
+      debugWindow(response);
     }
 
     } catch (e) {
