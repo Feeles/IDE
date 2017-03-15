@@ -130,10 +130,12 @@ export default class Hierarchy extends PureComponent {
     );
   };
 
-  handleAdd = () => {
-    this.props.openFileDialog(AddDialog)
-      .then(this.props.addFile)
-      .catch(() => {});
+  handleAdd = async () => {
+    const file = await this.props.openFileDialog(AddDialog);
+    if (file) {
+      await this.props.addFile(file);
+      await this.handleFileSelect(file);
+    }
   };
 
   render() {
