@@ -1,1 +1,1 @@
-module.exports = 'beta-7e';
+module.exports = 'beta-7f';
