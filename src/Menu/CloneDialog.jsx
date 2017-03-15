@@ -328,11 +328,11 @@ export default class CloneDialog extends PureComponent {
                   project={item}
                   showURL={this.state.showAllUrls}
                   launchIDE={this.props.launchIDE}
-                  setProject={this.props.setProject}
                   processing={this.state.processing}
                   onProcessStart={this.handleProcessStart}
                   onProcessEnd={this.handleProcessEnd}
                   requestTitleChange={this.handleTitleChange}
+                  requestProjectSet={this.props.setProject}
                   localization={localization}
                 />
               ))}
@@ -397,12 +397,21 @@ export class ProjectCard extends PureComponent {
     project: PropTypes.object.isRequired,
     showURL: PropTypes.bool.isRequired,
     launchIDE: PropTypes.func.isRequired,
-    setProject: PropTypes.func.isRequired,
     processing: PropTypes.bool.isRequired,
     onProcessStart: PropTypes.func.isRequired,
     onProcessEnd: PropTypes.func.isRequired,
-    requestTitleChange: PropTypes.func,
+    requestProjectSet: PropTypes.func.isRequired,
+    requestTitleChange: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    showURL: false,
+    processing: false,
+    onProcessStart: () => {},
+    onProcessEnd: () => {},
+    requestProjectSet: () => {},
+    requestTitleChange: () => {},
   };
 
   handleLoad = async () => {
@@ -440,7 +449,7 @@ export class ProjectCard extends PureComponent {
     try {
       // Delete project and all included files
       await deleteProject(project.id);
-      await this.props.setProject(null);
+      await this.props.requestProjectSet(null);
 
     } catch (e) {
       console.error(e);

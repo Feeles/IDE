@@ -47,16 +47,9 @@ class RootComponent extends Component {
     deployURL: null,
   };
 
-  setStatePromise(nextState) {
-    return new Promise((resolve, reject) => {
-      this.setState(nextState, resolve);
-    });
-  }
-
   componentWillMount() {
     const {
       title,
-      jsonURL
     } = this.props;
 
     const deployInfo = document.querySelector('script[x-feeles-deploy]');
@@ -70,14 +63,8 @@ class RootComponent extends Component {
       // From indexedDB
       this.launchIDE({ title });
 
-    } else if (typeof jsonURL === 'string') {
-      // From fetching JSON
-      this.launchFromURL(jsonURL);
-
     } else {
-      this.setState({
-        openDialog: true,
-      });
+      this.setState({openDialog: true});
     }
   }
 
@@ -146,6 +133,14 @@ class RootComponent extends Component {
       } else {
         await this.progress(new SourceFile(seed));
       }
+    }
+  };
+
+  defaultLaunch = () => {
+    if (typeof this.props.jsonURL === 'string') {
+      this.launchFromURL(this.props.jsonURL);
+    } else {
+      this.launchFromElements();
     }
   };
 
@@ -227,7 +222,7 @@ class RootComponent extends Component {
           open={this.state.openDialog}
           localization={this.state.localization}
           launchIDE={this.launchIDE}
-          launchFromElements={this.launchFromElements}
+          fallback={this.defaultLaunch}
           onRequestClose={this.closeDialog}
         />
         <style>{`

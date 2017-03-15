@@ -15,6 +15,7 @@ import {
   updateProject,
 } from '../database/';
 import EditableLabel from '../jsx/EditableLabel';
+import {ProjectCard} from '../Menu/CloneDialog';
 
 export default class LaunchDialog extends PureComponent {
 
@@ -22,8 +23,12 @@ export default class LaunchDialog extends PureComponent {
     open: PropTypes.bool.isRequired,
     localization: PropTypes.object.isRequired,
     launchIDE: PropTypes.func.isRequired,
-    launchFromElements: PropTypes.func.isRequired,
+    fallback: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    fallback: () => {},
   };
 
   state = {
@@ -43,14 +48,16 @@ export default class LaunchDialog extends PureComponent {
   }
 
   async setup() {
-    const projects = await personalDB.projects.toArray();
+    const url = location.origin + location.pathname;
+    const projects = await personalDB.projects.filter(item => {
+      return item.url === url;
+    }).toArray();
 
-    if (projects.length < 1) {
-      this.launchFromElements();
+    if (!projects.length) {
+      this.props.fallback();
+      this.props.onRequestClose();
     } else {
-      this.setState({
-        projects,
-      });
+      this.setState({projects});
     }
   }
 
@@ -67,22 +74,19 @@ export default class LaunchDialog extends PureComponent {
     }
   }
 
-  launchFromElements = () => {
-    this.props.launchFromElements();
-    this.props.onRequestClose();
-  };
-
   handleTitleChange = async (project, title) => {
     const {
       localization,
     } = this.props;
 
     try {
-      const nextProject = await updateProject(project.id, { title });
+      await updateProject(project.id, { title });
+      const url = location.origin + location.pathname;
+      const projects = await personalDB.projects.filter(item => {
+        return item.url === url;
+      }).toArray();
 
-      this.setState({
-        projects: await personalDB.projects.toArray(),
-      });
+      this.setState({projects});
 
     } catch (e) {
       console.error(e);
@@ -91,54 +95,6 @@ export default class LaunchDialog extends PureComponent {
       }
     }
   };
-
-  renderProjectCard(item, styles) {
-    const {
-      localization,
-    } = this.props;
-
-    return (
-      <Card
-        key={item.id}
-        style={styles.card}
-      >
-        <CardHeader showExpandableButton
-          title={(
-            <EditableLabel id="title"
-              defaultValue={item.title}
-              tapTwiceQuickly={localization.common.tapTwiceQuickly}
-              onEditEnd={(text) => this.handleTitleChange(item, text)}
-            />
-          )}
-          subtitle={new Date(item.updated).toLocaleString()}
-        />
-        <CardText expandable>
-          <div>
-            <span style={styles.label}>{localization.cloneDialog.created}</span>
-            {new Date(item.created).toLocaleString()}
-          </div>
-          <div>
-            <span style={styles.label}>{localization.cloneDialog.updated}</span>
-            {new Date(item.updated).toLocaleString()}
-          </div>
-          <div>
-            <span style={styles.label}>{localization.cloneDialog.size}</span>
-            {`${(item.size / 1024 / 1024).toFixed(2)}MB`}
-          </div>
-        </CardText>
-        <CardActions>
-          <FlatButton
-            label={localization.launchDialog.openProject}
-            icon={<ActionOpenInBrowser />}
-            disabled={this.state.processing}
-            onTouchTap={() => this.launchIDE({
-              title: item.title,
-            })}
-          />
-        </CardActions>
-      </Card>
-    );
-  }
 
   renderLoading() {
     return (
@@ -192,12 +148,20 @@ export default class LaunchDialog extends PureComponent {
           <RaisedButton primary
             label={localization.launchDialog.startNew}
             style={styles.button}
-            onTouchTap={this.launchFromElements}
+            onTouchTap={this.props.fallback}
           />
           {localization.common.or}
         </div>
         <div style={styles.container}>
-        {this.state.projects.map(item => this.renderProjectCard(item, styles))}
+        {this.state.projects.map(item => (
+          <ProjectCard
+            key={item.id}
+            project={item}
+            launchIDE={this.props.launchIDE}
+            requestTitleChange={this.handleTitleChange}
+            localization={localization}
+          />
+        ))}
         </div>
       </Dialog>
     );
