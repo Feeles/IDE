@@ -24,6 +24,7 @@ export default {
     viewTwitter: 'View web site',
     failedToTweet: 'Failed tweeting...😢 server error.',
     version: 'Version',
+    showAllUrls: 'Show all URLs'
   },
   cloneDialog: {
     saveTitle: 'Save',

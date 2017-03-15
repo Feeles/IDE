@@ -54,6 +54,8 @@ export default class CloneDialog extends PureComponent {
     projects: null,
     processing: false,
     currentProject: this.props.project,
+    // Default show projects same url (origin + pathname)
+    showAll: false,
   };
 
   get hasSaved() {
@@ -265,7 +267,12 @@ export default class CloneDialog extends PureComponent {
               onEditEnd={(text) => this.handleTitleChange(item, text)}
             />
           )}
-          subtitle={new Date(item.updated).toLocaleString()}
+          subtitle={
+            [
+              new Date(item.updated).toLocaleString(),
+              this.state.showAll ? item.url : ''
+            ].join(' ')
+          }
         />
         <CardText expandable>
           <div>
@@ -359,11 +366,22 @@ export default class CloneDialog extends PureComponent {
 
     const actions =  [
       <FlatButton
+        label={localization.menu.showAllUrls}
+        style={styles.button}
+        onTouchTap={() => this.setState(prevState => {
+          return {showAll: !prevState.showAll};
+        })}
+      />,
+      <FlatButton
         label={localization.cloneDialog.cancel}
         style={styles.button}
         onTouchTap={onRequestClose}
       />,
     ];
+
+    const url = location.origin + location.pathname;
+    const projects = (this.state.projects || [])
+      .filter(project => this.state.showAll || project.url === url);
 
     return (
       <Dialog open
@@ -415,7 +433,7 @@ export default class CloneDialog extends PureComponent {
               </div>
             ) : (
               <div style={styles.container}>
-              {this.state.projects.map((item) => this.renderProjectCard(item, styles))}
+              {projects.map((item) => this.renderProjectCard(item, styles))}
               </div>
             )}
           </Tab>
