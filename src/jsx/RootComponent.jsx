@@ -3,7 +3,8 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { grey100, grey500 } from 'material-ui/styles/colors';
+import { grey300, grey700 } from 'material-ui/styles/colors';
+import transitions from 'material-ui/styles/transitions';
 
 
 import {
@@ -120,10 +121,7 @@ class RootComponent extends Component {
     });
 
     for (const item of Array.from(elements)) {
-      this.progress(await makeFromElement(item));
-      if (Math.random() < 0.1 || this.state.last === 1) {
-        await this.wait();
-      }
+      await this.progress(await makeFromElement(item));
     }
   };
 
@@ -144,21 +142,20 @@ class RootComponent extends Component {
 
     for (const seed of seeds) {
       if (validateType('blob', seed.type)) {
-        this.progress(new BinaryFile(seed));
+        await this.progress(new BinaryFile(seed));
       } else {
-        this.progress(new SourceFile(seed));
+        await this.progress(new SourceFile(seed));
       }
     }
   };
 
-  wait() {
-    return new Promise((resolve, reject) => {
-      requestAnimationFrame(resolve);
-    });
-  }
-
-  progress(file) {
-    this.setState((prevState) => {
+  async progress(file) {
+    if (Math.random() < 0.1 || this.state.last === 1) {
+      await new Promise((resolve, reject) => {
+        requestAnimationFrame(resolve);
+      });
+    }
+    this.setState(prevState => {
       return {
         last: prevState.last - 1,
         files: prevState.files.concat(file),
@@ -192,29 +189,40 @@ class RootComponent extends Component {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: grey100,
       },
       header: {
+        marginTop: 0,
         fontWeight: 100,
         color: 'white',
-        fontFamily: 'cursive',
+        fontFamily: '"Apple Chancery", cursive',
       },
       count: {
-        color: grey500,
+        color: grey700,
         fontSize: '.5rem',
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
         wordBreak: 'break-all',
+        marginBottom: '1.5rem',
       },
     };
 
+    const author = document.querySelector('meta[name="og:author"],meta[property="og:author"]');
+    const title = document.querySelector('meta[name="og:title"],meta[property="og:title"]');
+
     return (
       <div style={styles.root}>
-        <h1 style={styles.header}>Feeles</h1>
+        <h1 style={styles.header}>{title
+          ? title.getAttribute('content')
+          : (document.title || '❤️')
+        }</h1>
+      {author && (
+        <h2 style={styles.header}>{author.getAttribute('content')}</h2>
+      )}
       {last < Infinity ? (
-        <span key="0" style={styles.count}>
-          {'='.repeat(files.length) + '+' + '-'.repeat(last - 1)}
+        <span style={styles.count}>
+          {indicator(files.length, last)}
         </span>
       ) : null}
+        <span style={styles.header}>Made with Feeles</span>
         <LaunchDialog
           open={this.state.openDialog}
           localization={this.state.localization}
@@ -222,6 +230,13 @@ class RootComponent extends Component {
           launchFromElements={this.launchFromElements}
           onRequestClose={this.closeDialog}
         />
+        <style>{`
+          html, body {
+            background-color: ${grey300};
+            transition: ${transitions.easeOut('4000ms')};
+          }
+        `}
+        </style>
       </div>
     );
   };
@@ -256,3 +271,10 @@ class RootComponent extends Component {
 
 const dndBackend = 'ontouchend' in document ? TouchBackend : HTML5Backend;
 export default DragDropContext(dndBackend)(RootComponent);
+
+function indicator(val, last) {
+  const length = 32;
+  const sum = Math.max(1, val + last) + 0.00001;
+  const progress = Math.floor(val / sum * length);
+  return '='.repeat(progress) + '+' + '-'.repeat(length - 1 - progress);
+}
