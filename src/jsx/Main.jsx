@@ -130,6 +130,12 @@ export default class Main extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.project !== nextProps.project) {
+      this.setProject(nextProps.project);
+    }
+  }
+
   componentDidUpdate() {
     if (this.state.reboot) {
       this.setState({ reboot: false });

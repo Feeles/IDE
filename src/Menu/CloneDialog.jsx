@@ -418,9 +418,7 @@ export class ProjectCard extends PureComponent {
     if (isServiceWorkerEnabled) {
       location.href = `../${this.props.project.title}/`;
     } else {
-      await this.props.launchIDE({
-        title: this.props.project.title
-      });
+      await this.props.launchIDE(this.props.project);
     }
   };
 

@@ -37,17 +37,17 @@ export default class LaunchDialog extends PureComponent {
 
   componentWillMount() {
     if (this.props.open) {
-      this.setup();
+      this.refreshState();
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.open && nextProps.open) {
-      this.setup();
+      this.refreshState();
     }
   }
 
-  async setup() {
+  async refreshState() {
     const url = location.origin + location.pathname;
     const projects = await personalDB.projects.filter(item => {
       return item.url === url;
@@ -57,20 +57,20 @@ export default class LaunchDialog extends PureComponent {
       this.props.fallback();
       this.props.onRequestClose();
     } else {
-      this.setState({projects});
+      await new Promise((resolve, reject) => {
+        this.setState({projects}, resolve);
+      });
     }
   }
 
-  async launchIDE({ title }) {
+  async launchIDE(project) {
     try {
-      await this.props.launchIDE({ title });
+      await this.props.launchIDE(project);
       this.props.onRequestClose();
 
     } catch (e) {
-      console.error(e);
-      if (e.message) {
-        alert(e.message);
-      }
+      console.error(1, e);
+      alert(e.message || e);
     }
   }
 
@@ -81,12 +81,7 @@ export default class LaunchDialog extends PureComponent {
 
     try {
       await updateProject(project.id, { title });
-      const url = location.origin + location.pathname;
-      const projects = await personalDB.projects.filter(item => {
-        return item.url === url;
-      }).toArray();
-
-      this.setState({projects});
+      await this.refreshState();
 
     } catch (e) {
       console.error(e);
@@ -159,6 +154,7 @@ export default class LaunchDialog extends PureComponent {
             project={item}
             launchIDE={this.props.launchIDE}
             requestTitleChange={this.handleTitleChange}
+            onProcessEnd={() => this.refreshState()}
             localization={localization}
           />
         ))}
