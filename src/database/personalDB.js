@@ -70,6 +70,21 @@ export async function readProject(title) {
   };
 }
 
+export async function findProject(id) {
+  const project = await personalDB.projects.get(id);
+  if (!project) {
+    return null;
+  }
+  // select * from files where projectId=project.id;
+  const query = personalDB.files
+    .where('[projectId+fileName]').between([project.id, ''], [project.id, '\uffff']);
+  return {
+    project,
+    query,
+    length: await query.clone().count(),
+  };
+}
+
 export async function updateProject(projectId, update) {
   const prevProject = await personalDB.projects
     .where(':id').equals(projectId)

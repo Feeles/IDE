@@ -9,6 +9,7 @@ import transitions from 'material-ui/styles/transitions';
 
 import {
   readProject,
+  findProject,
 } from '../database/';
 import {
   makeFromElement,
@@ -68,8 +69,8 @@ class RootComponent extends Component {
     }
   }
 
-  launchIDE = async ({ title }) => {
-    if (!title) {
+  launchIDE = async ({ id, title }) => {
+    if (!id && !title) {
       // Required unique title of project to proxy it
       throw new Error(
         this.state.localization.cloneDialog.titleIsRequired,
@@ -80,7 +81,7 @@ class RootComponent extends Component {
       project,
       query,
       length,
-    } = await readProject(title);
+    } = await (id ? findProject(id) : readProject(title));
 
     this.setState({
       last: length,
