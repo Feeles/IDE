@@ -195,6 +195,7 @@ class RootComponent extends Component {
         backgroundColor: grey100,
       },
       header: {
+        marginTop: 0,
         fontWeight: 100,
         color: 'white',
         fontFamily: 'cursive',
@@ -207,14 +208,24 @@ class RootComponent extends Component {
       },
     };
 
+    const author = document.querySelector('meta[name="og:author"],meta[property="og:author"]');
+    const title = document.querySelector('meta[name="og:title"],meta[property="og:title"]');
+
     return (
       <div style={styles.root}>
-        <h1 style={styles.header}>Feeles</h1>
+        <h1 style={styles.header}>{title
+          ? title.getAttribute('content')
+          : (document.title || '❤️')
+        }</h1>
       {last < Infinity ? (
         <span key="0" style={styles.count}>
           {'='.repeat(files.length) + '+' + '-'.repeat(last - 1)}
         </span>
       ) : null}
+      {author && (
+        <h2 style={styles.header}>{author.getAttribute('content')}</h2>
+      )}
+        <span style={styles.header}>Made with Feeles</span>
         <LaunchDialog
           open={this.state.openDialog}
           localization={this.state.localization}
