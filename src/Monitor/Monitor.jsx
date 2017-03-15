@@ -23,13 +23,19 @@ const popoutURL = URL.createObjectURL(
 const getStyle = (props, context, state) => {
   const {
     palette,
+    appBar,
   } = context.muiTheme;
+  const fullScreen = (yes, no) => props.isFullScreen ? yes : no;
 
   return {
     root: {
+      position: fullScreen('fixed', 'relative'),
+      paddingTop: fullScreen(appBar.height, 0),
       width: '100%',
       height: '100%',
-
+      left: 0,
+      top: 0,
+      boxSizing: 'border-box',
       opacity: 1,
       display: 'flex',
       flexDirection: 'column',
@@ -64,9 +70,11 @@ export default class Monitor extends PureComponent {
     isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     isPopout: PropTypes.bool.isRequired,
+    isFullScreen: PropTypes.bool.isRequired,
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
     togglePopout: PropTypes.func.isRequired,
+    toggleFullScreen: PropTypes.func.isRequired,
     portRef: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
@@ -302,6 +310,12 @@ export default class Monitor extends PureComponent {
     }
   };
 
+  handleTouch = () => {
+    if (this.props.isFullScreen) {
+      this.props.toggleFullScreen();
+    }
+  };
+
   render() {
     const {
       progress,
@@ -338,7 +352,7 @@ export default class Monitor extends PureComponent {
     const styles = getStyle(this.props, this.context, this.state);
 
     return (
-      <div style={styles.root}>
+      <div style={styles.root} onTouchTap={this.handleTouch}>
       {popout}
         <Screen animation
           display={!isPopout}

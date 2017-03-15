@@ -63,7 +63,9 @@ export default class Main extends Component {
   };
 
   state = {
-    monitorType: MonitorTypes.Card,
+    monitorType: this.rootWidth > 991
+      ? MonitorTypes.Card
+      : MonitorTypes.FullScreen,
 
     files: this.props.files,
     reboot: false,
@@ -342,6 +344,14 @@ export default class Main extends Component {
     });
   };
 
+  handleToggleFullScreen = () => {
+    const isFullScreen = this.state.monitorType === MonitorTypes.FullScreen;
+    this.setState({
+      monitorType: isFullScreen ?
+        MonitorTypes.Card : MonitorTypes.FullScreen,
+    });
+  };
+
   setLocation = (href) => {
     this.setState((prevState) => ({
       reboot: true,
@@ -440,14 +450,18 @@ export default class Main extends Component {
       },
       MonitorCard: {
         setLocation: this.setLocation,
-        togglePopout: this.handleTogglePopout,
         isPopout: this.state.monitorType === MonitorTypes.Popout,
+        togglePopout: this.handleTogglePopout,
+        toggleFullScreen: this.handleToggleFullScreen,
         getConfig: this.getConfig,
         monitorProps: {
           ...commonProps,
           rootWidth: this.rootWidth,
+          monitorType: this.state.monitorType,
           isPopout: this.state.monitorType === MonitorTypes.Popout,
+          isFullScreen: this.state.monitorType === MonitorTypes.FullScreen,
           togglePopout: this.handleTogglePopout,
+          toggleFullScreen: this.handleToggleFullScreen,
           reboot,
           portRef: (port) => this.setState({ port }),
           coreString: this.state.coreString,
@@ -491,6 +505,7 @@ export default class Main extends Component {
             cardProps={cardProps}
             updateCard={this.updateCard}
             localization={localization}
+            showCardIcon={this.state.monitorType !== MonitorTypes.FullScreen}
           />
           <FileDialog
             ref={this.handleFileDialog}

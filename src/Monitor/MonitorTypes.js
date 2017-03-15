@@ -2,6 +2,8 @@
 const MonitorTypes = {
   // If popout button is pressed
   Popout: Symbol('Popout'),
+  // If monitor card is expanded and render large size
+  FullScreen: Symbol('FullScreen'),
   // If monitor card is expanded
   Card: Symbol('Card'),
   // If editor is not shown
@@ -16,6 +18,7 @@ export function maxByPriority (...types) {
 
   const priority = [
     MonitorTypes.Popout,
+    MonitorTypes.FullScreen,
     MonitorTypes.Card,
   ];
 

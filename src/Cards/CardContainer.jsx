@@ -19,6 +19,7 @@ class CardContainer extends PureComponent {
     cardProps: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
+    showCardIcon: PropTypes.bool.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired
   };
@@ -110,6 +111,9 @@ class CardContainer extends PureComponent {
   }
 
   renderIcons(cards) {
+    if (!this.props.showCardIcon) {
+      return null;
+    }
     cards = cards.filter(info => info.visible);
     return cards.map((info, key) => (
       <a key={key} href={'#' + info.name}>
