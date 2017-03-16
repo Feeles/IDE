@@ -1,12 +1,12 @@
 {
-    "og:image": "https://embed.hackforplay.xyz/open-source/ogp/WQs5wGAvvnO8NJdlFHtd1zLimS0ollWf.png",
-    "og:image:width": 480,
-    "og:image:height": 320,
+    "og:title": "HackforPlay",
+    "og:url": "https://feeles.github.io/IDE/dist/hack-rpg.html",
+    "og:description": "体力9999のスライムに、ふれたら即GAMEOVERのブレス……クリアするには、プログラムを書きかえるしかない!!",
+    "og:image": "https://embed.hackforplay.xyz/open-source/ogp/rpg-kit.png",
+    "og:author": "てら",
     "twitter:card": "summary_large_image",
-    "twitter:image": "https://embed.hackforplay.xyz/open-source/ogp/WQs5wGAvvnO8NJdlFHtd1zLimS0ollWf.png",
-    "og:title": "jsonのための書き出し",
-    "twitter:title": "jsonのための書き出し",
-    "og:author": "てら"
-}scription": "",
-    "og:author": ""
+    "twitter:site": "@teramotodaiki",
+    "twitter:title": "HackforPlay",
+    "twitter:description": "体力9999のスライムに、ふれたら即GAMEOVERのブレス……クリアするには、プログラムを書きかえるしかない!!",
+    "twitter:image": "https://embed.hackforplay.xyz/open-source/ogp/rpg-kit.png"
 }
