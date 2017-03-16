@@ -45,14 +45,6 @@ export default new Map([
     },
     defaultName: '.babelrc',
   }],
-  ['provider', {
-    test: /^\.provider$/i,
-    multiple: false,
-    defaultValue: {
-      publishUrl: '',
-    },
-    defaultName: '.provider',
-  }],
   ['ogp', {
     test: /^feeles\/ogp\.json$/i,
     multiple: false,

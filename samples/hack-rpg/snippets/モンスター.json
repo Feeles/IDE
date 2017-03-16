@@ -1,0 +1,99 @@
+{
+	".source.js": {
+		"enchantjs/monster4.gif": {
+			"prefix": "slime",
+			"body": "// slime\nvar item = new RPGObject();\nitem.mod(Hack.assets.slime);\nitem.hp = 3;\nitem.atk = 1;\nitem.locate(7, 5, 'map1');\nitem.onbecomeidle = () => {\n\titem.attack();\n};\n",
+			"leftLabelHTML": "<img src='trimmed/slime.gif' />",
+			"description": "ムチのように からだをふりまわす、キケンなスライム。idle（まっている）→attack（こうげきする）→idle…を えいえんにくりかえすだけの あわれなそんざい",
+			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/スライム"
+		},
+		"enchantjs/monster1.gif": {
+			"prefix": "insect",
+			"body": "// insect\nvar item = new RPGObject();\nitem.mod(Hack.assets.insect);\nitem.hp = 2;\nitem.atk = 1;\nitem.locate(7, 5, 'map1');\nitem.onbecomeidle = () => {\n\titem.turn();\n\titem.walk();\n};\nitem.onbecomedead = () => {\n\tHack.score += 1;\n};\n",
+			"leftLabelHTML": "<img src='trimmed/insect.gif' />",
+			"description": "にげあしは おいらの とくぎなのさ。すばやく turn（ターン）して walk（あるく）のが ひけつさ",
+			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/イモムシ"
+		},
+		"enchantjs/monster3.gif": {
+			"prefix": "bat",
+			"body": `
+// bat
+var item = new RPGObject();
+item.mod(Hack.assets.bat);
+item.hp = 3;
+item.atk = 1;
+item.locate(7, 5, 'map1');
+item.onbecomedead = () => {
+    Hack.score += 1;
+};
+item.onbecomeidle = (e) => {
+	const self = e.target;
+    const target = Hack.player;
+    const moveX = 32 * Math.sign(target.mapX - self.mapX);
+    const moveY = 32 * Math.sign(target.mapY - self.mapY);
+    self.forward = [moveX, moveY];
+    self.tl.become('walk').moveBy(moveX, moveY, 30).then(() => {
+        Hack.Attack.call(self, self.mapX, self.mapY, self.atk);
+    }).become('attack', 20).become('idle');
+};
+			`,
+			"leftLabelHTML": "<img src='trimmed/bat.gif' />",
+			"description": "ねらいをつけて おそってくる おそろしいコウモリ。 target に、むかってくる らしい",
+			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/コウモリ"
+		},
+		"enchantjs/monster5.gif": {
+			"prefix": "ouroboros",
+			"body": "// ouroboros\nvar item = new RPGObject();\nitem.mod(Hack.assets.ouroboros);\nitem.hp = 10;\nitem.atk = 1;\nitem.locate(7, 5, 'map1');\nsetInterval(() => {\n\titem.attack();\n}, 4000);\n",
+			"leftLabelHTML": "<img src='trimmed/ouroboros.gif' />",
+			"description": "４秒おきに攻撃してくる大蛇ウロボロス。攻撃までの時間を変更することもできる",
+			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ウロボオス"
+		},
+		"enchantjs/bigmonster1.gif": {
+			"prefix": "dragon",
+			"body": `
+// dragon
+var item = new RPGObject();
+item.mod(Hack.assets.dragon);
+item.hp = 10;
+item.atk = 1;
+item.locate(7, 5, 'map1');
+item.scale(2, 2);
+item.setFrame('Idle', [10]);
+item.onbecomedead = () => {
+	Hack.gameclear();
+};
+item.onenterframe = (e) => {
+	const self = e.target;
+	if (game.frame % 3 > 0) return;
+	const flame = new RPGObject();
+	flame.mod(Hack.assets.explosion);
+	flame.collisionFlag = false;
+	self.shoot(flame, self.forward, 6);
+	const fx = self.forward.x,
+		  fy = self.forward.y;
+	flame.moveBy(fx * random(64, 96), fy * random(64, 96));
+	flame.velocityX += random(-0.99, 1);
+	flame.velocityY += random(-0.99, 1);
+	flame.scale(random(0.99, 1.5));
+	flame.force(-fx * random(0, 0.199), -fy * random(0, 0.199));
+	flame.destroy(20);
+	flame.ontriggerenter = (event) => {
+		if (event.hit !== self) {
+			Hack.Attack(event.mapX, event.mapY, self.atk);
+		}
+	};
+};
+			`,
+			"leftLabelHTML": "<img src='trimmed/dragon.gif' />",
+			"description": "やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！",
+			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ドラゴン"
+		},
+		"enchantjs/bigmonster2.gif": {
+			"prefix": "minotaur",
+			"body": "// minotaur\nvar item = new RPGObject();\nitem.mod(Hack.assets.minotaur);\nitem.hp = 10;\nitem.atk = 1;\nitem.locate(7, 5, 'map1');\nitem.scale(2, 2);\nitem.onbecomeidle = () => {\n\titem.attack();\n};\n",
+			"leftLabelHTML": "<img src='trimmed/minotaur.gif' />",
+			"description": "ずっと攻撃を繰り返す 凶暴なミノタウルス",
+			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス"
+		}
+	}
+}

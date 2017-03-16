@@ -312,8 +312,6 @@ export default class Menu extends PureComponent {
       palette: { alternateTextColor }
     } = this.context.muiTheme;
 
-    const canDeploy = !!getConfig('provider').publishUrl;
-
     const DeployStateIcon = this.state.isDeploying
       ? FileCloudCircle
       : FileCloudUpload;
