@@ -145,9 +145,7 @@ class CardContainer extends PureComponent {
       return no;
     };
     const isShrinkRight = (yes, no) => no;
-    const isResizing = (yes, no) => this.state.isResizing
-      ? yes
-      : no;
+    const isResizing = (yes, no) => this.state.isResizing ? yes : no;
 
     const styles = {
       container: {
