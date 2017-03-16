@@ -158,47 +158,47 @@ export default class Menu extends PureComponent {
           };
         })
       );
-    const actionURL = this.props.deployURL || organization.deployURL;
+      const actionURL = this.props.deployURL || organization.deployURL;
 
-    const response = await fetch(actionURL, {
-      method: this.props.deployURL ? 'PUT' : 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        json: JSON.stringify(composed),
-        script_src: CORE_CDN_URL,
-        ogp: JSON.stringify(this.props.getConfig('ogp')),
-        organization_id: organization.id,
-        organization_password: password,
-      }),
-      mode: 'cors'
-    });
-
-    if (response.ok) {
-      const text = await response.text();
-      const {search} = JSON.parse(text);
-      const api = new URL(actionURL);
-      const deployURL = `${api.origin}/api/v1/products/${search}`;
-      this.props.setDeployURL(deployURL);
-      if (this.props.project) {
-        await updateProject(this.props.project.id, {deployURL});
-      }
-
-      this.setState({
-        password,
-        notice: {
-          message: localization.menu.published,
-          action: localization.menu.goToSee,
-          autoHideDuration: 20000,
-          onActionTouchTap: () => window.open(`${api.origin}/p/${search}`),
-        }
+      const response = await fetch(actionURL, {
+        method: this.props.deployURL ? 'PUT' : 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          json: JSON.stringify(composed),
+          script_src: CORE_CDN_URL,
+          ogp: JSON.stringify(this.props.getConfig('ogp')),
+          organization_id: organization.id,
+          organization_password: password,
+        }),
+        mode: 'cors'
       });
-    } else {
-      alert(localization.menu.failedToDeploy);
-      debugWindow(response);
-    }
+
+      if (response.ok) {
+        const text = await response.text();
+        const {search} = JSON.parse(text);
+        const api = new URL(actionURL);
+        const deployURL = `${api.origin}/api/v1/products/${search}`;
+        this.props.setDeployURL(deployURL);
+        if (this.props.project) {
+          await updateProject(this.props.project.id, {deployURL});
+        }
+
+        this.setState({
+          password,
+          notice: {
+            message: localization.menu.published,
+            action: localization.menu.goToSee,
+            autoHideDuration: 20000,
+            onActionTouchTap: () => window.open(`${api.origin}/p/${search}`),
+          }
+        });
+      } else {
+        alert(localization.menu.failedToDeploy);
+        debugWindow(response);
+      }
 
     } catch (e) {
       console.error(e);
