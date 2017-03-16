@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
@@ -40,9 +41,7 @@ class RootComponent extends Component {
     files: [],
     // An object has project info
     project: null,
-    localization: getLocalization(...(
-      navigator.languages || [navigator.language]
-    )),
+    localization: null,
     muiTheme: getCustomTheme({}),
     openDialog: false,
     // continuous deploying URL (if null, do first deployment)
@@ -53,6 +52,8 @@ class RootComponent extends Component {
     const {
       title,
     } = this.props;
+
+    this.setLocalization(...(navigator.languages || [navigator.language]));
 
     const deployInfo = document.querySelector('script[x-feeles-deploy]');
     if (deployInfo) {
@@ -181,9 +182,15 @@ class RootComponent extends Component {
     });
   }
 
-  setLocalization = (localization) => this.setState({
-    localization
-  });
+  setLocalization = (...langs) => {
+    const localization = getLocalization(...langs);
+    if (localization) {
+      this.setState({localization});
+      moment.locale(langs);
+    } else {
+      throw new TypeError(`setLocalization: Cannot parse ${langs.join()}`);
+    }
+  };
 
   setMuiTheme = (theme) => this.setState({
     muiTheme: getCustomTheme(theme),

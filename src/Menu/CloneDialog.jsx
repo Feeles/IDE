@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import moment from 'moment';
 import Dialog from 'material-ui/Dialog';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -493,7 +494,7 @@ export class ProjectCard extends PureComponent {
           )}
           subtitle={
             [
-              new Date(project.updated).toLocaleString(),
+              moment(project.updated).fromNow(),
               this.props.showURL ? project.url : ''
             ].join(' ')
           }
