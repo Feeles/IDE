@@ -44,6 +44,7 @@ export default {
     embed: 'すべて１つのHTMLファイルにまとめる',
     divide: 'HTMLファイルとライブラリで分ける',
     cdn: 'ライブラリをインターネットから取得する',
+    project: 'プロジェクトを JSON で書き出す',
     save: '保存する',
     cancel: 'キャンセル',
     saveHTML: 'HTMLだけ保存する',
