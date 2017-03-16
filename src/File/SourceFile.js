@@ -70,9 +70,6 @@ export default class SourceFile extends _File {
   }
 
   get json() {
-    if (!this.is('json')) {
-      return null;
-    }
     if (!this._json) {
       const model = Array.from(configs.values())
         .find((config) => config.test.test(this.name));
