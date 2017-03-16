@@ -44,6 +44,7 @@ export default {
     embed: 'All in one HTML file',
     divide: 'Separate by HTML file and library',
     cdn: 'Get the library from the internet',
+    project: 'Export project as JSON',
     save: 'Save',
     cancel: 'Cancel',
     saveHTML: 'Save Only HTML',

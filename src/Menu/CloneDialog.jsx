@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import moment from 'moment';
+import md5 from 'md5';
 import Dialog from 'material-ui/Dialog';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -30,7 +31,8 @@ import isServiceWorkerEnabled from '../js/isServiceWorkerEnabled';
 const BundleTypes = [
   'embed',
   'divide',
-  'cdn'
+  'cdn',
+  'project'
 ];
 
 export default class CloneDialog extends PureComponent {
@@ -112,6 +114,18 @@ export default class CloneDialog extends PureComponent {
           files: this.props.files,
           deployURL: this.props.deployURL,
         })
+      );
+      this.props.onRequestClose();
+      break;
+
+      case 'project':
+
+      const text = JSON.stringify(
+        await Promise.all(this.props.files.map(item => item.collect()))
+      );
+      const name = md5(text) + '.json';
+      this.props.saveAs(
+        new SourceFile({type: 'application/json', name, text})
       );
       this.props.onRequestClose();
       break;
