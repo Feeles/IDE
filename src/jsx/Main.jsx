@@ -512,6 +512,7 @@ export default class Main extends Component {
             updateCard={this.updateCard}
             localization={localization}
             showCardIcon={this.state.monitorType !== MonitorTypes.FullScreen}
+            findFile={this.findFile}
           />
           <FileDialog
             ref={this.handleFileDialog}

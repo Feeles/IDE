@@ -20,6 +20,7 @@ class CardContainer extends PureComponent {
     updateCard: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     showCardIcon: PropTypes.bool.isRequired,
+    findFile: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired
   };
@@ -147,6 +148,11 @@ class CardContainer extends PureComponent {
     const isShrinkRight = (yes, no) => no;
     const isResizing = (yes, no) => this.state.isResizing ? yes : no;
 
+    // (暫定) 背景画像
+    const bg =
+      this.props.findFile('feeles/background.png') ||
+      this.props.findFile('feeles/background.jpg');
+
     const styles = {
       container: {
         flex: '1 1 auto',
@@ -154,6 +160,10 @@ class CardContainer extends PureComponent {
         alignItems: 'stretch',
         height: 0,
         overflow: 'hidden',
+        backgroundImage: bg && `url(${bg.blobURL})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
       },
       left: {
         position: 'relative',
