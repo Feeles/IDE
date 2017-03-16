@@ -10,11 +10,13 @@ class FeelesWebpackPlugin {
   constructor(params) {
     params = Object.assign({
       path: 'mount',
+      output: 'index.json',
       ignore: /[]/,
     }, params);
     this.fileTimestamps = new Map();
     this.filePromises = new Map();
     this.mountDir = path.resolve(params.path);
+    this.output = params.output;
     this.ignore = params.ignore;
   }
 
@@ -63,7 +65,7 @@ class FeelesWebpackPlugin {
         .then(files => {
           console.log(`Feeles: ${this.filePromises.size} files mounted in ${this.mountDir}`);
           const json = JSON.stringify(files);
-          compilation.assets['index.json'] = {
+          compilation.assets[this.output] = {
             source() {
               return json;
             },
