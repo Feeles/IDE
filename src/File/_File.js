@@ -118,6 +118,18 @@ export default class _File {
     });
   }
 
+  async collect() {
+    const dataURL = await this.toDataURL();
+    return {
+      name: this.name,
+      type: this.type,
+      lastModified: this.lastModified,
+      composed: dataURL.substr(dataURL.indexOf(',') + 1),
+      options: this.options,
+      credits: this.credits,
+    };
+  }
+
   get error() {
     return this.constructor._babelError.get(this);
   }
