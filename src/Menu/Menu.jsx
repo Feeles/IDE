@@ -22,7 +22,7 @@ import TwitterIcon from '../utils/TwitterIcon';
 
 
 import { BinaryFile, SourceFile } from '../File/';
-import getLocalization, { acceptedLanguages } from '../localization/';
+import { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
 import MetaDialog from './MetaDialog';
@@ -413,9 +413,7 @@ export default class Menu extends PureComponent {
           <MenuItem
             key={lang.accept[0]}
             primaryText={lang.native}
-            onTouchTap={() => setLocalization(
-              getLocalization(lang.accept[0])
-            )}
+            onTouchTap={() => setLocalization(lang.accept[0])}
           />
         ))}
         </IconMenu>

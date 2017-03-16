@@ -4,6 +4,15 @@ import Dexie from 'dexie';
 const personalDB = new Dexie('personal');
 
 // DB migrations
+personalDB.version(2).stores({
+  projects: '++id, &title, size, created, updated, url',
+  files: '++id, [projectId+fileName]',
+}).upgrade(() => {
+  personalDB.projects.toCollection().modify ((project) => {
+    project.url = '';
+  });
+});
+
 personalDB.version(1).stores({
   projects: '++id, &title, size, created, updated',
   files: '++id, [projectId+fileName]',
@@ -25,6 +34,7 @@ export async function createProject(serializedFiles = []) {
     size,
     created: timestamp,
     updated: timestamp,
+    url: location.origin + location.pathname,
     CORE_VERSION: CORE_VERSION,
     CORE_CDN_URL: CORE_CDN_URL,
     // Remote project (product) deployment URL<string>
@@ -47,6 +57,21 @@ export async function readProject(title) {
   const project = await personalDB.projects
     .where('title').equalsIgnoreCase(title)
     .first();
+  if (!project) {
+    return null;
+  }
+  // select * from files where projectId=project.id;
+  const query = personalDB.files
+    .where('[projectId+fileName]').between([project.id, ''], [project.id, '\uffff']);
+  return {
+    project,
+    query,
+    length: await query.clone().count(),
+  };
+}
+
+export async function findProject(id) {
+  const project = await personalDB.projects.get(id);
   if (!project) {
     return null;
   }

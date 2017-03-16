@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import moment from 'moment';
 import Dialog from 'material-ui/Dialog';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -54,6 +55,8 @@ export default class CloneDialog extends PureComponent {
     projects: null,
     processing: false,
     currentProject: this.props.project,
+    // Default show projects same url (origin + pathname)
+    showAllUrls: false,
   };
 
   get hasSaved() {
@@ -168,59 +171,6 @@ export default class CloneDialog extends PureComponent {
     this.setState({ processing: false });
   };
 
-  handleLoad = async (project, openInNewTab) => {
-    const {
-      localization,
-    } = this.props;
-
-    try {
-      if (isServiceWorkerEnabled) {
-        if (openInNewTab) {
-          const tab = window.open(`../${project.title}/`, '_blank');
-          if (!tab) {
-            throw new Error(localization.cloneDialog.failedToOpenTab);
-          }
-        } else {
-          location.href = `../${project.title}/`;
-        }
-      } else {
-        await this.props.launchIDE({
-          title: project.title
-        });
-      }
-    } catch (e) {
-      console.error(e);
-      if (e.message) {
-        alert(e.message);
-      }
-    }
-  };
-
-  handleRemove = async (project) => {
-    const {
-      localization,
-    } = this.props;
-
-    if (!confirm(localization.common.cannotBeUndone)) {
-      return;
-    }
-
-    this.setState({ processing: true });
-    try {
-      // Delete project and all included files
-      await deleteProject(project.id);
-      await this.props.setProject(null);
-      // Update project list
-      await this.refreshState();
-
-    } catch (e) {
-      console.error(e);
-      alert(localization.cloneDialog.failedToRemove);
-
-    }
-    this.setState({ processing: false });
-  };
-
   handleTitleChange = async (project, title) => {
     const {
       localization,
@@ -247,64 +197,14 @@ export default class CloneDialog extends PureComponent {
     this.setState({ processing: false });
   };
 
-  renderProjectCard(item, styles) {
-    const {
-      localization,
-    } = this.props;
+  handleProcessStart = () => {
+    this.setState({processing: true});
+  };
 
-    return (
-      <Card
-        key={item.id}
-        style={styles.card}
-      >
-        <CardHeader showExpandableButton
-          title={(
-            <EditableLabel id="title"
-              defaultValue={item.title}
-              tapTwiceQuickly={localization.common.tapTwiceQuickly}
-              onEditEnd={(text) => this.handleTitleChange(item, text)}
-            />
-          )}
-          subtitle={new Date(item.updated).toLocaleString()}
-        />
-        <CardText expandable>
-          <div>
-            <span style={styles.label}>{localization.cloneDialog.created}</span>
-            {new Date(item.created).toLocaleString()}
-          </div>
-          <div>
-            <span style={styles.label}>{localization.cloneDialog.updated}</span>
-            {new Date(item.updated).toLocaleString()}
-          </div>
-          <div>
-            <span style={styles.label}>{localization.cloneDialog.size}</span>
-            {`${(item.size / 1024 / 1024).toFixed(2)}MB`}
-          </div>
-        </CardText>
-        <CardActions>
-          <FlatButton
-            label={localization.cloneDialog.openOnThisTab}
-            icon={<ActionOpenInBrowser />}
-            disabled={this.state.processing}
-            onTouchTap={() => this.handleLoad(item, false)}
-          />
-          <FlatButton
-            label={localization.cloneDialog.openInNewTab}
-            icon={<ActionOpenInNew />}
-            disabled={this.state.processing || !isServiceWorkerEnabled}
-            onTouchTap={() => this.handleLoad(item, true)}
-          />
-          <FlatButton
-            label={localization.cloneDialog.remove}
-            icon={<ActionDelete color={red400} />}
-            labelStyle={styles.remove}
-            disabled={this.state.processing}
-            onTouchTap={() => this.handleRemove(item)}
-          />
-        </CardActions>
-      </Card>
-    );
-  }
+  handleProcessEnd = () => {
+    this.setState({processing: false});
+    this.refreshState();
+  };
 
   render() {
     const {
@@ -348,9 +248,6 @@ export default class CloneDialog extends PureComponent {
       card: {
         marginTop: 16,
       },
-      remove: {
-        color: red400,
-      },
       label: {
         fontWeight: 600,
         marginRight: '1rem',
@@ -359,11 +256,22 @@ export default class CloneDialog extends PureComponent {
 
     const actions =  [
       <FlatButton
+        label={localization.menu.showAllUrls}
+        style={styles.button}
+        onTouchTap={() => this.setState(prevState => {
+          return {showAllUrls: !prevState.showAllUrls};
+        })}
+      />,
+      <FlatButton
         label={localization.cloneDialog.cancel}
         style={styles.button}
         onTouchTap={onRequestClose}
       />,
     ];
+
+    const url = location.origin + location.pathname;
+    const projects = (this.state.projects || [])
+      .filter(project => this.state.showAllUrls || project.url === url);
 
     return (
       <Dialog open
@@ -415,7 +323,20 @@ export default class CloneDialog extends PureComponent {
               </div>
             ) : (
               <div style={styles.container}>
-              {this.state.projects.map((item) => this.renderProjectCard(item, styles))}
+              {projects.map(item => (
+                <ProjectCard
+                  key={item.id}
+                  project={item}
+                  showURL={this.state.showAllUrls}
+                  launchIDE={this.props.launchIDE}
+                  processing={this.state.processing}
+                  onProcessStart={this.handleProcessStart}
+                  onProcessEnd={this.handleProcessEnd}
+                  requestTitleChange={this.handleTitleChange}
+                  requestProjectSet={this.props.setProject}
+                  localization={localization}
+                />
+              ))}
               </div>
             )}
           </Tab>
@@ -469,4 +390,152 @@ export default class CloneDialog extends PureComponent {
       </Dialog>
     );
   }
+}
+
+export class ProjectCard extends PureComponent {
+
+  static propTypes = {
+    project: PropTypes.object.isRequired,
+    showURL: PropTypes.bool.isRequired,
+    launchIDE: PropTypes.func.isRequired,
+    processing: PropTypes.bool.isRequired,
+    onProcessStart: PropTypes.func.isRequired,
+    onProcessEnd: PropTypes.func.isRequired,
+    requestProjectSet: PropTypes.func.isRequired,
+    requestTitleChange: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired,
+  };
+
+  static defaultProps = {
+    showURL: false,
+    processing: false,
+    onProcessStart: () => {},
+    onProcessEnd: () => {},
+    requestProjectSet: () => {},
+    requestTitleChange: () => {},
+  };
+
+  handleLoad = async () => {
+    if (isServiceWorkerEnabled) {
+      location.href = `../${this.props.project.title}/`;
+    } else {
+      await this.props.launchIDE(this.props.project);
+    }
+  };
+
+  handleOpenTab = async () => {
+    const {
+      localization,
+    } = this.props;
+
+    const tab = window.open(`../${this.props.project.title}/`, '_blank');
+    if (!tab) {
+      alert(localization.cloneDialog.failedToOpenTab);
+    }
+  };
+
+  handleRemove = async () => {
+    const {
+      project,
+      localization,
+    } = this.props;
+
+    if (!confirm(localization.common.cannotBeUndone)) {
+      return;
+    }
+
+    this.props.onProcessStart();
+    try {
+      // Delete project and all included files
+      await deleteProject(project.id);
+      await this.props.requestProjectSet(null);
+
+    } catch (e) {
+      console.error(e);
+      alert(localization.cloneDialog.failedToRemove);
+    }
+    this.props.onProcessEnd();
+  };
+
+  render() {
+    const {
+      localization,
+      project,
+    } = this.props;
+
+    const styles = {
+      button: {
+        marginLeft: 16,
+      },
+      card: {
+        marginTop: 16,
+      },
+      remove: {
+        color: red400,
+      },
+      label: {
+        fontWeight: 600,
+        marginRight: '1rem',
+      },
+    };
+
+    return (
+      <Card
+        key={project.id}
+        style={styles.card}
+      >
+        <CardHeader showExpandableButton
+          title={(
+            <EditableLabel id="title"
+              defaultValue={project.title}
+              tapTwiceQuickly={localization.common.tapTwiceQuickly}
+              onEditEnd={(text) => this.props.requestTitleChange(project, text)}
+            />
+          )}
+          subtitle={
+            [
+              moment(project.updated).fromNow(),
+              this.props.showURL ? project.url : ''
+            ].join(' ')
+          }
+        />
+        <CardText expandable>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.created}</span>
+            {new Date(project.created).toLocaleString()}
+          </div>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.updated}</span>
+            {new Date(project.updated).toLocaleString()}
+          </div>
+          <div>
+            <span style={styles.label}>{localization.cloneDialog.size}</span>
+            {`${(project.size / 1024 / 1024).toFixed(2)}MB`}
+          </div>
+        </CardText>
+        <CardActions>
+          <FlatButton
+            label={localization.cloneDialog.openOnThisTab}
+            icon={<ActionOpenInBrowser />}
+            disabled={this.props.processing}
+            onTouchTap={this.handleLoad}
+          />
+          <FlatButton
+            label={localization.cloneDialog.openInNewTab}
+            icon={<ActionOpenInNew />}
+            disabled={this.props.processing || !isServiceWorkerEnabled}
+            onTouchTap={this.handleOpenTab}
+          />
+          <FlatButton
+            label={localization.cloneDialog.remove}
+            icon={<ActionDelete color={red400} />}
+            labelStyle={styles.remove}
+            disabled={this.props.processing}
+            onTouchTap={this.handleRemove}
+          />
+        </CardActions>
+      </Card>
+    );
+  }
+
 }

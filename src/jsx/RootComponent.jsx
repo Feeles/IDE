@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import { DragDropContext } from 'react-dnd';
@@ -8,7 +9,9 @@ import transitions from 'material-ui/styles/transitions';
 
 
 import {
+  createProject,
   readProject,
+  findProject,
 } from '../database/';
 import {
   makeFromElement,
@@ -38,26 +41,19 @@ class RootComponent extends Component {
     files: [],
     // An object has project info
     project: null,
-    localization: getLocalization(...(
-      navigator.languages || [navigator.language]
-    )),
+    localization: null,
     muiTheme: getCustomTheme({}),
     openDialog: false,
     // continuous deploying URL (if null, do first deployment)
     deployURL: null,
   };
 
-  setStatePromise(nextState) {
-    return new Promise((resolve, reject) => {
-      this.setState(nextState, resolve);
-    });
-  }
-
   componentWillMount() {
     const {
       title,
-      jsonURL
     } = this.props;
+
+    this.setLocalization(...(navigator.languages || [navigator.language]));
 
     const deployInfo = document.querySelector('script[x-feeles-deploy]');
     if (deployInfo) {
@@ -70,19 +66,13 @@ class RootComponent extends Component {
       // From indexedDB
       this.launchIDE({ title });
 
-    } else if (typeof jsonURL === 'string') {
-      // From fetching JSON
-      this.launchFromURL(jsonURL);
-
     } else {
-      this.setState({
-        openDialog: true,
-      });
+      this.setState({openDialog: true});
     }
   }
 
-  launchIDE = async ({ title }) => {
-    if (!title) {
+  launchIDE = async ({ id, title }) => {
+    if (!id && !title) {
       // Required unique title of project to proxy it
       throw new Error(
         this.state.localization.cloneDialog.titleIsRequired,
@@ -93,7 +83,7 @@ class RootComponent extends Component {
       project,
       query,
       length,
-    } = await readProject(title);
+    } = await (id ? findProject(id) : readProject(title));
 
     this.setState({
       last: length,
@@ -149,6 +139,35 @@ class RootComponent extends Component {
     }
   };
 
+  defaultLaunch = async () => {
+    if (typeof this.props.jsonURL === 'string') {
+      await this.launchFromURL(this.props.jsonURL);
+    } else {
+      await this.launchFromElements();
+    }
+    // Create new project
+    try {
+      const project = await createProject(
+        this.state.files.map(item => item.serialize())
+      );
+
+      const {deployURL} = this.props;
+      if (deployURL) {
+        this.setState({
+          project: await updateProject(project.id, {deployURL})
+        });
+      } else {
+        this.setState({project});
+      }
+
+    } catch (e) {
+      console.log(e);
+      if (typeof e === 'string' && e in this.state.localization.cloneDialog) {
+        alert(this.state.localization.cloneDialog[e]);
+      }
+    }
+  };
+
   async progress(file) {
     if (Math.random() < 0.1 || this.state.last === 1) {
       await new Promise((resolve, reject) => {
@@ -163,9 +182,15 @@ class RootComponent extends Component {
     });
   }
 
-  setLocalization = (localization) => this.setState({
-    localization
-  });
+  setLocalization = (...langs) => {
+    const localization = getLocalization(...langs);
+    if (localization) {
+      this.setState({localization});
+      moment.locale(langs);
+    } else {
+      throw new TypeError(`setLocalization: Cannot parse ${langs.join()}`);
+    }
+  };
 
   setMuiTheme = (theme) => this.setState({
     muiTheme: getCustomTheme(theme),
@@ -227,7 +252,7 @@ class RootComponent extends Component {
           open={this.state.openDialog}
           localization={this.state.localization}
           launchIDE={this.launchIDE}
-          launchFromElements={this.launchFromElements}
+          fallback={this.defaultLaunch}
           onRequestClose={this.closeDialog}
         />
         <style>{`
