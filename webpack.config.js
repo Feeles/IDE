@@ -69,7 +69,13 @@ const config = {
       debug: false
     }),
     new FeelesWebpackPlugin({
-      path: 'mount',
+      path: 'samples/hello-world',
+      output: 'index.json',
+      ignore: /\.DS_Store$/,
+    }),
+    new FeelesWebpackPlugin({
+      path: 'samples/hack-rpg',
+      output: 'hack-rpg.json',
       ignore: /\.DS_Store$/,
     }),
   ],
