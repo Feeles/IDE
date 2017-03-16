@@ -145,7 +145,19 @@ export default class Menu extends PureComponent {
     this.setState({isDeploying: true});
 
     try {
-    const composed = await Promise.all(this.props.files.map(item => item.compose()));
+      const composed = await Promise.all(
+        this.props.files.map(async item => {
+          const dataURL = await item.toDataURL();
+          return {
+            name: item.name,
+            type: item.type,
+            lastModified: item.lastModified,
+            composed: dataURL.substr(dataURL.indexOf(',') + 1),
+            options: item.options,
+            credits: [],
+          };
+        })
+      );
     const actionURL = this.props.deployURL || organization.deployURL;
 
     const response = await fetch(actionURL, {
