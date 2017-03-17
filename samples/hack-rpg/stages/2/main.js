@@ -5,13 +5,13 @@ import extra from '../extra';
 
 function gameStart() {
 
-	// 説明書を表示する
-	feeles.openReadme('stages/2/README.md');
-
 	// 解説の youtube を開く
 	feeles.openMedia({
 		url: 'https://www.youtube.com/embed/mLBb7WQTjoo'
 	});
+
+	// 説明書を表示する
+	feeles.openReadme('stages/2/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();
@@ -33,7 +33,7 @@ function gameStart() {
 		// ゲームオーバー
 		Hack.gameover();
 	};
-	
+
 
 
 	// まどうしょ
@@ -73,7 +73,7 @@ function gameStart() {
 	item3.hp = 9999;
 	// イモムシを 5, 7 の位置に移動する ( map1 )
 	item3.locate(5, 7, 'map1');
-	
+
 	// 魔道書にスライムを登録する
 	feeles.exports.push({
 		insect: item3
@@ -109,7 +109,7 @@ function createMap() {
 	map.imagePath = 'enchantjs/x2/dotmat.gif';
 
 	const ___ = -1;
-	
+
 	// マップの地形をつくる
 	map.bmap.loadData([
 		[323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323],

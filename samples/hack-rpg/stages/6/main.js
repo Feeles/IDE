@@ -9,9 +9,6 @@ game.preload('hackforplay/bar_green.png', 'hackforplay/bar_red.png');
 
 function gameStart() {
 
-	// 説明書を開く
-	feeles.openReadme('stages/6/README.md');
-
 	// 魔道書を開く
 	feeles.openCode('stages/6/code1.js');
 
@@ -20,6 +17,8 @@ function gameStart() {
 		url: 'https://www.youtube.com/embed/4L0qPyUaH0A'
 	});
 
+	// 説明書を開く
+	feeles.openReadme('stages/6/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();

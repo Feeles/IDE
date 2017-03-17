@@ -5,13 +5,13 @@ import extra from '../extra';
 
 function gameStart() {
 
-	// 説明書を表示する
-	feeles.openReadme('stages/1/README.md');
-
 	// 解説の youtube を開く
 	feeles.openMedia({
 		url: 'https://www.youtube.com/embed/od61KliPeJI'
 	});
+
+	// 説明書を表示する
+	feeles.openReadme('stages/1/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();
@@ -33,7 +33,7 @@ function gameStart() {
 		// ゲームオーバー
 		Hack.gameover();
 	};
-	
+
 
 
 

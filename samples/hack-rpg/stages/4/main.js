@@ -7,14 +7,13 @@ function gameStart() {
 	// コードをとじる
 	feeles.closeCode();
 
-	// 説明書を開く
-	feeles.openReadme('stages/4/README.md');
-
 	// 解説の youtube を開く
 	feeles.openMedia({
 		url: 'https://www.youtube.com/embed/8lU6vmn-C_c'
 	});
 
+	// 説明書を開く
+	feeles.openReadme('stages/4/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();
@@ -40,7 +39,7 @@ function gameStart() {
 	// 魔道書にプレイヤーを登録する
 	feeles.exports.push({ player });
 
-	
+
 	// ATK Label
 	// 攻撃力を画面に表示する
 	var atkLabel = new ScoreLabel();
@@ -70,7 +69,7 @@ function gameStart() {
 	item2.mod(Hack.assets.upStair);
 	// 階段を 7, 1 の位置に移動する ( map1 )
 	item2.locate(7, 1, 'map1');
-	// 階段を下の方に置く ( Under ) 
+	// 階段を下の方に置く ( Under )
 	item2.layer = RPGMap.Layer.Under;
 	// 階段にプレイヤーが乗ったら...
 	item2.onplayerenter = () => {
@@ -90,7 +89,7 @@ function gameStart() {
 
 
 function createMap() {
-	
+
 	// map1 というマップを作る
 	const mapName = 'map1';
 
