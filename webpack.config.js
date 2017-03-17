@@ -78,6 +78,11 @@ const config = {
       output: 'hack-rpg.json',
       ignore: /\.DS_Store$/,
     }),
+    new FeelesWebpackPlugin({
+      path: 'samples/make-rpg',
+      output: 'make-rpg.json',
+      ignore: /\.DS_Store$/,
+    }),
   ],
   devServer: {
     contentBase: 'dist',
