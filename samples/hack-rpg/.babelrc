@@ -1,11 +1,8 @@
 {
-	"presets": [
-		"es2015", "stage-3"
-	]
+    "presets": [
+        "es2015", "stage-3"
+    ],
+    "ignore": [
+        "stages/3/code.js"
+    ]
 }
-
-
-
-
-
-
