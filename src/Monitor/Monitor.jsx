@@ -170,7 +170,8 @@ export default class Monitor extends PureComponent {
     const env = composeEnv(getConfig('env'));
 
     const scriptFiles = this.props.files
-      .filter((file) => !file.options.isTrashed && file.isScript);
+      .filter((file) => !file.options.isTrashed && file.isScript)
+      .filter(file => file.name !== 'stages/3/code.js');
 
     const indicate = ((sent) => () => {
       const progress = Math.min(1, ++sent / scriptFiles.length);

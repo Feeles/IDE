@@ -64,7 +64,7 @@ export default function (file, babelrc) {
       worker.postMessage({
         id: id,
         code: file.text,
-        babelrc: babelrc,
+        options: {...babelrc, filename: file.name},
       });
     } else {
       resolve(file);

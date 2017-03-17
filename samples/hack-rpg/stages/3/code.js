@@ -1,4 +1,4 @@
-// stair.opacity = １;
+stair.opacity = １;
 
 
 // このへやに 出口が ないのは CODE が まちがっているからです。  
