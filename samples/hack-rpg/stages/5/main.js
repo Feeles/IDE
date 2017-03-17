@@ -4,9 +4,6 @@ import extra from '../extra';
 
 function gameStart() {
 
-	// 説明書を開く
-	feeles.openReadme('stages/5/README.md');
-	
 	// 魔道書を開く
 	feeles.openCode('stages/5/code1.js');
 
@@ -15,6 +12,8 @@ function gameStart() {
 		url: 'https://www.youtube.com/embed/3pfSkOBRvDI'
 	});
 
+	// 説明書を開く
+	feeles.openReadme('stages/5/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();
@@ -53,7 +52,7 @@ function gameStart() {
 		atkLabel.score = Hack.player.atk;
 	};
 	Hack.menuGroup.addChild(atkLabel);
-	
+
 
 
 	// コウモリ
@@ -73,7 +72,7 @@ function gameStart() {
 	item2.mod(Hack.assets.upStair);
 	// 階段を 7, 8 の位置に移動する ( map1 )
 	item2.locate(7, 8, 'map1');
-	// 階段を下の方に置く ( Under ) 
+	// 階段を下の方に置く ( Under )
 	item2.layer = RPGMap.Layer.Under;
 	// 階段にプレイヤーが乗ったら...
 	item2.onplayerenter = () => {
@@ -88,7 +87,7 @@ function gameStart() {
 	};
 
 	// 赤スライム軍団
-	
+
 	// 0 ならスライムは出ないけど、
 	// 1 ならスライムが出る！
 	// ためしに数値を書き換えてみよう！
@@ -136,7 +135,7 @@ function gameStart() {
 
 		});
 	});
-	
+
 	// このステージを改造
 	extra(0, 5, 'map1', 'stages/5/main.js');
 }

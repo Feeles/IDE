@@ -3,10 +3,7 @@ import { gameclear } from 'utils.js';
 import extra from '../extra';
 
 function gameStart() {
-	
-	// 説明書を表示する
-	feeles.openReadme('stages/3/README.md');
-	
+
 	// 魔道書を使う
 	feeles.openCode('stages/3/code.js');
 
@@ -15,6 +12,8 @@ function gameStart() {
 		url: 'https://www.youtube.com/embed/no7ch0jTHRc'
 	});
 
+	// 説明書を表示する
+	feeles.openReadme('stages/3/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();

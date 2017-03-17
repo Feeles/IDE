@@ -18,11 +18,11 @@
         }
     },
     "EditorCard": {
-        "visible": true,
+        "visible": false,
         "order": 2
     },
     "MediaCard": {
-        "visible": true,
+        "visible": false,
         "order": 3
     },
     "CreditsCard": {
@@ -30,7 +30,7 @@
         "order": 4
     },
     "ReadmeCard": {
-        "visible": true,
+        "visible": false,
         "order": 5,
         "init": {
             "fileName": "README.md"
@@ -41,7 +41,7 @@
         "order": 6
     },
     "HierarchyCard": {
-        "visible": true,
+        "visible": false,
         "order": 9
     },
     "EnvCard": {
