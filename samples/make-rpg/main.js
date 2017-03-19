@@ -17,11 +17,11 @@ function main() {
 		Hack.gameover();
 	};
 
-	/* ____/ assets/ゲーム.json \____ */
+	/* ____/ assets/game.json \____ */
 
 
 
-	/* \____ assets/ゲーム.json ____/ */
+	/* \____ assets/game.json ____/ */
 
 }
 

@@ -32,7 +32,6 @@ Hack.onload = () => {
 	Hack.maps['map1'] = map1;
 
 
-	/* \____ assets/マップ.json ____/ */
+	/* \____ assets/map.json ____/ */
 
 };
-
