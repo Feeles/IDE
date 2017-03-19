@@ -224,6 +224,10 @@ export default class Readme extends PureComponent {
       if (children.length < 1) {
         children = null;
       }
+      if (tag === 'p') {
+        tag = 'div';
+        props = {...props, style: {...props.style, margin: '14px 0'}};
+      }
       return React.createElement(tag, props, children);
     };
 
