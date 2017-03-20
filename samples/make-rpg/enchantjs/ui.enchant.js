@@ -1,4 +1,4 @@
-import 'enchantjs/enchant';
+require('enchantjs/enchant');
 
 /**
  * @fileOverview
@@ -926,12 +926,3 @@ set: function(arg) {
 function rand(num) {
     return Math.floor(Math.random() * num);
 }
-
-
-
-
-
-
-
-
-
