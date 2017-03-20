@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import Popout from '../jsx/ReactPopout';
 import IconButton from 'material-ui/IconButton';
-import LinearProgress from 'material-ui/LinearProgress';
+import CircularProgress from 'material-ui/CircularProgress';
 import NavigationRefreh from 'material-ui/svg-icons/navigation/refresh';
 import transitions from 'material-ui/styles/transitions';
 
@@ -38,8 +38,8 @@ const getStyle = (props, context, state) => {
       boxSizing: 'border-box',
       opacity: 1,
       display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch',
+      justifyContent: 'center',
+      alignItems: 'center',
       overflow: 'hidden',
       zIndex: 300,
       transition: transitions.easeOut(),
@@ -49,16 +49,8 @@ const getStyle = (props, context, state) => {
       right: 0,
       zIndex: 2,
     },
-    linear1: {
-      flex: '0 0 auto',
-      borderRadius: 0,
-      height: 8,
-    },
-    linear2: {
-      flex: '0 0 auto',
-      marginTop: -4,
-      borderRadius: 0,
-      opacity: state.progress < 1 ? 1 : 0,
+    progress: {
+      opacity: state.error ? 0 : 1,
     },
     progressColor: palette.primary1Color,
   };
@@ -93,7 +85,6 @@ export default class Monitor extends PureComponent {
   };
 
   state = {
-    progress: 0,
     error: null,
     port: null,
   };
@@ -169,28 +160,11 @@ export default class Monitor extends PureComponent {
     const babelrc = getConfig('babelrc');
     const env = composeEnv(getConfig('env'));
 
-    const scriptFiles = this.props.files
-      .filter((file) => !file.options.isTrashed && file.isScript)
-      .filter(file => file.name !== 'stages/3/code.js');
-
-    const indicate = ((sent) => () => {
-      const progress = Math.min(1, ++sent / scriptFiles.length);
-      this.setState({ progress });
-    })(0);
-
-    const buildProcess = scriptFiles
-      .map((file) => {
-        return file.babel(babelrc)
-          .then((es5) => indicate() || es5);
-      });
-    const processedFiles = await Promise.all(buildProcess);
-
     const htmlFile = this.props.findFile(this.props.href) || SourceFile.html();
 
     const html = await registerHTML(
       htmlFile.text,
       this.props.findFile,
-      processedFiles,
       env
     );
 
@@ -228,12 +202,22 @@ export default class Monitor extends PureComponent {
     this.setState({ port });
   }
 
-  handleMessage = ({ data }, reply) => {
+  handleMessage = async ({ data }, reply) => {
     switch (data.query) {
       case 'fetch':
         const file = this.props.findFile(data.value);
         if (file) {
           reply({ value: file.blob });
+        } else {
+          reply({ error: true });
+        }
+        break;
+      case 'resolve':
+        const file2 = this.props.findFile(data.value);
+        if (file2) {
+          const babelrc = this.props.getConfig('babelrc');
+          const result = await file2.babel(babelrc);
+          reply({ value: result.text });
         } else {
           reply({ error: true });
         }
@@ -319,7 +303,6 @@ export default class Monitor extends PureComponent {
 
   render() {
     const {
-      progress,
       error,
     } = this.state;
     const {
@@ -363,16 +346,10 @@ export default class Monitor extends PureComponent {
           width={this.props.frameWidth}
           height={this.props.frameHeight}
         />
-        <LinearProgress
-          mode="determinate"
-          max={1}
-          value={progress}
-          style={styles.linear1}
-          color={styles.progressColor}
-        />
-        <LinearProgress
-          mode="indeterminate"
-          style={styles.linear2}
+        <CircularProgress
+          size={100}
+          thickness={8}
+          style={styles.progress}
           color={styles.progressColor}
         />
       </div>
