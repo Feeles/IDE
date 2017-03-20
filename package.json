@@ -63,6 +63,7 @@
     "react-scroll": "^1.4.5",
     "react-tap-event-plugin": "^2.0.0",
     "regenerator-runtime": "^0.10.3",
+    "unorm": "^1.4.1",
     "url-search-params": "^0.6.1",
     "whatwg-fetch": "^2.0.2"
   }

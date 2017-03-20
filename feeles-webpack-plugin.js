@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
+const unorm = require('unorm');
 
 
 module.exports =
@@ -86,6 +87,9 @@ class FeelesWebpackPlugin {
   }
 
   loadFile(filePath) {
+    // Convert unicode
+    filePath = unorm.nfc(filePath);
+
     return Promise.resolve({
       name: path.relative(this.mountDir, filePath),
       type: mime.lookup(filePath),
