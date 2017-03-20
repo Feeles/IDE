@@ -160,10 +160,6 @@ export default class Monitor extends PureComponent {
     const babelrc = getConfig('babelrc');
     const env = composeEnv(getConfig('env'));
 
-    const scriptFiles = this.props.files
-      .filter((file) => !file.options.isTrashed && file.isScript)
-      .filter(file => file.name !== 'stages/3/code.js');
-
     const htmlFile = this.props.findFile(this.props.href) || SourceFile.html();
 
     const html = await registerHTML(
