@@ -228,12 +228,22 @@ export default class Monitor extends PureComponent {
     this.setState({ port });
   }
 
-  handleMessage = ({ data }, reply) => {
+  handleMessage = async ({ data }, reply) => {
     switch (data.query) {
       case 'fetch':
         const file = this.props.findFile(data.value);
         if (file) {
           reply({ value: file.blob });
+        } else {
+          reply({ error: true });
+        }
+        break;
+      case 'resolve':
+        const file2 = this.props.findFile(data.value);
+        if (file2) {
+          const babelrc = this.props.getConfig('babelrc');
+          const result = await file2.babel(babelrc);
+          reply({ value: result.text });
         } else {
           reply({ error: true });
         }
