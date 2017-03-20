@@ -45,7 +45,6 @@ export default function (file, babelrc) {
   return new Promise((resolve, reject) => {
     if (
       file.isScript &&
-      file.options.noBabel === false &&
       file.text.length < 100000
     ) {
       const id = getUniqueId();

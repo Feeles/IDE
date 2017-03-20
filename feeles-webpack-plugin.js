@@ -98,7 +98,6 @@ class FeelesWebpackPlugin {
 
       options: {
           isTrashed: false,
-          noBabel: false
       },
       credits: [],
     });

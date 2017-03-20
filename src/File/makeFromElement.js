@@ -14,7 +14,6 @@ export default async (script) => {
   const type = script.getAttribute('data-type');
   const options = {
     isTrashed: script.hasAttribute('is-trashed'),
-    noBabel: script.hasAttribute('no-babel'),
   };
   const credits = script.hasAttribute('data-credits') ?
     JSON.parse(script.getAttribute('data-credits')) : [];
