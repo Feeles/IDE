@@ -91,12 +91,15 @@ export default class Screen extends PureComponent {
     } = this.state;
 
     const style = {
-      flex: '1 1 auto',
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
       background: 'linear-gradient(rgba(0,0,0,0.8), rgba(128,128,128,0.8))',
       display: display ? 'flex' : 'none',
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
+      zIndex: 10,
     };
 
     const frameStyle = {
