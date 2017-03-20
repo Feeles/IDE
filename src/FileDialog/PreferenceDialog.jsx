@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import Dialog from 'material-ui/Dialog';
 import Table, { TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
-import Checkbox from 'material-ui/Checkbox';
 
 
 import { Confirm, Abort } from './Buttons';
@@ -35,16 +34,13 @@ export default class RenameDialog extends Component {
     changed: false,
     name: this.props.content.name,
     type: this.props.content.type,
-    noBabel: this.props.content.options.noBabel,
   };
 
   confirm = () => {
     const { onRequestClose, resolve, content } = this.props;
-    const { changed, name, type, noBabel } = this.state;
+    const { changed, name, type } = this.state;
 
-    const options = Object.assign({}, content.options, { noBabel });
-
-    resolve(changed ? { name, type, options } : {});
+    resolve(changed ? { name, type } : {});
     onRequestClose();
   };
 
@@ -56,17 +52,12 @@ export default class RenameDialog extends Component {
     this.setState({ changed: true, type });
   };
 
-  handleNoBabelChange = (event, noBabel) => {
-    this.setState({ changed: true, noBabel });
-  };
-
   render() {
     const { onRequestClose, content } = this.props;
     const {
       changed,
       name,
       type,
-      noBabel,
     } = this.state;
 
     const actions = [
@@ -114,17 +105,6 @@ export default class RenameDialog extends Component {
                 defaultValue={type}
                 onChange={this.handleTypeChange}
               />
-              </TableRowColumn>
-            </TableRow>
-            <TableRow>
-              <TableRowColumn style={left}>
-                Ingore Babel
-              </TableRowColumn>
-              <TableRowColumn>
-                <Checkbox
-                  checked={noBabel}
-                  onCheck={this.handleNoBabelChange}
-                />
               </TableRowColumn>
             </TableRow>
           </TableBody>

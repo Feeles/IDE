@@ -17,7 +17,6 @@ export default class BinaryFile extends _File {
 
   static defaultOptions = {
     isTrashed: false,
-    noBabel: false,
   }
 
   static visible = _File.visible.concat(
