@@ -21,13 +21,10 @@ export default async (script) => {
 
   const composed = script.textContent;
 
-  if (validateType('text', type)) {
-    return new SourceFile({ type, name, options, credits, lastModified, composed });
-  }
-
   if (validateType('blob', type)) {
     return new BinaryFile({ type, name, options, credits, lastModified, composed });
+  } else {
+    return new SourceFile({ type, name, options, credits, lastModified, composed });
   }
-
-  throw 'Unknown File Type ' + type;
+  
 };
