@@ -178,19 +178,11 @@ export default class Monitor extends PureComponent {
       this.setState({ progress });
     })(0);
 
-    const buildProcess = scriptFiles
-      .map((file) => {
-        return file.babel(babelrc)
-          .then((es5) => indicate() || es5);
-      });
-    const processedFiles = await Promise.all(buildProcess);
-
     const htmlFile = this.props.findFile(this.props.href) || SourceFile.html();
 
     const html = await registerHTML(
       htmlFile.text,
       this.props.findFile,
-      processedFiles,
       env
     );
 

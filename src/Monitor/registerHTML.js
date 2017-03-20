@@ -5,7 +5,6 @@ import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
 /**
  * @param html:String
  * @param findFile:Function
- * @param scriptFiles:Array<_File>
  * @param env:Object
  * @return Promise<String>
  *
@@ -13,12 +12,12 @@ import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
  * 0. window.feeles と 環境変数 env のエクスポート
  * 1. headタグの一番上に screenJs を埋め込む
  * 2. src 属性を BinaryFile の Data URL に差し替える
- * 3. screenJs のすぐ下で、全てのスクリプトを define する
+ * REMOVED: 3. screenJs のすぐ下で、全てのスクリプトを define する
  * 4. スクリプトタグの src 属性を requirejs を Data URL に差し替える
  * 5. a 要素の href 属性を feeles.replace の Data URL に差し替える
  * 6. regeneratorRuntime
  */
-export default async (html, findFile, scriptFiles, env) => {
+export default async (html, findFile, env) => {
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
@@ -65,11 +64,6 @@ export default async (html, findFile, scriptFiles, env) => {
     }
   }
 
-  // 3. screenJs のすぐ下で、全てのスクリプトを define する
-  if (env.MODULE) {
-    appendScript(scriptFiles.map(defineTemplate).join(''));
-  }
-
   // 4. スクリプトタグの src 属性を requirejs を Data URL に差し替える
   for (const node of [...doc.scripts]) {
     if (node.type && node.type !== 'text/javascript') continue;
@@ -79,7 +73,7 @@ export default async (html, findFile, scriptFiles, env) => {
     if (env.MODULE) {
       const dataURL =
         'data:text/javascript;charset=UTF-8,' +
-        encodeURIComponent(requireTemplate(file.moduleName, scriptFiles));
+        encodeURIComponent(requireTemplate(file.moduleName));
       node.setAttribute('src', dataURL);
     } else {
       node.text = file.text;
@@ -106,21 +100,7 @@ export default async (html, findFile, scriptFiles, env) => {
 
 }
 
-const defineTemplate = (file) => `;
-define('${file.moduleName}', new Function('require, exports, module',
-  unescape('${escape(file.text)}')
-))`;
-
-const requireTemplate = (src, scriptFiles) =>
-`requirejs({
-  map: {
-    '*': {
-      ${scriptFiles.map(nameToModuleName).join()}
-    }
-  }
-}, ['${src}'], function () {})`;
-
-const nameToModuleName = (file) => `"${file.name}":"${file.moduleName}"`;
+const requireTemplate = (src) => `requirejs(['${src}'])`;
 
 const replaceUrls = async (text, findFile) => {
   const regExp = /url\(([\w\/\.]*)\)/g;
