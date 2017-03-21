@@ -163,7 +163,7 @@ export default class Menu extends PureComponent {
       const body = {
         json: JSON.stringify(composed),
         script_src: CORE_CDN_URL,
-        ogp: JSON.stringify(this.props.getConfig('ogp')),
+        ogp: this.props.getConfig('ogp'),
       };
       if (withOAuth) {
         body.oauth_id = this.state.oAuthId;
