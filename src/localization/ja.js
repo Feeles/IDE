@@ -23,10 +23,7 @@ export default {
     linkCopied: 'リンクがコピーされました! 📎 ',
     published: 'あなたの作品が公開されました! 🎉 ',
     goToSee: '見に行く 👀',
-    haveTwitter: '自分のツイッターアカウントを持っていますか？',
-    tweeted: 'ツイートできました! 🎉 ',
     viewTwitter: 'サイトを見に行く',
-    failedToTweet: 'ツイートに失敗していました...😢',
     version: 'バージョン',
     showAllUrls: '全ての URL を表示',
     signInTwitter: 'ツイッターでログイン'
