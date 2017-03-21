@@ -370,12 +370,7 @@ export default class Menu extends PureComponent {
               />
             ]}
           />
-        {isLoggedin ? (
-          <MenuItem
-            primaryText={localization.menu.logout}
-            onTouchTap={this.handleLogout}
-          />
-        ) : (
+        {isLoggedin ? null : (
           <MenuItem
             primaryText={localization.menu.login}
             disabled={isLoggedin}
@@ -407,6 +402,12 @@ export default class Menu extends PureComponent {
                 onTouchTap={() => this.handleDeploy(false, false)}
               />
             ]}
+          />
+        ) : null}
+        {isLoggedin ? (
+          <MenuItem
+            primaryText={localization.menu.logout}
+            onTouchTap={this.handleLogout}
           />
         ) : null}
         </IconMenu>
