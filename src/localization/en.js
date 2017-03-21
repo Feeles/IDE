@@ -13,6 +13,7 @@ export default {
     share: 'Share this app',
     login: 'Login',
     logout: 'Logout',
+    loggedIn: 'You have logged in! 🎉 ',
     copyURL: 'Copy public link',
     tweet: 'Tweet',
     update: 'Update published app',

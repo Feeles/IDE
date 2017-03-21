@@ -13,6 +13,7 @@ export default {
     share: 'この作品をシェア',
     login: 'ログイン',
     logout: 'ログアウト',
+    loggedIn: 'ログインしました! 🎉 ',
     copyURL: '公開リンクをコピー',
     tweet: 'ツイートする',
     update: '公開作品をアップデート',

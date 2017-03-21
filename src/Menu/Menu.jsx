@@ -233,13 +233,17 @@ export default class Menu extends PureComponent {
   };
 
   handleLoginWithTwitter = async () => {
+    const {
+      localization,
+    } = this.props;
+
     const win = open(organization.api.twitter);
     const callback = (oAuthId) => {
       this.setState({
         oAuthId,
         notice: {
-          message: `You have logged in!`,
-          action: `Logout`,
+          message: localization.menu.loggedIn,
+          action: localization.menu.logout,
           autoHideDuration: 20000,
           onActionTouchTap: this.handleLogout,
         },
