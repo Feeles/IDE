@@ -15,6 +15,7 @@ import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
+import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import SocialShare from 'material-ui/svg-icons/social/share';
 import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
@@ -134,7 +135,7 @@ export default class Menu extends PureComponent {
     });
   };
 
-  handleDeploy = async () => {
+  handleDeploy = async (withOAuth, isUpdate) => {
     const {localization} = this.props;
 
     const result = await this.props.openFileDialog(MetaDialog, {
@@ -143,31 +144,41 @@ export default class Menu extends PureComponent {
     });
     if (!result) return;
 
-    const password = this.state.password || prompt(localization.menu.enterPassword);
-    if (!password) {
-      this.setState({password: null});
-      return;
+    // organization による投稿にはパスワードが必要
+    let password = null;
+    if (!withOAuth) {
+      password = this.state.password || prompt(localization.menu.enterPassword);
+      if (!password) {
+        this.setState({password: null});
+        return;
+      }
     }
 
     this.setState({isDeploying: true});
 
     try {
       const composed = await Promise.all(this.props.files.map(item => item.collect()));
-      const actionURL = this.props.deployURL || organization.deployURL;
 
+      // isUpdate の場合は PUT products/:search, そうでない場合は POST products
+      const actionURL = isUpdate ? this.props.deployURL : organization.api.deploy;
+      const body = {
+        json: JSON.stringify(composed),
+        script_src: CORE_CDN_URL,
+        ogp: JSON.stringify(this.props.getConfig('ogp')),
+      };
+      if (withOAuth) {
+        body.oauth_id = this.state.oAuthId;
+      } else {
+        body.organization_id = organization.id;
+        body.organization_password = password;
+      }
       const response = await fetch(actionURL, {
-        method: this.props.deployURL ? 'PUT' : 'POST',
+        method: isUpdate ? 'PUT' : 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          json: JSON.stringify(composed),
-          script_src: CORE_CDN_URL,
-          ogp: JSON.stringify(this.props.getConfig('ogp')),
-          organization_id: organization.id,
-          organization_password: password,
-        }),
+        body: JSON.stringify(body),
         mode: 'cors'
       });
 
@@ -337,11 +348,8 @@ export default class Menu extends PureComponent {
       palette: { alternateTextColor }
     } = this.context.muiTheme;
 
-    const DeployStateIcon = this.state.isDeploying
-      ? FileCloudCircle
-      : FileCloudUpload;
-
     const visits = document.querySelector('script[x-feeles-visits]');
+    const isHttp = /^https?\:$/.test(location.protocol);
     const isLoggedin = this.state.oAuthId !== null;
 
     return (
@@ -379,7 +387,7 @@ export default class Menu extends PureComponent {
         </IconButton>
       {this.state.isDeploying ? (
         <CircularProgress size={24} style={styles.progress} color={alternateTextColor} />
-      ) : this.props.deployURL ? (
+      ) : (
         <IconMenu
           iconButtonElement={(
             <IconButton tooltip={localization.menu.share}>
@@ -390,14 +398,42 @@ export default class Menu extends PureComponent {
           targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           style={styles.button}
         >
-          <MenuItem leftIcon={<ContentLink />} onTouchTap={this.handleShare}>
-            {localization.menu.copyURL}
-            <input style={styles.hidden} ref={ref => this.input = ref} />
-          </MenuItem>
+        {isLoggedin ? (
           <MenuItem
-            primaryText={localization.menu.tweet}
-            leftIcon={<TwitterIcon />}
-            onTouchTap={this.handleShareTwitter}
+            primaryText={localization.menu.deploySelf}
+            leftIcon={<ActionAccountCircle />}
+            rightIcon={<ArrowDropRight />}
+            menuItems={[
+              <MenuItem
+                primaryText={localization.menu.update}
+                disabled={!this.props.deployURL}
+                leftIcon={<ActionAutorenew />}
+                onTouchTap={() => this.handleDeploy(true, true)}
+              />,
+              <MenuItem
+                primaryText={localization.menu.create}
+                leftIcon={<FileCloudUpload />}
+                onTouchTap={() => this.handleDeploy(true, false)}
+              />
+            ]}
+          />
+        ) : null}
+          <MenuItem
+            primaryText={localization.menu.share}
+            leftIcon={<SocialShare />}
+            rightIcon={<ArrowDropRight />}
+            disabled={!isHttp}
+            menuItems={[
+              <MenuItem leftIcon={<ContentLink />} onTouchTap={this.handleShare}>
+                {localization.menu.copyURL}
+                <input style={styles.hidden} ref={ref => this.input = ref} />
+              </MenuItem>,
+              <MenuItem
+                primaryText={localization.menu.tweet}
+                leftIcon={<TwitterIcon />}
+                onTouchTap={this.handleShareTwitter}
+              />
+            ]}
           />
         {isLoggedin ? (
           <MenuItem
@@ -419,16 +455,26 @@ export default class Menu extends PureComponent {
             ]}
           />
         )}
+        {organization.id ? (
+          <MenuItem
+            rightIcon={<ArrowDropRight />}
+            primaryText={localization.menu.deployAs(organization.title)}
+            menuItems={[
+              <MenuItem
+                primaryText={localization.menu.update}
+                disabled={!this.props.deployURL}
+                leftIcon={<ActionAutorenew />}
+                onTouchTap={() => this.handleDeploy(false, true)}
+              />,
+              <MenuItem
+                primaryText={localization.menu.create}
+                leftIcon={<FileCloudUpload />}
+                onTouchTap={() => this.handleDeploy(false, false)}
+              />
+            ]}
+          />
+        ) : null}
         </IconMenu>
-      ) : (
-        <IconButton
-          tooltip={localization.menu.deploy}
-          onTouchTap={this.handleDeploy}
-          disabled={this.state.isDeploying}
-          style={styles.button}
-        >
-          <DeployStateIcon color={alternateTextColor} />
-        </IconButton>
       )}
         <IconMenu
           iconButtonElement={(
