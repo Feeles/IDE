@@ -23,7 +23,6 @@ export default {
     linkCopied: 'Link is copied! 📎 ',
     published: 'Your app was published! 🎉 ',
     goToSee: 'Go to see 👀',
-    confirmUnlink: '⚠️ CONFIRM: Your published app will be NOT deleted.',
     haveTwitter: 'Do you have your own Twitter account?',
     tweeted: 'Successed tweeting! 🎉 ',
     viewTwitter: 'View web site',

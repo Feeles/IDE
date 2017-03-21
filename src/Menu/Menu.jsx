@@ -320,15 +320,6 @@ export default class Menu extends PureComponent {
     this.setState({notice: null});
   };
 
-  handleUnlink = async () => {
-    if (confirm(this.props.localization.menu.confirmUnlink)) {
-      this.props.setDeployURL(null);
-      if (this.props.project) {
-        await updateProject(this.props.project.id, {deployURL: null});
-      }
-    }
-  };
-
   handleToggleDrawer = () => this.setState({
     open: !this.state.open,
   });

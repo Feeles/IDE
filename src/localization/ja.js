@@ -23,7 +23,6 @@ export default {
     linkCopied: 'リンクがコピーされました! 📎 ',
     published: 'あなたの作品が公開されました! 🎉 ',
     goToSee: '見に行く 👀',
-    confirmUnlink: '⚠️ 注意: 公開した作品は削除されません。',
     haveTwitter: '自分のツイッターアカウントを持っていますか？',
     tweeted: 'ツイートできました! 🎉 ',
     viewTwitter: 'サイトを見に行く',
