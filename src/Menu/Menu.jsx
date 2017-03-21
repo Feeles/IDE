@@ -10,7 +10,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
-import FileCloudCircle from 'material-ui/svg-icons/file/cloud-circle';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
@@ -520,7 +519,6 @@ export default class Menu extends PureComponent {
           />
         )) : null}
           <MenuItem
-            key="Version"
             primaryText={localization.menu.version}
             leftIcon={<ActionHistory />}
             onTouchTap={() => {

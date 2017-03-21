@@ -7,8 +7,6 @@ export default {
     language: 'Launguage',
     clone: 'Save and Load',
     aboutFeeles: 'About Feeles',
-    deploy: 'Publish this app',
-    share: 'Share',
     upload: 'Upload',
     deploySelf: 'Publish with your account',
     deployAs: (name) => `Publish with ${name}`,

@@ -7,8 +7,6 @@ export default {
     language: '言語',
     clone: 'セーブ / ロード / クローン',
     aboutFeeles: 'この Feeles について',
-    deploy: 'この作品を公開',
-    share: 'シェアする',
     upload: '作品を公開',
     deploySelf: 'このアカウントで作品を公開',
     deployAs: (name) => `${name} として公開`,
