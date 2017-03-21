@@ -108,7 +108,7 @@ export default class Menu extends PureComponent {
 
   get shareURL() {
     if (!this.props.deployURL) {
-      return '';
+      return location.href;
     }
     const url = new URL(this.props.deployURL);
     const {origin, pathname} = url;
