@@ -30,6 +30,7 @@ import {CardIcons} from '../Cards/CardWindow';
 import { updateProject } from '../database/';
 import organization from '../organization';
 import debugWindow from '../utils/debugWindow';
+import open from '../utils/open';
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -217,14 +218,7 @@ export default class Menu extends PureComponent {
       if (organization.hashtags) {
         params.set('hashtags', organization.hashtags);
       }
-      const tweetIntent = `https://twitter.com/intent/tweet?${params}`;
-      window.open(tweetIntent, '_blank', [
-        `width=550`,
-        `height=420`,
-        `left=${Math.round((screen.width / 2) - (550 / 2))}`,
-        `top=${screen.height > 550 ? Math.round((screen.height / 2) - (420 / 2)) : 0}`,
-      ].join());
-
+      open(`https://twitter.com/intent/tweet?${params}`);
       return;
     }
 
