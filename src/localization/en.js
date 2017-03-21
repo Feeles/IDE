@@ -9,6 +9,8 @@ export default {
     aboutFeeles: 'About Feeles',
     deploy: 'Publish this app',
     share: 'Share',
+    login: 'Login',
+    logout: 'Logout',
     copyURL: 'Copy public link',
     tweet: 'Tweet',
     update: 'Update published app',
@@ -24,7 +26,8 @@ export default {
     viewTwitter: 'View web site',
     failedToTweet: 'Failed tweeting...😢 server error.',
     version: 'Version',
-    showAllUrls: 'Show all URLs'
+    showAllUrls: 'Show all URLs',
+    signInTwitter: 'Sign in with Twitter',
   },
   cloneDialog: {
     saveTitle: 'Save',

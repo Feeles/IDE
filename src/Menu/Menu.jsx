@@ -14,10 +14,12 @@ import FileCloudCircle from 'material-ui/svg-icons/file/cloud-circle';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
+import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import SocialShare from 'material-ui/svg-icons/social/share';
 import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import ContentLink from 'material-ui/svg-icons/content/link';
+import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import TwitterIcon from '../utils/TwitterIcon';
 
 
@@ -98,6 +100,10 @@ export default class Menu extends PureComponent {
     password: null,
     isDeploying: false,
     notice: null,
+    // OAuth 認証によって得られる UUID.
+    // あくまで発行しているのは feeles.com である
+    // この値はユーザが見えるところには表示してはならない
+    oAuthId: null,
   };
 
   get shareURL() {
@@ -275,6 +281,31 @@ export default class Menu extends PureComponent {
     this.setState({isDeploying: false});
   };
 
+  handleLoginWithTwitter = async () => {
+    const win = open(organization.api.twitter);
+    const callback = (oAuthId) => {
+      this.setState({
+        oAuthId,
+        notice: {
+          message: `You have logged in!`,
+          action: `Logout`,
+          autoHideDuration: 20000,
+          onActionTouchTap: this.handleLogout,
+        },
+      });
+    };
+    window.addEventListener('message', function task(event) {
+      if (event.source === win) {
+        window.removeEventListener('message', task);
+        callback(event.data.id);
+      }
+    });
+  };
+
+  handleLogout = () => {
+    this.setState({oAuthId: null});
+  };
+
   handleRequestClose = () => {
     this.setState({notice: null});
   };
@@ -311,6 +342,7 @@ export default class Menu extends PureComponent {
       : FileCloudUpload;
 
     const visits = document.querySelector('script[x-feeles-visits]');
+    const isLoggedin = this.state.oAuthId !== null;
 
     return (
       <AppBar
@@ -367,17 +399,26 @@ export default class Menu extends PureComponent {
             leftIcon={<TwitterIcon />}
             onTouchTap={this.handleShareTwitter}
           />
+        {isLoggedin ? (
           <MenuItem
-            primaryText={localization.menu.update}
-            leftIcon={<DeployStateIcon />}
-            onTouchTap={this.handleDeploy}
-            disabled={this.state.isDeploying}
+            primaryText={localization.menu.logout}
+            onTouchTap={this.handleLogout}
           />
+        ) : (
           <MenuItem
-            primaryText={localization.menu.unlink}
-            leftIcon={<NotificationSyncDisabled />}
-            onTouchTap={this.handleUnlink}
+            primaryText={localization.menu.login}
+            disabled={isLoggedin}
+            leftIcon={<ActionAccountCircle />}
+            rightIcon={<ArrowDropRight />}
+            menuItems={[
+              <MenuItem
+                primaryText={localization.menu.signInTwitter}
+                leftIcon={<TwitterIcon />}
+                onTouchTap={this.handleLoginWithTwitter}
+              />
+            ]}
           />
+        )}
         </IconMenu>
       ) : (
         <IconButton

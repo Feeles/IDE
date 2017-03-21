@@ -9,6 +9,8 @@ export default {
     aboutFeeles: 'この Feeles について',
     deploy: 'この作品を公開',
     share: 'シェアする',
+    login: 'ログイン',
+    logout: 'ログアウト',
     copyURL: '公開リンクをコピー',
     tweet: 'ツイートする',
     update: '公開作品をアップデート',
@@ -24,7 +26,8 @@ export default {
     viewTwitter: 'サイトを見に行く',
     failedToTweet: 'ツイートに失敗していました...😢',
     version: 'バージョン',
-    showAllUrls: '全ての URL を表示'
+    showAllUrls: '全ての URL を表示',
+    signInTwitter: 'ツイッターでログイン'
   },
   cloneDialog: {
     saveTitle: 'セーブ',
