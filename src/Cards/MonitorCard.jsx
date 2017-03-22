@@ -35,7 +35,6 @@ export default class MonitorCard extends PureComponent {
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    getConfig: PropTypes.func.isRequired
   };
 
   state = {
@@ -44,7 +43,7 @@ export default class MonitorCard extends PureComponent {
   };
 
   componentWillMount() {
-    const {size} = this.props.getConfig('card').MonitorCard.frame || {};
+    const {size} = this.props.cardPropsBag.cards.MonitorCard.frame || {};
     if (Array.isArray(size)) {
       this.setState({
         frameWidth: size[0],

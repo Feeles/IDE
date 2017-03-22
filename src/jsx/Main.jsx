@@ -82,6 +82,8 @@ export default class Main extends Component {
 
     project: this.props.project,
     notice: null,
+
+    cards: Cards.defaultState,
   };
 
   get rootWidth() {
@@ -110,6 +112,10 @@ export default class Main extends Component {
     this.props.setMuiTheme({
       palette: this.getConfig('palette'),
     });
+    const card = this.findFile('feeles/card.json');
+    if (card) {
+      this.setState({cards: card.json});
+    }
   }
 
   componentDidMount() {
@@ -422,10 +428,10 @@ export default class Main extends Component {
     location.hash = 'MonitorCard';
   };
 
-  updateCard = async (name, props) => {
-    const nextCard = {...this.getConfig('card')};
+  updateCard = (name, props) => {
+    const nextCard = {...this.state.cards};
     nextCard[name] = {...nextCard[name], ...props};
-    await this.setConfig('card', nextCard);
+    return this.setStatePromise({cards: nextCard});
   };
 
   openFileDialog = () => console.error('openFileDialog has not be declared');
@@ -514,9 +520,9 @@ export default class Main extends Component {
         isPopout: this.state.monitorType === MonitorTypes.Popout,
         togglePopout: this.handleTogglePopout,
         toggleFullScreen: this.handleToggleFullScreen,
-        getConfig: this.getConfig,
         monitorProps: {
           ...commonProps,
+          cards: this.state.cards,
           rootWidth: this.rootWidth,
           monitorType: this.state.monitorType,
           isPopout: this.state.monitorType === MonitorTypes.Popout,
@@ -561,6 +567,7 @@ export default class Main extends Component {
             setDeployURL={this.props.setDeployURL}
           />
           <CardContainer
+            cards={this.state.cards}
             getConfig={this.getConfig}
             rootWidth={this.rootWidth}
             cardProps={cardProps}
