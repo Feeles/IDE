@@ -31,7 +31,7 @@ export default class ReadmeCard extends PureComponent {
   };
 
   componentWillMount() {
-    const {fileName} = this.props.getConfig('card').ReadmeCard.init || {};
+    const {fileName} = this.props.cardPropsBag.cards.ReadmeCard.init || {};
     if (fileName) {
       this.setState({
         selectedFile: this.props.findFile(fileName)

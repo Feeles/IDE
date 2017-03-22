@@ -14,6 +14,7 @@ const RightContainerId = 'CardContainerRight';
 class CardContainer extends PureComponent {
 
   static propTypes = {
+    cards: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     rootWidth: PropTypes.number.isRequired,
     cardProps: PropTypes.object.isRequired,
@@ -64,7 +65,7 @@ class CardContainer extends PureComponent {
   };
 
   scrollToCard = (name) => {
-    const card = this.props.getConfig('card')[name];
+    const card = this.props.cards[name];
     if (card) {
       const containerId = card.order % this.column === 1
         ? LeftContainerId
@@ -105,6 +106,7 @@ class CardContainer extends PureComponent {
           isResizing: this.state.isResizing,
           updateCard: this.props.updateCard,
           scrollToCard: this.scrollToCard,
+          cards: this.props.cards,
         },
         ...this.props.cardProps[info.name]
       });
@@ -126,7 +128,7 @@ class CardContainer extends PureComponent {
   render() {
     const {connectDropTarget} = this.props;
 
-    const orderedCardInfo = Object.entries(this.props.getConfig('card')).map(([name, value]) => ({
+    const orderedCardInfo = Object.entries(this.props.cards).map(([name, value]) => ({
       name,
       ...value
     }));

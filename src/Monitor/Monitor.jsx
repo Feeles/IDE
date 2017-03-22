@@ -61,6 +61,7 @@ export default class Monitor extends PureComponent {
   static propTypes = {
     isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
+    cards: PropTypes.object.isRequired,
     isPopout: PropTypes.bool.isRequired,
     isFullScreen: PropTypes.bool.isRequired,
     reboot: PropTypes.bool.isRequired,
@@ -99,7 +100,7 @@ export default class Monitor extends PureComponent {
   popoutClosed = false;
 
   componentDidMount() {
-    const {src} = this.props.getConfig('card').MonitorCard.frame || {};
+    const {src} = this.props.cards.MonitorCard.frame || {};
     this.props.setLocation(src);
   }
 

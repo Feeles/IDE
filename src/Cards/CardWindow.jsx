@@ -28,7 +28,8 @@ export default class CardWindow extends PureComponent {
     updateCard: PropTypes.func.isRequired,
     isResizing: PropTypes.bool.isRequired,
     scrollToCard: PropTypes.func.isRequired,
-    actions: PropTypes.array.isRequired
+    actions: PropTypes.array.isRequired,
+    cards: PropTypes.object.isRequired,
   };
 
   static defaultProps = {

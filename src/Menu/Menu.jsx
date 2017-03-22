@@ -75,6 +75,7 @@ const getStyles = (props, context) => {
 export default class Menu extends PureComponent {
 
   static propTypes = {
+    cards: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -441,7 +442,7 @@ export default class Menu extends PureComponent {
             iconElementLeft={<IconButton><NavigationArrowBack /></IconButton>}
             onLeftIconButtonTouchTap={this.handleToggleDrawer}
           />
-        {this.state.open ? Object.entries(this.props.getConfig('card'))
+        {this.state.open ? Object.entries(this.props.cards)
           .map(([name, card]) => ({name, ...card}))
           .filter(item => !item.visible)
           .map(item => (
