@@ -151,6 +151,10 @@ export default class Main extends Component {
     }
     // 未オートセーブでファイルが更新されたとき、あらたにセーブデータを作る
     if (!this.state.project && prevState.files !== this.state.files) {
+      if (process.env.NODE_ENV !== 'production') {
+        // development のときは自動で作られない
+        return;
+      }
       // Create new project
       try {
         const project = await createProject(
