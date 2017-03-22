@@ -24,7 +24,7 @@ ES: ECMA Script, The standardized modern javascript
 Try it out!
 - [Empty Feeles (latest version)](https://feeles.github.io/IDE/dist/)
 (English or Japanese 🍔)
-- [HackforPlay on Feeles](https://teramotodaiki.github.io/hackforplay-on-feeles/)
+- [HackforPlay on Feeles](https://feeles.github.io/IDE/dist/hack-rpg.html)
 (Japanese only 🍣)
 - [Pixi.js (in development)](https://tenonno.github.io/RPG-2/)
 (Japanese only 🍣)
