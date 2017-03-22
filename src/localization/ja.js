@@ -5,7 +5,7 @@ export default {
 
   menu: {
     language: '言語',
-    clone: 'セーブ / ロード / クローン',
+    clone: 'クローン セーブ ロード',
     aboutFeeles: 'この Feeles について',
     upload: '作品を公開',
     deploySelf: 'このアカウントで作品を公開',

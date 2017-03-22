@@ -5,7 +5,7 @@ export default {
 
   menu: {
     language: 'Launguage',
-    clone: 'Save and Load',
+    clone: 'Clone, Save and Load',
     aboutFeeles: 'About Feeles',
     upload: 'Upload',
     deploySelf: 'Publish with your account',
