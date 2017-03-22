@@ -1,5 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
+import Snackbar from 'material-ui/Snackbar';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -9,6 +10,8 @@ injectTapEventPlugin();
 
 
 import {
+  createProject,
+  updateProject,
   putFile,
   deleteFile,
 } from '../database/';
@@ -21,6 +24,7 @@ import FileDialog, { SaveDialog, RenameDialog, DeleteDialog } from '../FileDialo
 import { Tab } from '../ChromeTab/';
 import * as Cards from '../Cards/';
 import CardContainer from '../Cards/CardContainer';
+import CloneDialog from '../Menu/CloneDialog';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -77,6 +81,7 @@ export default class Main extends Component {
     coreString: null,
 
     project: this.props.project,
+    notice: null,
   };
 
   get rootWidth() {
@@ -136,9 +141,55 @@ export default class Main extends Component {
     }
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate(prevProps, prevState) {
+    const {
+      localization,
+    } = this.props;
+
     if (this.state.reboot) {
       this.setState({ reboot: false });
+    }
+    // 未オートセーブでファイルが更新されたとき、あらたにセーブデータを作る
+    if (!this.state.project && prevState.files !== this.state.files) {
+      // Create new project
+      try {
+        const project = await createProject(
+          this.state.files.map(item => item.serialize())
+        );
+        // add deployURL if exists
+        const {deployURL} = this.props;
+        if (deployURL) {
+          const nextProject = await updateProject(project.id, {deployURL});
+          await this.setProject(nextProject);
+        } else {
+          await this.setProject(project);
+        }
+
+      } catch (e) {
+        console.log(e);
+        if (typeof e === 'string' && e in localization.cloneDialog) {
+          alert(localization.cloneDialog[e]);
+        }
+      }
+      // notice
+      this.setState({
+        notice: {
+          message: localization.cloneDialog.autoSaved,
+          action: localization.cloneDialog.setTitle,
+          autoHideDuration: 20000,
+          onActionTouchTap: () => {
+            this.openFileDialog(CloneDialog, {
+              coreString: this.state.coreString,
+              files: this.state.files,
+              saveAs: this.saveAs,
+              project: this.state.project,
+              setProject: this.setProject,
+              launchIDE: this.props.launchIDE,
+              deployURL: this.props.deployURL,
+            });
+          },
+        }
+      });
     }
 
     document.title = this.getConfig('ogp')['og:title'] || '';
@@ -524,6 +575,13 @@ export default class Main extends Component {
           {userStyle ? (
             <style>{userStyle.text}</style>
           ) : null}
+          <Snackbar
+            open={this.state.notice !== null}
+            message=""
+            autoHideDuration={4000}
+            onRequestClose={() => this.setState({notice: null})}
+            {...this.state.notice}
+          />
         </div>
     );
   }

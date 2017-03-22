@@ -9,7 +9,6 @@ import transitions from 'material-ui/styles/transitions';
 
 
 import {
-  createProject,
   readProject,
   findProject,
 } from '../database/';
@@ -148,27 +147,6 @@ class RootComponent extends Component {
       await this.launchFromURL(this.props.jsonURL);
     } else {
       await this.launchFromElements();
-    }
-    // Create new project
-    try {
-      const project = await createProject(
-        this.state.files.map(item => item.serialize())
-      );
-
-      const {deployURL} = this.props;
-      if (deployURL) {
-        this.setState({
-          project: await updateProject(project.id, {deployURL})
-        });
-      } else {
-        this.setState({project});
-      }
-
-    } catch (e) {
-      console.log(e);
-      if (typeof e === 'string' && e in this.state.localization.cloneDialog) {
-        alert(this.state.localization.cloneDialog[e]);
-      }
     }
   };
 
