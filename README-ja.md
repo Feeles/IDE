@@ -20,9 +20,9 @@
 ES: ECMA Script, 規格化されたモダンな JavaScript , その総称
 
 Try it out!
-- [空の Feeles (最新版)](http://teramotodaiki.github.io/h4p/dist/)
+- [空の Feeles (最新版)](https://feeles.github.io/IDE/dist)
 (日本語/英語対応 🍔)
-- [HackforPlay on Feeles](https://teramotodaiki.github.io/hackforplay-on-feeles/)
+- [HackforPlay on Feeles](https://feeles.github.io/IDE/dist/hack-rpg.html)
 (日本語のみ 🍣)
 - [Pixi.js (制作中)](https://tenonno.github.io/RPG-2/)
 (日本語のみ 🍣)
