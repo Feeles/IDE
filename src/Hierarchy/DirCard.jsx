@@ -37,17 +37,14 @@ const getStyles = (props, context) => {
       justifyContent: 'space-around',
       boxSizing: 'border-box',
       height: isDirOpened(cd, 'auto', 40),
-      marginTop: spacing.desktopGutterLess,
-      marginRight: isDirOpened(cd, 0, spacing.desktopGutterLess),
+      marginTop: 4,
+      marginRight: 8,
       paddingBottom: isDirOpened(cd, spacing.desktopGutterLess, 0),
       paddingLeft: isDirOpened(cd, spacing.desktopGutterLess, 0),
       borderWidth,
-      borderRightWidth: isDirOpened(cd, 0, borderWidth),
       borderStyle,
       borderColor: palette.primary1Color,
       borderRadius: 2,
-      borderTopRightRadius: isDirOpened(cd, 0, 2),
-      borderBottomRightRadius: isDirOpened(cd, 0, 2),
       transition: transitions.easeOut(null, [
         'margin', 'padding-bottom', 'border'
       ])

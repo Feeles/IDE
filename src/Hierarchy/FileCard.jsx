@@ -32,8 +32,8 @@ const getStyles = (props, context) => {
 
   return {
     root: {
-      marginTop: spacing.desktopGutterLess,
-      marginRight: isSelected ? 0 : spacing.desktopGutterLess,
+      marginTop: 4,
+      marginRight: 8,
       transition: transitions.easeOut(),
     },
     card: {
