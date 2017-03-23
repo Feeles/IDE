@@ -16,9 +16,7 @@ import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import SocialShare from 'material-ui/svg-icons/social/share';
 import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
-import ContentLink from 'material-ui/svg-icons/content/link';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import TwitterIcon from '../utils/TwitterIcon';
 import LineIcon from '../utils/LineIcon';
@@ -222,26 +220,6 @@ export default class Menu extends PureComponent {
     this.setState({isDeploying: false});
   };
 
-  handleShare = () => {
-    if (!this.input || !this.shareURL) return;
-
-    this.input.value = this.shareURL;
-    this.input.select();
-    if (document.execCommand('copy')) {
-      const message = this.props.localization.menu.linkCopied + this.shareURL;
-      this.setState({notice: {message}});
-    }
-  };
-
-  handleShareTwitter = async () => {
-    const params = new URLSearchParams();
-    params.set('url', this.shareURL);
-    if (organization.hashtags) {
-      params.set('hashtags', organization.hashtags);
-    }
-    open(`https://twitter.com/intent/tweet?${params}`);
-  };
-
   handleLoginWithOAuth(url) {
     const {
       localization,
@@ -294,7 +272,6 @@ export default class Menu extends PureComponent {
     } = this.context.muiTheme;
 
     const visits = document.querySelector('script[x-feeles-visits]');
-    const isHttp = /^https?\:$/.test(location.protocol);
     const isLoggedin = this.state.oAuthId !== null;
 
     return (
@@ -335,8 +312,8 @@ export default class Menu extends PureComponent {
       ) : (
         <IconMenu
           iconButtonElement={(
-            <IconButton tooltip={localization.menu.share}>
-              <SocialShare color={alternateTextColor} />
+            <IconButton tooltip={localization.menu.you}>
+              <ActionAccountCircle color={alternateTextColor} />
             </IconButton>
           )}
           anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -346,7 +323,6 @@ export default class Menu extends PureComponent {
         {isLoggedin ? (
           <MenuItem
             primaryText={localization.menu.deploySelf}
-            leftIcon={<ActionAccountCircle />}
             rightIcon={<ArrowDropRight />}
             menuItems={[
               <MenuItem
@@ -362,26 +338,7 @@ export default class Menu extends PureComponent {
               />
             ]}
           />
-        ) : null}
-          <MenuItem
-            primaryText={localization.menu.share}
-            leftIcon={<SocialShare />}
-            rightIcon={<ArrowDropRight />}
-            disabled={!isHttp}
-            menuItems={[
-              <MenuItem leftIcon={<ContentLink />} onTouchTap={this.handleShare}>
-                {localization.menu.copyURL}
-                <input style={styles.hidden} ref={ref => this.input = ref} />
-              </MenuItem>,
-              <MenuItem
-                primaryText={localization.menu.tweet}
-                leftIcon={<TwitterIcon />}
-                style={styles.twitter}
-                onTouchTap={this.handleShareTwitter}
-              />
-            ]}
-          />
-        {isLoggedin ? null : (
+        ) : (
           <MenuItem
             primaryText={localization.menu.login}
             disabled={isLoggedin}

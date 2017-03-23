@@ -25,6 +25,7 @@ import { Tab } from '../ChromeTab/';
 import * as Cards from '../Cards/';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
+import Footer from './Footer';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -434,6 +435,10 @@ export default class Main extends Component {
     return this.setStatePromise({cards: nextCard});
   };
 
+  handleShowNotice = (notice) => this.setStatePromise({
+    notice,
+  });
+
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
@@ -575,6 +580,11 @@ export default class Main extends Component {
             localization={localization}
             showCardIcon={this.state.monitorType !== MonitorTypes.FullScreen}
             findFile={this.findFile}
+          />
+          <Footer
+            deployURL={this.props.deployURL}
+            localization={localization}
+            showNotice={this.handleShowNotice}
           />
           <FileDialog
             ref={this.handleFileDialog}
