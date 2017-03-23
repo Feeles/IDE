@@ -12,5 +12,13 @@ export default function open(url, target, options) {
       `top=${screen.height > width ? Math.round((screen.height / 2) - (height / 2)) : 0}`,
     ].join();
   }
-  return window.open(url, target, options);
+  const dialog = window.open(url, target, options);
+  if (dialog) {
+    window.addEventListener('unload', () => {
+      if (dialog) {
+        dialog.close();
+      }
+    });
+  }
+  return dialog;
 }
