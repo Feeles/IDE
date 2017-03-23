@@ -27,7 +27,8 @@ export default {
     viewTwitter: 'View web site',
     version: 'Version',
     showAllUrls: 'Show all URLs',
-    signInTwitter: 'Sign in with Twitter',
+    withTwitter: 'Log in with Twitter',
+    withLine: 'Log in with LINE',
   },
   cloneDialog: {
     saveTitle: 'Save',

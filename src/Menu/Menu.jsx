@@ -21,6 +21,7 @@ import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-di
 import ContentLink from 'material-ui/svg-icons/content/link';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import TwitterIcon from '../utils/TwitterIcon';
+import LineIcon from '../utils/LineIcon';
 
 
 import { BinaryFile, SourceFile } from '../File/';
@@ -68,6 +69,14 @@ const getStyles = (props, context) => {
     visits: {
       color: palette.alternateTextColor,
       fontSize: '.8rem',
+    },
+    twitter: {
+      color: '#FFFFFF',
+      backgroundColor: '#1DA1F2',
+    },
+    line: {
+      color: '#FFFFFF',
+      backgroundColor: '#00C300',
     },
   };
 };
@@ -233,12 +242,12 @@ export default class Menu extends PureComponent {
     open(`https://twitter.com/intent/tweet?${params}`);
   };
 
-  handleLoginWithTwitter = async () => {
+  handleLoginWithOAuth(url) {
     const {
       localization,
     } = this.props;
 
-    const win = open(organization.api.twitter);
+    const win = open(url);
     const callback = (oAuthId) => {
       this.setState({
         oAuthId,
@@ -367,6 +376,7 @@ export default class Menu extends PureComponent {
               <MenuItem
                 primaryText={localization.menu.tweet}
                 leftIcon={<TwitterIcon />}
+                style={styles.twitter}
                 onTouchTap={this.handleShareTwitter}
               />
             ]}
@@ -379,9 +389,16 @@ export default class Menu extends PureComponent {
             rightIcon={<ArrowDropRight />}
             menuItems={[
               <MenuItem
-                primaryText={localization.menu.signInTwitter}
+                primaryText={localization.menu.withTwitter}
                 leftIcon={<TwitterIcon />}
-                onTouchTap={this.handleLoginWithTwitter}
+                style={styles.twitter}
+                onTouchTap={() => this.handleLoginWithOAuth(organization.api.twitter)}
+              />,
+              <MenuItem
+                primaryText={localization.menu.withLine}
+                leftIcon={<LineIcon />}
+                style={styles.line}
+                onTouchTap={() => this.handleLoginWithOAuth(organization.api.line)}
               />
             ]}
           />

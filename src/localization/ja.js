@@ -27,7 +27,8 @@ export default {
     viewTwitter: 'サイトを見に行く',
     version: 'バージョン',
     showAllUrls: '全ての URL を表示',
-    signInTwitter: 'ツイッターでログイン'
+    withTwitter: 'Twitterでログイン',
+    withLine: 'LINEでログイン',
   },
   cloneDialog: {
     saveTitle: 'セーブ',
