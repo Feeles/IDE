@@ -69,6 +69,10 @@ const getStyles = (props, context) => {
       color: palette.alternateTextColor,
       fontSize: '.8rem',
     },
+    twitter: {
+      color: '#FFFFFF',
+      backgroundColor: '#1DA1F2',
+    },
   };
 };
 
@@ -367,6 +371,7 @@ export default class Menu extends PureComponent {
               <MenuItem
                 primaryText={localization.menu.tweet}
                 leftIcon={<TwitterIcon />}
+                style={styles.twitter}
                 onTouchTap={this.handleShareTwitter}
               />
             ]}
@@ -381,6 +386,7 @@ export default class Menu extends PureComponent {
               <MenuItem
                 primaryText={localization.menu.withTwitter}
                 leftIcon={<TwitterIcon />}
+                style={styles.twitter}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.twitter)}
               />
             ]}
