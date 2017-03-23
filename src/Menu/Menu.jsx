@@ -20,6 +20,7 @@ import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-di
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import TwitterIcon from '../utils/TwitterIcon';
 import LineIcon from '../utils/LineIcon';
+import FacebookIcon from '../utils/FacebookIcon';
 
 
 import { BinaryFile, SourceFile } from '../File/';
@@ -75,6 +76,10 @@ const getStyles = (props, context) => {
     line: {
       color: '#FFFFFF',
       backgroundColor: '#00C300',
+    },
+    facebook: {
+      color: '#FFFFFF',
+      backgroundColor: '#3B5998',
     },
   };
 };
@@ -356,6 +361,12 @@ export default class Menu extends PureComponent {
                 leftIcon={<LineIcon />}
                 style={styles.line}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.line)}
+              />,
+              <MenuItem
+                primaryText={localization.menu.withFacebook}
+                leftIcon={<FacebookIcon />}
+                style={styles.facebook}
+                onTouchTap={() => this.handleLoginWithOAuth(organization.api.facebook)}
               />
             ]}
           />
