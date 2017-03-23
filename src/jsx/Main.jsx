@@ -435,6 +435,10 @@ export default class Main extends Component {
     return this.setStatePromise({cards: nextCard});
   };
 
+  handleShowNotice = (notice) => this.setStatePromise({
+    notice,
+  });
+
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
@@ -580,6 +584,7 @@ export default class Main extends Component {
           <Footer
             deployURL={this.props.deployURL}
             localization={localization}
+            showNotice={this.handleShowNotice}
           />
           <FileDialog
             ref={this.handleFileDialog}

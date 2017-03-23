@@ -8,6 +8,7 @@ export default class Footer extends PureComponent {
   static propTypes = {
     deployURL: PropTypes.string,
     localization: PropTypes.object.isRequired,
+    showNotice: PropTypes.func.isRequired,
   };
 
   state = {
@@ -46,6 +47,14 @@ export default class Footer extends PureComponent {
       this.mountTweetButton();
     }
   }
+
+  handleLinkCopy = (event) => {
+    event.target.select();
+    if (document.execCommand('copy')) {
+      const message = this.props.localization.menu.linkCopied + this.shareURL;
+      this.props.showNotice({message});
+    }
+  };
 
   mountLineIt() {
     const id = 'line-wjs';
@@ -119,6 +128,11 @@ export default class Footer extends PureComponent {
     return (
       <Paper style={styles.root}>
         <div style={{flex: '1 1 auto'}}></div>
+        <input readOnly
+          value={this.shareURL}
+          onTouchTap={this.handleLinkCopy}
+        />
+        <div style={styles.blank}></div>
         {/* Twitter */}
         <a
           className="twitter-share-button"
