@@ -379,7 +379,7 @@ export default class Menu extends PureComponent {
             rightIcon={<ArrowDropRight />}
             menuItems={[
               <MenuItem
-                primaryText={localization.menu.signInTwitter}
+                primaryText={localization.menu.withTwitter}
                 leftIcon={<TwitterIcon />}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.twitter)}
               />
