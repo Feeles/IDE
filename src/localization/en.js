@@ -28,6 +28,7 @@ export default {
     showAllUrls: 'Show all URLs',
     withTwitter: 'Log in with Twitter',
     withLine: 'Log in with LINE',
+    withFacebook: 'Log in with Facebook',
   },
   cloneDialog: {
     saveTitle: 'Save',
