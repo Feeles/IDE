@@ -28,6 +28,7 @@ export default {
     version: 'バージョン',
     showAllUrls: '全ての URL を表示',
     withTwitter: 'Twitterでログイン',
+    withLine: 'LINEでログイン',
   },
   cloneDialog: {
     saveTitle: 'セーブ',

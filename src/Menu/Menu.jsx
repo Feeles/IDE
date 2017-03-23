@@ -21,6 +21,7 @@ import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-di
 import ContentLink from 'material-ui/svg-icons/content/link';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import TwitterIcon from '../utils/TwitterIcon';
+import LineIcon from '../utils/LineIcon';
 
 
 import { BinaryFile, SourceFile } from '../File/';
@@ -72,6 +73,10 @@ const getStyles = (props, context) => {
     twitter: {
       color: '#FFFFFF',
       backgroundColor: '#1DA1F2',
+    },
+    line: {
+      color: '#FFFFFF',
+      backgroundColor: '#00C300',
     },
   };
 };
@@ -388,6 +393,12 @@ export default class Menu extends PureComponent {
                 leftIcon={<TwitterIcon />}
                 style={styles.twitter}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.twitter)}
+              />,
+              <MenuItem
+                primaryText={localization.menu.withLine}
+                leftIcon={<LineIcon />}
+                style={styles.line}
+                onTouchTap={() => this.handleLoginWithOAuth(organization.api.line)}
               />
             ]}
           />
