@@ -233,12 +233,12 @@ export default class Menu extends PureComponent {
     open(`https://twitter.com/intent/tweet?${params}`);
   };
 
-  handleLoginWithTwitter = async () => {
+  handleLoginWithOAuth(url) {
     const {
       localization,
     } = this.props;
 
-    const win = open(organization.api.twitter);
+    const win = open(url);
     const callback = (oAuthId) => {
       this.setState({
         oAuthId,
@@ -381,7 +381,7 @@ export default class Menu extends PureComponent {
               <MenuItem
                 primaryText={localization.menu.signInTwitter}
                 leftIcon={<TwitterIcon />}
-                onTouchTap={this.handleLoginWithTwitter}
+                onTouchTap={() => this.handleLoginWithOAuth(organization.api.twitter)}
               />
             ]}
           />
