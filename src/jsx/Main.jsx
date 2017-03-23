@@ -25,6 +25,7 @@ import { Tab } from '../ChromeTab/';
 import * as Cards from '../Cards/';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
+import Footer from './Footer';
 
 const DOWNLOAD_ENABLED = typeof document.createElement('a').download === 'string';
 
@@ -575,6 +576,10 @@ export default class Main extends Component {
             localization={localization}
             showCardIcon={this.state.monitorType !== MonitorTypes.FullScreen}
             findFile={this.findFile}
+          />
+          <Footer
+            deployURL={this.props.deployURL}
+            localization={localization}
           />
           <FileDialog
             ref={this.handleFileDialog}
