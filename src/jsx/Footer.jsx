@@ -1,5 +1,9 @@
 import React, {PureComponent, PropTypes} from 'react';
 import Paper from 'material-ui/Paper';
+import IconButton from 'material-ui/IconButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import SocialShare from 'material-ui/svg-icons/social/share';
 
 import organization from '../organization';
 
@@ -105,10 +109,18 @@ export default class Footer extends PureComponent {
 
     const styles = {
       root: {
-        flex: '0 0 2rem',
+        flex: '0 0 auto',
+        height: this.state.open ? '2.5rem' : 0,
+        overflow: 'hidden',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        zIndex: 1,
+      },
+      open: {
+        position: 'fixed',
+        right: 8,
+        bottom: this.state.open ? -40 : 8,
         zIndex: 1,
       },
       blank: {
@@ -127,6 +139,15 @@ export default class Footer extends PureComponent {
 
     return (
       <Paper style={styles.root}>
+        <FloatingActionButton mini secondary
+          style={styles.open}
+          onTouchTap={() => this.setState({open: true})}
+        >
+          <SocialShare />
+        </FloatingActionButton>
+        <IconButton onTouchTap={() => this.setState({open: false})}>
+          <NavigationClose />
+        </IconButton>
         <div style={{flex: '1 1 auto'}}></div>
         <input readOnly
           value={this.shareURL}
