@@ -3,11 +3,13 @@ export default function open(url, target, options) {
     target = '_blank';
   }
   if (!options) {
+    const width = 600;
+    const height = 520;
     options = [
-      `width=550`,
-      `height=420`,
-      `left=${Math.round((screen.width / 2) - (550 / 2))}`,
-      `top=${screen.height > 550 ? Math.round((screen.height / 2) - (420 / 2)) : 0}`,
+      `width=${width}`,
+      `height=${height}`,
+      `left=${Math.round((screen.width / 2) - (width / 2))}`,
+      `top=${screen.height > width ? Math.round((screen.height / 2) - (height / 2)) : 0}`,
     ].join();
   }
   return window.open(url, target, options);
