@@ -32,6 +32,7 @@ export default class Footer extends PureComponent {
   componentDidMount() {
     this.mountLineIt();
     this.mountTweetButton();
+    this.mountFacebookShare();
   }
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -49,6 +50,7 @@ export default class Footer extends PureComponent {
       // Rewrite
       this.mountLineIt();
       this.mountTweetButton();
+      this.mountFacebookShare();
     }
   }
 
@@ -78,7 +80,6 @@ export default class Footer extends PureComponent {
     fjs.parentNode.insertBefore(js, fjs);
   }
 
-
   mountTweetButton() {
     if (window.twttr) {
       twttr.widgets.load();
@@ -100,6 +101,21 @@ export default class Footer extends PureComponent {
 
       return t;
     }(document, "script", "twitter-wjs"));
+  }
+
+  mountFacebookShare() {
+    const {localization} = this.props;
+    if (window.FB) {
+      FB.XFBML.parse();
+    }
+    /* https://developers.facebook.com/docs/plugins/share-button */
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = `//connect.facebook.net/${localization.ll_CC}/sdk.js#xfbml=1&version=v2.8`;
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   }
 
   render() {
@@ -160,7 +176,6 @@ export default class Footer extends PureComponent {
           href={twitterIntent}
           data-lang={lang}
           data-show-count="false"
-          style={styles.button}
         ></a>
         <div style={styles.blank}></div>
         {/* LINE */}
@@ -169,8 +184,15 @@ export default class Footer extends PureComponent {
           data-url={this.shareURL}
           data-lang={lang}
           data-type="share-a"
-          style={styles.button}
         ></div>
+        <div style={styles.blank}></div>
+        {/* Facebook */}
+        <div style={{marginTop: -4}}>
+          <div
+            className="fb-share-button"
+            data-href={this.shareURL}
+            data-layout="button"></div>
+        </div>
         <div style={styles.blank}></div>
       </Paper>
     );

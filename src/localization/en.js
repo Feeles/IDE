@@ -2,6 +2,7 @@ export default {
 
   accept: ['en', 'en-us'],
   native: 'English',
+  ll_CC: 'en_US',
 
   menu: {
     language: 'Launguage',
