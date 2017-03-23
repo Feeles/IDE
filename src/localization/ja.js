@@ -2,6 +2,7 @@ export default {
 
   accept: ['ja', 'ja-jp'],
   native: '日本語',
+  ll_CC: 'ja_JP',
 
   menu: {
     language: '言語',
