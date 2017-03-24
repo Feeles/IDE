@@ -9,6 +9,7 @@ import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
+import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
 
 import Monitor from '../Monitor/';
 
@@ -41,6 +42,12 @@ export default class MonitorCard extends PureComponent {
     frameWidth: 300,
     frameHeight: 150
   };
+
+  static icon() {
+    return (
+      <HardwareDesktopWindows color="gray" />
+    );
+  }
 
   componentWillMount() {
     const {size} = this.props.cardPropsBag.cards.MonitorCard.frame || {};
@@ -92,6 +99,7 @@ export default class MonitorCard extends PureComponent {
     return (
       <Card
         initiallyExpanded
+        icon={MonitorCard.icon()}
         {...this.props.cardPropsBag}
         actions={[
           <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
@@ -114,6 +122,7 @@ export default class MonitorCard extends PureComponent {
             />
           </IconMenu>
         ]}
+        icon={MonitorCard.icon()}
       >
         <CardMedia expandable style={styles.flexible}>
           <div style={styles.parent}>

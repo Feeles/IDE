@@ -23,6 +23,7 @@ import Menu from '../Menu/';
 import FileDialog, { SaveDialog, RenameDialog, DeleteDialog } from '../FileDialog/';
 import { Tab } from '../ChromeTab/';
 import * as Cards from '../Cards/';
+import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
 import Footer from './Footer';
@@ -84,7 +85,7 @@ export default class Main extends Component {
     project: this.props.project,
     notice: null,
 
-    cards: Cards.defaultState,
+    cards: cardStateDefault,
   };
 
   get rootWidth() {

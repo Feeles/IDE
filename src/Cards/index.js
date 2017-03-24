@@ -8,4 +8,3 @@ export { default as CreditsCard } from './CreditsCard';
 export { default as ShotCard } from './ShotCard';
 export { default as EditorCard } from './EditorCard';
 export { default as HierarchyCard } from './HierarchyCard';
-export { default as defaultState } from './defaultState';

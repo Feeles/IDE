@@ -28,11 +28,11 @@ import { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
 import MetaDialog from './MetaDialog';
-import {CardIcons} from '../Cards/CardWindow';
 import { updateProject } from '../database/';
 import organization from '../organization';
 import debugWindow from '../utils/debugWindow';
 import open from '../utils/open';
+import * as Cards from '../Cards';
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -434,7 +434,7 @@ export default class Menu extends PureComponent {
           <MenuItem
             key={item.name}
             primaryText={localization[lowerCaseAtFirst(item.name)].title}
-            leftIcon={CardIcons[item.name]}
+            leftIcon={renderCardIcon(item.name)}
             onTouchTap={() => {
               this.props.updateCard(item.name, {visible: true});
               this.handleToggleDrawer();
@@ -465,4 +465,12 @@ export default class Menu extends PureComponent {
 
 function lowerCaseAtFirst(string) {
   return string[0].toLowerCase() + string.substr(1);
+}
+
+function renderCardIcon(name) {
+  if (name in Cards) {
+    return Cards[name].icon();
+  } else {
+    return null;
+  }
 }

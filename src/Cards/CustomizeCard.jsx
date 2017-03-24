@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Card from './CardWindow';
 import { CardHeader } from 'material-ui/Card';
-
+import ActionSettingsApplications from 'material-ui/svg-icons/action/settings-applications';
 
 import { SourceFile } from '../File/';
 import { commonRoot } from './commonStyles';
@@ -25,6 +25,12 @@ export default class CustomizeCard extends PureComponent {
     editorFileKey: '',
     cssFileKey: '',
   };
+
+  static icon() {
+    return (
+      <ActionSettingsApplications color="gray" />
+    );
+  }
 
   componentWillMount() {
 
@@ -122,7 +128,7 @@ export default class CustomizeCard extends PureComponent {
     } = this.props;
 
     return (
-      <Card initiallyExpanded {...this.props.cardPropsBag}>
+      <Card initiallyExpanded icon={CustomizeCard.icon()} {...this.props.cardPropsBag}>
       {this.renderBlock(
         localization.customizeCard.editor,
         'http://codemirror.net/doc/manual.html#config',

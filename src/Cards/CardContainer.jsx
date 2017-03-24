@@ -6,7 +6,6 @@ import transitions from 'material-ui/styles/transitions';
 import Sizer from './Sizer';
 import DragTypes from '../utils/dragTypes';
 import * as Cards from './';
-import {CardIcons} from './CardWindow';
 
 const LeftContainerId = 'CardContainerLeft';
 const RightContainerId = 'CardContainerRight';
@@ -120,7 +119,7 @@ class CardContainer extends PureComponent {
     cards = cards.filter(info => info.visible);
     return cards.map((info, key) => (
       <a key={key} href={'#' + info.name}>
-        {CardIcons[info.name]}
+        {Cards[info.name].icon && Cards[info.name].icon()}
       </a>
     ));
   }

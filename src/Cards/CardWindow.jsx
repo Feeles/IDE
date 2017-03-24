@@ -6,18 +6,6 @@ import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
-// Card Icons
-import ContentReply from 'material-ui/svg-icons/content/reply';
-import ContentCreate from 'material-ui/svg-icons/content/create';
-import ActionCopyright from 'material-ui/svg-icons/action/copyright';
-import ActionTouchApp from 'material-ui/svg-icons/action/touch-app';
-import ActionSettingsApplications from 'material-ui/svg-icons/action/settings-applications';
-import ImagePalette from 'material-ui/svg-icons/image/palette';
-import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
-import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
-import MapsMap from 'material-ui/svg-icons/maps/map';
-import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
-
 const HeaderHeight = 32;
 
 export default class CardWindow extends PureComponent {
@@ -30,11 +18,13 @@ export default class CardWindow extends PureComponent {
     scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
+    icon: PropTypes.node.isRequired,
   };
 
   static defaultProps = {
     visible: false,
-    actions: []
+    actions: [],
+    icon: null,
   };
 
   state = {
@@ -157,7 +147,7 @@ export default class CardWindow extends PureComponent {
       <Element name={this.props.name} style={styles.root}>
         <Card {...this.cardProps}>
           <div style={styles.header}>
-            <a href={'#' + this.props.name} style={styles.a}>{CardIcons[this.props.name]}</a>
+            <a href={'#' + this.props.name} style={styles.a}>{this.props.icon}</a>
             <div style={styles.blank}></div>
             {this.props.actions}
             {this.renderExpandButton()}
@@ -173,16 +163,3 @@ export default class CardWindow extends PureComponent {
 function lowerCaseAtFirst(string) {
   return string[0].toLowerCase() + string.substr(1);
 }
-
-export const CardIcons = {
-  MonitorCard: <HardwareDesktopWindows color="gray" />,
-  ShotCard: <ContentReply color="gray" style={{transform:'rotateY(180deg)'}} />,
-  EditorCard: <ContentCreate color="gray" />,
-  MediaCard: <AvMusicVideo color="gray" />,
-  CreditsCard: <ActionCopyright color="gray" />,
-  ReadmeCard: <MapsMap color="gray" />,
-  PaletteCard: <ImagePalette color="gray" />,
-  EnvCard: <ActionTouchApp color="gray" />,
-  HierarchyCard: <FileFolderOpen color="gray" />,
-  CustomizeCard: <ActionSettingsApplications color="gray" />,
-};

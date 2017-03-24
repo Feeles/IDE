@@ -6,6 +6,7 @@ import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
 import {convertColorToString} from 'material-ui/utils/colorManipulator';
 import {transparent, fullWhite} from 'material-ui/styles/colors';
+import ImagePalette from 'material-ui/svg-icons/image/palette';
 import {ChromePicker, TwitterPicker} from 'react-color';
 
 import {LayeredStyle} from '../PalettePane/';
@@ -77,7 +78,7 @@ const getStyles = (props, context) => {
   };
 };
 
-export default class PalettePane extends PureComponent {
+export default class PaletteCard extends PureComponent {
 
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
@@ -97,6 +98,12 @@ export default class PalettePane extends PureComponent {
     anchorEl: null,
     limited: false
   };
+
+  static icon() {
+    return (
+      <ImagePalette color="gray" />
+    );
+  }
 
   handleRectClick = (event, key, limited = false) => {
     event.stopPropagation();
@@ -146,7 +153,7 @@ export default class PalettePane extends PureComponent {
     styles.label = prepareStyles(styles.label);
 
     return (
-      <Card {...this.props.cardPropsBag}>
+      <Card icon={PaletteCard.icon()} {...this.props.cardPropsBag}>
         <CardActions>
           <LayeredStyle styles={[
             prepareStyles(styles.html),
