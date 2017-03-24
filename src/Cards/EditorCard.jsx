@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import Card from './CardWindow';
 import { CardMedia } from 'material-ui/Card';
-
+import ContentCreate from 'material-ui/svg-icons/content/create';
 
 import EditorPane from '../EditorPane/';
 import { Tab } from '../ChromeTab/';
@@ -13,6 +13,12 @@ export default class EditorCard extends PureComponent {
     editorProps: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
   };
+
+  static icon() {
+    return (
+      <ContentCreate color="gray" />
+    );
+  }
 
   // port が渡されることを前提とした実装, 今のままではあまりよくない
   // カード本体の Mount, Update にアクセスできるクラスと、EditorPane を統合すべき
@@ -56,7 +62,7 @@ export default class EditorCard extends PureComponent {
 
   render() {
     return (
-      <Card initiallyExpanded {...this.props.cardPropsBag}>
+      <Card initiallyExpanded icon={EditorCard.icon()} {...this.props.cardPropsBag}>
         <CardMedia expandable >
           <EditorPane {...this.props.editorProps} />
         </CardMedia>

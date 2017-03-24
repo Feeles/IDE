@@ -3,7 +3,7 @@ import Card from './CardWindow';
 import {CardText, CardActions} from 'material-ui/Card';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-
+import MapsMap from 'material-ui/svg-icons/maps/map';
 
 import ReadmePane from '../ReadmePane/';
 import { SourceFile } from '../File/';
@@ -29,6 +29,12 @@ export default class ReadmeCard extends PureComponent {
     selectedFile: null,
     completes: [],
   };
+
+  static icon() {
+    return (
+      <MapsMap color="gray" />
+    );
+  }
 
   componentWillMount() {
     const {fileName} = this.props.cardPropsBag.cards.ReadmeCard.init || {};
@@ -181,7 +187,7 @@ export default class ReadmeCard extends PureComponent {
       },
     };
     return (
-      <Card initiallyExpanded {...this.props.cardPropsBag}>
+      <Card initiallyExpanded icon={ReadmeCard.icon()} {...this.props.cardPropsBag}>
         <CardText
           expandable
           style={styles.text}

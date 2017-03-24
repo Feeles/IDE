@@ -1,6 +1,7 @@
 import React, {PureComponent, PropTypes} from 'react';
 import Card from './CardWindow';
 import {CardMedia} from 'material-ui/Card';
+import ContentReply from 'material-ui/svg-icons/content/reply';
 
 import {ShotPane} from '../EditorPane/';
 import shallowEqual from '../utils/shallowEqual';
@@ -17,6 +18,12 @@ export default class ShotCard extends PureComponent {
     file: null,
     completes: [],
   };
+
+  static icon() {
+    return (
+      <ContentReply color="gray" style={{transform:'rotateY(180deg)'}} />
+    );
+  }
 
   // port が渡されることを前提とした実装, 今のままではあまりよくない
   // カード本体の Mount, Update にアクセスできるクラスと、ShotPane を統合すべき
@@ -71,7 +78,12 @@ export default class ShotCard extends PureComponent {
 
   render() {
     return (
-      <Card initiallyExpanded onExpandChange={this.handleExpand} {...this.props.cardPropsBag}>
+      <Card
+        initiallyExpanded
+        icon={ShotCard.icon()}
+        onExpandChange={this.handleExpand}
+        {...this.props.cardPropsBag}
+      >
         <CardMedia expandable>
           <ShotPane {...this.props.shotProps} file={this.state.file} completes={this.state.completes} />
         </CardMedia>

@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import Card from './CardWindow';
 import {CardMedia} from 'material-ui/Card';
+import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import ReactPlayer from 'react-player';
 
 export default class MediaCard extends Component {
@@ -15,6 +16,12 @@ export default class MediaCard extends Component {
       // https://github.com/CookPete/react-player#props
     }
   };
+
+  static icon() {
+    return (
+      <AvMusicVideo color="gray" />
+    );
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.port !== nextProps.port) {
@@ -44,7 +51,7 @@ export default class MediaCard extends Component {
 
   render() {
     return (
-      <Card initiallyExpanded {...this.props.cardPropsBag}>
+      <Card initiallyExpanded icon={MediaCard.icon()} {...this.props.cardPropsBag}>
       {this.state.playerState.url ? (
         <CardMedia>
           <ReactPlayer {...this.state.playerState}/>

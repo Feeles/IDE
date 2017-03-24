@@ -8,6 +8,7 @@ import {red50, red500} from 'material-ui/styles/colors';
 
 import Editor from './Editor';
 import {SourceFile} from '../File/';
+import {ShotCard} from '../Cards';
 import {CardIcons} from '../Cards/CardWindow';
 
 const durations = [600, 1400, 0];
@@ -72,7 +73,7 @@ const getStyle = (props, context, state) => {
   };
 };
 
-export default class ShotCard extends PureComponent {
+export default class ShotPane extends PureComponent {
 
   static propTypes = {
     files: PropTypes.array.isRequired,
@@ -213,7 +214,7 @@ export default class ShotCard extends PureComponent {
         <div style={styles.menu}>
           <FloatingActionButton mini disabled={anim !== 0} onTouchTap={this.shoot} style={styles.shoot}>
             {anim === 0
-              ? CardIcons.ShotCard
+              ? ShotCard.icon()
               : (<AvStop/>)}
           </FloatingActionButton>
           <span style={styles.label}>{localization.shotCard.shoot}</span>

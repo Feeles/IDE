@@ -1,6 +1,7 @@
 import React, {PureComponent, PropTypes} from 'react';
 import Card from './CardWindow';
 import {CardText, CardActions} from 'material-ui/Card';
+import ActionTouchApp from 'material-ui/svg-icons/action/touch-app';
 
 import {SourceFile} from '../File/';
 import {Tab} from '../ChromeTab/';
@@ -25,6 +26,12 @@ export default class EnvCard extends PureComponent {
     env: this.props.getConfig('env'),
     fileKey: ''
   };
+
+  static icon() {
+    return (
+      <ActionTouchApp color="gray" />
+    );
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.files !== nextProps.files) {
@@ -61,7 +68,7 @@ export default class EnvCard extends PureComponent {
     const {localization} = this.props;
 
     return (
-      <Card initiallyExpanded {...this.props.cardPropsBag}>
+      <Card initiallyExpanded icon={EnvCard.icon()} {...this.props.cardPropsBag}>
         <CardText expandable>
           {Object.keys(this.state.env).map((key) => (<EnvItem key={key} itemKey={key} item={this.state.env[key]} localization={localization} updateEnv={this.handleUpdateEnv}/>))}
         </CardText>
