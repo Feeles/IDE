@@ -85,7 +85,7 @@ export default {
     creator: 'クリエータについて',
     title: 'タイトル',
     description: '説明文',
-    creatorConfirm: '入力は任意です。個人情報は書かないで下さい！',
+    creatorConfirm: 'ここは書かなくてもOK! 本名はぜったいに書かないで下さい',
     nickname: 'ニックネーム',
     twitterId: 'ツイッター ID',
   },
