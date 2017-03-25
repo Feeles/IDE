@@ -43,6 +43,7 @@ const getStyles = (props, context) => {
       display: 'flex',
       flexWrap: 'wrap',
       alignItems: 'center',
+      zIndex: null,
     },
     leftIcon: {
       marginTop: 0,

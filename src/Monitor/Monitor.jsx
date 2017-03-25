@@ -30,7 +30,6 @@ const getStyle = (props, context, state) => {
   return {
     root: {
       position: fullScreen('fixed', 'relative'),
-      paddingTop: fullScreen(appBar.height, 0),
       width: '100%',
       height: '100%',
       left: 0,

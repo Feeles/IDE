@@ -131,6 +131,7 @@ export default class Footer extends PureComponent {
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
+        position: 'relative',
         zIndex: 1,
       },
       open: {
@@ -154,47 +155,50 @@ export default class Footer extends PureComponent {
     const twitterIntent = `https://twitter.com/intent/tweet?${params}`;
 
     return (
-      <Paper style={styles.root}>
-        <FloatingActionButton mini secondary
-          style={styles.open}
-          onTouchTap={() => this.setState({open: true})}
-        >
-          <SocialShare />
-        </FloatingActionButton>
-        <IconButton onTouchTap={() => this.setState({open: false})}>
-          <NavigationClose />
-        </IconButton>
-        <div style={{flex: '1 1 auto'}}></div>
-        <input readOnly
-          value={this.shareURL}
-          onTouchTap={this.handleLinkCopy}
-        />
-        <div style={styles.blank}></div>
-        {/* Twitter */}
-        <a
-          className="twitter-share-button"
-          href={twitterIntent}
-          data-lang={lang}
-          data-show-count="false"
-        ></a>
-        <div style={styles.blank}></div>
-        {/* LINE */}
-        <div
-          className="line-it-button"
-          data-url={this.shareURL}
-          data-lang={lang}
-          data-type="share-a"
-        ></div>
-        <div style={styles.blank}></div>
-        {/* Facebook */}
-        <div style={{marginTop: -4}}>
+      /* z-index: inherit; の階層を Main 直下に置くことで フルスクリーンのとき奥に行くように */
+      <div>
+        <Paper style={styles.root}>
+          <FloatingActionButton mini secondary
+            style={styles.open}
+            onTouchTap={() => this.setState({open: true})}
+          >
+            <SocialShare />
+          </FloatingActionButton>
+          <IconButton onTouchTap={() => this.setState({open: false})}>
+            <NavigationClose />
+          </IconButton>
+          <div style={{flex: '1 1 auto'}}></div>
+          <input readOnly
+            value={this.shareURL}
+            onTouchTap={this.handleLinkCopy}
+          />
+          <div style={styles.blank}></div>
+          {/* Twitter */}
+          <a
+            className="twitter-share-button"
+            href={twitterIntent}
+            data-lang={lang}
+            data-show-count="false"
+          ></a>
+          <div style={styles.blank}></div>
+          {/* LINE */}
           <div
-            className="fb-share-button"
-            data-href={this.shareURL}
-            data-layout="button"></div>
-        </div>
-        <div style={styles.blank}></div>
-      </Paper>
+            className="line-it-button"
+            data-url={this.shareURL}
+            data-lang={lang}
+            data-type="share-a"
+          ></div>
+          <div style={styles.blank}></div>
+          {/* Facebook */}
+          <div style={{marginTop: -4}}>
+            <div
+              className="fb-share-button"
+              data-href={this.shareURL}
+              data-layout="button"></div>
+          </div>
+          <div style={styles.blank}></div>
+        </Paper>
+      </div>
     );
   }
 }

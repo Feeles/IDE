@@ -95,6 +95,7 @@ export default class Screen extends PureComponent {
       width: '100%',
       height: '100%',
       left: 0,
+      top: 0,
       background: 'linear-gradient(rgba(0,0,0,0.8), rgba(128,128,128,0.8))',
       display: display ? 'flex' : 'none',
       justifyContent: 'center',
