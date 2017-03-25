@@ -159,7 +159,7 @@
     "description": "ほかにも blue や orange など、さまざまな色がつかえる",
     "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/色付きハート"
 }, {
-    "code": "// explosion\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.explosion);\nflame.locate(7, 5, 'map1');\nflame.velocityY = -1;\nflame.collisionFlag = false;\nflame.ontriggerenter = (event) => {\n\tHack.Attack.call(flame, event.mapX, event.mapY, 1);\n};\nflame.destroy(20);\n",
+    "code": "// explosion\nconst item1 = new RPGObject();\nitem1.mod(Hack.assets.explosion);\nitem1.locate(7, 5, 'map1');\nitem1.velocityY = -1;\nitem1.collisionFlag = false;\nitem1.ontriggerenter = (event) => {\n\tHack.Attack.call(item1, event.mapX, event.mapY, 1);\n};\nitem1.destroy(20);\n",
     "image": "trimmed/explosion.png",
     "description": "立ち昇る爆炎。ふれると１のダメージを受ける",
     "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/爆炎"
