@@ -193,7 +193,8 @@ export default class Menu extends PureComponent {
           'Accept': 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body,
+        // [Safari Bug] URLSearchParams not supported in bodyInit
+        body: body.toString(),
         mode: 'cors'
       });
 
@@ -255,6 +256,7 @@ export default class Menu extends PureComponent {
 
   handleLogout = () => {
     this.setState({oAuthId: null});
+    this.handleRequestClose();
   };
 
   handleRequestClose = () => {
