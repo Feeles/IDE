@@ -165,6 +165,7 @@ class CardContainer extends PureComponent {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundSize: 'contain',
+        position: 'relative',
       },
       left: {
         position: 'relative',
