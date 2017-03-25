@@ -9,7 +9,7 @@
     "description": "にげあしは おいらの とくぎなのさ。すばやく turn（ターン）して walk（あるく）のが ひけつさ",
     "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/イモムシ"
 }, {
-    "code": "// bat\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.bat);\nitem2.hp = 3;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nitem2.onbecomedead = () => {\n\tHack.score += 1;\n};\nitem2.onbecomeidle = (e) => {\n\tconst target = Hack.player;\n\tconst moveX = 32 * Math.sign(target.mapX - item2.mapX);\n\tconst moveY = 32 * Math.sign(target.mapY - item2.mapY);\n\titem2.forward = [moveX, moveY];\n\titem2.tl.become('walk').moveBy(moveX, moveY, 30).then(() => {\n\t\tHack.Attack.call(item2, item2.mapX, item2.mapY, item2.atk);\n\t}).become('attack', 20).become('idle');\n};\n",
+    "code": "// bat\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.bat);\nitem2.hp = 3;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nitem2.onbecomedead = () => {\n\tHack.score += 1;\n};\nitem2.onbecomeidle = (e) => {\n\tconst target = Hack.player;\n\tconst moveX = 32 * Math.sign(target.mapX - item2.mapX);\n\tconst moveY = 32 * Math.sign(target.mapY - item2.mapY);\n\titem2.forward = [moveX, moveY];\n\titem2.tl.become('walk').moveBy(moveX, moveY, 30).then(() => {\n\t\tHack.Attack.call(item2, item2.mapX, item2.mapY, item2.atk);\n\t}).become('attack', 20).become('idle', 20);\n};\n",
     "image": "trimmed/bat.gif",
     "description": "ねらいをつけて おそってくる おそろしいコウモリ。 target に、むかってくる らしい",
     "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/コウモリ"
@@ -159,7 +159,7 @@
     "description": "ほかにも blue や orange など、さまざまな色がつかえる",
     "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/色付きハート"
 }, {
-    "code": "// explosion\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.explosion);\nflame.locate(7, 5, 'map1');\nflame.velocityY = -1;\nflame.collisionFlag = false;\nflame.ontriggerenter = (event) => {\n\tHack.Attack.call(flame, event.mapX, event.mapY, 1);\n};\nflame.destroy(20);\n",
+    "code": "// explosion\nconst item1 = new RPGObject();\nitem1.mod(Hack.assets.explosion);\nitem1.locate(7, 5, 'map1');\nitem1.velocityY = -1;\nitem1.collisionFlag = false;\nitem1.ontriggerenter = (event) => {\n\tHack.Attack.call(item1, event.mapX, event.mapY, 1);\n};\nitem1.destroy(20);\n",
     "image": "trimmed/explosion.png",
     "description": "立ち昇る爆炎。ふれると１のダメージを受ける",
     "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/爆炎"
