@@ -174,24 +174,26 @@ export default class Menu extends PureComponent {
 
       // isUpdate の場合は PUT products/:search, そうでない場合は POST products
       const actionURL = isUpdate ? this.props.deployURL : organization.api.deploy;
-      const body = {
-        json: JSON.stringify(composed),
-        script_src: CORE_CDN_URL,
-        ogp: this.props.getConfig('ogp'),
-      };
+      const body = new URLSearchParams();
+      body.append('json', JSON.stringify(composed));
+      body.append('script_src', CORE_CDN_URL);
+      body.append('ogp', JSON.stringify(this.props.getConfig('ogp')));
       if (withOAuth) {
-        body.oauth_id = this.state.oAuthId;
+        body.append('oauth_id', this.state.oAuthId);
       } else {
-        body.organization_id = organization.id;
-        body.organization_password = password;
+        body.append('organization_id', organization.id);
+        body.append('organization_password', password);
+      }
+      if (isUpdate) {
+        body.append('_method', 'PUT');
       }
       const response = await fetch(actionURL, {
-        method: isUpdate ? 'PUT' : 'POST',
+        method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: JSON.stringify(body),
+        body,
         mode: 'cors'
       });
 
