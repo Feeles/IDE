@@ -295,52 +295,6 @@ export default class CloneDialog extends PureComponent {
         onRequestClose={onRequestClose}
       >
         <Tabs>
-          <Tab label={localization.cloneDialog.cloneTitle}>
-            <h1 style={styles.header}>{localization.cloneDialog.cloneHeader}</h1>
-            <RadioButtonGroup
-              name="libType"
-              valueSelected={bundleType}
-              style={styles.group}
-              onChange={this.handleBundleTypeChange}
-            >
-            {BundleTypes.map((type) => (
-              <RadioButton
-                key={type}
-                value={type}
-                label={localization.cloneDialog[type]}
-                style={styles.radio}
-              />
-            ))}
-            </RadioButtonGroup>,
-          {bundleType === 'divide' ? (
-            <div style={styles.center}>
-              <RaisedButton primary
-                label={localization.cloneDialog.saveHTML}
-                style={styles.button}
-                onTouchTap={this.handleClone}
-              />
-              <RaisedButton primary
-                label={localization.cloneDialog.saveLibrary}
-                disabled={!coreString}
-                style={styles.button}
-                onTouchTap={this.handleCloneLibrary}
-              />
-              <RaisedButton primary
-                label={localization.cloneDialog.saveAll}
-                disabled={!coreString}
-                style={styles.button}
-                onTouchTap={this.handleCloneAll}
-              />
-            </div>
-          ) : (
-            <RaisedButton primary
-              label={localization.cloneDialog.save}
-              disabled={!coreString}
-              style={styles.button}
-              onTouchTap={this.handleClone}
-            />
-          )}
-          </Tab>
           <Tab label={localization.cloneDialog.saveTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.saveHeader}</h1>
             <div style={styles.container}>
@@ -399,6 +353,52 @@ export default class CloneDialog extends PureComponent {
               ))}
               </div>
             )}
+          </Tab>
+          <Tab label={localization.cloneDialog.cloneTitle}>
+            <h1 style={styles.header}>{localization.cloneDialog.cloneHeader}</h1>
+            <RadioButtonGroup
+              name="libType"
+              valueSelected={bundleType}
+              style={styles.group}
+              onChange={this.handleBundleTypeChange}
+            >
+            {BundleTypes.map((type) => (
+              <RadioButton
+                key={type}
+                value={type}
+                label={localization.cloneDialog[type]}
+                style={styles.radio}
+              />
+            ))}
+            </RadioButtonGroup>,
+          {bundleType === 'divide' ? (
+            <div style={styles.center}>
+              <RaisedButton primary
+                label={localization.cloneDialog.saveHTML}
+                style={styles.button}
+                onTouchTap={this.handleClone}
+              />
+              <RaisedButton primary
+                label={localization.cloneDialog.saveLibrary}
+                disabled={!coreString}
+                style={styles.button}
+                onTouchTap={this.handleCloneLibrary}
+              />
+              <RaisedButton primary
+                label={localization.cloneDialog.saveAll}
+                disabled={!coreString}
+                style={styles.button}
+                onTouchTap={this.handleCloneAll}
+              />
+            </div>
+          ) : (
+            <RaisedButton primary
+              label={localization.cloneDialog.save}
+              disabled={!coreString}
+              style={styles.button}
+              onTouchTap={this.handleClone}
+            />
+          )}
           </Tab>
         </Tabs>
       </Dialog>
