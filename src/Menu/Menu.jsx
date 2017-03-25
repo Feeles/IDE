@@ -255,6 +255,7 @@ export default class Menu extends PureComponent {
 
   handleLogout = () => {
     this.setState({oAuthId: null});
+    this.handleRequestClose();
   };
 
   handleRequestClose = () => {
