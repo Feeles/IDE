@@ -4,10 +4,10 @@
     "og:image:height": 320,
     "twitter:card": "summary_large_image",
     "twitter:image": "https://embed.hackforplay.xyz/open-source/ogp/rpg-kit.png",
-    "og:title": "ゲームをつくろう",
-    "twitter:title": "ゲームをつくろう",
-    "og:description": "オリジナルステージを作って、ダウンロードして遊ぼう！",
-    "twitter:description": "オリジナルステージを作って、ダウンロードして遊ぼう！",
-    "og:author": "てら",
+    "og:title": "",
+    "twitter:title": "",
+    "og:description": "",
+    "twitter:description": "",
+    "og:author": "",
     "og:url": "https://feeles.github.io/IDE/dist/make-rpg.html"
 }
