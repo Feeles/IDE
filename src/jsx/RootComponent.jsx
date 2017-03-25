@@ -67,8 +67,10 @@ class RootComponent extends Component {
 
     } else {
       if (process.env.NODE_ENV !== 'production') {
-        this.launchFromURL(this.props.jsonURL);
-        return;
+        if (this.props.jsonURL) {
+          this.launchFromURL(this.props.jsonURL);
+          return;
+        }
       }
       this.setState({openDialog: true});
     }
