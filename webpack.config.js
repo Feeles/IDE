@@ -83,6 +83,11 @@ const config = {
       output: 'make-rpg.json',
       ignore: /\.DS_Store$/,
     }),
+    new FeelesWebpackPlugin({
+      path: 'samples/ask',
+      output: 'ask.json',
+      ignore: /\.DS_Store$/,
+    }),
   ],
   devServer: {
     contentBase: 'dist',

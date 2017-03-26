@@ -19,6 +19,9 @@ const popoutURL = URL.createObjectURL(
   new Blob([popoutTemplate()], { type: 'text/html' })
 );
 
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
 
 const getStyle = (props, context, state) => {
   const {
@@ -245,6 +248,52 @@ export default class Monitor extends PureComponent {
         if (!this.state.error) {
           this.setState({ error: new Error(data.message) });
         }
+        break;
+      case 'api.SpeechRecognition':
+        const recognition = new SpeechRecognition();
+        for (const prop of [
+          'lang',
+          'continuous',
+          'interimResults',
+          'maxAlternatives',
+          'serviceURI'
+        ]) {
+          if (data.value[prop] !== undefined) {
+            recognition[prop] = data.value[prop];
+          }
+        }
+        if (Array.isArray(data.value.grammars)) {
+          recognition.grammars = new webkitSpeechGrammarList();
+          for (const {src, weight} of data.value.grammars) {
+            recognition.grammars.addFromString(src, weight);
+          }
+        }
+        recognition.onresult = (event) => {
+          const results = [];
+          for (const items of event.results) {
+            const result = [];
+            result.isFinal = items.isFinal;
+            for (const {confidence, transcript} of items) {
+              result.push({confidence, transcript});
+            }
+            results.push(result);
+          }
+          reply({
+            type: 'result',
+            event: {
+              results,
+            },
+          });
+        };
+        recognition.onerror = (event) => {
+          reply({
+            type: 'error',
+            event: {
+              error: event.error,
+            },
+          });
+        };
+        recognition.start();
         break;
     }
   };
