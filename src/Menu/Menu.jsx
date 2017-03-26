@@ -21,7 +21,7 @@ import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import TwitterIcon from '../utils/TwitterIcon';
 import LineIcon from '../utils/LineIcon';
 import FacebookIcon from '../utils/FacebookIcon';
-
+import GoogleIcon from '../utils/GoogleIcon';
 
 import { BinaryFile, SourceFile } from '../File/';
 import { acceptedLanguages } from '../localization/';
@@ -81,6 +81,10 @@ const getStyles = (props, context) => {
     facebook: {
       color: '#FFFFFF',
       backgroundColor: '#3B5998',
+    },
+    google: {
+      color: 'rgba(0,0,0,0.54)',
+      backgroundColor: '#FFFFFF',
     },
   };
 };
@@ -381,6 +385,12 @@ export default class Menu extends PureComponent {
                 leftIcon={<FacebookIcon />}
                 style={styles.facebook}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.facebook)}
+              />,
+              <MenuItem
+                primaryText={localization.menu.withGoogle}
+                leftIcon={<GoogleIcon />}
+                style={styles.google}
+                onTouchTap={() => this.handleLoginWithOAuth(organization.api.google)}
               />
             ]}
           />

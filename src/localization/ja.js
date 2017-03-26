@@ -30,6 +30,7 @@ export default {
     withTwitter: 'Twitterでログイン',
     withLine: 'LINEでログイン',
     withFacebook: 'Facebookでログイン',
+    withGoogle: 'Googleでログイン',
   },
   cloneDialog: {
     saveTitle: 'セーブ',
