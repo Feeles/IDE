@@ -18,6 +18,7 @@ import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
+import {emphasize} from 'material-ui/utils/colorManipulator';
 import TwitterIcon from '../utils/TwitterIcon';
 import LineIcon from '../utils/LineIcon';
 import FacebookIcon from '../utils/FacebookIcon';
@@ -368,25 +369,25 @@ export default class Menu extends PureComponent {
             leftIcon={<ActionAccountCircle />}
             rightIcon={<ArrowDropRight />}
             menuItems={[
-              <MenuItem
+              <HoverMenuItem
                 primaryText={localization.menu.withTwitter}
                 leftIcon={<TwitterIcon />}
                 style={styles.twitter}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.twitter)}
               />,
-              <MenuItem
+              <HoverMenuItem
                 primaryText={localization.menu.withLine}
                 leftIcon={<LineIcon />}
                 style={styles.line}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.line)}
               />,
-              <MenuItem
+              <HoverMenuItem
                 primaryText={localization.menu.withFacebook}
                 leftIcon={<FacebookIcon />}
                 style={styles.facebook}
                 onTouchTap={() => this.handleLoginWithOAuth(organization.api.facebook)}
               />,
-              <MenuItem
+              <HoverMenuItem
                 primaryText={localization.menu.withGoogle}
                 leftIcon={<GoogleIcon />}
                 style={styles.google}
@@ -496,5 +497,30 @@ function renderCardIcon(name) {
     return Cards[name].icon();
   } else {
     return null;
+  }
+}
+
+class HoverMenuItem extends PureComponent {
+
+  state = {
+    hover: false,
+  };
+
+  render() {
+    let {style} = this.props;
+    if (this.state.hover) {
+      style = {
+        ...style,
+        backgroundColor: emphasize(style.backgroundColor, 0.14)
+      };
+    }
+    return (
+      <MenuItem
+        {...this.props}
+        style={style}
+        onMouseEnter={() => this.setState({hover: true})}
+        onMouseLeave={() => this.setState({hover: false})}
+      />
+    );
   }
 }
