@@ -177,7 +177,6 @@ export default class Menu extends PureComponent {
       const body = new URLSearchParams();
       body.append('json', JSON.stringify(composed));
       body.append('script_src', CORE_CDN_URL);
-      body.append('ogp', JSON.stringify(this.props.getConfig('ogp')));
       if (withOAuth) {
         body.append('oauth_id', this.state.oAuthId);
       } else {
@@ -186,7 +185,17 @@ export default class Menu extends PureComponent {
       }
       if (isUpdate) {
         body.append('_method', 'PUT');
+        // Update og:url
+        const ogp = this.props.getConfig('ogp');
+        if (ogp['og:url'] !== this.shareURL) {
+          this.props.setConfig('ogp', {
+            ...ogp,
+            'og:url': this.shareURL,
+          });
+        }
       }
+      body.append('ogp', JSON.stringify(this.props.getConfig('ogp')));
+      // store/update action
       const response = await fetch(actionURL, {
         method: 'POST',
         headers: {
