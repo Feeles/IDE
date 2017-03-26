@@ -1,11 +1,14 @@
 export default async function start(ask) {
 
-  // あっちが喋る
+  console.log('hello');
+
+  // あっちがしゃべる
   await ask('げんき？');
 
-  // こっちが喋る
+  // こっちがしゃべる
   const message = await ask();
 
-  await ask(message + ' か、ならよかった');
+  // こたえる
+  await ask(`わたしも、${message}`);
 
 }
