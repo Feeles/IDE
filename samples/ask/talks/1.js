@@ -1,7 +1,4 @@
 export default async function start(ask) {
-
-  console.log('hello');
-
   // あっちがしゃべる
   await ask('げんき？');
 
