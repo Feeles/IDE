@@ -32,13 +32,43 @@ function speechRecognition() {
   });
 }
 
+let _touched = false;
+function touchThenPrompt() {
+  if (!_touched) {
+    const touchMe = document.createElement('div');
+    touchMe.style.position = 'fixed';
+    touchMe.style.left = '0px';
+    touchMe.style.top = '0px';
+    touchMe.style.width = '100vw';
+    touchMe.style.height = '100vh';
+    touchMe.style['z-index'] = '10000';
+    touchMe.style['line-height'] = '100vh';
+    touchMe.style['text-align'] = 'center';
+    touchMe.style['font-size'] = '25vw';
+    touchMe.style.color = 'white';
+    touchMe.style['background-color'] = 'black';
+    touchMe.textContent = 'TOUCH';
+    return new Promise((resolve, reject) => {
+      touchMe.onclick = () => {
+        _touched = true;
+        touchMe.parentNode.removeChild(touchMe);
+        requestAnimationFrame(() => {
+          resolve(prompt(''));
+        });
+      };
+      document.body.appendChild(touchMe);
+    });
+  }
+  return Promise.resolve(prompt(''));
+}
+
 const request = 'speechSynthesis' in window
   ? textToSpeech
   : (message) => Promise.resolve(alert(message));
 
 const response = SpeechRecognition
   ? speechRecognition
-  : () => Promise.resolve(prompt());
+  : touchThenPrompt;
 
 export default function ask(message) {
   if (typeof message === 'string') {
