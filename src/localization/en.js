@@ -30,6 +30,7 @@ export default {
     withTwitter: 'Log in with Twitter',
     withLine: 'Log in with LINE',
     withFacebook: 'Log in with Facebook',
+    withGoogle: 'Log in with Google',
   },
   cloneDialog: {
     saveTitle: 'Save',
