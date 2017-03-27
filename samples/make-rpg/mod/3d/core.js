@@ -1,4 +1,4 @@
-import 'hackforplay/Assets';
+import 'hackforplay/core';
 
 import gl from 'mod/3d/gl';
 import { canvas } from 'mod/3d/gl';
@@ -63,7 +63,7 @@ game.preload('mod/3d/ui.png');
 const main = async function() {
 
 
-	// UI 
+	// UI
 	(function() {
 		var a = new Sprite(300, 320);
 		a.image = game.assets['mod/3d/ui.png'];
@@ -434,11 +434,11 @@ const main = async function() {
 				pCameraHeight -= 3;
 			}
 
-			
+
 			pCameraDistance = Math.max(10, pCameraDistance);
 			pCameraHeight = Math.max(0, pCameraHeight);
 
-			
+
 			CPOS = Hack.player.position.toArray();
 			CPOS[1] += 50;
 
