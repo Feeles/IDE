@@ -1,4 +1,4 @@
-import 'hackforplay/Assets';
+import 'hackforplay/core';
 import 'mod/key';
 
 import { Vec2 } from 'mod/3d/math';
@@ -121,5 +121,3 @@ Player.prototype.frameOverride = function frameOverride() {
 	return this.simNode;
 
 };
-
-

@@ -1,6 +1,7 @@
 import 'hackforplay/core';
 
-Hack.onload = () => {
+
+function maps() {
 	Hack.maps = {};
 	// map1
 	const map1 = new RPGMap(32, 32, 15, 10);
@@ -36,3 +37,4 @@ Hack.onload = () => {
 
 };
 
+export default maps;

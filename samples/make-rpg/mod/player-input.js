@@ -1,4 +1,4 @@
-import 'hackforplay/Assets';
+import 'hackforplay/core';
 import 'mod/key';
 
 Player.prototype.input = {
@@ -34,4 +34,3 @@ Player.prototype.onenterframe = function() {
 		}
 	}
 };
-
