@@ -1,7 +1,10 @@
 const API = {
+  YouTube: 'https://www.googleapis.com/youtube/v3/search',
+  YouTubeEmbed: 'http://www.youtube.com/embed',
 };
 
 const API_KEY = {
+  YouTube: 'AIzaSyAwUCeU11XtFn_LzhJkoyo9Ngq1vw-SwAg',
 };
 
 export default function internet(query) {
@@ -11,6 +14,29 @@ export default function internet(query) {
 }
 
 export class Internet {
+
+  async youtube(params = {}) {
+    const response = await this.request(
+      API.YouTube,
+      {
+        part: 'id',
+        type: 'video',
+        q: this.query,
+        key: API_KEY.YouTube,
+        maxResults: 1,
+        videoEmbeddable: true,
+        ...params,
+      }
+    );
+    const result = await response.clone().text();
+    const [item] = JSON.parse(result).items;
+    if (item) {
+      await feeles.openMedia({
+        url: `${API.YouTubeEmbed}/${item.id.videoId}`,
+        playing: true,
+      });
+    }
+  }
 
   async request(api, params) {
     const url = new URL(api);
