@@ -15,51 +15,78 @@ export default function internet(query) {
 
 export class Internet {
 
-  async youtube(params = {}) {
+  get youtube() {
+    return new YouTubeResource(this);
+  }
+
+}
+
+
+// インターネット上からリソースを取得、表示するクラスの基底クラス
+class Resource {
+  constructor(internet) {
+    // Internet インスタンスへの参照
+    this.internet = internet;
+    // face の描画先コンテキスト
+    let [canvas] = document.getElementsByTagName('canvas');
+    this.context = canvas && canvas.getContext('2d');
+  }
+
+  // fetch のラッパー
+  async request(api, params = {}) {
+    const url = new URL(api);
+    url.search = Object.keys(params)
+      .map(key => `${key}=${params[key]}`)
+      .join('&');
+    try {
+      this.response = await fetch(url.href);
+      if (!this.response.ok) throw response;
+      return this.response;
+    } catch (e) {
+      await this.debugWindow(this.response);
+      throw e;
+    }
+  }
+
+  // レスポンスを新しいウィンドウに表示（デバッグ用）
+  async debugWindow(response) {
+    if (response instanceof Response) {
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      if (!window.open(url) && confirm('OK')) {
+        window.open(url);
+      }
+      URL.revokeObjectURL(url);
+    }
+  }
+}
+
+
+class YouTubeResource extends Resource {
+  async get() {
     const response = await this.request(
       API.YouTube,
       {
         part: 'id',
         type: 'video',
-        q: this.query,
+        q: this.internet.query,
         key: API_KEY.YouTube,
         maxResults: 1,
         videoEmbeddable: true,
-        ...params,
       }
     );
-    const result = await response.clone().text();
-    const [item] = JSON.parse(result).items;
-    if (item) {
+    const result = await response.text();
+    return JSON.parse(result);
+  }
+
+  async card() {
+    const {items} = await this.get();
+
+    if (items[0]) {
       await feeles.openMedia({
-        url: `${API.YouTubeEmbed}/${item.id.videoId}`,
+        url: `${API.YouTubeEmbed}/${items[0].id.videoId}`,
         playing: true,
       });
     }
-  }
-
-  async request(api, params) {
-    const url = new URL(api);
-    url.search = Object.keys(params)
-      .map(key => `${key}=${params[key]}`)
-      .join('&');
-    let response;
-    try {
-      response = await fetch(url.href);
-      if (!response.ok) throw response;
-      return response;
-    } catch (e) {
-      await this.debugWindow(response);
-      throw e;
-    }
-  }
-
-  async debugWindow(response) {
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    if (!window.open(url) && confirm('OK')) {
-      window.open(url);
-    }
-    URL.revokeObjectURL(url);
   }
 }
