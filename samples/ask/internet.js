@@ -34,8 +34,11 @@ class Resource {
     // Internet インスタンスへの参照
     this.internet = internet;
     // face の描画先コンテキスト
-    const canvas = document.getElementById('face');
-    this.context = canvas && canvas.getContext('2d');
+    const canvas = document.createElement('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    this.context = canvas.getContext('2d');
   }
 
   // レスポンスを JSON で取得
@@ -156,9 +159,15 @@ class FlickrResource extends Resource {
   async face() {
     if (this.context) {
       const image = await this.getImage();
-      const width = Math.min(image.width, this.context.canvas.width);
-      const height = Math.min(image.height, this.context.canvas.height);
-      this.context.drawImage(image, 0, 0, this.context.canvas.width, this.context.canvas.height);
+      if (image) {
+        const {width, height} = this.context.canvas;
+        // 引き伸ばして描画
+        this.context.drawImage(image, 0, 0, width, height);
+        clearTimeout(this.refreshTimer);
+        this.refreshTimer = setTimeout(() => {
+          this.context.clearRect(0, 0, width, height);
+        }, 4000);
+      }
     }
   }
 }
