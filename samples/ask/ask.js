@@ -69,7 +69,11 @@ function touchThenPrompt() {
       document.body.appendChild(touchMe);
     });
   }
-  return Promise.resolve(prompt(''));
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(prompt(''));
+    }, 100);
+  });
 }
 
 const request = 'speechSynthesis' in window
