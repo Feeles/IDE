@@ -38,6 +38,13 @@ function speechRecognition() {
 let _touched = false;
 function touchThenPrompt() {
   if (!_touched) {
+    const testWindow = window.open();
+    if (testWindow) {
+      testWindow.close();
+      _touched = true;
+    }
+  }
+  if (!_touched) {
     const touchMe = document.createElement('div');
     touchMe.style.position = 'fixed';
     touchMe.style.left = '0px';
