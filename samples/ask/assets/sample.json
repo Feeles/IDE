@@ -1,1 +1,33 @@
-[]
+[{
+    "code": "// 話す\nawait ask(`こんにちは`);\n\n",
+    "label": "「こんにちは」",
+    "description": "カッコの中のことばを話す"
+}, {
+    "code": "// 聞く\nconst item1 = await ask();\n\n",
+    "label": "(聞く)",
+    "description": "相手のことばを聞きとる"
+}, {
+    "code": "// 聞く\nconst item1 = await ask();\nawait ask(`${item1}`);\n\n",
+    "label": "「(それ)」",
+    "description": "相手のことばを聞きとって、そのまま返す"
+}, {
+    "code": "// 話す\nawait ask(`${item1}、いいね`);\n\n",
+    "label": "「(それ)、いいね」",
+    "description": "相手のことばを聞きとって、それをいいねと言う"
+}, {
+    "code": "internet(`キーワード`).youtube.card();\n",
+    "label": "YouTube",
+    "description": "キーワードをYouTubeで調べる"
+}, {
+    "code": "// 聞く\nconst item1 = await ask();\ninternet(`${item1}`).youtube.card();\n",
+    "label": "YouTubeでしらべる",
+    "description": "相手のことばを聞きとったあと、それをYouTubeで調べる"
+}, {
+    "code": "internet(`キーワード`).flickr.face();\n",
+    "label": "flickr",
+    "description": "キーワードにヒットする画像を顔に出す"
+}, {
+    "code": "// 聞く\nconst item1 = await ask();\ninternet(`${item1}`).flickr.face();\n",
+    "label": "flickrでしらべる",
+    "description": "相手のことばを聞きとったあと、それにヒットする画像を顔に出す"
+}]
