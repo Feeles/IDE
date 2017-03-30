@@ -8,7 +8,7 @@ async function start() {
   const item1 = await ask();
 
   internet(item1).flickr.face();
-  await ask(`いいなあ　おいしそう`);
+  await ask(`いいなあ、おいしそう`);
   await ask(`${item1}の美味しい食べ方知ってる？`);
 
   const item2 = await ask();
