@@ -6,6 +6,7 @@ async function start() {
   await ask(`今日お昼何食べた？`);
 
   const item1 = await ask();
+  /* \____ assets/sample.json ____/ */
 
   internet(item1).flickr.face();
   await ask(`いいなあ、おいしそう`);
