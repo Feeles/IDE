@@ -156,9 +156,11 @@ class FlickrResource extends Resource {
   async face() {
     if (this.context) {
       const image = await this.getImage();
-      const width = Math.min(image.width, this.context.canvas.width);
-      const height = Math.min(image.height, this.context.canvas.height);
-      this.context.drawImage(image, 0, 0, this.context.canvas.width, this.context.canvas.height);
+      if (image) {
+        const {width, height} = this.context.canvas;
+        // 引き伸ばして描画
+        this.context.drawImage(image, 0, 0, width, height);
+      }
     }
   }
 }
