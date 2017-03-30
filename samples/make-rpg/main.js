@@ -1,8 +1,8 @@
 import 'hackforplay/core';
 
 // ゲームをつくる
-import game from './game';
-game.onload = game;
+import gameFunc from './game';
+game.onload = gameFunc;
 
 // マップをつくる
 import maps from './maps';
