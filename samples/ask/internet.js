@@ -163,6 +163,10 @@ class FlickrResource extends Resource {
         const {width, height} = this.context.canvas;
         // 引き伸ばして描画
         this.context.drawImage(image, 0, 0, width, height);
+        clearTimeout(this.refreshTimer);
+        this.refreshTimer = setTimeout(() => {
+          this.context.clearRect(0, 0, width, height);
+        }, 4000);
       }
     }
   }
