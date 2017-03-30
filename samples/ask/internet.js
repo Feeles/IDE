@@ -1,10 +1,12 @@
 const API = {
   YouTube: 'https://www.googleapis.com/youtube/v3/search',
   YouTubeEmbed: 'http://www.youtube.com/embed',
+  Flickr: 'https://api.flickr.com/services/rest',
 };
 
 const API_KEY = {
   YouTube: 'AIzaSyAwUCeU11XtFn_LzhJkoyo9Ngq1vw-SwAg',
+  Flickr: '8dbc086c0bfa3a0eea4c4977e315f834',
 };
 
 export default function internet(query) {
@@ -19,6 +21,10 @@ export class Internet {
     return new YouTubeResource(this);
   }
 
+  get flickr() {
+    return new FlickrResource(this);
+  }
+
 }
 
 
@@ -28,8 +34,23 @@ class Resource {
     // Internet インスタンスへの参照
     this.internet = internet;
     // face の描画先コンテキスト
-    let [canvas] = document.getElementsByTagName('canvas');
+    const canvas = document.getElementById('face');
     this.context = canvas && canvas.getContext('2d');
+  }
+
+  // レスポンスを JSON で取得
+  async get() {
+    throw new ReferenceError();
+  }
+
+  // MediaCard などのカードにリソースを表示
+  async card() {
+    throw new ReferenceError();
+  }
+
+  // DOM や Canvas などにリソースを表示
+  async face() {
+    throw new ReferenceError();
   }
 
   // fetch のラッパー
@@ -87,6 +108,57 @@ class YouTubeResource extends Resource {
         url: `${API.YouTubeEmbed}/${items[0].id.videoId}`,
         playing: true,
       });
+    }
+  }
+}
+
+class FlickrResource extends Resource {
+  async get() {
+    const response = await this.request(
+      API.Flickr,
+      {
+        method: 'flickr.photos.search',
+        api_key: API_KEY.Flickr,
+        format: 'json',
+        text: this.internet.query,
+        nojsoncallback: 1,
+        per_page: 1,
+      }
+    );
+    const result = JSON.parse( await response.clone().text() );
+    if (!result.stat) {
+      await this.debugWindow(response);
+    }
+    return result;
+  }
+
+  async getImage() {
+    const {stat, photos} = await this.get();
+    const [item] = photos.photo;
+    if (item) {
+      const response = await this.request(
+        `https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}_z.jpg`
+      );
+      const blob = await response.blob();
+      const image = new Image();
+      return new Promise((resolve, reject) => {
+        image.addEventListener('load', () => {
+          URL.revokeObjectURL(image.src);
+          resolve(image);
+        });
+        image.addEventListener('error', reject);
+        image.src = URL.createObjectURL(blob);
+      });
+    }
+    return null;
+  }
+
+  async face() {
+    if (this.context) {
+      const image = await this.getImage();
+      const width = Math.min(image.width, this.context.canvas.width);
+      const height = Math.min(image.height, this.context.canvas.height);
+      this.context.drawImage(image, 0, 0, this.context.canvas.width, this.context.canvas.height);
     }
   }
 }
