@@ -82,8 +82,12 @@ export default function ask(message) {
 }
 
 // Text
-const canvas = document.getElementById('text');
-const context = canvas && canvas.getContext('2d');
+const canvas = document.createElement('canvas');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+canvas.style['z-index'] = 1;
+document.body.appendChild(canvas);
+const context = canvas.getContext('2d');
 let refreshTimer;
 function writeText(text) {
   if (!context) return;

@@ -34,8 +34,11 @@ class Resource {
     // Internet インスタンスへの参照
     this.internet = internet;
     // face の描画先コンテキスト
-    const canvas = document.getElementById('face');
-    this.context = canvas && canvas.getContext('2d');
+    const canvas = document.createElement('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    this.context = canvas.getContext('2d');
   }
 
   // レスポンスを JSON で取得
