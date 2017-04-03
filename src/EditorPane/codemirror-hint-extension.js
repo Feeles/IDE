@@ -7,7 +7,7 @@ CodeMirror.hint.javascript = (instance, options) => {
 
   const { cursor, token, from, to, empty } = getTokenInfo(instance);
 
-  if (!/[A-Za-z\.\'\"\`]$/.test(token.string)) {
+  if (!/[\w\.\'\"\`]$/.test(token.string)) {
     return empty;
   }
 
