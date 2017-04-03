@@ -26,6 +26,7 @@ CodeMirror.hint.javascript = (instance, options) => {
       .concat(result.list);
   }
 
+  result.list = uniquify(result.list);
   return result;
 
 };
@@ -54,6 +55,7 @@ CodeMirror.hint.html = (instance, options) => {
       .concat(result.list);
   }
 
+  result.list = uniquify(result.list);
   return result;
 
 };
@@ -76,6 +78,7 @@ CodeMirror.hint.css = (instance, options) => {
       .concat(result.list);
   }
 
+  result.list = uniquify(result.list);
   return result;
 
 };
@@ -107,6 +110,7 @@ CodeMirror.hint.markdown = (instance, options) => {
     .filter((snippet) => startWith(snippet.prefix, token.string))
     .concat(result.list);
 
+  result.list = uniquify(result.list);
   return result;
 
 };
@@ -144,4 +148,16 @@ function getTokenInfo(instance) {
 
   return { cursor, token, from, to, empty };
 
+}
+
+// 同じ文字列または text に同じ文字列が入っているオブジェクトを排除する
+function uniquify(array) {
+  const result = [];
+  for (const [index, current] of array.entries()) {
+    const text = current.text || current;
+    if (index === array.findIndex(item => text === item || text === item.text)) {
+      result[index] = current;
+    }
+  }
+  return result;
 }
