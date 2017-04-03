@@ -50,7 +50,6 @@ function gameStartLazy() {
 
 	].forEach((array, y) => {
 		array.forEach((value, x) => {
-			
 			// もし数値が 1 なら...
 			if (value === 1) {
 				// 宝箱を出す！
@@ -80,6 +79,7 @@ function gameStartLazy() {
 			// スコアを 400　アップ！！！！
 			Hack.score += 400;
 		};
+		return item1;
 
 	}
 
@@ -98,6 +98,7 @@ function gameStartLazy() {
 			// スコアを 400 アップ！！！！
 			Hack.score += 400;
 		};
+		return item1;
 
 	}
 

@@ -37,8 +37,7 @@ function gameStart() {
 	};
 
 	// 魔道書にプレイヤーを登録する
-	feeles.exports.push({ player });
-
+	feeles.setAlias('player', player);
 
 	// ATK Label
 	// 攻撃力を画面に表示する
@@ -63,6 +62,9 @@ function gameStart() {
 		// コウモリの縦の位置をプレイヤーと同じにする
 		item1.y = Hack.player.y;
 	};
+
+	// 魔道書にコウモリを登録する
+	feeles.setAlias('bat', item1);
 
 	// かいだん
 	const item2 = new RPGObject();

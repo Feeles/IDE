@@ -61,10 +61,7 @@ function gameStart() {
 	item2.locate(7, 5, 'map1');
 
 	// 魔道書にスライムを登録する
-	feeles.exports.push({
-		slime: item2
-	});
-
+	feeles.setAlias('slime', item2);
 
 	// イモムシ
 	const item3 = new RPGObject();
@@ -75,10 +72,7 @@ function gameStart() {
 	item3.locate(5, 7, 'map1');
 
 	// 魔道書にスライムを登録する
-	feeles.exports.push({
-		insect: item3
-	});
-
+	feeles.setAlias('insect', item3);
 
 	// かいだん
 	const item4 = new RPGObject();

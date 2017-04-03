@@ -5,10 +5,10 @@ import extra, {
 
 
 function gameStart() {
-	
+
 	// map1 を読み込む
 	Hack.maps['map1'].load();
-	
+
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
 	player.mod(Hack.assets.knight);
@@ -25,7 +25,7 @@ function gameStart() {
 		// ゲームオーバー
 		Hack.gameover();
 	};
-	
+
 
 	// 神官
 	const boy = new RPGObject();
@@ -39,7 +39,7 @@ function gameStart() {
 		boy.oncollided = () => {
 			Hack.log('君の力があれば、この世界をもっと自由にできるんじゃないかな……');
 		};
-	} 
+	}
 	// フラグが立っていなかったら...
 	else {
 		// 神官にぶつかったら...
@@ -61,25 +61,25 @@ function gameStart() {
 		'ステージ１ "はじまりの森" へ転移しますか？',
 		'stages/1/index.html'
 	);
-	
+
 	// 5, 7 の位置に　オレンジ色（orange） の転移装置を作る
 	const warp2 = createWarp(5, 7, 'orange',
 		'ステージ2 "CODE の 魔法" へ転移しますか？',
 		'stages/2/index.html'
 	);
-	
+
 	// 6, 7 の位置に　青色（blue） の転移装置を作る
 	const warp3 = createWarp(6, 7, 'blue',
 		'ステージ3 "おかしな行き止まり" へ転移しますか？',
 		'stages/3/index.html'
 	);
-	
+
 	// 8, 7 の位置に　シアン（水色）（cyan） の転移装置を作る
 	const warp4 = createWarp(8, 7, 'cyan',
 		'ステージ4 "閉じられた群青の輝き" へ転移しますか？',
 		'stages/4/index.html'
 	);
-	
+
 	// 9, 7 の位置に　黄色（yellow） の転移装置を作る
 	const warp5 = createWarp(9, 7, 'yellow',
 		'ステージ5 "大グモ荒野" へ転移しますか？',
@@ -93,9 +93,7 @@ function gameStart() {
 	);
 
 	// 魔道書にプレイヤーを登録する
-	feeles.exports.push({
-		player
-	});
+	feeles.setAlias('player', player);
 
 	// このステージを改造
 	extra(13, 8, 'map1', 'stages/7/main.js');
@@ -103,7 +101,7 @@ function gameStart() {
 
 // 転移装置を作るコード （ 関数 ）
 function createWarp(x, y, color, message, next) {
-	
+
 	// ワープ床
 	const warp = new RPGObject();
 	warp.mod(Hack.assets.warp);
@@ -123,7 +121,7 @@ function createWarp(x, y, color, message, next) {
 				feeles.replace(next);
 			}
 		};
-		
+
 	}
 	// もしフラグが立っていなかったら...
 	else {
@@ -175,7 +173,7 @@ function createMap() {
 		[321, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, ___, 321],
 		[341, 341, 341, 341, 341, 341, 341, 341, 341, 341, 341, 341, 341, 341, 341]
 	]);
-	
+
 
 	// マップの歩ける場所を決める
 	// 1 なら歩けないし、 0 なら歩ける

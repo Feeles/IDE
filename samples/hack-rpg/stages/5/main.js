@@ -37,9 +37,7 @@ function gameStart() {
 	};
 
 	// 魔道書にプレイヤーを登録する
-	feeles.exports.push({ player });
-
-
+	feeles.setAlias('player', player);
 
 	// ATK Label
 	// 攻撃力を画面に表示する
@@ -66,6 +64,8 @@ function gameStart() {
 		item4.y = Hack.player.y;
 	};
 
+	// 魔道書にコウモリを登録する
+	feeles.setAlias('bat', item4);
 
 	// かいだん
 	const item2 = new RPGObject();
@@ -91,6 +91,7 @@ function gameStart() {
 	// 0 ならスライムは出ないけど、
 	// 1 ならスライムが出る！
 	// ためしに数値を書き換えてみよう！
+	let count = 0;
 	[
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -105,13 +106,7 @@ function gameStart() {
 
 	].forEach((array, y) => {
 		array.forEach((flag, x) => {
-			const n = y * 15 + x;
-
-			// ダミー
-			if (!flag) return feeles.exports.push({
-				[`slime${n}`]: {}
-			});
-
+			if (!flag) return;
 
 			// スライム
 			const item3 = new RPGObject();
@@ -128,10 +123,8 @@ function gameStart() {
 				Hack.score++;
 			};
 
-			// 魔道書にスライムを登録
-			feeles.exports.push({
-				[`slime${n}`]: item3
-			});
+			// 魔道書にスライムを登録する
+			feeles.setAlias([`slime${++count}`], item3);
 
 		});
 	});

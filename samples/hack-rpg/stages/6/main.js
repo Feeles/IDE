@@ -44,8 +44,7 @@ function gameStart() {
 	};
 
 	// 魔道書にプレイヤーを登録する
-	feeles.exports.push({ player });
-
+	feeles.setAlias('player', player);
 
 	// 	HP Gage
 	// 体力のゲージを作る
@@ -76,6 +75,8 @@ function gameStart() {
 		item1.y = Hack.player.y;
 	};
 
+	// 魔道書にコウモリを登録する
+	feeles.setAlias('bat', item1);
 
 	// かいだん
 	const item2 = new RPGObject();
