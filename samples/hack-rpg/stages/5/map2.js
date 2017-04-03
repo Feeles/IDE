@@ -16,6 +16,8 @@ function gameStartLazy() {
 		item1.x = Hack.player.x;
 	};
 
+	// 魔道書にクモを登録する
+	feeles.exports.push({ spider: item1 });
 
 	// ダイアモンド
 	const item2 = new RPGObject();
@@ -30,6 +32,8 @@ function gameStartLazy() {
 		Hack.score += 100;
 	};
 
+	// 魔道書にクモを登録する
+	feeles.exports.push({ diamond: item2 });
 
 	// かいだん
 	const item3 = new RPGObject();

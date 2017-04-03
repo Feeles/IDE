@@ -18,6 +18,8 @@ function gameStartLazy() {
 		Hack.score += 100;
 	};
 	
+	// 魔道書にサファイアを登録
+	feeles.exports.push({ supphire: item1 });
 
 	// かいだん
 	const item2 = new RPGObject();

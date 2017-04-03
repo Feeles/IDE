@@ -76,6 +76,8 @@ function gameStart() {
 		item1.y = Hack.player.y;
 	};
 
+	// 魔道書にコウモリを登録する
+	feeles.exports.push({ bat: item1 });
 
 	// かいだん
 	const item2 = new RPGObject();

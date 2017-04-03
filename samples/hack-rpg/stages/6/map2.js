@@ -65,6 +65,8 @@ function gameStartLazy() {
 
 	};
 
+	// dragon をコードから利用可能に
+	feeles.exports.push({ dragon: item1 });
 
 	// 	Life gage
 	// 体力ゲージを作る
@@ -98,6 +100,8 @@ function gameStartLazy() {
 		item2.destroy();
 	};
 
+	// ruby をコードから利用可能に
+	feeles.exports.push({ ruby: item2 });
 
 	// 階段を作るコード （ 関数 )
 	function appearDownStair() {
