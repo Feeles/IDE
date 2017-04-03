@@ -114,10 +114,8 @@ game.on('load', function() {
 		return self;
 	})(new ScoreLabel(Hack.menuGroup.x + 10, Hack.menuGroup.y + 88), Hack.scoreLabel);
 
-	feeles.exports.concat({
-		Hack,
-		game,
-	});
+	feeles.setAlias('Hack', Hack);
+	feeles.setAlias('game', game);
 });
 
 // 互換性維持

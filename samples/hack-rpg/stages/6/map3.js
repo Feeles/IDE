@@ -50,21 +50,16 @@ function gameStartLazy() {
 
 	].forEach((array, y) => {
 		array.forEach((value, x) => {
-			let item;
-
 			// もし数値が 1 なら...
 			if (value === 1) {
 				// 宝箱を出す！
-				item = appearBox(x, y);
+				appearBox(x, y);
 			}
 			// もし数値が 2 なら...
 			if (value === 2) {
 				// コインを出す！
-				item = appearCoin(x, y);
+				appearCoin(x, y);
 			}
-
-			// 魔道書に登録する
-			feeles.exports.push({ [`item${y * 10 + x}`]: item });
 		});
 	});
 

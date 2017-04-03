@@ -17,9 +17,9 @@ function gameStartLazy() {
 		// スコアを　１００ アップ！
 		Hack.score += 100;
 	};
-	
+
 	// 魔道書にサファイアを登録
-	feeles.exports.push({ supphire: item1 });
+	feeles.setAlias('supphire', item1);
 
 	// かいだん
 	const item2 = new RPGObject();
@@ -44,10 +44,11 @@ function gameStartLazy() {
 
 
 	// スライム軍団をつくる
-	
+
 	// 0 ならスライムは出ないけど、
 	// 1 ならスライムが出る！
 	// ためしに数値を書き換えてみよう！
+	let count = 0;
 	[
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -59,15 +60,10 @@ function gameStartLazy() {
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		
+
 	].forEach((array, y) => {
 		array.forEach((flag, x) => {
-			const n = y * 15 + x;
-
-			// ダミー
-			if (!flag) return feeles.exports.push({
-				[`slime${n}`]: {}
-			});
+			if (!flag) return;
 
 			// スライム
 			const item3 = new RPGObject();
@@ -81,11 +77,9 @@ function gameStartLazy() {
 				// スコアアップ！
 				Hack.score++;
 			};
-			
+
 			// 魔道書にスライムを登録する
-			feeles.exports.push({
-				[`slime${n}`]: item3
-			});
+			feeles.setAlias([`slime${++count}`], item3);
 
 		});
 	});
@@ -108,7 +102,7 @@ function createMap() {
 	map.imagePath = 'enchantjs/x2/dotmat.gif';
 
 	const ___ = -1;
-	
+
 	// マップの地形をつくる
 	map.bmap.loadData([
 		[323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323, 323],

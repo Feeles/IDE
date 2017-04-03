@@ -66,7 +66,7 @@ function gameStartLazy() {
 	};
 
 	// dragon をコードから利用可能に
-	feeles.exports.push({ dragon: item1 });
+	feeles.setAlias('dragon', item1);
 
 	// 	Life gage
 	// 体力ゲージを作る
@@ -101,7 +101,7 @@ function gameStartLazy() {
 	};
 
 	// ruby をコードから利用可能に
-	feeles.exports.push({ ruby: item2 });
+	feeles.setAlias('ruby', item2);
 
 	// 階段を作るコード （ 関数 )
 	function appearDownStair() {
@@ -122,7 +122,7 @@ function gameStartLazy() {
 		};
 
 	}
-	
+
 	// このステージを改造
 	extra(0, 0, 'map2', 'stages/6/map2.js');
 };
@@ -131,7 +131,7 @@ function gameStartLazy() {
 
 
 function createMap() {
-	
+
 	//　map2 というマップを作る
 	const mapName = 'map2';
 
@@ -141,7 +141,7 @@ function createMap() {
 	map.imagePath = 'enchantjs/x2/dotmat.gif';
 
 	const ___ = -1;
-	
+
 	// マップの地形をつくる
 	map.bmap.loadData([
 		[323, 54., 55., 55., 55., 55., 55., 55., 55., 55., 55., 55., 55., 55., 55.],
@@ -171,7 +171,7 @@ function createMap() {
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 		[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 	];
-	
+
 
 	Hack.maps[mapName] = map;
 

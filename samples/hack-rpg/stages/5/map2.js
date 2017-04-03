@@ -17,7 +17,7 @@ function gameStartLazy() {
 	};
 
 	// 魔道書にクモを登録する
-	feeles.exports.push({ spider: item1 });
+	feeles.setAlias('spider', item1);
 
 	// ダイアモンド
 	const item2 = new RPGObject();
@@ -33,8 +33,8 @@ function gameStartLazy() {
 	};
 
 	// 魔道書にクモを登録する
-	feeles.exports.push({ diamond: item2 });
-
+	feeles.setAlias('diamond', item2);
+	
 	// かいだん
 	const item3 = new RPGObject();
 	item3.mod(Hack.assets.downStair);

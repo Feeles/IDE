@@ -54,9 +54,7 @@ function gameStart() {
 	};
 
 	// 魔道書に階段を登録する
-	feeles.exports.push({
-		stair: item1
-	});
+	feeles.setAlias('stair', item1);
 
 	// このステージを改造
 	extra(7, 0, 'map1', 'stages/3/main.js');
