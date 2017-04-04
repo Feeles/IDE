@@ -553,7 +553,11 @@ export default class Main extends Component {
         getConfig: this.getConfig,
         setConfig: this.setConfig,
         localization
-      }
+      },
+      ScreenShotCard: {
+        files,
+        deleteFile: this.deleteFile,
+      },
     };
 
     const userStyle = this.findFile('feeles/codemirror.css');

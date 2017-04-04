@@ -152,5 +152,8 @@ export default {
   mediaCard: {
     title: 'メディア',
   },
+  screenShotCard: {
+    title: 'スクショ',
+  },
 
 };
