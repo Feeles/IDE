@@ -113,7 +113,7 @@ export default class EditorPane extends PureComponent {
         <IconButton
           iconStyle={styles.largeIcon}
           style={styles.large}
-          onTouchTap={this.props.setLocation}
+          onTouchTap={() => this.props.setLocation()}
         >
           <AVPlayCircleOutline color={palette.alternateTextColor} />
         </IconButton>

@@ -389,7 +389,7 @@ export default class SourceEditor extends PureComponent {
     const props = Object.assign({}, this.props, {
       codemirrorRef: this.handleCodemirror,
       onChange: undefined,
-      handleRun: () => this.props.setLocation(),
+      handleRun: () => this.setLocation(),
       showHint,
     });
 
