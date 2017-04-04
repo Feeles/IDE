@@ -39,7 +39,7 @@ const config = {
         loaders: ["style-loader", "css-loader"]
       },
       {
-        test: /\.html$/,
+        test: /\.(html|hbs)$/,
         loaders: ["handlebars-loader"]
       },
       {
@@ -68,20 +68,47 @@ const config = {
       minimize: true,
       debug: false
     }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'index.html',
+      template: 'samples/hello-world.hbs',
+      production: process.env.NODE_ENV === 'production',
+    }),
     new FeelesWebpackPlugin({
       path: 'samples/hello-world',
       output: 'index.json',
       ignore: /\.DS_Store$/,
+    }),
+
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'hack-rpg.html',
+      template: 'samples/hack-rpg.hbs',
+      production: process.env.NODE_ENV === 'production',
     }),
     new FeelesWebpackPlugin({
       path: 'samples/hack-rpg',
       output: 'hack-rpg.json',
       ignore: /\.DS_Store$/,
     }),
+
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'make-rpg.html',
+      template: 'samples/make-rpg.hbs',
+      production: process.env.NODE_ENV === 'production',
+    }),
     new FeelesWebpackPlugin({
       path: 'samples/make-rpg',
       output: 'make-rpg.json',
       ignore: /\.DS_Store$/,
+    }),
+
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'ask.html',
+      template: 'samples/ask.hbs',
+      production: process.env.NODE_ENV === 'production',
     }),
     new FeelesWebpackPlugin({
       path: 'samples/ask',
