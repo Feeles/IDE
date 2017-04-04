@@ -152,5 +152,8 @@ export default {
   mediaCard: {
     title: 'Media',
   },
+  screenShotCard: {
+    title: 'ScreenShot',
+  },
 
 };

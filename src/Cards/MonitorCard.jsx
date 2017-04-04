@@ -1,4 +1,5 @@
 import React, {PureComponent, PropTypes} from 'react';
+import moment from 'moment';
 import Card from './CardWindow';
 import {CardMedia} from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
@@ -10,8 +11,10 @@ import ActionSettings from 'material-ui/svg-icons/action/settings';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
 import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
+import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from '../Monitor/';
+import {BinaryFile} from '../File/';
 
 const frameSizes = [
   [480, 320],
@@ -26,6 +29,7 @@ const frameSizes = [
 ];
 
 const by = 'x';
+const getUniqueId = ((i) => () => `Capture-${++i}`)(0);
 
 export default class MonitorCard extends PureComponent {
 
@@ -36,11 +40,14 @@ export default class MonitorCard extends PureComponent {
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
+    port: PropTypes.object,
+    updateCard: PropTypes.func.isRequired,
   };
 
   state = {
     frameWidth: 300,
-    frameHeight: 150
+    frameHeight: 150,
+    processing: false,
   };
 
   static icon() {
@@ -74,6 +81,41 @@ export default class MonitorCard extends PureComponent {
     );
   }
 
+  handleScreenShot = () => {
+    const {port} = this.props;
+    if (!port || this.state.processing) return;
+
+    // Monitor にスクリーンショットを撮るようリクエスト
+    const request = {
+      query: 'capture',
+      id: getUniqueId(),
+      type: 'image/png',
+    };
+    const task = async (event) => {
+      if (event.data && event.data.id === request.id) {
+        port.removeEventListener('message', task);
+        await this.handleReceiveImage(event.data);
+        this.setState({processing: false});
+      }
+    };
+    port.addEventListener('message', task);
+    port.postMessage(request);
+    this.setState({processing: true});
+  };
+
+  async handleReceiveImage(result) {
+    // Monitor から受け取ったデータを screenshot/ に保存
+    const datetime = moment().format('YYYY-MM-DD_HH-mm-ss');
+    const base64 = result.value.replace(/^.*\,/, '');
+    const file = new BinaryFile({
+      name: `screenshot/${datetime}.png`,
+      type: 'image/png',
+      composed: base64,
+    });
+    await this.props.addFile(file);
+    await this.props.updateCard('ScreenShotCard', {visible: true});
+  }
+
   render() {
     const styles = {
       flexible: {
@@ -104,6 +146,9 @@ export default class MonitorCard extends PureComponent {
         actions={[
           <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
             <NavigationRefresh />
+          </IconButton>,
+          <IconButton key="screenshot" disabled={this.state.processing} onTouchTap={this.handleScreenShot}>
+            <ImagePhotoCamera />
           </IconButton>,
           <IconButton key="fullscreen" onTouchTap={() => this.props.toggleFullScreen()}>
             <NavigationFullscreen />

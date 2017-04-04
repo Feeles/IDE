@@ -526,6 +526,9 @@ export default class Main extends Component {
         isPopout: this.state.monitorType === MonitorTypes.Popout,
         togglePopout: this.handleTogglePopout,
         toggleFullScreen: this.handleToggleFullScreen,
+        port: this.state.port,
+        addFile: this.addFile,
+        updateCard: this.updateCard,
         monitorProps: {
           ...commonProps,
           cards: this.state.cards,
@@ -551,7 +554,11 @@ export default class Main extends Component {
         getConfig: this.getConfig,
         setConfig: this.setConfig,
         localization
-      }
+      },
+      ScreenShotCard: {
+        files,
+        deleteFile: this.deleteFile,
+      },
     };
 
     const userStyle = this.findFile('feeles/codemirror.css');
