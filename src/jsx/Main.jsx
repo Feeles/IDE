@@ -528,6 +528,7 @@ export default class Main extends Component {
         toggleFullScreen: this.handleToggleFullScreen,
         port: this.state.port,
         addFile: this.addFile,
+        updateCard: this.updateCard,
         monitorProps: {
           ...commonProps,
           cards: this.state.cards,

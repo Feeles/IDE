@@ -41,7 +41,7 @@ export default class MonitorCard extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
     port: PropTypes.object,
-
+    updateCard: PropTypes.func.isRequired,
   };
 
   state = {
@@ -91,10 +91,10 @@ export default class MonitorCard extends PureComponent {
       id: getUniqueId(),
       type: 'image/png',
     };
-    const task = (event) => {
+    const task = async (event) => {
       if (event.data && event.data.id === request.id) {
         port.removeEventListener('message', task);
-        this.handleReceiveImage(event.data);
+        await this.handleReceiveImage(event.data);
         this.setState({processing: false});
       }
     };
@@ -103,7 +103,7 @@ export default class MonitorCard extends PureComponent {
     this.setState({processing: true});
   };
 
-  handleReceiveImage(result) {
+  async handleReceiveImage(result) {
     // Monitor から受け取ったデータを screenshot/ に保存
     const datetime = moment().format('YYYY-MM-DD_HH-mm-ss');
     const base64 = result.value.replace(/^.*\,/, '');
@@ -112,7 +112,8 @@ export default class MonitorCard extends PureComponent {
       type: 'image/png',
       composed: base64,
     });
-    this.props.addFile(file);
+    await this.props.addFile(file);
+    await this.props.updateCard('ScreenShotCard', {visible: true});
   }
 
   render() {
