@@ -526,6 +526,8 @@ export default class Main extends Component {
         isPopout: this.state.monitorType === MonitorTypes.Popout,
         togglePopout: this.handleTogglePopout,
         toggleFullScreen: this.handleToggleFullScreen,
+        port: this.state.port,
+        addFile: this.addFile,
         monitorProps: {
           ...commonProps,
           cards: this.state.cards,
