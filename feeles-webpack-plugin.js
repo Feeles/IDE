@@ -43,8 +43,9 @@ class FeelesWebpackPlugin {
     compiler.plugin('emit', (compilation, callback) => {
       // すべてのファイルを JSON にシリアライズ
 
+      const dir = `${this.mountDir}/`;
       const targetFiles = compilation.fileDependencies.filter(filePath => {
-        return !filePath.indexOf(this.mountDir) && !this.ignore.test(filePath);
+        return !filePath.indexOf(dir) && !this.ignore.test(filePath);
       });
 
       for (const filePath of targetFiles) {
