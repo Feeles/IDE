@@ -450,8 +450,16 @@ export default class Main extends Component {
     oAuthId,
   });
 
-  setPassword = (password = null) => this.setStatePromise({
-    password,
+  getPassword = () => {
+    const password = this.state.password ||
+      prompt(this.props.localization.menu.enterPassword) ||
+      null;
+    this.setState({password});
+    return password;
+  };
+
+  clearPassword = () => this.setStatePromise({
+    password: null,
   });
 
   openFileDialog = () => console.error('openFileDialog has not be declared');
@@ -594,8 +602,8 @@ export default class Main extends Component {
             setDeployURL={this.props.setDeployURL}
             oAuthId={this.state.oAuthId}
             setOAuthId={this.setOAuthId}
-            password={this.state.password}
-            setPassword={this.setPassword}
+            getPassword={this.getPassword}
+            clearPassword={this.clearPassword}
           />
           <CardContainer
             cards={this.state.cards}

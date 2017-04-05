@@ -110,8 +110,8 @@ export default class Menu extends PureComponent {
     setDeployURL: PropTypes.func.isRequired,
     oAuthId: PropTypes.string,
     setOAuthId: PropTypes.func.isRequired,
-    password: PropTypes.string,
-    setPassword: PropTypes.func.isRequired,
+    getPassword: PropTypes.func.isRequired,
+    clearPassword: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -164,13 +164,9 @@ export default class Menu extends PureComponent {
     // organization による投稿にはパスワードが必要
     let password = null;
     if (!withOAuth) {
-      password = this.props.password || prompt(localization.menu.enterPassword);
-      if (!password) {
-        this.props.setPassword();
-        return;
-      }
+      password = this.props.getPassword();
+      if (!password) return;
     }
-
     this.setState({isDeploying: true});
 
     try {
@@ -220,7 +216,6 @@ export default class Menu extends PureComponent {
         if (this.props.project) {
           await updateProject(this.props.project.id, {deployURL});
         }
-        await this.props.setPassword(password);
         this.setState({
           notice: {
             message: localization.menu.published,
@@ -230,6 +225,7 @@ export default class Menu extends PureComponent {
           }
         });
       } else {
+        await this.props.clearPassword();
         alert(localization.menu.failedToDeploy);
         debugWindow(response);
       }
