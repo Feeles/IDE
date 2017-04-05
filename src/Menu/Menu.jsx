@@ -108,6 +108,10 @@ export default class Menu extends PureComponent {
     launchIDE: PropTypes.func.isRequired,
     deployURL: PropTypes.string,
     setDeployURL: PropTypes.func.isRequired,
+    oAuthId: PropTypes.string,
+    setOAuthId: PropTypes.func.isRequired,
+    password: PropTypes.string,
+    setPassword: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -116,13 +120,8 @@ export default class Menu extends PureComponent {
 
   state = {
     open: false,
-    password: null,
     isDeploying: false,
     notice: null,
-    // OAuth 認証によって得られる UUID.
-    // あくまで発行しているのは feeles.com である
-    // この値はユーザが見えるところには表示してはならない
-    oAuthId: null,
   };
 
   get shareURL() {
@@ -165,9 +164,9 @@ export default class Menu extends PureComponent {
     // organization による投稿にはパスワードが必要
     let password = null;
     if (!withOAuth) {
-      password = this.state.password || prompt(localization.menu.enterPassword);
+      password = this.props.password || prompt(localization.menu.enterPassword);
       if (!password) {
-        this.setState({password: null});
+        this.props.setPassword();
         return;
       }
     }
@@ -183,7 +182,7 @@ export default class Menu extends PureComponent {
       body.append('json', JSON.stringify(composed));
       body.append('script_src', CORE_CDN_URL);
       if (withOAuth) {
-        body.append('oauth_id', this.state.oAuthId);
+        body.append('oauth_id', this.props.oAuthId);
       } else {
         body.append('organization_id', organization.id);
         body.append('organization_password', password);
@@ -221,9 +220,8 @@ export default class Menu extends PureComponent {
         if (this.props.project) {
           await updateProject(this.props.project.id, {deployURL});
         }
-
+        await this.props.setPassword(password);
         this.setState({
-          password,
           notice: {
             message: localization.menu.published,
             action: localization.menu.goToSee,
@@ -250,8 +248,8 @@ export default class Menu extends PureComponent {
 
     const win = open(url);
     const callback = (oAuthId) => {
+      this.props.setOAuthId(oAuthId);
       this.setState({
-        oAuthId,
         notice: {
           message: localization.menu.loggedIn,
           action: localization.menu.logout,
@@ -269,7 +267,7 @@ export default class Menu extends PureComponent {
   };
 
   handleLogout = () => {
-    this.setState({oAuthId: null});
+    this.props.setOAuthId();
     this.handleRequestClose();
   };
 
@@ -296,7 +294,7 @@ export default class Menu extends PureComponent {
     } = this.context.muiTheme;
 
     const visits = document.querySelector('script[x-feeles-visits]');
-    const isLoggedin = this.state.oAuthId !== null;
+    const isLoggedin = this.props.oAuthId !== null;
 
     return (
       <AppBar

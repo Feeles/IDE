@@ -84,6 +84,12 @@ export default class Main extends Component {
 
     project: this.props.project,
     notice: null,
+    // OAuth 認証によって得られる UUID.
+    // あくまで発行しているのは feeles.com である
+    // この値はユーザが見えるところには表示してはならない
+    oAuthId: null,
+    // organization に紐づけられた認証に対するパスワード
+    password: null,
 
     cards: cardStateDefault,
   };
@@ -440,6 +446,14 @@ export default class Main extends Component {
     notice,
   });
 
+  setOAuthId = (oAuthId = null) => this.setStatePromise({
+    oAuthId,
+  });
+
+  setPassword = (password = null) => this.setStatePromise({
+    password,
+  });
+
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
@@ -578,6 +592,10 @@ export default class Main extends Component {
             launchIDE={this.props.launchIDE}
             deployURL={this.props.deployURL}
             setDeployURL={this.props.setDeployURL}
+            oAuthId={this.state.oAuthId}
+            setOAuthId={this.setOAuthId}
+            password={this.state.password}
+            setPassword={this.setPassword}
           />
           <CardContainer
             cards={this.state.cards}
