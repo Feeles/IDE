@@ -73,7 +73,7 @@ export default class ScreenShotCard extends PureComponent {
         <GridList
           cellHeight={180}
           style={styles.root}
-          onTouchTap={this.handleSelect}
+          onTouchTap={(event) => this.handleSelect(event, null)}
         >
         {this.state.images.map((item, key) => (
           <GridTile
