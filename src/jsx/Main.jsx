@@ -578,8 +578,13 @@ export default class Main extends Component {
         localization
       },
       ScreenShotCard: {
-        files,
+        ...commonProps,
         deleteFile: this.deleteFile,
+        deployURL: this.props.deployURL,
+        oAuthId: this.state.oAuthId,
+        getPassword: this.getPassword,
+        clearPassword: this.clearPassword,
+        showNotice: this.handleShowNotice,
       },
     };
 
