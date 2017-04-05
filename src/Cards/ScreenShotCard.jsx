@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import Card from './CardWindow';
-import {CardAction} from 'material-ui/Card';
+import {CardActions} from 'material-ui/Card';
 import {GridList, GridTile} from 'material-ui/GridList';
 import FlatButton from 'material-ui/FlatButton';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
