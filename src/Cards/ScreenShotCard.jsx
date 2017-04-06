@@ -17,7 +17,6 @@ export default class ScreenShotCard extends PureComponent {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
-    deleteFile: PropTypes.func.isRequired,
     deployURL: PropTypes.string,
     oAuthId: PropTypes.string,
     getPassword: PropTypes.func.isRequired,
@@ -71,7 +70,11 @@ export default class ScreenShotCard extends PureComponent {
 
   getScreenShotImages(files) {
     const path = 'screenshot/';
-    return files.filter(item => item.name.indexOf(path) === 0 && item.is('image'));
+    return files.filter(item =>
+      item.name.indexOf(path) === 0 &&
+      item.is('image') &&
+      !item.isTrashed
+    );
   }
 
   async getCache() {
@@ -129,6 +132,19 @@ export default class ScreenShotCard extends PureComponent {
     this.props.showNotice({
       message: 'Successfully set!',
     });
+  };
+
+  handleThumbnailDelete = async () => {
+    const {selected} = this.state;
+    if (!selected) return;
+    const nextFile = selected.set({
+      options: {
+        ...selected.options,
+        isTrashed: true,
+      }
+    });
+    await this.props.putFile(selected, nextFile);
+    this.setState({selected: null});
   };
 
   async uploadThumbnail(file) {
@@ -221,6 +237,11 @@ export default class ScreenShotCard extends PureComponent {
             label="Set to cover image"
             disabled={!selected || !this.props.deployURL}
             onTouchTap={this.handleThumbnailSet}
+          />
+          <FlatButton secondary
+            label="delete"
+            disabled={!selected}
+            onTouchTap={this.handleThumbnailDelete}
           />
         </CardActions>
       </Card>
