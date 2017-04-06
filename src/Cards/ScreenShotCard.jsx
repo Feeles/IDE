@@ -135,8 +135,9 @@ export default class ScreenShotCard extends PureComponent {
   };
 
   handleThumbnailDelete = async () => {
-    const {selected} = this.state;
+    const {selected, images} = this.state;
     if (!selected) return;
+    // trashed file
     const nextFile = selected.set({
       options: {
         ...selected.options,
@@ -144,7 +145,20 @@ export default class ScreenShotCard extends PureComponent {
       }
     });
     await this.props.putFile(selected, nextFile);
-    this.setState({selected: null});
+    // move selected curosor
+    const index = images.indexOf(selected);
+    if (index === 0) {
+      // next
+      const next = images[1] || null;
+      this.setState({selected: next});
+    } else if (index > 0) {
+      // previous
+      const previous = images[index - 1] || null;
+      this.setState({selected: previous});
+    } else {
+      // unselect
+      this.setState({selected: null});
+    }
   };
 
   async uploadThumbnail(file) {
