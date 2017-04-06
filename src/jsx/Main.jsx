@@ -84,6 +84,12 @@ export default class Main extends Component {
 
     project: this.props.project,
     notice: null,
+    // OAuth 認証によって得られる UUID.
+    // あくまで発行しているのは feeles.com である
+    // この値はユーザが見えるところには表示してはならない
+    oAuthId: null,
+    // organization に紐づけられた認証に対するパスワード
+    password: null,
 
     cards: cardStateDefault,
   };
@@ -116,7 +122,13 @@ export default class Main extends Component {
     });
     const card = this.findFile('feeles/card.json');
     if (card) {
-      this.setState({cards: card.json});
+      const cards = card.json;
+      for (let key in cards) {
+        if (cards.hasOwnProperty(key) && !Cards[key]) {
+          delete cards[key];
+        }
+      }
+      this.setState({cards});
     }
   }
 
@@ -440,6 +452,22 @@ export default class Main extends Component {
     notice,
   });
 
+  setOAuthId = (oAuthId = null) => this.setStatePromise({
+    oAuthId,
+  });
+
+  getPassword = () => {
+    const password = this.state.password ||
+      prompt(this.props.localization.menu.enterPassword) ||
+      null;
+    this.setState({password});
+    return password;
+  };
+
+  clearPassword = () => this.setStatePromise({
+    password: null,
+  });
+
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = (ref) => ref && (this.openFileDialog = ref.open);
 
@@ -556,8 +584,13 @@ export default class Main extends Component {
         localization
       },
       ScreenShotCard: {
-        files,
+        ...commonProps,
         deleteFile: this.deleteFile,
+        deployURL: this.props.deployURL,
+        oAuthId: this.state.oAuthId,
+        getPassword: this.getPassword,
+        clearPassword: this.clearPassword,
+        showNotice: this.handleShowNotice,
       },
     };
 
@@ -578,6 +611,10 @@ export default class Main extends Component {
             launchIDE={this.props.launchIDE}
             deployURL={this.props.deployURL}
             setDeployURL={this.props.setDeployURL}
+            oAuthId={this.state.oAuthId}
+            setOAuthId={this.setOAuthId}
+            getPassword={this.getPassword}
+            clearPassword={this.clearPassword}
           />
           <CardContainer
             cards={this.state.cards}
