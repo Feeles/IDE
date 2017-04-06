@@ -122,7 +122,13 @@ export default class Main extends Component {
     });
     const card = this.findFile('feeles/card.json');
     if (card) {
-      this.setState({cards: card.json});
+      const cards = card.json;
+      for (let key in cards) {
+        if (cards.hasOwnProperty(key) && !Cards[key]) {
+          delete cards[key];
+        }
+      }
+      this.setState({cards});
     }
   }
 
