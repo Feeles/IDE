@@ -40,16 +40,20 @@
         "visible": false,
         "order": 6
     },
-    "HierarchyCard": {
-        "visible": true,
+    "ScreenShotCard": {
+        "visible": false,
         "order": 7
     },
     "EnvCard": {
         "visible": false,
         "order": 8
     },
+    "HierarchyCard": {
+        "visible": true,
+        "order": 9
+    },
     "CustomizeCard": {
         "visible": false,
-        "order": 9
+        "order": 10
     }
 }
