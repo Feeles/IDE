@@ -130,7 +130,7 @@ export default class ScreenShotCard extends PureComponent {
     };
     await this.props.setConfig('ogp', ogp);
     this.props.showNotice({
-      message: 'Successfully set!',
+      message: this.props.localization.screenShotCard.set,
     });
   };
 
@@ -209,6 +209,7 @@ export default class ScreenShotCard extends PureComponent {
   render() {
     const {palette, paper} = this.context.muiTheme;
     const {selected} = this.state;
+    const {localization} = this.props;
 
     const styles = {
       root: {
@@ -248,12 +249,12 @@ export default class ScreenShotCard extends PureComponent {
         </GridList>
         <CardActions>
           <FlatButton primary
-            label="Set to cover image"
+            label={localization.screenShotCard.coverImage}
             disabled={!selected || !this.props.deployURL}
             onTouchTap={this.handleThumbnailSet}
           />
           <FlatButton secondary
-            label="delete"
+            label={localization.screenShotCard.trash}
             disabled={!selected}
             onTouchTap={this.handleThumbnailDelete}
           />
