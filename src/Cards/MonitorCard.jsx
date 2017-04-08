@@ -89,7 +89,7 @@ export default class MonitorCard extends PureComponent {
     const request = {
       query: 'capture',
       id: getUniqueId(),
-      type: 'image/png',
+      type: 'image/jpeg',
     };
     const task = async (event) => {
       if (event.data && event.data.id === request.id) {
@@ -108,8 +108,8 @@ export default class MonitorCard extends PureComponent {
     const datetime = moment().format('YYYY-MM-DD_HH-mm-ss');
     const base64 = result.value.replace(/^.*\,/, '');
     const file = new BinaryFile({
-      name: `screenshot/${datetime}.png`,
-      type: 'image/png',
+      name: `screenshot/${datetime}.jpg`,
+      type: 'image/jpeg',
       composed: base64,
     });
     await this.props.addFile(file);
