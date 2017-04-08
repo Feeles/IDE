@@ -224,6 +224,7 @@ export default class ScreenShotCard extends PureComponent {
         return {
           boxShadow: ab(paper.zDepthShadows[1], 'none'),
           zIndex: ab(2, 1),
+          overflow: ab('visible', 'hidden'),
           transition: transitions.easeOut(),
         };
       },
