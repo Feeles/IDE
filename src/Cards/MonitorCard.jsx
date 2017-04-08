@@ -106,10 +106,15 @@ export default class MonitorCard extends PureComponent {
   async handleReceiveImage(result) {
     // Monitor から受け取ったデータを screenshot/ に保存
     const datetime = moment().format('YYYY-MM-DD_HH-mm-ss');
-    const base64 = result.value.replace(/^.*\,/, '');
+    const [, type, , base64] = result.value.split(/[:;,]/, 4);
+    const ext = {
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/svg+xml': 'svg',
+    }[type];
     const file = new BinaryFile({
-      name: `screenshot/${datetime}.jpg`,
-      type: 'image/jpeg',
+      name: `screenshot/${datetime}.${ext}`,
+      type,
       composed: base64,
     });
     await this.props.addFile(file);
