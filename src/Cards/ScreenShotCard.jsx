@@ -18,15 +18,12 @@ export default class ScreenShotCard extends PureComponent {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
-    deployURL: PropTypes.string,
-    oAuthId: PropTypes.string,
-    getPassword: PropTypes.func.isRequired,
-    clearPassword: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
     port: PropTypes.object,
     addFile: PropTypes.func.isRequired,
+    putFile: PropTypes.func.isRequired,
     updateCard: PropTypes.func.isRequired,
   };
 
