@@ -1,5 +1,4 @@
 import React, {PureComponent, PropTypes} from 'react';
-import moment from 'moment';
 import Card from './CardWindow';
 import {CardMedia} from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
@@ -14,7 +13,6 @@ import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windo
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from '../Monitor/';
-import {BinaryFile} from '../File/';
 
 const frameSizes = [
   [480, 320],
@@ -41,7 +39,6 @@ export default class MonitorCard extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
     port: PropTypes.object,
-    updateCard: PropTypes.func.isRequired,
   };
 
   state = {
@@ -94,7 +91,6 @@ export default class MonitorCard extends PureComponent {
     const task = async (event) => {
       if (event.data && event.data.id === request.id) {
         port.removeEventListener('message', task);
-        await this.handleReceiveImage(event.data);
         this.setState({processing: false});
       }
     };
@@ -102,24 +98,6 @@ export default class MonitorCard extends PureComponent {
     port.postMessage(request);
     this.setState({processing: true});
   };
-
-  async handleReceiveImage(result) {
-    // Monitor から受け取ったデータを screenshot/ に保存
-    const datetime = moment().format('YYYY-MM-DD_HH-mm-ss');
-    const [, type, , base64] = result.value.split(/[:;,]/, 4);
-    const ext = {
-      'image/png': 'png',
-      'image/jpeg': 'jpg',
-      'image/svg+xml': 'svg',
-    }[type];
-    const file = new BinaryFile({
-      name: `screenshot/${datetime}.${ext}`,
-      type,
-      composed: base64,
-    });
-    await this.props.addFile(file);
-    await this.props.updateCard('ScreenShotCard', {visible: true});
-  }
 
   render() {
     const styles = {

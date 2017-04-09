@@ -556,7 +556,6 @@ export default class Main extends Component {
         toggleFullScreen: this.handleToggleFullScreen,
         port: this.state.port,
         addFile: this.addFile,
-        updateCard: this.updateCard,
         monitorProps: {
           ...commonProps,
           cards: this.state.cards,
@@ -591,6 +590,8 @@ export default class Main extends Component {
         getPassword: this.getPassword,
         clearPassword: this.clearPassword,
         showNotice: this.handleShowNotice,
+        port: this.state.port,
+        updateCard: this.updateCard,
       },
     };
 

@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import moment from 'moment';
 import Card from './CardWindow';
 import {CardActions} from 'material-ui/Card';
 import {GridList, GridTile} from 'material-ui/GridList';
@@ -9,7 +10,7 @@ import transitions from 'material-ui/styles/transitions';
 
 import organization from '../organization';
 import debugWindow from '../utils/debugWindow';
-import {SourceFile} from '../File/';
+import {SourceFile, BinaryFile} from '../File/';
 
 export default class ScreenShotCard extends PureComponent {
 
@@ -24,6 +25,9 @@ export default class ScreenShotCard extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
+    port: PropTypes.object,
+    addFile: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -60,6 +64,13 @@ export default class ScreenShotCard extends PureComponent {
   }
 
   async componentWillReceiveProps(nextProps) {
+    if (this.props.port !== nextProps.port) {
+      nextProps.port.addEventListener('message', (event) => {
+        if (event.data && event.data.query === 'capture') {
+          this.handleCapture(event);
+        }
+      });
+    }
     if (this.props.files !== nextProps.files) {
       this.setState({
         images: this.getScreenShotImages(nextProps.files),
@@ -119,6 +130,25 @@ export default class ScreenShotCard extends PureComponent {
     event.stopPropagation();
     this.setState({selected});
   };
+
+  // 'capture' message をうけとったとき
+  handleCapture = async (event) => {
+    // Monitor から受け取ったデータを screenshot/ に保存
+    const datetime = moment().format('YYYY-MM-DD_HH-mm-ss');
+    const [, type, , base64] = event.data.value.split(/[:;,]/, 4);
+    const ext = {
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/svg+xml': 'svg',
+    }[type];
+    const file = new BinaryFile({
+      name: `screenshot/${datetime}.${ext}`,
+      type,
+      composed: base64,
+    });
+    await this.props.addFile(file);
+    await this.props.updateCard('ScreenShotCard', {visible: true});
+  }
 
   handleThumbnailSet = async () => {
     const {selected, cache} = this.state;
