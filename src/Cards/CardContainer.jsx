@@ -28,8 +28,30 @@ class CardContainer extends PureComponent {
 
   state = {
     isResizing: false,
-    rightSideWidth: this.props.rootWidth / 2
+    rightSideWidth: this.props.rootWidth / 2,
+    scrolledLeft: null,
+    scrolledRight: null,
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.cards !== this.props.cards) {
+      const checkCardClosing = (name) => {
+        if (!name) return false;
+        const prev = prevProps.cards[name];
+        const next = this.props.cards[name];
+        // visible -> invisible
+        return prev && prev.visible && next && !next.visible;
+      };
+      if (checkCardClosing(this.state.scrolledLeft)) {
+        // いま left が scroll している card が close した
+        this.handleCardClosed(this.state.scrolledLeft, this.left);
+      }
+      if (checkCardClosing(this.state.scrolledRight)) {
+        // いま right が scroll している card が close した
+        this.handleCardClosed(this.state.scrolledRight, this.right);
+      }
+    }
+  }
 
   // react-scroll はイベント重複時に前のイベントをキャンセルしてしまう.
   // もう一度スクロールさせるためにスタック(FILO)をのこす
@@ -67,14 +89,18 @@ class CardContainer extends PureComponent {
   scrollToCard = (name) => {
     const card = this.props.cards[name];
     if (card) {
-      const containerId = card.order % this.column === 1
-        ? LeftContainerId
-        : RightContainerId;
+      const isLeft = card.order % this.column === 1;
+      const containerId = isLeft ? LeftContainerId : RightContainerId;
       scroller.scrollTo(name, {
         containerId,
         smooth: true,
         duration: 250,
       });
+      if (isLeft) {
+        this.setState({scrolledLeft: name});
+      } else {
+        this.setState({scrolledRight: name});
+      }
       location.hash = '';
     }
   };
@@ -115,6 +141,14 @@ class CardContainer extends PureComponent {
     });
     waitFlag = true;
   })();
+
+  handleCardClosed = (name, cards) => {
+    const index = cards.findIndex(item => item.name === name);
+    const next = cards[index - 1] || cards[index + 1];
+    if (next) {
+      this.scrollToCard(next.name);
+    }
+  };
 
   renderCards(cards) {
     return cards.map((info, key) => {
