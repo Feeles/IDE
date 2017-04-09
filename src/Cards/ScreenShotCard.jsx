@@ -5,6 +5,7 @@ import {CardActions} from 'material-ui/Card';
 import {GridList, GridTile} from 'material-ui/GridList';
 import FlatButton from 'material-ui/FlatButton';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { emphasize, fade } from 'material-ui/utils/colorManipulator';
 import transitions from 'material-ui/styles/transitions';
 
@@ -209,6 +210,12 @@ export default class ScreenShotCard extends PureComponent {
         overflowY: 'scroll',
         padding: 8,
       },
+      action: {
+        display: 'flex',
+      },
+      blank: {
+        flex: '1 1 auto',
+      },
       tile(hash) {
         return {
           zIndex: hash === selected ? 2 : 1,
@@ -250,14 +257,16 @@ export default class ScreenShotCard extends PureComponent {
         >
         {gridList}
         </GridList>
-        <CardActions>
+        <CardActions style={styles.action}>
           <FlatButton
             label={localization.screenShotCard.coverImage}
             disabled={!selected || alreadySetImage}
             onTouchTap={this.handleThumbnailSet}
           />
+          <div style={styles.blank}></div>
           <FlatButton
-            label={localization.screenShotCard.trash}
+            label=""
+            icon={<ActionDelete />}
             disabled={!selected}
             onTouchTap={this.handleThumbnailDelete}
           />

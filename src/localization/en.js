@@ -155,7 +155,6 @@ export default {
   screenShotCard: {
     title: 'ScreenShot',
     coverImage: 'Set as cover image',
-    trash: 'Move to Trash',
     set: 'Cover image is successfully set! 📸 ',
   },
 
