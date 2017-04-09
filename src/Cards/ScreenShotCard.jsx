@@ -138,8 +138,8 @@ export default class ScreenShotCard extends PureComponent {
     const [, type, , base64] = event.data.value.split(/[:;,]/, 4);
     const ext = {
       'image/png': 'png',
+      'image/jpg': 'jpg',
       'image/jpeg': 'jpg',
-      'image/svg+xml': 'svg',
     }[type];
     const file = new BinaryFile({
       name: `screenshot/${datetime}.${ext}`,
