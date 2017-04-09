@@ -35,20 +35,12 @@ class CardContainer extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.cards !== this.props.cards) {
-      const checkCardClosing = (name) => {
-        if (!name) return false;
+      for (const [name, card] of Object.entries(this.props.cards)) {
         const prev = prevProps.cards[name];
         const next = this.props.cards[name];
-        // visible -> invisible
-        return prev && prev.visible && next && !next.visible;
-      };
-      if (checkCardClosing(this.state.scrolledLeft)) {
-        // いま left が scroll している card が close した
-        this.handleCardClosed(this.state.scrolledLeft, this.left);
-      }
-      if (checkCardClosing(this.state.scrolledRight)) {
-        // いま right が scroll している card が close した
-        this.handleCardClosed(this.state.scrolledRight, this.right);
+        if (prev && prev.visible !== next.visible) {
+          this.handleVisibilityChanged(name, next.visible);
+        }
       }
     }
   }
@@ -57,7 +49,6 @@ class CardContainer extends PureComponent {
   // もう一度スクロールさせるためにスタック(FILO)をのこす
   _eventStack = [];
   componentDidMount() {
-    window.addEventListener('hashchange', this.handleHashChange);
     Events.scrollEvent.register('begin', (to) => {
       if (!this._eventStack.includes(to)) {
         this._eventStack.push(to);
@@ -75,16 +66,9 @@ class CardContainer extends PureComponent {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('hashchange', this.handleHashChange);
     Events.scrollEvent.remove('begin');
     Events.scrollEvent.remove('end');
   }
-
-  handleHashChange = () => {
-    if (!location.hash) return;
-    const name = location.hash.substr(1);
-    this.scrollToCard(name);
-  };
 
   scrollToCard = (name) => {
     const card = this.props.cards[name];
@@ -101,7 +85,6 @@ class CardContainer extends PureComponent {
       } else {
         this.setState({scrolledRight: name});
       }
-      location.hash = '';
     }
   };
 
@@ -142,6 +125,21 @@ class CardContainer extends PureComponent {
     waitFlag = true;
   })();
 
+  handleVisibilityChanged = (name, visible) => {
+    if (this.state.scrolledLeft === name && !visible) {
+      // いま left が scroll している card が close した
+      this.handleCardClosed(this.state.scrolledLeft, this.left);
+    }
+    if (this.state.scrolledRight === name && !visible) {
+      // いま right が scroll している card が close した
+      this.handleCardClosed(this.state.scrolledRight, this.right);
+    }
+    if (visible) {
+      // カードが open された
+      this.scrollToCard(name);
+    }
+  };
+
   handleCardClosed = (name, cards) => {
     const index = cards.findIndex(item => item.name === name);
     const next = cards[index - 1] || cards[index + 1];
@@ -181,8 +179,8 @@ class CardContainer extends PureComponent {
     return cards.map((item, key) => (
       <FloatingActionButton mini
         key={key}
-        href={'#' + item.name}
         style={styles.icon(item.order % this.column === 1)}
+        onTouchTap={() => this.scrollToCard(item.name)}
       >
         {Cards[item.name].icon && Cards[item.name].icon()}
       </FloatingActionButton>

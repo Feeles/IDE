@@ -101,9 +101,15 @@ export default class Monitor extends PureComponent {
 
   popoutClosed = false;
 
-  componentDidMount() {
-    const {src} = this.props.cards.MonitorCard.frame || {};
-    this.props.setLocation(src);
+  componentWillMount() {
+    // feeles.github.io/sample/#/path/to/index.html
+    window.addEventListener('hashchange', this.handleHashChanged);
+    if (/^\#\//.test(location.hash)) {
+      this.handleHashChanged();
+    } else {
+      // default href で起動
+      this.props.setLocation();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -132,6 +138,10 @@ export default class Monitor extends PureComponent {
     if (prevProps.isPopout && !this.props.isPopout) {
       this.popoutClosed = true; // Use delay
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('hashchange', this.handleHashChanged);
   }
 
   get iframe() {
@@ -242,7 +252,7 @@ export default class Monitor extends PureComponent {
         this.props.setLocation();
         break;
       case 'replace':
-        this.props.setLocation(data.value);
+        location.hash = data.value.replace(/^\/*/, '/');
         break;
       case 'error':
         if (!this.state.error) {
@@ -347,6 +357,13 @@ export default class Monitor extends PureComponent {
   handleTouch = () => {
     if (this.props.isFullScreen) {
       this.props.toggleFullScreen();
+    }
+  };
+
+  handleHashChanged = () => {
+    if (/^\#\//.test(location.hash)) {
+      const href = location.hash.substr(2);
+      this.props.setLocation(href);
     }
   };
 
