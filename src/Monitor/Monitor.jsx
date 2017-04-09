@@ -252,7 +252,7 @@ export default class Monitor extends PureComponent {
         this.props.setLocation();
         break;
       case 'replace':
-        this.props.setLocation(data.value);
+        location.hash = data.value.replace(/^\/*/, '/');
         break;
       case 'error':
         if (!this.state.error) {
