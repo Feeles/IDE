@@ -3,7 +3,6 @@
         "visible": true,
         "order": 0,
         "frame": {
-            "src": "index.html",
             "size": [
                 800,
                 600
@@ -18,7 +17,7 @@
         }
     },
     "EditorCard": {
-        "visible": true,
+        "visible": false,
         "order": 2
     },
     "MediaCard": {
