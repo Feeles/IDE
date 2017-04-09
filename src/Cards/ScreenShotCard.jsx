@@ -192,36 +192,14 @@ export default class ScreenShotCard extends PureComponent {
   };
 
   async uploadThumbnail(file) {
-    const body = new URLSearchParams();
-    body.append('search', this.search);
-    if (this.props.oAuthId) {
-      // OAuth による認証
-      body.append('oauth_id', this.props.oAuthId);
-    } else if (organization.id) {
-      // organization による認証
-      body.append('organization_id', organization.id);
-      // organization による認証にはパスワードが必要
-      const password = this.props.getPassword();
-      if (password) {
-        body.append('organization_password', password);
-      } else {
-        // パスワード未入力
-        throw new TypeError();
-      }
-    } else {
-      // 認証していない
-      throw new TypeError();
-    }
-    body.append('data_url', await file.toDataURL());
-
     const response = await fetch(organization.api.thumbnail, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json'
       },
-      // [Safari Bug] URLSearchParams not supported in bodyInit
-      body: body.toString(),
+      body: JSON.stringify({
+        data_url: await file.toDataURL(),
+      }),
       mode: 'cors',
     });
     if (response.ok) {
@@ -230,7 +208,6 @@ export default class ScreenShotCard extends PureComponent {
       this.setState({cache});
       return url;
     } else {
-      await this.props.clearPassword();
       await debugWindow(response);
     }
     throw new Error();
@@ -281,7 +258,7 @@ export default class ScreenShotCard extends PureComponent {
         <CardActions>
           <FlatButton primary
             label={localization.screenShotCard.coverImage}
-            disabled={!selected || !this.props.deployURL}
+            disabled={!selected}
             onTouchTap={this.handleThumbnailSet}
           />
           <FlatButton secondary
