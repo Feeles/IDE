@@ -1,9 +1,10 @@
 import React, {PureComponent, PropTypes} from 'react';
 import {Events, scroller} from 'react-scroll';
 import {DropTarget} from 'react-dnd';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import transitions from 'material-ui/styles/transitions';
 
-import Sizer from './Sizer';
+import Sizer, {SizerWidth} from './Sizer';
 import DragTypes from '../utils/dragTypes';
 import * as Cards from './';
 
@@ -117,10 +118,18 @@ class CardContainer extends PureComponent {
       return null;
     }
     cards = cards.filter(info => info.visible);
+    const iconStyle = (item) => ({
+      // left or right
+      marginRight: item.order % this.column ? 0 : -2 * SizerWidth,
+    });
     return cards.map((info, key) => (
-      <a key={key} href={'#' + info.name}>
+      <FloatingActionButton mini
+        key={key}
+        href={'#' + info.name}
+        style={iconStyle(info)}
+      >
         {Cards[info.name].icon && Cards[info.name].icon()}
-      </a>
+      </FloatingActionButton>
     ));
   }
 
@@ -210,6 +219,7 @@ class CardContainer extends PureComponent {
         flexDirection: 'column',
         justifyContent: 'space-around',
         overflow: 'visible',
+        alignItems: 'center',
         zIndex: 2,
       }
     };
@@ -221,15 +231,12 @@ class CardContainer extends PureComponent {
           {this.renderCards(left)}
           <div style={styles.blank}></div>
         </div>
-        <div style={{...styles.bar, alignItems: 'flex-end'}}>
-          {this.renderIcons(left)}
+        <div style={styles.bar}>
+          {this.renderIcons(orderedCardInfo)}
         </div>
         {this.column === 2
           ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
           : null}
-        <div style={{...styles.bar, alignItems: 'flex-start'}}>
-          {this.renderIcons(right)}
-        </div>
         <div id={RightContainerId} style={styles.right}>
           {this.renderCards(right)}
           <div style={styles.blank}></div>
