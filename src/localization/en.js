@@ -121,6 +121,7 @@ export default {
     editFile: 'Edit File',
     conflict: 'A file with the same name already exists. Do you want to overwrite it?',
     or: 'or',
+    wantToOpen: (name) => `Do you want to open ${name}?`,
   },
   editorCard: {
     title: 'Editor',
