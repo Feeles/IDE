@@ -38,7 +38,7 @@ export default class ScreenShotCard extends PureComponent {
     );
   }
 
-  static fileName = 'screenshot/cache.json';
+  static fileName = 'feeles/capture.json';
 
   state = {
     cache: {},
