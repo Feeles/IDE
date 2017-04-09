@@ -116,6 +116,9 @@ export default class ScreenShotCard extends PureComponent {
 
   handleSelect = (event, selected = null) => {
     event.stopPropagation();
+    if (this.state.selected === selected) {
+      selected = null; // toggle
+    }
     this.setState({selected});
   };
 
