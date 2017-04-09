@@ -15,15 +15,14 @@ export default class EditFile extends PureComponent {
   };
 
   handleEdit = () => {
-    const { fileKey } = this.props;
+    const {fileKey, localization} = this.props;
+    const getFile = () => this.props.findFile(item => item.key === fileKey);
+    const item = getFile();
 
-    const tab = new Tab({
-      getFile: () => this.props.findFile((item) => (
-        item.key === fileKey
-      )),
-    });
-
-    this.props.selectTab(tab);
+    if (item && confirm(localization.common.wantToOpen(item.name))) {
+      const tab = new Tab({getFile});
+      this.props.selectTab(tab);
+    }
   };
 
   render() {

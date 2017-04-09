@@ -121,6 +121,7 @@ export default {
     editFile: '書きかえる',
     conflict: '同じ名前のファイルがすでに存在します。上書きしますか？',
     or: 'または',
+    wantToOpen: (name) => `${name} をひらきますか?`,
   },
   editorCard: {
     title: 'エディタ',
