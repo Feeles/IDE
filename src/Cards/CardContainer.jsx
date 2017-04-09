@@ -83,6 +83,26 @@ class CardContainer extends PureComponent {
     return 1 + (this.props.rootWidth > 991);
   }
 
+  get left() {
+    const cards = [];
+    for (const [name, item] of Object.entries(this.props.cards)) {
+      if (item.order % this.column === 1) {
+        cards.push({...item, name});
+      }
+    }
+    return cards.sort((a, b) => a.order - b.order);
+  }
+
+  get right() {
+    const cards = [];
+    for (const [name, item] of Object.entries(this.props.cards)) {
+      if (item.order % this.column === 0) {
+        cards.push({...item, name});
+      }
+    }
+    return cards.sort((a, b) => a.order - b.order);
+  }
+
   resize = ((waitFlag = false) => (width, _, forceFlag = false) => {
     width = Math.max(0, Math.min(this.props.rootWidth, width));
     if (waitFlag && !forceFlag || width === this.state.rightSideWidth) {
@@ -113,41 +133,30 @@ class CardContainer extends PureComponent {
     });
   }
 
-  renderIcons(cards) {
+  renderIcons(styles) {
     if (!this.props.showCardIcon) {
       return null;
     }
-    cards = cards.filter(info => info.visible);
-    const iconStyle = (item) => ({
-      // left or right
-      marginRight: item.order % this.column ? 0 : -2 * SizerWidth,
-    });
-    return cards.map((info, key) => (
+    const cards = [];
+    for (const [name, item] of Object.entries(this.props.cards)) {
+      if (item.visible) {
+        cards.push({...item, name});
+      }
+    }
+    cards.sort((a, b) => a.order - b.order);
+    return cards.map((item, key) => (
       <FloatingActionButton mini
         key={key}
-        href={'#' + info.name}
-        style={iconStyle(info)}
+        href={'#' + item.name}
+        style={styles.icon(item.order % this.column === 1)}
       >
-        {Cards[info.name].icon && Cards[info.name].icon()}
+        {Cards[item.name].icon && Cards[item.name].icon()}
       </FloatingActionButton>
     ));
   }
 
   render() {
     const {connectDropTarget} = this.props;
-
-    const orderedCardInfo = Object.entries(this.props.cards).map(([name, value]) => ({
-      name,
-      ...value
-    }));
-    orderedCardInfo.sort((a, b) => a.order - b.order);
-
-    const left = orderedCardInfo.filter(item => {
-      return item.order % this.column === 1;
-    });
-    const right = orderedCardInfo.filter(item => {
-      return item.order % this.column === 0;
-    });
 
     const isShrinkLeft = (yes, no) => {
       if (this.column === 1) {
@@ -221,24 +230,29 @@ class CardContainer extends PureComponent {
         overflow: 'visible',
         alignItems: 'center',
         zIndex: 2,
-      }
+      },
+      icon(isLeft) {
+        return {
+          marginRight: isLeft ? 0 : -2 * SizerWidth,
+        };
+      },
     };
 
     return connectDropTarget(
       <div style={styles.container}>
         <div style={styles.dropCover}></div>
         <div id={LeftContainerId} style={styles.left}>
-          {this.renderCards(left)}
+          {this.renderCards(this.left)}
           <div style={styles.blank}></div>
         </div>
         <div style={styles.bar}>
-          {this.renderIcons(orderedCardInfo)}
+          {this.renderIcons(styles)}
         </div>
         {this.column === 2
           ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
           : null}
         <div id={RightContainerId} style={styles.right}>
-          {this.renderCards(right)}
+          {this.renderCards(this.right)}
           <div style={styles.blank}></div>
         </div>
       </div>
