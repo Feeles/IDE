@@ -64,6 +64,7 @@ export default class EditorPane extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
     reboot: PropTypes.bool.isRequired,
+    scrollToCard: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -76,6 +77,11 @@ export default class EditorPane extends PureComponent {
     }
     return true;
   }
+
+  setLocation = (href) => {
+    this.props.setLocation(href);
+    this.props.scrollToCard('MonitorCard');
+  };
 
   renderBackground() {
     const {
@@ -113,7 +119,7 @@ export default class EditorPane extends PureComponent {
         <IconButton
           iconStyle={styles.largeIcon}
           style={styles.large}
-          onTouchTap={() => this.props.setLocation()}
+          onTouchTap={() => this.setLocation()}
         >
           <AVPlayCircleOutline color={palette.alternateTextColor} />
         </IconButton>
@@ -181,7 +187,7 @@ export default class EditorPane extends PureComponent {
           getFiles: this.getFiles,
           closeSelectedTab: this.handleCloseSelectedTab,
           selectTabFromFile: this.handleSelectTabFromFile,
-          setLocation: this.props.setLocation,
+          setLocation: this.setLocation,
           href: this.props.href,
           getConfig,
           findFile,

@@ -61,10 +61,11 @@ export default class EditorCard extends PureComponent {
   };
 
   render() {
+    const {scrollToCard} = this.props.cardPropsBag;
     return (
       <Card initiallyExpanded icon={EditorCard.icon()} {...this.props.cardPropsBag}>
         <CardMedia expandable >
-          <EditorPane {...this.props.editorProps} />
+          <EditorPane {...this.props.editorProps} scrollToCard={scrollToCard} />
         </CardMedia>
       </Card>
     );

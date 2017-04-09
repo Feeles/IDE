@@ -49,7 +49,6 @@ class CardContainer extends PureComponent {
   // もう一度スクロールさせるためにスタック(FILO)をのこす
   _eventStack = [];
   componentDidMount() {
-    window.addEventListener('hashchange', this.handleHashChange);
     Events.scrollEvent.register('begin', (to) => {
       if (!this._eventStack.includes(to)) {
         this._eventStack.push(to);
@@ -67,16 +66,9 @@ class CardContainer extends PureComponent {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('hashchange', this.handleHashChange);
     Events.scrollEvent.remove('begin');
     Events.scrollEvent.remove('end');
   }
-
-  handleHashChange = () => {
-    if (!location.hash) return;
-    const name = location.hash.substr(1);
-    this.scrollToCard(name);
-  };
 
   scrollToCard = (name) => {
     const card = this.props.cards[name];
@@ -93,7 +85,6 @@ class CardContainer extends PureComponent {
       } else {
         this.setState({scrolledRight: name});
       }
-      location.hash = '';
     }
   };
 
@@ -143,6 +134,10 @@ class CardContainer extends PureComponent {
       // いま right が scroll している card が close した
       this.handleCardClosed(this.state.scrolledRight, this.right);
     }
+    if (visible) {
+      // カードが open された
+      this.scrollToCard(name);
+    }
   };
 
   handleCardClosed = (name, cards) => {
@@ -184,8 +179,8 @@ class CardContainer extends PureComponent {
     return cards.map((item, key) => (
       <FloatingActionButton mini
         key={key}
-        href={'#' + item.name}
         style={styles.icon(item.order % this.column === 1)}
+        onTouchTap={() => this.scrollToCard(item.name)}
       >
         {Cards[item.name].icon && Cards[item.name].icon()}
       </FloatingActionButton>

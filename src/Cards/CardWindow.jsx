@@ -86,6 +86,10 @@ export default class CardWindow extends PureComponent {
     this.props.updateCard(this.props.name, {visible: false});
   };
 
+  handleScroll = () => {
+    this.props.scrollToCard(this.props.name);
+  };
+
   renderExpandButton() {
     return (
       <IconButton onTouchTap={this.toggleExpand}>
@@ -147,7 +151,7 @@ export default class CardWindow extends PureComponent {
       <Element name={this.props.name} style={styles.root}>
         <Card {...this.cardProps}>
           <div style={styles.header}>
-            <a href={'#' + this.props.name} style={styles.a}>{this.props.icon}</a>
+            <a style={styles.a} onTouchTap={this.handleScroll}>{this.props.icon}</a>
             <div style={styles.blank}></div>
             {this.props.actions}
             {this.renderExpandButton()}

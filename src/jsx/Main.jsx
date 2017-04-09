@@ -353,7 +353,6 @@ export default class Main extends Component {
     }
 
     this.updateCard('EditorCard', {visible: true});
-    location.hash = 'EditorCard';
   });
 
   closeTab = (tab) => new Promise((resolve, reject) => {
@@ -439,7 +438,6 @@ export default class Main extends Component {
       monitorType: maxByPriority(prevState.monitorType, MonitorTypes.Card),
       href: href || prevState.href,
     }));
-    location.hash = 'MonitorCard';
   };
 
   updateCard = (name, props) => {
