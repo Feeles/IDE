@@ -35,20 +35,12 @@ class CardContainer extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (prevProps.cards !== this.props.cards) {
-      const checkCardClosing = (name) => {
-        if (!name) return false;
+      for (const [name, card] of Object.entries(this.props.cards)) {
         const prev = prevProps.cards[name];
         const next = this.props.cards[name];
-        // visible -> invisible
-        return prev && prev.visible && next && !next.visible;
-      };
-      if (checkCardClosing(this.state.scrolledLeft)) {
-        // いま left が scroll している card が close した
-        this.handleCardClosed(this.state.scrolledLeft, this.left);
-      }
-      if (checkCardClosing(this.state.scrolledRight)) {
-        // いま right が scroll している card が close した
-        this.handleCardClosed(this.state.scrolledRight, this.right);
+        if (prev && prev.visible !== next.visible) {
+          this.handleVisibilityChanged(name, next.visible);
+        }
       }
     }
   }
@@ -141,6 +133,17 @@ class CardContainer extends PureComponent {
     });
     waitFlag = true;
   })();
+
+  handleVisibilityChanged = (name, visible) => {
+    if (this.state.scrolledLeft === name && !visible) {
+      // いま left が scroll している card が close した
+      this.handleCardClosed(this.state.scrolledLeft, this.left);
+    }
+    if (this.state.scrolledRight === name && !visible) {
+      // いま right が scroll している card が close した
+      this.handleCardClosed(this.state.scrolledRight, this.right);
+    }
+  };
 
   handleCardClosed = (name, cards) => {
     const index = cards.findIndex(item => item.name === name);
