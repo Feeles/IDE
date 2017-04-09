@@ -1,9 +1,10 @@
 import React, {PureComponent, PropTypes} from 'react';
 import {Events, scroller} from 'react-scroll';
 import {DropTarget} from 'react-dnd';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import transitions from 'material-ui/styles/transitions';
 
-import Sizer from './Sizer';
+import Sizer, {SizerWidth} from './Sizer';
 import DragTypes from '../utils/dragTypes';
 import * as Cards from './';
 
@@ -27,8 +28,30 @@ class CardContainer extends PureComponent {
 
   state = {
     isResizing: false,
-    rightSideWidth: this.props.rootWidth / 2
+    rightSideWidth: this.props.rootWidth / 2,
+    scrolledLeft: null,
+    scrolledRight: null,
   };
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.cards !== this.props.cards) {
+      const checkCardClosing = (name) => {
+        if (!name) return false;
+        const prev = prevProps.cards[name];
+        const next = this.props.cards[name];
+        // visible -> invisible
+        return prev && prev.visible && next && !next.visible;
+      };
+      if (checkCardClosing(this.state.scrolledLeft)) {
+        // いま left が scroll している card が close した
+        this.handleCardClosed(this.state.scrolledLeft, this.left);
+      }
+      if (checkCardClosing(this.state.scrolledRight)) {
+        // いま right が scroll している card が close した
+        this.handleCardClosed(this.state.scrolledRight, this.right);
+      }
+    }
+  }
 
   // react-scroll はイベント重複時に前のイベントをキャンセルしてしまう.
   // もう一度スクロールさせるためにスタック(FILO)をのこす
@@ -66,20 +89,44 @@ class CardContainer extends PureComponent {
   scrollToCard = (name) => {
     const card = this.props.cards[name];
     if (card) {
-      const containerId = card.order % this.column === 1
-        ? LeftContainerId
-        : RightContainerId;
+      const isLeft = card.order % this.column === 1;
+      const containerId = isLeft ? LeftContainerId : RightContainerId;
       scroller.scrollTo(name, {
         containerId,
         smooth: true,
         duration: 250,
       });
+      if (isLeft) {
+        this.setState({scrolledLeft: name});
+      } else {
+        this.setState({scrolledRight: name});
+      }
       location.hash = '';
     }
   };
 
   get column() {
     return 1 + (this.props.rootWidth > 991);
+  }
+
+  get left() {
+    const cards = [];
+    for (const [name, item] of Object.entries(this.props.cards)) {
+      if (item.order % this.column === 1) {
+        cards.push({...item, name});
+      }
+    }
+    return cards.sort((a, b) => a.order - b.order);
+  }
+
+  get right() {
+    const cards = [];
+    for (const [name, item] of Object.entries(this.props.cards)) {
+      if (item.order % this.column === 0) {
+        cards.push({...item, name});
+      }
+    }
+    return cards.sort((a, b) => a.order - b.order);
   }
 
   resize = ((waitFlag = false) => (width, _, forceFlag = false) => {
@@ -94,6 +141,14 @@ class CardContainer extends PureComponent {
     });
     waitFlag = true;
   })();
+
+  handleCardClosed = (name, cards) => {
+    const index = cards.findIndex(item => item.name === name);
+    const next = cards[index - 1] || cards[index + 1];
+    if (next) {
+      this.scrollToCard(next.name);
+    }
+  };
 
   renderCards(cards) {
     return cards.map((info, key) => {
@@ -112,33 +167,30 @@ class CardContainer extends PureComponent {
     });
   }
 
-  renderIcons(cards) {
+  renderIcons(styles) {
     if (!this.props.showCardIcon) {
       return null;
     }
-    cards = cards.filter(info => info.visible);
-    return cards.map((info, key) => (
-      <a key={key} href={'#' + info.name}>
-        {Cards[info.name].icon && Cards[info.name].icon()}
-      </a>
+    const cards = [];
+    for (const [name, item] of Object.entries(this.props.cards)) {
+      if (item.visible) {
+        cards.push({...item, name});
+      }
+    }
+    cards.sort((a, b) => a.order - b.order);
+    return cards.map((item, key) => (
+      <FloatingActionButton mini
+        key={key}
+        href={'#' + item.name}
+        style={styles.icon(item.order % this.column === 1)}
+      >
+        {Cards[item.name].icon && Cards[item.name].icon()}
+      </FloatingActionButton>
     ));
   }
 
   render() {
     const {connectDropTarget} = this.props;
-
-    const orderedCardInfo = Object.entries(this.props.cards).map(([name, value]) => ({
-      name,
-      ...value
-    }));
-    orderedCardInfo.sort((a, b) => a.order - b.order);
-
-    const left = orderedCardInfo.filter(item => {
-      return item.order % this.column === 1;
-    });
-    const right = orderedCardInfo.filter(item => {
-      return item.order % this.column === 0;
-    });
 
     const isShrinkLeft = (yes, no) => {
       if (this.column === 1) {
@@ -210,28 +262,31 @@ class CardContainer extends PureComponent {
         flexDirection: 'column',
         justifyContent: 'space-around',
         overflow: 'visible',
+        alignItems: 'center',
         zIndex: 2,
-      }
+      },
+      icon(isLeft) {
+        return {
+          marginRight: isLeft ? 0 : -2 * SizerWidth,
+        };
+      },
     };
 
     return connectDropTarget(
       <div style={styles.container}>
         <div style={styles.dropCover}></div>
         <div id={LeftContainerId} style={styles.left}>
-          {this.renderCards(left)}
+          {this.renderCards(this.left)}
           <div style={styles.blank}></div>
         </div>
-        <div style={{...styles.bar, alignItems: 'flex-end'}}>
-          {this.renderIcons(left)}
+        <div style={styles.bar}>
+          {this.renderIcons(styles)}
         </div>
         {this.column === 2
           ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
           : null}
-        <div style={{...styles.bar, alignItems: 'flex-start'}}>
-          {this.renderIcons(right)}
-        </div>
         <div id={RightContainerId} style={styles.right}>
-          {this.renderCards(right)}
+          {this.renderCards(this.right)}
           <div style={styles.blank}></div>
         </div>
       </div>

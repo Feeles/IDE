@@ -169,18 +169,10 @@ export default class ScreenShotCard extends PureComponent {
     // 選択アイテムを削除
     await this.setCache(selected, undefined);
     // 選択アイテムをとなりに移動
-    const keys = Object.keys(cache);
+    const keys = Object.keys(this.state.cache);
     const index = keys.indexOf(selected);
-    if (index === 0) {
-      const next = keys[1] || null;
-      this.setState({selected: next});
-    } else if (index > 0) {
-      const previous = keys[index - 1] || null;
-      this.setState({selected: previous});
-    } else {
-      // unselect
-      this.setState({selected: null});
-    }
+    const next = keys[index + 1] || keys[index - 1] || null;
+    this.setState({selected: next});
   };
 
   async uploadThumbnail(data_url) {
