@@ -34,9 +34,6 @@ function gameStart() {
 		Hack.gameover();
 	};
 
-
-
-
 	// スライム
 	const item1 = new RPGObject();
 	item1.mod(Hack.assets.slime);

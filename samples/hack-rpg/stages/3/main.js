@@ -36,7 +36,8 @@ function gameStart() {
 		Hack.gameover();
 	};
 
-
+	// 魔道書にプレイヤーを登録する
+	feeles.setAlias('player', player);
 
 	// かいだん
 	const item1 = new RPGObject();
