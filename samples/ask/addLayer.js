@@ -50,5 +50,5 @@ export default function addLayer(zIndex, update) {
   layers.push(layer);
   layers.sort((a, b) => a.zIndex - b.zIndex);
   // context を返す
-  return layer.canvas.getContext('2d');
+  return layer;
 }

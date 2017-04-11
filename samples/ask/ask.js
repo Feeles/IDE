@@ -13,19 +13,28 @@ function textToSpeech(message) {
       reject(event.error);
     };
     speechSynthesis.speak(utter);
-    writeText(message, 2, 'bottom');
+    writeText(message, 'bottom');
   });
 }
 
 function speechRecognition() {
   const recognition = new SpeechRecognition();
   recognition.lang = ask.lang;
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  // 暫定テキスト
+  let text = writeText('', 'top');
   return new Promise((resolve, reject) => {
     recognition.onresult = (event) => {
-      console.info(event);
-      const text = event.results[0][0].transcript;
-      writeText(text);
-      resolve(text);
+      const [result] = event.results;
+      if (result.isFinal) {
+        // 確定
+        resolve(result[0].transcript);
+      } else {
+        // テキストを更新
+        text.destroy();
+        text = writeText(result[0].transcript, 'top');
+      }
     };
     recognition.onerror = (event) => {
       console.error(event);
@@ -97,8 +106,8 @@ export default function ask(message) {
 }
 
 // Text
-function writeText(text, zIndex, position) {
-  return addLayer(zIndex, (layer, t) => {
+function writeText(text, baseline) {
+  return addLayer(2, (layer, t) => {
     const canvas = layer.canvas;
     const context = canvas.getContext('2d');
 
