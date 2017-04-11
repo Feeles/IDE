@@ -40,7 +40,7 @@ export default function addLayer(zIndex, draw) {
   };
   // レイヤーをキューに追加
   layers.push(layer);
-  layers.sort((a, b) => b.zIndex - a.zIndex);
+  layers.sort((a, b) => a.zIndex - b.zIndex);
   // context を返す
   return layer.canvas.getContext('2d');
 }
