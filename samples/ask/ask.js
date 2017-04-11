@@ -22,6 +22,7 @@ function speechRecognition() {
   recognition.lang = ask.lang;
   recognition.continuous = true;
   recognition.interimResults = true;
+  createRecIcon(recognition);
   // 暫定テキスト
   let text = writeText('', 'top');
   return new Promise((resolve, reject) => {
@@ -139,4 +140,45 @@ function writeText(text, baseline) {
       layer.destroy();
     }
   });
+}
+
+// REC icon
+function createRecIcon(recognition) {
+  let showRecIcon = false;
+  let sounded = false;
+
+  const layer = addLayer(3, (layer, t) => {
+    const canvas = layer.canvas;
+    const context = canvas.getContext('2d');
+    const radius = 18;
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    if (showRecIcon) {
+      const alpha = sounded ? 1 : Math.sin(t * 2) / 2 + 0.5;
+      context.fillStyle = `rgba(255, 0, 0, ${alpha})`;
+      context.strokeStyle = `rgba(255, 0, 0, ${alpha})`;
+      context.lineWidth = 2;
+      context.beginPath();
+      context.arc(canvas.width - radius - 10, radius + 10, radius - 6, 0, 2 * Math.PI);
+      context.fill();
+      context.beginPath();
+      context.arc(canvas.width - radius - 10, radius + 10, radius, 0, 2 * Math.PI);
+      context.stroke();
+    }
+  });
+  recognition.onaudiostart = () => {
+    showRecIcon = true; // audio の準備ができた
+  };
+  recognition.onspeechstart = () => {
+    sounded = true; // スピーチを認識し始めた
+  };
+  recognition.onresult = (event) => {
+    if (event.results[0].isFinal) {
+      // 確定した
+      layer.destroy();
+    }
+  };
+  recognition.onend = (event) => {
+    layer.destroy(); // 終了した
+  };
 }
