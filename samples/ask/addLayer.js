@@ -16,28 +16,36 @@ function thread() {
   primaryCanvasContext.clearRect(0, 0, width, height);
   // primaryCanvas に一枚ずつ layer を描画
   for (const item of layers) {
-    const source = item.draw();
+    const source = item.update();
     primaryCanvas.getContext('2d').drawImage(source, 0, 0);
   }
   // next
   requestAnimationFrame(thread);
 }
 
-export default function addLayer(zIndex, draw) {
+export default function addLayer(zIndex, update) {
   // あらたなレイヤーを生成
   const layer = {
     zIndex,
+    created: Date.now(),
     canvas: primaryCanvas.cloneNode(false),
-    draw() {
+    update() {
       // 毎フレーム呼ばれるレイヤーごとのルーチン
-      if (draw) {
-        // layer 自身を this, 第一引数に context を与えてコールする
-        draw.call(layer, layer.canvas);
+      if (update) {
+        update(layer, (Date.now() - layer.created) / 1000);
       }
       // 描画されたあとの canvas を返す
       return layer.canvas;
     },
+    destroy() {
+      const index = layers.indexOf(layer);
+      if (index > -1) {
+        layers.splice(index, 1);
+      }
+    }
   };
+  // t0 の update をコール
+  layer.update();
   // レイヤーをキューに追加
   layers.push(layer);
   layers.sort((a, b) => a.zIndex - b.zIndex);

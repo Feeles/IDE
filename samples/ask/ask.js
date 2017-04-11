@@ -97,24 +97,27 @@ export default function ask(message) {
 }
 
 // Text
-const context = addLayer(2);
-const {canvas} = context;
-let refreshTimer;
 function writeText(text) {
-  if (!context) return;
-  context.textAlign = 'center';
-  context.font = "32px sans-serif";
-  const metrix = context.measureText(text);
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  return addLayer(2, (layer, t) => {
+    const canvas = layer.canvas;
+    const context = canvas.getContext('2d');
 
-  context.fillStyle = 'black';
-  context.fillRect((canvas.width - metrix.width) / 2, canvas.height - 70, metrix.width, 32);
+    if (t === 0) {
+      context.textAlign = 'center';
+      context.font = "32px sans-serif";
+      const metrix = context.measureText(text);
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
-  context.fillStyle = 'white';
-  context.fillText(text, canvas.width / 2, canvas.height - 40, canvas.width);
+      context.fillStyle = 'black';
+      context.fillRect((canvas.width - metrix.width) / 2, canvas.height - 70, metrix.width, 32);
 
-  clearTimeout(refreshTimer);
-  refreshTimer = setTimeout(() => {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-  }, text.length * 250 + 0.1);
+      context.fillStyle = 'white';
+      context.fillText(text, canvas.width / 2, canvas.height - 40, canvas.width);
+    }
+
+    if (t > text.length * 0.25 + 0.1) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      layer.destroy();
+    }
+  });
 }

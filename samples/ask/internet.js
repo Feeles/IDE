@@ -33,7 +33,7 @@ export class Internet {
 // インターネット上からリソースを取得、表示するクラスの基底クラス
 class Resource {
 
-  static face = addLayer(0);
+  static face = addLayer(0).canvas.getContext('2d');
 
   constructor(internet) {
     // Internet インスタンスへの参照
