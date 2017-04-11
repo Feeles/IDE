@@ -112,19 +112,24 @@ function writeText(text, baseline) {
     const context = canvas.getContext('2d');
 
     if (t === 0) {
+      const margin = 32;
+      const fontSize = 32;
+      context.font = `${fontSize}px sans-serif`;
       context.textAlign = 'center';
-      context.font = "32px sans-serif";
+      context.textBaseline = baseline;
       const metrix = context.measureText(text);
-
-      if (position === 'bottom') {
-        context.translate(0, canvas.height - 100);
-      }
+      const baselineHeight = baseline === 'top'
+        ? margin - 6
+        : canvas.height - margin;
+      const bgTop = baseline === 'top'
+        ? margin
+        : canvas.height - margin - 32;
 
       context.fillStyle = 'black';
-      context.fillRect((canvas.width - metrix.width) / 2, 10, metrix.width, 32);
+      context.fillRect((canvas.width - metrix.width) / 2, bgTop, metrix.width, 32);
 
       context.fillStyle = 'white';
-      context.fillText(text, canvas.width / 2, 38, canvas.width);
+      context.fillText(text, canvas.width / 2, baselineHeight, canvas.width);
 
       context.resetTransform();
     }
