@@ -5,15 +5,16 @@ const {SpeechRecognition} = feeles;
 function textToSpeech(message) {
   const utter = new SpeechSynthesisUtterance(message);
   utter.lang = ask.lang;
+  writeText(message, 'bottom');
   return new Promise((resolve, reject) => {
     utter.onend = (event) => {
       resolve();
     };
     utter.onerror = (event) => {
-      reject(event.error);
+      console.error(event);
+      resolve();
     };
     speechSynthesis.speak(utter);
-    writeText(message, 'bottom');
   });
 }
 
