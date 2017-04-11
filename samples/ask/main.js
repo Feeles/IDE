@@ -3,6 +3,9 @@ import internet from 'internet';
 
 async function start() {
 
+  // 日本語にする
+  ask.lang = 'ja-JP';
+
 
   /* \____ assets/sample.json ____/ */
 
@@ -15,6 +18,8 @@ start();
 // サンプルコード
 
 // async function start() {
+//
+//   ask.lang = 'ja-JP';
 //
 //   await ask(`今日お昼何食べた？`);
 //

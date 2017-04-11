@@ -4,6 +4,7 @@ const {SpeechRecognition} = feeles;
 
 function textToSpeech(message) {
   const utter = new SpeechSynthesisUtterance(message);
+  utter.lang = ask.lang;
   return new Promise((resolve, reject) => {
     utter.onend = (event) => {
       resolve();
@@ -18,6 +19,7 @@ function textToSpeech(message) {
 
 function speechRecognition() {
   const recognition = new SpeechRecognition();
+  recognition.lang = ask.lang;
   return new Promise((resolve, reject) => {
     recognition.onresult = (event) => {
       console.info(event);
