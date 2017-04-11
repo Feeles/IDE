@@ -13,7 +13,7 @@ function textToSpeech(message) {
       reject(event.error);
     };
     speechSynthesis.speak(utter);
-    writeText(message);
+    writeText(message, 2, 'bottom');
   });
 }
 
@@ -97,8 +97,8 @@ export default function ask(message) {
 }
 
 // Text
-function writeText(text) {
-  return addLayer(2, (layer, t) => {
+function writeText(text, zIndex, position) {
+  return addLayer(zIndex, (layer, t) => {
     const canvas = layer.canvas;
     const context = canvas.getContext('2d');
 
@@ -106,16 +106,21 @@ function writeText(text) {
       context.textAlign = 'center';
       context.font = "32px sans-serif";
       const metrix = context.measureText(text);
-      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (position === 'bottom') {
+        context.translate(0, canvas.height - 100);
+      }
 
       context.fillStyle = 'black';
-      context.fillRect((canvas.width - metrix.width) / 2, canvas.height - 70, metrix.width, 32);
+      context.fillRect((canvas.width - metrix.width) / 2, 10, metrix.width, 32);
 
       context.fillStyle = 'white';
-      context.fillText(text, canvas.width / 2, canvas.height - 40, canvas.width);
+      context.fillText(text, canvas.width / 2, 38, canvas.width);
+
+      context.resetTransform();
     }
 
-    if (t > text.length * 0.25 + 0.1) {
+    if (t > text.length * 0.4 + 0.1) {
       context.clearRect(0, 0, canvas.width, canvas.height);
       layer.destroy();
     }
