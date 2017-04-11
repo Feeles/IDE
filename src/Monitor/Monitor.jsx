@@ -256,7 +256,7 @@ export default class Monitor extends PureComponent {
         break;
       case 'error':
         if (!this.state.error) {
-          this.setState({ error: new Error(data.message) });
+          this.setState({ error: new Error(data.value) });
         }
         break;
       case 'api.SpeechRecognition':
