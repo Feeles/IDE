@@ -45,7 +45,9 @@ export default function addLayer(zIndex, update) {
     }
   };
   // t0 の update をコール
-  layer.update();
+  if (update) {
+    update(layer, 0);
+  }
   // レイヤーをキューに追加
   layers.push(layer);
   layers.sort((a, b) => a.zIndex - b.zIndex);
