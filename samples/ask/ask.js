@@ -1,3 +1,5 @@
+import addLayer from 'addLayer';
+
 const {SpeechRecognition} = feeles;
 
 function textToSpeech(message) {
@@ -93,12 +95,8 @@ export default function ask(message) {
 }
 
 // Text
-const canvas = document.createElement('canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style['z-index'] = 1;
-document.body.appendChild(canvas);
-const context = canvas.getContext('2d');
+const context = addLayer(2);
+const {canvas} = context;
 let refreshTimer;
 function writeText(text) {
   if (!context) return;
