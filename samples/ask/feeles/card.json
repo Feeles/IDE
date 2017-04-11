@@ -18,7 +18,7 @@
         }
     },
     "EditorCard": {
-        "visible": true,
+        "visible": false,
         "order": 2
     },
     "MediaCard": {
@@ -40,16 +40,20 @@
         "visible": false,
         "order": 6
     },
-    "HierarchyCard": {
-        "visible": true,
+    "ScreenShotCard": {
+        "visible": false,
         "order": 7
     },
     "EnvCard": {
         "visible": false,
         "order": 8
     },
-    "CustomizeCard": {
+    "HierarchyCard": {
         "visible": false,
         "order": 9
+    },
+    "CustomizeCard": {
+        "visible": false,
+        "order": 10
     }
 }

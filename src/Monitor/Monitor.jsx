@@ -256,7 +256,7 @@ export default class Monitor extends PureComponent {
         break;
       case 'error':
         if (!this.state.error) {
-          this.setState({ error: new Error(data.message) });
+          this.setState({ error: new Error(data.value) });
         }
         break;
       case 'api.SpeechRecognition':
@@ -303,6 +303,21 @@ export default class Monitor extends PureComponent {
             },
           });
         };
+        [
+          'audioend',
+          'audiostart',
+          'end',
+          'nomatch',
+          'soundend',
+          'soundstart',
+          'speechend',
+          'speechstart',
+          'start',
+        ].forEach(type => {
+          recognition[`on${type}`] = (event) => {
+            reply({type});
+          };
+        });
         recognition.start();
         break;
     }

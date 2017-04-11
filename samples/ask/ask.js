@@ -1,27 +1,42 @@
+import addLayer from 'addLayer';
+
 const {SpeechRecognition} = feeles;
 
 function textToSpeech(message) {
   const utter = new SpeechSynthesisUtterance(message);
+  utter.lang = ask.lang;
+  writeText(message, 'bottom');
   return new Promise((resolve, reject) => {
     utter.onend = (event) => {
       resolve();
     };
     utter.onerror = (event) => {
-      reject(event.error);
+      console.error(event);
+      resolve();
     };
     speechSynthesis.speak(utter);
-    writeText(message);
   });
 }
 
 function speechRecognition() {
   const recognition = new SpeechRecognition();
+  recognition.lang = ask.lang;
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  createRecIcon(recognition);
+  // 暫定テキスト
+  let text = writeText('', 'top');
   return new Promise((resolve, reject) => {
     recognition.onresult = (event) => {
-      console.info(event);
-      const text = event.results[0][0].transcript;
-      writeText(text);
-      resolve(text);
+      const [result] = event.results;
+      if (result.isFinal) {
+        // 確定
+        resolve(result[0].transcript);
+      } else {
+        // テキストを更新
+        text.destroy();
+        text = writeText(result[0].transcript, 'top');
+      }
     };
     recognition.onerror = (event) => {
       console.error(event);
@@ -93,28 +108,78 @@ export default function ask(message) {
 }
 
 // Text
-const canvas = document.createElement('canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style['z-index'] = 1;
-document.body.appendChild(canvas);
-const context = canvas.getContext('2d');
-let refreshTimer;
-function writeText(text) {
-  if (!context) return;
-  context.textAlign = 'center';
-  context.font = "32px sans-serif";
-  const metrix = context.measureText(text);
-  context.clearRect(0, 0, canvas.width, canvas.height);
+function writeText(text, baseline) {
+  return addLayer(2, (layer, t) => {
+    const canvas = layer.canvas;
+    const context = canvas.getContext('2d');
 
-  context.fillStyle = 'black';
-  context.fillRect((canvas.width - metrix.width) / 2, canvas.height - 70, metrix.width, 32);
+    if (t === 0) {
+      const margin = 32;
+      const fontSize = 32;
+      context.font = `${fontSize}px sans-serif`;
+      context.textAlign = 'center';
+      context.textBaseline = baseline;
+      const metrix = context.measureText(text);
+      const baselineHeight = baseline === 'top'
+        ? margin - 6
+        : canvas.height - margin;
+      const bgTop = baseline === 'top'
+        ? margin
+        : canvas.height - margin - 32;
 
-  context.fillStyle = 'white';
-  context.fillText(text, canvas.width / 2, canvas.height - 40, canvas.width);
+      context.fillStyle = 'black';
+      context.fillRect((canvas.width - metrix.width) / 2, bgTop, metrix.width, 32);
 
-  clearTimeout(refreshTimer);
-  refreshTimer = setTimeout(() => {
+      context.fillStyle = 'white';
+      context.fillText(text, canvas.width / 2, baselineHeight, canvas.width);
+
+      context.resetTransform();
+    }
+
+    if (t > text.length * 0.4 + 0.1) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      layer.destroy();
+    }
+  });
+}
+
+// REC icon
+function createRecIcon(recognition) {
+  let showRecIcon = false;
+  let sounded = false;
+
+  const layer = addLayer(3, (layer, t) => {
+    const canvas = layer.canvas;
+    const context = canvas.getContext('2d');
+    const radius = 18;
+
     context.clearRect(0, 0, canvas.width, canvas.height);
-  }, text.length * 250 + 0.1);
+    if (showRecIcon) {
+      const alpha = sounded ? 1 : Math.sin(t * 2) / 2 + 0.5;
+      context.fillStyle = `rgba(255, 0, 0, ${alpha})`;
+      context.strokeStyle = `rgba(255, 0, 0, ${alpha})`;
+      context.lineWidth = 2;
+      context.beginPath();
+      context.arc(canvas.width - radius - 10, radius + 10, radius - 6, 0, 2 * Math.PI);
+      context.fill();
+      context.beginPath();
+      context.arc(canvas.width - radius - 10, radius + 10, radius, 0, 2 * Math.PI);
+      context.stroke();
+    }
+  });
+  recognition.onaudiostart = () => {
+    showRecIcon = true; // audio の準備ができた
+  };
+  recognition.onspeechstart = () => {
+    sounded = true; // スピーチを認識し始めた
+  };
+  recognition.onresult = (event) => {
+    if (event.results[0].isFinal) {
+      // 確定した
+      layer.destroy();
+    }
+  };
+  recognition.onend = (event) => {
+    layer.destroy(); // 終了した
+  };
 }

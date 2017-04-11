@@ -1,3 +1,5 @@
+import addLayer from 'addLayer';
+
 const API = {
   YouTube: 'https://www.googleapis.com/youtube/v3/search',
   YouTubeEmbed: 'http://www.youtube.com/embed',
@@ -30,15 +32,12 @@ export class Internet {
 
 // インターネット上からリソースを取得、表示するクラスの基底クラス
 class Resource {
+
+  static face = addLayer(0).canvas.getContext('2d');
+
   constructor(internet) {
     // Internet インスタンスへの参照
     this.internet = internet;
-    // face の描画先コンテキスト
-    const canvas = document.createElement('canvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    document.body.appendChild(canvas);
-    this.context = canvas.getContext('2d');
   }
 
   // レスポンスを JSON で取得
@@ -157,15 +156,15 @@ class FlickrResource extends Resource {
   }
 
   async face() {
-    if (this.context) {
+    if (Resource.face) {
       const image = await this.getImage();
       if (image) {
-        const {width, height} = this.context.canvas;
+        const {width, height} = Resource.face.canvas;
         // 引き伸ばして描画
-        this.context.drawImage(image, 0, 0, width, height);
+        Resource.face.drawImage(image, 0, 0, width, height);
         clearTimeout(this.refreshTimer);
         this.refreshTimer = setTimeout(() => {
-          this.context.clearRect(0, 0, width, height);
+          Resource.face.clearRect(0, 0, width, height);
         }, 4000);
       }
     }
