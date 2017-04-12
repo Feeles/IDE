@@ -11,6 +11,7 @@ import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import transitions from 'material-ui/styles/transitions';
 
 import organization from '../organization';
+import ScreenShotCard from '../Cards/ScreenShotCard';
 
 /**
  * OGPの設定を行い, デプロイが必要な場合 true で resolve する
@@ -21,6 +22,7 @@ export default class MetaDialog extends PureComponent {
   static propTypes = {
     onRequestClose: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
+    findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
   };
@@ -59,6 +61,7 @@ export default class MetaDialog extends PureComponent {
     const bag = {
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
+      findFile: this.props.findFile,
       localization: this.props.localization,
     };
     switch (this.state.stepIndex) {
@@ -99,6 +102,7 @@ export default class MetaDialog extends PureComponent {
 class EditOGP extends PureComponent {
 
   static propTypes = {
+    findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
   };
@@ -108,13 +112,26 @@ class EditOGP extends PureComponent {
   };
 
   state = {
+    images: [],
     isLoading: false,
   };
 
   componentWillMount() {
     const ogp = this.props.getConfig('ogp');
-    if (!ogp['og:image'] && organization.placeholder['og:image']) {
-      this.handleChangeImage(organization.placeholder['og:image']);
+    let screenshots = [];
+    try {
+      const file = this.props.findFile(ScreenShotCard.fileName);
+      screenshots = Object.values(JSON.parse(file.text));
+    } catch (e) {}
+    const images = []
+      .concat(ogp['og:image'], ogp['twitter:image'])
+      .concat(screenshots)
+      .concat(organization.placeholder['og:image'])
+      .concat(organization.images)
+      .filter((item, i, array) => item && array.indexOf(item) === i); // unique
+    this.setState({images});
+    if (images[0]) {
+      this.handleChangeImage(images[0]);
     }
   }
 
@@ -160,18 +177,21 @@ class EditOGP extends PureComponent {
 
   handleNext = () => {
     const ogp = this.props.getConfig('ogp');
-    const cursor = organization.images.indexOf(ogp['og:image']);
-    const {length} = organization.images;
-    const src = organization.images[(cursor + 1) %  length]
+    const {images} = this.state;
+    const cursor = images.indexOf(ogp['og:image']);
+    const src = images[(cursor + 1) % images.length]; // next
     this.handleChangeImage(src);
   };
 
   handlePrevious = () => {
     const ogp = this.props.getConfig('ogp');
-    const cursor = organization.images.indexOf(ogp['og:image']);
-    const {length} = organization.images;
-    const src = organization.images[(cursor - 1 + length * 2) % length]
-    this.handleChangeImage(src);
+    const {images} = this.state;
+    const cursor = images.indexOf(ogp['og:image']);
+    if (cursor > 0) {
+      this.handleChangeImage(images[cursor - 1]); // previous
+    } else {
+      this.handleChangeImage(images[images.length - 1]); // last
+    }
   };
 
   render() {
@@ -227,7 +247,7 @@ class EditOGP extends PureComponent {
         <Card style={styles.card}>
           <CardMedia
             style={styles.media}
-            overlay={organization.images.length > 0 ? (
+            overlay={this.state.images.length > 1 ? (
               <CardActions style={styles.navigation}>
                 <IconButton onTouchTap={this.handlePrevious}>
                   <NavigationArrowBack color="white" />
