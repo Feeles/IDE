@@ -100,6 +100,7 @@ export default class Menu extends PureComponent {
     setLocalization: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
+    findFile: PropTypes.func.isRequired,
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
     project: PropTypes.object,
@@ -158,6 +159,7 @@ export default class Menu extends PureComponent {
     const result = await this.props.openFileDialog(MetaDialog, {
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
+      findFile: this.props.findFile,
     });
     if (!result) return;
 

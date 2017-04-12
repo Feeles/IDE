@@ -30,19 +30,19 @@ export default function GoogleIcon (props) {
           <rect id="path-2" x="0" y="0" width="40" height="40" rx="2"></rect>
           <rect id="path-3" x="5" y="5" width="38" height="38" rx="1"></rect>
       </defs>
-      <g id="Google-Button" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+      <g id="Google-Button" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
           <g id="9-PATCH" transform="translate(-608.000000, -219.000000)"></g>
           <g id="btn_google_dark_normal" transform="translate(-1.000000, -1.000000)">
               <g id="button" transform="translate(4.000000, 4.000000)" filter="url(#filter-1)">
                   <g id="button-bg">
-                      <use fill="#4285F4" fill-rule="evenodd"></use>
+                      <use fill="#4285F4" fillRule="evenodd"></use>
                       <use fill="none"></use>
                       <use fill="none"></use>
                       <use fill="none"></use>
                   </g>
               </g>
               <g id="button-bg-copy">
-                  <use fill="#FFFFFF" fill-rule="evenodd"></use>
+                  <use fill="#FFFFFF" fillRule="evenodd"></use>
                   <use fill="none"></use>
                   <use fill="none"></use>
                   <use fill="none"></use>
