@@ -32,6 +32,7 @@ function speechRecognition() {
       if (result.isFinal) {
         // 確定
         resolve(result[0].transcript);
+        recognition.stop();
       } else {
         // テキストを更新
         text.destroy();
@@ -39,12 +40,17 @@ function speechRecognition() {
       }
     };
     recognition.onerror = (event) => {
-      console.error(event);
       if (event.error === 'no-speech') {
         resolve(''); // 無言だった
+      } else if (event.error === 'aborted') {
+        resolve(''); //
       } else {
+        console.error(event);
         reject(event.error);
       }
+    };
+    recognition.onspeechend = () => {
+      recognition.stop();
     };
     recognition.start();
   });
@@ -167,19 +173,19 @@ function createRecIcon(recognition) {
       context.stroke();
     }
   });
-  recognition.onaudiostart = () => {
+  recognition.addEventListener('audiostart', () => {
     showRecIcon = true; // audio の準備ができた
-  };
-  recognition.onspeechstart = () => {
+  });
+  recognition.addEventListener('speechstart', () => {
     sounded = true; // スピーチを認識し始めた
-  };
-  recognition.onresult = (event) => {
+  });
+  recognition.addEventListener('result', (event) => {
     if (event.results[0].isFinal) {
       // 確定した
       layer.destroy();
     }
-  };
-  recognition.onend = (event) => {
+  });
+  recognition.addEventListener('end', (event) => {
     layer.destroy(); // 終了した
-  };
+  });
 }
