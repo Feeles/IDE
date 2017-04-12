@@ -224,6 +224,11 @@ export default class Menu extends PureComponent {
             onActionTouchTap: () => window.open(`${api.origin}/p/${search}`),
           }
         });
+        if (process.env.NODE_ENV === 'production') {
+          if (ga) {
+            ga('send', 'event', 'Account', 'deploy');
+          }
+        }
       } else {
         await this.props.clearPassword();
         alert(localization.menu.failedToDeploy);
@@ -253,6 +258,11 @@ export default class Menu extends PureComponent {
           onActionTouchTap: this.handleLogout,
         },
       });
+      if (process.env.NODE_ENV === 'production') {
+        if (ga) {
+          ga('send', 'event', 'Account', 'login', url);
+        }
+      }
     };
     window.addEventListener('message', function task(event) {
       if (event.source === win) {
@@ -260,11 +270,22 @@ export default class Menu extends PureComponent {
         callback(event.data.id);
       }
     });
+    if (process.env.NODE_ENV === 'production') {
+      if (ga) {
+        ga('send', 'event', 'Account', 'oauth', url);
+      }
+    }
   };
 
   handleLogout = () => {
     this.props.setOAuthId();
     this.handleRequestClose();
+
+    if (process.env.NODE_ENV === 'production') {
+      if (ga) {
+        ga('send', 'event', 'Account', 'logout');
+      }
+    }
   };
 
   handleRequestClose = () => {
