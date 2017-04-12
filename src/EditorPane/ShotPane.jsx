@@ -172,9 +172,20 @@ export default class ShotPane extends PureComponent {
         const file = await SourceFile.shot(text).babel(babelrc);
         this.props.port.postMessage({query: 'shot', value: file.serialize()});
 
+        if (process.env.NODE_ENV === 'production') {
+          if (ga) {
+            ga('send', 'event', 'Code', 'run', text);
+          }
+        }
       } catch (e) {
         console.error(e);
         this.setState({error: e});
+
+        if (process.env.NODE_ENV === 'production') {
+          if (ga) {
+            ga('send', 'event', 'Code', 'error', text);
+          }
+        }
       }
     }
 

@@ -379,6 +379,12 @@ export default class Monitor extends PureComponent {
     if (/^\#\//.test(location.hash)) {
       const href = location.hash.substr(2);
       this.props.setLocation(href);
+      if (process.env.NODE_ENV === 'production') {
+        if (ga) {
+          ga('set', 'page', `/${href}`);
+          ga('send', 'pageview');
+        }
+      }
     }
   };
 
