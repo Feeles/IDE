@@ -207,6 +207,12 @@ export default class SourceEditor extends PureComponent {
     this.setState({
       loading: false,
     });
+
+    if (process.env.NODE_ENV === 'production') {
+      if (ga) {
+        ga('send', 'event', 'Code', 'save', this.props.file.name);
+      }
+    }
   };
 
   handleUndo = () => {
