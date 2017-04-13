@@ -18,6 +18,8 @@ function textToSpeech(message) {
   });
 }
 
+ask.lang = ask.lang || navigator.language || navigator.languages[0];
+ask.timeout = ask.timeout || 2000; // 2秒喋らなかったら終了
 function speechRecognition() {
   const recognition = new SpeechRecognition();
   recognition.lang = ask.lang;
@@ -26,17 +28,28 @@ function speechRecognition() {
   createRecIcon(recognition);
   // 暫定テキスト
   let text = writeText('', 'top');
+  // 認識タイムアウト
+  let stopTimer;
+  const reset = (value) => {
+    recognition.onresult = null;
+    recognition.onerror = null;
+    recognition.stop();
+    return value;
+  };
   return new Promise((resolve, reject) => {
     recognition.onresult = (event) => {
       const [result] = event.results;
+      const message = result[0].transcript;
       if (result.isFinal) {
         // 確定
-        resolve(result[0].transcript);
-        recognition.stop();
+        resolve(message);
       } else {
         // テキストを更新
         text.destroy();
-        text = writeText(result[0].transcript, 'top');
+        text = writeText(message, 'top');
+        // ここから2秒喋らなかったら終了
+        clearTimeout(stopTimer);
+        stopTimer = setTimeout(() => resolve(message), ask.timeout);
       }
     };
     recognition.onerror = (event) => {
@@ -49,11 +62,8 @@ function speechRecognition() {
         reject(event.error);
       }
     };
-    recognition.onspeechend = () => {
-      recognition.stop();
-    };
     recognition.start();
-  });
+  }).then(reset, reset);
 }
 
 let _touched = false;
