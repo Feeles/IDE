@@ -18,6 +18,7 @@ function textToSpeech(message) {
   });
 }
 
+ask.lang = ask.lang || navigator.language || navigator.languages[0];
 ask.timeout = ask.timeout || 2000; // 2秒喋らなかったら終了
 function speechRecognition() {
   const recognition = new SpeechRecognition();
