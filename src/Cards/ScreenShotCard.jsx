@@ -176,13 +176,16 @@ export default class ScreenShotCard extends PureComponent {
   };
 
   async uploadThumbnail(data_url) {
+    const body = new URLSearchParams();
+    body.append('data_url', data_url);
     const response = await fetch(organization.api.thumbnail, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
-      body: JSON.stringify({data_url}),
-      mode: 'cors',
+      body: body.toString(),
+      mode: 'cors'
     });
     if (response.ok) {
       return await response.text();
