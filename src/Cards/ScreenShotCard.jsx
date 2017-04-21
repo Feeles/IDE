@@ -1,8 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import md5 from 'md5';
 import Card from './CardWindow';
-import {CardActions} from 'material-ui/Card';
-import {GridList, GridTile} from 'material-ui/GridList';
+import { CardActions } from 'material-ui/Card';
+import { GridList, GridTile } from 'material-ui/GridList';
 import FlatButton from 'material-ui/FlatButton';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
@@ -11,10 +11,9 @@ import transitions from 'material-ui/styles/transitions';
 
 import organization from '../organization';
 import debugWindow from '../utils/debugWindow';
-import {SourceFile, BinaryFile} from '../File/';
+import { SourceFile, BinaryFile } from '../File/';
 
 export default class ScreenShotCard extends PureComponent {
-
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
@@ -25,17 +24,15 @@ export default class ScreenShotCard extends PureComponent {
     port: PropTypes.object,
     addFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   static icon() {
-    return (
-      <ImagePhotoCamera color="gray" />
-    );
+    return <ImagePhotoCamera color="gray" />;
   }
 
   static fileName = 'feeles/capture.json';
@@ -43,12 +40,12 @@ export default class ScreenShotCard extends PureComponent {
   state = {
     cache: {},
     selected: null,
-    uploading: null,
+    uploading: null
   };
 
   get search() {
     try {
-      const {pathname} = new URL(this.props.deployURL);
+      const { pathname } = new URL(this.props.deployURL);
       return pathname.split('/').pop();
     } catch (e) {
       return null;
@@ -57,13 +54,13 @@ export default class ScreenShotCard extends PureComponent {
 
   async componentWillMount() {
     this.setState({
-      cache: await this.getCache(),
+      cache: await this.getCache()
     });
   }
 
   async componentWillReceiveProps(nextProps) {
     if (this.props.port !== nextProps.port) {
-      nextProps.port.addEventListener('message', (event) => {
+      nextProps.port.addEventListener('message', event => {
         if (event.data && event.data.query === 'capture') {
           this.handleCapture(event);
         }
@@ -71,7 +68,7 @@ export default class ScreenShotCard extends PureComponent {
     }
     if (this.props.files !== nextProps.files) {
       this.setState({
-        cache: await this.getCache(),
+        cache: await this.getCache()
       });
     }
   }
@@ -92,7 +89,7 @@ export default class ScreenShotCard extends PureComponent {
     try {
       next = JSON.parse(prevFile.text);
     } catch (e) {
-      next = {...this.state.cache};
+      next = { ...this.state.cache };
     }
     // update data
     next[hash] = url;
@@ -100,14 +97,14 @@ export default class ScreenShotCard extends PureComponent {
     // update file
     if (prevFile) {
       // file is exist. replace it
-      const nextFile = prevFile.set({text});
+      const nextFile = prevFile.set({ text });
       await this.props.putFile(prevFile, nextFile);
     } else {
       // file is missing. insert it
       const nextFile = new SourceFile({
         type: 'application/json',
         name: ScreenShotCard.fileName,
-        text,
+        text
       });
       await this.props.addFile(nextFile);
     }
@@ -119,18 +116,18 @@ export default class ScreenShotCard extends PureComponent {
     if (this.state.selected === selected) {
       selected = null; // toggle
     }
-    this.setState({selected});
+    this.setState({ selected });
   };
 
   // 'capture' message をうけとったとき
-  handleCapture = async (event) => {
-    const {value} = event.data;
+  handleCapture = async event => {
+    const { value } = event.data;
     const uploading = md5(value);
 
     // キャッシュを確認
     if (uploading in this.state.cache) {
-      await this.props.updateCard('ScreenShotCard', {visible: true});
-      this.setState({selected: uploading});
+      await this.props.updateCard('ScreenShotCard', { visible: true });
+      this.setState({ selected: uploading });
       return;
     }
 
@@ -138,41 +135,41 @@ export default class ScreenShotCard extends PureComponent {
     const cache = {
       ...this.state.cache,
       // 一時的に Data URL を挿入 (あとで置き換わる)
-      [uploading]: [value],
+      [uploading]: [value]
     };
-    this.setState({cache, uploading}, () => {
-      this.props.updateCard('ScreenShotCard', {visible: true});
+    this.setState({ cache, uploading }, () => {
+      this.props.updateCard('ScreenShotCard', { visible: true });
     });
     // サムネイルをアップロード
     const url = await this.uploadThumbnail(value);
     await this.setCache(uploading, url);
-    this.setState({uploading: null});
-  }
+    this.setState({ uploading: null });
+  };
 
   handleThumbnailSet = async () => {
-    const {selected, uploading, cache} = this.state;
+    const { selected, uploading, cache } = this.state;
     if (selected === uploading) return;
     const url = cache[selected];
     const ogp = {
       ...this.props.getConfig('ogp'),
       'og:image': url,
-      'twitter:image': url,
+      'twitter:image': url
     };
     await this.props.setConfig('ogp', ogp);
     this.props.showNotice({
-      message: this.props.localization.screenShotCard.set,
+      message: this.props.localization.screenShotCard.set
     });
   };
 
   handleThumbnailDelete = async () => {
-    const {selected, cache} = this.state;
+    const { selected, cache } = this.state;
     // 選択アイテムを削除
     await this.setCache(selected, undefined);
     // 選択アイテムをとなりに移動
     const keys = Object.keys(this.state.cache);
     const index = keys.indexOf(selected);
     const next = keys[index + 1] || keys[index - 1] || null;
-    this.setState({selected: next});
+    this.setState({ selected: next });
   };
 
   async uploadThumbnail(data_url) {
@@ -196,9 +193,9 @@ export default class ScreenShotCard extends PureComponent {
   }
 
   render() {
-    const {palette, paper} = this.context.muiTheme;
-    const {selected, uploading} = this.state;
-    const {localization} = this.props;
+    const { palette, paper } = this.context.muiTheme;
+    const { selected, uploading } = this.state;
+    const { localization } = this.props;
 
     const styles = {
       root: {
@@ -206,13 +203,13 @@ export default class ScreenShotCard extends PureComponent {
         maxHeight: '50vh',
         overflowX: 'hidden',
         overflowY: 'scroll',
-        padding: 8,
+        padding: 8
       },
       action: {
-        display: 'flex',
+        display: 'flex'
       },
       blank: {
-        flex: '1 1 auto',
+        flex: '1 1 auto'
       },
       tile(hash) {
         return {
@@ -220,15 +217,15 @@ export default class ScreenShotCard extends PureComponent {
           filter: hash === uploading ? 'blur(1px)' : 'blur(0px)',
           opacity: hash === uploading ? 0.5 : 1,
           overflow: hash === selected ? 'visible' : 'hidden',
-          transition: transitions.easeOut(),
+          transition: transitions.easeOut()
         };
       },
       image(file) {
         return {
           boxShadow: file === selected ? paper.zDepthShadows[1] : 'none',
-          transition: transitions.easeOut(),
+          transition: transitions.easeOut()
         };
-      },
+      }
     };
 
     const gridList = [];
@@ -237,23 +234,28 @@ export default class ScreenShotCard extends PureComponent {
         <GridTile
           key={hash}
           style={styles.tile(hash)}
-          onTouchTap={(e) => this.handleSelect(e, hash)}
+          onTouchTap={e => this.handleSelect(e, hash)}
         >
           <img style={styles.image(hash)} src={url} />
         </GridTile>
       );
     }
 
-    const alreadySetImage = this.props.getConfig('ogp')['og:image'] === this.state.cache[selected];
+    const alreadySetImage =
+      this.props.getConfig('ogp')['og:image'] === this.state.cache[selected];
 
     return (
-      <Card initiallyExpanded icon={ScreenShotCard.icon()} {...this.props.cardPropsBag}>
+      <Card
+        initiallyExpanded
+        icon={ScreenShotCard.icon()}
+        {...this.props.cardPropsBag}
+      >
         <GridList
           cellHeight={180}
           style={styles.root}
-          onTouchTap={(event) => this.handleSelect(event, null)}
+          onTouchTap={event => this.handleSelect(event, null)}
         >
-        {gridList}
+          {gridList}
         </GridList>
         <CardActions style={styles.action}>
           <FlatButton
@@ -261,7 +263,7 @@ export default class ScreenShotCard extends PureComponent {
             disabled={!selected || alreadySetImage}
             onTouchTap={this.handleThumbnailSet}
           />
-          <div style={styles.blank}></div>
+          <div style={styles.blank} />
           <FlatButton
             label=""
             icon={<ActionDelete />}
