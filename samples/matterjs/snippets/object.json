@@ -1,0 +1,70 @@
+{
+	".source.js": {
+		"rectangle": {
+			"prefix": "rectangle",
+			"leftLabel": "レクタングル",
+			"description": "四角形のオブジェクト。中心の位置と大きさを指定できる",
+			"body": `
+Bodies.rectangle(140, 0, 80, 80),`			
+		},
+		"wall": {
+			"prefix": "floor",
+			"leftLabel": "フロア",
+			"description": "固定された四角形のオブジェクト。床や壁になる",
+			"body": `
+Bodies.rectangle(400, 600, 400, 40, {
+	isStatic: true,
+
+}),`
+		},
+		"slope": {
+			"prefix": "slope",
+			"leftLabel": "スロープ",
+			"description": "少しかたむいたオブジェクト。ボールなどを置くと転がる",
+			"body": `
+Bodies.rectangle(400, 600, 400, 40, {
+	isStatic: true,
+	angle: 0.15,
+
+}),`
+		},
+		"circle": {
+			"prefix": "circle",
+			"leftLabel": "サークル",
+			"description": "円のオブジェクト。中心の位置と半径を指定できる",
+			"body": `
+Bodies.circle(240, 0, 40)),`
+		},
+		"ball": {
+			"prefix": "ball",
+			"leftLabel": "ボール",
+			"description": "跳ね返り係数を 1 にした、円のオブジェクト。とても跳ねる",
+			"body": `
+Bodies.circle(240, 0, 40, {
+	restitution: 1,
+
+}),`
+		},
+		"redball": {
+			"prefix": "colorball",
+			"leftLabel": "カラーボール",
+			"description": "赤色のボール",
+			"body": `
+Bodies.circle(240, 0, 40, {
+	restitution: 1,
+	render: {
+		fillStyle: 'red',
+		lineWidth: 10,
+		strokeStyle: 'black',
+	},
+
+}),`
+		}
+	}
+}
+
+
+
+
+
+

@@ -1,0 +1,47 @@
+.CodeMirror {
+	font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+	background-color: rgba(245, 245, 245, 1.0);
+	/* 100%　にすると、ダークモードになるよ */
+	filter: invert(0%);
+}
+
+.CodeMirror .cm-tab:before {
+	visibility: hidden;
+	content: '••••';
+	color: rgba(0, 0, 0, 0.1);
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	position: absolute;
+}
+
+.CodeMirror-linenumber {
+	color: rgba(153, 153, 153, 1.0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

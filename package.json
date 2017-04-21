@@ -6,7 +6,7 @@
   "scripts": {
     "install": "cp -i src/organization.js.example src/organization.js; exit 0",
     "start": "webpack-dev-server --inline",
-    "build": "NODE_ENV=production webpack -p && webpack -p --config feeles.config.js"
+    "production": "NODE_ENV=production webpack -p && webpack -p --config feeles.config.js"
   },
   "repository": {
     "type": "git",
