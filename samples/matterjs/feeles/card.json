@@ -3,7 +3,6 @@
         "visible": true,
         "order": 0,
         "frame": {
-            "src": "index.html",
             "size": [
                 800,
                 600
@@ -40,7 +39,7 @@
         "visible": false,
         "order": 6
     },
-    "SnippetCard": {
+    "ScreenShotCard": {
         "visible": false,
         "order": 7
     },
@@ -55,9 +54,5 @@
     "CustomizeCard": {
         "visible": false,
         "order": 10
-    },
-		"ScreenShotCard": {
-			"visible": true,
-				"order": 11
-		}
+    }
 }
