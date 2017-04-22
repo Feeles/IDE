@@ -1,5 +1,4 @@
 export default {
-
   accept: ['en', 'en-us'],
   native: 'English',
   ll_CC: 'en_US',
@@ -10,7 +9,7 @@ export default {
     aboutFeeles: 'About Feeles',
     upload: 'Upload',
     deploySelf: 'Publish with your account',
-    deployAs: (name) => `Publish with ${name}`,
+    deployAs: name => `Publish with ${name}`,
     share: 'Share this app',
     you: 'You',
     login: 'Login',
@@ -30,7 +29,7 @@ export default {
     withTwitter: 'Log in with Twitter',
     withLine: 'Log in with LINE',
     withFacebook: 'Log in with Facebook',
-    withGoogle: 'Log in with Google',
+    withGoogle: 'Log in with Google'
   },
   cloneDialog: {
     saveTitle: 'Save',
@@ -62,29 +61,30 @@ export default {
     failedToRename: 'It is not possible to create two projects with the same title.',
     titleIsRequired: 'Project title is required to open via URL.',
     autoSaved: 'It is automatically saved ;)',
-    setTitle: 'Please set title',
+    setTitle: 'Please set title'
   },
   saveDialog: {
     title: 'You need to download it manually, because Your browser does not support HTML5!',
-    description: (filename) => `Right click on the above link, click "download with alias", and save it with the name "${filename}"`,
-    cancel: 'Cancel',
+    description: filename =>
+      `Right click on the above link, click "download with alias", and save it with the name "${filename}"`,
+    cancel: 'Cancel'
   },
   aboutDialog: {
     title: 'About Feeles',
     coreVersion: 'Core Version',
     changeVersion: 'Change Version',
-    change: 'Change',
+    change: 'Change'
   },
   addDialog: {
     title: 'Add new file',
     fileName: 'File name',
     add: 'Add',
-    cancel: 'Cancel',
+    cancel: 'Cancel'
   },
   LaunchDialog: {
     title: 'Projects are found',
     openProject: 'Open this project',
-    startNew: 'Start new',
+    startNew: 'Start new'
   },
   metaDialog: {
     back: 'Back',
@@ -94,26 +94,26 @@ export default {
     description: 'description',
     creatorConfirm: 'Filling is optional. Do not write personal information!',
     nickname: 'Nickname',
-    twitterId: 'Twitter ID',
+    twitterId: 'Twitter ID'
   },
   readmeCard: {
     title: 'Getting Started',
-    index: 'Index',
+    index: 'Index'
   },
   shotCard: {
     title: 'Quick Run',
     shoot: 'After rewriting, send the code',
-    restore: 'Restore',
+    restore: 'Restore'
   },
   hierarchyCard: {
     title: 'Folders',
-    emptyTrashBox: 'Empty trash',
+    emptyTrashBox: 'Empty trash'
   },
   credit: {
     writeAuthorName: 'Write author name',
     credits: 'Credits',
-    whoMade: (name) => `Who made the file "${name}"?`,
-    website: 'Website URL (optional)',
+    whoMade: name => `Who made the file "${name}"?`,
+    website: 'Website URL (optional)'
   },
   common: {
     tapTwiceQuickly: 'Tap twice quickly',
@@ -121,7 +121,7 @@ export default {
     editFile: 'Edit File',
     conflict: 'A file with the same name already exists. Do you want to overwrite it?',
     or: 'or',
-    wantToOpen: (name) => `Do you want to open ${name}?`,
+    wantToOpen: name => `Do you want to open ${name}?`
   },
   editorCard: {
     title: 'Editor',
@@ -129,14 +129,14 @@ export default {
     save: 'Save',
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
-    insert: 'Insert',
+    insert: 'Insert'
   },
   envCard: {
     title: 'Parameters',
-    remove: 'Remove',
+    remove: 'Remove'
   },
   paletteCard: {
-    title: 'Colors',
+    title: 'Colors'
   },
   monitorCard: {
     title: 'Screen',
@@ -146,18 +146,17 @@ export default {
     title: 'Customize',
     detail: `Click here for details`,
     editor: `Tabs and line wrapping ...etc`,
-    style: `Color of text and background ...etc`,
+    style: `Color of text and background ...etc`
   },
   creditsCard: {
-    title: 'Credits',
+    title: 'Credits'
   },
   mediaCard: {
-    title: 'Media',
+    title: 'Media'
   },
   screenShotCard: {
     title: 'ScreenShot',
     coverImage: 'Set as cover image',
-    set: 'Cover image is successfully set! 📸 ',
-  },
-
+    set: 'Cover image is successfully set! 📸 '
+  }
 };
