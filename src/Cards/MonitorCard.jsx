@@ -38,7 +38,11 @@ export default class MonitorCard extends PureComponent {
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    port: PropTypes.object,
+    port: PropTypes.object
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -128,7 +132,9 @@ export default class MonitorCard extends PureComponent {
         {...this.props.cardPropsBag}
         actions={[
           <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
-            <NavigationRefresh />
+            <NavigationRefresh
+              color={this.context.muiTheme.palette.primary1Color}
+            />
           </IconButton>,
           <IconButton key="screenshot" disabled={this.state.processing} onTouchTap={this.handleScreenShot}>
             <ImagePhotoCamera />
