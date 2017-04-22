@@ -29,6 +29,18 @@ export default class EditorCard extends PureComponent {
     }
   }
 
+  componentDidMount() {
+    // init.fileName があるとき Mount 後に selectTab しておく
+    try {
+      const { init } = this.props.cardPropsBag.cards.EditorCard;
+      if (init && init.fileName) {
+        const { selectTab, findFile } = this.props.editorProps;
+        const getFile = () => findFile(init.fileName);
+        selectTab(new Tab({ getFile }));
+      }
+    } catch (e) {}
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.editorProps !== nextProps.editorProps) {
       this.handlePort(this.props.editorProps.port, nextProps.editorProps.port);
