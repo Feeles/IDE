@@ -181,12 +181,16 @@ export default class Monitor extends PureComponent {
       env
     );
 
-    await new Promise((resolve, reject) => {
-      setSrcDoc(this.iframe, html, resolve);
-      setTimeout(() => {
-        reject(new Error('Connection Timeout'));
-      }, ConnectionTimeout);
-    });
+    const tryLoading = () =>
+      new Promise((resolve, reject) => {
+        // iframe.srcdoc, onload => resolve
+        setSrcDoc(this.iframe, html, resolve);
+        // Connection timeouted, then retry
+        setTimeout(reject, ConnectionTimeout);
+      })
+      .catch(() => tryLoading());
+
+    await tryLoading();
 
     const channel = new MessageChannel();
     channel.port1.addEventListener('message', (event) => {
