@@ -73,16 +73,18 @@ const getStyle = (props, state, context) => {
       width: '100%',
       height: state.assetFileName ? '100%' : 0,
       overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
       zIndex: 10,
       transition: transitions.easeOut(),
     },
     scroller: {
-      width: '100%',
-      height: '100%',
+      flex: 1,
       overflowX: 'auto',
       overflowY: 'scroll',
       display: 'flex',
       flexWrap: 'wrap',
+      justifyContent: 'center',
       boxSizing: 'border-box',
       paddingTop: 20,
       paddingBottom: 60,
@@ -91,9 +93,12 @@ const getStyle = (props, state, context) => {
       backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.25),
     },
     closeAsset: {
-      position: 'absolute',
-      right: 10,
-      bottom: 10,
+      marginBottom: 10,
+      textAlign: 'center',
+      backgroundColor: palette.primary1Color,
+      borderTopRightRadius: 0,
+      borderTopLeftRadius: 0,
+      cursor: 'pointer',
     },
   };
 };
@@ -452,9 +457,9 @@ export default class SourceEditor extends PureComponent {
                 />
               ))}
             </div>
-            <FloatingActionButton secondary style={styles.closeAsset} onTouchTap={this.handleAssetClose}>
-              <NavigationExpandLess />
-            </FloatingActionButton>
+            <Paper zDepth={2} style={styles.closeAsset} onTouchTap={this.handleAssetClose}>
+              <NavigationExpandLess color="white" />
+            </Paper>
           </div>
           <Editor
             {...props}
