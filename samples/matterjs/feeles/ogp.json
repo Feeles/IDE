@@ -1,16 +1,16 @@
 {
     "og:title": "モノの動きシミュレータ",
-    "og:url": "https://teramotodaiki.github.io/matterjs-on-feeles/",
+    "og:url": "https://feeles.github.io/IDE/dist/matterjs.html",
     "og:description": "飛ばしたり ぶつけたり 回したり つなげたり……物理の世界をプログラミングで体験しよう！",
     "og:author": "",
-    "og:image": "https://embed.hackforplay.xyz/open-source/ogp/matter-ogp-image.png",
+    "og:image": "https://assets.feeles.com/thumbnail/7c36c597ca8ae2e5cf13f738508bf9b5.jpg",
     "og:image:width": 1200,
     "og:image:height": 633,
     "twitter:card": "summary_large_image",
     "twitter:site": "@teramotodaiki",
     "twitter:title": "モノの動きシミュレータ",
     "twitter:description": "飛ばしたり ぶつけたり 回したり つなげたり……物理の世界をプログラミングで体験しよう！",
-    "twitter:image": "https://embed.hackforplay.xyz/open-source/ogp/matter-ogp-image.png",
+    "twitter:image": "https://assets.feeles.com/thumbnail/7c36c597ca8ae2e5cf13f738508bf9b5.jpg",
     "twitter:author": "",
     "fb:app_id": 1862685483943802
 }
