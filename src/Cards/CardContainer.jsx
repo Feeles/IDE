@@ -141,6 +141,7 @@ class CardContainer extends PureComponent {
   };
 
   handleCardClosed = (name, cards) => {
+    cards = cards.filter(item => item.visible);
     const index = cards.findIndex(item => item.name === name);
     const next = cards[index - 1] || cards[index + 1];
     if (next) {

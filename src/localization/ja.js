@@ -1,5 +1,4 @@
 export default {
-
   accept: ['ja', 'ja-jp'],
   native: '日本語',
   ll_CC: 'ja_JP',
@@ -10,7 +9,7 @@ export default {
     aboutFeeles: 'この Feeles について',
     upload: '作品を公開',
     deploySelf: 'このアカウントで作品を公開',
-    deployAs: (name) => `${name} として公開`,
+    deployAs: name => `${name} として公開`,
     share: 'この作品をシェア',
     you: 'あなた',
     login: 'ログイン',
@@ -30,7 +29,7 @@ export default {
     withTwitter: 'Twitterでログイン',
     withLine: 'LINEでログイン',
     withFacebook: 'Facebookでログイン',
-    withGoogle: 'Googleでログイン',
+    withGoogle: 'Googleでログイン'
   },
   cloneDialog: {
     saveTitle: 'セーブ',
@@ -62,23 +61,24 @@ export default {
     failedToRename: '同じタイトルのプロジェクトを二つ作ることはできません',
     titleIsRequired: 'プロジェクトにはタイトルを必ずつけてください',
     autoSaved: 'オートセーブされています',
-    setTitle: 'タイトルをつけてください',
+    setTitle: 'タイトルをつけてください'
   },
   saveDialog: {
     title: 'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',
-    description: (filename) => `上のリンクを右クリックして、「別名でダウンロード」をクリックし、「${filename}」という名前をつけて保存して下さい`,
-    cancel: 'キャンセル',
+    description: filename =>
+      `上のリンクを右クリックして、「別名でダウンロード」をクリックし、「${filename}」という名前をつけて保存して下さい`,
+    cancel: 'キャンセル'
   },
   aboutDialog: {
     title: 'この Feeles について',
     coreVersion: 'Feelse のバージョン',
     changeVersion: 'バージョンを変更',
-    change: '変更',
+    change: '変更'
   },
   launchDialog: {
     title: 'プロジェクトが見つかりました',
     openProject: 'このプロジェクトを開く',
-    startNew: 'あたらしく始める',
+    startNew: 'あたらしく始める'
   },
   metaDialog: {
     back: 'もどる',
@@ -88,32 +88,32 @@ export default {
     description: '説明文',
     creatorConfirm: 'ここは書かなくてもOK! 本名はぜったいに書かないで下さい',
     nickname: 'ニックネーム',
-    twitterId: 'ツイッター ID',
+    twitterId: 'ツイッター ID'
   },
   addDialog: {
     title: 'ファイルを追加する',
     fileName: 'ファイル名',
     add: '作成',
-    cancel: 'キャンセル',
+    cancel: 'キャンセル'
   },
   readmeCard: {
     title: 'トリセツ',
-    index: '目次',
+    index: '目次'
   },
   shotCard: {
     title: 'クイック',
     shoot: '書きかえたら、コードを送る',
-    restore: '元に戻す',
+    restore: '元に戻す'
   },
   hierarchyCard: {
     title: 'フォルダ',
-    emptyTrashBox: '空にする',
+    emptyTrashBox: '空にする'
   },
   credit: {
     writeAuthorName: '作者の名前を入れる',
     credits: 'クレジット',
-    whoMade: (name) => `ファイル "${name}" を作った人は?`,
-    website: 'ウェブサイトのURL (なくてもよい)',
+    whoMade: name => `ファイル "${name}" を作った人は?`,
+    website: 'ウェブサイトのURL (なくてもよい)'
   },
   common: {
     tapTwiceQuickly: 'すばやく２回クリック',
@@ -121,7 +121,7 @@ export default {
     editFile: '書きかえる',
     conflict: '同じ名前のファイルがすでに存在します。上書きしますか？',
     or: 'または',
-    wantToOpen: (name) => `${name} をひらきますか?`,
+    wantToOpen: name => `${name} をひらきますか?`
   },
   editorCard: {
     title: 'エディタ',
@@ -129,34 +129,34 @@ export default {
     save: 'セーブ',
     play: 'プレイ',
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
-    insert: '中に入れる',
+    insert: '中に入れる'
   },
   envCard: {
     title: 'スイッチ',
-    remove: '削除',
+    remove: '削除'
   },
   paletteCard: {
-    title: 'カラー',
+    title: 'カラー'
   },
   monitorCard: {
     title: 'ガメン',
+    popout: 'ポップアウト'
   },
   customizeCard: {
     title: 'カスタマイズ',
     detail: `くわしくはこちら`,
     editor: `タブや行の折り返しなど`,
-    style: `文字の色や背景色など`,
+    style: `文字の色や背景色など`
   },
   creditsCard: {
-    title: 'クレジット',
+    title: 'クレジット'
   },
   mediaCard: {
-    title: 'メディア',
+    title: 'メディア'
   },
   screenShotCard: {
     title: 'スクショ',
     coverImage: 'カバー画像にする',
-    set: 'カバー画像がセットされました! 📸 ',
-  },
-
+    set: 'カバー画像がセットされました! 📸 '
+  }
 };

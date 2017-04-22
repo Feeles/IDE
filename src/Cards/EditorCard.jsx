@@ -7,17 +7,14 @@ import EditorPane from '../EditorPane/';
 import { Tab } from '../ChromeTab/';
 
 export default class EditorCard extends PureComponent {
-
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     editorProps: PropTypes.object.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired
   };
 
   static icon() {
-    return (
-      <ContentCreate color="gray" />
-    );
+    return <ContentCreate color="gray" />;
   }
 
   // port が渡されることを前提とした実装, 今のままではあまりよくない
@@ -27,6 +24,18 @@ export default class EditorCard extends PureComponent {
     if (this.props.ShotPane && this.props.editorProps.port) {
       this.handlePort(null, this.props.editorProps.port);
     }
+  }
+
+  componentDidMount() {
+    // init.fileName があるとき Mount 後に selectTab しておく
+    try {
+      const { init } = this.props.cardPropsBag.cards.EditorCard;
+      if (init && init.fileName) {
+        const { selectTab, findFile } = this.props.editorProps;
+        const getFile = () => findFile(init.fileName);
+        selectTab(new Tab({ getFile }));
+      }
+    } catch (e) {}
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,26 +54,30 @@ export default class EditorCard extends PureComponent {
   };
 
   // TODO: この辺の処理は共通化した方がよさそう
-  handleMessage = (event) => {
-    const {query, value} = event.data || {};
+  handleMessage = event => {
+    const { query, value } = event.data || {};
     if (!query) return;
 
     if (query === 'editor' && value) {
       // feeles.openEditor()
       const getFile = () => this.props.editorProps.findFile(value);
       this.props.editorProps.selectTab(new Tab({ getFile }));
-      this.props.updateCard('EditorCard', {visible: true});
+      this.props.updateCard('EditorCard', { visible: true });
     } else if (query === 'editor') {
       // feeles.closeEditor()
-      this.props.updateCard('EditorCard', {visible: false});
+      this.props.updateCard('EditorCard', { visible: false });
     }
   };
 
   render() {
-    const {scrollToCard} = this.props.cardPropsBag;
+    const { scrollToCard } = this.props.cardPropsBag;
     return (
-      <Card initiallyExpanded icon={EditorCard.icon()} {...this.props.cardPropsBag}>
-        <CardMedia expandable >
+      <Card
+        initiallyExpanded
+        icon={EditorCard.icon()}
+        {...this.props.cardPropsBag}
+      >
+        <CardMedia expandable>
           <EditorPane {...this.props.editorProps} scrollToCard={scrollToCard} />
         </CardMedia>
       </Card>
