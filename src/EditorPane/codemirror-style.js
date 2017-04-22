@@ -1,4 +1,4 @@
-import { grey100 } from 'material-ui/styles/colors';
+import { grey100, grey300, blueA700 } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
 
@@ -46,4 +46,19 @@ textarea {
   border-bottom-right-radius: 1rem;
   white-space: pre;
   box-shadow: ${paper.zDepthShadows[1]};
+}
+.cm-s-default .cm-property {
+  color: ${blueA700};
+}
+div.CodeMirror:not(.CodeMirror-focused) .CodeMirror-line>span {
+  background-color: ${grey300};
+}
+div.CodeMirror:not(.CodeMirror-focused) .CodeMirror-line>span>span.cm-tab,
+div.CodeMirror:not(.CodeMirror-focused) .CodeMirror-line>span>span.cm-comment {
+  background-color: ${grey100};
+}
+div.CodeMirror span.CodeMirror-matchingbracket {
+  font-size: 30px;
+  line-height: 16px;
+  vertical-align: middle;
 }`;
