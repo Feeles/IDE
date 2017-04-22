@@ -124,6 +124,7 @@ export default class MonitorCard extends PureComponent {
     }
 
     const sizeValue = this.state.frameWidth + by + this.state.frameHeight;
+    const { localization } = this.props.monitorProps;
 
     return (
       <Card
@@ -142,17 +143,19 @@ export default class MonitorCard extends PureComponent {
           <IconButton key="fullscreen" onTouchTap={() => this.props.toggleFullScreen()}>
             <NavigationFullscreen />
           </IconButton>,
-          <IconButton key="popout" onTouchTap={() => this.props.togglePopout()}>
-            <OpenInBrowser />
-          </IconButton>,
           <IconMenu
-            key="size"
+            key="settings"
             iconButtonElement={<IconButton><ActionSettings /></IconButton>}
           >
             <MenuItem
               primaryText={sizeValue}
               leftIcon={<DeviceDevices />}
               menuItems={frameSizes.map(this.renderMenuItem, this)}
+            />
+            <MenuItem
+              primaryText={localization.monitorCard.popout}
+              leftIcon={<OpenInBrowser />}
+              onTouchTap={() => this.props.togglePopout()}
             />
           </IconMenu>
         ]}

@@ -140,6 +140,7 @@ export default {
   },
   monitorCard: {
     title: 'Screen',
+    popout: 'Popout Screen'
   },
   customizeCard: {
     title: 'Customize',

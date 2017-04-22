@@ -140,6 +140,7 @@ export default {
   },
   monitorCard: {
     title: 'ガメン',
+    popout: 'ポップアウト'
   },
   customizeCard: {
     title: 'カスタマイズ',
