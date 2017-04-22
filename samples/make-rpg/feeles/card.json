@@ -1,7 +1,7 @@
 {
     "MonitorCard": {
         "visible": true,
-        "order": 0,
+        "order": 1,
         "frame": {
             "size": [
                 480,
@@ -11,22 +11,21 @@
     },
     "ShotCard": {
         "visible": false,
-        "order": 1,
+        "order": 2,
         "init": {
             "fileName": "main.js"
         }
-    },
-    "EditorCard": {
-        "visible": false,
-        "order": 2
     },
     "MediaCard": {
         "visible": false,
         "order": 3
     },
-    "CreditsCard": {
-        "visible": false,
-        "order": 4
+    "EditorCard": {
+        "visible": true,
+        "order": 4,
+        "init": {
+            "fileName": "game.js"
+        }
     },
     "ReadmeCard": {
         "visible": true,
@@ -35,11 +34,11 @@
             "fileName": "README.md"
         }
     },
-    "PaletteCard": {
+    "ScreenShotCard": {
         "visible": false,
         "order": 6
     },
-    "ScreenShotCard": {
+    "PaletteCard": {
         "visible": false,
         "order": 7
     },
@@ -54,5 +53,9 @@
     "CustomizeCard": {
         "visible": false,
         "order": 10
+    },
+    "CreditsCard": {
+        "visible": false,
+        "order": 11
     }
 }
