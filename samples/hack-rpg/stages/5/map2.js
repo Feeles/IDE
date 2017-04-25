@@ -22,8 +22,8 @@ function gameStartLazy() {
 	// ダイアモンド
 	const item2 = new RPGObject();
 	item2.mod(Hack.assets.diamond);
-	// ダイアモンドを 2, 7 の位置に移動する ( map2 )
-	item2.locate(2, 7, 'map2');
+	// ダイアモンドを 4, 7 の位置に移動する ( map2 )
+	item2.locate(4, 7, 'map2');
 	// ダイアモンドにプレイヤーが乗ったら...
 	item2.onplayerenter = () => {
 		// ダイアモンドを削除する
