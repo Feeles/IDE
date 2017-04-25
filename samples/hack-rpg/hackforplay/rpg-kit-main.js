@@ -60,7 +60,6 @@ game.on('load', function() {
 	Hack.pad = pad;
 
 	var apad = new Sprite(50, 50);
-	console.log(game.assets['hackforplay/button-white.png']);
 	apad.image = game.assets['hackforplay/button-white.png'];
 	apad.buttonMode = 'a';
 	apad.moveTo(400, 250);

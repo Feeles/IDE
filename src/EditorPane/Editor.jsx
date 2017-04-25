@@ -67,6 +67,7 @@ export default class Editor extends PureComponent {
     codemirrorRef: PropTypes.func.isRequired,
     snippets: PropTypes.array.isRequired,
     showHint: PropTypes.bool.isRequired,
+    extraKeys: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -78,6 +79,7 @@ export default class Editor extends PureComponent {
     codemirrorRef: () => {},
     snippets: [],
     showHint: true,
+    extraKeys: {},
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -187,6 +189,7 @@ export default class Editor extends PureComponent {
         'Ctrl-W': closeSelectedTab,
         'Cmd-W': closeSelectedTab,
         'Ctrl-Alt-B': this.beautify,
+        ...this.props.extraKeys,
       },
       ...getConfig('codemirror'),
     };
