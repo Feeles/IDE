@@ -49,7 +49,7 @@ require('enchantjs/enchant');
 /**
  * @type {Object}
  */
-enchant.ui = { assets: ['enchantjs/pad.png', 'enchantjs/apad.png', 'enchantjs/icon0.png', 'enchantjs/font0.png'] };
+enchant.ui = { assets: ['hackforplay/pad-white.png', 'enchantjs/apad.png', 'enchantjs/icon0.png', 'enchantjs/font0.png'] };
 
 /**
  * 方向キーパッドのクラス: Pad
@@ -63,7 +63,7 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
      */
     initialize: function() {
         var core = enchant.Core.instance;
-        var image = core.assets['enchantjs/pad.png'];
+        var image = core.assets['hackforplay/pad-white.png'];
         enchant.Sprite.call(this, image.width / 2, image.height);
         this.image = image;
         this.input = { left: false, right: false, up: false, down: false };
