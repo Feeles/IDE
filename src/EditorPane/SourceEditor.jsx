@@ -339,8 +339,10 @@ export default class SourceEditor extends PureComponent {
     // カーソル (挿入直後に undo したときスクロールが上に戻るのを防ぐ)
     this.codemirror.focus();
     this.codemirror.setCursor(end);
-
+    // Pane をとじる
     this.handleAssetClose();
+    // 実行 (UIが固まらないように時間をおいている)
+    setTimeout(this.setLocation, 1000);
   };
 
   emphasizeTextMarker = async(textMarker) => {
