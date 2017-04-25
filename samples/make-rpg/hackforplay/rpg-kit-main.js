@@ -7,7 +7,7 @@ import 'hackforplay/rpg-kit-color';
 
 var game = enchant.Core.instance;
 game.preload('enchantjs/monster1.gif', 'enchantjs/monster2.gif', 'enchantjs/monster3.gif', 'enchantjs/monster4.gif', 'enchantjs/bigmonster1.gif', 'enchantjs/bigmonster2.gif', 'enchantjs/x2/map1.gif', 'enchantjs/x2/dotmat.gif', 'enchantjs/x1.5/chara0.png', 'enchantjs/x1.5/chara5.png', 'hackforplay/enchantbook.png', 'enchantjs/icon0.png', 'enchantjs/x2/effect0.png', 'hackforplay/madosyo_small.png', 'enchantjs/shadow.gif', 'enchantjs/x1.5/chara7.png',
-'hackforplay/clear.png', 'hackforplay/gameover.png', 'hackforplay/button_retry.png', 'hackforplay/new_button_replay.png', 'hackforplay/new_button_retry.png', 'hackforplay/menu-button-menu.png', 'hackforplay/menu-button-restage.png', 'hackforplay/menu-button-hint.png', 'hackforplay/menu-button-comment.png', 'hackforplay/menu-button-retry.png', 'hackforplay/new_button_next.png', 'hackforplay/new_button_comment.png', 'hackforplay/new_button_restage.png');
+'hackforplay/clear.png', 'hackforplay/gameover.png', 'hackforplay/button_retry.png', 'hackforplay/new_button_replay.png', 'hackforplay/new_button_retry.png', 'hackforplay/menu-button-menu.png', 'hackforplay/menu-button-restage.png', 'hackforplay/menu-button-hint.png', 'hackforplay/menu-button-comment.png', 'hackforplay/menu-button-retry.png', 'hackforplay/new_button_next.png', 'hackforplay/new_button_comment.png', 'hackforplay/new_button_restage.png', 'hackforplay/button-white.png');
 
 game.keybind(' '.charCodeAt(0), 'a');
 
@@ -59,11 +59,11 @@ game.on('load', function() {
 	game.rootScene.addChild(pad);
 	Hack.pad = pad;
 
-	var apad = new APad();
-	apad.moveTo(350, 200);
-	apad.outside.scale(0.5, 0.5);
-	apad.inside.visible = false;
-	apad.outside.buttonMode = 'a';
+	var apad = new Sprite(50, 50);
+	console.log(game.assets['hackforplay/button-white.png']);
+	apad.image = game.assets['hackforplay/button-white.png'];
+	apad.buttonMode = 'a';
+	apad.moveTo(400, 250);
 	apad.onenterframe = function() {
 		game.rootScene.addChild(this);
 	};
