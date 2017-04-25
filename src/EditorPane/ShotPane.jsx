@@ -209,6 +209,10 @@ export default class ShotPane extends PureComponent {
 
     const styles = getStyle(this.props, this.context, this.state);
 
+    const extraKeys = {
+      'Enter': this.shoot
+    };
+
     return (
       <div>
         {this.state.error
@@ -220,7 +224,7 @@ export default class ShotPane extends PureComponent {
           ? (<LinearProgress/>)
           : null}
         <div style={styles.editor}>
-          <Editor isSelected isCared file={this.props.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.props.completes}/>
+          <Editor isSelected isCared file={this.props.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.props.completes} extraKeys={extraKeys}/>
         </div>
         <div style={styles.menu}>
           <FloatingActionButton mini disabled={anim !== 0} onTouchTap={this.shoot} style={styles.shoot}>
