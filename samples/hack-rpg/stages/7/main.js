@@ -45,12 +45,8 @@ function gameStart() {
 		// 神官にぶつかったら...
 		boy.oncollided = () => {
 			Hack.log('転移装置が使えなくなってる……君が改造して、元通りにしてくれないか？');
-			// 2.0 秒後に...
-			setTimeout(() => {
-				// 魔道書を開く
-				feeles.openEditor('stages/extra.js');
-			}, 2000);
-			// 2000 は 2.0 秒のことです
+			// 魔道書を開く
+			feeles.openEditor('stages/extra.js');
 		};
 	}
 
