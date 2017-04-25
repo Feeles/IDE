@@ -137,8 +137,8 @@ export default class SourceFile extends _File {
     });
   }
 
-  static shot(text) {
-    return new SourceFile({ type: 'text/javascript', name: '', text });
+  static shot(text, name = '') {
+    return new SourceFile({ type: 'text/javascript', name, text });
   }
 
   static coreLibFilename = `feeles-${CORE_VERSION}.js`;
