@@ -1,33 +1,33 @@
 [{
     "code": "// 話す\nawait ask(`こんにちは`);\n\n",
-    "label": "「こんにちは」",
+    "label": "話す",
     "description": "カッコの中のことばを話す"
 }, {
     "code": "// 聞く\nconst item1 = await ask();\n\n",
-    "label": "(聞く)",
+    "label": "聞く",
     "description": "相手のことばを聞きとる"
 }, {
-    "code": "// 聞く\nconst item1 = await ask();\nawait ask(`${item1}`);\n\n",
-    "label": "「(それ)」",
+    "code": "const item1 = await ask(); // 聞く\nawait ask(`${item1}`); // 話す\n\n",
+    "label": "聞く+話す",
     "description": "相手のことばを聞きとって、そのまま返す"
 }, {
-    "code": "// 話す\nawait ask(`${item1}、いいね`);\n\n",
-    "label": "「(それ)、いいね」",
-    "description": "相手のことばを聞きとって、それをいいねと言う"
+    "code": "const item1 = await ask(); // 聞く\nawait ask(`${item1}、いいね`); // 話す\n\n",
+    "label": "あいづち",
+    "description": "相手のことばを聞きとって、それを「いいね」と言う"
 }, {
-    "code": "internet(`キーワード`).youtube.card();\n",
+    "code": "internet(`キーワード`).youtube.card(); // YouTube\n\n",
     "label": "YouTube",
     "description": "キーワードをYouTubeで調べる"
 }, {
-    "code": "// 聞く\nconst item1 = await ask();\ninternet(`${item1}`).youtube.card();\n",
+    "code": "const item1 = await ask(); // 聞く\ninternet(item1).youtube.card(); // YouTube\n\n",
     "label": "YouTubeでしらべる",
     "description": "相手のことばを聞きとったあと、それをYouTubeで調べる"
 }, {
-    "code": "internet(`キーワード`).flickr.face();\n",
+    "code": "internet(`キーワード`).flickr.face(); // 画像\n\n",
     "label": "flickr",
     "description": "キーワードにヒットする画像を顔に出す"
 }, {
-    "code": "// 聞く\nconst item1 = await ask();\ninternet(`${item1}`).flickr.face();\n",
+    "code": "const item1 = await ask(); // 聞く\ninternet(item1).flickr.face(); // 画像\n\n",
     "label": "flickrでしらべる",
     "description": "相手のことばを聞きとったあと、それにヒットする画像を顔に出す"
 }]
