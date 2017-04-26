@@ -12,10 +12,10 @@ import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionHistory from 'material-ui/svg-icons/action/history';
-import ActionDashboard from 'material-ui/svg-icons/action/dashboard';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import {emphasize} from 'material-ui/utils/colorManipulator';
@@ -320,7 +320,7 @@ export default class Menu extends PureComponent {
         title={organization.title}
         style={styles.root}
         iconStyleLeft={styles.leftIcon}
-        iconElementLeft={<IconButton><ActionDashboard /></IconButton>}
+        iconElementLeft={<IconButton><NavigationMenu /></IconButton>}
         onLeftIconButtonTouchTap={this.handleToggleDrawer}
       >
         <div style={{ flexGrow: 1 }}></div>
