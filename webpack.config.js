@@ -125,4 +125,9 @@ const config = {
   }
 };
 
+if (process.env.NODE_ENV !== 'production') {
+  // SourceMap
+  config.devtool = 'inline-source-map';
+}
+
 module.exports = config;
