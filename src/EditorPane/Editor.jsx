@@ -184,7 +184,7 @@ export default class Editor extends PureComponent {
       scrollbarStyle: 'simple',
       foldGutter: true,
       foldOptions: {
-        widget: "✧⟣❃⟢✧",
+        widget: " 📦 ",
         minFoldSize: 1,
         scanUp: false,
       },
