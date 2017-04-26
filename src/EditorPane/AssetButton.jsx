@@ -2,7 +2,6 @@ import React, { PureComponent, PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
 import Popover from 'material-ui/Popover';
 import RaisedButton from 'material-ui/RaisedButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
@@ -87,8 +86,9 @@ export default class AssetButton extends PureComponent {
       },
       button: {
         position: 'absolute',
-        right: -12,
-        bottom: -10,
+        right: 0,
+        bottom: 0,
+        cursor: 'pointer'
       }
     };
 
@@ -121,9 +121,11 @@ export default class AssetButton extends PureComponent {
           <div style={styles.description}>{this.props.description}</div>
           <code style={styles.code}><pre>{this.props.code}</pre></code>
         </Popover>
-        <FloatingActionButton mini style={styles.button} onTouchTap={this.handleInsert}>
-          <ContentAdd />
-        </FloatingActionButton>
+        <ContentAdd
+          color={palette.primary1Color}
+          style={styles.button}
+          onTouchTap={this.handleInsert}
+        />
       </Paper>
     );
   }
