@@ -5,14 +5,12 @@ const path = require('path');
 const mime = require('mime');
 const unorm = require('unorm');
 
-
-module.exports =
-class FeelesWebpackPlugin {
+module.exports = class FeelesWebpackPlugin {
   constructor(params) {
     params = Object.assign({
       path: 'mount',
       output: 'index.json',
-      ignore: /[]/,
+      ignore: /[]/
     }, params);
     this.fileTimestamps = new Map();
     this.filePromises = new Map();
@@ -48,24 +46,29 @@ class FeelesWebpackPlugin {
         return !filePath.indexOf(dir) && !this.ignore.test(filePath);
       });
 
+      let changed = false;
       for (const filePath of targetFiles) {
+        // キャッシュが存在するかどうか, そのキャッシュから更新されていないか
         const lastModified = compilation.fileTimestamps[filePath] || Date.now();
         const lastCached = this.fileTimestamps.get(filePath) || 0;
-        if (lastModified > lastCached) {
+        if (!this.filePromises.has(filePath) || lastModified > lastCached) {
+          changed = true;
           this.filePromises.set(filePath, this.loadFile(filePath));
           this.fileTimestamps.set(filePath, lastModified);
         }
       }
 
+      // 削除されたファイル
       for (const cachedPath of this.filePromises.keys()) {
         if (targetFiles.indexOf(cachedPath) < 0) {
+          changed = true;
           this.filePromises.delete(cachedPath);
         }
       }
 
-      Promise.all(this.filePromises.values())
-        .then(files => {
-          console.log(`Feeles: ${this.filePromises.size} files mounted in ${this.mountDir}`);
+      if (changed) {
+        Promise.all(this.filePromises.values()).then(files => {
+          console.log(`📦 Feeles:${this.filePromises.size} files mounted\tin ${this.mountDir}`);
           const json = JSON.stringify(files);
           compilation.assets[this.output] = {
             source() {
@@ -75,9 +78,11 @@ class FeelesWebpackPlugin {
               return json.length;
             }
           };
-
           callback();
         });
+      } else {
+        callback();
+      }
     });
 
     compiler.plugin('after-emit', (compilation, callback) => {
@@ -98,9 +103,9 @@ class FeelesWebpackPlugin {
       composed: fs.readFileSync(filePath, 'base64'),
 
       options: {
-          isTrashed: false,
+        isTrashed: false
       },
-      credits: [],
+      credits: []
     });
   }
 }
