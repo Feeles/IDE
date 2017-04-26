@@ -130,7 +130,8 @@ export default {
     save: 'Save',
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
-    insert: 'Insert'
+    insert: 'Insert',
+    restore: 'Restore before error occurs'
   },
   envCard: {
     title: 'Parameters',

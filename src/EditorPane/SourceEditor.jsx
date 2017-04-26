@@ -8,6 +8,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import {red50, red500} from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 import {fade} from 'material-ui/utils/colorManipulator';
+import AlertError from 'material-ui/svg-icons/alert/error';
 import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
@@ -33,15 +34,22 @@ const getStyle = (props, state, context) => {
       flexDirection: 'column',
       alignItems: 'stretch'
     },
+    errorDiv: {
+      flex: '0 1 120px',
+      borderStyle: 'double',
+      borderColor: red500,
+      backgroundColor: red50,
+      overflow: 'scroll'
+    },
+    restore: {
+      color: red500
+    },
     error: {
-      flex: '0 1 auto',
+      color: red500,
       margin: 0,
       padding: 8,
-      borderStyle: 'double',
-      backgroundColor: red50,
-      color: red500,
-      fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
-      overflow: 'scroll'
+      paddingTop: 0,
+      fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
     },
     editorContainer: {
       flex: '1 1 auto',
@@ -303,11 +311,8 @@ export default class SourceEditor extends PureComponent {
   };
 
   setLocation = async(href) => {
-
     await this.handleSave();
-
     return this.props.setLocation(href);
-
   };
 
   handleCodemirror = (ref) => {
@@ -380,6 +385,12 @@ export default class SourceEditor extends PureComponent {
     }
   };
 
+  handleRestore = () => {
+    // ひとつ戻して再実行する
+    this.handleUndo();
+    this.setLocation();
+  };
+
   render() {
     const {
       file,
@@ -408,10 +419,16 @@ export default class SourceEditor extends PureComponent {
         <style>
           {
             this.state.classNameStyles.map(item => `.${item.className} { ${item.style} } `)
-          }</style>
+          }
+</style>
         {file.error
           ? (
-            <pre style={styles.error}>{file.error.message}</pre>
+            <div style={styles.errorDiv}>
+              <FlatButton label={localization.editorCard.restore} icon={< AlertError color = {
+                styles.error.color
+              } />} style={styles.restore} onTouchTap={this.handleRestore}/>
+              <pre style={styles.error}>{file.error.message}</pre>
+            </div>
           )
           : null}
         <div style={styles.menuBar}>

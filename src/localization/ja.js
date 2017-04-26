@@ -130,7 +130,8 @@ export default {
     save: 'セーブ',
     play: 'プレイ',
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
-    insert: '中に入れる'
+    insert: '中に入れる',
+    restore: 'エラーが起きる前にもどす'
   },
   envCard: {
     title: 'スイッチ',
