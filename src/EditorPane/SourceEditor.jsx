@@ -203,7 +203,7 @@ export default class SourceEditor extends PureComponent {
     const file = await this.props.putFile(this.props.file, this.props.file.set({text}));
 
     // Like a watching
-    file.babel(babelrc).catch((err) => {
+    file.babel(babelrc).catch(e => {
       this.props.selectTabFromFile(file);
       throw e;
     });
