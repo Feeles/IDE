@@ -14,7 +14,7 @@ export default class HierarchyCard extends PureComponent {
 
   static icon() {
     return (
-      <FileFolderOpen color="gray" />
+      <FileFolderOpen />
     );
   }
 

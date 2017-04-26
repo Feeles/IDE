@@ -21,7 +21,7 @@ export default class ShotCard extends PureComponent {
 
   static icon() {
     return (
-      <ContentReply color="gray" style={{transform:'rotateY(180deg)'}} />
+      <ContentReply style={{transform:'rotateY(180deg)'}} />
     );
   }
 

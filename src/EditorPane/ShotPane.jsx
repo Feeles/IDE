@@ -1,6 +1,6 @@
 import React, {PureComponent, PropTypes} from 'react';
 import FlatButton from 'material-ui/FlatButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import transitions from 'material-ui/styles/transitions';
@@ -225,14 +225,19 @@ export default class ShotPane extends PureComponent {
           ? (<LinearProgress/>)
           : null}
         <div style={styles.editor}>
-          <Editor isSelected isCared file={this.props.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.props.completes} extraKeys={extraKeys}/>
+          <Editor isSelected isCared file={this.props.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.props.completes} extraKeys={extraKeys} lineNumbers={false} />
         </div>
         <div style={styles.menu}>
-          <FloatingActionButton mini disabled={anim !== 0} onTouchTap={this.shoot} style={styles.shoot}>
-            {anim === 0
+          <RaisedButton primary
+            label={localization.shotCard.button}
+            icon={anim === 0
               ? ShotCard.icon()
               : (<AvStop/>)}
-          </FloatingActionButton>
+            labelPosition="before"
+            disabled={anim !== 0}
+            onTouchTap={this.shoot}
+            style={styles.shoot}
+          />
           <span style={styles.label}>{localization.shotCard.shoot}</span>
           <div style={{
             flex: '1 1 auto'

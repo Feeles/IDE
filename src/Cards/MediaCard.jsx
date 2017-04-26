@@ -19,7 +19,7 @@ export default class MediaCard extends Component {
 
   static icon() {
     return (
-      <AvMusicVideo color="gray" />
+      <AvMusicVideo />
     );
   }
 

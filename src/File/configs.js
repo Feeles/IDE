@@ -6,21 +6,7 @@ export default new Map([
   ['codemirror', {
     test: /^feeles\/codemirror\.json$/i,
     multiple: false,
-    defaultValue: {
-    	lineNumbers: true,
-    	indentUnit: 4,
-    	indentWithTabs: true,
-    	matchBrackets: true,
-    	autoCloseBrackets: true,
-    	keyMap: 'sublime',
-    	scrollbarStyle: 'simple',
-    	foldGutter: true,
-    	foldOptions: {
-    		widget: '✧⟣❃⟢✧',
-    		minFoldSize: 1,
-    		scanUp: false
-    	},
-    },
+    defaultValue: {},
     defaultName: 'feeles/codemirror.json',
   }],
   ['palette', {

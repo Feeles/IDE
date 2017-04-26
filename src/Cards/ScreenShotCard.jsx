@@ -32,7 +32,7 @@ export default class ScreenShotCard extends PureComponent {
   };
 
   static icon() {
-    return <ImagePhotoCamera color="gray" />;
+    return <ImagePhotoCamera />;
   }
 
   static fileName = 'feeles/capture.json';

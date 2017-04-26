@@ -102,8 +102,9 @@ export default {
   },
   shotCard: {
     title: 'クイック',
-    shoot: '書きかえたら、コードを送る',
-    restore: '元に戻す'
+    shoot: '書きかえたら、',
+    button: 'コードをおくる',
+    restore: '元にもどす'
   },
   hierarchyCard: {
     title: 'フォルダ',

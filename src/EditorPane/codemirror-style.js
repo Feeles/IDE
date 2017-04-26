@@ -61,4 +61,7 @@ div.CodeMirror span.CodeMirror-matchingbracket {
   font-size: 30px;
   line-height: 16px;
   vertical-align: middle;
+}
+div.CodeMirror.CodeMirror-focused .CodeMirror-line>span>span.cm-comment {
+  opacity: 0.5;
 }`;

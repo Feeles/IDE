@@ -52,7 +52,7 @@ export default class MonitorCard extends PureComponent {
   };
 
   static icon() {
-    return <HardwareDesktopWindows color="gray" />;
+    return <HardwareDesktopWindows />;
   }
 
   componentWillMount() {
