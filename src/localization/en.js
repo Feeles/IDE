@@ -102,7 +102,8 @@ export default {
   },
   shotCard: {
     title: 'Quick Run',
-    shoot: 'After rewriting, send the code',
+    shoot: 'After rewriting,',
+    button: 'send the code',
     restore: 'Restore'
   },
   hierarchyCard: {
