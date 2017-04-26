@@ -20,7 +20,7 @@ export default class CreditsCard extends PureComponent {
 
   static icon() {
     return (
-      <ActionCopyright color="gray" />
+      <ActionCopyright />
     );
   }
 

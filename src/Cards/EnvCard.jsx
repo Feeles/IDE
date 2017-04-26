@@ -29,7 +29,7 @@ export default class EnvCard extends PureComponent {
 
   static icon() {
     return (
-      <ActionTouchApp color="gray" />
+      <ActionTouchApp />
     );
   }
 

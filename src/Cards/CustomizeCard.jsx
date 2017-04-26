@@ -28,7 +28,7 @@ export default class CustomizeCard extends PureComponent {
 
   static icon() {
     return (
-      <ActionSettingsApplications color="gray" />
+      <ActionSettingsApplications />
     );
   }
 

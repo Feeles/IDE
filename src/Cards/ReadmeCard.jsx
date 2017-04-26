@@ -32,7 +32,7 @@ export default class ReadmeCard extends PureComponent {
 
   static icon() {
     return (
-      <MapsMap color="gray" />
+      <MapsMap />
     );
   }
 

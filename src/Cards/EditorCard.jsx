@@ -14,7 +14,7 @@ export default class EditorCard extends PureComponent {
   };
 
   static icon() {
-    return <ContentCreate color="gray" />;
+    return <ContentCreate />;
   }
 
   // port が渡されることを前提とした実装, 今のままではあまりよくない

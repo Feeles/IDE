@@ -101,7 +101,7 @@ export default class PaletteCard extends PureComponent {
 
   static icon() {
     return (
-      <ImagePalette color="gray" />
+      <ImagePalette />
     );
   }
 
