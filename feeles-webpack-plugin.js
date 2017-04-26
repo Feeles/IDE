@@ -5,14 +5,12 @@ const path = require('path');
 const mime = require('mime');
 const unorm = require('unorm');
 
-
-module.exports =
-class FeelesWebpackPlugin {
+module.exports = class FeelesWebpackPlugin {
   constructor(params) {
     params = Object.assign({
       path: 'mount',
       output: 'index.json',
-      ignore: /[]/,
+      ignore: /[]/
     }, params);
     this.fileTimestamps = new Map();
     this.filePromises = new Map();
@@ -69,8 +67,7 @@ class FeelesWebpackPlugin {
       }
 
       if (changed) {
-        Promise.all(this.filePromises.values())
-        .then(files => {
+        Promise.all(this.filePromises.values()).then(files => {
           console.log(`📦 Feeles:${this.filePromises.size} files mounted\tin ${this.mountDir}`);
           const json = JSON.stringify(files);
           compilation.assets[this.output] = {
@@ -106,9 +103,9 @@ class FeelesWebpackPlugin {
       composed: fs.readFileSync(filePath, 'base64'),
 
       options: {
-          isTrashed: false,
+        isTrashed: false
       },
-      credits: [],
+      credits: []
     });
   }
 }
