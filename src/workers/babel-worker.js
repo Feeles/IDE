@@ -1,17 +1,16 @@
 import babelWorkerJs from '../../lib/babel-worker';
 
-
 const IDLE_TIME = 5000;
-const getUniqueId = ((id) => () => ++ id)(0);
+const getUniqueId = (id => () => ++id)(0);
 
 const url = URL.createObjectURL(
- new Blob([babelWorkerJs], { type: 'text/javascript' })
+  new Blob([babelWorkerJs], { type: 'text/javascript' })
 );
 
 const _site = {
   worker: null,
   queue: 0,
-  timer: null,
+  timer: null
 };
 
 const assign = () => {
@@ -38,15 +37,11 @@ const release = () => {
  * @param file An object of file object
  * @param babelrc An object of .babelrc
  */
-export default function (file, babelrc) {
-
+export default function(file, babelrc) {
   const worker = assign();
 
   return new Promise((resolve, reject) => {
-    if (
-      file.isScript &&
-      file.text.length < 100000
-    ) {
+    if (file.isScript && file.text.length < 100000) {
       const id = getUniqueId();
 
       worker.addEventListener('message', function task(event) {
@@ -56,23 +51,25 @@ export default function (file, babelrc) {
           resolve(file.set({ text }));
         }
       });
-      worker.addEventListener('error', function (event) {
+      worker.addEventListener('error', function(event) {
         reject(new Error(event.message));
       });
 
       worker.postMessage({
         id: id,
         code: file.text,
-        options: {...babelrc, filename: file.name},
+        options: {
+          ...babelrc,
+          filename: file.name
+        }
       });
     } else {
       resolve(file);
     }
   })
-  .then((result) => (release(), result))
-  .catch((error) => {
-    release();
-    throw error;
-  });
-
-};
+    .then(result => (release(), result))
+    .catch(error => {
+      release();
+      throw error;
+    });
+}

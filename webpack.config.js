@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FeelesWebpackPlugin = require('./feeles-webpack-plugin');
+const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p';
 const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__';
@@ -55,10 +56,9 @@ const config = {
       CORE_CDN_PREFIX: JSON.stringify(CORE_CDN_PREFIX),
       CORE_CDN_URL: JSON.stringify(`${CORE_CDN_PREFIX}${CORE_VERSION}.js`)
     }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false
-    }),
+    new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
+    new OpenBrowserPlugin({ url: 'http://localhost:8080' }),
+
     new HtmlWebpackPlugin({
       inject: false,
       filename: 'index.html',
@@ -124,5 +124,10 @@ const config = {
     port: process.env.PORT
   }
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  // SourceMap
+  config.devtool = 'inline-source-map';
+}
 
 module.exports = config;
