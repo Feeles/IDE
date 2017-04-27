@@ -1,19 +1,18 @@
-import React, {PureComponent, PropTypes} from 'react';
-import {DropTarget} from 'react-dnd';
+import React, { PureComponent, PropTypes } from 'react';
+import { DropTarget } from 'react-dnd';
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import {red50, red500} from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
-import {fade} from 'material-ui/utils/colorManipulator';
-import AlertError from 'material-ui/svg-icons/alert/error';
-import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
+import { fade } from 'material-ui/utils/colorManipulator';
+import HardwareKeyboardBackspace
+  from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
-import {emphasize} from 'material-ui/utils/colorManipulator';
-import {Pos} from 'codemirror';
+import { emphasize } from 'material-ui/utils/colorManipulator';
+import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 
 import DragTypes from '../utils/dragTypes';
@@ -24,7 +23,7 @@ import AssetButton from './AssetButton';
 import ErrorPane from './ErrorPane';
 
 const getStyle = (props, state, context) => {
-  const {palette} = context.muiTheme;
+  const { palette } = context.muiTheme;
 
   return {
     root: {
@@ -59,9 +58,7 @@ const getStyle = (props, state, context) => {
     assetContainer: {
       position: 'absolute',
       width: '100%',
-      height: state.assetFileName
-        ? '100%'
-        : 0,
+      height: state.assetFileName ? '100%' : 0,
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
@@ -94,7 +91,6 @@ const getStyle = (props, state, context) => {
 };
 
 export default class SourceEditor extends PureComponent {
-
   static propTypes = {
     file: PropTypes.object.isRequired,
     getFiles: PropTypes.func.isRequired,
@@ -145,10 +141,12 @@ export default class SourceEditor extends PureComponent {
     if (this.codemirror) {
       this.codemirror.on('beforeChange', this.handleIndexReplacement);
       this.codemirror.on('change', this.handleIndentLine);
-      this.codemirror.on('change', (cm) => this.setState({
-        hasHistory: cm.historySize().undo > 0,
-        hasChanged: cm.getValue('\n') !== this.props.file.text
-      }));
+      this.codemirror.on('change', cm =>
+        this.setState({
+          hasHistory: cm.historySize().undo > 0,
+          hasChanged: cm.getValue('\n') !== this.props.file.text
+        })
+      );
       this.codemirror.on('change', this.handleUpdateWidget);
       this.codemirror.on('update', this.handleRenderWidget);
 
@@ -171,7 +169,7 @@ export default class SourceEditor extends PureComponent {
     return [];
   }
 
-  handleSave = async() => {
+  handleSave = async () => {
     if (!this.codemirror) {
       return;
     }
@@ -182,17 +180,19 @@ export default class SourceEditor extends PureComponent {
       return;
     }
 
-    this.setState({hasChanged: false, loading: true});
+    this.setState({ hasChanged: false, loading: true });
 
-    const file = await this.props.putFile(this.props.file, this.props.file.set({text}));
+    const file = await this.props.putFile(
+      this.props.file,
+      this.props.file.set({ text })
+    );
 
     // Like a watching
     file.babel(babelrc).catch(e => {
       this.props.selectTabFromFile(file);
-      throw e;
     });
 
-    this.setState({loading: false});
+    this.setState({ loading: false });
 
     if (process.env.NODE_ENV === 'production') {
       if (ga) {
@@ -210,11 +210,10 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleUpdateWidget = (cm, change) => {
-    const {paper, palette} = this.context.muiTheme;
+    const { paper, palette } = this.context.muiTheme;
 
     this._widgets.clear();
-    for (const [line,
-      text]of cm.getValue('\n').split('\n').entries()) {
+    for (const [line, text] of cm.getValue('\n').split('\n').entries()) {
       this.updateWidget(cm, line, text);
     }
   };
@@ -228,15 +227,11 @@ export default class SourceEditor extends PureComponent {
     if (begin || end) {
       const element = document.createElement('span');
       element.textContent = text.replace(/\t/g, '    ');
-      element.classList.add(`Feeles-asset-opener-${begin
-        ? 'begin'
-        : 'end'}`);
+      element.classList.add(`Feeles-asset-opener-${begin ? 'begin' : 'end'}`);
       element.onclick = () => {
         this.setState({
           assetFileName: (begin || end)[1].trim(),
-          assetLineNumber: line + (begin
-            ? 1
-            : 0),
+          assetLineNumber: line + (begin ? 1 : 0),
           appendToHead: !!begin
         });
       };
@@ -244,43 +239,44 @@ export default class SourceEditor extends PureComponent {
     }
   };
 
-  handleRenderWidget = (cm) => {
+  handleRenderWidget = cm => {
     // remove old widgets
-    for (const widget of[...document.querySelectorAll('.Feeles-asset-opener-begin,.Feeles-asset-opener-end')]) {
+    for (const widget of [
+      ...document.querySelectorAll(
+        '.Feeles-asset-opener-begin,.Feeles-asset-opener-end'
+      )
+    ]) {
       if (widget.parentNode) {
         widget.parentNode.removeChild(widget);
       }
     }
     // render new widgets
-    for (const [i,
-      element]of this._widgets.entries()) {
+    for (const [i, element] of this._widgets.entries()) {
       cm.addWidget(new Pos(i, 0), element);
     }
   };
 
   handleIndexReplacement = (cm, change) => {
-    if (!['asset', 'paste'].includes(change.origin))
-      return;
+    if (!['asset', 'paste'].includes(change.origin)) return;
 
-    for (const keyword of['item',
-      'map']) {
+    for (const keyword of ['item', 'map']) {
       // item{N} のような変数を探す. e.g. From "const item1 = 'hello';", into [1]
       // 戻り値は Array<Number>
       const sourceIndexes = searchItemIndexes(change.text.join('\n'), keyword);
-      if (sourceIndexes.length < 1)
-        continue;
+      if (sourceIndexes.length < 1) continue;
 
       // すでに使われている変数と, 被っていないか調べる
       const usedIndexes = searchItemIndexes(cm.getValue('\n'), keyword);
-      const duplicatedIndexes = sourceIndexes.filter(i => usedIndexes.includes(i));
+      const duplicatedIndexes = sourceIndexes.filter(i =>
+        usedIndexes.includes(i)
+      );
 
       if (duplicatedIndexes.length > 0) {
         let _next = 0; // 使えるインデックスを探すカーソル. 効率化のために残す
         let _replaced = change.text.join('\n'); // ひとつずつ置換していくためのバッファ
         for (const i of duplicatedIndexes) {
           // update next
-          for (_next++; usedIndexes.includes(_next) && _next < 10000; _next++)
-          ;
+          for (_next++; usedIndexes.includes(_next) && _next < 10000; _next++);
           const from = new RegExp(`${keyword}${i}`, 'g');
           const to = `${keyword}${_next}`;
           _replaced = _replaced.replace(from, to);
@@ -291,28 +287,26 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleAssetClose = () => {
-    this.setState({assetFileName: null});
+    this.setState({ assetFileName: null });
   };
 
-  setLocation = async(href) => {
+  setLocation = async href => {
     await this.handleSave();
     return this.props.setLocation(href);
   };
 
-  handleCodemirror = (ref) => {
+  handleCodemirror = ref => {
     if (!ref) {
       return;
     }
     this.codemirror = ref;
   };
 
-  handleAssetInsert = ({code, description}) => {
-    const {assetLineNumber} = this.state;
+  handleAssetInsert = ({ code, description }) => {
+    const { assetLineNumber } = this.state;
     const pos = new Pos(assetLineNumber, 0);
     const end = new Pos(pos.line + code.split('\n').length, 0);
-    code = this.state.appendToHead
-      ? '\n' + code
-      : code + '\n';
+    code = this.state.appendToHead ? '\n' + code : code + '\n';
     this.codemirror.replaceRange(code, pos, pos, 'asset');
     // トランジション（フェードイン）
     const fadeInMarker = this.codemirror.markText(pos, end, {
@@ -321,10 +315,13 @@ export default class SourceEditor extends PureComponent {
     });
     this.emphasizeTextMarker(fadeInMarker);
     // スクロール
-    this.codemirror.scrollIntoView({
-      from: pos,
-      to: end
-    }, 10);
+    this.codemirror.scrollIntoView(
+      {
+        from: pos,
+        to: end
+      },
+      10
+    );
     // カーソル (挿入直後に undo したときスクロールが上に戻るのを防ぐ)
     this.codemirror.focus();
     this.codemirror.setCursor(end);
@@ -334,7 +331,7 @@ export default class SourceEditor extends PureComponent {
     setTimeout(this.setLocation, 1000);
   };
 
-  emphasizeTextMarker = async(textMarker) => {
+  emphasizeTextMarker = async textMarker => {
     const begin = {
       className: textMarker.className,
       style: `opacity: 0; background-color: rgba(0,0,0,1)`
@@ -345,23 +342,26 @@ export default class SourceEditor extends PureComponent {
     };
     textMarker.on('clear', () => {
       this.setState(prevState => ({
-        classNameStyles: prevState.classNameStyles.filter(item => begin !== item && end !== item)
+        classNameStyles: prevState.classNameStyles.filter(
+          item => begin !== item && end !== item
+        )
       }));
     });
 
-    this.setState(prevState => ({classNameStyles: prevState.classNameStyles.concat(begin)}));
+    this.setState(prevState => ({
+      classNameStyles: prevState.classNameStyles.concat(begin)
+    }));
     await wait(500);
     this.setState(prevState => ({
-      classNameStyles: prevState.classNameStyles.map(item => item === begin
-        ? end
-        : item)
+      classNameStyles: prevState.classNameStyles.map(
+        item => (item === begin ? end : item)
+      )
     }));
   };
 
   handleIndentLine = (cm, change) => {
-    if (!['asset', 'paste'].includes(change.origin))
-      return;
-    const {from} = change;
+    if (!['asset', 'paste'].includes(change.origin)) return;
+    const { from } = change;
     const to = new Pos(from.line + change.text.length, 0);
     // インデント
     for (let line = from.line; line < to.line; line++) {
@@ -385,7 +385,7 @@ export default class SourceEditor extends PureComponent {
 
       connectDropTarget
     } = this.props;
-    const {showHint} = this.state;
+    const { showHint } = this.state;
 
     const styles = getStyle(this.props, this.state, this.context);
 
@@ -411,28 +411,70 @@ export default class SourceEditor extends PureComponent {
           onRestore={this.handleRestore}
         />
         <div style={styles.menuBar}>
-          <FlatButton label={localization.editorCard.undo} disabled={!this.state.hasHistory} style={styles.barButton} labelStyle={styles.barButtonLabel} icon={< HardwareKeyboardBackspace />} onTouchTap={this.handleUndo}/>
-          <FlatButton label={localization.editorCard.save} disabled={!this.state.hasChanged} style={styles.barButton} labelStyle={styles.barButtonLabel} icon={< ContentSave />} onTouchTap={this.handleSave}/>
-          <div style={{
-            flex: '1 1 auto'
-          }}></div>
-          <PlayMenu getFiles={this.props.getFiles} setLocation={this.setLocation} href={this.props.href} localization={this.props.localization}/>
+          <FlatButton
+            label={localization.editorCard.undo}
+            disabled={!this.state.hasHistory}
+            style={styles.barButton}
+            labelStyle={styles.barButtonLabel}
+            icon={<HardwareKeyboardBackspace />}
+            onTouchTap={this.handleUndo}
+          />
+          <FlatButton
+            label={localization.editorCard.save}
+            disabled={!this.state.hasChanged}
+            style={styles.barButton}
+            labelStyle={styles.barButtonLabel}
+            icon={<ContentSave />}
+            onTouchTap={this.handleSave}
+          />
+          <div
+            style={{
+              flex: '1 1 auto'
+            }}
+          />
+          <PlayMenu
+            getFiles={this.props.getFiles}
+            setLocation={this.setLocation}
+            href={this.props.href}
+            localization={this.props.localization}
+          />
         </div>
         {this.state.loading
-          ? (<LinearProgress color={styles.progressColor} style={styles.progress}/>)
+          ? <LinearProgress
+              color={styles.progressColor}
+              style={styles.progress}
+            />
           : null}
         <div style={styles.editorContainer}>
           <div style={styles.assetContainer}>
             <div style={styles.scroller}>
-              {this.assets.map((item, i) => (<AssetButton {...item} key={i} onTouchTap={this.handleAssetInsert} findFile={this.props.findFile} localization={this.props.localization}/>))}
+              {this.assets.map((item, i) => (
+                <AssetButton
+                  {...item}
+                  key={i}
+                  onTouchTap={this.handleAssetInsert}
+                  findFile={this.props.findFile}
+                  localization={this.props.localization}
+                />
+              ))}
             </div>
-            <Paper zDepth={2} style={styles.closeAsset} onTouchTap={this.handleAssetClose}>
-              <NavigationExpandLess color="white"/>
+            <Paper
+              zDepth={2}
+              style={styles.closeAsset}
+              onTouchTap={this.handleAssetClose}
+            >
+              <NavigationExpandLess color="white" />
             </Paper>
           </div>
-          <Editor {...props} snippets={this.state.snippets}/>
+          <Editor {...props} snippets={this.state.snippets} />
         </div>
-        <CreditBar file={file} openFileDialog={this.props.openFileDialog} putFile={this.props.putFile} localization={localization} getFiles={this.props.getFiles}/>
+        <CreditBar
+          file={file}
+          openFileDialog={this.props.openFileDialog}
+          putFile={this.props.putFile}
+          localization={localization}
+          getFiles={this.props.getFiles}
+        />
       </div>
     );
   }
@@ -445,12 +487,16 @@ function wait(millisec) {
 }
 
 function searchItemIndexes(text, keyword, limit = 1000) {
-  const regExp = new RegExp(String.raw `(const|let)\s${keyword}(\d+)\s`, 'g');
+  const regExp = new RegExp(String.raw`(const|let)\s${keyword}(\d+)\s`, 'g');
   text = beautify(text);
 
   const indexes = [];
-  for (let i = 0, result = null; (result = regExp.exec(text)) && i < limit; i++) {
-    indexes.push(+ result[2]);
+  for (
+    let i = 0, result = null;
+    (result = regExp.exec(text)) && i < limit;
+    i++
+  ) {
+    indexes.push(+result[2]);
   }
   return indexes;
 }
