@@ -131,6 +131,7 @@ export default {
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
     insert: 'Insert',
+    error: 'Error',
     restore: 'Restore before error occurs'
   },
   envCard: {
