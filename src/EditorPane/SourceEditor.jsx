@@ -21,6 +21,7 @@ import Editor from './Editor';
 import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
 import AssetButton from './AssetButton';
+import ErrorPane from './ErrorPane';
 
 const getStyle = (props, state, context) => {
   const {palette} = context.muiTheme;
@@ -33,23 +34,6 @@ const getStyle = (props, state, context) => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch'
-    },
-    errorDiv: {
-      flex: '0 1 120px',
-      borderStyle: 'double',
-      borderColor: red500,
-      backgroundColor: red50,
-      overflow: 'scroll'
-    },
-    restore: {
-      color: red500
-    },
-    error: {
-      color: red500,
-      margin: 0,
-      padding: 8,
-      paddingTop: 0,
-      fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
     },
     editorContainer: {
       flex: '1 1 auto',
@@ -417,20 +401,15 @@ export default class SourceEditor extends PureComponent {
     return (
       <div style={styles.root}>
         <style>
-          {
-            this.state.classNameStyles.map(item => `.${item.className} { ${item.style} } `)
-          }
-</style>
-        {file.error
-          ? (
-            <div style={styles.errorDiv}>
-              <FlatButton label={localization.editorCard.restore} icon={< AlertError color = {
-                styles.error.color
-              } />} style={styles.restore} onTouchTap={this.handleRestore}/>
-              <pre style={styles.error}>{file.error.message}</pre>
-            </div>
-          )
-          : null}
+          {this.state.classNameStyles.map(
+            item => `.${item.className} { ${item.style} } `
+          )}
+        </style>
+        <ErrorPane
+          error={file.error}
+          localization={localization}
+          onRestore={this.handleRestore}
+        />
         <div style={styles.menuBar}>
           <FlatButton label={localization.editorCard.undo} disabled={!this.state.hasHistory} style={styles.barButton} labelStyle={styles.barButtonLabel} icon={< HardwareKeyboardBackspace />} onTouchTap={this.handleUndo}/>
           <FlatButton label={localization.editorCard.save} disabled={!this.state.hasChanged} style={styles.barButton} labelStyle={styles.barButtonLabel} icon={< ContentSave />} onTouchTap={this.handleSave}/>
