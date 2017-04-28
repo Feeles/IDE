@@ -1,5 +1,8 @@
 import Assets from 'hackforplay/Assets';
-import { gameclear, mergeBMap } from 'utils';
+import {
+	gameclear,
+	mergeBMap
+} from 'utils';
 import extra from '../extra';
 
 
