@@ -1,4 +1,3 @@
-
 /**
  * @param next String 次に読み込むHTMLのパス
  */
@@ -18,4 +17,3 @@ export function gameclear(next) {
 	game.rootScene.addChild(button);
 
 }
-

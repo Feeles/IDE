@@ -1,5 +1,7 @@
 import Assets from 'hackforplay/Assets';
-import { gameclear } from 'utils';
+import {
+	gameclear
+} from 'utils';
 import extra from '../extra';
 
 
@@ -32,7 +34,7 @@ function gameStartLazy() {
 		dark.tl.delay(30).then(function() {
 			Hack.menuGroup.parentNode.removeChild(Hack.menuGroup);
 		}).fadeIn(90, enchant.Easing.CUBIC_EASEOUT).then(function() {
-			
+
 			// ALL CLEAR と表示する
 			const label = new Label('ALL CLEAR');
 			label.width = 480;
@@ -58,7 +60,7 @@ function gameStartLazy() {
 		});
 
 	}
-	
+
 	// このステージを改造
 	extra(13, 7, 'map4', 'stages/6/map4.js');
 }

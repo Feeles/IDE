@@ -1,5 +1,7 @@
 import Assets from 'hackforplay/Assets';
-import { gameclear } from 'utils';
+import {
+	gameclear
+} from 'utils';
 import extra from '../extra';
 
 
@@ -34,7 +36,7 @@ function gameStartLazy() {
 
 	// 魔道書にクモを登録する
 	feeles.setAlias('diamond', item2);
-	
+
 	// かいだん
 	const item3 = new RPGObject();
 	item3.mod(Hack.assets.downStair);

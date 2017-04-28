@@ -1,5 +1,7 @@
 import Assets from 'hackforplay/Assets';
-import { gameclear } from 'utils';
+import {
+	gameclear
+} from 'utils';
 import extra from '../extra';
 
 
