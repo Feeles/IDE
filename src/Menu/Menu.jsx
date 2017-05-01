@@ -110,9 +110,7 @@ export default class Menu extends PureComponent {
     deployURL: PropTypes.string,
     setDeployURL: PropTypes.func.isRequired,
     oAuthId: PropTypes.string,
-    setOAuthId: PropTypes.func.isRequired,
-    getPassword: PropTypes.func.isRequired,
-    clearPassword: PropTypes.func.isRequired
+    setOAuthId: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -163,12 +161,6 @@ export default class Menu extends PureComponent {
     });
     if (!result) return;
 
-    // organization による投稿にはパスワードが必要
-    let password = null;
-    if (!withOAuth) {
-      password = this.props.getPassword();
-      if (!password) return;
-    }
     this.setState({ isDeploying: true });
 
     try {
@@ -185,9 +177,6 @@ export default class Menu extends PureComponent {
       body.append('script_src', CORE_CDN_URL);
       if (withOAuth) {
         body.append('oauth_id', this.props.oAuthId);
-      } else {
-        body.append('organization_id', organization.id);
-        body.append('organization_password', password);
       }
       if (isUpdate) {
         body.append('_method', 'PUT');
@@ -236,7 +225,6 @@ export default class Menu extends PureComponent {
           }
         }
       } else {
-        await this.props.clearPassword();
         alert(localization.menu.failedToDeploy);
         debugWindow(response);
       }
@@ -427,25 +415,6 @@ export default class Menu extends PureComponent {
                       />
                     ]}
                   />}
-              {organization.id
-                ? <MenuItem
-                    rightIcon={<ArrowDropRight />}
-                    primaryText={localization.menu.deployAs(organization.title)}
-                    menuItems={[
-                      <MenuItem
-                        primaryText={localization.menu.update}
-                        disabled={!this.props.deployURL}
-                        leftIcon={<ActionAutorenew />}
-                        onTouchTap={() => this.handleDeploy(false, true)}
-                      />,
-                      <MenuItem
-                        primaryText={localization.menu.create}
-                        leftIcon={<FileCloudUpload />}
-                        onTouchTap={() => this.handleDeploy(false, false)}
-                      />
-                    ]}
-                  />
-                : null}
               {isLoggedin
                 ? <MenuItem
                     primaryText={localization.menu.logout}
