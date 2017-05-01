@@ -3,6 +3,9 @@ import 'hackforplay/core';
 
 function maps() {
 	Hack.maps = {};
+
+	/* \____ assets/マップ.json ____/ */
+
 	// map1
 	const map1 = new RPGMap(32, 32, 15, 10);
 	map1.imagePath = 'enchantjs/x2/dotmat.gif';
@@ -31,9 +34,6 @@ function maps() {
 		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	];
 	Hack.maps['map1'] = map1;
-
-
-	/* \____ assets/マップ.json ____/ */
 
 };
 
