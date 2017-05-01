@@ -1,4 +1,4 @@
-const a_href = false;
+const a_href = true;
 const img_src = true;
 const audio_src = false;
 const script_src = false;
