@@ -1,11 +1,11 @@
-import React, {PureComponent, PropTypes} from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import Popout from '../jsx/ReactPopout';
 import IconButton from 'material-ui/IconButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import NavigationRefreh from 'material-ui/svg-icons/navigation/refresh';
 import transitions from 'material-ui/styles/transitions';
 
-import {BinaryFile, SourceFile, makeFromFile} from '../File/';
+import { BinaryFile, SourceFile, makeFromFile } from '../File/';
 import composeEnv from '../File/composeEnv';
 import popoutTemplate from '../html/popout';
 import Screen from './Screen';
@@ -13,15 +13,16 @@ import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
 
 const ConnectionTimeout = 1000;
-const popoutURL = URL.createObjectURL(new Blob([popoutTemplate()], {type: 'text/html'}));
+const popoutURL = URL.createObjectURL(
+  new Blob([popoutTemplate()], { type: 'text/html' })
+);
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const getStyle = (props, context, state) => {
-  const {palette, appBar} = context.muiTheme;
-  const fullScreen = (yes, no) => props.isFullScreen
-    ? yes
-    : no;
+  const { palette, appBar } = context.muiTheme;
+  const fullScreen = (yes, no) => (props.isFullScreen ? yes : no);
 
   return {
     root: {
@@ -45,16 +46,13 @@ const getStyle = (props, context, state) => {
       zIndex: 2
     },
     progress: {
-      opacity: state.error
-        ? 0
-        : 1
+      opacity: state.error ? 0 : 1
     },
     progressColor: palette.primary1Color
   };
 };
 
 export default class Monitor extends PureComponent {
-
   static propTypes = {
     isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
@@ -109,9 +107,9 @@ export default class Monitor extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.files !== nextProps.files && this.state.port) {
-      const files = this.props.files.map((item) => item.watchSerialize());
+      const files = this.props.files.map(item => item.watchSerialize());
 
-      this.state.port.postMessage({query: 'watch', value: files});
+      this.state.port.postMessage({ query: 'watch', value: files });
     }
   }
 
@@ -136,18 +134,16 @@ export default class Monitor extends PureComponent {
   }
 
   get iframe() {
-    return this.props.isPopout
-      ? this.popoutFrame
-      : this.inlineFrame;
+    return this.props.isPopout ? this.popoutFrame : this.inlineFrame;
   }
 
   prevent = Promise.resolve();
   async start() {
     const _prevent = this.prevent;
 
-    this.prevent = _prevent.then(() => this.startProcess()).catch((error) => {
+    this.prevent = _prevent.then(() => this.startProcess()).catch(error => {
       if (error) {
-        this.setState({error});
+        this.setState({ error });
       } else if (this.props.isPopout) {
         this.start();
       }
@@ -155,11 +151,11 @@ export default class Monitor extends PureComponent {
 
     await _prevent;
 
-    this.setState({error: null, port: null});
+    this.setState({ error: null, port: null });
   }
 
   async startProcess() {
-    const {portRef, getConfig} = this.props;
+    const { portRef, getConfig } = this.props;
 
     const babelrc = getConfig('babelrc');
     const env = composeEnv(getConfig('env'));
@@ -168,52 +164,57 @@ export default class Monitor extends PureComponent {
 
     const html = await registerHTML(htmlFile.text, this.props.findFile, env);
 
-    const tryLoading = () => new Promise((resolve, reject) => {
-      // iframe.srcdoc, onload => resolve
-      setSrcDoc(this.iframe, html, resolve);
-      // Connection timeouted, then retry
-      setTimeout(reject, ConnectionTimeout);
-    }).catch(() => tryLoading());
+    const tryLoading = () =>
+      new Promise((resolve, reject) => {
+        // iframe.srcdoc, onload => resolve
+        setSrcDoc(this.iframe, html, resolve);
+        // Connection timeouted, then retry
+        setTimeout(reject, ConnectionTimeout);
+      }).catch(() => tryLoading());
 
     await tryLoading();
 
     const channel = new MessageChannel();
-    channel.port1.addEventListener('message', (event) => {
-      const reply = (params) => {
-        params = Object.assign({
-          id: event.data.id
-        }, params);
+    channel.port1.addEventListener('message', event => {
+      const reply = params => {
+        params = Object.assign(
+          {
+            id: event.data.id
+          },
+          params
+        );
         channel.port1.postMessage(params);
       };
       this.handleMessage(event, reply);
     });
     this.handlePort(channel.port1);
 
-    const files = this.props.files.map((item) => item.watchSerialize());
+    const files = this.props.files.map(item => item.watchSerialize());
 
-    this.iframe.contentWindow.postMessage({
-      files,
-      env
-    }, '*', [channel.port2]);
-
+    this.iframe.contentWindow.postMessage(
+      {
+        files,
+        env
+      },
+      '*',
+      [channel.port2]
+    );
   }
 
   handlePort(port) {
     this.props.portRef(port);
     port.start();
-    this.setState({port});
+    this.setState({ port });
   }
 
-  handleMessage = async({
-    data
-  }, reply) => {
+  handleMessage = async ({ data }, reply) => {
     switch (data.query) {
       case 'fetch':
         const file = this.props.findFile(data.value);
         if (file) {
-          reply({value: file.blob});
+          reply({ value: file.blob });
         } else {
-          reply({error: true});
+          reply({ error: true });
         }
         break;
       case 'resolve':
@@ -221,22 +222,21 @@ export default class Monitor extends PureComponent {
         if (file2) {
           const babelrc = this.props.getConfig('babelrc');
           const result = await file2.babel(babelrc);
-          reply({value: result.text});
+          reply({ value: result.text });
         } else {
-          reply({error: true});
+          reply({ error: true });
         }
         break;
       case 'saveAs':
-        const [blob,
-          name] = data.value;
+        const [blob, name] = data.value;
 
-        makeFromFile(blob).then((add) => {
+        makeFromFile(blob).then(add => {
           const exist = this.props.findFile(name);
           if (exist) {
-            const {key} = exist;
-            this.props.putFile(exist, add.set({key, name}));
+            const { key } = exist;
+            this.props.putFile(exist, add.set({ key, name }));
           } else {
-            this.props.addFile(add.set({name}));
+            this.props.addFile(add.set({ name }));
           }
         });
         break;
@@ -255,38 +255,41 @@ export default class Monitor extends PureComponent {
         break;
       case 'api.SpeechRecognition':
         const recognition = new SpeechRecognition();
-        for (const prop of['lang',
+        for (const prop of [
+          'lang',
           'continuous',
           'interimResults',
           'maxAlternatives',
-          'serviceURI']) {
+          'serviceURI'
+        ]) {
           if (data.value[prop] !== undefined) {
             recognition[prop] = data.value[prop];
           }
         }
         if (Array.isArray(data.value.grammars)) {
           recognition.grammars = new webkitSpeechGrammarList();
-          for (const {src, weight}
-          of data.value.grammars) {
+          for (const { src, weight } of data.value.grammars) {
             recognition.grammars.addFromString(src, weight);
           }
         }
-        recognition.onresult = (event) => {
+        recognition.onresult = event => {
           const results = [];
           for (const items of event.results) {
             const result = [];
             result.isFinal = items.isFinal;
-            for (const {confidence, transcript}
-            of items) {
-              result.push({confidence, transcript});
+            for (const { confidence, transcript } of items) {
+              result.push({ confidence, transcript });
             }
             results.push(result);
           }
-          reply({type: 'result', event: {
+          reply({
+            type: 'result',
+            event: {
               results
-            }});
+            }
+          });
         };
-        recognition.onerror = (event) => {
+        recognition.onerror = event => {
           reply({
             type: 'error',
             event: {
@@ -305,8 +308,8 @@ export default class Monitor extends PureComponent {
           'speechstart',
           'start'
         ].forEach(type => {
-          recognition[`on${type}`] = (event) => {
-            reply({type});
+          recognition[`on${type}`] = event => {
+            reply({ type });
           };
         });
         recognition.start();
@@ -318,19 +321,19 @@ export default class Monitor extends PureComponent {
     this.parent = window.open.apply(window, args);
     if (this.parent) {
       this.parent.addEventListener('load', () => {
-
         const out = this.popoutOptions.height !== this.parent.innerHeight;
         this.parent.addEventListener('resize', () => {
           this.popoutOptions = Object.assign({}, this.popoutOptions, {
             width: this.parent.innerWidth,
-            height: out
-              ? this.parent.outerHeight
-              : this.parent.innerHeight
+            height: out ? this.parent.outerHeight : this.parent.innerHeight
           });
         });
 
         const popoutMove = setInterval(() => {
-          if (this.parent.screenX === this.popoutOptions.left && this.parent.screenY === this.popoutOptions.top) {
+          if (
+            this.parent.screenX === this.popoutOptions.left &&
+            this.parent.screenY === this.popoutOptions.top
+          ) {
             return;
           }
           this.popoutOptions = Object.assign({}, this.popoutOptions, {
@@ -353,7 +356,7 @@ export default class Monitor extends PureComponent {
     }
   };
 
-  handleFrame = (ref) => {
+  handleFrame = ref => {
     if (!this.props.isPopout) {
       this.inlineFrame = ref;
     } else {
@@ -381,19 +384,31 @@ export default class Monitor extends PureComponent {
   };
 
   render() {
-    const {error} = this.state;
-    const {isPopout, reboot} = this.props;
+    const { error } = this.state;
+    const { isPopout, reboot } = this.props;
 
     const popout = isPopout && !reboot
-      ? (
-        <Popout url={popoutURL} title='app' options={this.popoutOptions} window={{
-          open: this.handlePopoutOpen,
-          addEventListener: window.addEventListener.bind(window),
-          removeEventListener: window.removeEventListener.bind(window)
-        }} onClosing={this.handlePopoutClose}>
-          <Screen display frameRef={this.handleFrame} handleReload={() => this.props.setLocation()} reboot={reboot} error={error} width={this.props.frameWidth} height={this.props.frameHeight}/>
+      ? <Popout
+          url={popoutURL}
+          title="app"
+          options={this.popoutOptions}
+          window={{
+            open: this.handlePopoutOpen,
+            addEventListener: window.addEventListener.bind(window),
+            removeEventListener: window.removeEventListener.bind(window)
+          }}
+          onClosing={this.handlePopoutClose}
+        >
+          <Screen
+            display
+            frameRef={this.handleFrame}
+            handleReload={() => this.props.setLocation()}
+            reboot={reboot}
+            error={error}
+            width={this.props.frameWidth}
+            height={this.props.frameHeight}
+          />
         </Popout>
-      )
       : null;
 
     const styles = getStyle(this.props, this.context, this.state);
@@ -401,8 +416,21 @@ export default class Monitor extends PureComponent {
     return (
       <div style={styles.root} onTouchTap={this.handleTouch}>
         {popout}
-        <Screen animation display={!isPopout} frameRef={this.handleFrame} reboot={reboot} error={error} width={this.props.frameWidth} height={this.props.frameHeight}/>
-        <CircularProgress size={100} thickness={8} style={styles.progress} color={styles.progressColor}/>
+        <Screen
+          animation
+          display={!isPopout}
+          frameRef={this.handleFrame}
+          reboot={reboot}
+          error={error}
+          width={this.props.frameWidth}
+          height={this.props.frameHeight}
+        />
+        <CircularProgress
+          size={100}
+          thickness={8}
+          style={styles.progress}
+          color={styles.progressColor}
+        />
       </div>
     );
   }
