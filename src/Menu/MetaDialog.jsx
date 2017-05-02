@@ -298,22 +298,17 @@ class EditAuthor extends PureComponent {
   static propTypes = {
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired,
+    localization: PropTypes.object.isRequired
   };
 
-  handleChangeNickname = (event, text) => {
-    this.props.setConfig('ogp', {
-      ...this.props.getConfig('ogp'),
-      'og:author': text,
-    });
-  };
-
-  handleChangeTwitterId = (event, text) => {
-    this.props.setConfig('ogp', {
-      ...this.props.getConfig('ogp'),
-      'twitter:author': text,
-    });
-  };
+  changeAttribute(attribute) {
+    return (event, value) => {
+      this.props.setConfig('ogp', {
+        ...this.props.getConfig('ogp'),
+        [attribute]: value
+      });
+    };
+  }
 
   render() {
     const {localization} = this.props;
@@ -327,13 +322,13 @@ class EditAuthor extends PureComponent {
           floatingLabelText={localization.metaDialog.nickname}
           hintText={organization.placeholder['og:author']}
           defaultValue={ogp['og:author']}
-          onChange={this.handleChangeNickname}
+          onChange={this.changeAttribute('og:author')}
         />
         <TextField id="" fullWidth
           floatingLabelText={localization.metaDialog.twitterId}
           hintText={organization.placeholder['twitter:author']}
           defaultValue={ogp['twitter:author']}
-          onChange={this.handleChangeTwitterId}
+          onChange={this.changeAttribute('twitter:author')}
         />
       </div>
     );
