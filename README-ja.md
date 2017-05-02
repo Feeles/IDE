@@ -1,5 +1,6 @@
 # HackforPlay Open Source 🏫  
 
+![Build Status](https://travis-ci.org/Feeles/IDE.svg?branch=master)
 
 世の中には、様々な目的をもって教育を行う人々がいます。  
 しかし、自分たちで教材を作れる人はそう多くありません。  
