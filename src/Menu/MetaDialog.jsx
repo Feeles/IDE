@@ -3,10 +3,11 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import {Card, CardMedia, CardHeader, CardActions} from 'material-ui/Card';
+import { Card, CardMedia, CardHeader, CardActions } from 'material-ui/Card';
 import CircularProgress from 'material-ui/CircularProgress';
 import IconButton from 'material-ui/IconButton';
-import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forward';
+import NavigationArrowForward
+  from 'material-ui/svg-icons/navigation/arrow-forward';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import transitions from 'material-ui/styles/transitions';
 
@@ -18,21 +19,20 @@ import ScreenShotCard from '../Cards/ScreenShotCard';
  * 途中でキャンセルされた場合は false で resolve する
  */
 export default class MetaDialog extends PureComponent {
-
   static propTypes = {
     onRequestClose: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
-    setConfig: PropTypes.func.isRequired,
+    setConfig: PropTypes.func.isRequired
   };
 
   state = {
-    stepIndex: 0,
+    stepIndex: 0
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const {stepIndex, isDeploying} = this.state;
+    const { stepIndex, isDeploying } = this.state;
     if (prevState.stepIndex !== stepIndex && stepIndex === 2) {
       // Close this dialog and start uploading
       this.props.resolve(true);
@@ -42,7 +42,7 @@ export default class MetaDialog extends PureComponent {
 
   next = () => {
     this.setState(prevState => ({
-      stepIndex: prevState.stepIndex + 1,
+      stepIndex: prevState.stepIndex + 1
     }));
   };
 
@@ -53,7 +53,7 @@ export default class MetaDialog extends PureComponent {
       return;
     }
     this.setState(prevState => ({
-      stepIndex: prevState.stepIndex - 1,
+      stepIndex: prevState.stepIndex - 1
     }));
   };
 
@@ -62,33 +62,45 @@ export default class MetaDialog extends PureComponent {
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
       findFile: this.props.findFile,
-      localization: this.props.localization,
+      localization: this.props.localization
     };
     switch (this.state.stepIndex) {
-      case 0: return <EditOGP {...bag} />;
-      case 1: return <EditAuthor {...bag} />;
+      case 0:
+        return <EditOGP {...bag} />;
+      case 1:
+        return <EditAuthor {...bag} />;
     }
   }
 
   render() {
-    const {stepIndex} = this.state;
-    const {localization} = this.props;
+    const { stepIndex } = this.state;
+    const { localization } = this.props;
 
     const actions = [
-      <FlatButton key="1" label={localization.metaDialog.back} onTouchTap={this.back} />,
-      <RaisedButton key="2" primary label={localization.metaDialog.next} onTouchTap={this.next} />,
+      <FlatButton
+        key="1"
+        label={localization.metaDialog.back}
+        onTouchTap={this.back}
+      />,
+      <RaisedButton
+        key="2"
+        primary
+        label={localization.metaDialog.next}
+        onTouchTap={this.next}
+      />
     ];
 
     const styles = {
       dialog: {
         minHeight: 500,
         overflowX: 'auto',
-        overflowY: 'scroll',
-      },
+        overflowY: 'scroll'
+      }
     };
 
     return (
-      <Dialog open
+      <Dialog
+        open
         actions={actions}
         bodyStyle={styles.dialog}
         onRequestClose={this.props.onRequestClose}
@@ -100,20 +112,19 @@ export default class MetaDialog extends PureComponent {
 }
 
 class EditOGP extends PureComponent {
-
   static propTypes = {
     findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
-    setConfig: PropTypes.func.isRequired,
+    setConfig: PropTypes.func.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
     images: [],
-    isLoading: false,
+    isLoading: false
   };
 
   componentWillMount() {
@@ -129,7 +140,7 @@ class EditOGP extends PureComponent {
       .concat(organization.placeholder['og:image'])
       .concat(organization.images)
       .filter((item, i, array) => item && array.indexOf(item) === i); // unique
-    this.setState({images});
+    this.setState({ images });
     if (images[0]) {
       this.handleChangeImage(images[0]);
     }
@@ -139,7 +150,7 @@ class EditOGP extends PureComponent {
     await this.props.setConfig('ogp', {
       ...this.props.getConfig('ogp'),
       'og:title': text,
-      'twitter:title': text || '...',
+      'twitter:title': text || '...'
     });
     this.forceUpdate();
   };
@@ -148,13 +159,13 @@ class EditOGP extends PureComponent {
     await this.props.setConfig('ogp', {
       ...this.props.getConfig('ogp'),
       'og:description': text,
-      'twitter:description': text || '...',
+      'twitter:description': text || '...'
     });
     this.forceUpdate();
   };
 
-  handleChangeImage = async (src) => {
-    this.setState({isLoading: true});
+  handleChangeImage = async src => {
+    this.setState({ isLoading: true });
 
     const image = await new Promise((resolve, reject) => {
       const image = new Image();
@@ -172,12 +183,12 @@ class EditOGP extends PureComponent {
       'twitter:image': image.src
     });
 
-    this.setState({isLoading: false});
+    this.setState({ isLoading: false });
   };
 
   handleNext = () => {
     const ogp = this.props.getConfig('ogp');
-    const {images} = this.state;
+    const { images } = this.state;
     const cursor = images.indexOf(ogp['og:image']);
     const src = images[(cursor + 1) % images.length]; // next
     this.handleChangeImage(src);
@@ -185,7 +196,7 @@ class EditOGP extends PureComponent {
 
   handlePrevious = () => {
     const ogp = this.props.getConfig('ogp');
-    const {images} = this.state;
+    const { images } = this.state;
     const cursor = images.indexOf(ogp['og:image']);
     if (cursor > 0) {
       this.handleChangeImage(images[cursor - 1]); // previous
@@ -195,7 +206,7 @@ class EditOGP extends PureComponent {
   };
 
   render() {
-    const {localization} = this.props;
+    const { localization } = this.props;
     const ogp = this.props.getConfig('ogp');
 
     const styles = {
@@ -204,69 +215,74 @@ class EditOGP extends PureComponent {
         width: 460,
         marginLeft: 'auto',
         marginRight: 'auto',
-        overflow: 'hidden',
+        overflow: 'hidden'
       },
       media: {
         backgroundImage: `url(${ogp['og:image'] || ''})`,
         backgroundSize: 'cover',
         opacity: this.state.isLoading ? 0.5 : 1,
-        transition: transitions.easeOut(),
+        transition: transitions.easeOut()
       },
       image: {
-        opacity: 0,
+        opacity: 0
       },
       header: {
-        width: '100%',
+        width: '100%'
       },
       innerHeader: {
         paddingTop: 8,
-        paddingBottom: 0,
+        paddingBottom: 0
       },
       textField: {
-        marginTop: -16,
+        marginTop: -16
       },
       description: {
-        fontSize: 14,
+        fontSize: 14
       },
       loading: {
         width: '100%',
         paddingTop: '50%',
         textAlign: 'center',
-        height: 0,
+        height: 0
       },
       progress: {
-        top: -150,
+        top: -150
       },
       navigation: {
-        display: 'flex',
-      },
-    }
+        display: 'flex'
+      }
+    };
 
     return (
       <div>
         <Card style={styles.card}>
           <CardMedia
             style={styles.media}
-            overlay={this.state.images.length > 1 ? (
-              <CardActions style={styles.navigation}>
-                <IconButton onTouchTap={this.handlePrevious}>
-                  <NavigationArrowBack color="white" />
-                </IconButton>
-                <div style={{flexGrow: 1}}></div>
-                <IconButton onTouchTap={this.handleNext}>
-                  <NavigationArrowForward color="white" />
-                </IconButton>
-              </CardActions>
-            ) : null}
+            overlay={
+              this.state.images.length > 1
+                ? <CardActions style={styles.navigation}>
+                    <IconButton onTouchTap={this.handlePrevious}>
+                      <NavigationArrowBack color="white" />
+                    </IconButton>
+                    <div style={{ flexGrow: 1 }} />
+                    <IconButton onTouchTap={this.handleNext}>
+                      <NavigationArrowForward color="white" />
+                    </IconButton>
+                  </CardActions>
+                : null
+            }
           >
-          {ogp['og:image']
-            ? <img style={styles.image} src={ogp['og:image']} />
-            : <div style={styles.loading}><CircularProgress style={styles.progress} size={100} /></div>
-          }
+            {ogp['og:image']
+              ? <img style={styles.image} src={ogp['og:image']} />
+              : <div style={styles.loading}>
+                  <CircularProgress style={styles.progress} size={100} />
+                </div>}
           </CardMedia>
           <CardHeader
             title={
-              <TextField id="" fullWidth
+              <TextField
+                id=""
+                fullWidth
                 floatingLabelText={localization.metaDialog.title}
                 hintText={organization.placeholder['og:title']}
                 defaultValue={ogp['og:title']}
@@ -275,7 +291,11 @@ class EditOGP extends PureComponent {
               />
             }
             subtitle={
-              <TextField id="" fullWidth multiLine rows={2}
+              <TextField
+                id=""
+                fullWidth
+                multiLine
+                rows={2}
                 floatingLabelText={localization.metaDialog.description}
                 hintText={organization.placeholder['og:description']}
                 defaultValue={ogp['og:description']}
@@ -294,46 +314,52 @@ class EditOGP extends PureComponent {
 }
 
 class EditAuthor extends PureComponent {
-
   static propTypes = {
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired,
+    localization: PropTypes.object.isRequired
   };
 
-  handleChangeNickname = (event, text) => {
-    this.props.setConfig('ogp', {
-      ...this.props.getConfig('ogp'),
-      'og:author': text,
-    });
-  };
-
-  handleChangeTwitterId = (event, text) => {
-    this.props.setConfig('ogp', {
-      ...this.props.getConfig('ogp'),
-      'twitter:author': text,
-    });
-  };
+  changeAttribute(attribute) {
+    return (event, value) => {
+      this.props.setConfig('ogp', {
+        ...this.props.getConfig('ogp'),
+        [attribute]: value
+      });
+    };
+  }
 
   render() {
-    const {localization} = this.props;
+    const { localization } = this.props;
     const ogp = this.props.getConfig('ogp');
 
     return (
       <div>
         <h1>{localization.metaDialog.creator}</h1>
         <h4>{localization.metaDialog.creatorConfirm}</h4>
-        <TextField id="" fullWidth
+        <TextField
+          id=""
+          fullWidth
           floatingLabelText={localization.metaDialog.nickname}
           hintText={organization.placeholder['og:author']}
           defaultValue={ogp['og:author']}
-          onChange={this.handleChangeNickname}
+          onChange={this.changeAttribute('og:author')}
         />
-        <TextField id="" fullWidth
+        <TextField
+          id=""
+          fullWidth
+          floatingLabelText={localization.metaDialog.homepage}
+          hintText={organization.placeholder['og:homepage']}
+          defaultValue={ogp['og:homepage']}
+          onChange={this.changeAttribute('og:homepage')}
+        />
+        <TextField
+          id=""
+          fullWidth
           floatingLabelText={localization.metaDialog.twitterId}
           hintText={organization.placeholder['twitter:author']}
           defaultValue={ogp['twitter:author']}
-          onChange={this.handleChangeTwitterId}
+          onChange={this.changeAttribute('twitter:author')}
         />
       </div>
     );

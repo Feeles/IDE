@@ -9,6 +9,7 @@ export default {
     aboutFeeles: 'About Feeles',
     upload: 'Upload',
     deploySelf: 'Publish with your account',
+    deployAnonymous: 'Publish with anonymous',
     share: 'Share this app',
     you: 'You',
     login: 'Login',
@@ -92,7 +93,8 @@ export default {
     description: 'description',
     creatorConfirm: 'Filling is optional. Do not write personal information!',
     nickname: 'Nickname',
-    twitterId: 'Twitter ID'
+    homepage: 'Homepage (If any)',
+    twitterId: 'Twitter ID (If any)'
   },
   readmeCard: {
     title: 'Getting Started',

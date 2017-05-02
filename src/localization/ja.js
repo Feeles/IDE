@@ -9,6 +9,7 @@ export default {
     aboutFeeles: 'この Feeles について',
     upload: '作品を公開',
     deploySelf: 'このアカウントで作品を公開',
+    deployAnonymous: 'とりあえず公開',
     share: 'この作品をシェア',
     you: 'あなた',
     login: 'ログイン',
@@ -86,7 +87,8 @@ export default {
     description: '説明文',
     creatorConfirm: 'ここは書かなくてもOK! 本名はぜったいに書かないで下さい',
     nickname: 'ニックネーム',
-    twitterId: 'ツイッター ID'
+    homepage: 'ホームページ (もしあれば)',
+    twitterId: 'ツイッター ID (もしあれば)'
   },
   addDialog: {
     title: 'ファイルを追加する',

@@ -362,6 +362,13 @@ export default class Menu extends PureComponent {
               style={styles.button}
             >
               {isLoggedin
+                ? null
+                : <MenuItem
+                    primaryText={localization.menu.deployAnonymous}
+                    leftIcon={<FileCloudUpload />}
+                    onTouchTap={() => this.handleDeploy(false, false)}
+                  />}
+              {isLoggedin
                 ? <MenuItem
                     primaryText={localization.menu.deploySelf}
                     rightIcon={<ArrowDropRight />}

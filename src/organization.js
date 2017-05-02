@@ -10,10 +10,11 @@ export default {
     'og:title': '',
     'og:url': '',
     'og:description': '',
-    'og:author': '',
     'og:image': 'https://embed.hackforplay.xyz/open-source/ogp/WQs5wGAvvnO8NJdlFHtd1zLimS0ollWf.png',
     'og:image:width': 480,
     'og:image:height': 320,
+    'og:author': '', // additional
+    'og:homepage': '', // additional
     'twitter:card': 'summary_large_image',
     'twitter:site': '',
     'twitter:title': '...',
