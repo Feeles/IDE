@@ -15,19 +15,19 @@
     "label": "あいづち",
     "description": "相手のことばを聞きとって、それを「いいね」と言う"
 }, {
-    "code": "internet(`キーワード`).youtube.card(); // YouTube\n\n",
+    "code": "internet(`キーワード`).youtube(); // YouTube\n\n",
     "label": "YouTube",
     "description": "キーワードをYouTubeで調べる"
 }, {
-    "code": "const item1 = await ask(); // 聞く\ninternet(item1).youtube.card(); // YouTube\n\n",
+    "code": "const item1 = await ask(); // 聞く\ninternet(item1).youtube(); // YouTube\n\n",
     "label": "YouTubeでしらべる",
     "description": "相手のことばを聞きとったあと、それをYouTubeで調べる"
 }, {
-    "code": "internet(`キーワード`).flickr.face(); // 画像\n\n",
+    "code": "internet(`キーワード`).flickr(); // 画像\n\n",
     "label": "flickr",
     "description": "キーワードにヒットする画像を顔に出す"
 }, {
-    "code": "const item1 = await ask(); // 聞く\ninternet(item1).flickr.face(); // 画像\n\n",
+    "code": "const item1 = await ask(); // 聞く\ninternet(item1).flickr(); // 画像\n\n",
     "label": "flickrでしらべる",
     "description": "相手のことばを聞きとったあと、それにヒットする画像を顔に出す"
 }]
