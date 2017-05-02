@@ -93,7 +93,7 @@ export default {
     description: 'description',
     creatorConfirm: 'Filling is optional. Do not write personal information!',
     nickname: 'Nickname',
-    twitterId: 'Twitter ID'
+    twitterId: 'Twitter ID (If any)'
   },
   readmeCard: {
     title: 'Getting Started',
