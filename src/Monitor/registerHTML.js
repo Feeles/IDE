@@ -1,7 +1,6 @@
 import screenJs from '../../lib/screen';
 import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
 
-
 /**
  * @param html:String
  * @param findFile:Function
@@ -18,19 +17,16 @@ import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
  * 6. regeneratorRuntime
  */
 export default async (html, findFile, env) => {
-
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
 
-  const appendScript = ((lastNode) => (text) => {
-
+  const appendScript = (lastNode => text => {
     const script = doc.createElement('script');
     script.type = 'text/javascript';
     script.text = text;
     doc.head.insertBefore(script, lastNode && lastNode.nextSibling);
 
     lastNode = script;
-
   })(doc.head.firstChild);
 
   // 0. window.feeles と 環境変数 env のエクスポート
@@ -56,7 +52,7 @@ export default async (html, findFile, env) => {
 
     if (file.is('css') && file.text.indexOf('url') >= 0) {
       const replaced = file.set({
-        text: await replaceUrls(file.text, findFile),
+        text: await replaceUrls(file.text, findFile)
       });
       node.setAttribute('href', await replaced.toDataURL());
     } else {
@@ -79,7 +75,6 @@ export default async (html, findFile, env) => {
       node.text = file.text;
       node.removeAttribute('src');
     }
-
   }
 
   // 5. a 要素の href 属性を feeles.replace に差し替える
@@ -97,10 +92,9 @@ export default async (html, findFile, env) => {
   appendScript(regeneratorRuntimePolyfill);
 
   return doc.documentElement.outerHTML;
+};
 
-}
-
-const requireTemplate = (src) => `requirejs(['${src}'])`;
+const requireTemplate = src => `requirejs(['${src}'])`;
 
 const replaceUrls = async (text, findFile) => {
   const regExp = /url\(([\w\/\.]*)\)/g;
@@ -117,4 +111,4 @@ const replaceUrls = async (text, findFile) => {
   }
 
   return text;
-}
+};

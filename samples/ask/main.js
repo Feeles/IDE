@@ -1,6 +1,3 @@
-import ask from 'ask';
-import internet from 'internet';
-
 async function start() {
 
 	// 日本語にする
@@ -12,7 +9,7 @@ async function start() {
 
 }
 
-start();
+export default start;
 
 
 

@@ -18,42 +18,7 @@ export default function internet(query) {
 }
 
 export class Internet {
-
-	get youtube() {
-		return new YouTubeResource(this);
-	}
-
-	get flickr() {
-		return new FlickrResource(this);
-	}
-
-}
-
-
-// インターネット上からリソースを取得、表示するクラスの基底クラス
-class Resource {
-
 	static face = addLayer(0).canvas.getContext('2d');
-
-	constructor(internet) {
-		// Internet インスタンスへの参照
-		this.internet = internet;
-	}
-
-	// レスポンスを JSON で取得
-	async get() {
-		throw new ReferenceError();
-	}
-
-	// MediaCard などのカードにリソースを表示
-	async card() {
-		throw new ReferenceError();
-	}
-
-	// DOM や Canvas などにリソースを表示
-	async face() {
-		throw new ReferenceError();
-	}
 
 	// fetch のラッパー
 	async request(api, params = {}) {
@@ -84,97 +49,64 @@ class Resource {
 	}
 }
 
-
-class YouTubeResource extends Resource {
-	async get() {
-		const response = await this.request(
-			API.YouTube,
-			{
-				part: 'id',
-				type: 'video',
-				q: this.internet.query,
-				key: API_KEY.YouTube,
-				maxResults: 1,
-				videoEmbeddable: true,
-			}
-		);
-		const result = await response.text();
-		return JSON.parse(result);
+Internet.prototype.youtube = async function() {
+	const response = await this.request(
+		API.YouTube, {
+			part: 'id',
+			type: 'video',
+			q: this.query,
+			key: API_KEY.YouTube,
+			maxResults: 1,
+			videoEmbeddable: true,
+		}
+	);
+	const json = await response.text();
+	const result = JSON.parse(json);
+	const [item] = result.items;
+	if (item) {
+		await feeles.openMedia({
+			url: `${API.YouTubeEmbed}/${item.id.videoId}`,
+			playing: true,
+			controls: true
+		});
 	}
+};
 
-	async card() {
+Internet.prototype.flickr = async function() {
+	// search
+	const searchResponse = await this.request(
+		API.Flickr, {
+			method: 'flickr.photos.search',
+			api_key: API_KEY.Flickr,
+			format: 'json',
+			text: this.query,
+			nojsoncallback: 1,
+			per_page: 1,
+		}
+	);
+	const searchResult = JSON.parse(await searchResponse.clone().text());
+	if (!searchResult.stat || !searchResult.photos.photo.length) {
+		await this.debugWindow(searchResponse);
+	}
+	// static image
+	const [item] = searchResult.photos.photo;
+	const staticResponse = await this.request(
+		`https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}_z.jpg`
+	);
+	const blob = await staticResponse.blob();
+	const image = new Image();
+	image.addEventListener('load', () => {
+		URL.revokeObjectURL(image.src);
 		const {
-			items
-		} = await this.get();
-
-		if (items[0]) {
-			await feeles.openMedia({
-				url: `${API.YouTubeEmbed}/${items[0].id.videoId}`,
-				playing: true,
-			});
-		}
-	}
-}
-
-class FlickrResource extends Resource {
-	async get() {
-		const response = await this.request(
-			API.Flickr,
-			{
-				method: 'flickr.photos.search',
-				api_key: API_KEY.Flickr,
-				format: 'json',
-				text: this.internet.query,
-				nojsoncallback: 1,
-				per_page: 1,
-			}
-		);
-		const result = JSON.parse(await response.clone().text());
-		if (!result.stat) {
-			await this.debugWindow(response);
-		}
-		return result;
-	}
-
-	async getImage() {
-		const {
-			stat,
-			photos
-		} = await this.get();
-		const [item] = photos.photo;
-		if (item) {
-			const response = await this.request(
-				`https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}_z.jpg`
-			);
-			const blob = await response.blob();
-			const image = new Image();
-			return new Promise((resolve, reject) => {
-				image.addEventListener('load', () => {
-					URL.revokeObjectURL(image.src);
-					resolve(image);
-				});
-				image.addEventListener('error', reject);
-				image.src = URL.createObjectURL(blob);
-			});
-		}
-		return null;
-	}
-
-	async face() {
-		if (Resource.face) {
-			const image = await this.getImage();
-			if (image) {
-				const {
-					width,
-					height
-				} = Resource.face.canvas;
-				// 引き伸ばして描画
-				Resource.face.drawImage(image, 0, 0, width, height);
-				clearTimeout(this.refreshTimer);
-				this.refreshTimer = setTimeout(() => {
-					Resource.face.clearRect(0, 0, width, height);
-				}, 4000);
-			}
-		}
-	}
-}
+			width,
+			height
+		} = Internet.face.canvas;
+		// 引き伸ばして描画
+		Internet.face.drawImage(image, 0, 0, width, height);
+		clearTimeout(this.refreshTimer);
+		this.refreshTimer = setTimeout(() => {
+			Internet.face.clearRect(0, 0, width, height);
+		}, 4000);
+	});
+	image.src = URL.createObjectURL(blob);
+};
