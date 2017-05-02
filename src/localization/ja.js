@@ -87,6 +87,7 @@ export default {
     description: '説明文',
     creatorConfirm: 'ここは書かなくてもOK! 本名はぜったいに書かないで下さい',
     nickname: 'ニックネーム',
+    homepage: 'ホームページ (もしあれば)',
     twitterId: 'ツイッター ID (もしあれば)'
   },
   addDialog: {

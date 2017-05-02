@@ -348,6 +348,14 @@ class EditAuthor extends PureComponent {
         <TextField
           id=""
           fullWidth
+          floatingLabelText={localization.metaDialog.homepage}
+          hintText={organization.placeholder['og:homepage']}
+          defaultValue={ogp['og:homepage']}
+          onChange={this.changeAttribute('og:homepage')}
+        />
+        <TextField
+          id=""
+          fullWidth
           floatingLabelText={localization.metaDialog.twitterId}
           hintText={organization.placeholder['twitter:author']}
           defaultValue={ogp['twitter:author']}
