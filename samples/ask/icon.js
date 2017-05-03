@@ -1,50 +1,31 @@
-icon.id = 'icon';
+icon.querySelector = '.icon img';
 async function icon(fileName) {
 	const result = await feeles.fetch(fileName);
 	const blob = await result.blob();
-	const img = document.getElementById(icon.id) || new Image();
-	img.id = icon.id;
-	img.style.maxWidth = '100%';
-	img.onload = e => {
-		URL.revokeObjectURL(e.target.src);
+	const fileReader = new FileReader();
+	fileReader.onload = e => {
+		const img = document.querySelector(icon.querySelector);
+		img.onload = () => {
+			document.querySelector('.root').classList.add('show-icon');
+		};
+		img.onclick = () => {
+			// img をクリックするとアイコン選択ダイアログが出る
+			document.querySelector('input.file').click();
+		};
+		img.src = e.target.result;
 	};
-	img.onclick = e => {
-		// img をクリックするとアイコン選択ダイアログが出る
-		input.click();
-	};
-	img.src = URL.createObjectURL(blob);
-	div.appendChild(img);
+	fileReader.readAsDataURL(blob);
 }
 export default icon;
 
-// 暫定コンテナエレメント
-const div = document.createElement('div');
-div.style.position = 'absolute';
-div.style.left = 0;
-div.style.top = 0;
-div.style.width = '100%';
-div.style.height = '100%';
-div.style.display = 'flex';
-div.style.flexDirection = 'column';
-div.style.justifyContent = 'space-around';
-div.style.alignItems = 'center';
-div.style.zIndex = 2;
-document.body.appendChild(div);
-
 // 暫定ファイルインプット
-const input = document.createElement('input');
-input.style.display = 'none';
-input.type = 'file';
-input.accept = 'image/*';
-input.onchange = async e => {
+document.querySelector('input.file').onchange = async e => {
 	const [file] = e.target.files;
 	const [ext] = file.name.split('.').slice(-1);
 	const fileName = `icons/default.${ext}`;
-	await feeles.saveAs(e.target.files[0], fileName);
+	await feeles.saveAs(file, fileName);
 	await icon(fileName);
-	input.style.display = 'none';
 };
-div.appendChild(input);
 
 (async() => {
 	// もし icons/default.png があればアイコンにする
@@ -55,5 +36,5 @@ div.appendChild(input);
 		} catch (e) {}
 	}
 	// もしアイコン画像がなければ、アイコン選択 GUI を表示
-	input.style.display = 'block';
+	document.querySelector('.root').classList.remove('show-icon');
 })();
