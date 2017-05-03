@@ -1,5 +1,3 @@
-import addLayer from 'addLayer';
-
 const API = {
 	YouTube: 'https://www.googleapis.com/youtube/v3/search',
 	YouTubeEmbed: 'http://www.youtube.com/embed',
@@ -18,8 +16,6 @@ export default function internet(query) {
 }
 
 export class Internet {
-	static face = addLayer(0).canvas.getContext('2d');
-
 	// fetch のラッパー
 	async request(api, params = {}) {
 		const url = new URL(api);
@@ -94,19 +90,18 @@ Internet.prototype.flickr = async function() {
 		`https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}_z.jpg`
 	);
 	const blob = await staticResponse.blob();
-	const image = new Image();
-	image.addEventListener('load', () => {
-		URL.revokeObjectURL(image.src);
-		const {
-			width,
-			height
-		} = Internet.face.canvas;
-		// 引き伸ばして描画
-		Internet.face.drawImage(image, 0, 0, width, height);
-		clearTimeout(this.refreshTimer);
-		this.refreshTimer = setTimeout(() => {
-			Internet.face.clearRect(0, 0, width, height);
-		}, 4000);
-	});
-	image.src = URL.createObjectURL(blob);
+	const fileReader = new FileReader();
+	fileReader.onload = e => {
+		const image = document.querySelector('.image img');
+		const state = document.querySelector('.root').classList;
+		image.onload = () => {
+			clearTimeout(this.refreshTimer);
+			state.add('show-image');
+			this.refreshTimer = setTimeout(() => {
+				state.remove('show-image');
+			}, 4000);
+		};
+		image.src = e.target.result;
+	};
+	fileReader.readAsDataURL(blob);
 };

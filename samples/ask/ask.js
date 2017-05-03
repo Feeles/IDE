@@ -1,5 +1,3 @@
-import addLayer from 'addLayer';
-
 const {
 	SpeechRecognition
 } = feeles;
@@ -7,7 +5,7 @@ const {
 function textToSpeech(message) {
 	const utter = new SpeechSynthesisUtterance(message);
 	utter.lang = ask.lang;
-	writeText(message, 'bottom');
+	writeText(message, '.speak');
 	return new Promise((resolve, reject) => {
 		utter.onend = (event) => {
 			resolve();
@@ -27,9 +25,8 @@ function speechRecognition() {
 	recognition.lang = ask.lang;
 	recognition.continuous = true;
 	recognition.interimResults = true;
-	createRecIcon(recognition);
-	// 暫定テキスト
-	let text = writeText('', 'top');
+	setRecIcon(recognition);
+	writeText('', '.listen'); // リセット
 	// 認識タイムアウト
 	let stopTimer;
 	const reset = (value) => {
@@ -47,8 +44,7 @@ function speechRecognition() {
 				resolve(message);
 			} else {
 				// テキストを更新
-				text.destroy();
-				text = writeText(message, 'top');
+				writeText(message, '.listen');
 				// ここから2秒喋らなかったら終了
 				clearTimeout(stopTimer);
 				stopTimer = setTimeout(() => resolve(message), ask.timeout);
@@ -127,78 +123,37 @@ export default function ask(message) {
 }
 
 // Text
-function writeText(text, baseline) {
-	return addLayer(2, (layer, t) => {
-		const canvas = layer.canvas;
-		const context = canvas.getContext('2d');
+function writeText(text, querySelector) {
+	const element = document.querySelector(querySelector);
+	element.textContent = text;
 
-		if (t === 0) {
-			const margin = 32;
-			const fontSize = 32;
-			context.font = `${fontSize}px sans-serif`;
-			context.textAlign = 'center';
-			context.textBaseline = baseline;
-			const metrix = context.measureText(text);
-			const baselineHeight = baseline === 'top' ?
-				margin - 6 :
-				canvas.height - margin;
-			const bgTop = baseline === 'top' ?
-				margin :
-				canvas.height - margin - 32;
-
-			context.fillStyle = 'black';
-			context.fillRect((canvas.width - metrix.width) / 2, bgTop, metrix.width, 32);
-
-			context.fillStyle = 'white';
-			context.fillText(text, canvas.width / 2, baselineHeight, canvas.width);
-
-			context.resetTransform();
+	setTimeout(() => {
+		if (element.textContent === text) {
+			element.textContent = '';
 		}
-
-		if (t > text.length * 0.4 + 0.1) {
-			context.clearRect(0, 0, canvas.width, canvas.height);
-			layer.destroy();
-		}
-	});
+	}, text.length * 300 + 500);
 }
 
 // REC icon
-function createRecIcon(recognition) {
-	let showRecIcon = false;
-	let sounded = false;
+function setRecIcon(recognition) {
+	const state = document.querySelector('.root').classList;
 
-	const layer = addLayer(3, (layer, t) => {
-		const canvas = layer.canvas;
-		const context = canvas.getContext('2d');
-		const radius = 18;
-
-		context.clearRect(0, 0, canvas.width, canvas.height);
-		if (showRecIcon) {
-			const alpha = sounded ? 1 : Math.sin(t * 2) / 2 + 0.5;
-			context.fillStyle = `rgba(255, 0, 0, ${alpha})`;
-			context.strokeStyle = `rgba(255, 0, 0, ${alpha})`;
-			context.lineWidth = 2;
-			context.beginPath();
-			context.arc(canvas.width - radius - 10, radius + 10, radius - 6, 0, 2 * Math.PI);
-			context.fill();
-			context.beginPath();
-			context.arc(canvas.width - radius - 10, radius + 10, radius, 0, 2 * Math.PI);
-			context.stroke();
-		}
+	recognition.addEventListener('audiostart', e => {
+		state.add('recording');
 	});
-	recognition.addEventListener('audiostart', () => {
-		showRecIcon = true; // audio の準備ができた
+	recognition.addEventListener('speechstart', e => {
+		state.add('speeching');
 	});
-	recognition.addEventListener('speechstart', () => {
-		sounded = true; // スピーチを認識し始めた
+	recognition.addEventListener('speechend', e => {
+		state.remove('speeching');
 	});
-	recognition.addEventListener('result', (event) => {
-		if (event.results[0].isFinal) {
+	recognition.addEventListener('result', e => {
+		if (e.results[0].isFinal) {
 			// 確定した
-			layer.destroy();
+			state.remove('recording');
 		}
 	});
-	recognition.addEventListener('end', (event) => {
-		layer.destroy(); // 終了した
+	recognition.addEventListener('end', e => {
+		state.remove('recording');
 	});
 }

@@ -229,16 +229,15 @@ export default class Monitor extends PureComponent {
         break;
       case 'saveAs':
         const [blob, name] = data.value;
-
-        makeFromFile(blob).then(add => {
-          const exist = this.props.findFile(name);
-          if (exist) {
-            const { key } = exist;
-            this.props.putFile(exist, add.set({ key, name }));
-          } else {
-            this.props.addFile(add.set({ name }));
-          }
-        });
+        const file3 = await makeFromFile(blob);
+        const exist = this.props.findFile(name);
+        if (exist) {
+          const { key } = exist;
+          await this.props.putFile(exist, file3.set({ key, name }));
+        } else {
+          await this.props.addFile(file3.set({ name }));
+        }
+        reply();
         break;
       case 'reload':
         this.props.setLocation();

@@ -1,9 +1,87 @@
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
-canvas {
-  position: fixed;
-  top: 0px;
+.root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  background-color: grey;
+  overflow: hidden;
+  transition: all 1s linear;
+}
+
+.root.loading {
+  opacity: 0.1;
+}
+
+.rec {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 2rem;
+}
+
+.root.speeching .rec {
+  animation: speeching 0.6s ease 0s infinite alternate;
+}
+@keyframes speeching {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.2);
+  }
+}
+
+.root:not(.recording) .rec {
+  display: none;
+}
+
+.listen,
+.speak {
+  color: white;
+  text-shadow: 1px 1px 3px black;
+  font-size: 2rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.icon,
+.image {
+  height: 0;
+  text-align: center;
+  align-self: stretch;
+  transition: all 0.25s ease;
+  visibility: hidden;
+}
+
+.icon img,
+.image img {
+  height: 100%;
+}
+
+.root.show-icon .icon,
+.root.show-image .image {
+  flex: 1;
+  max-height: 100%;
+  visibility: visible;
+}
+
+.root.show-icon .file {
+  display: none;
+}
+
+.blank {
+  flex: 1;
+}
+
+.root.show-icon .blank,
+.root.show-image .blank {
+  flex: 0;
 }
