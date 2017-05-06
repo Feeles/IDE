@@ -15,7 +15,12 @@ const CORE_CDN_PREFIX =
 
 const config = {
   entry: {
-    main: ['whatwg-fetch', './lib/url-search-params', './src/main'],
+    main: [
+      'normalize.css',
+      'whatwg-fetch',
+      './lib/url-search-params',
+      './src/main'
+    ],
     h4p: ['whatwg-fetch', 'entry-point-dev']
   },
   output: {
