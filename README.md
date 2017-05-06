@@ -15,6 +15,9 @@ By helping all educators make their own teaching materials (education)
 We promote better educational quest.  
 
 
+// IDEA:
+- <https://trello.com/b/DAR76ZPP>
+
 ## Feeles
 
 An open source IDE for giving code to people.  
