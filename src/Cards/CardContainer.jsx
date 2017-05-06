@@ -1,10 +1,10 @@
-import React, {PureComponent, PropTypes} from 'react';
-import {Events, scroller} from 'react-scroll';
-import {DropTarget} from 'react-dnd';
+import React, { PureComponent, PropTypes } from 'react';
+import { Events, scroller } from 'react-scroll';
+import { DropTarget } from 'react-dnd';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import transitions from 'material-ui/styles/transitions';
 
-import Sizer, {SizerWidth} from './Sizer';
+import Sizer, { SizerWidth } from './Sizer';
 import DragTypes from '../utils/dragTypes';
 import * as Cards from './';
 
@@ -12,7 +12,6 @@ const LeftContainerId = 'CardContainerLeft';
 const RightContainerId = 'CardContainerRight';
 
 class CardContainer extends PureComponent {
-
   static propTypes = {
     cards: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
@@ -30,7 +29,7 @@ class CardContainer extends PureComponent {
     isResizing: false,
     rightSideWidth: this.props.rootWidth / 2,
     scrolledLeft: null,
-    scrolledRight: null,
+    scrolledRight: null
   };
 
   componentDidUpdate(prevProps) {
@@ -49,13 +48,14 @@ class CardContainer extends PureComponent {
   // もう一度スクロールさせるためにスタック(FILO)をのこす
   _eventStack = [];
   componentDidMount() {
-    Events.scrollEvent.register('begin', (to) => {
+    Events.scrollEvent.register('begin', to => {
       if (!this._eventStack.includes(to)) {
         this._eventStack.push(to);
       }
     });
-    const lastOf = (array) => array.length ? array[array.length - 1] : undefined;
-    Events.scrollEvent.register('end', (to) => {
+    const lastOf = array =>
+      (array.length ? array[array.length - 1] : undefined);
+    Events.scrollEvent.register('end', to => {
       if (lastOf(this._eventStack) === to) {
         this._eventStack.pop();
         if (lastOf(this._eventStack)) {
@@ -70,7 +70,7 @@ class CardContainer extends PureComponent {
     Events.scrollEvent.remove('end');
   }
 
-  scrollToCard = (name) => {
+  scrollToCard = name => {
     const card = this.props.cards[name];
     if (card) {
       const isLeft = card.order % this.column === 1;
@@ -78,12 +78,12 @@ class CardContainer extends PureComponent {
       scroller.scrollTo(name, {
         containerId,
         smooth: true,
-        duration: 250,
+        duration: 250
       });
       if (isLeft) {
-        this.setState({scrolledLeft: name});
+        this.setState({ scrolledLeft: name });
       } else {
-        this.setState({scrolledRight: name});
+        this.setState({ scrolledRight: name });
       }
     }
   };
@@ -96,7 +96,7 @@ class CardContainer extends PureComponent {
     const cards = [];
     for (const [name, item] of Object.entries(this.props.cards)) {
       if (item.order % this.column === 1) {
-        cards.push({...item, name});
+        cards.push({ ...item, name });
       }
     }
     return cards.sort((a, b) => a.order - b.order);
@@ -106,7 +106,7 @@ class CardContainer extends PureComponent {
     const cards = [];
     for (const [name, item] of Object.entries(this.props.cards)) {
       if (item.order % this.column === 0) {
-        cards.push({...item, name});
+        cards.push({ ...item, name });
       }
     }
     return cards.sort((a, b) => a.order - b.order);
@@ -114,14 +114,17 @@ class CardContainer extends PureComponent {
 
   resize = ((waitFlag = false) => (width, _, forceFlag = false) => {
     width = Math.max(0, Math.min(this.props.rootWidth, width));
-    if (waitFlag && !forceFlag || width === this.state.rightSideWidth) {
+    if ((waitFlag && !forceFlag) || width === this.state.rightSideWidth) {
       return;
     }
-    this.setState({
-      rightSideWidth: width
-    }, () => {
-      setTimeout(() => (waitFlag = false), 400);
-    });
+    this.setState(
+      {
+        rightSideWidth: width
+      },
+      () => {
+        setTimeout(() => (waitFlag = false), 400);
+      }
+    );
     waitFlag = true;
   })();
 
@@ -159,7 +162,7 @@ class CardContainer extends PureComponent {
           isResizing: this.state.isResizing,
           updateCard: this.props.updateCard,
           scrollToCard: this.scrollToCard,
-          cards: this.props.cards,
+          cards: this.props.cards
         },
         ...this.props.cardProps[info.name]
       });
@@ -173,12 +176,13 @@ class CardContainer extends PureComponent {
     const cards = [];
     for (const [name, item] of Object.entries(this.props.cards)) {
       if (item.visible) {
-        cards.push({...item, name});
+        cards.push({ ...item, name });
       }
     }
     cards.sort((a, b) => a.order - b.order);
     return cards.map((item, key) => (
-      <FloatingActionButton mini
+      <FloatingActionButton
+        mini
         key={key}
         style={styles.icon(item.order % this.column === 1)}
         onTouchTap={() => this.scrollToCard(item.name)}
@@ -189,7 +193,7 @@ class CardContainer extends PureComponent {
   }
 
   render() {
-    const {connectDropTarget} = this.props;
+    const { connectDropTarget } = this.props;
 
     const isShrinkLeft = (yes, no) => {
       if (this.column === 1) {
@@ -198,7 +202,7 @@ class CardContainer extends PureComponent {
       return no;
     };
     const isShrinkRight = (yes, no) => no;
-    const isResizing = (yes, no) => this.state.isResizing ? yes : no;
+    const isResizing = (yes, no) => (this.state.isResizing ? yes : no);
 
     // (暫定) 背景画像
     const bg =
@@ -216,7 +220,7 @@ class CardContainer extends PureComponent {
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundSize: 'contain',
-        position: 'relative',
+        position: 'relative'
       },
       left: {
         position: 'relative',
@@ -239,7 +243,7 @@ class CardContainer extends PureComponent {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
-        overflow: 'hidden',
+        overflow: 'hidden'
       },
       dropCover: {
         position: 'absolute',
@@ -262,31 +266,34 @@ class CardContainer extends PureComponent {
         justifyContent: 'space-around',
         overflow: 'visible',
         alignItems: 'center',
-        zIndex: 2,
+        zIndex: 2
       },
       icon(isLeft) {
         return {
-          marginRight: isLeft ? 0 : -2 * SizerWidth,
+          marginRight: isLeft ? 0 : -2 * SizerWidth
         };
-      },
+      }
     };
 
     return connectDropTarget(
       <div style={styles.container}>
-        <div style={styles.dropCover}></div>
+        <div style={styles.dropCover} />
         <div id={LeftContainerId} style={styles.left}>
           {this.renderCards(this.left)}
-          <div style={styles.blank}></div>
+          <div style={styles.blank} />
         </div>
         <div style={styles.bar}>
           {this.renderIcons(styles)}
         </div>
         {this.column === 2
-          ? (<Sizer width={this.state.rightSideWidth} onSizer={(isResizing) => this.setState({isResizing})}/>)
+          ? <Sizer
+              width={this.state.rightSideWidth}
+              onSizer={isResizing => this.setState({ isResizing })}
+            />
           : null}
         <div id={RightContainerId} style={styles.right}>
           {this.renderCards(this.right)}
-          <div style={styles.blank}></div>
+          <div style={styles.blank} />
         </div>
       </div>
     );
@@ -309,6 +316,8 @@ const spec = {
   }
 };
 
-const collect = (connect, monitor) => ({connectDropTarget: connect.dropTarget()});
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget()
+});
 
 export default DropTarget(DragTypes.Sizer, spec, collect)(CardContainer);
