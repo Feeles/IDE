@@ -13,7 +13,7 @@ function gameStart() {
 	});
 
 	// 説明書を表示する
-	feeles.openReadme('stages/2/README.md');
+	// feeles.openReadme('stages/2/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();
@@ -47,7 +47,7 @@ function gameStart() {
 	// 魔道書にプレイヤーが乗ったら...
 	item1.onplayerenter = () => {
 		// 説明書 2 を開く
-		feeles.openReadme('stages/2/README2.md');
+		// feeles.openReadme('stages/2/README2.md');
 		// 魔道書を開く
 		feeles.openCode('stages/2/code.js');
 		// 魔道書を削除

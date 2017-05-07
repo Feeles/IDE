@@ -15,7 +15,7 @@ function gameStart() {
 	});
 
 	// 説明書を表示する
-	feeles.openReadme('stages/3/README.md');
+	// feeles.openReadme('stages/3/README.md');
 
 	// map1 を読み込む
 	Hack.maps['map1'].load();

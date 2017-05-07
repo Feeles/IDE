@@ -28,7 +28,7 @@ function gameStartLazy() {
 		// マップ map4 に移動する
 		Hack.changeMap('map4');
 		// 説明書 4 を表示する
-		feeles.openReadme('stages/6/README4.md');
+		// feeles.openReadme('stages/6/README4.md');
 
 	};
 
