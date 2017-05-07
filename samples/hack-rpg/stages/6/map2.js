@@ -121,7 +121,7 @@ function gameStartLazy() {
 			// プレイヤーを 2, 5 の位置に移動する ( map3 )
 			Hack.player.locate(2, 5, 'map3');
 			// 説明書 3 を表示する
-			feeles.openReadme('stages/6/README3.md');
+			// feeles.openReadme('stages/6/README3.md');
 		};
 
 	}
