@@ -126,47 +126,53 @@ export default class MonitorCard extends PureComponent {
     }
 
     const sizeValue = this.state.frameWidth + by + this.state.frameHeight;
-    const { localization } = this.props.monitorProps;
+    const { localization, showAll } = this.props.monitorProps;
+
+    const actions = [
+      <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
+        <NavigationRefresh
+          color={this.context.muiTheme.palette.primary1Color}
+        />
+      </IconButton>,
+      <IconButton
+        key="fullscreen"
+        onTouchTap={() => this.props.toggleFullScreen()}
+      >
+        <NavigationFullscreen />
+      </IconButton>
+    ];
+    if (showAll) {
+      actions.push(
+        <IconButton
+          key="screenshot"
+          disabled={this.state.processing}
+          onTouchTap={this.handleScreenShot}
+        >
+          <ImagePhotoCamera />
+        </IconButton>,
+        <IconMenu
+          key="settings"
+          iconButtonElement={<IconButton><ActionSettings /></IconButton>}
+        >
+          <MenuItem
+            primaryText={sizeValue}
+            leftIcon={<DeviceDevices />}
+            menuItems={frameSizes.map(this.renderMenuItem, this)}
+          />
+          <MenuItem
+            primaryText={localization.monitorCard.popout}
+            leftIcon={<OpenInBrowser />}
+            onTouchTap={() => this.props.togglePopout()}
+          />
+        </IconMenu>
+      );
+    }
 
     return (
       <Card
         icon={MonitorCard.icon()}
         {...this.props.cardPropsBag}
-        actions={[
-          <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
-            <NavigationRefresh
-              color={this.context.muiTheme.palette.primary1Color}
-            />
-          </IconButton>,
-          <IconButton
-            key="screenshot"
-            disabled={this.state.processing}
-            onTouchTap={this.handleScreenShot}
-          >
-            <ImagePhotoCamera />
-          </IconButton>,
-          <IconButton
-            key="fullscreen"
-            onTouchTap={() => this.props.toggleFullScreen()}
-          >
-            <NavigationFullscreen />
-          </IconButton>,
-          <IconMenu
-            key="settings"
-            iconButtonElement={<IconButton><ActionSettings /></IconButton>}
-          >
-            <MenuItem
-              primaryText={sizeValue}
-              leftIcon={<DeviceDevices />}
-              menuItems={frameSizes.map(this.renderMenuItem, this)}
-            />
-            <MenuItem
-              primaryText={localization.monitorCard.popout}
-              leftIcon={<OpenInBrowser />}
-              onTouchTap={() => this.props.togglePopout()}
-            />
-          </IconMenu>
-        ]}
+        actions={actions}
         icon={MonitorCard.icon()}
       >
         <CardMedia style={styles.flexible}>

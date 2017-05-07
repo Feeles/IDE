@@ -92,7 +92,9 @@ export default class Main extends Component {
     // この値はユーザが見えるところには表示してはならない
     oAuthId: null,
 
-    cards: cardStateDefault
+    cards: cardStateDefault,
+    // Advanced Mode
+    showAll: false
   };
 
   get rootWidth() {
@@ -475,6 +477,8 @@ export default class Main extends Component {
       oAuthId
     });
 
+  toggleShowAll = () => this.setStatePromise({ showAll: !this.state.showAll });
+
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = ref => ref && (this.openFileDialog = ref.open);
 
@@ -493,7 +497,8 @@ export default class Main extends Component {
       setConfig: this.setConfig,
       findFile: this.findFile,
       addFile: this.addFile,
-      putFile: this.putFile
+      putFile: this.putFile,
+      showAll: this.state.showAll
     };
 
     const cardProps = {
@@ -611,6 +616,8 @@ export default class Main extends Component {
           setDeployURL={this.props.setDeployURL}
           oAuthId={this.state.oAuthId}
           setOAuthId={this.setOAuthId}
+          showAll={this.state.showAll}
+          toggleShowAll={this.toggleShowAll}
         />
         <CardContainer
           cards={this.state.cards}
@@ -619,6 +626,7 @@ export default class Main extends Component {
           updateCard={this.updateCard}
           localization={localization}
           findFile={this.findFile}
+          showAll={this.state.showAll}
         />
         <Footer
           deployURL={this.props.deployURL}
