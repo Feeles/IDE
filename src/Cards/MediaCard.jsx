@@ -47,16 +47,18 @@ export default class MediaCard extends Component {
   };
 
   render() {
-    const styles = {
-      player: {
+    const playerState = {
+      width: 'initial',
+      style: {
         maxWidth: 500
-      }
+      },
+      ...this.state.playerState
     };
 
     return (
       <Card icon={MediaCard.icon()} {...this.props.cardPropsBag}>
         {this.state.playerState.url
-          ? <ReactPlayer {...this.state.playerState} style={styles.player} />
+          ? <ReactPlayer {...playerState} />
           : <div>
               URL not given
             </div>}
