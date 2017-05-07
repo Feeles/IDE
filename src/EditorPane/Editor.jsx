@@ -69,6 +69,7 @@ export default class Editor extends PureComponent {
     showHint: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
     lineNumbers: PropTypes.bool.isRequired,
+    foldGutter: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -81,7 +82,8 @@ export default class Editor extends PureComponent {
     snippets: [],
     showHint: true,
     extraKeys: {},
-    lineNumbers: true
+    lineNumbers: true,
+    foldgutter: true
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -164,13 +166,17 @@ export default class Editor extends PureComponent {
       handleRun,
       closeSelectedTab,
       getConfig,
-      lineNumbers
+      lineNumbers,
+      foldGutter
     } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
-    const gutters = ['CodeMirror-foldgutter'];
+    const gutters = [];
     if (lineNumbers) {
       gutters.push('CodeMirror-linenumbers');
+    }
+    if (foldGutter) {
+      gutters.push('CodeMirror-foldgutter');
     }
 
     const options = {
@@ -182,7 +188,7 @@ export default class Editor extends PureComponent {
       autoCloseBrackets: true,
       keyMap: 'sublime',
       scrollbarStyle: 'simple',
-      foldGutter: true,
+      foldGutter,
       foldOptions: {
         widget: " 📦 ",
         minFoldSize: 1,

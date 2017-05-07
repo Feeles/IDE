@@ -226,7 +226,18 @@ export default class ShotPane extends PureComponent {
           ? (<LinearProgress/>)
           : null}
         <div style={styles.editor}>
-          <Editor isSelected isCared file={this.props.file} onChange={this.handleChange} getConfig={getConfig} codemirrorRef={this.handleCodemirror} snippets={this.props.completes} extraKeys={extraKeys} lineNumbers={false} />
+          <Editor
+            isSelected
+            isCared
+            file={this.props.file || SourceFile.shot('')}
+            onChange={this.handleChange}
+            getConfig={getConfig}
+            codemirrorRef={this.handleCodemirror}
+            snippets={this.props.completes}
+            extraKeys={extraKeys}
+            lineNumbers={false}
+            foldGutter={false}
+          />
         </div>
         <div style={styles.menu}>
           <RaisedButton primary
