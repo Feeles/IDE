@@ -2,7 +2,8 @@ import React, { PureComponent, PropTypes } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Card from './CardWindow';
 import { CardHeader } from 'material-ui/Card';
-import ActionSettingsApplications from 'material-ui/svg-icons/action/settings-applications';
+import ActionSettingsApplications
+  from 'material-ui/svg-icons/action/settings-applications';
 
 import { SourceFile } from '../File/';
 import { commonRoot } from './commonStyles';
@@ -10,7 +11,6 @@ import EditFile from './EditFile';
 import resolveOrigin from '../utils/resolveOrigin';
 
 export default class CustomizeCard extends PureComponent {
-
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
@@ -18,24 +18,20 @@ export default class CustomizeCard extends PureComponent {
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
-    addFile: PropTypes.func.isRequired,
+    addFile: PropTypes.func.isRequired
   };
 
   state = {
     editorFileKey: '',
-    cssFileKey: '',
+    cssFileKey: ''
   };
 
   static icon() {
-    return (
-      <ActionSettingsApplications />
-    );
+    return <ActionSettingsApplications />;
   }
 
   componentWillMount() {
-
-    (async() => {
-
+    (async () => {
       const editorFileKey = await this.addFileIfNotExist(
         'feeles/codemirror.json',
         () => {
@@ -43,7 +39,7 @@ export default class CustomizeCard extends PureComponent {
           return new SourceFile({
             type: 'application/json',
             name: 'feeles/codemirror.json',
-            text: JSON.stringify(editor, null, '\t'),
+            text: JSON.stringify(editor, null, '\t')
           });
         }
       );
@@ -54,22 +50,19 @@ export default class CustomizeCard extends PureComponent {
           return new SourceFile({
             type: 'text/css',
             name: 'feeles/codemirror.css',
-            text: '',
-          })
+            text: ''
+          });
         }
       );
 
       this.setState({
         editorFileKey,
-        cssFileKey,
+        cssFileKey
       });
-
     })();
-
   }
 
   async addFileIfNotExist(name, getFile) {
-
     const file = this.props.findFile(name);
 
     if (!file) {
@@ -78,22 +71,19 @@ export default class CustomizeCard extends PureComponent {
     }
 
     return file.key;
-
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.files !== nextProps.files) {
       const editorFile = this.props.findFile('feeles/codemirror.json');
       this.setState({
-        editorFileKey: editorFile ? editorFile.key : '',
+        editorFileKey: editorFile ? editorFile.key : ''
       });
     }
   }
 
   renderBlock(title, href, fileKey) {
-    const {
-      localization,
-    } = this.props;
+    const { localization } = this.props;
 
     const subtitle = [
       <span key={1}>{title + ' - '}</span>,
@@ -102,16 +92,12 @@ export default class CustomizeCard extends PureComponent {
 
     const styles = {
       block: {
-        whiteSpace: 'inherit',
-      },
+        whiteSpace: 'inherit'
+      }
     };
 
     return (
-      <CardHeader expandable
-        style={styles.block}
-        title={title}
-        subtitle={subtitle}
-      >
+      <CardHeader style={styles.block} title={title} subtitle={subtitle}>
         <EditFile
           fileKey={fileKey}
           findFile={this.props.findFile}
@@ -123,22 +109,20 @@ export default class CustomizeCard extends PureComponent {
   }
 
   render() {
-    const {
-      localization,
-    } = this.props;
+    const { localization } = this.props;
 
     return (
-      <Card initiallyExpanded icon={CustomizeCard.icon()} {...this.props.cardPropsBag}>
-      {this.renderBlock(
-        localization.customizeCard.editor,
-        'http://codemirror.net/doc/manual.html#config',
-        this.state.editorFileKey
-      )}
-      {this.renderBlock(
-        localization.customizeCard.style,
-        'http://codemirror.net/doc/manual.html#styling',
-        this.state.cssFileKey
-      )}
+      <Card icon={CustomizeCard.icon()} {...this.props.cardPropsBag}>
+        {this.renderBlock(
+          localization.customizeCard.editor,
+          'http://codemirror.net/doc/manual.html#config',
+          this.state.editorFileKey
+        )}
+        {this.renderBlock(
+          localization.customizeCard.style,
+          'http://codemirror.net/doc/manual.html#styling',
+          this.state.cssFileKey
+        )}
       </Card>
     );
   }

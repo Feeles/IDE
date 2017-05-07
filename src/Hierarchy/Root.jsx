@@ -1,7 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { emphasize, fade } from 'material-ui/utils/colorManipulator';
 
-
 import DirCard from './DirCard';
 import getHierarchy from './getHierarchy';
 
@@ -13,17 +12,15 @@ const getStyles = (props, context) => {
       boxSizing: 'border-box',
       width: '100%',
       fontFamily,
-      maxHeight: '65vh',
       paddingBottom: 40,
       overflowX: 'hidden',
       overflowY: 'scroll',
-      backgroundColor: fade(emphasize(palette.canvasColor, 1), 0.07),
-    },
+      backgroundColor: fade(emphasize(palette.canvasColor, 1), 0.07)
+    }
   };
 };
 
 export default class Root extends PureComponent {
-
   static propTypes = {
     files: PropTypes.array.isRequired,
     selectedFile: PropTypes.object,
@@ -34,11 +31,11 @@ export default class Root extends PureComponent {
     handleFileMove: PropTypes.func.isRequired,
     handleNativeDrop: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    putFile: PropTypes.func.isRequired,
+    putFile: PropTypes.func.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   render() {
@@ -54,7 +51,7 @@ export default class Root extends PureComponent {
       handleNativeDrop: this.props.handleNativeDrop,
       handleNameChange: this.props.handleNameChange,
       openFileDialog: this.props.openFileDialog,
-      putFile: this.props.putFile,
+      putFile: this.props.putFile
     };
 
     const { root } = getStyles(this.props, this.context);

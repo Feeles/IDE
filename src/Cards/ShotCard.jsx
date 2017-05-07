@@ -1,13 +1,12 @@
-import React, {PureComponent, PropTypes} from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import Card from './CardWindow';
-import {CardMedia} from 'material-ui/Card';
+import { CardMedia } from 'material-ui/Card';
 import ContentReply from 'material-ui/svg-icons/content/reply';
 
-import {ShotPane} from '../EditorPane/';
+import { ShotPane } from '../EditorPane/';
 import shallowEqual from '../utils/shallowEqual';
 
 export default class ShotCard extends PureComponent {
-
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     shotProps: PropTypes.object.isRequired,
@@ -16,13 +15,11 @@ export default class ShotCard extends PureComponent {
 
   state = {
     file: null,
-    completes: [],
+    completes: []
   };
 
   static icon() {
-    return (
-      <ContentReply style={{transform:'rotateY(180deg)'}} />
-    );
+    return <ContentReply />;
   }
 
   // port が渡されることを前提とした実装, 今のままではあまりよくない
@@ -49,44 +46,35 @@ export default class ShotCard extends PureComponent {
     }
   };
 
-  handleMessage = (event) => {
-    const {query, value} = event.data || {};
+  handleMessage = event => {
+    const { query, value } = event.data || {};
     if (!query) return;
 
     if (query === 'code' && value) {
       // feeles.openCode()
       const file = this.props.shotProps.findFile(value);
-      this.setState({file});
-      this.props.updateCard('ShotCard', {visible: true});
+      this.setState({ file });
+      this.props.updateCard('ShotCard', { visible: true });
     } else if (query === 'code') {
       // feeles.closeCode()
-      this.props.updateCard('ShotCard', {visible: false});
+      this.props.updateCard('ShotCard', { visible: false });
     }
     if (query === 'complete') {
       // feeles.exports
       if (!shallowEqual(value, this.state.completes)) {
-        this.setState({completes: value});
+        this.setState({ completes: value });
       }
-    }
-  };
-
-  handleExpand = (expand) => {
-    if (expand) {
-      this.props.updateCard('MonitorCard', {visible: true});
     }
   };
 
   render() {
     return (
-      <Card
-        initiallyExpanded
-        icon={ShotCard.icon()}
-        onExpandChange={this.handleExpand}
-        {...this.props.cardPropsBag}
-      >
-        <CardMedia expandable>
-          <ShotPane {...this.props.shotProps} file={this.state.file} completes={this.state.completes} />
-        </CardMedia>
+      <Card icon={ShotCard.icon()} {...this.props.cardPropsBag}>
+        <ShotPane
+          {...this.props.shotProps}
+          file={this.state.file}
+          completes={this.state.completes}
+        />
       </Card>
     );
   }

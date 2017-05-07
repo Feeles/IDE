@@ -7,6 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
+import Toggle from 'material-ui/Toggle';
 import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
@@ -87,6 +88,13 @@ const getStyles = (props, context) => {
     google: {
       color: 'rgba(0,0,0,0.54)',
       backgroundColor: '#FFFFFF'
+    },
+    toggle: {
+      width: 'initial',
+      filter: `contrast(40%)`
+    },
+    toggleLabel: {
+      color: palette.alternateTextColor
     }
   };
 };
@@ -110,7 +118,9 @@ export default class Menu extends PureComponent {
     deployURL: PropTypes.string,
     setDeployURL: PropTypes.func.isRequired,
     oAuthId: PropTypes.string,
-    setOAuthId: PropTypes.func.isRequired
+    setOAuthId: PropTypes.func.isRequired,
+    showAll: PropTypes.bool.isRequired,
+    toggleShowAll: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -301,51 +311,62 @@ export default class Menu extends PureComponent {
     const visits = document.querySelector('script[x-feeles-visits]');
     const isLoggedin = this.props.oAuthId !== null;
 
+    const title =
+      this.props.project &&
+      (this.props.project.title
+        ? <div style={styles.projectName}>
+            {this.props.project.title}
+          </div>
+        : <FlatButton
+            label={localization.cloneDialog.setTitle}
+            labelStyle={{
+              color: alternateTextColor
+            }}
+            onTouchTap={this.handleClone}
+          />);
+
     return (
       <AppBar
-        title={organization.title}
+        title={title}
         style={styles.root}
+        titleStyle={{ flex: null }}
+        showMenuIconButton={this.props.showAll}
+        iconElementLeft={<IconButton><NavigationMenu /></IconButton>}
         iconStyleLeft={styles.leftIcon}
-        iconElementLeft={<IconButton> <NavigationMenu /> </IconButton>}
         onLeftIconButtonTouchTap={this.handleToggleDrawer}
       >
-        <div
-          style={{
-            flexGrow: 1
-          }}
+        <div style={{ flex: 1 }} />
+        <Toggle
+          label={this.props.showAll ? '' : localization.menu.showAll}
+          toggled={this.props.showAll}
+          onToggle={this.props.toggleShowAll}
+          style={styles.toggle}
+          labelStyle={styles.toggleLabel}
         />
-        {this.props.project &&
-          (this.props.project.title
-            ? <div style={styles.projectName}>
-                {this.props.project.title}
-              </div>
-            : <FlatButton
-                label={localization.cloneDialog.setTitle}
-                labelStyle={{
-                  color: alternateTextColor
-                }}
-                onTouchTap={this.handleClone}
-              />)}
         {visits &&
           <div style={styles.visits}>
             {visits.getAttribute('x-feeles-visits')}
             PV
           </div>}
-        <IconButton
-          tooltip={localization.menu.clone}
-          disabled={!this.props.coreString}
-          onTouchTap={this.handleClone}
-          style={styles.button}
-        >
-          <FileDownload color={alternateTextColor} />
-        </IconButton>
+        {this.props.showAll
+          ? <IconButton
+              tooltip={localization.menu.clone}
+              disabled={!this.props.coreString}
+              onTouchTap={this.handleClone}
+              style={styles.button}
+            >
+              <FileDownload color={alternateTextColor} />
+            </IconButton>
+          : null}
         {this.state.isDeploying
           ? <CircularProgress
               size={24}
               style={styles.progress}
               color={alternateTextColor}
             />
-          : <IconMenu
+          : null}
+        {!this.state.isDeploying && this.props.showAll
+          ? <IconMenu
               iconButtonElement={
                 <IconButton tooltip={localization.menu.you}>
                   <ActionAccountCircle color={alternateTextColor} />
@@ -428,7 +449,8 @@ export default class Menu extends PureComponent {
                     onTouchTap={this.handleLogout}
                   />
                 : null}
-            </IconMenu>}
+            </IconMenu>
+          : null}
         <IconMenu
           iconButtonElement={
             <IconButton tooltip={localization.menu.language}>
@@ -469,7 +491,6 @@ export default class Menu extends PureComponent {
                   name,
                   ...card
                 }))
-                .filter(item => !item.visible)
                 .map(item => (
                   <MenuItem
                     key={item.name}

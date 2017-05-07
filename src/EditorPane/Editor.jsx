@@ -31,9 +31,9 @@ import 'codemirror/addon/fold/foldgutter.css';
 import glslMode from 'glsl-editor/glsl';
 glslMode(CodeMirror);
 CodeMirror.modeInfo.push({
-  name: "glsl",
-  mime: "text/x-glsl",
-  mode: "glsl",
+  name: 'glsl',
+  mime: 'text/x-glsl',
+  mode: 'glsl'
 });
 
 import './codemirror-hint-extension';
@@ -49,13 +49,12 @@ export const MimeTypes = {
   'text/html': '.html',
   'text/css': '.css',
   'text/plain': '',
-  'text/x-glsl': '.sort',
+  'text/x-glsl': '.sort'
 };
 
 export const FileEditorMap = new WeakMap();
 
 export default class Editor extends PureComponent {
-
   static propTypes = {
     file: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -69,6 +68,7 @@ export default class Editor extends PureComponent {
     showHint: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
     lineNumbers: PropTypes.bool.isRequired,
+    foldGutter: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -81,7 +81,8 @@ export default class Editor extends PureComponent {
     snippets: [],
     showHint: true,
     extraKeys: {},
-    lineNumbers: true
+    lineNumbers: true,
+    foldGutter: true
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -98,7 +99,7 @@ export default class Editor extends PureComponent {
     }
   }
 
-  handleCodemirror = (ref) => {
+  handleCodemirror = ref => {
     if (!ref) return;
     if (!ref[AlreadySetSymbol]) {
       const cm = ref.getCodeMirror();
@@ -107,7 +108,7 @@ export default class Editor extends PureComponent {
       ref[AlreadySetSymbol] = true;
       FileEditorMap.set(this.props.file, cm);
     }
-  }
+  };
 
   showHint(cm) {
     if (!this.props.showHint) {
@@ -122,7 +123,7 @@ export default class Editor extends PureComponent {
       cm.showHint({
         completeSingle: false,
         files: getFiles(),
-        snippets: this.props.snippets,
+        snippets: this.props.snippets
       });
     });
 
@@ -131,27 +132,27 @@ export default class Editor extends PureComponent {
     }
   }
 
-  beautify = (cm) => {
+  beautify = cm => {
     const { file } = this.props;
     if (file.is('javascript') || file.is('json')) {
       cm.setValue(
         beautify(cm.getValue(), {
-          "indent_with_tabs": true,
-          "end_with_newline": true,
+          indent_with_tabs: true,
+          end_with_newline: true
         })
       );
     } else if (file.is('html')) {
       cm.setValue(
         beautify.html(cm.getValue(), {
-          "indent_with_tabs": true,
-          "indent_inner_html": true,
-          "extra_liners": [],
+          indent_with_tabs: true,
+          indent_inner_html: true,
+          extra_liners: []
         })
       );
     } else if (file.is('css')) {
       cm.setValue(
         beautify.css(cm.getValue(), {
-          "indent_with_tabs": true,
+          indent_with_tabs: true
         })
       );
     }
@@ -164,13 +165,17 @@ export default class Editor extends PureComponent {
       handleRun,
       closeSelectedTab,
       getConfig,
-      lineNumbers
+      lineNumbers,
+      foldGutter
     } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
-    const gutters = ['CodeMirror-foldgutter'];
+    const gutters = [];
     if (lineNumbers) {
       gutters.push('CodeMirror-linenumbers');
+    }
+    if (foldGutter) {
+      gutters.push('CodeMirror-foldgutter');
     }
 
     const options = {
@@ -182,11 +187,11 @@ export default class Editor extends PureComponent {
       autoCloseBrackets: true,
       keyMap: 'sublime',
       scrollbarStyle: 'simple',
-      foldGutter: true,
+      foldGutter,
       foldOptions: {
-        widget: " 📦 ",
+        widget: ' 📦 ',
         minFoldSize: 1,
-        scanUp: false,
+        scanUp: false
       },
       dragDrop: false,
       gutters,
@@ -196,13 +201,14 @@ export default class Editor extends PureComponent {
         'Ctrl-W': closeSelectedTab,
         'Cmd-W': closeSelectedTab,
         'Ctrl-Alt-B': this.beautify,
-        ...this.props.extraKeys,
+        ...this.props.extraKeys
       },
-      ...getConfig('codemirror'),
+      ...getConfig('codemirror')
     };
 
     return (
-      <ReactCodeMirror preserveScrollPosition
+      <ReactCodeMirror
+        preserveScrollPosition
         ref={this.handleCodemirror}
         value={file.text}
         onChange={onChange}

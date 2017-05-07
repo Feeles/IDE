@@ -10,6 +10,7 @@ export default {
     upload: 'Upload',
     deploySelf: 'Publish with your account',
     deployAnonymous: 'Publish with anonymous',
+    showAll: 'Show all menu',
     share: 'Share this app',
     you: 'You',
     login: 'Login',

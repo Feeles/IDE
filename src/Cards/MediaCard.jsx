@@ -1,14 +1,14 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import Card from './CardWindow';
-import {CardMedia} from 'material-ui/Card';
+import { CardMedia } from 'material-ui/Card';
 import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import ReactPlayer from 'react-player';
 
 export default class MediaCard extends Component {
-
   static propTypes = {
+    cardPropsBag: PropTypes.object.isRequired,
     port: PropTypes.object,
-    updateCard: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired
   };
 
   state = {
@@ -18,9 +18,7 @@ export default class MediaCard extends Component {
   };
 
   static icon() {
-    return (
-      <AvMusicVideo />
-    );
+    return <AvMusicVideo />;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,33 +32,34 @@ export default class MediaCard extends Component {
     }
   }
 
-  handleMessage = (event) => {
-    if (!event.data || !event.data.query)
-      return;
-    const {query, value} = event.data;
+  handleMessage = event => {
+    if (!event.data || !event.data.query) return;
+    const { query, value } = event.data;
 
     if (query === 'media' && value) {
       // feeles.openMedia()
-      this.setState({playerState: value});
-      this.props.updateCard('MediaCard', {visible: true});
+      this.setState({ playerState: value });
+      this.props.updateCard('MediaCard', { visible: true });
     } else if (query === 'media') {
       // feeles.closeMedia()
-      this.props.updateCard('MediaCard', {visible: false});
+      this.props.updateCard('MediaCard', { visible: false });
     }
   };
 
   render() {
+    const styles = {
+      player: {
+        maxWidth: 500
+      }
+    };
+
     return (
-      <Card initiallyExpanded icon={MediaCard.icon()} {...this.props.cardPropsBag}>
-      {this.state.playerState.url ? (
-        <CardMedia>
-          <ReactPlayer {...this.state.playerState}/>
-        </CardMedia>
-      ) : (
-        <div>
-          URL not given
-        </div>
-      )}
+      <Card icon={MediaCard.icon()} {...this.props.cardPropsBag}>
+        {this.state.playerState.url
+          ? <ReactPlayer {...this.state.playerState} style={styles.player} />
+          : <div>
+              URL not given
+            </div>}
       </Card>
     );
   }

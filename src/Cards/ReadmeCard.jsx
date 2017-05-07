@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import Card from './CardWindow';
-import {CardText, CardActions} from 'material-ui/Card';
+import { CardText, CardActions } from 'material-ui/Card';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MapsMap from 'material-ui/svg-icons/maps/map';
@@ -11,7 +11,6 @@ import EditFile from './EditFile';
 import shallowEqual from '../utils/shallowEqual';
 
 export default class ReadmeCard extends PureComponent {
-
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
@@ -22,22 +21,20 @@ export default class ReadmeCard extends PureComponent {
     localization: PropTypes.object.isRequired,
     port: PropTypes.object,
     setLocation: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    updateCard: PropTypes.func.isRequired
   };
 
   state = {
     selectedFile: null,
-    completes: [],
+    completes: []
   };
 
   static icon() {
-    return (
-      <MapsMap />
-    );
+    return <MapsMap />;
   }
 
   componentWillMount() {
-    const {fileName} = this.props.cardPropsBag.cards.ReadmeCard.init || {};
+    const { fileName } = this.props.cardPropsBag.cards.ReadmeCard.init || {};
     if (fileName) {
       this.setState({
         selectedFile: this.props.findFile(fileName)
@@ -65,7 +62,7 @@ export default class ReadmeCard extends PureComponent {
     }
   }
 
-  handleMessage = (event) => {
+  handleMessage = event => {
     if (!event.data || !event.data.query) return;
     const { query, value } = event.data;
 
@@ -73,7 +70,7 @@ export default class ReadmeCard extends PureComponent {
     if (query === 'complete') {
       if (!shallowEqual(value, this.state.completes)) {
         this.setState({
-          completes: value,
+          completes: value
         });
       }
     }
@@ -84,22 +81,22 @@ export default class ReadmeCard extends PureComponent {
         throw `Not Found Error: feeles.openReamde("${value}")`;
       }
       this.setState({ selectedFile });
-      this.props.updateCard('ReadmeCard', {visible: true});
+      this.props.updateCard('ReadmeCard', { visible: true });
     } else if (query === 'readme') {
       // feeles.closeReadme()
-      this.props.updateCard('ReadmeCard', {visible: false});
+      this.props.updateCard('ReadmeCard', { visible: false });
     }
   };
 
-  handleShot = (text) => {
+  handleShot = text => {
     if (this.props.port) {
       const babelrc = this.props.getConfig('babelrc');
       return Promise.resolve()
         .then(() => SourceFile.shot(text).babel(babelrc))
-        .then((file) => {
+        .then(file => {
           this.props.port.postMessage({
             query: 'shot',
-            value: file.serialize(),
+            value: file.serialize()
           });
         });
     }
@@ -108,7 +105,7 @@ export default class ReadmeCard extends PureComponent {
 
   handleSelect = (event, index, value) => {
     this.setState({
-      selectedFile: this.resolveFile(value),
+      selectedFile: this.resolveFile(value)
     });
   };
 
@@ -116,63 +113,52 @@ export default class ReadmeCard extends PureComponent {
     if (!key) {
       return null;
     }
-    return this.props.findFile((item) => item.key === key);
+    return this.props.findFile(item => item.key === key);
   }
 
   renderDropDownMenu() {
-    const {
-      localization,
-    } = this.props;
-    const {
-      selectedFile,
-    } = this.state;
+    const { localization } = this.props;
+    const { selectedFile } = this.state;
 
     const markdowns = this.props.files
-      .filter((item) => item.is('markdown'))
-      .sort((a, b) => a.header > b.header ? 1 : -1);
+      .filter(item => item.is('markdown'))
+      .sort((a, b) => (a.header > b.header ? 1 : -1));
 
     const styles = {
       index: {
         marginLeft: 16,
         marginRight: -8,
-        fontSize: '.5rem',
+        fontSize: '.5rem'
       },
       dropDown: {
-        verticalAlign: 'bottom',
+        verticalAlign: 'bottom'
       },
       underline: {
-        display: 'none',
-      },
+        display: 'none'
+      }
     };
 
     return [
       <span key="index" style={styles.index}>
-      {localization.readmeCard.index}
+        {localization.readmeCard.index}
       </span>,
-      <DropDownMenu key="dropDown"
+      <DropDownMenu
+        key="dropDown"
         value={selectedFile.key}
         style={styles.dropDown}
         underlineStyle={styles.underline}
         onChange={this.handleSelect}
       >
-      {markdowns.map((file) => (
-        <MenuItem
-          key={file.key}
-          value={file.key}
-          primaryText={file.header}
-        />
-      ))}
+        {markdowns.map(file => (
+          <MenuItem key={file.key} value={file.key} primaryText={file.header} />
+        ))}
       </DropDownMenu>
     ];
   }
 
   render() {
-    const {
-      localization,
-    } = this.props;
-    const {
-      selectedFile,
-    } = this.state;
+    const { localization } = this.props;
+    const { selectedFile } = this.state;
 
     if (!selectedFile) {
       return null;
@@ -180,18 +166,19 @@ export default class ReadmeCard extends PureComponent {
 
     const styles = {
       text: {
+        flex: 1,
         paddingTop: 0,
         maxHeight: '65vh',
         overflowX: 'hidden',
-        overflowY: 'scroll',
+        overflowY: 'scroll'
       },
+      actions: {
+        flex: 0
+      }
     };
     return (
-      <Card initiallyExpanded icon={ReadmeCard.icon()} {...this.props.cardPropsBag}>
-        <CardText
-          expandable
-          style={styles.text}
-        >
+      <Card icon={ReadmeCard.icon()} {...this.props.cardPropsBag} fit>
+        <CardText style={styles.text}>
           <ReadmePane
             file={selectedFile}
             selectTab={this.props.selectTab}
@@ -204,8 +191,8 @@ export default class ReadmeCard extends PureComponent {
             setLocation={this.props.setLocation}
           />
         </CardText>
-        <CardActions expandable >
-        {this.renderDropDownMenu()}
+        <CardActions style={styles.actions}>
+          {this.renderDropDownMenu()}
           <EditFile
             fileKey={selectedFile.key}
             findFile={this.props.findFile}

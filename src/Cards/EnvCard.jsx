@@ -1,16 +1,15 @@
-import React, {PureComponent, PropTypes} from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import Card from './CardWindow';
-import {CardText, CardActions} from 'material-ui/Card';
+import { CardText, CardActions } from 'material-ui/Card';
 import ActionTouchApp from 'material-ui/svg-icons/action/touch-app';
 
-import {SourceFile} from '../File/';
-import {Tab} from '../ChromeTab/';
-import {EnvItem} from '../EnvPane/';
-import {commonRoot} from './commonStyles';
+import { SourceFile } from '../File/';
+import { Tab } from '../ChromeTab/';
+import { EnvItem } from '../EnvPane/';
+import { commonRoot } from './commonStyles';
 import EditFile from './EditFile';
 
 export default class EnvCard extends PureComponent {
-
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
@@ -28,9 +27,7 @@ export default class EnvCard extends PureComponent {
   };
 
   static icon() {
-    return (
-      <ActionTouchApp />
-    );
+    return <ActionTouchApp />;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,9 +35,7 @@ export default class EnvCard extends PureComponent {
       const envFile = this.props.findFile('.env');
       this.setState({
         env: this.props.getConfig('env'),
-        fileKey: envFile
-          ? envFile.key
-          : ''
+        fileKey: envFile ? envFile.key : ''
       });
     }
   }
@@ -49,31 +44,49 @@ export default class EnvCard extends PureComponent {
     const envFile = this.props.findFile('.env');
     if (!envFile) {
       const env = this.props.getConfig('env');
-      this.props.addFile(new SourceFile({
-        type: 'application/json',
-        name: '.env',
-        text: JSON.stringify(env, null, '\t')
-      }));
+      this.props.addFile(
+        new SourceFile({
+          type: 'application/json',
+          name: '.env',
+          text: JSON.stringify(env, null, '\t')
+        })
+      );
     } else {
-      this.setState({fileKey: envFile.key});
+      this.setState({ fileKey: envFile.key });
     }
   }
 
-  handleUpdateEnv = (change) => {
+  handleUpdateEnv = change => {
     const env = Object.assign({}, this.state.env, change);
-    this.props.setConfig('env', env).then((file) => file.json).then((env) => this.setState({env}));
+    this.props
+      .setConfig('env', env)
+      .then(file => file.json)
+      .then(env => this.setState({ env }));
   };
 
   render() {
-    const {localization} = this.props;
+    const { localization } = this.props;
 
     return (
-      <Card initiallyExpanded icon={EnvCard.icon()} {...this.props.cardPropsBag}>
-        <CardText expandable>
-          {Object.keys(this.state.env).map((key) => (<EnvItem key={key} itemKey={key} item={this.state.env[key]} localization={localization} updateEnv={this.handleUpdateEnv}/>))}
+      <Card icon={EnvCard.icon()} {...this.props.cardPropsBag}>
+        <CardText>
+          {Object.keys(this.state.env).map(key => (
+            <EnvItem
+              key={key}
+              itemKey={key}
+              item={this.state.env[key]}
+              localization={localization}
+              updateEnv={this.handleUpdateEnv}
+            />
+          ))}
         </CardText>
-        <CardActions expandable>
-          <EditFile fileKey={this.state.fileKey} findFile={this.props.findFile} selectTab={this.props.selectTab} localization={localization}/>
+        <CardActions>
+          <EditFile
+            fileKey={this.state.fileKey}
+            findFile={this.props.findFile}
+            selectTab={this.props.selectTab}
+            localization={localization}
+          />
         </CardActions>
       </Card>
     );

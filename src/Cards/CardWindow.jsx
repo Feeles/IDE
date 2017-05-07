@@ -1,41 +1,31 @@
-import React, {PureComponent, PropTypes} from 'react';
-import {Element, scroller} from 'react-scroll';
-import {Card} from 'material-ui/Card';
+import React, { PureComponent, PropTypes } from 'react';
+import { Card } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
-import NavigationExpandMore from 'material-ui/svg-icons/navigation/expand-more';
-import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 const HeaderHeight = 32;
 
 export default class CardWindow extends PureComponent {
-
   static propTypes = {
     name: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
+    order: PropTypes.number.isRequired,
     updateCard: PropTypes.func.isRequired,
     isResizing: PropTypes.bool.isRequired,
     scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
     icon: PropTypes.node.isRequired,
+    fit: PropTypes.bool.isRequired,
+    showAll: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
     visible: false,
     actions: [],
     icon: null,
+    fit: false
   };
-
-  state = {
-    expanded: false,
-  };
-
-  componentWillMount() {
-    if (this.props.initiallyExpanded && this.props.visible) {
-      this.toggleExpand();
-    }
-  }
 
   shouldComponentUpdate(nextProps) {
     if (this.props.isResizing && nextProps.isResizing) {
@@ -44,27 +34,15 @@ export default class CardWindow extends PureComponent {
     return true;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.visible !== nextProps.visible) {
-      if (nextProps.visible && nextProps.initiallyExpanded) {
-        this.toggleExpand();
-      }
-      if (!nextProps.visible && this.state.expanded) {
-        this.toggleExpand();
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!prevProps.visible && this.props.visible) {
-      this.props.scrollToCard(this.props.name);
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.props.visible !== nextProps.visible && nextProps.visible) {
+      this.handleScroll();
     }
   }
 
   get cardProps() {
     const props = {
-      ...this.props,
-      expanded: this.state.expanded
+      ...this.props
     };
     for (const key in CardWindow.propTypes) {
       delete props[key];
@@ -72,67 +50,46 @@ export default class CardWindow extends PureComponent {
     return props;
   }
 
-  toggleExpand = () => {
-    this.setState(prevState => {
-      const expanded = !prevState.expanded;
-      if (this.props.onExpandChange) {
-        this.props.onExpandChange(expanded);
-      }
-      return {expanded};
-    });
-  };
-
   closeCard = () => {
-    this.props.updateCard(this.props.name, {visible: false});
+    this.props.updateCard(this.props.name, { visible: false });
   };
 
   handleScroll = () => {
     this.props.scrollToCard(this.props.name);
   };
 
-  renderExpandButton() {
-    return (
-      <IconButton onTouchTap={this.toggleExpand}>
-        {this.state.expanded
-          ? (<NavigationExpandLess/>)
-          : (<NavigationExpandMore/>)}
-      </IconButton>
-    );
-  }
-
-  renderCloseButton() {
-    return (
-      <IconButton onTouchTap={this.closeCard} iconStyle={{
-        transform: 'scale(0.8)'
-      }}>
-        <NavigationClose/>
-      </IconButton>
-    );
-  }
-
   render() {
-    if (!this.props.visible) {
-      return <Element name={this.props.name}></Element>;
-    }
-
-    const {connectDragSource, connectDragPreview, isDragging} = this.props;
+    const { isDragging, visible, fit, order } = this.props;
 
     const styles = {
       root: {
+        width: 0,
+        order,
+        boxSizing: 'border-box',
+        maxWidth: '100%',
+        maxHeight: '100%',
         direction: 'ltr',
-        paddingTop: 16,
-        paddingLeft: 20,
-        paddingRight: 20,
+        flex: '0 0 auto',
+        flexBasis: visible ? '500px' : 0,
+        padding: visible ? '16px 20px 16px 0' : 0,
+        overflow: visible ? 'initial' : 'hidden'
+      },
+      innerContainer: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column'
       },
       header: {
+        flex: 0,
         display: 'flex',
         alignItems: 'center',
-        height: HeaderHeight,
+        minHeight: HeaderHeight,
         paddingLeft: 8,
         width: '100%',
         boxSizing: 'border-box',
         overflowX: 'auto',
-        overflowY: 'hidden',
+        overflowY: 'hidden'
       },
       title: {
         flex: '0 0 auto',
@@ -144,22 +101,42 @@ export default class CardWindow extends PureComponent {
       },
       a: {
         display: 'inherit'
+      },
+      close: {
+        transform: 'scale(0.8)'
       }
     };
+    if (fit) {
+      styles.card = { height: '100%' };
+    } else {
+      styles.card = { maxHeight: '100%' };
+    }
 
     return (
-      <Element name={this.props.name} style={styles.root}>
-        <Card {...this.cardProps}>
+      <div id={this.props.name} style={styles.root}>
+        <Card
+          {...this.cardProps}
+          style={styles.card}
+          containerStyle={styles.innerContainer}
+        >
           <div style={styles.header}>
-            <a style={styles.a} onTouchTap={this.handleScroll}>{this.props.icon}</a>
-            <div style={styles.blank}></div>
+            <a style={styles.a} onTouchTap={this.handleScroll}>
+              {this.props.icon}
+            </a>
+            <div style={styles.blank} />
             {this.props.actions}
-            {this.renderExpandButton()}
-            {this.renderCloseButton()}
+            {this.props.showAll
+              ? <IconButton
+                  onTouchTap={this.closeCard}
+                  iconStyle={styles.close}
+                >
+                  <NavigationClose />
+                </IconButton>
+              : null}
           </div>
           {this.props.children}
         </Card>
-      </Element>
+      </div>
     );
   }
 }
