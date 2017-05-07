@@ -140,8 +140,7 @@ export default class ShotPane extends PureComponent {
 
   handleChange = (text) => {
     this.setState({
-      canRestore: text !== this.props.file.text,
-      height: this.getHeight()
+      canRestore: text !== this.props.file.text
     });
   };
 
@@ -198,7 +197,9 @@ export default class ShotPane extends PureComponent {
       return;
     }
     this.codemirror = ref;
-    this.setState({height: this.getHeight()});
+    this.codemirror.on('viewportChange', () => {
+      this.setState({ height: this.getHeight() });
+    });
   };
 
   render() {
