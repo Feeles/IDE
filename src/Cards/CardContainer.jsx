@@ -9,7 +9,8 @@ export default class CardContainer extends PureComponent {
     cardProps: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
-    findFile: PropTypes.func.isRequired
+    findFile: PropTypes.func.isRequired,
+    showAll: PropTypes.bool.isRequired
   };
 
   state = {
@@ -90,7 +91,8 @@ export default class CardContainer extends PureComponent {
         isResizing: false, // Deprecated
         updateCard: this.props.updateCard,
         scrollToCard: this.scrollToCard,
-        cards: this.props.cards
+        cards: this.props.cards,
+        showAll: this.props.showAll
       };
       cards.push(
         React.createElement(component, {

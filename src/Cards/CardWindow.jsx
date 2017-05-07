@@ -16,7 +16,8 @@ export default class CardWindow extends PureComponent {
     actions: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
     icon: PropTypes.node.isRequired,
-    fit: PropTypes.bool.isRequired
+    fit: PropTypes.bool.isRequired,
+    showAll: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -56,19 +57,6 @@ export default class CardWindow extends PureComponent {
   handleScroll = () => {
     this.props.scrollToCard(this.props.name);
   };
-
-  renderCloseButton() {
-    return (
-      <IconButton
-        onTouchTap={this.closeCard}
-        iconStyle={{
-          transform: 'scale(0.8)'
-        }}
-      >
-        <NavigationClose />
-      </IconButton>
-    );
-  }
 
   render() {
     const { isDragging, visible, fit, order } = this.props;
@@ -113,6 +101,9 @@ export default class CardWindow extends PureComponent {
       },
       a: {
         display: 'inherit'
+      },
+      close: {
+        transform: 'scale(0.8)'
       }
     };
     if (fit) {
@@ -134,7 +125,14 @@ export default class CardWindow extends PureComponent {
             </a>
             <div style={styles.blank} />
             {this.props.actions}
-            {this.renderCloseButton()}
+            {this.props.showAll
+              ? <IconButton
+                  onTouchTap={this.closeCard}
+                  iconStyle={styles.close}
+                >
+                  <NavigationClose />
+                </IconButton>
+              : null}
           </div>
           {this.props.children}
         </Card>
