@@ -1,6 +1,6 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
-
 
 import { separate } from '../File/';
 
@@ -11,43 +11,42 @@ const getStyles = (props, context) => {
     root: {
       display: 'flex',
       justifyContent: 'flex-start',
-      alignItems: 'baseline',
+      alignItems: 'baseline'
     },
     path: {
-      color: palette.secondaryTextColor,
+      color: palette.secondaryTextColor
     },
     plane: {
-      color: palette.textColor,
+      color: palette.textColor
     },
     ext: {
       color: palette.secondaryTextColor,
       fontSize: '.8em',
-      paddingLeft: 4,
+      paddingLeft: 4
     },
     textField: {
       width: 'auto',
       flex: '0 1 auto',
-      height: 40,
-    },
+      height: 40
+    }
   };
 };
 
 export default class Filename extends PureComponent {
-
   static propTypes = {
     file: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
-    isEditing: false,
+    isEditing: false
   };
 
-  handleInput = (ref) => {
+  handleInput = ref => {
     const { file, onChange } = this.props;
 
     if (!ref) return;
@@ -55,13 +54,13 @@ export default class Filename extends PureComponent {
       onChange(file, target.value);
       this.setState({ isEditing: false });
     };
-    ref.input.onblur = (event) => {
-      this.setState({ isEditing: false })
+    ref.input.onblur = event => {
+      this.setState({ isEditing: false });
     };
   };
 
   touchFlag = false;
-  handleDoubleTap = (event) => {
+  handleDoubleTap = event => {
     event.stopPropagation();
 
     if (this.touchFlag) {
@@ -69,10 +68,10 @@ export default class Filename extends PureComponent {
       return;
     }
     this.touchFlag = true;
-    setTimeout(() => this.touchFlag = false, 200);
+    setTimeout(() => (this.touchFlag = false), 200);
   };
 
-  handleTextFieldTap = (event) => {
+  handleTextFieldTap = event => {
     event.stopPropagation();
   };
 
@@ -88,22 +87,20 @@ export default class Filename extends PureComponent {
     return (
       <div style={prepareStyles(styles.root)}>
         <span style={prepareStyles(styles.path)}>{path}</span>
-        {isEditing ? (
-          <TextField
-            id={name}
-            defaultValue={plane}
-            ref={this.handleInput}
-            style={styles.textField}
-            onTouchTap={this.handleTextFieldTap}
-          />
-        ) : (
-          <span
-            onTouchTap={this.handleDoubleTap}
-            style={prepareStyles(styles.plane)}
-          >
-            {plane}
-          </span>
-        )}
+        {isEditing
+          ? <TextField
+              id={name}
+              defaultValue={plane}
+              ref={this.handleInput}
+              style={styles.textField}
+              onTouchTap={this.handleTextFieldTap}
+            />
+          : <span
+              onTouchTap={this.handleDoubleTap}
+              style={prepareStyles(styles.plane)}
+            >
+              {plane}
+            </span>}
         <span style={prepareStyles(styles.ext)}>{ext}</span>
       </div>
     );

@@ -1,13 +1,11 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
 
-
 const getStyles = (props, context) => {
   const { show } = props;
-  const {
-    palette,
-  } = context.muiTheme;
+  const { palette } = context.muiTheme;
 
   return {
     root: {
@@ -18,24 +16,23 @@ const getStyles = (props, context) => {
       backgroundColor: 'transparent',
       zIndex: show ? 11 : 10,
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     },
     container: {
       flex: '1 1 auto',
-      borderTop: `1px solid ${palette.primary1Color}`,
-    },
-  }
+      borderTop: `1px solid ${palette.primary1Color}`
+    }
+  };
 };
 
 export default class ChromeTabContent extends PureComponent {
-
   static propTypes = {
     show: PropTypes.bool.isRequired,
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   shouldComponentUpdate(nextProps) {
@@ -54,7 +51,7 @@ export default class ChromeTabContent extends PureComponent {
     return (
       <div style={prepareStyles(root)}>
         <div style={prepareStyles(container)}>
-        {children}
+          {children}
         </div>
       </div>
     );

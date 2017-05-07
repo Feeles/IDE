@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
@@ -7,11 +8,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { grey300, grey700 } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 
-
-import {
-  readProject,
-  findProject,
-} from '../database/';
+import { readProject, findProject } from '../database/';
 import {
   makeFromElement,
   BinaryFile,
@@ -24,7 +21,6 @@ import Main from './Main';
 import LaunchDialog from './LaunchDialog';
 
 class RootComponent extends Component {
-
   static propTypes = {
     rootElement: PropTypes.object.isRequired,
     // A string as title of project opened
@@ -32,7 +28,7 @@ class RootComponent extends Component {
     // An URL string as JSON file provided
     jsonURL: PropTypes.string,
     // An URL string to continuous deploying
-    deployURL: PropTypes.string,
+    deployURL: PropTypes.string
   };
 
   state = {
@@ -44,13 +40,11 @@ class RootComponent extends Component {
     muiTheme: getCustomTheme({}),
     openDialog: false,
     // continuous deploying URL (if null, do first deployment)
-    deployURL: null,
+    deployURL: null
   };
 
   componentWillMount() {
-    const {
-      title,
-    } = this.props;
+    const { title } = this.props;
 
     this.setLocalization(...(navigator.languages || [navigator.language]));
 
@@ -64,7 +58,6 @@ class RootComponent extends Component {
     if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
-
     } else {
       if (process.env.NODE_ENV !== 'production') {
         if (this.props.jsonURL) {
@@ -72,29 +65,25 @@ class RootComponent extends Component {
           return;
         }
       }
-      this.setState({openDialog: true});
+      this.setState({ openDialog: true });
     }
   }
 
   launchIDE = async ({ id, title }) => {
     if (!id && !title) {
       // Required unique title of project to proxy it
-      throw new Error(
-        this.state.localization.cloneDialog.titleIsRequired,
-      );
+      throw new Error(this.state.localization.cloneDialog.titleIsRequired);
     }
 
-    const {
-      project,
-      query,
-      length,
-    } = await (id ? findProject(id) : readProject(title));
+    const { project, query, length } = await (id
+      ? findProject(id)
+      : readProject(title));
 
     this.setState({
       last: length,
       files: [],
       project,
-      deployURL: project.deployURL,
+      deployURL: project.deployURL
     });
 
     query.each(value => {
@@ -112,7 +101,7 @@ class RootComponent extends Component {
     const query = this.props.rootElement.getAttribute('data-target');
     const elements = document.querySelectorAll(`script${query}`);
     this.setState({
-      last: elements.length,
+      last: elements.length
     });
 
     for (const item of Array.from(elements)) {
@@ -120,7 +109,7 @@ class RootComponent extends Component {
     }
   };
 
-  launchFromURL = async (url) => {
+  launchFromURL = async url => {
     // from json file URL
     const response = await fetch(url);
     const text = await response.text();
@@ -161,7 +150,7 @@ class RootComponent extends Component {
     this.setState(prevState => {
       return {
         last: prevState.last - 1,
-        files: prevState.files.concat(file),
+        files: prevState.files.concat(file)
       };
     });
   }
@@ -169,26 +158,25 @@ class RootComponent extends Component {
   setLocalization = (...langs) => {
     const localization = getLocalization(...langs);
     if (localization) {
-      this.setState({localization});
+      this.setState({ localization });
       moment.locale(langs);
     } else {
       throw new TypeError(`setLocalization: Cannot parse ${langs.join()}`);
     }
   };
 
-  setMuiTheme = (theme) => this.setState({
-    muiTheme: getCustomTheme(theme),
-  });
+  setMuiTheme = theme =>
+    this.setState({
+      muiTheme: getCustomTheme(theme)
+    });
 
-  closeDialog = () => this.setState({
-    openDialog: false,
-  });
+  closeDialog = () =>
+    this.setState({
+      openDialog: false
+    });
 
   renderLoading = () => {
-    const {
-      last,
-      files,
-    } = this.state;
+    const { last, files } = this.state;
 
     const styles = {
       root: {
@@ -197,40 +185,42 @@ class RootComponent extends Component {
         height: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       },
       header: {
         marginTop: 0,
         fontWeight: 100,
         color: 'white',
-        fontFamily: '"Apple Chancery", cursive',
+        fontFamily: '"Apple Chancery", cursive'
       },
       count: {
         color: grey700,
         fontSize: '.5rem',
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
         wordBreak: 'break-all',
-        marginBottom: '1.5rem',
-      },
+        marginBottom: '1.5rem'
+      }
     };
 
-    const author = document.querySelector('meta[name="og:author"],meta[property="og:author"]');
-    const title = document.querySelector('meta[name="og:title"],meta[property="og:title"]');
+    const author = document.querySelector(
+      'meta[name="og:author"],meta[property="og:author"]'
+    );
+    const title = document.querySelector(
+      'meta[name="og:title"],meta[property="og:title"]'
+    );
 
     return (
       <div style={styles.root}>
-        <h1 style={styles.header}>{title
-          ? title.getAttribute('content')
-          : (document.title || '❤️')
-        }</h1>
-      {author && (
-        <h2 style={styles.header}>{author.getAttribute('content')}</h2>
-      )}
-      {last < Infinity ? (
-        <span style={styles.count}>
-          {indicator(files.length, last)}
-        </span>
-      ) : null}
+        <h1 style={styles.header}>
+          {title ? title.getAttribute('content') : document.title || '❤️'}
+        </h1>
+        {author &&
+          <h2 style={styles.header}>{author.getAttribute('content')}</h2>}
+        {last < Infinity
+          ? <span style={styles.count}>
+              {indicator(files.length, last)}
+            </span>
+          : null}
         <span style={styles.header}>Made with Feeles</span>
         <LaunchDialog
           open={this.state.openDialog}
@@ -239,7 +229,8 @@ class RootComponent extends Component {
           fallback={this.defaultLaunch}
           onRequestClose={this.closeDialog}
         />
-        <style>{`
+        <style>
+          {`
           html, body {
             background-color: ${grey300};
             transition: ${transitions.easeOut('4000ms')};
@@ -251,32 +242,29 @@ class RootComponent extends Component {
   };
 
   render() {
-    const {
-      rootElement,
-    } = this.props;
+    const { rootElement } = this.props;
 
     return (
       <MuiThemeProvider muiTheme={this.state.muiTheme}>
-      {this.state.last > 0 ? this.renderLoading() : (
-        <Main
-          files={this.state.files}
-          rootElement={rootElement}
-          rootStyle={getComputedStyle(rootElement)}
-          project={this.state.project}
-          launchIDE={this.launchIDE}
-          localization={this.state.localization}
-          setLocalization={this.setLocalization}
-          muiTheme={this.state.muiTheme}
-          setMuiTheme={this.setMuiTheme}
-          deployURL={this.state.deployURL}
-          setDeployURL={deployURL => this.setState({deployURL})}
-        />
-      )}
+        {this.state.last > 0
+          ? this.renderLoading()
+          : <Main
+              files={this.state.files}
+              rootElement={rootElement}
+              rootStyle={getComputedStyle(rootElement)}
+              project={this.state.project}
+              launchIDE={this.launchIDE}
+              localization={this.state.localization}
+              setLocalization={this.setLocalization}
+              muiTheme={this.state.muiTheme}
+              setMuiTheme={this.setMuiTheme}
+              deployURL={this.state.deployURL}
+              setDeployURL={deployURL => this.setState({ deployURL })}
+            />}
       </MuiThemeProvider>
     );
   }
 }
-
 
 const dndBackend = 'ontouchend' in document ? TouchBackend : HTML5Backend;
 export default DragDropContext(dndBackend)(RootComponent);

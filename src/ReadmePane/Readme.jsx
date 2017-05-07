@@ -1,11 +1,11 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
 import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import ReactCodeMirror from 'react-codemirror';
-
 
 import MDReactComponent from '../../lib/MDReactComponent';
 import { Tab } from '../ChromeTab/';
@@ -23,12 +23,12 @@ const codemirrorOptions = {
   scrollbarStyle: 'simple',
   foldGutter: true,
   foldOptions: {
-    widget: "✧⟣❃⟢✧",
+    widget: '✧⟣❃⟢✧',
     minFoldSize: 1,
-    scanUp: false,
+    scanUp: false
   },
-  gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-  readOnly: true,
+  gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+  readOnly: true
 };
 
 const mdComponents = [
@@ -39,7 +39,8 @@ const mdComponents = [
     },
     render(tag, props, children, component, mdStyles) {
       return (
-        <RaisedButton primary
+        <RaisedButton
+          primary
           key={props.key}
           label={children}
           href={props.href}
@@ -50,8 +51,9 @@ const mdComponents = [
           icon={<ActionOpenInNew />}
         />
       );
-    },
-  }, {
+    }
+  },
+  {
     // Feeles 内リンク
     validate(tag, props) {
       return tag === 'a';
@@ -61,7 +63,8 @@ const mdComponents = [
         component.props.setLocation(decodeURIComponent(props.href));
       };
       return (
-        <RaisedButton primary
+        <RaisedButton
+          primary
           key={props.key}
           label={children}
           style={mdStyles.raisedButton}
@@ -70,7 +73,8 @@ const mdComponents = [
         />
       );
     }
-  }, {
+  },
+  {
     // 外部リンク画像
     validate(tag, props) {
       return tag === 'img' && isValidURL(props.src);
@@ -78,7 +82,8 @@ const mdComponents = [
     render(tag, props, children, component, mdStyles) {
       return <img {...props} style={mdStyles.img} />;
     }
-  }, {
+  },
+  {
     // Feeles 内画像
     validate(tag, props) {
       return tag === 'img';
@@ -94,11 +99,13 @@ const mdComponents = [
 
       // Edit file
       const onTouchTap = () => {
-        const getFile = () => component.props.findFile(item => item.key === file.key);
+        const getFile = () =>
+          component.props.findFile(item => item.key === file.key);
         component.props.selectTab(new Tab({ getFile }));
       };
       return (
-        <RaisedButton primary
+        <RaisedButton
+          primary
           key={props.key}
           label={props.alt}
           icon={<EditorModeEdit />}
@@ -108,7 +115,8 @@ const mdComponents = [
         />
       );
     }
-  }, {
+  },
+  {
     // インタプリタ
     validate(tag, props) {
       return tag === 'pre';
@@ -118,15 +126,12 @@ const mdComponents = [
       const containerStyle = {
         position: 'relative',
         height: Math.min(20, code.split('\n').length) + 'rem',
-        paddingBottom: 8,
+        paddingBottom: 8
       };
 
       return (
         <div key={props.key + code} style={containerStyle}>
-          <ReactCodeMirror
-            value={code}
-            options={codemirrorOptions}
-          />
+          <ReactCodeMirror value={code} options={codemirrorOptions} />
         </div>
       );
     }
@@ -134,10 +139,7 @@ const mdComponents = [
 ];
 
 const mdStyle = (props, state, context) => {
-  const {
-    palette,
-    spacing,
-  } = context.muiTheme;
+  const { palette, spacing } = context.muiTheme;
 
   const tableBorder = `1px solid ${palette.disabledColor}`;
 
@@ -146,48 +148,47 @@ const mdStyle = (props, state, context) => {
       color: palette.secondaryTextColor,
       marginLeft: '1rem',
       paddingLeft: '1rem',
-      borderLeft: `5px solid ${palette.disabledColor}`,
+      borderLeft: `5px solid ${palette.disabledColor}`
     },
     img: {
-      maxWidth: '100%',
+      maxWidth: '100%'
     },
     table: {
       margin: '1rem 0',
       borderLeft: tableBorder,
-      borderSpacing: 0,
+      borderSpacing: 0
     },
     th: {
       padding: spacing.desktopGutterMini,
       borderTop: tableBorder,
       borderRight: tableBorder,
-      borderBottom: tableBorder,
+      borderBottom: tableBorder
     },
     td: {
       padding: spacing.desktopGutterMini,
       borderRight: tableBorder,
-      borderBottom: tableBorder,
+      borderBottom: tableBorder
     },
     code: {
       backgroundColor: emphasize(palette.canvasColor, 0.07),
       padding: '.2em',
-      borderRadius: 2,
+      borderRadius: 2
     },
     iconStyle: {
       transform: 'scale(0.6)',
-      verticalAlign: 'middle',
+      verticalAlign: 'middle'
     },
     iconColor: palette.alternateTextColor,
     raisedButton: {
-      margin: 4,
+      margin: 4
     },
     raisedButtonLabel: {
-      textTransform: 'none',
-    },
+      textTransform: 'none'
+    }
   };
 };
 
 export default class Readme extends PureComponent {
-
   static propTypes = {
     file: PropTypes.object.isRequired,
     onShot: PropTypes.func.isRequired,
@@ -196,11 +197,11 @@ export default class Readme extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     completes: PropTypes.array.isRequired,
-    setLocation: PropTypes.func.isRequired,
+    setLocation: PropTypes.func.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   componentWillReceiveProps(nextProps, nextContext) {
@@ -213,20 +214,20 @@ export default class Readme extends PureComponent {
     const mdStyles = mdStyle(this.props, this.state, this.context);
 
     const onIterate = (tag, props, children) => {
-      for (const {validate, render} of mdComponents) {
+      for (const { validate, render } of mdComponents) {
         if (validate(tag, props)) {
           return render(tag, props, children, this, mdStyles);
         }
       }
       if (tag in mdStyles) {
-        props = {...props, style: mdStyles[tag]};
+        props = { ...props, style: mdStyles[tag] };
       }
       if (children.length < 1) {
         children = null;
       }
       if (tag === 'p') {
         tag = 'div';
-        props = {...props, style: {...props.style, margin: '14px 0'}};
+        props = { ...props, style: { ...props.style, margin: '14px 0' } };
       }
       return React.createElement(tag, props, children);
     };
@@ -234,8 +235,8 @@ export default class Readme extends PureComponent {
     const styles = {
       root: {
         boxSizing: 'border-box',
-        overflow: 'scroll',
-      },
+        overflow: 'scroll'
+      }
     };
 
     return (

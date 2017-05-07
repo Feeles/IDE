@@ -1,21 +1,20 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 
-
 import EditableLabel from '../jsx/EditableLabel';
 
-export default class EnvItem extends Component {
-
+export default class EnvItem extends PureComponent {
   static propTypes = {
     item: PropTypes.array.isRequired,
     itemKey: PropTypes.any.isRequired,
     updateEnv: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired,
+    localization: PropTypes.object.isRequired
   };
 
-  changeKey = (key) => {
+  changeKey = key => {
     const { itemKey, updateEnv } = this.props;
     const [...item] = this.props.item;
 
@@ -25,7 +24,7 @@ export default class EnvItem extends Component {
     });
   };
 
-  changeValue = (value) => {
+  changeValue = value => {
     const { itemKey, updateEnv } = this.props;
     const [, type, tooltip] = this.props.item;
 
@@ -33,7 +32,7 @@ export default class EnvItem extends Component {
     updateEnv({ [itemKey]: item });
   };
 
-  changeTooltip = (tooltip) => {
+  changeTooltip = tooltip => {
     const { itemKey, updateEnv } = this.props;
     const [value, type] = this.props.item;
 
@@ -42,10 +41,7 @@ export default class EnvItem extends Component {
   };
 
   render() {
-    const {
-      itemKey,
-      localization,
-    } = this.props;
+    const { itemKey, localization } = this.props;
     const [value, type, tooltip] = this.props.item;
 
     const styles = {
@@ -55,21 +51,21 @@ export default class EnvItem extends Component {
         flexWrap: 'wrap',
         alignItems: 'center',
         paddingTop: 12,
-        paddingBottom: 12,
+        paddingBottom: 12
       },
       key: {
         flex: '1 1 auto',
-        maxWidth: 100,
+        maxWidth: 100
       },
       value: {
         flex: '1 1 auto',
-        margin: '0 4px',
+        margin: '0 4px'
       },
       tooltip: {
         flex: '1 1 auto',
         fontSize: '.8em',
-        maxWidth: 140,
-      },
+        maxWidth: 140
+      }
     };
 
     return (
@@ -82,11 +78,7 @@ export default class EnvItem extends Component {
           onEditEnd={this.changeKey}
         />
         <div style={styles.value}>
-          <Configurable
-            type={type}
-            value={value}
-            onChange={this.changeValue}
-          />
+          <Configurable type={type} value={value} onChange={this.changeValue} />
         </div>
         <EditableLabel
           id="tf2"
@@ -100,7 +92,7 @@ export default class EnvItem extends Component {
   }
 }
 
-const Configurable = (props) => {
+const Configurable = props => {
   switch (props.type) {
     case 'boolean':
       return (
@@ -117,7 +109,7 @@ const Configurable = (props) => {
           defaultValue={props.value}
           style={{ width: 100 }}
           inputStyle={{ textAlign: 'right' }}
-          onChange={(e) => {
+          onChange={e => {
             const float = parseFloat(e.target.value);
             if (!isNaN(float)) {
               props.onChange(float);
@@ -127,11 +119,12 @@ const Configurable = (props) => {
       );
     case 'string':
       return (
-        <TextField multiLine
+        <TextField
+          multiLine
           id="tf"
           defaultValue={props.value}
           style={{ width: 200 }}
-          onChange={(e) => props.onChange(e.target.value)}
+          onChange={e => props.onChange(e.target.value)}
         />
       );
     default:

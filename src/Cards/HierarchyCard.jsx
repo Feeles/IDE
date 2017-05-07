@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Card from './CardWindow';
 import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
 

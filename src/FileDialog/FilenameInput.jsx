@@ -1,19 +1,18 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-
 
 import { MimeTypes } from '../EditorPane/';
 
 const getUniqueId = (i => () => ++i)(0);
 
 export default class FilenameInput extends Component {
-
   static propTypes = {
     defaultName: PropTypes.string,
     defaultType: PropTypes.string,
-    disabled: PropTypes.bool,
+    disabled: PropTypes.bool
   };
 
   state = {
@@ -40,7 +39,7 @@ export default class FilenameInput extends Component {
     return this.state.type;
   }
 
-  handleNameChange = (event) => {
+  handleNameChange = event => {
     this.setState({ name: event.target.value });
   };
 
@@ -77,7 +76,7 @@ export default class FilenameInput extends Component {
       <div style={style}>
         <TextField
           id={this.id}
-          ref={(textField) => this.input = textField && textField.input}
+          ref={textField => (this.input = textField && textField.input)}
         >
           <input
             autoFocus={true}
@@ -92,9 +91,9 @@ export default class FilenameInput extends Component {
           onChange={this.handleTypeChange}
           style={dropDownStyle}
         >
-        {Object.keys(MimeTypes).map(type => (
-          <MenuItem key={type} value={type} primaryText={MimeTypes[type]} />
-        ))}
+          {Object.keys(MimeTypes).map(type => (
+            <MenuItem key={type} value={type} primaryText={MimeTypes[type]} />
+          ))}
         </DropDownMenu>
       </div>
     );

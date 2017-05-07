@@ -1,6 +1,6 @@
-import React, { PropTypes, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import transitions from 'material-ui/styles/transitions';
-
 
 import { SrcDocEnabled } from './setSrcDoc';
 import ErrorMessage from './ErrorMessage';
@@ -10,7 +10,6 @@ const Padding = 1;
 const ScaleChangeMin = 0.02;
 
 export default class Screen extends PureComponent {
-
   static propTypes = {
     reboot: PropTypes.bool.isRequired,
     animation: PropTypes.bool.isRequired,
@@ -19,17 +18,17 @@ export default class Screen extends PureComponent {
     handleReload: PropTypes.func,
     error: PropTypes.object,
     width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired
   };
 
   static defaultProps = {
     animation: false,
     display: false,
-    error: null,
+    error: null
   };
 
   state = {
-    loading: false,
+    loading: false
   };
 
   componentWillReceiveProps(nextProps) {
@@ -50,9 +49,13 @@ export default class Screen extends PureComponent {
 
   _scale = 0;
   handleUpdate = () => {
-    const {width, height} = this.props;
+    const { width, height } = this.props;
 
-    if (this.iframe && this.iframe.parentNode && this.iframe.parentNode.parentNode) {
+    if (
+      this.iframe &&
+      this.iframe.parentNode &&
+      this.iframe.parentNode.parentNode
+    ) {
       const rect = this.iframe.parentNode.getBoundingClientRect();
       const containerWidth = Math.max(0, rect.width - Padding);
       const containerHeight = Math.max(0, rect.height - Padding);
@@ -71,7 +74,7 @@ export default class Screen extends PureComponent {
     }
   };
 
-  handleFrame = (ref) => {
+  handleFrame = ref => {
     this.iframe = ref;
     this.props.frameRef(ref);
 
@@ -82,13 +85,9 @@ export default class Screen extends PureComponent {
   };
 
   render() {
-    const {
-      display,
-    } = this.props;
+    const { display } = this.props;
 
-    const {
-      loading,
-    } = this.state;
+    const { loading } = this.state;
 
     const style = {
       position: 'absolute',
@@ -101,48 +100,46 @@ export default class Screen extends PureComponent {
       justifyContent: 'center',
       alignItems: 'center',
       overflow: 'hidden',
-      zIndex: 10,
+      zIndex: 10
     };
 
     const frameStyle = {
       border: '0 none',
       flex: '0 0 auto',
       opacity: loading ? 0 : 1,
-      transition: loading ?
-        'none' :
-        transitions.easeOut(null, 'opacity'),
+      transition: loading ? 'none' : transitions.easeOut(null, 'opacity')
     };
 
     const buttonStyle = {
       position: 'absolute',
       left: 0,
       top: 0,
-      zIndex: 1,
+      zIndex: 1
     };
 
-    const sandbox = SrcDocEnabled ?
-      "allow-scripts allow-modals allow-popups" :
-      "allow-scripts allow-modals allow-popups allow-same-origin";
+    const sandbox = SrcDocEnabled
+      ? 'allow-scripts allow-modals allow-popups'
+      : 'allow-scripts allow-modals allow-popups allow-same-origin';
 
     return (
       <div style={style}>
-        <ErrorMessage
-          error={this.props.error}
-        />
-      {this.props.handleReload ? (
-        <SvgButton style={buttonStyle} onTouchTap={this.props.handleReload}>
-          {"M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"}
-        </SvgButton>
-      ) : null}
-      {this.props.reboot ? null : (
-        <iframe
-          sandbox={sandbox}
-          style={frameStyle}
-          ref={this.handleFrame}
-          width={this.props.width}
-          height={this.props.height}
-        ></iframe>
-      )}
+        <ErrorMessage error={this.props.error} />
+        {this.props.handleReload
+          ? <SvgButton style={buttonStyle} onTouchTap={this.props.handleReload}>
+              {
+                'M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z'
+              }
+            </SvgButton>
+          : null}
+        {this.props.reboot
+          ? null
+          : <iframe
+              sandbox={sandbox}
+              style={frameStyle}
+              ref={this.handleFrame}
+              width={this.props.width}
+              height={this.props.height}
+            />}
       </div>
     );
   }

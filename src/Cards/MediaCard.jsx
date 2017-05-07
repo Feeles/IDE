@@ -1,10 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Card from './CardWindow';
 import { CardMedia } from 'material-ui/Card';
 import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import ReactPlayer from 'react-player';
 
-export default class MediaCard extends Component {
+export default class MediaCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     port: PropTypes.object,
