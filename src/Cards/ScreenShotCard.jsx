@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import md5 from 'md5';
 import Card from './CardWindow';
 import { CardActions } from 'material-ui/Card';

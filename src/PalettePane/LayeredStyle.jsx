@@ -1,18 +1,16 @@
-import React, { Component, PropTypes } from 'react';
-
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function LayeredStyle(props) {
-
   if (isEmpty(props.styles)) {
     return (
       <div {...props}>
-      {props.children}
+        {props.children}
       </div>
     );
   }
 
-  const styles = [props.style].concat(props.styles)
-    .filter(s => s);
+  const styles = [props.style].concat(props.styles).filter(s => s);
 
   const nextProps = Object.assign({}, props, {
     style: styles[1],
@@ -27,7 +25,6 @@ export default function LayeredStyle(props) {
       <LayeredStyle {...nextProps} />
     </div>
   );
-
 }
 
 function isEmpty(array) {

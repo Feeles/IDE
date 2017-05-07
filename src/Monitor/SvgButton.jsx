@@ -1,21 +1,21 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { fullWhite, transparent } from 'material-ui/styles/colors';
 
 export default class SvgButton extends PureComponent {
-
   static propTypes = {
     onTouchTap: PropTypes.func.isRequired,
-    style: PropTypes.object.isRequired,
+    style: PropTypes.object.isRequired
   };
 
   static defaultProps = {
-    style: {},
+    style: {}
   };
 
   render() {
     const svgStyle = {
       width: 24,
-      height: 24,
+      height: 24
     };
 
     const style = {
@@ -23,20 +23,13 @@ export default class SvgButton extends PureComponent {
       border: 'none',
       outline: 'none',
       cursor: 'pointer',
-      ...this.props.style,
+      ...this.props.style
     };
 
     return (
-      <button
-        style={style}
-        onTouchTap={this.props.onTouchTap}
-      >
-        <svg
-          fill={fullWhite}
-          style={svgStyle}
-          viewBox="0 0 24 24"
-        >
-          <path d={this.props.children}/>
+      <button style={style} onTouchTap={this.props.onTouchTap}>
+        <svg fill={fullWhite} style={svgStyle} viewBox="0 0 24 24">
+          <path d={this.props.children} />
         </svg>
       </button>
     );

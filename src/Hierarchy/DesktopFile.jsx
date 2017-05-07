@@ -1,23 +1,19 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import { DropTarget } from 'react-dnd';
 import HardwareComputer from 'material-ui/svg-icons/hardware/computer';
 import { transparent } from 'material-ui/styles/colors';
 
-
 import DragTypes from '../utils/dragTypes';
 
 const getStyles = (props, context, state) => {
   const { isOver } = props;
-  const {
-    palette,
-    spacing,
-    prepareStyles,
-  } = context.muiTheme;
+  const { palette, spacing, prepareStyles } = context.muiTheme;
 
   return {
     input: prepareStyles({
-      display: 'none',
+      display: 'none'
     }),
     icon: {
       borderWidth: 0,
@@ -25,50 +21,45 @@ const getStyles = (props, context, state) => {
       borderStyle: 'solid',
       borderColor: transparent,
       backgroundColor: isOver ? palette.disabledColor : transparent,
-      borderRadius: 2,
-    },
+      borderRadius: 2
+    }
   };
 };
 
 class _DesktopFile extends PureComponent {
-
   static propTypes = {
     onOpen: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
+    isOver: PropTypes.bool.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
-  handleChange = (event) => {
-    this.props.onOpen(
-      Array.from(event.target.files)
-    );
+  handleChange = event => {
+    this.props.onOpen(Array.from(event.target.files));
   };
 
   render() {
     const {
       onOpen,
 
-      connectDropTarget,
+      connectDropTarget
     } = this.props;
     const { palette } = this.context.muiTheme;
 
-    const {
-      input,
-      icon,
-    } = getStyles(this.props, this.context);
+    const { input, icon } = getStyles(this.props, this.context);
 
     return connectDropTarget(
       <div>
-        <input multiple
+        <input
+          multiple
           type="file"
           style={input}
-          ref={(ref) => ref && (this.input = ref)}
+          ref={ref => ref && (this.input = ref)}
           onChange={this.handleChange}
         />
         <IconButton
@@ -96,7 +87,7 @@ const spec = {
 
 const collect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver({ shallow: true }),
+  isOver: monitor.isOver({ shallow: true })
 });
 
 const DesktopFile = DropTarget(DragTypes.File, spec, collect)(_DesktopFile);

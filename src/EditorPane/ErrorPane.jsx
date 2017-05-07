@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import AlertError from 'material-ui/svg-icons/alert/error';
 import { red50, red500 } from 'material-ui/styles/colors';

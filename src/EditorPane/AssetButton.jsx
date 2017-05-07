@@ -1,12 +1,12 @@
-import React, {PureComponent, PropTypes} from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import Popover from 'material-ui/Popover';
 import RaisedButton from 'material-ui/RaisedButton';
-import {emphasize} from 'material-ui/utils/colorManipulator';
+import { emphasize } from 'material-ui/utils/colorManipulator';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 export default class AssetButton extends PureComponent {
-
   static propTypes = {
     code: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -25,17 +25,17 @@ export default class AssetButton extends PureComponent {
     open: false
   };
 
-  handleOpen = (event) => {
-    this.setState({open: true, anchorEl: event.currentTarget});
+  handleOpen = event => {
+    this.setState({ open: true, anchorEl: event.currentTarget });
   };
 
-  handleInsert = (event) => {
+  handleInsert = event => {
     this.props.onTouchTap(this.props);
   };
 
   render() {
-    const {localization} = this.props;
-    const {palette} = this.context.muiTheme;
+    const { localization } = this.props;
+    const { palette } = this.context.muiTheme;
 
     const styles = {
       root: {
@@ -101,17 +101,31 @@ export default class AssetButton extends PureComponent {
     return (
       <Paper style={styles.root} onTouchTap={this.handleOpen}>
         <span style={styles.label}>{this.props.label}</span>
-        <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={styles.popover} onRequestClose={() => this.setState({open: false})}>
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          style={styles.popover}
+          onRequestClose={() => this.setState({ open: false })}
+        >
           <div style={styles.box}>
             <span style={styles.label}>{this.props.label}</span>
-            <RaisedButton primary label={localization.editorCard.insert} icon={< ContentAdd />} onTouchTap={this.handleInsert}/>
+            <RaisedButton
+              primary
+              label={localization.editorCard.insert}
+              icon={<ContentAdd />}
+              onTouchTap={this.handleInsert}
+            />
           </div>
           <div style={styles.description}>{this.props.description}</div>
           <code style={styles.code}>
             <pre>{this.props.code}</pre>
           </code>
         </Popover>
-        <ContentAdd color={palette.primary1Color} style={styles.button} onTouchTap={this.handleInsert}/>
+        <ContentAdd
+          color={palette.primary1Color}
+          style={styles.button}
+          onTouchTap={this.handleInsert}
+        />
       </Paper>
     );
   }

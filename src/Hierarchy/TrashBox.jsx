@@ -1,20 +1,16 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import IconButton from 'material-ui/IconButton';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { transparent } from 'material-ui/styles/colors';
 
-
 import DragTypes from '../utils/dragTypes';
 
 const getStyles = (props, state, context) => {
   const { isOver } = props;
-  const {
-    palette,
-    spacing,
-    prepareStyles,
-  } = context.muiTheme;
+  const { palette, spacing, prepareStyles } = context.muiTheme;
 
   return {
     icon: {
@@ -23,24 +19,23 @@ const getStyles = (props, state, context) => {
       borderStyle: 'solid',
       borderColor: transparent,
       backgroundColor: isOver ? palette.disabledColor : transparent,
-      borderRadius: 2,
-    },
+      borderRadius: 2
+    }
   };
 };
 
 class _TrashBox extends PureComponent {
-
   static propTypes = {
     showTrashes: PropTypes.bool.isRequired,
     putFile: PropTypes.func.isRequired,
     onTouchTap: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
-    isOver: PropTypes.bool.isRequired,
+    isOver: PropTypes.bool.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   render() {
@@ -48,22 +43,18 @@ class _TrashBox extends PureComponent {
       showTrashes,
       onTouchTap,
 
-      connectDropTarget,
+      connectDropTarget
     } = this.props;
     const { palette } = this.context.muiTheme;
 
-    const {
-      icon,
-    } = getStyles(this.props, this.state, this.context);
+    const { icon } = getStyles(this.props, this.state, this.context);
 
     return connectDropTarget(
       <div>
         <IconButton style={icon} onTouchTap={onTouchTap}>
-        {showTrashes ? (
-          <NavigationArrowBack color={palette.secondaryTextColor} />
-        ) : (
-          <ActionDelete color={palette.secondaryTextColor} />
-        )}
+          {showTrashes
+            ? <NavigationArrowBack color={palette.secondaryTextColor} />
+            : <ActionDelete color={palette.secondaryTextColor} />}
         </IconButton>
       </div>
     );
@@ -75,9 +66,9 @@ const spec = {
     const { putFile } = props;
     const { files } = monitor.getItem();
 
-    files.forEach((file) => {
+    files.forEach(file => {
       const options = Object.assign({}, file.options, {
-        isTrashed: !file.options.isTrashed,
+        isTrashed: !file.options.isTrashed
       });
       putFile(file, file.set({ options }));
     });
@@ -87,7 +78,7 @@ const spec = {
 
 const collect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver({ shallow: true }),
+  isOver: monitor.isOver({ shallow: true })
 });
 
 const TrashBox = DropTarget(DragTypes.File, spec, collect)(_TrashBox);

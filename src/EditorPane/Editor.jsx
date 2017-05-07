@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import ReactCodeMirror from 'react-codemirror';
 import beautify from 'js-beautify';
 
@@ -17,7 +18,7 @@ import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/dialog/dialog';
 import 'codemirror/addon/search/search';
 import 'codemirror/addon/search/searchcursor';
-import 'codemirror/addon/scroll/simplescrollbars';
+// import 'codemirror/addon/scroll/simplescrollbars';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
@@ -25,7 +26,7 @@ import 'codemirror/keymap/sublime';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/dialog/dialog.css';
-import 'codemirror/addon/scroll/simplescrollbars.css';
+// import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/addon/fold/foldgutter.css';
 
 import glslMode from 'glsl-editor/glsl';
@@ -186,7 +187,7 @@ export default class Editor extends PureComponent {
       matchBrackets: true,
       autoCloseBrackets: true,
       keyMap: 'sublime',
-      scrollbarStyle: 'simple',
+      // scrollbarStyle: 'simple',
       foldGutter,
       foldOptions: {
         widget: ' 📦 ',
@@ -203,7 +204,8 @@ export default class Editor extends PureComponent {
         'Ctrl-Alt-B': this.beautify,
         ...this.props.extraKeys
       },
-      ...getConfig('codemirror')
+      ...getConfig('codemirror'),
+      scrollbarStyle: null
     };
 
     return (
@@ -213,6 +215,7 @@ export default class Editor extends PureComponent {
         value={file.text}
         onChange={onChange}
         options={options}
+        codeMirrorInstance={CodeMirror}
       />
     );
   }

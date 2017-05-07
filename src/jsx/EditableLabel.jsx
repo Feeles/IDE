@@ -1,13 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 
-
 const getStyles = (props, context) => {
-  const {
-    prepareStyles,
-    palette,
-  } = context.muiTheme;
+  const { prepareStyles, palette } = context.muiTheme;
 
   return {
     hint: prepareStyles({
@@ -17,30 +14,32 @@ const getStyles = (props, context) => {
       borderBottom: `1px dashed ${palette.secondaryTextColor}`
     }),
     label: {
-      fontSize: 16,
-    },
+      fontSize: 16
+    }
   };
 };
 
-export default class EditableLabel extends Component {
-
-  static propTypes = Object.assign({
-    openImmediately: PropTypes.bool.isRequired,
-    tapTwiceQuickly: PropTypes.string.isRequired,
-    onEditEnd: PropTypes.func,
-  }, TextField.propTypes);
+export default class EditableLabel extends PureComponent {
+  static propTypes = Object.assign(
+    {
+      openImmediately: PropTypes.bool.isRequired,
+      tapTwiceQuickly: PropTypes.string.isRequired,
+      onEditEnd: PropTypes.func
+    },
+    TextField.propTypes
+  );
 
   static defaultProps = {
     openImmediately: false,
-    tapTwiceQuickly: 'Tap twice quickly',
+    tapTwiceQuickly: 'Tap twice quickly'
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
-    isEditing: this.props.openImmediately,
+    isEditing: this.props.openImmediately
   };
 
   touched = false;
@@ -49,7 +48,7 @@ export default class EditableLabel extends Component {
       this.setState({ isEditing: true });
     }
     this.touched = true;
-    setTimeout(() => this.touched = false, 200);
+    setTimeout(() => (this.touched = false), 200);
   };
 
   handleBlur = () => {
@@ -87,45 +86,32 @@ export default class EditableLabel extends Component {
 
     const {
       prepareStyles,
-      palette: { secondaryTextColor },
+      palette: { secondaryTextColor }
     } = this.context.muiTheme;
 
-    const {
-      hint,
-      label,
-    } = getStyles(this.props, this.context);
+    const { hint, label } = getStyles(this.props, this.context);
 
-    const style = prepareStyles(
-      Object.assign({}, label, this.props.style)
-    );
+    const style = prepareStyles(Object.assign({}, label, this.props.style));
 
     const props = Object.assign({}, this.props);
     delete props.onEditEnd;
     delete props.tapTwiceQuickly;
     delete props.openImmediately;
 
-    return isEditing ? (
-      <TextField
-        {...props}
-        ref={(ref) => ref && (this.input = ref.input)}
-        onBlur={this.handleBlur}
-        onKeyPress={this.handleKeyPress}
-      />
-    ) : labelText ? (
-      <div
-        style={style}
-        onTouchTap={this.handleTouch}
-      >
-      {labelText}
-      </div>
-    ) : (
-      <div
-        style={hint}
-        onTouchTap={this.handleTouch}
-      >
-        <ContentCreate color={secondaryTextColor} />
-        {this.props.tapTwiceQuickly}
-      </div>
-    );
+    return isEditing
+      ? <TextField
+          {...props}
+          ref={ref => ref && (this.input = ref.input)}
+          onBlur={this.handleBlur}
+          onKeyPress={this.handleKeyPress}
+        />
+      : labelText
+          ? <div style={style} onTouchTap={this.handleTouch}>
+              {labelText}
+            </div>
+          : <div style={hint} onTouchTap={this.handleTouch}>
+              <ContentCreate color={secondaryTextColor} />
+              {this.props.tapTwiceQuickly}
+            </div>;
   }
 }

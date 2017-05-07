@@ -1,18 +1,19 @@
-import React, {PureComponent, PropTypes} from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Card from './CardWindow';
-import {CardActions, CardText} from 'material-ui/Card';
+import { CardActions, CardText } from 'material-ui/Card';
 import Popover from 'material-ui/Popover';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
-import {convertColorToString} from 'material-ui/utils/colorManipulator';
-import {transparent, fullWhite} from 'material-ui/styles/colors';
+import { convertColorToString } from 'material-ui/utils/colorManipulator';
+import { transparent, fullWhite } from 'material-ui/styles/colors';
 import ImagePalette from 'material-ui/svg-icons/image/palette';
-import {ChromePicker, TwitterPicker} from 'react-color';
+import { ChromePicker, TwitterPicker } from 'react-color';
 
-import {LayeredStyle} from '../PalettePane/';
+import { LayeredStyle } from '../PalettePane/';
 
 const getStyles = (props, context) => {
-  const {palette, spacing} = context.muiTheme;
+  const { palette, spacing } = context.muiTheme;
 
   const bodyColor = getComputedStyle(document.body)['background-color'];
   const boxSize = 60;
@@ -79,7 +80,6 @@ const getStyles = (props, context) => {
 };
 
 export default class PaletteCard extends PureComponent {
-
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
@@ -100,53 +100,60 @@ export default class PaletteCard extends PureComponent {
   };
 
   static icon() {
-    return (
-      <ImagePalette />
-    );
+    return <ImagePalette />;
   }
 
   handleRectClick = (event, key, limited = false) => {
     event.stopPropagation();
     const anchorEl = event.target;
     const color = this.state.palette[key];
-    this.setState({open: true, key, anchorEl, color, limited});
+    this.setState({ open: true, key, anchorEl, color, limited });
   };
 
-  handleChangeComplete = (structure) => {
-    const {key} = this.state;
-    const {setConfig} = this.props;
+  handleChangeComplete = structure => {
+    const { key } = this.state;
+    const { setConfig } = this.props;
 
-    const {r, g, b, a} = structure.rgb;
-    const color = ({
+    const { r, g, b, a } = structure.rgb;
+    const color = {
       type: 'rgba',
       values: [r, g, b, a]
-    });
+    };
 
-    const palette = Object.assign({}, this.state.palette, {[key]: convertColorToString(color)});
-    setConfig('palette', palette).then((file) => file.json).then(palette => this.setState({palette}));
+    const palette = Object.assign({}, this.state.palette, {
+      [key]: convertColorToString(color)
+    });
+    setConfig('palette', palette)
+      .then(file => file.json)
+      .then(palette => this.setState({ palette }));
   };
 
   closePopover = () => {
-    this.setState({open: false});
+    this.setState({ open: false });
   };
 
   renderItem(key, styles) {
-    const {palette, prepareStyles} = this.context.muiTheme;
+    const { palette, prepareStyles } = this.context.muiTheme;
 
-    const rectStyle = Object.assign({}, styles.rect, {backgroundColor: palette[key]});
+    const rectStyle = Object.assign({}, styles.rect, {
+      backgroundColor: palette[key]
+    });
 
     return (
       <div key={key} style={styles.item}>
         <span style={styles.label}>{key}</span>
-        <span style={prepareStyles(rectStyle)} onTouchTap={(event) => this.handleRectClick(event, key)}></span>
+        <span
+          style={prepareStyles(rectStyle)}
+          onTouchTap={event => this.handleRectClick(event, key)}
+        />
       </div>
     );
   }
 
   render() {
-    const {localization} = this.props;
-    const {open, key, anchorEl, limited} = this.state;
-    const {palette, prepareStyles} = this.context.muiTheme;
+    const { localization } = this.props;
+    const { open, key, anchorEl, limited } = this.state;
+    const { palette, prepareStyles } = this.context.muiTheme;
 
     const styles = getStyles(this.props, this.context);
     styles.item = prepareStyles(styles.item);
@@ -155,31 +162,55 @@ export default class PaletteCard extends PureComponent {
     return (
       <Card icon={PaletteCard.icon()} {...this.props.cardPropsBag}>
         <CardActions>
-          <LayeredStyle styles={[
-            prepareStyles(styles.html),
-            prepareStyles(styles.body),
-            prepareStyles(styles.overlay)
-          ]} onTouchTap={(e) => this.handleRectClick(e, 'backgroundColor')}>
-            <Paper style={styles.canvas} onTouchTap={(e) => this.handleRectClick(e, 'canvasColor')}>
-              <Paper style={styles.primary} onTouchTap={(e) => this.handleRectClick(e, 'primary1Color', true)}/>
-              <Paper style={styles.secondary} onTouchTap={(e) => this.handleRectClick(e, 'accent1Color', true)}/>
-              <div style={prepareStyles(styles.blank)}></div>
+          <LayeredStyle
+            styles={[
+              prepareStyles(styles.html),
+              prepareStyles(styles.body),
+              prepareStyles(styles.overlay)
+            ]}
+            onTouchTap={e => this.handleRectClick(e, 'backgroundColor')}
+          >
+            <Paper
+              style={styles.canvas}
+              onTouchTap={e => this.handleRectClick(e, 'canvasColor')}
+            >
+              <Paper
+                style={styles.primary}
+                onTouchTap={e => this.handleRectClick(e, 'primary1Color', true)}
+              />
+              <Paper
+                style={styles.secondary}
+                onTouchTap={e => this.handleRectClick(e, 'accent1Color', true)}
+              />
+              <div style={prepareStyles(styles.blank)} />
             </Paper>
           </LayeredStyle>
         </CardActions>
         <CardText expandable style={styles.container}>
-          {Object.keys(palette).map((key) => this.renderItem(key, styles))}
+          {Object.keys(palette).map(key => this.renderItem(key, styles))}
         </CardText>
-        <Popover open={open} anchorEl={anchorEl} anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'top'
-        }} targetOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom'
-        }} onRequestClose={this.closePopover}>
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            horizontal: 'left',
+            vertical: 'top'
+          }}
+          targetOrigin={{
+            horizontal: 'left',
+            vertical: 'bottom'
+          }}
+          onRequestClose={this.closePopover}
+        >
           {limited
-            ? (<TwitterPicker color={key && palette[key]} onChangeComplete={this.handleChangeComplete}/>)
-            : (<ChromePicker color={key && palette[key]} onChangeComplete={this.handleChangeComplete}/>)}
+            ? <TwitterPicker
+                color={key && palette[key]}
+                onChangeComplete={this.handleChangeComplete}
+              />
+            : <ChromePicker
+                color={key && palette[key]}
+                onChangeComplete={this.handleChangeComplete}
+              />}
         </Popover>
       </Card>
     );

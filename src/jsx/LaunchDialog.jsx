@@ -1,38 +1,32 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
 import { Card, CardHeader, CardActions, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
-import {
-  brown50,
-} from 'material-ui/styles/colors';
+import { brown50 } from 'material-ui/styles/colors';
 
-
-import {
-  personalDB,
-  updateProject,
-} from '../database/';
+import { personalDB, updateProject } from '../database/';
 import EditableLabel from '../jsx/EditableLabel';
-import {ProjectCard} from '../Menu/CloneDialog';
+import { ProjectCard } from '../Menu/CloneDialog';
 
 export default class LaunchDialog extends PureComponent {
-
   static propTypes = {
     open: PropTypes.bool.isRequired,
     localization: PropTypes.object.isRequired,
     launchIDE: PropTypes.func.isRequired,
     fallback: PropTypes.func.isRequired,
-    onRequestClose: PropTypes.func.isRequired,
+    onRequestClose: PropTypes.func.isRequired
   };
 
   static defaultProps = {
-    fallback: () => {},
+    fallback: () => {}
   };
 
   state = {
-    projects: null,
+    projects: null
   };
 
   componentWillMount() {
@@ -49,16 +43,18 @@ export default class LaunchDialog extends PureComponent {
 
   async refreshState() {
     const url = location.origin + location.pathname;
-    const projects = await personalDB.projects.filter(item => {
-      return item.url === url;
-    }).toArray();
+    const projects = await personalDB.projects
+      .filter(item => {
+        return item.url === url;
+      })
+      .toArray();
 
     if (!projects.length) {
       this.props.fallback();
       this.props.onRequestClose();
     } else {
       await new Promise((resolve, reject) => {
-        this.setState({projects}, resolve);
+        this.setState({ projects }, resolve);
       });
     }
   }
@@ -67,7 +63,6 @@ export default class LaunchDialog extends PureComponent {
     try {
       await this.props.launchIDE(project);
       this.props.onRequestClose();
-
     } catch (e) {
       console.error(1, e);
       alert(e.message || e);
@@ -75,14 +70,11 @@ export default class LaunchDialog extends PureComponent {
   }
 
   handleTitleChange = async (project, title) => {
-    const {
-      localization,
-    } = this.props;
+    const { localization } = this.props;
 
     try {
       await updateProject(project.id, { title });
       await this.refreshState();
-
     } catch (e) {
       console.error(e);
       if (typeof e === 'string') {
@@ -93,10 +85,7 @@ export default class LaunchDialog extends PureComponent {
 
   renderLoading() {
     return (
-      <Dialog modal
-        open={this.props.open}
-        style={{ textAlign: 'center' }}
-      >
+      <Dialog modal open={this.props.open} style={{ textAlign: 'center' }}>
         <CircularProgress size={120} />
       </Dialog>
     );
@@ -105,11 +94,9 @@ export default class LaunchDialog extends PureComponent {
   render() {
     if (!this.state.projects) {
       return this.renderLoading();
-    };
+    }
 
-    const {
-      localization,
-    } = this.props;
+    const { localization } = this.props;
 
     const styles = {
       container: {
@@ -120,27 +107,29 @@ export default class LaunchDialog extends PureComponent {
         overflow: 'scroll',
         backgroundColor: brown50,
         overflowX: 'auto',
-        overflowY: 'scroll',
+        overflowY: 'scroll'
       },
       button: {
-        marginLeft: 8,
+        marginLeft: 8
       },
       card: {
-        marginTop: 16,
+        marginTop: 16
       },
       label: {
         fontWeight: 600,
-        marginRight: '1rem',
-      },
+        marginRight: '1rem'
+      }
     };
 
     return (
-      <Dialog modal
+      <Dialog
+        modal
         open={this.props.open}
         title={localization.launchDialog.title}
       >
         <div style={{ textAlign: 'center' }}>
-          <RaisedButton primary
+          <RaisedButton
+            primary
             label={localization.launchDialog.startNew}
             style={styles.button}
             onTouchTap={this.props.fallback}
@@ -148,16 +137,16 @@ export default class LaunchDialog extends PureComponent {
           {localization.common.or}
         </div>
         <div style={styles.container}>
-        {this.state.projects.map(item => (
-          <ProjectCard
-            key={item.id}
-            project={item}
-            launchIDE={this.props.launchIDE}
-            requestTitleChange={this.handleTitleChange}
-            onProcessEnd={() => this.refreshState()}
-            localization={localization}
-          />
-        ))}
+          {this.state.projects.map(item => (
+            <ProjectCard
+              key={item.id}
+              project={item}
+              launchIDE={this.props.launchIDE}
+              requestTitleChange={this.handleTitleChange}
+              onProcessEnd={() => this.refreshState()}
+              localization={localization}
+            />
+          ))}
         </div>
       </Dialog>
     );

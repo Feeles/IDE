@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
@@ -8,33 +9,24 @@ import { fade } from 'material-ui/utils/colorManipulator';
 import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
 
-
 import Filename from './Filename';
 import { PreferenceDialog } from '../FileDialog/';
 import DragTypes from '../utils/dragTypes';
 
-
 const getStyles = (props, context) => {
-  const {
-    file,
-    selectedFile,
-    tabbedFiles,
-    isDragging,
-  } = props;
-  const {
-    palette,
-    spacing,
-  } = context.muiTheme;
+  const { file, selectedFile, tabbedFiles, isDragging } = props;
+  const { palette, spacing } = context.muiTheme;
 
   const isSelected = selectedFile === file;
-  const backgroundColor = tabbedFiles.includes(file) ?
-    fade(palette.canvasColor, 1) : palette.disabledColor;
+  const backgroundColor = tabbedFiles.includes(file)
+    ? fade(palette.canvasColor, 1)
+    : palette.disabledColor;
 
   return {
     root: {
       marginTop: 4,
       marginRight: 8,
-      transition: transitions.easeOut(),
+      transition: transitions.easeOut()
     },
     card: {
       boxSizing: 'border-box',
@@ -46,27 +38,26 @@ const getStyles = (props, context) => {
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      opacity: isDragging ? .5 : 1,
-      transition: transitions.easeOut(),
+      opacity: isDragging ? 0.5 : 1,
+      transition: transitions.easeOut()
     },
     dragHandle: {
       flex: '0 0 auto',
       width: spacing.iconSize,
       height: spacing.iconSize,
       marginRight: spacing.desktopGutterMini,
-      cursor: 'move',
+      cursor: 'move'
     },
     container: {
       flex: '1 1 auto',
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'center',
-    },
+      alignItems: 'center'
+    }
   };
 };
 
 class FileCard extends PureComponent {
-
   static propTypes = {
     file: PropTypes.object.isRequired,
     selectedFile: PropTypes.object,
@@ -77,21 +68,20 @@ class FileCard extends PureComponent {
 
     connectDragSource: PropTypes.func.isRequired,
     connectDragPreview: PropTypes.func.isRequired,
-    isDragging: PropTypes.bool.isRequired,
+    isDragging: PropTypes.bool.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
-  handleConfirmSettings = (event) => {
+  handleConfirmSettings = event => {
     const { file, openFileDialog, putFile } = this.props;
 
     event.stopPropagation();
     openFileDialog(PreferenceDialog, {
-      content: file,
-    })
-    .then((change) => putFile(file, file.set(change)));
+      content: file
+    }).then(change => putFile(file, file.set(change)));
   };
 
   handleNameChange = (event, name) => {
@@ -102,24 +92,23 @@ class FileCard extends PureComponent {
 
   render() {
     const {
-      file, selectedFile, handleFileSelect,
-      connectDragSource, connectDragPreview,
+      file,
+      selectedFile,
+      handleFileSelect,
+      connectDragSource,
+      connectDragPreview
     } = this.props;
     const {
       prepareStyles,
-      palette: {
-        secondaryTextColor,
-      },
+      palette: { secondaryTextColor }
     } = this.context.muiTheme;
 
     const isSelected = selectedFile === file;
 
-    const {
-      root,
-      card,
-      dragHandle,
-      container,
-    } = getStyles(this.props, this.context);
+    const { root, card, dragHandle, container } = getStyles(
+      this.props,
+      this.context
+    );
 
     return connectDragPreview(
       <div style={root}>
@@ -157,4 +146,4 @@ const collect = (connect, monitor) => ({
   isDragging: monitor.isDragging()
 });
 
-export default DragSource(DragTypes.File, spec, collect)(FileCard)
+export default DragSource(DragTypes.File, spec, collect)(FileCard);

@@ -1,13 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import AlertError from 'material-ui/svg-icons/alert/error';
 import { redA400 } from 'material-ui/styles/colors';
 
-
 import { Confirm, Abort } from './Buttons';
 
 export default class DeleteDialog extends Component {
-
   static propTypes = {
     resolve: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func.isRequired,
@@ -22,7 +21,7 @@ export default class DeleteDialog extends Component {
     const { resolve, onRequestClose, content } = this.props;
     resolve(content);
     onRequestClose();
-  }
+  };
 
   render() {
     const { onRequestClose, content } = this.props;
@@ -33,17 +32,21 @@ export default class DeleteDialog extends Component {
 
     const iconStyle = {
       marginRight: 10,
-      marginBottom: -6,
+      marginBottom: -6
     };
 
     const actions = [
       <Abort onTouchTap={onRequestClose} />,
-      <Confirm label="Delete" onTouchTap={this.handleDelete} />,
+      <Confirm label="Delete" onTouchTap={this.handleDelete} />
     ];
 
     return (
       <Dialog
-        title={<h3>Do you really want to delete <b>{content && content.name}</b>?</h3>}
+        title={
+          <h3>
+            Do you really want to delete <b>{content && content.name}</b>?
+          </h3>
+        }
         actions={actions}
         modal={false}
         open={true}

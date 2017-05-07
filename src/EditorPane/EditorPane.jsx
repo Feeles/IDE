@@ -1,4 +1,5 @@
-import React, { PropTypes, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 import transitions from 'material-ui/styles/transitions';
