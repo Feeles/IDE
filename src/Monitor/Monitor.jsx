@@ -218,7 +218,9 @@ export default class Monitor extends PureComponent {
         }
         break;
       case 'resolve':
-        const file2 = this.props.findFile(`${data.value}.js`);
+        const file2 =
+          this.props.findFile(`${data.value}.js`) ||
+          this.props.findFile(data.value);
         if (file2) {
           const babelrc = this.props.getConfig('babelrc');
           const result = await file2.babel(babelrc);
