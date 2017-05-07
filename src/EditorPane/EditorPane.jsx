@@ -3,31 +3,25 @@ import IconButton from 'material-ui/IconButton';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 import transitions from 'material-ui/styles/transitions';
 
-
 import { SourceFile } from '../File/';
 import ChromeTab, { ChromeTabContent } from '../ChromeTab/';
 
 const MAX_TAB = 16;
 
 const getStyles = (props, context) => {
-  const {
-    palette,
-    spacing,
-    fontFamily,
-  } = context.muiTheme;
+  const { palette, spacing, fontFamily } = context.muiTheme;
 
   return {
     root: {
+      flex: 1,
       position: 'relative',
-      height: '80vh',
-      width: '100%',
       opacity: 1,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'stretch',
       overflow: 'hidden',
       fontFamily,
-      transition: transitions.easeOut(),
+      transition: transitions.easeOut()
     },
     tabContainer: {
       display: 'flex',
@@ -38,17 +32,16 @@ const getStyles = (props, context) => {
       paddingLeft: 7,
       marginBottom: -10,
       overflow: 'hidden',
-      zIndex: 10,
+      zIndex: 10
     },
     tabContentContainer: {
       flex: '1 1 auto',
-      position: 'relative',
-    },
+      position: 'relative'
+    }
   };
 };
 
 export default class EditorPane extends PureComponent {
-
   static propTypes = {
     files: PropTypes.array.isRequired,
     tabs: PropTypes.array.isRequired,
@@ -64,11 +57,11 @@ export default class EditorPane extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
     reboot: PropTypes.bool.isRequired,
-    scrollToCard: PropTypes.func.isRequired,
+    scrollToCard: PropTypes.func.isRequired
   };
 
   static contextTypes = {
-    muiTheme: PropTypes.object.isRequired,
+    muiTheme: PropTypes.object.isRequired
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -78,18 +71,14 @@ export default class EditorPane extends PureComponent {
     return true;
   }
 
-  setLocation = (href) => {
+  setLocation = href => {
     this.props.setLocation(href);
     this.props.scrollToCard('MonitorCard');
   };
 
   renderBackground() {
-    const {
-      localization,
-    } = this.props;
-    const {
-      palette,
-    } = this.context.muiTheme;
+    const { localization } = this.props;
+    const { palette } = this.context.muiTheme;
 
     const styles = {
       noFileBg: {
@@ -97,20 +86,20 @@ export default class EditorPane extends PureComponent {
         backgroundColor: palette.primary1Color,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
       },
       logo: {
-        color: palette.secondaryTextColor,
+        color: palette.secondaryTextColor
       },
       largeIcon: {
         width: 40,
-        height: 40,
+        height: 40
       },
       large: {
         width: 80,
         height: 80,
-        padding: 20,
-      },
+        padding: 20
+      }
     };
 
     return (
@@ -131,14 +120,14 @@ export default class EditorPane extends PureComponent {
 
   handleCloseSelectedTab = () => {
     this.props.tabs
-      .filter((item) => item.isSelected)
-      .forEach((item) => this.props.closeTab(item));
+      .filter(item => item.isSelected)
+      .forEach(item => this.props.closeTab(item));
   };
 
-  handleSelectTabFromFile = (file) => {
+  handleSelectTabFromFile = file => {
     this.props.tabs
-      .filter((item) => item.file.key === file.key)
-      .forEach((item) => this.props.selectTab(item));
+      .filter(item => item.file.key === file.key)
+      .forEach(item => this.props.selectTab(item));
   };
 
   render() {
@@ -147,60 +136,63 @@ export default class EditorPane extends PureComponent {
     }
 
     const {
-      files, tabs,
-      putFile, selectTab, closeTab,
+      files,
+      tabs,
+      putFile,
+      selectTab,
+      closeTab,
       openFileDialog,
       localization,
       findFile,
-      getConfig, setConfig,
+      getConfig,
+      setConfig,
       port,
-      reboot,
+      reboot
     } = this.props;
-    const {
-      prepareStyles,
-      palette,
-    } = this.context.muiTheme;
+    const { prepareStyles, palette } = this.context.muiTheme;
 
     const styles = getStyles(this.props, this.context);
 
     return (
-    <div style={styles.root}>
-      <div style={styles.tabContainer}>
-      {tabs.slice(0, MAX_TAB).map((tab) => (
-        <ChromeTab
-          key={tab.key}
-          tab={tab}
-          file={tab.file}
-          tabs={tabs}
-          isSelected={tab.isSelected}
-          isResizing={this.props.isResizing}
-          localization={localization}
-          handleSelect={selectTab}
-          handleClose={closeTab}
-        />
-      ))}
+      <div style={styles.root}>
+        <div style={styles.tabContainer}>
+          {tabs
+            .slice(0, MAX_TAB)
+            .map(tab => (
+              <ChromeTab
+                key={tab.key}
+                tab={tab}
+                file={tab.file}
+                tabs={tabs}
+                isSelected={tab.isSelected}
+                isResizing={this.props.isResizing}
+                localization={localization}
+                handleSelect={selectTab}
+                handleClose={closeTab}
+              />
+            ))}
+        </div>
+        <div style={styles.tabContentContainer}>
+          {tabs.map(tab => (
+            <ChromeTabContent key={tab.key} show={tab.isSelected}>
+              {tab.renderContent({
+                getFiles: this.getFiles,
+                closeSelectedTab: this.handleCloseSelectedTab,
+                selectTabFromFile: this.handleSelectTabFromFile,
+                setLocation: this.setLocation,
+                href: this.props.href,
+                getConfig,
+                findFile,
+                localization,
+                port,
+                reboot,
+                openFileDialog,
+                putFile
+              })}
+            </ChromeTabContent>
+          ))}
+        </div>
       </div>
-      <div style={styles.tabContentContainer}>
-      {tabs.map((tab) => (
-        <ChromeTabContent key={tab.key} show={tab.isSelected}>
-        {tab.renderContent({
-          getFiles: this.getFiles,
-          closeSelectedTab: this.handleCloseSelectedTab,
-          selectTabFromFile: this.handleSelectTabFromFile,
-          setLocation: this.setLocation,
-          href: this.props.href,
-          getConfig,
-          findFile,
-          localization,
-          port,
-          reboot,
-          openFileDialog,
-          putFile,
-        })}
-        </ChromeTabContent>
-      ))}
-      </div>
-    </div>
     );
   }
 }

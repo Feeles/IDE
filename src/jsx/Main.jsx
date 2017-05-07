@@ -615,11 +615,9 @@ export default class Main extends Component {
         <CardContainer
           cards={this.state.cards}
           getConfig={this.getConfig}
-          rootWidth={this.rootWidth}
           cardProps={cardProps}
           updateCard={this.updateCard}
           localization={localization}
-          showCardIcon={this.state.monitorType !== MonitorTypes.FullScreen}
           findFile={this.findFile}
         />
         <Footer

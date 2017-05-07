@@ -130,7 +130,6 @@ export default class MonitorCard extends PureComponent {
 
     return (
       <Card
-        initiallyExpanded
         icon={MonitorCard.icon()}
         {...this.props.cardPropsBag}
         actions={[
@@ -170,7 +169,7 @@ export default class MonitorCard extends PureComponent {
         ]}
         icon={MonitorCard.icon()}
       >
-        <CardMedia expandable style={styles.flexible}>
+        <CardMedia style={styles.flexible}>
           <div style={styles.parent}>
             <Monitor
               {...this.props.monitorProps}

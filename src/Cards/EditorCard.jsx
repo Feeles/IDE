@@ -1,6 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
 import Card from './CardWindow';
-import { CardMedia } from 'material-ui/Card';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 
 import EditorPane from '../EditorPane/';
@@ -72,14 +71,8 @@ export default class EditorCard extends PureComponent {
   render() {
     const { scrollToCard } = this.props.cardPropsBag;
     return (
-      <Card
-        initiallyExpanded
-        icon={EditorCard.icon()}
-        {...this.props.cardPropsBag}
-      >
-        <CardMedia expandable>
-          <EditorPane {...this.props.editorProps} scrollToCard={scrollToCard} />
-        </CardMedia>
+      <Card icon={EditorCard.icon()} {...this.props.cardPropsBag} fit>
+        <EditorPane {...this.props.editorProps} scrollToCard={scrollToCard} />
       </Card>
     );
   }

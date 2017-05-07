@@ -245,11 +245,7 @@ export default class ScreenShotCard extends PureComponent {
       this.props.getConfig('ogp')['og:image'] === this.state.cache[selected];
 
     return (
-      <Card
-        initiallyExpanded
-        icon={ScreenShotCard.icon()}
-        {...this.props.cardPropsBag}
-      >
+      <Card icon={ScreenShotCard.icon()} {...this.props.cardPropsBag}>
         <GridList
           cellHeight={180}
           style={styles.root}
