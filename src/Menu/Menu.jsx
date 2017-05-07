@@ -469,7 +469,6 @@ export default class Menu extends PureComponent {
                   name,
                   ...card
                 }))
-                .filter(item => !item.visible)
                 .map(item => (
                   <MenuItem
                     key={item.name}

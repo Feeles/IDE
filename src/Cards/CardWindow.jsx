@@ -33,6 +33,12 @@ export default class CardWindow extends PureComponent {
     return true;
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.props.visible !== nextProps.visible && nextProps.visible) {
+      this.handleScroll();
+    }
+  }
+
   get cardProps() {
     const props = {
       ...this.props
