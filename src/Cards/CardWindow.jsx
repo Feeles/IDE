@@ -1,5 +1,4 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Element, scroller } from 'react-scroll';
 import { Card } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
@@ -70,14 +69,16 @@ export default class CardWindow extends PureComponent {
 
     const styles = {
       root: {
-        display: visible ? 'block' : 'none',
-        flex: '0 0 500px',
+        width: 0,
         order,
         boxSizing: 'border-box',
         maxWidth: '100%',
         maxHeight: '100%',
         direction: 'ltr',
-        padding: '16px 20px 16px 0'
+        flex: '0 0 auto',
+        flexBasis: visible ? '500px' : 0,
+        padding: visible ? '16px 20px 16px 0' : 0,
+        overflow: visible ? 'initial' : 'hidden'
       },
       innerContainer: {
         width: '100%',
@@ -108,10 +109,14 @@ export default class CardWindow extends PureComponent {
         display: 'inherit'
       }
     };
-    styles.card = fit ? { height: '100%' } : { maxHeight: '100%' };
+    if (fit) {
+      styles.card = { height: '100%' };
+    } else {
+      styles.card = { maxHeight: '100%' };
+    }
 
     return (
-      <Element name={this.props.name} style={styles.root}>
+      <div id={this.props.name} style={styles.root}>
         <Card
           {...this.cardProps}
           style={styles.card}
@@ -127,7 +132,7 @@ export default class CardWindow extends PureComponent {
           </div>
           {this.props.children}
         </Card>
-      </Element>
+      </div>
     );
   }
 }

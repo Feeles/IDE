@@ -62,7 +62,6 @@
     "react-dom": "^15.3.2",
     "react-player": "^0.14.1",
     "react-popout": "^0.5.3",
-    "react-scroll": "^1.4.5",
     "react-tap-event-plugin": "^2.0.0",
     "regenerator-runtime": "^0.10.3",
     "url-search-params": "^0.6.1",

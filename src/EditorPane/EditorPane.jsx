@@ -71,6 +71,17 @@ export default class EditorPane extends PureComponent {
     return true;
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.props.tabs !== nextProps.tabs) {
+      const prevSelected = this.props.tabs.find(t => t.isSelected);
+      const nextSelected = nextProps.tabs.find(t => t.isSelected);
+      if (prevSelected !== nextSelected) {
+        // タブの選択が変化したら EditorCard にスクロールする
+        this.props.scrollToCard('EditorCard');
+      }
+    }
+  }
+
   setLocation = href => {
     this.props.setLocation(href);
     this.props.scrollToCard('MonitorCard');

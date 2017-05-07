@@ -12,8 +12,48 @@ export default class CardContainer extends PureComponent {
     findFile: PropTypes.func.isRequired
   };
 
-  scrollToCard(name) {
+  state = {
+    // smooth scroll のターゲット
+    scrollTarget: null
+  };
+
+  scrollToCard = name => {
     // Cards[name] にスクロールする
+    const scrollTarget = document.getElementById(name);
+    if (scrollTarget) {
+      const startSmoothScroll = !this.state.scrollTarget;
+      this.setState({ scrollTarget }, () => {
+        if (startSmoothScroll) {
+          this.scroll();
+        }
+      });
+    }
+  };
+
+  scroll() {
+    // Scroll into view (shallow) element
+    const { scrollTarget } = this.state;
+    if (scrollTarget) {
+      const rect = scrollTarget.getBoundingClientRect();
+      const offset = 16;
+      let difference = 0;
+      if (rect.left < offset) {
+        difference = rect.left - offset;
+      } else if (rect.right > window.innerWidth) {
+        difference = rect.right - window.innerWidth;
+      }
+
+      if (Math.abs(difference) > 1) {
+        const sign = Math.sign(difference);
+        // smooth scroll
+        scrollTarget.parentNode.scrollLeft += difference / 5 + sign * 5;
+        requestAnimationFrame(() => {
+          this.scroll();
+        });
+      } else {
+        this.setState({ scrollTarget: null });
+      }
+    }
   }
 
   render() {
@@ -62,7 +102,7 @@ export default class CardContainer extends PureComponent {
     }
 
     return (
-      <div id="card-container" style={styles.container}>
+      <div style={styles.container}>
         {cards}
       </div>
     );

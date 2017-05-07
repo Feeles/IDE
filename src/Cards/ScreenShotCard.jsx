@@ -127,6 +127,7 @@ export default class ScreenShotCard extends PureComponent {
     // キャッシュを確認
     if (uploading in this.state.cache) {
       await this.props.updateCard('ScreenShotCard', { visible: true });
+      this.props.cardPropsBag.scrollToCard('ScreenShotCard');
       this.setState({ selected: uploading });
       return;
     }
@@ -137,8 +138,9 @@ export default class ScreenShotCard extends PureComponent {
       // 一時的に Data URL を挿入 (あとで置き換わる)
       [uploading]: [value]
     };
-    this.setState({ cache, uploading }, () => {
-      this.props.updateCard('ScreenShotCard', { visible: true });
+    this.setState({ cache, uploading }, async () => {
+      await this.props.updateCard('ScreenShotCard', { visible: true });
+      this.props.cardPropsBag.scrollToCard('ScreenShotCard');
     });
     // サムネイルをアップロード
     const url = await this.uploadThumbnail(value);
