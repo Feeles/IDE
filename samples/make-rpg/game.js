@@ -2,7 +2,7 @@ import 'hackforplay/core';
 // import 'mod/3d/core';
 
 function gameFunc() {
-	Hack.maps['map1'].load(); // map1 をロード
+	Hack.changeMap('map1'); // map1 をロード
 
 	self.player = new Player(); // プレイヤーをつくる
 	player.mod(_kきし); // 見た目

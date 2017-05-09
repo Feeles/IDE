@@ -51,6 +51,11 @@ Hack.on('load', function() {
 });
 
 game.on('load', function() {
+	// Hack.player がないとき self.player を代わりに入れる
+	if (self.player && !Hack.player) {
+		Hack.player = self.player;
+	}
+
 	var pad = new Pad();
 	pad.moveTo(20, 200);
 	pad.onenterframe = function() {
@@ -402,6 +407,9 @@ Hack.changeMap = function(mapName) {
 					Hack.log('Hack.changeMap(\'map2\'); の ように かいてみよう');
 					break;
 			}
+		} else if (!current) {
+			// 最初のマップをロード
+			next.load();
 		} else if (current !== next) {
 			var r = function(n) {
 				game.rootScene.removeChild(n);
