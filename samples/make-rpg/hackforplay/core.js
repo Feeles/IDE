@@ -1,7 +1,7 @@
 import 'hackforplay/rpg-kit-main';
 import 'hackforplay/CameraV2';
 import 'hackforplay/loader';
-
+import './synonyms';
 
 // Game start
 game.onload = function() {
@@ -91,4 +91,3 @@ Hack.onload = function() {
 };
 
 //Hack.start();
-
