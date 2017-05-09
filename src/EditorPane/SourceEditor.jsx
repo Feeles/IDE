@@ -261,28 +261,23 @@ export default class SourceEditor extends PureComponent {
     if (!['asset', 'paste'].includes(change.origin)) return;
 
     for (const keyword of ['item', 'map']) {
-      // item{N} のような変数を探す. e.g. From "const item1 = 'hello';", into [1]
+      // すでに使われている item{N} のような変数を探す.
       // 戻り値は Array<Number>
-      const sourceIndexes = searchItemIndexes(change.text.join('\n'), keyword);
-      if (sourceIndexes.length < 1) continue;
-
-      // すでに使われている変数と, 被っていないか調べる
+      // e.g. From "const item1 = 'hello';", into [1]
       const usedIndexes = searchItemIndexes(cm.getValue('\n'), keyword);
-      const duplicatedIndexes = sourceIndexes.filter(i =>
-        usedIndexes.includes(i)
-      );
+      if (usedIndexes.length < 1) continue;
 
-      if (duplicatedIndexes.length > 0) {
-        let _next = 0; // 使えるインデックスを探すカーソル. 効率化のために残す
-        let _replaced = change.text.join('\n'); // ひとつずつ置換していくためのバッファ
-        for (const i of duplicatedIndexes) {
-          // update next
-          for (_next++; usedIndexes.includes(_next) && _next < 10000; _next++);
-          const from = new RegExp(`${keyword}${i}`, 'g');
-          const to = `${keyword}${_next}`;
-          _replaced = _replaced.replace(from, to);
-        }
-        change.update(change.from, change.to, _replaced.split('\n'));
+      const sourceText = change.text.join('\n');
+      if (usedIndexes.some(i => sourceText.includes(keyword + i))) {
+        // もし名前が競合していたら…
+        const max = Math.max.apply(null, usedIndexes);
+        const regExp = new RegExp(`${keyword}(\\d+)`, 'g');
+        const text = sourceText.replace(regExp, (match, n) => {
+          // item{n} => item{n+max}
+          n = n >> 0;
+          return keyword + (n + max);
+        });
+        change.update(change.from, change.to, text.split('\n'));
       }
     }
   };
