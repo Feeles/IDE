@@ -84,11 +84,15 @@ export default class ShotPane extends PureComponent {
     height: 0,
     error: null,
     loading: false,
-    canRestore: false
+    canRestore: false,
+    file: this.props.file || SourceFile.shot('')
   };
 
   componentWillReceiveProps(nextProps, nextState) {
-    if (this.props.file !== nextProps.file && nextProps.file) {
+    if (this.props.file !== nextProps.file) {
+      const file = nextProps.file || SourceFile.shot('');
+      this.setState({ file });
+
       if (this.codemirror) {
         // setState しただけでは
         // ReactCodeMirror の componentWillReceiveProps に入らず
@@ -132,60 +136,27 @@ export default class ShotPane extends PureComponent {
   };
 
   handleChange = text => {
-    this.setState({
-      canRestore: text !== this.props.file.text
-    });
+    const canRestore = text !== this.state.file.text;
+    this.setState({ canRestore });
   };
 
   handleRestore = () => {
-    if (!this.props.file || !this.codemirror) {
+    if (!this.codemirror) {
       return;
     }
 
-    this.codemirror.setValue(this.props.file.text);
+    this.codemirror.setValue(this.state.file.text);
     this.setState({ canRestore: false, height: this.getHeight() });
   };
 
   async handleShot() {
     const text = this.codemirror
       ? this.codemirror.getValue('\n')
-      : this.props.file.text;
+      : this.state.file.text;
+    const name = this.state.file.name;
+    const file = SourceFile.shot(text, name);
 
-    await new Promise((resolve, reject) => {
-      this.setState(
-        {
-          error: null,
-          loading: true
-        },
-        resolve
-      );
-    });
-
-    if (this.props.port) {
-      const babelrc = this.props.getConfig('babelrc');
-      try {
-        const { name } = this.props.file;
-        const file = await SourceFile.shot(text, name).babel(babelrc);
-        this.props.port.postMessage({ query: 'shot', value: file.serialize() });
-
-        if (process.env.NODE_ENV === 'production') {
-          if (ga) {
-            ga('send', 'event', 'Code', 'run', text);
-          }
-        }
-      } catch (e) {
-        console.error(e);
-        this.setState({ error: e });
-
-        if (process.env.NODE_ENV === 'production') {
-          if (ga) {
-            ga('send', 'event', 'Code', 'error', text);
-          }
-        }
-      }
-    }
-
-    this.setState({ loading: false });
+    this.props.port.postMessage({ query: 'shot', value: file.serialize() });
   }
 
   handleCodemirror = ref => {
@@ -216,7 +187,7 @@ export default class ShotPane extends PureComponent {
           <Editor
             isSelected
             isCared
-            file={this.props.file || SourceFile.shot('')}
+            file={this.state.file}
             onChange={this.handleChange}
             getConfig={getConfig}
             codemirrorRef={this.handleCodemirror}
