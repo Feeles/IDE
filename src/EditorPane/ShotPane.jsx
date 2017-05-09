@@ -12,11 +12,9 @@ import { SourceFile } from '../File/';
 import { ShotCard } from '../Cards';
 import { CardIcons } from '../Cards/CardWindow';
 
-const durations = [600, 1400, 0];
-
 const getStyle = (props, context, state) => {
   const { palette, spacing, prepareStyles } = context.muiTheme;
-  const { anim, height } = state;
+  const { shooting, height } = state;
 
   return {
     root: {
@@ -24,15 +22,14 @@ const getStyle = (props, context, state) => {
       flexDirection: 'column'
     },
     editor: {
+      position: 'relative',
       boxSizing: 'border-box',
       width: '100%',
-      height: Math.min(500, height + spacing.desktopGutterMore),
-      marginLeft: anim === 1 ? -400 : 0,
-      transform: `
-        rotateZ(${anim === 1 ? -180 : 0}deg)
-        scaleY(${anim === 2 ? 0 : 1})`,
-      opacity: anim === 0 ? 1 : 0.1,
-      transition: transitions.easeOut(durations[anim] + 'ms')
+      height: height + spacing.desktopGutterMore,
+      maxHeight: '100%',
+      marginLeft: shooting ? '-100%' : 0,
+      opacity: shooting ? 0 : 1,
+      transition: transitions.easeOut()
     },
     menu: {
       position: 'relative',
@@ -46,7 +43,7 @@ const getStyle = (props, context, state) => {
       marginRight: 9,
       marginBottom: 4,
       transform: `
-        rotateY(${anim === 0 ? 0 : 180}deg)`
+        rotateY(${shooting ? 180 : 0}deg)`
     },
     label: {
       color: palette.secondaryTextColor,
@@ -80,7 +77,7 @@ export default class ShotPane extends PureComponent {
   };
 
   state = {
-    anim: 0,
+    shooting: false,
     height: 0,
     error: null,
     loading: false,
@@ -88,7 +85,7 @@ export default class ShotPane extends PureComponent {
     file: this.props.file || SourceFile.shot('')
   };
 
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.file !== nextProps.file) {
       const file = nextProps.file || SourceFile.shot('');
       this.setState({ file });
@@ -102,6 +99,15 @@ export default class ShotPane extends PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.shooting && this.state.shooting) {
+      // shooting アニメーションをもとにもどす
+      setTimeout(() => {
+        this.setState({ shooting: false });
+      }, 1000);
+    }
+  }
+
   getHeight = () => {
     if (!this.codemirror) {
       return 0;
@@ -112,27 +118,9 @@ export default class ShotPane extends PureComponent {
   };
 
   shoot = async () => {
-    if (this.state.anim !== 0) {
-      return;
-    }
-
-    const transition = (anim, delay) => {
-      return new Promise((resolve, reject) => {
-        this.setState(
-          {
-            anim
-          },
-          () => {
-            setTimeout(() => resolve(), durations[anim] + 10);
-          }
-        );
-      });
-    };
-
+    if (this.state.shooting) return;
     await this.handleShot();
-    await transition(1);
-    await transition(2);
-    await transition(0);
+    this.setState({ shooting: true });
   };
 
   handleChange = text => {
@@ -169,10 +157,7 @@ export default class ShotPane extends PureComponent {
 
   render() {
     const { localization, getConfig } = this.props;
-    const { anim } = this.state;
-
     const styles = getStyle(this.props, this.context, this.state);
-
     const extraKeys = {
       Enter: this.shoot
     };
@@ -201,9 +186,9 @@ export default class ShotPane extends PureComponent {
           <RaisedButton
             primary
             label={localization.shotCard.button}
-            icon={anim === 0 ? ShotCard.icon() : <AvStop />}
+            icon={this.state.shooting ? <AvStop /> : ShotCard.icon()}
             labelPosition="before"
-            disabled={anim !== 0}
+            disabled={this.state.shooting}
             onTouchTap={this.shoot}
             style={styles.shoot}
           />
