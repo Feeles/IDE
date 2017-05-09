@@ -51,6 +51,11 @@ Hack.on('load', function() {
 });
 
 game.on('load', function() {
+	// Hack.player がないとき self.player を代わりに入れる
+	if (self.player && !Hack.player) {
+		Hack.player = self.player;
+	}
+
 	var pad = new Pad();
 	pad.moveTo(20, 200);
 	pad.onenterframe = function() {
