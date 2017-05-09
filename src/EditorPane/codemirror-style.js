@@ -2,8 +2,8 @@ import { grey100, grey300, blueA700 } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
 
-
-export default ({palette, paper}) => `
+export default ({ palette, paper }) =>
+  `
 textarea {
   font-size: 16px !important; /* In smartphone, will not scale automatically */
 }
@@ -27,7 +27,7 @@ textarea {
 }
 .Feeles-asset-opener-begin {
   cursor: pointer;
-  margin: -22px 0 0 -5px;
+  margin: -20px 0 0 -5px;
   z-index: 2;
   color: ${palette.alternateTextColor};
   background-color: ${fade(palette.primary1Color, 1)};
@@ -38,7 +38,7 @@ textarea {
 }
 .Feeles-asset-opener-end {
   cursor: pointer;
-  margin: -22px 0 0 -5px;
+  margin: -20px 0 0 -5px;
   z-index: 2;
   color: ${palette.alternateTextColor};
   background-color: ${fade(palette.primary1Color, 1)};
@@ -50,11 +50,11 @@ textarea {
 .cm-s-default .cm-property {
   color: ${blueA700};
 }
-div.CodeMirror:not(.CodeMirror-focused) .CodeMirror-line>span {
+div.CodeMirror:not(.CodeMirror-focused) pre>span {
   background-color: ${grey300};
 }
-div.CodeMirror:not(.CodeMirror-focused) .CodeMirror-line>span>span.cm-tab,
-div.CodeMirror:not(.CodeMirror-focused) .CodeMirror-line>span>span.cm-comment {
+div.CodeMirror:not(.CodeMirror-focused) pre>span>span.cm-tab,
+div.CodeMirror:not(.CodeMirror-focused) pre>span>span.cm-comment {
   background-color: ${grey100};
 }
 div.CodeMirror span.CodeMirror-matchingbracket {
@@ -62,6 +62,9 @@ div.CodeMirror span.CodeMirror-matchingbracket {
   line-height: 16px;
   vertical-align: middle;
 }
-div.CodeMirror.CodeMirror-focused .CodeMirror-line>span>span.cm-comment {
+div.CodeMirror.CodeMirror-focused pre>span>span.cm-comment {
   opacity: 0.5;
+}
+div.CodeMirror pre {
+  line-height: 20px;
 }`;
