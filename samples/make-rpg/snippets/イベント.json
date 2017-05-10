@@ -56,22 +56,22 @@
 			"description": "item.hp が変化したときに発生するイベント",
 			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/体力が変わったとき"
 		},
-		"onscorechange": {
-			"prefix": "onscorechange",
+		"Hack.onscorechange": {
+			"prefix": "Hack.onscorechange",
 			"body": "Hack.onscorechange = () => {\n\t\n};",
 			"leftLabel": "スコアが変わったとき",
 			"description": "Hack.score が変化したときに発生するイベント",
 			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/スコアが変わったとき"
 		},
-		"ongameclear": {
-			"prefix": "ongameclear",
+		"Hack.ongameclear": {
+			"prefix": "Hack.ongameclear",
 			"body": "Hack.ongameclear = () => {\n\t\n};",
 			"leftLabel": "ゲームクリアしたとき",
 			"description": "ゲームクリアしたときに発生するイベント",
 			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ゲームクリアしたとき"
 		},
-		"ongameover": {
-			"prefix": "ongameover",
+		"Hack.ongameover": {
+			"prefix": "Hack.ongameover",
 			"body": "Hack.ongameover = () => {\n\t\n};",
 			"leftLabel": "ゲームオーバーになったとき",
 			"description": "ゲームオーバーになったときに発生するイベント",
