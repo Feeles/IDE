@@ -43,6 +43,24 @@ export const assets = [
   ['bomb', '_bばくだん']
 ];
 
-for (const [from, to] of synonyms) {
-  self[to] = Hack.assets[from];
-}
+export const events = {
+/* onplayerenter => onのった */
+  'playerenter': 'のった',
+  'playerstay': 'いる',
+  'playerexit': 'おりた',
+  'walkstart': 'あるきはじめた',
+  'walkmove': 'あるいている',
+  'walkend': 'あるきおわった',
+  'triggerenter': 'ふれはじめた',
+  'triggerstay': 'ふれつづけている',
+  'triggerexit': 'ふれおわった',
+  'collided': 'ぶつかった',
+  'hpchange': 'HPかわった',
+  'becomeidle': 'とまるとき',
+  'becomewalk': 'あるくとき',
+  'becomeattack': 'こうげきするとき',
+  'becomedamaged': 'くらったとき',
+  'becomedead': 'たおれたとき',
+  'attacked': 'こうげきされた',
+  'enterframe': 'つねに'
+};
