@@ -407,6 +407,9 @@ Hack.changeMap = function(mapName) {
 					Hack.log('Hack.changeMap(\'map2\'); の ように かいてみよう');
 					break;
 			}
+		} else if (!current) {
+			// 最初のマップをロード
+			next.load();
 		} else if (current !== next) {
 			var r = function(n) {
 				game.rootScene.removeChild(n);

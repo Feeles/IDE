@@ -2,7 +2,7 @@
 	".source.js": {
 		"log": {
 			"prefix": "Hacklog",
-			"body": "Hack.log();",
+			"body": "Hack.log('');",
 			"leftLabel": "ログ",
 			"description": "ゲーム画面に好きな文字や数字を出せる",
 			"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ログ"

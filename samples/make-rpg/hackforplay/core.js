@@ -1,7 +1,13 @@
 import 'hackforplay/rpg-kit-main';
 import 'hackforplay/CameraV2';
 import 'hackforplay/loader';
-import './synonyms';
+import * as synonyms from './synonyms';
+
+// Assign synonyms
+for (const [from, to] of synonyms.assets) {
+  self[to] = Hack.assets[from];
+}
+
 
 // Game start
 game.onload = function() {

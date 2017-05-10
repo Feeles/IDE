@@ -2,6 +2,7 @@ import 'hackforplay/rpg-kit-main';
 import 'enchantjs/enchant';
 import 'enchantjs/ui.enchant';
 import 'hackforplay/hack';
+import * as synonyms from './synonyms';
 
 /**
 * RPGObject
@@ -108,14 +109,18 @@ var __RPGObject = enchant.Class(enchant.Sprite, {
 			}
 		});
 		var collisionFlag = null; // this.collisionFlag (Default:true)
+		var noCollisionEvents = ['playerenter', 'playerstay', 'playerexit'];
 		Object.defineProperty(this, 'collisionFlag', {
 			configurable: true,
 			enumerable: true,
 			get: function() {
-				return collisionFlag !== null ? collisionFlag :
-					!(this.onplayerenter || this._listeners['playerenter'] ||
-						this.onplayerstay || this._listeners['playerstay'] ||
-						this.onplayerexit || this._listeners['playerexit']);
+				if (collisionFlag !== null) return collisionFlag;
+				for (var i = 0; i < noCollisionEvents.length; i++) {
+					if (this.isListening(noCollisionEvents[i])) {
+						return false;
+					}
+				}
+				return true;
 			},
 			set: function(value) { collisionFlag = value; }
 		});
@@ -540,8 +545,22 @@ var __RPGObject = enchant.Class(enchant.Sprite, {
 				this.direction = [2, 3, 1, 0][i % 4]; // turn index to direction
 				break;
 		}
+	},
+	dispatchEvent: function (event) {
+		EventTarget.prototype.dispatchEvent.call(this, event);
+		// Synonym Event を発火
+		var synonym = synonyms.events[event.type];
+		if (synonym) {
+			var clone = Object.assign({}, event, { type: synonym });
+			EventTarget.prototype.dispatchEvent.call(this, clone);
+		}
+	},
+	isListening: function (eventType) {
+		// eventType のリスナーを持っているか
+		var synonym = synonyms.events[eventType];
+		return this['on' + eventType] || this._listeners[eventType] ||
+			synonym && (this['on' + synonym] || this._listeners[synonym]);
 	}
-
 });
 
 var __HumanBase = enchant.Class(RPGObject, {

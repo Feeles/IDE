@@ -1,7 +1,5 @@
-import 'hackforplay/rpg-kit-main';
-import 'hackforplay/rpg-kit-rpgobjects';
-
-const synonyms = [
+export const assets = [
+/* Hack.assets.knight === self._kきし */
   ['knight', '_kきし'],
   ['darkKnight', '_aあんこくきし'],
   ['slime', '_sスライム'],
@@ -45,6 +43,24 @@ const synonyms = [
   ['bomb', '_bばくだん']
 ];
 
-for (const [from, to] of synonyms) {
-  self[to] = Hack.assets[from];
-}
+export const events = {
+/* onplayerenter => onのった */
+  'playerenter': 'のった',
+  'playerstay': 'いる',
+  'playerexit': 'おりた',
+  'walkstart': 'あるきはじめた',
+  'walkmove': 'あるいている',
+  'walkend': 'あるきおわった',
+  'triggerenter': 'ふれはじめた',
+  'triggerstay': 'ふれつづけている',
+  'triggerexit': 'ふれおわった',
+  'collided': 'ぶつかった',
+  'hpchange': 'HPかわった',
+  'becomeidle': 'とまるとき',
+  'becomewalk': 'あるくとき',
+  'becomeattack': 'こうげきするとき',
+  'becomedamaged': 'くらったとき',
+  'becomedead': 'たおれたとき',
+  'attacked': 'こうげきされた',
+  'enterframe': 'つねに'
+};
