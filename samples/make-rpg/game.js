@@ -9,9 +9,9 @@ function gameFunc() {
 	player.locate(3, 5); // はじめの位置
 	player.hp = 3; // 体力
 	player.atk = 1; // こうげき力
-	player.onbecomedead = () => {
-		player.destroy(); // プレイヤーがたおれた => プレイヤーを消す
-		Hack.gameover(); // プレイヤーがたおれた => ゲームオーバー
+	player.onたおれたとき = () => {
+		player.destroy(); // プレイヤーを消す
+		Hack.gameover(); // ゲームオーバー
 	};
 
 	/* \____ assets/ゲーム.json ____/ */
