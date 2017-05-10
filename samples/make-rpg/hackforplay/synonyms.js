@@ -1,7 +1,5 @@
-import 'hackforplay/rpg-kit-main';
-import 'hackforplay/rpg-kit-rpgobjects';
-
-const synonyms = [
+export const assets = [
+/* Hack.assets.knight === self._kきし */
   ['knight', '_kきし'],
   ['darkKnight', '_aあんこくきし'],
   ['slime', '_sスライム'],
