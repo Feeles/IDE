@@ -15,6 +15,7 @@ import HardwareDesktopWindows
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from '../Monitor/';
+import uniqueId from '../utils/uniqueId';
 
 const frameSizes = [
   [480, 320],
@@ -29,7 +30,6 @@ const frameSizes = [
 ];
 
 const by = 'x';
-const getUniqueId = (i => () => `Capture-${++i}`)(0);
 
 export default class MonitorCard extends PureComponent {
   static propTypes = {
@@ -92,7 +92,7 @@ export default class MonitorCard extends PureComponent {
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
       query: 'capture',
-      id: getUniqueId(),
+      id: uniqueId(),
       type: 'image/jpeg'
     };
     const task = async event => {
