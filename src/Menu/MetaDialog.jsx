@@ -21,11 +21,13 @@ import ScreenShotCard from '../Cards/ScreenShotCard';
  */
 export default class MetaDialog extends PureComponent {
   static propTypes = {
+    resolve: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
-    setConfig: PropTypes.func.isRequired
+    setConfig: PropTypes.func.isRequired,
+    port: PropTypes.object
   };
 
   state = {
@@ -63,7 +65,9 @@ export default class MetaDialog extends PureComponent {
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
       findFile: this.props.findFile,
-      localization: this.props.localization
+      localization: this.props.localization,
+      back: this.back,
+      port: this.props.port
     };
     switch (this.state.stepIndex) {
       case 0:
@@ -116,7 +120,9 @@ class EditOGP extends PureComponent {
   static propTypes = {
     findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
-    setConfig: PropTypes.func.isRequired
+    setConfig: PropTypes.func.isRequired,
+    back: PropTypes.func.isRequired,
+    port: PropTypes.object
   };
 
   static contextTypes = {

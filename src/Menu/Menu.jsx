@@ -121,7 +121,8 @@ export default class Menu extends PureComponent {
     oAuthId: PropTypes.string,
     setOAuthId: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
-    toggleShowAll: PropTypes.func.isRequired
+    toggleShowAll: PropTypes.func.isRequired,
+    port: PropTypes.object
   };
 
   static contextTypes = {
@@ -168,7 +169,8 @@ export default class Menu extends PureComponent {
     const result = await this.props.openFileDialog(MetaDialog, {
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
-      findFile: this.props.findFile
+      findFile: this.props.findFile,
+      port: this.props.port
     });
     if (!result) return;
 
