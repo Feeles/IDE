@@ -99,7 +99,7 @@ export default class MetaDialog extends PureComponent {
 
     const styles = {
       dialog: {
-        minHeight: 500,
+        minHeight: 400,
         overflowX: 'auto',
         overflowY: 'scroll'
       }
