@@ -138,8 +138,6 @@ class EditOGP extends PureComponent {
     const images = []
       .concat(ogp['og:image'], ogp['twitter:image'])
       .concat(screenshots)
-      .concat(organization.placeholder['og:image'])
-      .concat(organization.images)
       .filter((item, i, array) => item && array.indexOf(item) === i); // unique
     this.setState({ images });
     if (images[0]) {

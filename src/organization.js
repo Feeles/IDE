@@ -10,33 +10,16 @@ export default {
     'og:title': '',
     'og:url': '',
     'og:description': '',
-    'og:image': 'https://embed.hackforplay.xyz/open-source/ogp/WQs5wGAvvnO8NJdlFHtd1zLimS0ollWf.png',
-    'og:image:width': 480,
-    'og:image:height': 320,
+    'og:image': '',
     'og:author': '', // additional
     'og:homepage': '', // additional
     'twitter:card': 'summary_large_image',
     'twitter:site': '',
     'twitter:title': '...',
     'twitter:description': '...',
-    'twitter:image': 'https://embed.hackforplay.xyz/open-source/ogp/WQs5wGAvvnO8NJdlFHtd1zLimS0ollWf.png',
+    'twitter:image': '',
     'twitter:author': ''
   },
-  images: [
-    'https://embed.hackforplay.xyz/open-source/ogp/WQs5wGAvvnO8NJdlFHtd1zLimS0ollWf.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/VUeOuXf5Lo0PepdqalINiVraCUTpfJ8V.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/vveWeYwVjeU7fj4Y22jpnlDBxQJpugme.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/wwdaiseDGHw8lS3SedaXjFczMEMq63GJ.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/Y109KU1wE4CyTM9MNFQMQR3PMYRSjb6A.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/x1dQ6aq3uLrXgmaDWWSB4K5fDlM4IE9T.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/Z0yCmf7BVwooyR4utctOnxlijUl7g235.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/xC6Xnuacrj9vnvyyLjKUvDGIpugdZnK8.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/ZE18NZ2uqdgNNRXJvqjnaJI4DqnElKDD.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/yzsPOWsudxmxziPpP8ftcRyziFVZ3sJG.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/ZTVGl3XmGpfD6BF1izJq8PGp5GzpqJi4.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/zYqZHmMVVeXOs19WmhrYRyimuKf58YWB.png',
-    'https://embed.hackforplay.xyz/open-source/ogp/vTLBZ4zUTMiJlOEeHjFogiufdVxIR0Ch.png'
-  ],
   palette: {},
   hashtags: 'hackforplay',
   api: {
