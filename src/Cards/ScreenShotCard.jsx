@@ -147,6 +147,8 @@ export default class ScreenShotCard extends PureComponent {
     const url = await this.uploadThumbnail(value);
     await this.setCache(uploading, url);
     this.setState({ uploading: null });
+    // サムネイルをセット
+    this.setState({ selected: uploading }, this.handleThumbnailSet);
   };
 
   handleThumbnailSet = async () => {
