@@ -619,6 +619,7 @@ export default class Main extends Component {
           setOAuthId={this.setOAuthId}
           showAll={this.state.showAll}
           toggleShowAll={this.toggleShowAll}
+          port={this.state.port}
         />
         <CardContainer
           cards={this.state.cards}
