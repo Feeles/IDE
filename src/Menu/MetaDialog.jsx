@@ -3,17 +3,19 @@ import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import TextField from 'material-ui/TextField';
 import { Card, CardMedia, CardHeader, CardActions } from 'material-ui/Card';
-import CircularProgress from 'material-ui/CircularProgress';
 import IconButton from 'material-ui/IconButton';
 import NavigationArrowForward
   from 'material-ui/svg-icons/navigation/arrow-forward';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import transitions from 'material-ui/styles/transitions';
 
 import organization from '../organization';
 import ScreenShotCard from '../Cards/ScreenShotCard';
+import uniqueId from '../utils/uniqueId';
 
 /**
  * OGPの設定を行い, デプロイが必要な場合 true で resolve する
@@ -210,6 +212,24 @@ class EditOGP extends PureComponent {
     }
   };
 
+  handleCapture = () => {
+    const { port } = this.props;
+    // Monitor にスクリーンショットを撮るようリクエスト
+    const request = {
+      query: 'capture',
+      id: uniqueId(),
+      type: 'image/jpeg'
+    };
+    const task = event => {
+      if (event.data && event.data.id === request.id) {
+        port.removeEventListener('message', task);
+      }
+    };
+    port.addEventListener('message', task);
+    port.postMessage(request);
+    this.props.back();
+  };
+
   render() {
     const { localization } = this.props;
     const ogp = this.props.getConfig('ogp');
@@ -251,7 +271,10 @@ class EditOGP extends PureComponent {
         height: 0
       },
       progress: {
-        top: -150
+        top: '50%',
+        left: '50%',
+        position: 'absolute',
+        marginLeft: -28
       },
       navigation: {
         display: 'flex'
@@ -280,7 +303,12 @@ class EditOGP extends PureComponent {
             {ogp['og:image']
               ? <img style={styles.image} src={ogp['og:image']} />
               : <div style={styles.loading}>
-                  <CircularProgress style={styles.progress} size={100} />
+                  <FloatingActionButton
+                    style={styles.progress}
+                    onTouchTap={this.handleCapture}
+                  >
+                    <ImagePhotoCamera />
+                  </FloatingActionButton>
                 </div>}
           </CardMedia>
           <CardHeader
