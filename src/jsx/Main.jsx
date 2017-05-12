@@ -18,7 +18,8 @@ import {
 import { BinaryFile, SourceFile, configs } from '../File/';
 import EditorPane, { codemirrorStyle } from '../EditorPane/';
 import Hierarchy from '../Hierarchy/';
-import Monitor, { MonitorTypes, maxByPriority } from '../Monitor/';
+import Monitor, { maxByPriority } from '../Monitor/';
+import * as MonitorTypes from '../utils/MonitorTypes';
 import Menu from '../Menu/';
 import FileDialog, {
   SaveDialog,
@@ -26,7 +27,6 @@ import FileDialog, {
   DeleteDialog
 } from '../FileDialog/';
 import { Tab } from '../ChromeTab/';
-import * as Cards from '../Cards/';
 import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
@@ -94,6 +94,7 @@ export default class Main extends Component {
     oAuthId: null,
 
     cards: cardStateDefault,
+    cardIcons: null,
     // Advanced Mode
     showAll: false
   };
@@ -126,13 +127,7 @@ export default class Main extends Component {
     });
     const card = this.findFile('feeles/card.json');
     if (card) {
-      const cards = card.json;
-      for (let key in cards) {
-        if (cards.hasOwnProperty(key) && !Cards[key]) {
-          delete cards[key];
-        }
-      }
-      this.setState({ cards });
+      this.setState({ cards: card.json });
     }
   }
 
@@ -457,7 +452,6 @@ export default class Main extends Component {
   setLocation = href => {
     this.setState(prevState => ({
       reboot: true,
-      monitorType: maxByPriority(prevState.monitorType, MonitorTypes.Card),
       href: href || prevState.href
     }));
   };
@@ -483,16 +477,24 @@ export default class Main extends Component {
   openFileDialog = () => console.error('openFileDialog has not be declared');
   handleFileDialog = ref => ref && (this.openFileDialog = ref.open);
 
+  handleContainerRef = ref => {
+    if (!this.state.cardIcons && ref) {
+      const cardIcons = {};
+      for (const [name, instance] of Object.entries(ref.refs)) {
+        if (instance.constructor.icon) {
+          cardIcons[name] = instance.constructor.icon;
+        }
+      }
+      this.setState({ cardIcons });
+    }
+  };
+
   render() {
     const { connectDropTarget, localization } = this.props;
-
-    const { files, tabs, dialogContent, reboot, port } = this.state;
-
     const styles = getStyle(this.props, this.state, this.getConfig('palette'));
 
     const commonProps = {
-      files,
-      isResizing: false,
+      files: this.props.files,
       localization,
       getConfig: this.getConfig,
       setConfig: this.setConfig,
@@ -500,102 +502,6 @@ export default class Main extends Component {
       addFile: this.addFile,
       putFile: this.putFile,
       showAll: this.state.showAll
-    };
-
-    const cardProps = {
-      EditorCard: {
-        updateCard: this.updateCard,
-        editorProps: {
-          ...commonProps,
-          tabs,
-          selectTab: this.selectTab,
-          closeTab: this.closeTab,
-          setLocation: this.setLocation,
-          openFileDialog: this.openFileDialog,
-          port,
-          reboot,
-          href: this.state.href
-        }
-      },
-      HierarchyCard: {
-        hierarchyProps: {
-          ...commonProps,
-          tabs,
-          deleteFile: this.deleteFile,
-          selectTab: this.selectTab,
-          closeTab: this.closeTab,
-          openFileDialog: this.openFileDialog,
-          saveAs: this.saveAs
-        }
-      },
-      MediaCard: {
-        port: this.state.port,
-        updateCard: this.updateCard
-      },
-      ReadmeCard: {
-        ...commonProps,
-        selectTab: this.selectTab,
-        port: this.state.port,
-        setLocation: this.setLocation,
-        updateCard: this.updateCard
-      },
-      ShotCard: {
-        updateCard: this.updateCard,
-        shotProps: {
-          ...commonProps,
-          port: this.state.port
-        }
-      },
-      EnvCard: {
-        ...commonProps,
-        selectTab: this.selectTab
-      },
-      CustomizeCard: {
-        ...commonProps,
-        selectTab: this.selectTab
-      },
-      MonitorCard: {
-        setLocation: this.setLocation,
-        isPopout: this.state.monitorType === MonitorTypes.Popout,
-        togglePopout: this.handleTogglePopout,
-        toggleFullScreen: this.handleToggleFullScreen,
-        port: this.state.port,
-        addFile: this.addFile,
-        monitorProps: {
-          ...commonProps,
-          cards: this.state.cards,
-          rootWidth: this.rootWidth,
-          monitorType: this.state.monitorType,
-          isPopout: this.state.monitorType === MonitorTypes.Popout,
-          isFullScreen: this.state.monitorType === MonitorTypes.FullScreen,
-          togglePopout: this.handleTogglePopout,
-          toggleFullScreen: this.handleToggleFullScreen,
-          reboot,
-          portRef: port => this.setState({ port }),
-          coreString: this.state.coreString,
-          saveAs: this.saveAs,
-          href: this.state.href,
-          setLocation: this.setLocation
-        }
-      },
-      CreditsCard: {
-        files,
-        localization
-      },
-      PaletteCard: {
-        getConfig: this.getConfig,
-        setConfig: this.setConfig,
-        localization
-      },
-      ScreenShotCard: {
-        ...commonProps,
-        deleteFile: this.deleteFile,
-        deployURL: this.props.deployURL,
-        oAuthId: this.state.oAuthId,
-        showNotice: this.handleShowNotice,
-        port: this.state.port,
-        updateCard: this.updateCard
-      }
     };
 
     const userStyle = this.findFile('feeles/codemirror.css');
@@ -620,15 +526,31 @@ export default class Main extends Component {
           showAll={this.state.showAll}
           toggleShowAll={this.toggleShowAll}
           port={this.state.port}
+          cardIcons={this.state.cardIcons}
         />
         <CardContainer
+          {...commonProps}
           cards={this.state.cards}
-          getConfig={this.getConfig}
-          cardProps={cardProps}
           updateCard={this.updateCard}
-          localization={localization}
-          findFile={this.findFile}
-          showAll={this.state.showAll}
+          tabs={this.state.tabs}
+          selectTab={this.selectTab}
+          closeTab={this.closeTab}
+          setLocation={this.setLocation}
+          openFileDialog={this.openFileDialog}
+          port={this.state.port}
+          setPort={port => this.setState({ port })}
+          reboot={this.state.reboot}
+          href={this.state.href}
+          coreString={this.state.coreString}
+          monitorType={this.state.monitorType}
+          saveAs={this.saveAs}
+          toggleFullScreen={this.handleToggleFullScreen}
+          togglePopout={this.handleTogglePopout}
+          saveAs={this.saveAs}
+          showNotice={this.handleShowNotice}
+          deleteFile={this.deleteFile}
+          oAuthId={this.state.oAuthId}
+          ref={this.handleContainerRef}
         />
         <Footer
           deployURL={this.props.deployURL}

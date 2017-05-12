@@ -101,7 +101,6 @@ export default class ChromeTabs extends PureComponent {
     file: PropTypes.object.isRequired,
     tabs: PropTypes.array.isRequired,
     isSelected: PropTypes.bool.isRequired,
-    isResizing: PropTypes.bool.isRequired,
     handleSelect: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
@@ -125,13 +124,6 @@ export default class ChromeTabs extends PureComponent {
     } else {
       return false;
     }
-  }
-
-  shouldComponentUpdate(nextProps) {
-    if (this.props.isResizing && nextProps.isResizing) {
-      return false;
-    }
-    return true;
   }
 
   handleRef = ref => {

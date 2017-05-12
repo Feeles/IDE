@@ -36,7 +36,6 @@ import { updateProject } from '../database/';
 import organization from '../organization';
 import debugWindow from '../utils/debugWindow';
 import open from '../utils/open';
-import * as Cards from '../Cards';
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -103,6 +102,7 @@ const getStyles = (props, context) => {
 export default class Menu extends PureComponent {
   static propTypes = {
     cards: PropTypes.object.isRequired,
+    cardIcons: PropTypes.object,
     files: PropTypes.array.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -500,7 +500,11 @@ export default class Menu extends PureComponent {
                     primaryText={
                       localization[lowerCaseAtFirst(item.name)].title
                     }
-                    leftIcon={renderCardIcon(item.name)}
+                    leftIcon={
+                      this.props.cardIcons && this.props.cardIcons[item.name]
+                        ? this.props.cardIcons[item.name]()
+                        : null
+                    }
                     onTouchTap={() => {
                       this.props.updateCard(item.name, { visible: true });
                       this.handleToggleDrawer();
@@ -532,14 +536,6 @@ export default class Menu extends PureComponent {
 
 function lowerCaseAtFirst(string) {
   return string[0].toLowerCase() + string.substr(1);
-}
-
-function renderCardIcon(name) {
-  if (name in Cards) {
-    return Cards[name].icon();
-  } else {
-    return null;
-  }
 }
 
 class HoverMenuItem extends PureComponent {

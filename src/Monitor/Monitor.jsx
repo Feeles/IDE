@@ -55,7 +55,6 @@ const getStyle = (props, context, state) => {
 
 export default class Monitor extends PureComponent {
   static propTypes = {
-    isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
     isPopout: PropTypes.bool.isRequired,
@@ -64,7 +63,7 @@ export default class Monitor extends PureComponent {
     href: PropTypes.string.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    portRef: PropTypes.func.isRequired,
+    setPort: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -156,7 +155,7 @@ export default class Monitor extends PureComponent {
   }
 
   async startProcess() {
-    const { portRef, getConfig } = this.props;
+    const { setPort, getConfig } = this.props;
 
     const babelrc = getConfig('babelrc');
     const env = composeEnv(getConfig('env'));
@@ -203,7 +202,7 @@ export default class Monitor extends PureComponent {
   }
 
   handlePort(port) {
-    this.props.portRef(port);
+    this.props.setPort(port);
     port.start();
     this.setState({ port });
   }

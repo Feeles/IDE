@@ -36,7 +36,6 @@ export default class Hierarchy extends PureComponent {
     closeTab: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    isResizing: PropTypes.bool.isRequired,
     localization: PropTypes.object.isRequired
   };
 
@@ -59,13 +58,6 @@ export default class Hierarchy extends PureComponent {
         tabbedFiles: nextProps.tabs.map(tab => tab.file)
       });
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.isResizing) {
-      return false;
-    }
-    return true;
   }
 
   handleNativeDrop = (files, dir = null) => {
