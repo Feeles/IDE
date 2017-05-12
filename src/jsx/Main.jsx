@@ -15,18 +15,16 @@ import {
   putFile,
   deleteFile
 } from '../database/';
-import { BinaryFile, SourceFile, configs } from '../File/';
-import EditorPane, { codemirrorStyle } from '../EditorPane/';
-import Hierarchy from '../Hierarchy/';
-import Monitor, { maxByPriority } from '../Monitor/';
-import * as MonitorTypes from '../utils/MonitorTypes';
+import { BinaryFile, SourceFile, configs } from 'File/';
+import codemirrorStyle from 'js/codemirrorStyle';
+import * as MonitorTypes from 'utils/MonitorTypes';
 import Menu from '../Menu/';
 import FileDialog, {
   SaveDialog,
   RenameDialog,
   DeleteDialog
-} from '../FileDialog/';
-import { Tab } from '../ChromeTab/';
+} from 'FileDialog/';
+import { Tab } from 'ChromeTab/';
 import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';

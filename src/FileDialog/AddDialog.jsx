@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
 
-import { SourceFile } from '../File/';
+import { SourceFile } from 'File/';
 import { Confirm, Abort } from './Buttons';
 
 const getSeed = type => {

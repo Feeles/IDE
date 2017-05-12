@@ -9,7 +9,7 @@ import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import { brown50 } from 'material-ui/styles/colors';
 
 import { personalDB, updateProject } from '../database/';
-import EditableLabel from '../jsx/EditableLabel';
+import EditableLabel from 'jsx/EditableLabel';
 import { ProjectCard } from '../Menu/CloneDialog';
 
 export default class LaunchDialog extends PureComponent {

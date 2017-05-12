@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
-import { MimeTypes } from '../EditorPane/';
+import { MimeTypes } from 'Cards/EditorCard/';
 
 const getUniqueId = (i => () => ++i)(0);
 

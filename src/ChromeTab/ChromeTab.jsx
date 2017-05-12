@@ -11,7 +11,7 @@ const MinTabWidth = 0;
 const TabHeight = 32;
 const TabSkewX = 24;
 
-import { FileEditorMap } from '../EditorPane/';
+import { FileEditorMap } from 'Cards/EditorCard/';
 
 const getStyles = (props, context, state) => {
   const { isSelected } = props;

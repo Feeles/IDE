@@ -28,8 +28,8 @@ import {
   updateProject,
   deleteProject
 } from '../database/';
-import { SourceFile } from '../File/';
-import EditableLabel from '../jsx/EditableLabel';
+import { SourceFile } from 'File/';
+import EditableLabel from 'jsx/EditableLabel';
 import isServiceWorkerEnabled from '../js/isServiceWorkerEnabled';
 
 const BundleTypes = ['embed', 'divide', 'cdn', 'project'];

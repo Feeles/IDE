@@ -2,36 +2,29 @@ import React from 'react';
 import md5 from 'md5';
 import { parse } from './JSON6';
 
-
 import _File from './_File';
 import configs from './configs';
-import { SourceEditor } from '../EditorPane/';
-import download from '../html/download';
+import { SourceEditor } from 'Cards/EditorCard/';
+import download from 'html/download';
 import composeOgp from './composeOgp';
 import { encode, decode } from './sanitizeHTML';
 
 export default class SourceFile extends _File {
-
   static defaultProps = {
     name: '.SourceFile',
     text: '',
     json: null,
     component: SourceEditor,
-    sign: null,
+    sign: null
   };
 
   static defaultOptions = {
-    isTrashed: false,
-  }
+    isTrashed: false
+  };
 
-  static visible = _File.visible.concat(
-    'text',
-    'isScript'
-  );
+  static visible = _File.visible.concat('text', 'isScript');
 
-  static watchProps = _File.watchProps.concat(
-    'isScript'
-  );
+  static watchProps = _File.watchProps.concat('isScript');
 
   constructor(props) {
     if (props.composed && !props.text) {
@@ -43,7 +36,7 @@ export default class SourceFile extends _File {
         // 旧仕様（sanitizeHTML）で compose された文字列の展開 (backword compatibility)
         text = decode(props.composed);
       }
-      props = {...props, text};
+      props = { ...props, text };
     }
 
     super(props);
@@ -70,11 +63,12 @@ export default class SourceFile extends _File {
 
   get json() {
     if (!this._json) {
-      const model = Array.from(configs.values())
-        .find((config) => config.test.test(this.name));
+      const model = Array.from(configs.values()).find(config =>
+        config.test.test(this.name)
+      );
       const defaultValue = model ? model.defaultValue : {};
       try {
-        this._json = {...defaultValue, ...parse(this.text)};
+        this._json = { ...defaultValue, ...parse(this.text) };
       } catch (e) {
         return {};
       }
@@ -84,14 +78,14 @@ export default class SourceFile extends _File {
 
   _hash = null;
   get hash() {
-    return this._hash = this._hash || md5(this.text);
+    return (this._hash = this._hash || md5(this.text));
   }
 
   set(change) {
     if (!change.text && this.hash) {
       change.hash = this.hash;
     }
-    const seed = {...this.serialize(), ...change};
+    const seed = { ...this.serialize(), ...change };
     seed.key = this.key;
     seed.lastModified = Date.now();
 
@@ -106,7 +100,7 @@ export default class SourceFile extends _File {
       const credits = this.credits.concat({
         ...this.sign,
         timestamp: Date.now(),
-        hash: this.hash,
+        hash: this.hash
       });
       serialized.credits = JSON.stringify(credits);
     } else {
@@ -123,13 +117,13 @@ export default class SourceFile extends _File {
   static load(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         resolve(
           new SourceFile({
             type: file.type,
             name: file.name || SourceFile.defaultProps.name,
             text: e.target.result,
-            lastModified: file.lastModified,
+            lastModified: file.lastModified
           })
         );
       };
@@ -160,10 +154,10 @@ export default class SourceFile extends _File {
       text: download({
         CSS_PREFIX,
         title: getConfig('ogp')['og:title'],
-        files: await Promise.all( files.map((file) => file.compose()) ),
+        files: await Promise.all(files.map(file => file.compose())),
         ogp: composeOgp(getConfig),
-        body,
-      }),
+        body
+      })
     });
   }
 
@@ -182,10 +176,10 @@ export default class SourceFile extends _File {
       text: download({
         CSS_PREFIX,
         title: getConfig('ogp')['og:title'],
-        files: await Promise.all( files.map((file) => file.compose()) ),
+        files: await Promise.all(files.map(file => file.compose())),
         ogp: composeOgp(getConfig),
-        head,
-      }),
+        head
+      })
     });
   }
 
@@ -204,10 +198,10 @@ export default class SourceFile extends _File {
       text: download({
         CSS_PREFIX,
         title: getConfig('ogp')['og:title'],
-        files: await Promise.all( files.map((file) => file.compose()) ),
+        files: await Promise.all(files.map(file => file.compose())),
         ogp: composeOgp(getConfig),
-        head,
-      }),
+        head
+      })
     });
   }
 
@@ -215,7 +209,7 @@ export default class SourceFile extends _File {
     return new SourceFile({
       name: SourceFile.coreLibFilename,
       type: 'text/javascript',
-      text: coreString,
+      text: coreString
     });
   }
 
@@ -233,8 +227,7 @@ export default class SourceFile extends _File {
     return new SourceFile({
       name: '404.html',
       type: 'text/html',
-      text,
+      text
     });
   }
-
 }
