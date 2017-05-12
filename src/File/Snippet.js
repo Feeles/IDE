@@ -2,7 +2,7 @@ import React from 'react';
 import { Pos } from 'codemirror';
 
 
-import { separate } from '../File/';
+import { separate } from 'File/';
 
 export default class Snippet {
   constructor(props) {

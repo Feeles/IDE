@@ -14,7 +14,7 @@ import {
   BinaryFile,
   SourceFile,
   validateType
-} from '../File/';
+} from 'File/';
 import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';

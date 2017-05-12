@@ -5,7 +5,7 @@ import Table, { TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
-import { SourceFile } from '../File/';
+import { SourceFile } from 'File/';
 
 const getStyles = (props, context) => {
   return {

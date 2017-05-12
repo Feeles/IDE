@@ -13,9 +13,9 @@ import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import transitions from 'material-ui/styles/transitions';
 
-import organization from '../organization';
+import organization from 'organization';
 import ScreenShotCard from '../Cards/ScreenShotCard';
-import uniqueId from '../utils/uniqueId';
+import uniqueId from 'utils/uniqueId';
 
 /**
  * OGPの設定を行い, デプロイが必要な場合 true で resolve する

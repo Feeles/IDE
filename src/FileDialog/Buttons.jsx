@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const Confirm = props => {
-  const style = Object.assign({}, commonStyle, props.style);
+  const style = Object.assign({ marginRight: 20 }, props.style);
   return <RaisedButton {...props} style={style} />;
 };
 
@@ -18,7 +18,7 @@ Confirm.defaultProps = {
 };
 
 const Abort = props => {
-  const style = Object.assign({}, commonStyle, props.style);
+  const style = Object.assign({ marginRight: 20 }, props.style);
   return <FlatButton {...props} style={style} />;
 };
 
@@ -30,8 +30,4 @@ Abort.defaultProps = {
   label: 'Cancel'
 };
 
-const commonStyle = {
-  marginRight: 20
-};
-
-export { Confirm, Abort, commonStyle };
+export { Confirm, Abort };

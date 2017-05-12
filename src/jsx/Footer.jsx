@@ -6,7 +6,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import SocialShare from 'material-ui/svg-icons/social/share';
 
-import organization from '../organization';
+import organization from 'organization';
 
 export default class Footer extends PureComponent {
   static propTypes = {

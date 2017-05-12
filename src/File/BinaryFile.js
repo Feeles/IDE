@@ -1,30 +1,25 @@
 import React from 'react';
 import md5 from 'md5';
 
-
 import _File from './_File';
-import { Preview } from '../EditorPane/';
+import { Preview } from 'Cards/EditorCard/';
 import { encode, decode } from './sanitizeHTML';
 
 export default class BinaryFile extends _File {
-
   static defaultProps = {
     name: '.BinaryFile',
     blob: null,
     component: Preview,
-    sign: null,
+    sign: null
   };
 
   static defaultOptions = {
-    isTrashed: false,
-  }
+    isTrashed: false
+  };
 
-  static visible = _File.visible.concat(
-    'blob'
-  );
+  static visible = _File.visible.concat('blob');
 
-  static watchProps = _File.watchProps.concat(
-  );
+  static watchProps = _File.watchProps.concat();
 
   constructor(props) {
     if (props.composed) {
@@ -33,14 +28,14 @@ export default class BinaryFile extends _File {
       for (let i = bin.length - 1; i >= 0; i--) {
         byteArray[i] = bin.charCodeAt(i);
       }
-      const blob = new Blob([byteArray.buffer], {type: props.type});
+      const blob = new Blob([byteArray.buffer], { type: props.type });
       const hash = md5(byteArray);
-      props = {...props, blob, hash};
+      props = { ...props, blob, hash };
     }
 
     if (props.blob && !props.blobURL) {
       const blobURL = URL.createObjectURL(props.blob);
-      props = {...props, blobURL};
+      props = { ...props, blobURL };
     }
 
     super(props);
@@ -62,7 +57,7 @@ export default class BinaryFile extends _File {
     if (!change.blob && this.hash) {
       change.hash = this.hash;
     }
-    const seed = {...this.serialize(), ...change};
+    const seed = { ...this.serialize(), ...change };
     seed.key = this.key;
     seed.lastModified = Date.now();
 
@@ -76,7 +71,7 @@ export default class BinaryFile extends _File {
       const credits = this.credits.concat({
         ...this.sign,
         timestamp: Date.now(),
-        hash: this.hash,
+        hash: this.hash
       });
       serialized.credits = JSON.stringify(credits);
     } else {
@@ -95,22 +90,23 @@ export default class BinaryFile extends _File {
    */
   static load(file) {
     return new Promise((resolve, reject) => {
-        // get hash of TypedArray from binary
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const typedArray = new Uint8Array(e.target.result);
-          const hash = md5(typedArray);
-          resolve(hash);
-        };
-        reader.readAsArrayBuffer(file);
-      })
-      .then((hash) => new BinaryFile({
-        type: file.type,
-        name: file.name || BinaryFile.defaultProps.name,
-        blob: file,
-        hash,
-        lastModified: file.lastModified,
-      }));
+      // get hash of TypedArray from binary
+      const reader = new FileReader();
+      reader.onload = e => {
+        const typedArray = new Uint8Array(e.target.result);
+        const hash = md5(typedArray);
+        resolve(hash);
+      };
+      reader.readAsArrayBuffer(file);
+    }).then(
+      hash =>
+        new BinaryFile({
+          type: file.type,
+          name: file.name || BinaryFile.defaultProps.name,
+          blob: file,
+          hash,
+          lastModified: file.lastModified
+        })
+    );
   }
-
 }
