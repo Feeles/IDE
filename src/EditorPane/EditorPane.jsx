@@ -53,7 +53,6 @@ export default class EditorPane extends PureComponent {
     openFileDialog: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
-    isResizing: PropTypes.bool.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
     port: PropTypes.object,
@@ -64,13 +63,6 @@ export default class EditorPane extends PureComponent {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired
   };
-
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.isResizing) {
-      return false;
-    }
-    return true;
-  }
 
   componentWillReceiveProps(nextProps, nextState) {
     if (this.props.tabs !== nextProps.tabs) {
@@ -177,7 +169,6 @@ export default class EditorPane extends PureComponent {
                 file={tab.file}
                 tabs={tabs}
                 isSelected={tab.isSelected}
-                isResizing={this.props.isResizing}
                 localization={localization}
                 handleSelect={selectTab}
                 handleClose={closeTab}

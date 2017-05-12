@@ -12,7 +12,6 @@ export default class CardWindow extends PureComponent {
     visible: PropTypes.bool.isRequired,
     order: PropTypes.number.isRequired,
     updateCard: PropTypes.func.isRequired,
-    isResizing: PropTypes.bool.isRequired,
     scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
@@ -27,13 +26,6 @@ export default class CardWindow extends PureComponent {
     icon: null,
     fit: false
   };
-
-  shouldComponentUpdate(nextProps) {
-    if (this.props.isResizing && nextProps.isResizing) {
-      return false;
-    }
-    return true;
-  }
 
   componentWillReceiveProps(nextProps, nextState) {
     if (this.props.visible !== nextProps.visible && nextProps.visible) {

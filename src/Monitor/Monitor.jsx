@@ -55,7 +55,6 @@ const getStyle = (props, context, state) => {
 
 export default class Monitor extends PureComponent {
   static propTypes = {
-    isResizing: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
     isPopout: PropTypes.bool.isRequired,

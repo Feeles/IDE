@@ -492,7 +492,6 @@ export default class Main extends Component {
 
     const commonProps = {
       files,
-      isResizing: false,
       localization,
       getConfig: this.getConfig,
       setConfig: this.setConfig,
