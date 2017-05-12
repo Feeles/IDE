@@ -145,18 +145,14 @@ export default class CardContainer extends PureComponent {
       deployURL: this.props.deployURL,
       oAuthId: this.props.oAuthId,
       showNotice: this.props.showNotice,
-      updateCard: this.props.updateCard
-    };
-    const editorProps = {
-      ...commonProps,
+      updateCard: this.props.updateCard,
       tabs: this.props.tabs,
-      selectTab: this.props.selectTab,
       closeTab: this.props.closeTab,
-      setLocation: this.props.setLocation,
       openFileDialog: this.props.openFileDialog,
-      port: this.props.port,
-      reboot: this.props.reboot,
-      href: this.props.href
+      href: this.props.href,
+      scrollToCard: this.scrollToCard,
+      cards: this.props.cards,
+      reboot: this.props.reboot
     };
     const hierarchyProps = {
       ...commonProps,
@@ -231,7 +227,6 @@ export default class CardContainer extends PureComponent {
         <EditorCard
           ref="EditorCard"
           {...cardProps}
-          editorProps={editorProps}
           cardPropsBag={bag('EditorCard')}
         />
         <HierarchyCard
