@@ -152,15 +152,7 @@ export default class CardContainer extends PureComponent {
       href: this.props.href,
       scrollToCard: this.scrollToCard,
       cards: this.props.cards,
-      reboot: this.props.reboot
-    };
-    const hierarchyProps = {
-      ...commonProps,
-      tabs: this.props.tabs,
-      deleteFile: this.props.deleteFile,
-      selectTab: this.props.selectTab,
-      closeTab: this.props.closeTab,
-      openFileDialog: this.props.openFileDialog,
+      reboot: this.props.reboot,
       saveAs: this.props.saveAs
     };
     const shotProps = {
@@ -232,7 +224,6 @@ export default class CardContainer extends PureComponent {
         <HierarchyCard
           ref="HierarchyCard"
           {...cardProps}
-          hierarchyProps={hierarchyProps}
           cardPropsBag={bag('HierarchyCard')}
         />
         <ScreenShotCard
