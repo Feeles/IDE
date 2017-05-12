@@ -9,7 +9,7 @@ import { red50, red500 } from 'material-ui/styles/colors';
 
 import Editor from './Editor';
 import { SourceFile } from '../File/';
-import { ShotCard } from '../Cards';
+import ShotCard from '../Cards/ShotCard';
 import { CardIcons } from '../Cards/CardWindow';
 
 const getStyle = (props, context, state) => {
