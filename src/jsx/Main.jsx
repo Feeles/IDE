@@ -18,7 +18,8 @@ import {
 import { BinaryFile, SourceFile, configs } from '../File/';
 import EditorPane, { codemirrorStyle } from '../EditorPane/';
 import Hierarchy from '../Hierarchy/';
-import Monitor, { MonitorTypes, maxByPriority } from '../Monitor/';
+import Monitor, { maxByPriority } from '../Monitor/';
+import * as MonitorTypes from '../utils/MonitorTypes';
 import Menu from '../Menu/';
 import FileDialog, {
   SaveDialog,
@@ -457,7 +458,6 @@ export default class Main extends Component {
   setLocation = href => {
     this.setState(prevState => ({
       reboot: true,
-      monitorType: maxByPriority(prevState.monitorType, MonitorTypes.Card),
       href: href || prevState.href
     }));
   };
