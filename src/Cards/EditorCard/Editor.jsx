@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import ReactCodeMirror from 'react-codemirror';
 import beautify from 'js-beautify';
 
+import { JSHINT } from 'jshint';
+window.JSHINT = JSHINT;
+
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
 import 'codemirror/mode/htmlmixed/htmlmixed';
@@ -22,12 +25,15 @@ import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/lint/lint';
+import 'codemirror/addon/lint/javascript-lint';
 import 'codemirror/keymap/sublime';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/dialog/dialog.css';
 // import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/addon/fold/foldgutter.css';
+import 'codemirror/addon/lint/lint.css';
 
 import glslMode from 'glsl-editor/glsl';
 glslMode(CodeMirror);
@@ -171,7 +177,7 @@ export default class Editor extends PureComponent {
     } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
-    const gutters = [];
+    const gutters = ['CodeMirror-lint-markers'];
     if (lineNumbers) {
       gutters.push('CodeMirror-linenumbers');
     }
@@ -196,6 +202,7 @@ export default class Editor extends PureComponent {
       },
       dragDrop: false,
       gutters,
+      lint: {},
       extraKeys: {
         'Ctrl-Enter': handleRun,
         'Cmd-Enter': handleRun,
