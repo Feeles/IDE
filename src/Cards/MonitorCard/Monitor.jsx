@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Popout from 'jsx/ReactPopout';
 import IconButton from 'material-ui/IconButton';
-import CircularProgress from 'material-ui/CircularProgress';
 import NavigationRefreh from 'material-ui/svg-icons/navigation/refresh';
 import transitions from 'material-ui/styles/transitions';
 
@@ -12,6 +11,7 @@ import popoutTemplate from 'html/popout';
 import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
+import ResolveProgress from './ResolveProgress';
 
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
@@ -45,11 +45,7 @@ const getStyle = (props, context, state) => {
       position: 'absolute',
       right: 0,
       zIndex: 2
-    },
-    progress: {
-      opacity: state.error ? 0 : 1
-    },
-    progressColor: palette.primary1Color
+    }
   };
 };
 
@@ -102,14 +98,6 @@ export default class Monitor extends PureComponent {
     } else {
       // default href で起動
       this.props.setLocation();
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps.files && this.state.port) {
-      const files = this.props.files.map(item => item.watchSerialize());
-
-      this.state.port.postMessage({ query: 'watch', value: files });
     }
   }
 
@@ -189,11 +177,8 @@ export default class Monitor extends PureComponent {
     });
     this.handlePort(channel.port1);
 
-    const files = this.props.files.map(item => item.watchSerialize());
-
     this.iframe.contentWindow.postMessage(
       {
-        files,
         env
       },
       '*',
@@ -426,12 +411,7 @@ export default class Monitor extends PureComponent {
           width={this.props.frameWidth}
           height={this.props.frameHeight}
         />
-        <CircularProgress
-          size={100}
-          thickness={8}
-          style={styles.progress}
-          color={styles.progressColor}
-        />
+        <ResolveProgress port={this.state.port} />
       </div>
     );
   }
