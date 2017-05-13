@@ -153,27 +153,14 @@ export default class CardContainer extends PureComponent {
       scrollToCard: this.scrollToCard,
       cards: this.props.cards,
       reboot: this.props.reboot,
-      saveAs: this.props.saveAs
+      saveAs: this.props.saveAs,
+      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
+      setPort: this.props.setPort,
+      coreString: this.props.coreString
     };
     const shotProps = {
       ...commonProps,
       port: this.props.port
-    };
-    const monitorProps = {
-      ...commonProps,
-      cards: this.props.cards,
-      rootWidth: this.rootWidth,
-      monitorType: this.props.monitorType,
-      isPopout: this.props.monitorType === MonitorTypes.Popout,
-      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
-      togglePopout: this.props.togglePopout,
-      toggleFullScreen: this.props.toggleFullScreen,
-      reboot: this.props.reboot,
-      setPort: this.props.setPort,
-      coreString: this.props.coreString,
-      saveAs: this.props.saveAs,
-      href: this.props.href,
-      setLocation: this.props.setLocation
     };
 
     return (
@@ -186,7 +173,6 @@ export default class CardContainer extends PureComponent {
         <MonitorCard
           ref="MonitorCard"
           {...cardProps}
-          monitorProps={monitorProps}
           cardPropsBag={bag('MonitorCard')}
         />
         <PaletteCard
