@@ -2,9 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactCodeMirror from 'react-codemirror';
 import beautify from 'js-beautify';
-
 import { JSHINT } from 'jshint';
-window.JSHINT = JSHINT;
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
@@ -75,7 +73,8 @@ export default class Editor extends PureComponent {
     showHint: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
     lineNumbers: PropTypes.bool.isRequired,
-    foldGutter: PropTypes.bool.isRequired
+    foldGutter: PropTypes.bool.isRequired,
+    findFile: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -92,11 +91,28 @@ export default class Editor extends PureComponent {
     foldGutter: true
   };
 
+  state = {
+    jshintrc: null
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
     if (this.props.file === nextProps.file) {
       return false;
     }
     return true;
+  }
+
+  componentWillMount() {
+    const jshintrc = this.props.findFile('.jshintrc');
+    if (jshintrc) {
+      // .jshintrc があれば JSHint でチェック
+      window.JSHINT = JSHINT;
+      try {
+        this.setState({
+          jshintrc: JSON.parse(jshintrc.text)
+        });
+      } catch (e) {}
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -177,7 +193,10 @@ export default class Editor extends PureComponent {
     } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
-    const gutters = ['CodeMirror-lint-markers'];
+    const gutters = [];
+    if (this.state.jshintrc) {
+      gutters.push('CodeMirror-lint-markers');
+    }
     if (lineNumbers) {
       gutters.push('CodeMirror-linenumbers');
     }
@@ -202,7 +221,7 @@ export default class Editor extends PureComponent {
       },
       dragDrop: false,
       gutters,
-      lint: {},
+      lint: this.state.jshintrc,
       extraKeys: {
         'Ctrl-Enter': handleRun,
         'Cmd-Enter': handleRun,
