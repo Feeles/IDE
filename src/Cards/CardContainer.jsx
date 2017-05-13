@@ -158,10 +158,6 @@ export default class CardContainer extends PureComponent {
       setPort: this.props.setPort,
       coreString: this.props.coreString
     };
-    const shotProps = {
-      ...commonProps,
-      port: this.props.port
-    };
 
     return (
       <div style={styles.container}>
@@ -199,7 +195,6 @@ export default class CardContainer extends PureComponent {
         <ShotCard
           ref="ShotCard"
           {...cardProps}
-          shotProps={shotProps}
           cardPropsBag={bag('ShotCard')}
         />
         <EditorCard

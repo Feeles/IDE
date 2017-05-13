@@ -10,8 +10,12 @@ import shallowEqual from 'utils/shallowEqual';
 export default class ShotCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
-    shotProps: PropTypes.object.isRequired,
-    updateCard: PropTypes.func.isRequired
+    updateCard: PropTypes.func.isRequired,
+    files: PropTypes.array.isRequired,
+    findFile: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired,
+    getConfig: PropTypes.func.isRequired,
+    port: PropTypes.object
   };
 
   state = {
@@ -23,18 +27,9 @@ export default class ShotCard extends PureComponent {
     return <ContentReply />;
   }
 
-  // port が渡されることを前提とした実装, 今のままではあまりよくない
-  // カード本体の Mount, Update にアクセスできるクラスと、ShotPane を統合すべき
-  // でなければ ShotCard が show のときしか port をハンドルできない
-  componentWillMount() {
-    if (this.props.ShotPane && this.props.shotProps.port) {
-      this.handlePort(null, this.props.shotProps.port);
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.shotProps !== nextProps.shotProps) {
-      this.handlePort(this.props.shotProps.port, nextProps.shotProps.port);
+    if (this.props.port !== nextProps.port) {
+      this.handlePort(this.props.port, nextProps.port);
     }
   }
 
@@ -53,7 +48,7 @@ export default class ShotCard extends PureComponent {
 
     if (query === 'code' && value) {
       // feeles.openCode()
-      const file = this.props.shotProps.findFile(value);
+      const file = this.props.findFile(value);
       this.setState({ file });
       this.props.updateCard('ShotCard', { visible: true });
     } else if (query === 'code') {
@@ -72,9 +67,13 @@ export default class ShotCard extends PureComponent {
     return (
       <Card icon={ShotCard.icon()} {...this.props.cardPropsBag}>
         <ShotPane
-          {...this.props.shotProps}
           file={this.state.file}
           completes={this.state.completes}
+          files={this.props.files}
+          findFile={this.props.findFile}
+          localization={this.props.localization}
+          getConfig={this.props.getConfig}
+          port={this.props.port}
         />
       </Card>
     );
