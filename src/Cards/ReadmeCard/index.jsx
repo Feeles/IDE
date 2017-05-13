@@ -22,7 +22,8 @@ export default class ReadmeCard extends PureComponent {
     localization: PropTypes.object.isRequired,
     port: PropTypes.object,
     setLocation: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired
+    updateCard: PropTypes.func.isRequired,
+    cards: PropTypes.object.isRequired
   };
 
   state = {
@@ -35,12 +36,14 @@ export default class ReadmeCard extends PureComponent {
   }
 
   componentWillMount() {
-    const { fileName } = this.props.cardPropsBag.cards.ReadmeCard.init || {};
-    if (fileName) {
-      this.setState({
-        selectedFile: this.props.findFile(fileName)
-      });
-    }
+    try {
+      const { init } = this.props.cards.ReadmeCard;
+      if (init && init.fileName) {
+        this.setState({
+          selectedFile: this.props.findFile(init.fileName)
+        });
+      }
+    } catch (e) {}
   }
 
   componentWillReceiveProps(nextProps) {

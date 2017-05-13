@@ -34,12 +34,24 @@ const by = 'x';
 export default class MonitorCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
-    monitorProps: PropTypes.object.isRequired,
     setLocation: PropTypes.func.isRequired,
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    port: PropTypes.object
+    port: PropTypes.object,
+    files: PropTypes.array.isRequired,
+    cards: PropTypes.object.isRequired,
+    isFullScreen: PropTypes.bool.isRequired,
+    reboot: PropTypes.bool.isRequired,
+    href: PropTypes.string.isRequired,
+    setPort: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired,
+    getConfig: PropTypes.func.isRequired,
+    addFile: PropTypes.func.isRequired,
+    findFile: PropTypes.func.isRequired,
+    putFile: PropTypes.func.isRequired,
+    coreString: PropTypes.string,
+    saveAs: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -57,13 +69,13 @@ export default class MonitorCard extends PureComponent {
   }
 
   componentWillMount() {
-    const { size } = this.props.cardPropsBag.cards.MonitorCard.frame || {};
-    if (Array.isArray(size)) {
-      this.setState({
-        frameWidth: size[0],
-        frameHeight: size[1]
-      });
-    }
+    try {
+      const { frame } = this.props.cards.MonitorCard;
+      if (frame && Array.isArray(frame.size)) {
+        const [frameWidth, frameHeight] = frame.size;
+        this.setState({ frameWidth, frameHeight });
+      }
+    } catch (e) {}
   }
 
   get height() {
@@ -127,7 +139,7 @@ export default class MonitorCard extends PureComponent {
     }
 
     const sizeValue = this.state.frameWidth + by + this.state.frameHeight;
-    const { localization, showAll } = this.props.monitorProps;
+    const { localization, showAll } = this.props;
 
     const actions = [
       <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
@@ -174,12 +186,27 @@ export default class MonitorCard extends PureComponent {
         icon={MonitorCard.icon()}
         {...this.props.cardPropsBag}
         actions={actions}
-        icon={MonitorCard.icon()}
       >
         <CardMedia style={styles.flexible}>
           <div style={styles.parent}>
             <Monitor
-              {...this.props.monitorProps}
+              files={this.props.files}
+              cards={this.props.cards}
+              isPopout={this.props.isPopout}
+              isFullScreen={this.props.isFullScreen}
+              reboot={this.props.reboot}
+              href={this.props.href}
+              togglePopout={this.props.togglePopout}
+              toggleFullScreen={this.props.toggleFullScreen}
+              setPort={this.props.setPort}
+              localization={this.props.localization}
+              getConfig={this.props.getConfig}
+              addFile={this.props.addFile}
+              findFile={this.props.findFile}
+              putFile={this.props.putFile}
+              coreString={this.props.coreString}
+              saveAs={this.props.saveAs}
+              setLocation={this.props.setLocation}
               frameWidth={this.state.frameWidth}
               frameHeight={this.state.frameHeight}
             />

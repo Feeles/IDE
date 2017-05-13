@@ -145,47 +145,18 @@ export default class CardContainer extends PureComponent {
       deployURL: this.props.deployURL,
       oAuthId: this.props.oAuthId,
       showNotice: this.props.showNotice,
-      updateCard: this.props.updateCard
-    };
-    const editorProps = {
-      ...commonProps,
+      updateCard: this.props.updateCard,
       tabs: this.props.tabs,
-      selectTab: this.props.selectTab,
-      closeTab: this.props.closeTab,
-      setLocation: this.props.setLocation,
-      openFileDialog: this.props.openFileDialog,
-      port: this.props.port,
-      reboot: this.props.reboot,
-      href: this.props.href
-    };
-    const hierarchyProps = {
-      ...commonProps,
-      tabs: this.props.tabs,
-      deleteFile: this.props.deleteFile,
-      selectTab: this.props.selectTab,
       closeTab: this.props.closeTab,
       openFileDialog: this.props.openFileDialog,
-      saveAs: this.props.saveAs
-    };
-    const shotProps = {
-      ...commonProps,
-      port: this.props.port
-    };
-    const monitorProps = {
-      ...commonProps,
-      cards: this.props.cards,
-      rootWidth: this.rootWidth,
-      monitorType: this.props.monitorType,
-      isPopout: this.props.monitorType === MonitorTypes.Popout,
-      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
-      togglePopout: this.props.togglePopout,
-      toggleFullScreen: this.props.toggleFullScreen,
-      reboot: this.props.reboot,
-      setPort: this.props.setPort,
-      coreString: this.props.coreString,
-      saveAs: this.props.saveAs,
       href: this.props.href,
-      setLocation: this.props.setLocation
+      scrollToCard: this.scrollToCard,
+      cards: this.props.cards,
+      reboot: this.props.reboot,
+      saveAs: this.props.saveAs,
+      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
+      setPort: this.props.setPort,
+      coreString: this.props.coreString
     };
 
     return (
@@ -198,7 +169,6 @@ export default class CardContainer extends PureComponent {
         <MonitorCard
           ref="MonitorCard"
           {...cardProps}
-          monitorProps={monitorProps}
           cardPropsBag={bag('MonitorCard')}
         />
         <PaletteCard
@@ -225,19 +195,16 @@ export default class CardContainer extends PureComponent {
         <ShotCard
           ref="ShotCard"
           {...cardProps}
-          shotProps={shotProps}
           cardPropsBag={bag('ShotCard')}
         />
         <EditorCard
           ref="EditorCard"
           {...cardProps}
-          editorProps={editorProps}
           cardPropsBag={bag('EditorCard')}
         />
         <HierarchyCard
           ref="HierarchyCard"
           {...cardProps}
-          hierarchyProps={hierarchyProps}
           cardPropsBag={bag('HierarchyCard')}
         />
         <ScreenShotCard
