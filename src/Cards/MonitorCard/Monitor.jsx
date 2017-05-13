@@ -105,14 +105,6 @@ export default class Monitor extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps.files && this.state.port) {
-      const files = this.props.files.map(item => item.watchSerialize());
-
-      this.state.port.postMessage({ query: 'watch', value: files });
-    }
-  }
-
   componentDidUpdate(prevProps, prevStates) {
     if (prevProps.reboot && !this.props.reboot) {
       if (this.props.isPopout || this.popoutClosed) {
@@ -189,11 +181,8 @@ export default class Monitor extends PureComponent {
     });
     this.handlePort(channel.port1);
 
-    const files = this.props.files.map(item => item.watchSerialize());
-
     this.iframe.contentWindow.postMessage(
       {
-        files,
         env
       },
       '*',

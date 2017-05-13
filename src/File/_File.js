@@ -18,13 +18,6 @@ export default class _File {
     'sign'
   ];
 
-  static watchProps = [
-    'name',
-    'moduleName',
-    'type',
-    'isTrashed'
-  ];
-
   constructor(props) {
     this.key = props.key || getUniqueId();
 

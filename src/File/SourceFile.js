@@ -24,8 +24,6 @@ export default class SourceFile extends _File {
 
   static visible = _File.visible.concat('text', 'isScript');
 
-  static watchProps = _File.watchProps.concat('isScript');
-
   constructor(props) {
     if (props.composed && !props.text) {
       let text = '';

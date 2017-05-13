@@ -19,8 +19,6 @@ export default class BinaryFile extends _File {
 
   static visible = _File.visible.concat('blob');
 
-  static watchProps = _File.watchProps.concat();
-
   constructor(props) {
     if (props.composed) {
       const bin = atob(decode(props.composed));
