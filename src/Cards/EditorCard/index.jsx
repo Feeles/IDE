@@ -184,7 +184,11 @@ export default class EditorCard extends PureComponent {
 
   render() {
     if (!this.props.tabs.length) {
-      return this.renderBackground();
+      return (
+        <Card icon={EditorCard.icon()} {...this.props.cardPropsBag} fit>
+          {this.renderBackground()}
+        </Card>
+      );
     }
 
     const {
