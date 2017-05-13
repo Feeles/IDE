@@ -12,7 +12,11 @@ game.onload = () => {
 
 // マップをつくる
 import maps from './maps';
-Hack.onload = maps;
+Hack.onload = () => {
+  // Hack.maps を事前に作っておく
+  Hack.maps = Hack.maps || {};
+  maps();
+};
 
 // ゲームスタート
 Hack.start();
