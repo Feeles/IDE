@@ -1,9 +1,7 @@
 import { separate, validateType } from './';
 import babelWorker from '../workers/babel-worker';
 
-
 export default class _File {
-
   static defaultProps = {};
 
   static defaultOptions = {};
@@ -21,9 +19,7 @@ export default class _File {
   constructor(props) {
     this.key = props.key || getUniqueId();
 
-    const lock = (...args) => Object.freeze(
-      Object.assign({}, ...args)
-    );
+    const lock = (...args) => Object.freeze(Object.assign({}, ...args));
     this.props = lock(this.constructor.defaultProps, props);
     this.options = lock(this.constructor.defaultOptions, this.props.options);
 
@@ -65,15 +61,13 @@ export default class _File {
         .replace(/\n[^]*$/, '') // 改行以降を削除
         .trim() // 前後の空白を削除
         .replace(/^[\#\-]*\s*/, '') // 行頭の # - を削除
-        .replace(/[\*\~\_\[\]\(\)\`]/g, '') // * ~ _ [] () `` を削除
-        ;
+        .replace(/[\*\~\_\[\]\(\)\`]/g, ''); // * ~ _ [] () `` を削除
     }
     return this.plane + this.ext;
   }
 
   get credits() {
-    return this.props.credits instanceof Array ?
-      this.props.credits : [];
+    return this.props.credits instanceof Array ? this.props.credits : [];
   }
 
   get sign() {
@@ -81,7 +75,7 @@ export default class _File {
   }
 
   get credit() {
-    const credit = this.credits.find((item) => item.hash === this.hash);
+    const credit = this.credits.find(item => item.hash === this.hash);
     if (credit) {
       return credit;
     }
@@ -119,7 +113,7 @@ export default class _File {
       lastModified: this.lastModified,
       composed: dataURL.substr(dataURL.indexOf(',') + 1),
       options: this.options,
-      credits: this.credits,
+      credits: this.credits
     };
   }
 
@@ -141,19 +135,16 @@ export default class _File {
   babel(config) {
     const { _babelCache, _babelConfig, _babelError } = this.constructor;
     if (_babelConfig === config) {
-      if (_babelCache.has(this))
-        return _babelCache.get(this);
-      if (_babelError.has(this))
-        throw _babelError.get(this);
+      if (_babelCache.has(this)) return _babelCache.get(this);
+      if (_babelError.has(this)) throw _babelError.get(this);
     } else {
       this.constructor._babelConfig = config;
     }
 
-    const promise = babelWorker(this, config)
-      .catch((err) => {
-        _babelError.set(this, err);
-        throw err;
-      });
+    const promise = babelWorker(this, config).catch(err => {
+      _babelError.set(this, err);
+      throw err;
+    });
     _babelCache.set(this, promise);
     return promise;
   }
@@ -178,20 +169,11 @@ export default class _File {
 
   serialize() {
     const obj = Object.create(null);
-    this.constructor.visible.forEach((key) => {
+    this.constructor.visible.forEach(key => {
       obj[key] = this[key];
     });
     return obj;
   }
-
-  watchSerialize() {
-    const obj = Object.create(null);
-    this.constructor.watchProps.forEach((key) => {
-      obj[key] = this[key];
-    });
-    return obj;
-  }
-
 }
 
 const getUniqueId = (i => () => '_File__' + ++i)(0);
