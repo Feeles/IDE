@@ -51,11 +51,6 @@ Hack.on('load', function() {
 });
 
 game.on('load', function() {
-	// Hack.player がないとき self.player を代わりに入れる
-	if (self.player && !Hack.player) {
-		Hack.player = self.player;
-	}
-
 	var pad = new Pad();
 	pad.moveTo(20, 200);
 	pad.onenterframe = function() {
@@ -388,6 +383,39 @@ RPGMap.Layer = {
 	Middle: 2,
 	Shadow: 1,
 	Under: 0,
+};
+
+Hack.createMap = function (template) {
+	// テンプレートリテラルからマップを生成するラッパー
+	const zenkaku = /[０１２３４５６７８９]/g.exec(template);
+	if (zenkaku) {
+		Hack.log(`⚠️ 全角の ${zenkaku[0]} がマップに入っています!`);
+	}
+	var source = template.split('\n')
+		.map(function (line) {
+			return line.match(/\s*\d+[\s\|]?/g)
+		})
+		.filter(function (line) {
+			return Array.isArray(line);
+		});
+	var int = function (item) {
+		return parseInt(item, 10);
+	};
+	var bmap = source.map(function (line) {
+		return line.map(int);
+	});
+	var bar = function (item) {
+		return item.substr(-1) === '|' ? 1 : 0;
+	};
+	var cmap = source.map(function (line) {
+		return line.map(bar);
+	});
+
+	const map = new RPGMap(32, 32, bmap[0].length, bmap.length);
+	map.imagePath = 'enchantjs/x2/dotmat.gif';
+	map.bmap.loadData(bmap);
+	map.cmap = cmap;
+	return map;
 };
 
 Hack.changeMap = function(mapName) {

@@ -77,6 +77,9 @@ export default class AssetButton extends PureComponent {
         backgroundColor: emphasize(palette.canvasColor, 0.07),
         borderRadius: 2
       },
+      pre: {
+        fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
+      },
       button: {
         position: 'absolute',
         right: 0,
@@ -118,7 +121,7 @@ export default class AssetButton extends PureComponent {
           </div>
           <div style={styles.description}>{this.props.description}</div>
           <code style={styles.code}>
-            <pre>{this.props.code}</pre>
+            <pre style={styles.pre}>{this.props.code}</pre>
           </code>
         </Popover>
         <ContentAdd
