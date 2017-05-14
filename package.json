@@ -44,6 +44,7 @@
     "webpack-dev-server": "^2.1.0-beta.9"
   },
   "dependencies": {
+    "animate.css": "^3.5.2",
     "babel-runtime": "^6.18.0",
     "babel-standalone": "^6.18.1",
     "dexie": "^1.5.1",
@@ -68,6 +69,7 @@
     "react-player": "^0.17.1",
     "react-popout": "^0.6.0",
     "react-tap-event-plugin": "^2.0.0",
+    "react-transition-group": "^1.1.3",
     "regenerator-runtime": "^0.10.3",
     "url-search-params": "^0.8.0",
     "whatwg-fetch": "^2.0.2"
