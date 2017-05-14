@@ -1,18 +1,29 @@
 // Copied from https://github.com/endaaman/markdown-react-js
 
 import markdown from 'markdown-it';
-// import React, { PropTypes } from 'react';
+// import React, { PropTypes } from 'react'
 import React from 'react';
 import PropTypes from 'prop-types';
-import isPlainObject from 'lodash/isPlainObject';
-import assign from 'lodash/assign';
-import reduce from 'lodash/reduce';
-import zipObject from 'lodash/zipObject';
-import sortBy from 'lodash/sortBy';
-import compact from 'lodash/compact';
-import camelCase from 'lodash/camelCase';
-import isString from 'lodash/isString';
-import fromPairs from 'lodash/fromPairs';
+// import isPlainObject from 'lodash/isPlainObject'
+// import assign from 'lodash/assign'
+// import reduce from 'lodash/reduce'
+// import zipObject from 'lodash/zipObject'
+// import sortBy from 'lodash/sortBy'
+// import compact from 'lodash/compact'
+// import camelCase from 'lodash/camelCase'
+// import isString from 'lodash/isString'
+// import fromPairs from 'lodash/fromPairs'
+import {
+  isPlainObject,
+  assign,
+  reduce,
+  zipObject,
+  sortBy,
+  compact,
+  camelCase,
+  isString,
+  fromPairs
+} from 'lodash';
 
 const DEFAULT_TAGS = {
   html: 'span'
