@@ -81,7 +81,7 @@ export default {
     add: 'Add',
     cancel: 'Cancel'
   },
-  LaunchDialog: {
+  launchDialog: {
     title: 'Projects are found',
     openProject: 'Open this project',
     startNew: 'Start new'
