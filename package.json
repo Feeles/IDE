@@ -5,7 +5,8 @@
   "main": "dist/h4p.js",
   "scripts": {
     "start": "webpack-dev-server --inline",
-    "production": "NODE_ENV=production webpack -p && webpack -p --config feeles.config.js"
+    "production": "NODE_ENV=production webpack -p && webpack -p --config feeles.config.js",
+    "heroku-postbuild": "npm run production"
   },
   "repository": {
     "type": "git",
