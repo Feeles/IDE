@@ -172,7 +172,6 @@ export default class ReadmeCard extends PureComponent {
       text: {
         flex: 1,
         paddingTop: 0,
-        maxHeight: '65vh',
         overflowX: 'hidden',
         overflowY: 'scroll'
       },
