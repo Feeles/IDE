@@ -17,6 +17,7 @@ const config = {
   entry: {
     main: [
       'normalize.css',
+      'animate.css',
       'whatwg-fetch',
       './lib/url-search-params',
       './src/main'
