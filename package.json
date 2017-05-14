@@ -4,8 +4,8 @@
   "description": "The hackable and serializable IDE to make learning material",
   "main": "dist/h4p.js",
   "scripts": {
-    "start": "webpack-dev-server --inline",
-    "production": "NODE_ENV=production webpack -p && webpack -p --config feeles.config.js",
+    "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline",
+    "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js -p && node_modules/webpack/bin/webpack.js -p --config feeles.config.js",
     "heroku-postbuild": "npm run production"
   },
   "repository": {
