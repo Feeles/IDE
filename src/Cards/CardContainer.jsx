@@ -98,7 +98,6 @@ export default class CardContainer extends PureComponent {
     const styles = {
       container: {
         flex: 1,
-        height: 0,
         position: 'relative',
         display: 'flex',
         alignItems: 'stretch',

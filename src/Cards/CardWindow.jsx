@@ -54,6 +54,14 @@ export default class CardWindow extends PureComponent {
   render() {
     const { isDragging, visible, fit, order } = this.props;
 
+    const fitWrap = fit
+      ? {
+          display: 'flex'
+        }
+      : {
+          maxHeight: '100%'
+        };
+
     const styles = {
       root: {
         width: 0,
@@ -65,13 +73,17 @@ export default class CardWindow extends PureComponent {
         flex: '0 0 auto',
         flexBasis: visible ? '500px' : 0,
         padding: visible ? '16px 20px 16px 0' : 0,
-        overflow: visible ? 'initial' : 'hidden'
+        overflow: visible ? 'initial' : 'hidden',
+        ...fitWrap
+      },
+      card: {
+        flex: 1,
+        ...fitWrap
       },
       innerContainer: {
         width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        ...fitWrap
       },
       header: {
         flex: 0,
@@ -99,11 +111,6 @@ export default class CardWindow extends PureComponent {
         transform: 'scale(0.8)'
       }
     };
-    if (fit) {
-      styles.card = { height: '100%' };
-    } else {
-      styles.card = { maxHeight: '100%' };
-    }
 
     return (
       <div id={this.props.name} style={styles.root}>
