@@ -7,7 +7,7 @@ import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import ReactCodeMirror from 'react-codemirror';
 
-import MDReactComponent from '../../../lib/MDReactComponent';
+import MDReactComponent from 'jsx/MDReactComponent';
 import { Tab } from 'ChromeTab/';
 
 const BarHeight = 36;
