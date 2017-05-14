@@ -14,10 +14,10 @@ function maps() {
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
 	`);
-	Hack.maps['map1'] = map1;
+	Hack.maps.map1 = map1;
 
 	/* \____ assets/マップ.json ____/ */
 
-};
+}
 
 export default maps;

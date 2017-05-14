@@ -179,6 +179,7 @@ export default class ShotPane extends PureComponent {
             extraKeys={extraKeys}
             lineNumbers={false}
             foldGutter={false}
+            findFile={this.props.findFile}
           />
         </div>
         <div style={styles.menu}>

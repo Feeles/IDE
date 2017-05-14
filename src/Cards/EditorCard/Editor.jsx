@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ReactCodeMirror from 'react-codemirror';
 import beautify from 'js-beautify';
+import { JSHINT } from 'jshint';
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
@@ -22,12 +23,15 @@ import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
+import 'codemirror/addon/lint/lint';
+import 'codemirror/addon/lint/javascript-lint';
 import 'codemirror/keymap/sublime';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/dialog/dialog.css';
 // import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/addon/fold/foldgutter.css';
+import 'codemirror/addon/lint/lint.css';
 
 import glslMode from 'glsl-editor/glsl';
 glslMode(CodeMirror);
@@ -69,7 +73,8 @@ export default class Editor extends PureComponent {
     showHint: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
     lineNumbers: PropTypes.bool.isRequired,
-    foldGutter: PropTypes.bool.isRequired
+    foldGutter: PropTypes.bool.isRequired,
+    findFile: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -86,11 +91,28 @@ export default class Editor extends PureComponent {
     foldGutter: true
   };
 
+  state = {
+    jshintrc: null
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
     if (this.props.file === nextProps.file) {
       return false;
     }
     return true;
+  }
+
+  componentWillMount() {
+    const jshintrc = this.props.findFile('.jshintrc');
+    if (jshintrc) {
+      // .jshintrc があれば JSHint でチェック
+      window.JSHINT = JSHINT;
+      try {
+        this.setState({
+          jshintrc: JSON.parse(jshintrc.text)
+        });
+      } catch (e) {}
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -172,6 +194,9 @@ export default class Editor extends PureComponent {
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const gutters = [];
+    if (this.state.jshintrc) {
+      gutters.push('CodeMirror-lint-markers');
+    }
     if (lineNumbers) {
       gutters.push('CodeMirror-linenumbers');
     }
@@ -196,6 +221,7 @@ export default class Editor extends PureComponent {
       },
       dragDrop: false,
       gutters,
+      lint: this.state.jshintrc,
       extraKeys: {
         'Ctrl-Enter': handleRun,
         'Cmd-Enter': handleRun,

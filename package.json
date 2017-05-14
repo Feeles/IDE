@@ -38,6 +38,7 @@
     "open-browser-webpack-plugin": "0.0.5",
     "raw-loader": "^0.5.1",
     "style-loader": "^0.17.0",
+    "svgo": "^0.7.2",
     "unorm": "^1.4.1",
     "webpack": "^2.1.0-beta.25",
     "webpack-dev-server": "^2.1.0-beta.9"
@@ -49,7 +50,9 @@
     "dom-to-image": "^2.5.2",
     "handlebars-loader": "^1.4.0",
     "js-beautify": "^1.6.4",
-    "markdown-it": "^8.1.0",
+    "jshint": "^2.9.4",
+    "lodash": "^4.17.4",
+    "markdown-it": "^8.3.1",
     "material-ui": "^0.18.0",
     "md5": "^2.2.1",
     "moment": "^2.17.1",
