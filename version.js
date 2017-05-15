@@ -7,8 +7,12 @@ try {
   exports.next = 'v1001';
 }
 
-exports.getUrl = () =>
-  `https://assets.feeles.com/public/${exports.next}/h4p.js`;
+exports.getUrl = (pathname = '') =>
+  require('path').join(
+    'https://assets.feeles.com/public',
+    exports.next,
+    pathname
+  );
 exports.advance = async () => {
   exports.current = exports.next;
   exports.next = advance(exports.next);
