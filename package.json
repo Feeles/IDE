@@ -76,5 +76,8 @@
     "regenerator-runtime": "^0.10.3",
     "url-search-params": "^0.8.0",
     "whatwg-fetch": "^2.0.2"
+  },
+  "engines": {
+    "node": "7.9"
   }
 }
