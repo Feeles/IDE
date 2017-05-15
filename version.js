@@ -8,17 +8,9 @@ try {
 }
 
 exports.currentUrl = (pathname = '') =>
-  require('path').join(
-    'https://assets.feeles.com/public',
-    exports.current,
-    pathname
-  );
+  `https://assets.feeles.com/public/${exports.current}/${pathname}`;
 exports.nextUrl = (pathname = '') =>
-  require('path').join(
-    'https://assets.feeles.com/public',
-    exports.next,
-    pathname
-  );
+  `https://assets.feeles.com/public/${exports.next}/${pathname}`;
 exports.advance = async () => {
   exports.current = exports.next;
   exports.next = advance(exports.next);
