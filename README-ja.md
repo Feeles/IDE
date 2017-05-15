@@ -22,14 +22,6 @@
 > Feeles: "Feel *ES*".  
 ES: ECMA Script, 規格化されたモダンな JavaScript , その総称
 
-Try it out!
-- [空の Feeles (最新版)](https://feeles.github.io/IDE/dist)
-(日本語/英語対応 🍔)
-- [HackforPlay on Feeles](https://feeles.github.io/IDE/dist/hack-rpg.html)
-(日本語のみ 🍣)
-- [Pixi.js (制作中)](https://tenonno.github.io/RPG-2/)
-(日本語のみ 🍣)
-
 
 ## できること
 
@@ -53,8 +45,7 @@ Try it out!
 
 1. このリポジトリを Fork または Clone します
 2. ディレクトリを移動します `cd (installed directory)`
-3. npm コマンドを実行します `npm install && npm start`
-4. localhost をブラウザで開きます `open http://localhost:(port)` ポートは通常 8080 です
+3. npm コマンドを実行します `npm install && npm start` または `yarn install && npm start`
 
 - `src/`
   - 生徒が使うアプリケーションで、 React.js で作られています

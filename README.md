@@ -25,14 +25,6 @@ An open source IDE for giving code to people.  
 > Feeles: "Feel *ES*".  
 ES: ECMA Script, The standardized modern javascript
 
-Try it out!
-- [Empty Feeles (latest version)](https://feeles.github.io/IDE/dist/)
-(English or Japanese 🍔)
-- [HackforPlay on Feeles](https://feeles.github.io/IDE/dist/hack-rpg.html)
-(Japanese only 🍣)
-- [Pixi.js (in development)](https://tenonno.github.io/RPG-2/)
-(Japanese only 🍣)
-
 
 ## Features
 
@@ -57,8 +49,7 @@ and more…
 
 1. Clone or Fork this repo.
 2. `cd (installed directory)`
-3. `npm install && npm start`
-4. `open http://localhost:(port)` usually port is 8080.
+3. `npm install && npm start` or `yarn install && npm start`
 
 - `src/`
   - An application students use made with React.js.
