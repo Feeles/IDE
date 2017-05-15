@@ -40,3 +40,5 @@ jspm_packages
 
 .version.js
 .version
+
+*.rdb

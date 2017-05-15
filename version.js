@@ -1,49 +1,66 @@
-const fs = require('fs');
+const redis = require('redis');
 const promisify = require('es6-promisify');
-const writeFile = promisify(fs.writeFile);
 
-// 仮に手元のファイルとしてあるものを使う
-const versionFilePath =
-  process.env.DOT_VERSION || require('path').resolve(__dirname, '.version');
-let currentVersion;
-try {
-  currentVersion = fs.readFileSync(versionFilePath, 'utf8');
-} catch (e) {
-  currentVersion = '';
-}
-console.log(`⏰ Version: ${versionFilePath} => '${currentVersion}'`);
+// RedisClient instance and Promised API
+const client = redis.createClient({
+  url: process.env.REDIS_URL,
+  retry_strategy(options) {
+    if (options.error && options.error.code === 'ECONNREFUSED') {
+      // End reconnecting on a specific error and flush all commands with a individual error
+    } else {
+      console.log('🚨', options.error);
+    }
+  }
+});
+const get = client && promisify(client.get, client);
+const set = client && promisify(client.set, client);
+
+// currentVersion の初期値は redis から取得する
+// 初期値が取得できる（あるいは失敗する）までは <pending>
+const VERSION = 'version';
+let currentVersion = get(VERSION).catch(err => '');
 
 // version を 1 すすめる
+// e.g. 'v1001' => 'v1002'
 const advance = version => {
   if (!version) return 'v1001';
   const n = version.substr(1) >> 0;
   return `v${n + 1}`;
 };
 
+// CDN のプレフィックス
 const endpoint = 'https://assets.feeles.com/public';
+// Interface
 module.exports = {
   // 現在のバージョン
-  currentVersion() {
-    return currentVersion;
+  async currentVersion() {
+    return (await currentVersion) || '';
   },
   // 現在から 1 すすんだバージョン
-  nextVersion() {
-    return advance(currentVersion);
+  async nextVersion() {
+    return advance(await currentVersion);
   },
   // 現在のバージョンを提供する CDN URL
-  currentUrl(pathname = '') {
+  async currentUrl(pathname = '') {
     return (
-      endpoint + require('path').join('/', this.currentVersion(), pathname)
+      endpoint +
+      require('path').join('/', await this.currentVersion(), pathname)
     );
   },
   // 現在から 1 すすんだバージョンを提供する CDN URL
-  nextUrl(pathname = '') {
-    return endpoint + require('path').join('/', this.nextVersion(), pathname);
+  async nextUrl(pathname = '') {
+    return (
+      endpoint + require('path').join('/', await this.nextVersion(), pathname)
+    );
   },
   // 現在のバージョンを 1 すすめる
   async advance() {
-    currentVersion = advance(currentVersion);
-    await writeFile(versionFilePath, currentVersion);
+    // currentVersion にはプリミティブな値が入る
+    currentVersion = advance(await currentVersion);
+    await set(VERSION, currentVersion);
     return currentVersion;
+  },
+  quit() {
+    client.quit();
   }
 };

@@ -27,7 +27,8 @@ module.exports = class VersioningWebpackPlugin {
     try {
       await this.uploadDir(this.outputPath);
       await version.advance(); // version をインクリメント
-      console.log(`🌤 Nice deploying! ${version.currentUrl()}`);
+      console.log(`🌤 Nice deploying! ${await version.currentUrl()}`);
+      version.quit(); // Quit RedisClient
     } catch (e) {
       console.log(e);
     }
@@ -53,7 +54,7 @@ module.exports = class VersioningWebpackPlugin {
     const path = require('path');
     // uploadPath === {version.next-version}/{relative-path}
     const relativePath = path.relative(this.outputPath, filePath);
-    const uploadPath = path.join(version.nextVersion(), relativePath);
+    const uploadPath = path.join(await version.nextVersion(), relativePath);
     await this.createBlockBlob('public', uploadPath, filePath);
   }
 };

@@ -52,9 +52,7 @@ const config = {
     new webpack.DefinePlugin({
       INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
-      EXPORT_VAR_NAME: JSON.stringify(exportVarName),
-      CORE_VERSION: JSON.stringify(version.nextVersion()),
-      CORE_CDN_URL: JSON.stringify(version.nextUrl('h4p.js'))
+      EXPORT_VAR_NAME: JSON.stringify(exportVarName)
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
     new OpenBrowserPlugin({ url: 'http://localhost:8080' }),
@@ -130,4 +128,13 @@ if (process.env.NODE_ENV !== 'production') {
   config.devtool = 'inline-source-map';
 }
 
-module.exports = config;
+module.exports = async () => {
+  config.plugins.push(
+    new webpack.DefinePlugin({
+      CORE_VERSION: JSON.stringify(await version.nextVersion()),
+      CORE_CDN_URL: JSON.stringify(await version.nextUrl('h4p.js'))
+    })
+  );
+  version.quit();
+  return config;
+};
