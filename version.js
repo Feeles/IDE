@@ -3,12 +3,14 @@ const promisify = require('es6-promisify');
 const writeFile = promisify(fs.writeFile);
 
 // 仮に手元のファイルとしてあるものを使う
+const versionFilePath = require('path').resolve(__dirname, '.version');
 let currentVersion;
 try {
-  currentVersion = require('./.version');
+  currentVersion = fs.readFileSync(versionFilePath, 'utf8');
 } catch (e) {
   currentVersion = '';
 }
+console.log(`⏰ Version: ${versionFilePath} => '${currentVersion}'`);
 
 // version を 1 すすめる
 const advance = version => {
@@ -40,8 +42,7 @@ module.exports = {
   // 現在のバージョンを 1 すすめる
   async advance() {
     currentVersion = advance(currentVersion);
-    const js = `module.exports = ${JSON.stringify(currentVersion)}`;
-    await writeFile('.version.js', js);
+    await writeFile(versionFilePath, currentVersion);
     return currentVersion;
   }
 };
