@@ -53,7 +53,7 @@ const config = {
       INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName),
-      CORE_VERSION: JSON.stringify(version.next),
+      CORE_VERSION: JSON.stringify(version.nextVersion()),
       CORE_CDN_URL: JSON.stringify(version.nextUrl('h4p.js'))
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),

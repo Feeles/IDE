@@ -51,9 +51,9 @@ module.exports = class VersioningWebpackPlugin {
 
   async upload(filePath) {
     const path = require('path');
-    // uploadPath === {version.next}/{relative-path}
+    // uploadPath === {version.next-version}/{relative-path}
     const relativePath = path.relative(this.outputPath, filePath);
-    const uploadPath = path.join(version.next, relativePath);
+    const uploadPath = path.join(version.nextVersion(), relativePath);
     await this.createBlockBlob('public', uploadPath, filePath);
   }
 };
