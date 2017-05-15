@@ -7,10 +7,11 @@ try {
   exports.next = 'v1001';
 }
 
+const endpoint = 'https://assets.feeles.com/public';
 exports.currentUrl = (pathname = '') =>
-  `https://assets.feeles.com/public/${exports.current}/${pathname}`;
+  endpoint + require('path').join('/', exports.current, pathname);
 exports.nextUrl = (pathname = '') =>
-  `https://assets.feeles.com/public/${exports.next}/${pathname}`;
+  endpoint + require('path').join('/', exports.next, pathname);
 exports.advance = async () => {
   exports.current = exports.next;
   exports.next = advance(exports.next);
