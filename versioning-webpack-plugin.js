@@ -26,9 +26,8 @@ module.exports = class VersioningWebpackPlugin {
     this.outputPath = stats.compilation.options.output.path;
     try {
       await this.uploadDir(this.outputPath);
-      const url = version.getUrl(); // いまアップロードした BlobStorage の URL
       await version.advance(); // version をインクリメント
-      console.log(`🌤 Nice deploying! now available on ${url}`);
+      console.log(`🌤 Nice deploying! ${version.currentUrl()}`);
     } catch (e) {
       console.log(e);
     }

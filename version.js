@@ -7,7 +7,13 @@ try {
   exports.next = 'v1001';
 }
 
-exports.getUrl = (pathname = '') =>
+exports.currentUrl = (pathname = '') =>
+  require('path').join(
+    'https://assets.feeles.com/public',
+    exports.current,
+    pathname
+  );
+exports.nextUrl = (pathname = '') =>
   require('path').join(
     'https://assets.feeles.com/public',
     exports.next,

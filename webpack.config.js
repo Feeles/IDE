@@ -54,7 +54,7 @@ const config = {
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName),
       CORE_VERSION: JSON.stringify(version.next),
-      CORE_CDN_URL: JSON.stringify(version.getUrl('h4p.js'))
+      CORE_CDN_URL: JSON.stringify(version.nextUrl('h4p.js'))
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
     new OpenBrowserPlugin({ url: 'http://localhost:8080' }),
