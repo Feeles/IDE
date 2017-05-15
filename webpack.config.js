@@ -6,12 +6,7 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p';
 const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__';
-
-const CORE_VERSION = require('./version');
-const corePrefix = 'h4p-';
-const CORE_NAME = corePrefix + CORE_VERSION;
-const CORE_CDN_PREFIX =
-  'https://embed.hackforplay.xyz/open-source/core/' + corePrefix;
+const version = require('./version');
 
 const config = {
   entry: {
@@ -58,9 +53,8 @@ const config = {
       INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName),
-      CORE_VERSION: JSON.stringify(CORE_VERSION),
-      CORE_CDN_PREFIX: JSON.stringify(CORE_CDN_PREFIX),
-      CORE_CDN_URL: JSON.stringify(`${CORE_CDN_PREFIX}${CORE_VERSION}.js`)
+      CORE_VERSION: JSON.stringify(version.next),
+      CORE_CDN_URL: JSON.stringify(version.getUrl())
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
     new OpenBrowserPlugin({ url: 'http://localhost:8080' }),

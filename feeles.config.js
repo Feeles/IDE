@@ -1,13 +1,8 @@
 const webpack = require('webpack');
 
-const CORE_VERSION = require('./version');
-const corePrefix = 'h4p-';
-const CORE_NAME = corePrefix + CORE_VERSION;
-
 const config = {
   entry: {
     h4p: './src/entry-point',
-    [CORE_NAME]: './src/entry-point',
   },
   output: {
     path: __dirname + '/dist/',
@@ -39,5 +34,9 @@ const config = {
   ],
 };
 
+if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
+  const VersioningWebpackPlugin = require('./versioning-webpack-plugin');
+  config.plugins.push(new VersioningWebpackPlugin());
+}
 
 module.exports = config;
