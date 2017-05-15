@@ -1,43 +1,40 @@
 const webpack = require('webpack');
 
-const CORE_VERSION = require('./version');
-const corePrefix = 'h4p-';
-const CORE_NAME = corePrefix + CORE_VERSION;
-
 const config = {
   entry: {
-    h4p: './src/entry-point',
-    [CORE_NAME]: './src/entry-point',
+    h4p: './src/entry-point'
   },
   output: {
     path: __dirname + '/dist/',
-    filename: '[name].js',
+    filename: '[name].js'
   },
   module: {
     loaders: [
       {
         test: /\.js$/,
         loaders: ['babel-loader'],
-        exclude: /node_modules/,
+        exclude: /node_modules/
       }
     ]
   },
   resolve: {
     extensions: ['.js'],
-    modules: [
-      'node_modules'
-    ]
+    modules: ['node_modules']
   },
   plugins: [
     new webpack.DefinePlugin({
-      INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
+      INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome')
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false
     })
-  ],
+  ]
 };
 
+if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
+  const VersioningWebpackPlugin = require('./versioning-webpack-plugin');
+  config.plugins.push(new VersioningWebpackPlugin());
+}
 
 module.exports = config;
