@@ -3,7 +3,8 @@ const promisify = require('es6-promisify');
 const writeFile = promisify(fs.writeFile);
 
 // 仮に手元のファイルとしてあるものを使う
-const versionFilePath = require('path').resolve(__dirname, '.version');
+const versionFilePath =
+  process.env.DOT_VERSION || require('path').resolve(__dirname, '.version');
 let currentVersion;
 try {
   currentVersion = fs.readFileSync(versionFilePath, 'utf8');
