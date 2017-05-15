@@ -140,7 +140,7 @@ export default class Main extends Component {
       this.setState({
         coreString: chromosome.textContent
       });
-    } else {
+    } else if (!!CORE_CDN_URL) {
       fetch(CORE_CDN_URL, { mode: 'cors' })
         .then(response => {
           if (!response.ok) {

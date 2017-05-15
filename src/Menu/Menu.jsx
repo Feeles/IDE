@@ -164,6 +164,7 @@ export default class Menu extends PureComponent {
   };
 
   handleDeploy = async (withOAuth, isUpdate) => {
+    if (!CORE_CDN_URL) return;
     const { localization } = this.props;
 
     const result = await this.props.openFileDialog(MetaDialog, {
