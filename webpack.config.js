@@ -15,6 +15,7 @@ const config = {
       'animate.css',
       'whatwg-fetch',
       './lib/url-search-params',
+      './src/utils/Rollbar',
       './src/main'
     ],
     h4p: ['whatwg-fetch', 'entry-point-dev']
