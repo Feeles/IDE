@@ -75,6 +75,7 @@
     "react-transition-group": "^1.1.3",
     "redis": "^2.7.1",
     "regenerator-runtime": "^0.10.3",
+    "rollbar-browser": "^1.9.4",
     "url-search-params": "^0.8.0",
     "whatwg-fetch": "^2.0.2"
   },
