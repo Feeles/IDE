@@ -30,7 +30,7 @@
 
 では、どちらか好きな方を選んでください
 
-[新しいステージを作る](https://feeles.github.io/IDE/dist/make-rpg.html)
+[新しいステージを作る](https://kits.feeles.com/make-rpg.html)
 [このゲームを改造する](stages/7/index.html)
 
 
