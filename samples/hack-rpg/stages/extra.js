@@ -9,10 +9,10 @@
  *
  */
 
-const 封印 = '';
+const 封印 = '　　';
 
 /*
- * ヒントは '' の中に 日本語が入るということだ
+ * ヒントは '　　' の中に 日本語が入るということだ
  * かきかえたら、右上の [プレイ] をおしてみよう
  */
 
@@ -20,7 +20,7 @@ const 封印 = '';
 
 
 
-export const flag = 封印 !== '';
+export const flag = 封印 !== '　　';
 export default function makeMagic(x, y, map, fileName) {
 	const magic = new RPGObject();
 	magic.mod(Hack.assets.magic);
