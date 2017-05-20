@@ -1,6 +1,7 @@
 import 'hackforplay/rpg-kit-main';
 import 'hackforplay/CameraV2';
 import 'hackforplay/loader';
+import 'hackforplay/hplabel';
 
 
 // Game start
@@ -91,4 +92,3 @@ Hack.onload = function() {
 };
 
 //Hack.start();
-
