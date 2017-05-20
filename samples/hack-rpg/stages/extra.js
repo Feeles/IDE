@@ -23,7 +23,6 @@ const 封印 = '　　';
 export const flag = 封印 !== '　　';
 export default function makeMagic(x, y, map, fileName) {
 	const magic = new RPGObject();
-	magic.mod(Hack.assets.magic);
 	magic.locate(x, y, map);
 	magic.layer = RPGMap.Layer.Under;
 	magic.collisionFlag = false;
@@ -35,6 +34,11 @@ export default function makeMagic(x, y, map, fileName) {
 			} else if (confirm('もどりますか？')) {
 				feeles.replace('stages/7/index.html');
 			}
+		};
+	} else {
+		magic.mod(Hack.assets.magic);
+		magic.onplayerenter = () => {
+			Hack.log('見えない力で とざされている');
 		};
 	}
 };
