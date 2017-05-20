@@ -1,41 +1,44 @@
 /*
- * 〜　コードの世界　〜
- * 神殿の転移装置はコードによって封印されていた…
- * これでは ステージを改造しに行けない！
- * 下のコードによって、封印を解除できるらしいが…
+ * 〜　コードの世界(せかい)　〜
+ * 転移装置(てんいそうち) はコードによって 封印(ふういん) されていた…
+ * これでは ステージを 改造(かいぞう) しに行けない！
+ * このコードによって、封印を 解除(かいじょ) できるらしいが…
  *
  * 『封印 を '解除' するには、
- * 　どうすれば良いだろうか？』
+ * 　どうすればいいだろうか？』
  *
  */
 
-const 封印 = '';
+const 封印 = '　　';
 
 /*
- * ヒントは '' の中に日本語が入るということだ
- * 書きかえたら、右上の プレイ を押してみよう
+ * ヒントは '　　' の中に 日本語が入るということだ
+ * かきかえたら、右上の [プレイ] をおしてみよう
  */
 
 
 
 
 
-export const flag = 封印 !== '';
+export const flag = 封印 !== '　　';
 export default function makeMagic(x, y, map, fileName) {
 	const magic = new RPGObject();
-	magic.mod(Hack.assets.magic);
 	magic.locate(x, y, map);
 	magic.layer = RPGMap.Layer.Under;
 	magic.collisionFlag = false;
 	if (flag) {
 		magic.mod(Hack.assets.usedMagic);
 		magic.onplayerenter = () => {
-			if (confirm('このステージを改造しますか？')) {
+			if (confirm('このステージを 改造(かいぞう) しますか？')) {
 				feeles.openEditor(fileName);
-			} else if (confirm('神殿に戻りますか？')) {
+			} else if (confirm('もどりますか？')) {
 				feeles.replace('stages/7/index.html');
 			}
 		};
+	} else {
+		magic.mod(Hack.assets.magic);
+		magic.onplayerenter = () => {
+			Hack.log('見えない力で とざされている');
+		};
 	}
 };
-
