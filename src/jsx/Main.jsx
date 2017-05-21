@@ -492,7 +492,7 @@ export default class Main extends Component {
     const styles = getStyle(this.props, this.state, this.getConfig('palette'));
 
     const commonProps = {
-      files: this.props.files,
+      files: this.state.files,
       localization,
       getConfig: this.getConfig,
       setConfig: this.setConfig,
