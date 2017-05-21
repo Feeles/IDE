@@ -194,9 +194,6 @@ export default class Editor extends PureComponent {
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const gutters = [];
-    if (this.state.jshintrc) {
-      gutters.push('CodeMirror-lint-markers');
-    }
     if (lineNumbers) {
       gutters.push('CodeMirror-linenumbers');
     }
@@ -221,7 +218,6 @@ export default class Editor extends PureComponent {
       },
       dragDrop: false,
       gutters,
-      lint: this.state.jshintrc,
       extraKeys: {
         'Ctrl-Enter': handleRun,
         'Cmd-Enter': handleRun,
@@ -233,6 +229,10 @@ export default class Editor extends PureComponent {
       ...getConfig('codemirror'),
       scrollbarStyle: null
     };
+    if (this.state.jshintrc && options.mode === 'javascript') {
+      options.lint = this.state.jshintrc;
+      gutters.push('CodeMirror-lint-markers');
+    }
 
     return (
       <ReactCodeMirror
