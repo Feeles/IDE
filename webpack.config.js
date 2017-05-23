@@ -7,6 +7,8 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p';
 const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__';
 const version = require('./version');
+// 8080 は CodeConnection for Minecraft で決め打ちされているので…
+const port = process.env.PORT || 8081;
 
 const config = {
   entry: {
@@ -56,7 +58,7 @@ const config = {
       EXPORT_VAR_NAME: JSON.stringify(exportVarName)
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
-    new OpenBrowserPlugin({ url: 'http://localhost:8080' }),
+    new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
 
     new HtmlWebpackPlugin({
       inject: false,
@@ -116,11 +118,26 @@ const config = {
       path: 'samples/matterjs',
       output: 'matterjs.json',
       ignore: /\.DS_Store$/
+    }),
+
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'mc.html',
+      template: 'samples/mc.hbs',
+      production: process.env.NODE_ENV === 'production'
+    }),
+    new FeelesWebpackPlugin({
+      path: 'samples/mc',
+      output: 'mc.json',
+      ignore: /\.DS_Store$/
     })
   ],
   devServer: {
     contentBase: 'dist',
-    port: process.env.PORT
+    port,
+    // https://github.com/webpack/webpack-dev-server/issues/882
+    // ngrok で https のテストをするとき "Invalid Host header" になるので.
+    disableHostCheck: true
   }
 };
 
