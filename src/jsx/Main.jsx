@@ -71,9 +71,7 @@ export default class Main extends Component {
   };
 
   state = {
-    monitorType: this.rootWidth > 991
-      ? MonitorTypes.Card
-      : MonitorTypes.FullScreen,
+    monitorType: MonitorTypes.Card,
 
     files: this.props.files,
     reboot: false,
