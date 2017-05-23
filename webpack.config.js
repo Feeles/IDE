@@ -7,6 +7,8 @@ const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p';
 const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__';
 const version = require('./version');
+// 8080 は CodeConnection for Minecraft で決め打ちされているので…
+const port = process.env.PORT || 8081;
 
 const config = {
   entry: {
@@ -56,7 +58,7 @@ const config = {
       EXPORT_VAR_NAME: JSON.stringify(exportVarName)
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
-    new OpenBrowserPlugin({ url: 'http://localhost:8080' }),
+    new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
 
     new HtmlWebpackPlugin({
       inject: false,
@@ -132,7 +134,7 @@ const config = {
   ],
   devServer: {
     contentBase: 'dist',
-    port: process.env.PORT
+    port,
   }
 };
 
