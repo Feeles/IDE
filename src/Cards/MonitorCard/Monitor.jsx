@@ -214,6 +214,16 @@ export default class Monitor extends PureComponent {
           reply({ error: true });
         }
         break;
+      case 'fetchDataURL':
+        const file4 = this.props.findFile(data.value);
+        if (file4) {
+          reply({
+            value: await file4.toDataURL()
+          });
+        } else {
+          reply({ error: true });
+        }
+        break;
       case 'saveAs':
         const [blob, name] = data.value;
         const file3 = await makeFromFile(blob);
