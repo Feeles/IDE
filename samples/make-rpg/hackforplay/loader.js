@@ -53,19 +53,12 @@ enchant.Surface.load = function(src, callback, onerror) {
 
 	}
 
+	feeles.fetchDataURL(src).then(function (dataURL) {
 
-
-	feeles.fetch(src).then(function(response) {
-		return response.blob();
-	}).then(function(blob) {
-
-
-
-
-		image.src = URL.createObjectURL(blob);
+		image.src = dataURL;
 		// 一部の MOD の為に元画像の情報を残す
 		image.originalSource = src;
-
+		
 	});
 
 
