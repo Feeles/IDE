@@ -1,0 +1,10 @@
+{
+    ".source.js": {
+        "if": {
+            "prefix": "if",
+            "body": "if (1 === 1) {}",
+            "description": "( ) の中の条件が正しいときだけ、{ } の中に入ります",
+            "leftLabel": "if 文"
+        }
+    }
+}

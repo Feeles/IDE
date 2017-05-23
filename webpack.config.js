@@ -116,6 +116,18 @@ const config = {
       path: 'samples/matterjs',
       output: 'matterjs.json',
       ignore: /\.DS_Store$/
+    }),
+
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'mc.html',
+      template: 'samples/mc.hbs',
+      production: process.env.NODE_ENV === 'production'
+    }),
+    new FeelesWebpackPlugin({
+      path: 'samples/mc',
+      output: 'mc.json',
+      ignore: /\.DS_Store$/
     })
   ],
   devServer: {
