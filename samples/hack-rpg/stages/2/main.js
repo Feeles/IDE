@@ -53,10 +53,6 @@ function gameStart() {
 		// 魔道書を削除
 		item1.destroy();
 	};
-	// 210f まつ -> 下に32 ずれる -> 140f まつ -> 下に32 ずれる
-	item1.tl
-		.delay(210).moveBy(0, 32, 30)
-		.delay(140).moveBy(0, 32, 30);
 
 
 	// スライム
@@ -92,6 +88,16 @@ function gameStart() {
 	item4.onのった = () => {
 		// 次のステージに！
 		gameclear('stages/3/index.html');
+	};
+
+	// まどうしょがやってくるぞ…
+	item2.onこうげきされた = () => {
+		// 60f まつ -> 下に32 ずれる -> 45f まつ -> 下に32 ずれる
+		item1.tl
+			.delay(60).moveBy(0, 32, 30)
+			.delay(45).moveBy(0, 32, 30);
+		// うごくのは、一回だけ
+		item2.onこうげきされた = null;
 	};
 
 	// このステージを改造
