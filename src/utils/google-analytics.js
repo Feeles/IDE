@@ -21,3 +21,5 @@ if (process.env.GA_TRACKING_ID) {
   ga('create', process.env.GA_TRACKING_ID, 'auto');
   ga('send', 'pageview');
 }
+
+export default window[window.GoogleAnalyticsObject] || function() {};

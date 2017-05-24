@@ -36,6 +36,7 @@ import { updateProject } from '../database/';
 import organization from 'organization';
 import debugWindow from 'utils/debugWindow';
 import open from 'utils/open';
+import ga from 'utils/google-analytics';
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -233,11 +234,7 @@ export default class Menu extends PureComponent {
             onActionTouchTap: () => window.open(`${api.origin}/p/${search}`)
           }
         });
-        if (process.env.NODE_ENV === 'production') {
-          if (ga) {
-            ga('send', 'event', 'Account', 'deploy');
-          }
-        }
+        ga('send', 'event', 'Account', 'deploy');
       } else {
         alert(localization.menu.failedToDeploy);
         debugWindow(response);
@@ -263,11 +260,7 @@ export default class Menu extends PureComponent {
           onActionTouchTap: this.handleLogout
         }
       });
-      if (process.env.NODE_ENV === 'production') {
-        if (ga) {
-          ga('send', 'event', 'Account', 'login', url);
-        }
-      }
+      ga('send', 'event', 'Account', 'login', url);
     };
     window.addEventListener('message', function task(event) {
       if (event.source === win) {
@@ -275,22 +268,14 @@ export default class Menu extends PureComponent {
         callback(event.data.id);
       }
     });
-    if (process.env.NODE_ENV === 'production') {
-      if (ga) {
-        ga('send', 'event', 'Account', 'oauth', url);
-      }
-    }
+    ga('send', 'event', 'Account', 'oauth', url);
   }
 
   handleLogout = () => {
     this.props.setOAuthId();
     this.handleRequestClose();
 
-    if (process.env.NODE_ENV === 'production') {
-      if (ga) {
-        ga('send', 'event', 'Account', 'logout');
-      }
-    }
+    ga('send', 'event', 'Account', 'logout');
   };
 
   handleRequestClose = () => {

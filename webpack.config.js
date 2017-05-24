@@ -17,7 +17,7 @@ const config = {
       'animate.css',
       'whatwg-fetch',
       './lib/url-search-params',
-      './lib/google-analytics',
+      './src/utils/google-analytics',
       './src/utils/Rollbar',
       './src/main'
     ],
@@ -56,7 +56,9 @@ const config = {
     new webpack.DefinePlugin({
       INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
-      EXPORT_VAR_NAME: JSON.stringify(exportVarName)
+      EXPORT_VAR_NAME: JSON.stringify(exportVarName),
+      'process.env.ROLLBAR': JSON.stringify(process.env.ROLLBAR),
+      'process.env.GA_TRACKING_ID': JSON.stringify(process.env.GA_TRACKING_ID)
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
     new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
