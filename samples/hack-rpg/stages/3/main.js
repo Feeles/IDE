@@ -18,7 +18,7 @@ function gameStart() {
 	// feeles.openReadme('stages/3/README.md');
 
 	// map1 を読み込む
-	Hack.maps['map1'].load();
+	Hack.maps.map1.load();
 
 
 	// プレイヤー（騎士）
