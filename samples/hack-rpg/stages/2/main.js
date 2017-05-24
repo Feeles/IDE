@@ -53,6 +53,10 @@ function gameStart() {
 		// 魔道書を削除
 		item1.destroy();
 	};
+	// 210f まつ -> 下に32 ずれる -> 140f まつ -> 下に32 ずれる
+	item1.tl
+		.delay(210).moveBy(0, 32, 30)
+		.delay(140).moveBy(0, 32, 30);
 
 
 	// スライム
