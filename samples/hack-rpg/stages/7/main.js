@@ -11,7 +11,7 @@ function gameStart() {
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(Hack.assets.knight);
+	player.mod(_kきし);
 	// プレイヤーを 7, 5 の位置に移動する
 	player.locate(7, 5);
 	// プレイヤーの体力
@@ -19,7 +19,7 @@ function gameStart() {
 	// プレイヤーの攻撃力
 	player.atk = 1;
 	// プレイヤーがやられたら...
-	player.onbecomedead = function() {
+	player.onたおれたとき = function() {
 		// プレイヤーを削除する
 		this.destroy();
 		// ゲームオーバー
@@ -29,22 +29,22 @@ function gameStart() {
 
 	// 神官
 	const boy = new RPGObject();
-	boy.mod(Hack.assets.boy);
+	boy.mod(_o男の子);
 	// 神官を 7, ３ の位置に移動する
 	boy.locate(7, 3);
 	// フラグが立っていたら...
 	if (flag) {
-		Hack.log('転移装置が使えるようになった!');
+		Hack.log('転移装置 の ふういんが とけた!');
 		// 神官にぶつかったら...
-		boy.oncollided = () => {
-			Hack.log('君の力があれば、この世界をもっと自由にできるんじゃないかな……');
+		boy.onぶつかった = () => {
+			Hack.log('きみの そのちから、このせかいをもっと 自由にできるんじゃないかな');
 		};
 	}
 	// フラグが立っていなかったら...
 	else {
 		// 神官にぶつかったら...
-		boy.oncollided = () => {
-			Hack.log('転移装置が使えなくなってる……君が改造して、元通りにしてくれないか？');
+		boy.onぶつかった = () => {
+			Hack.log('きみが ふういんを といてくれるのかい？');
 			// 魔道書を開く
 			feeles.openEditor('stages/extra.js');
 		};
@@ -54,37 +54,37 @@ function gameStart() {
 
 	// 4, 6 の位置に　明るい緑色（lightgreen） の転移装置を作る
 	const warp1 = createWarp(4, 6, 'lightgreen',
-		'ステージ１ "はじまりの森" へ転移しますか？',
+		'ステージ１ "はじまりの森" に ワープしますか？',
 		'stages/1/index.html'
 	);
 
 	// 5, 7 の位置に　オレンジ色（orange） の転移装置を作る
 	const warp2 = createWarp(5, 7, 'orange',
-		'ステージ2 "CODE の 魔法" へ転移しますか？',
+		'ステージ2 "CODE の 魔法" に ワープしますか？',
 		'stages/2/index.html'
 	);
 
 	// 6, 7 の位置に　青色（blue） の転移装置を作る
 	const warp3 = createWarp(6, 7, 'blue',
-		'ステージ3 "おかしな行き止まり" へ転移しますか？',
+		'ステージ3 "おかしな行き止まり" に ワープしますか？',
 		'stages/3/index.html'
 	);
 
 	// 8, 7 の位置に　シアン（水色）（cyan） の転移装置を作る
 	const warp4 = createWarp(8, 7, 'cyan',
-		'ステージ4 "閉じられた群青の輝き" へ転移しますか？',
+		'ステージ4 "閉じられた群青の輝き" に ワープしますか？',
 		'stages/4/index.html'
 	);
 
 	// 9, 7 の位置に　黄色（yellow） の転移装置を作る
 	const warp5 = createWarp(9, 7, 'yellow',
-		'ステージ5 "大グモ荒野" へ転移しますか？',
+		'ステージ5 "大グモ荒野" に ワープしますか？',
 		'stages/5/index.html'
 	);
 
 	// 10, 8 の位置に紫色（purple)　の転移装置を作る
 	const warp6 = createWarp(10, 8, 'purple',
-		'ステージ6 "守りし者" へ転移しますか？',
+		'ステージ6 "守りし者" に ワープしますか？',
 		'stages/6/index.html'
 	);
 
@@ -100,7 +100,7 @@ function createWarp(x, y, color, message, next) {
 
 	// ワープ床
 	const warp = new RPGObject();
-	warp.mod(Hack.assets.warp);
+	warp.mod(_wワープ);
 	// ワープ床を x, y の位置に移動する ( map1 )
 	warp.locate(x, y, 'map1');
 	// ワープ床の色を color にする
@@ -110,7 +110,7 @@ function createWarp(x, y, color, message, next) {
 	// もしフラグが立っていたら...
 	if (flag) {
 		// ワープ床にプレイヤーが乗ったら...
-		warp.onplayerenter = function() {
+		warp.onのった = () => {
 			// 確認して...
 			if (confirm(message)) {
 				// ワープ！
@@ -124,7 +124,7 @@ function createWarp(x, y, color, message, next) {
 		// ワープ床の透明度（うすさ）を0.2にする（ちょっと見える）
 		warp.opacity = 0.2;
 		// ワープ床にプレイヤーが乗ったら...
-		warp.onplayerenter = () => {
+		warp.onのった = () => {
 			// メッセージ
 			alert('見えない力で 閉ざされている');
 		};

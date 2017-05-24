@@ -9,11 +9,11 @@ function gameStartLazy() {
 
 	// クモ
 	const item1 = new RPGObject();
-	item1.mod(Hack.assets.spider);
+	item1.mod(_kくも);
 	// クモを 7, 4 の位置に移動する ( map2 )
 	item1.locate(7, 4, 'map2');
 	// クモを更新する...
-	item1.onenterframe = () => {
+	item1.onつねに = () => {
 		// クモの横の位置をプレイヤーと同じにする
 		item1.x = Hack.player.x;
 	};
@@ -23,11 +23,11 @@ function gameStartLazy() {
 
 	// ダイアモンド
 	const item2 = new RPGObject();
-	item2.mod(Hack.assets.diamond);
+	item2.mod(_dダイヤモンド);
 	// ダイアモンドを 4, 7 の位置に移動する ( map2 )
 	item2.locate(4, 7, 'map2');
 	// ダイアモンドにプレイヤーが乗ったら...
-	item2.onplayerenter = () => {
+	item2.onのった = () => {
 		// ダイアモンドを削除する
 		item2.destroy();
 		// スコアを 100 アップ！
@@ -39,13 +39,13 @@ function gameStartLazy() {
 
 	// かいだん
 	const item3 = new RPGObject();
-	item3.mod(Hack.assets.downStair);
+	item3.mod(_kくだりかいだん);
 	// 階段を 7, 0 の位置に移動する ( map2 )
 	item3.locate(7, 0, 'map2');
 	//　階段を下の方に置く ( Under )
 	item3.layer = RPGMap.Layer.Under;
 	// 階段にプレイヤーが乗ったら
-	item3.onplayerenter = () => {
+	item3.onのった = () => {
 		// マップ map1 に移動
 		Hack.changeMap('map1');
 		// プレイヤーを 7, 8 の位置に移動する ( map1 )

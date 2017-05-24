@@ -21,7 +21,7 @@ function gameStart() {
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(Hack.assets.knight);
+	player.mod(_kきし);
 	// プレイヤーを　3,　5 の位置に移動する
 	player.locate(3, 5);
 	// プレイヤーの体力
@@ -29,7 +29,7 @@ function gameStart() {
 	// プレイヤーの攻撃力
 	player.atk = 1;
 	// プレイヤーがやられたら...
-	player.onbecomedead = function() {
+	player.onたおれたとき = function() {
 		// プレイヤーを削除
 		this.destroy();
 		// ゲームオーバー
@@ -38,7 +38,7 @@ function gameStart() {
 
 	// スライム
 	const item1 = new RPGObject();
-	item1.mod(Hack.assets.slime);
+	item1.mod(_sスライム);
 	// スライムの体力
 	item1.hp = 3;
 	// スライムの攻撃力
@@ -61,11 +61,11 @@ function gameStart() {
 
 	// 階段
 	const item2 = new RPGObject();
-	item2.mod(Hack.assets.downStair);
+	item2.mod(_kくだりかいだん);
 	// 階段を 12, 5 の位置に移動 ( map1 )
 	item2.locate(12, 5, 'map1');
 	// 階段にプレイヤーが乗ったら...
-	item2.onplayerenter = () => {
+	item2.onのった = () => {
 		// 次のステージに！
 		feeles.replace('stages/2/index.html');
 	};

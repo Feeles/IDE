@@ -10,13 +10,13 @@ function gameStartLazy() {
 
 	// しろ
 	const item1 = new RPGObject();
-	item1.mod(Hack.assets.castle);
+	item1.mod(_sしろ);
 	// 城の透明度（うすさ）を 0 にする（見えなくする）
 	item1.opacity = 0;
 	// 城を 13, 5 の位置に移動する ( map4 )
 	item1.locate(13, 5, 'map4');
 	// 城にプレイヤーが乗ったら...
-	item1.onplayerenter = () => {
+	item1.onのった = () => {
 		// 城を削除する
 		item1.destroy();
 		// ゲームクリアー！！！！！！
