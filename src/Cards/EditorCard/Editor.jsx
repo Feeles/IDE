@@ -226,7 +226,6 @@ export default class Editor extends PureComponent {
         'Ctrl-Alt-B': this.beautify,
         ...this.props.extraKeys
       },
-      ...getConfig('codemirror'),
       scrollbarStyle: null
     };
     if (this.state.jshintrc && options.mode === 'javascript') {

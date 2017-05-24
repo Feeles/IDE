@@ -22,7 +22,6 @@ export default class CustomizeCard extends PureComponent {
   };
 
   state = {
-    editorFileKey: '',
     cssFileKey: ''
   };
 
@@ -32,18 +31,6 @@ export default class CustomizeCard extends PureComponent {
 
   componentWillMount() {
     (async () => {
-      const editorFileKey = await this.addFileIfNotExist(
-        'feeles/codemirror.json',
-        () => {
-          const editor = this.props.getConfig('codemirror');
-          return new SourceFile({
-            type: 'application/json',
-            name: 'feeles/codemirror.json',
-            text: JSON.stringify(editor, null, '\t')
-          });
-        }
-      );
-
       const cssFileKey = await this.addFileIfNotExist(
         'feeles/codemirror.css',
         () => {
@@ -55,10 +42,7 @@ export default class CustomizeCard extends PureComponent {
         }
       );
 
-      this.setState({
-        editorFileKey,
-        cssFileKey
-      });
+      this.setState({ cssFileKey });
     })();
   }
 
@@ -71,15 +55,6 @@ export default class CustomizeCard extends PureComponent {
     }
 
     return file.key;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps.files) {
-      const editorFile = this.props.findFile('feeles/codemirror.json');
-      this.setState({
-        editorFileKey: editorFile ? editorFile.key : ''
-      });
-    }
   }
 
   renderBlock(title, href, fileKey) {
@@ -113,11 +88,6 @@ export default class CustomizeCard extends PureComponent {
 
     return (
       <Card icon={CustomizeCard.icon()} {...this.props.cardPropsBag}>
-        {this.renderBlock(
-          localization.customizeCard.editor,
-          'http://codemirror.net/doc/manual.html#config',
-          this.state.editorFileKey
-        )}
         {this.renderBlock(
           localization.customizeCard.style,
           'http://codemirror.net/doc/manual.html#styling',

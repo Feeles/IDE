@@ -3,12 +3,6 @@ import Snippet from './Snippet';
 import organization from 'organization';
 
 export default new Map([
-  ['codemirror', {
-    test: /^feeles\/codemirror\.json$/i,
-    multiple: false,
-    defaultValue: {},
-    defaultName: 'feeles/codemirror.json',
-  }],
   ['palette', {
     test: /^\.palette$/i,
     multiple: false,
