@@ -70,6 +70,40 @@ function gameStart() {
 		feeles.replace('stages/2/index.html');
 	};
 
+	// そうさせつめい (1)
+	const {
+		mapX,
+		mapY
+	} = player; // もとのいち
+	setTimeout(() => {
+		// ６秒たったら...
+		if (player.mapX === mapX && player.mapY === mapY) {
+			// プレイヤーのいちが同じなら、せつめいを出す
+			Hack.log('キーボードの やじるしキーを おしてみて');
+		}
+	}, 6000);
+
+	// そうさせつめい (2)
+	let isAttacked = false; // こうげき したことがあるか
+	player.on('becomeattack', () => isAttacked = true);
+	setTimeout(() => {
+		// １５秒たったら...
+		if (!isAttacked) {
+			Hack.log('スペースキーを おしてみて');
+		}
+	}, 15000);
+
+	// そうさせつめい (3)
+	const {
+		hp
+	} = item1; // もとの HP (スライム)
+	setTimeout(() => {
+		// ２０秒たったら...
+		if (item1.hp === hp) {
+			Hack.log('スライムに ちかづいて こうげきしよう！');
+		}
+	}, 20000);
+
 
 	// このステージを改造
 	extra(6, 9, 'map1', 'stages/1/main.js');
