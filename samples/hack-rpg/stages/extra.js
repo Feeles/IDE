@@ -38,7 +38,7 @@ export default function makeMagic(x, y, map, fileName) {
 	} else {
 		magic.mod(Hack.assets.magic);
 		magic.onplayerenter = () => {
-			Hack.log('見えない力で とざされている');
+			Hack.log('ふういんのせいで つかえない');
 		};
 	}
 };
