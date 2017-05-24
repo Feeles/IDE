@@ -11,7 +11,7 @@ function gameStartLazy() {
 
 	// ドラゴン
 	const item1 = new RPGObject();
-	item1.mod(Hack.assets.dragon);
+	item1.mod(_dドラゴン);
 	// ドラゴンの体力
 	item1.hp = 16;
 	// ドラゴンの位置を調整する
@@ -26,7 +26,7 @@ function gameStartLazy() {
 	// ドラゴンの動きを設定する
 	item1.setFrame('Idle', [10]);
 	//　ドラゴンを更新する...
-	item1.onenterframe = () => {
+	item1.onつねに = () => {
 
 		// 炎を作る
 		const effect1 = new Effect(-3, 5, 40, true);
@@ -37,11 +37,11 @@ function gameStartLazy() {
 		// 炎の動きを設定する
 		effect1.force(0, -0.1);
 		// 炎に何かが当たったら...
-		effect1.ontriggerenter = (event) => {
+		effect1.onふれはじめた = (event) => {
 			// ドラゴン以外に当たったら...
 			if (event.hit !== item1) {
-				// 10 ダメージの攻撃！
-				Hack.Attack(event.mapX, event.mapY, 10);
+				// 1 ダメージの攻撃！
+				Hack.Attack(event.mapX, event.mapY, 1);
 			}
 		};
 
@@ -58,7 +58,7 @@ function gameStartLazy() {
 		// 炎の動きを設定する 2
 		effect2.velocityX = 0;
 		// 炎が何かに当たったら...
-		effect2.ontriggerenter = (event) => {
+		effect2.onふれはじめた = (event) => {
 			// ドラゴン以外に当たったら...
 			if (event.hit !== item1) {
 				// 450 ダメージの攻撃！！！！
@@ -79,7 +79,7 @@ function gameStartLazy() {
 	// 体力ゲージの位置
 	bar1.moveTo(0, 0);
 	// 体力ゲージを更新する...
-	bar1.onenterframe = function() {
+	bar1.onenterframe = () => {
 		// map2 じゃないなら表示しない
 		bar1.visible = Hack.map === Hack.maps['map2'];
 		item1.hp = Math.min(item1.hp, MAX);
@@ -91,11 +91,11 @@ function gameStartLazy() {
 
 	// ルビー
 	const item2 = new RPGObject();
-	item2.mod(Hack.assets.ruby);
+	item2.mod(_rルビー);
 	// ルビーを 11, 5 の位置に移動する ( map2 )
 	item2.locate(11, 5, 'map2');
 	// ルビーにプレイヤーが乗ったら...
-	item2.onplayerenter = function() {
+	item2.onのった = () => {
 		// 階段を作る！
 		// もう少し下のところに階段を作るコードが書いてあるよ！
 		appearDownStair();
@@ -111,11 +111,11 @@ function gameStartLazy() {
 
 		// かいだん
 		const item3 = new RPGObject();
-		item3.mod(Hack.assets.downStair);
+		item3.mod(_kくだりかいだん);
 		// 階段を 14, 5 の位置に移動する ( map2 )
 		item3.locate(14, 5, 'map2');
 		// 階段にプレイヤーが乗ったら...
-		item3.onplayerenter = function() {
+		item3.onのった = () => {
 			// マップ map3 に移動する
 			Hack.changeMap('map3');
 			// プレイヤーを 2, 5 の位置に移動する ( map3 )

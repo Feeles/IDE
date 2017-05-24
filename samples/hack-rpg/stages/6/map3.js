@@ -16,13 +16,13 @@ function gameStartLazy() {
 
 	// かいだん
 	const item1 = new RPGObject();
-	item1.mod(Hack.assets.upStair);
+	item1.mod(_nのぼりかいだん);
 	// 階段を 14, 5 の位置に移動する　( map3 )
 	item1.locate(14, 5, 'map3');
 	// 階段を下の方に置く ( Under )
 	item1.layer = RPGMap.Layer.Under;
 	// 階段にプレイヤーが乗ったら...
-	item1.onplayerenter = () => {
+	item1.onのった = () => {
 		// プレイヤーを 2, 5 の位置に移動する ( map4 )
 		Hack.player.locate(2, 5, 'map4');
 		// マップ map4 に移動する
@@ -71,11 +71,11 @@ function gameStartLazy() {
 
 		// はこ
 		const item1 = new RPGObject();
-		item1.mod(Hack.assets.box);
+		item1.mod(_tたからばこ);
 		// 宝箱を x, y の位置に移動する ( map3 )
 		item1.locate(x, y, 'map3');
 		// 宝箱にプレイヤーが乗ったら...
-		item1.onplayerenter = function() {
+		item1.onのった = () => {
 			// 宝箱を削除する
 			item1.destroy();
 			// スコアを 400　アップ！！！！
@@ -90,11 +90,11 @@ function gameStartLazy() {
 
 		// コイン
 		const item1 = new RPGObject();
-		item1.mod(Hack.assets.coin);
+		item1.mod(_kコイン);
 		// コインを x, y の位置に作る　( map3 )
 		item1.locate(x, y, 'map3');
 		// コインにプレイヤーが乗ったら...
-		item1.onplayerenter = function() {
+		item1.onのった = () => {
 			// コインを削除する
 			item1.destroy();
 			// スコアを 400 アップ！！！！

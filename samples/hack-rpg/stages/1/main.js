@@ -16,12 +16,12 @@ function gameStart() {
 	// feeles.openReadme('stages/1/README.md');
 
 	// map1 を読み込む
-	Hack.maps['map1'].load();
+	Hack.maps.map1.load();
 
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(Hack.assets.knight);
+	player.mod(_kきし);
 	// プレイヤーを　3,　5 の位置に移動する
 	player.locate(3, 5);
 	// プレイヤーの体力
@@ -29,7 +29,7 @@ function gameStart() {
 	// プレイヤーの攻撃力
 	player.atk = 1;
 	// プレイヤーがやられたら...
-	player.onbecomedead = function() {
+	player.onたおれたとき = function() {
 		// プレイヤーを削除
 		this.destroy();
 		// ゲームオーバー
@@ -38,7 +38,7 @@ function gameStart() {
 
 	// スライム
 	const item1 = new RPGObject();
-	item1.mod(Hack.assets.slime);
+	item1.mod(_sスライム);
 	// スライムの体力
 	item1.hp = 3;
 	// スライムの攻撃力
@@ -61,14 +61,48 @@ function gameStart() {
 
 	// 階段
 	const item2 = new RPGObject();
-	item2.mod(Hack.assets.downStair);
+	item2.mod(_kくだりかいだん);
 	// 階段を 12, 5 の位置に移動 ( map1 )
 	item2.locate(12, 5, 'map1');
 	// 階段にプレイヤーが乗ったら...
-	item2.onplayerenter = () => {
+	item2.onのった = () => {
 		// 次のステージに！
 		feeles.replace('stages/2/index.html');
 	};
+
+	// そうさせつめい (1)
+	const {
+		mapX,
+		mapY
+	} = player; // もとのいち
+	setTimeout(() => {
+		// ６秒たったら...
+		if (player.mapX === mapX && player.mapY === mapY) {
+			// プレイヤーのいちが同じなら、せつめいを出す
+			Hack.log('キーボードの やじるしキーを おしてみて');
+		}
+	}, 6000);
+
+	// そうさせつめい (2)
+	let isAttacked = false; // こうげき したことがあるか
+	player.on('becomeattack', () => isAttacked = true);
+	setTimeout(() => {
+		// １５秒たったら...
+		if (!isAttacked) {
+			Hack.log('スペースキーを おしてみて');
+		}
+	}, 15000);
+
+	// そうさせつめい (3)
+	const {
+		hp
+	} = item1; // もとの HP (スライム)
+	setTimeout(() => {
+		// ２０秒たったら...
+		if (item1.hp === hp) {
+			Hack.log('スライムに ちかづいて こうげきしよう！');
+		}
+	}, 20000);
 
 
 	// このステージを改造
