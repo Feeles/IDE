@@ -90,13 +90,38 @@ function gameStart() {
 		gameclear('stages/3/index.html');
 	};
 
+	// まほうをすすめてくる女の人
+	const item5 = new RPGObject();
+	item5.opacity = 0;
+	item5.mod(_o女の人);
+	// 女の人を 6, 3 の位置に移動する ( map1 )
+	item5.locate(6, 3, 'map1');
+	// 女の人にプレイヤーがぶつかったら...
+	item5.onぶつかった = () => {
+		if (item1.parentNode) {
+			// まだひろってないなら、魔道書を開く
+			feeles.openCode('stages/2/code.js');
+			// 魔道書を削除
+			item1.destroy();
+		}
+		Hack.log('本に かかれている もじを よんでみて');
+	};
+	// 魔道書に女の人を登録する
+	feeles.setAlias('woman', item5);
+
 	// まどうしょがやってくるぞ…
 	item2.onこうげきされた = () => {
-		// 60f まつ -> 下に32 ずれる -> 45f まつ -> 下に32 ずれる
+		// 魔道書: 60f まつ -> 下に32 ずれる -> 45f まつ -> 下に32 ずれる
 		item1.tl
 			.delay(60).moveBy(0, 32, 30)
 			.delay(45).moveBy(0, 32, 30);
-		// うごくのは、一回だけ
+		// 女の人: 210f まつ -> じわじわあらわれる -> あるく
+		item5.tl
+			.delay(210).fadeIn(30)
+			.then(() => {
+				item5.walk();
+			});
+		// 一回だけ
 		item2.onこうげきされた = null;
 	};
 
