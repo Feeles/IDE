@@ -1,193 +1,193 @@
 [{
-    "code": "// スライム\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.slime);\nitem2.hp = 3;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nitem2.onbecomeidle = () => {\n\titem2.attack();\n};\n",
-    "image": "trimmed/slime.gif",
-    "description": "ムチのように からだをふりまわす、キケンなスライム。idle（まっている）→attack（こうげきする）→idle…を えいえんにくりかえすだけの あわれなそんざい",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/スライム"
+	"code": "// スライム\nconst item1 = new RPGObject();\nitem1.mod(_sスライム);\nitem1.hp = 3;\nitem1.atk = 1;\nitem1.locate(7, 5, 'map1');\nitem1.onとまるとき = () => {\n\titem1.attack();\n};\n",
+	"image": "trimmed/slime.gif",
+	"description": "ムチのように からだをふりまわす、キケンなスライム。idle（まっている）→attack（こうげきする）→idle…を えいえんにくりかえすだけの あわれなそんざい",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/スライム"
 }, {
-    "code": "// イモムシ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.insect);\nitem2.hp = 2;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nitem2.onbecomeidle = () => {\n\titem2.turn();\n\titem2.walk();\n};\nitem2.onbecomedead = () => {\n\tHack.score += 1;\n};\n",
-    "image": "trimmed/insect.gif",
-    "description": "にげあしは おいらの とくぎなのさ。すばやく turn（ターン）して walk（あるく）のが ひけつさ",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/イモムシ"
+	"code": "// イモムシ\nconst item1 = new RPGObject();\nitem1.mod(_iいもむし);\nitem1.hp = 2;\nitem1.atk = 1;\nitem1.locate(7, 5, 'map1');\nitem1.onとまるとき = () => {\n\titem1.turn();\n\titem1.walk();\n};\nitem1.onたおれたとき = () => {\n\tHack.score += 1;\n};\n",
+	"image": "trimmed/insect.gif",
+	"description": "にげあしは おいらの とくぎなのさ。すばやく turn（ターン）して walk（あるく）のが ひけつさ",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/イモムシ"
 }, {
-    "code": "// コウモリ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.bat);\nitem2.hp = 3;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nitem2.onbecomedead = () => {\n\tHack.score += 1;\n};\nitem2.onbecomeidle = (e) => {\n\tconst target = player;\n\tconst moveX = 32 * Math.sign(target.mapX - item2.mapX);\n\tconst moveY = 32 * Math.sign(target.mapY - item2.mapY);\n\titem2.forward = [moveX, moveY];\n\titem2.tl.become('walk').moveBy(moveX, moveY, 30).then(() => {\n\t\tHack.Attack.call(item2, item2.mapX, item2.mapY, item2.atk);\n\t}).become('attack', 20).become('idle', 20);\n};\n",
-    "image": "trimmed/bat.gif",
-    "description": "ねらいをつけて おそってくる おそろしいコウモリ。 target に、むかってくる らしい",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/コウモリ"
+	"code": "// コウモリ\nconst item1 = new RPGObject();\nitem1.mod(_kこうもり);\nitem1.hp = 3;\nitem1.atk = 1;\nitem1.locate(7, 5, 'map1');\nitem1.onたおれたとき = () => {\n\tHack.score += 1;\n};\nitem1.onとまるとき = (e) => {\n\tconst target = player;\n\tconst moveX = 32 * Math.sign(target.mapX - item1.mapX);\n\tconst moveY = 32 * Math.sign(target.mapY - item1.mapY);\n\titem1.forward = [moveX, moveY];\n\titem1.tl.become('walk').moveBy(moveX, moveY, 30).then(() => {\n\t\tHack.Attack.call(item1, item1.mapX, item1.mapY, item1.atk);\n\t}).become('attack', 20).become('idle', 20);\n};\n",
+	"image": "trimmed/bat.gif",
+	"description": "ねらいをつけて おそってくる おそろしいコウモリ。 target に、むかってくる らしい",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/コウモリ"
 }, {
-    "code": "// ウロボロス\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.ouroboros);\nitem2.hp = 10;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nsetInterval(() => {\n\titem2.attack();\n}, 4000);\n",
-    "image": "trimmed/ouroboros.gif",
-    "description": "４秒おきに攻撃してくる大蛇ウロボロス。攻撃までの時間を変更することもできる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ウロボオス"
+	"code": "// ウロボロス\nconst item1 = new RPGObject();\nitem1.mod(_uウロボロス);\nitem1.hp = 10;\nitem1.atk = 1;\nitem1.locate(7, 5, 'map1');\nsetInterval(() => {\n\titem1.attack();\n}, 4000);\n",
+	"image": "trimmed/ouroboros.gif",
+	"description": "４秒おきに攻撃してくる大蛇ウロボロス。攻撃までの時間を変更することもできる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ウロボオス"
 }, {
-    "code": "// ドラゴン\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.dragon);\nitem2.hp = 10;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nitem2.scale(2, 2);\nitem2.setFrame('Idle', [10]);\nitem2.onbecomedead = () => {\n\tHack.gameclear();\n};\nitem2.onenterframe = (e) => {\n\tif (game.frame % 3 > 0) return;\n\tconst flame = new RPGObject();\n\tflame.mod(Hack.assets.explosion);\n\tflame.collisionFlag = false;\n\titem2.shoot(flame, item2.forward, 6);\n\tconst fx = item2.forward.x,\n\t\t  fy = item2.forward.y;\n\tflame.moveBy(fx * random(64, 96), fy * random(64, 96));\n\tflame.velocityX += random(-0.99, 1);\n\tflame.velocityY += random(-0.99, 1);\n\tflame.scale(random(0.99, 1.5));\n\tflame.force(-fx * random(0, 0.199), -fy * random(0, 0.199));\n\tflame.destroy(20);\n\tflame.ontriggerenter = (event) => {\n\t\tif (event.hit !== item2) {\n\t\t\tHack.Attack(event.mapX, event.mapY, item2.atk);\n\t\t}\n\t};\n};\n",
-    "image": "trimmed/dragon.gif",
-    "description": "やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ドラゴン"
+	"code": "// ドラゴン\nconst item1 = new RPGObject();\nitem1.mod(_dドラゴン);\nitem1.hp = 10;\nitem1.atk = 1;\nitem1.locate(7, 5, 'map1');\nitem1.scale(2, 2);\nitem1.setFrame('Idle', [10]);\nitem1.onたおれたとき = () => {\n\tHack.gameclear();\n};\nitem1.onつねに = (e) => {\n\tif (game.frame % 3 > 0) return;\n\tconst item2 = new RPGObject();\n\titem2.mod(_bばくえん);\n\titem2.collisionFlag = false;\n\titem1.shoot(item2, item1.forward, 6);\n\tconst fx = item1.forward.x,\n\t\t  fy = item1.forward.y;\n\titem2.moveBy(fx * random(64, 96), fy * random(64, 96));\n\titem2.velocityX += random(-0.99, 1);\n\titem2.velocityY += random(-0.99, 1);\n\titem2.scale(random(0.99, 1.5));\n\titem2.force(-fx * random(0, 0.199), -fy * random(0, 0.199));\n\titem2.destroy(20);\n\titem2.onふれはじめた = (event) => {\n\t\tif (event.hit !== item1) {\n\t\t\tHack.Attack(event.mapX, event.mapY, item1.atk);\n\t\t}\n\t};\n};\n",
+	"image": "trimmed/dragon.gif",
+	"description": "やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ドラゴン"
 }, {
-    "code": "// ミノタウルス\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.minotaur);\nitem2.hp = 10;\nitem2.atk = 1;\nitem2.locate(7, 5, 'map1');\nitem2.scale(2, 2);\nitem2.onbecomeidle = () => {\n\titem2.attack();\n};\n",
-    "image": "trimmed/minotaur.gif",
-    "description": "ずっと攻撃を繰り返す 凶暴なミノタウルス",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス"
+	"code": "// ミノタウルス\nconst item1 = new RPGObject();\nitem1.mod(_mミノタウルス);\nitem1.hp = 10;\nitem1.atk = 1;\nitem1.locate(7, 5, 'map1');\nitem1.scale(2, 2);\nitem1.onとまるとき = () => {\n\titem1.attack();\n};\n",
+	"image": "trimmed/minotaur.gif",
+	"description": "ずっと攻撃を繰り返す 凶暴なミノタウルス",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス"
 }, {
-    "code": "// 下りかいだん\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.downStair);\nitem2.locate(7, 5, 'map1');\nitem2.layer = RPGMap.Layer.Under;\nitem2.onplayerenter = () => {\n\tHack.changeMap('map2');\n};\n",
-    "image": "trimmed/map-21-2.png",
-    "description": "つぎのマップに つながっている くだりせんようの かいだん。カイゾウすると、つぎのマップからつぎのつぎのマップに つなげることも…",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/下り階段"
+	"code": "// 下りかいだん\nconst item1 = new RPGObject();\nitem1.mod(_kくだりかいだん);\nitem1.locate(7, 5, 'map1');\nitem1.layer = RPGMap.Layer.Under;\nitem1.onのった = () => {\n\tHack.changeMap('map2');\n};\n",
+	"image": "trimmed/map-21-2.png",
+	"description": "つぎのマップに つながっている くだりせんようの かいだん。カイゾウすると、つぎのマップからつぎのつぎのマップに つなげることも…",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/下り階段"
 }, {
-    "code": "// ワープ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.warp);\nitem2.locate(7, 5, 'map1');\nitem2.layer = RPGMap.Layer.Under;\nitem2.onplayerenter = () => {\n\tplayer.locate(11, 5);\n};\n",
-    "image": "trimmed/map-16-4.png",
-    "description": "ふむとワープできる すごいゆか。あかいろや みどりいろも そんざいするという うわさ",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ワープゾーン"
+	"code": "// ワープ\nconst item1 = new RPGObject();\nitem1.mod(_wワープ);\nitem1.locate(7, 5, 'map1');\nitem1.layer = RPGMap.Layer.Under;\nitem1.onのった = () => {\n\tplayer.locate(11, 5);\n};\n",
+	"image": "trimmed/map-16-4.png",
+	"description": "ふむとワープできる すごいゆか。あかいろや みどりいろも そんざいするという うわさ",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ワープゾーン"
 }, {
-    "code": "// おしろ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.castle);\nitem2.locate(7, 5, 'map1');\nitem2.onplayerenter = () => {\n\t// ゲームクリア\n\tHack.gameclear();\n\tplayer.destroy();\n\tHack.log('ゲームクリアです。おめでとう！');\n};\n",
-    "image": "trimmed/map-25-0.png",
-    "description": "あなたのかえりを まちわびている おしろ。ここへ たどりつくと ゲームクリアになる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ゴールちてん"
+	"code": "// しろ\nconst item1 = new RPGObject();\nitem1.mod(_sしろ);\nitem1.locate(7, 5, 'map1');\nitem1.onのった = () => {\n\t// ゲームクリア\n\tHack.gameclear();\n\tplayer.destroy();\n\tHack.log('ゲームクリアです。おめでとう！');\n};\n",
+	"image": "trimmed/map-25-0.png",
+	"description": "あなたのかえりを まちわびている おしろ。ここへ たどりつくと ゲームクリアになる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ゴールちてん"
 }, {
-    "code": "// お花\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.flower);\nitem2.locate(7, 5, 'map1');\nitem2.layer = RPGMap.Layer.Under;\nitem2.collisionFlag = false;\nitem2.onattacked = () => {\n\titem2.destroy();\n};\n",
-    "image": "trimmed/map-21-1.png",
-    "description": "まえで こうげきすると ちってしまう はかないはな。うえを あるくことができる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/お花畑"
+	"code": "// お花\nconst item1 = new RPGObject();\nitem1.mod(_hはな);\nitem1.locate(7, 5, 'map1');\nitem1.layer = RPGMap.Layer.Under;\nitem1.collisionFlag = false;\nitem1.onこうげきされた = () => {\n\titem1.destroy();\n};\n",
+	"image": "trimmed/map-21-1.png",
+	"description": "まえで こうげきすると ちってしまう はかないはな。うえを あるくことができる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/お花畑"
 }, {
-    "code": "// 木\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.tree);\nitem2.locate(7, 5, 'map1');\nitem2.hp = 1;\n",
-    "image": "trimmed/map-26-0.png",
-    "description": "まえで こうげきすると あっけなく おれてしまう キ。うえをあるくことは でキない",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/木"
+	"code": "// 木\nconst item1 = new RPGObject();\nitem1.mod(_k木);\nitem1.locate(7, 5, 'map1');\nitem1.hp = 1;\n",
+	"image": "trimmed/map-26-0.png",
+	"description": "まえで こうげきすると あっけなく おれてしまう キ。うえをあるくことは でキない",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/木"
 }, {
-    "code": "// バクダン岩\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.rock);\nitem2.locate(7, 5, 'map1');\nitem2.atk = 99;\nitem2.onattacked = () => {\n\tconst flame = new RPGObject();\n\tflame.mod(Hack.assets.explosion);\n\tflame.locate(7, 5, 'map1');\n\tflame.velocityY = -1;\n\tflame.collisionFlag = false;\n\tflame.ontriggerenter = (event) => {\n\t\tHack.Attack.call(flame, event.mapX, event.mapY, 1);\n\t};\n\tflame.destroy(20);\n\titem2.destroy();\n};\n",
-    "image": "trimmed/map-20-1.png",
-    "description": "しげきを あたえると ばくはつするぞ！おすなよ ぜったいに おすなよ！",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/爆弾岩"
+	"code": "// バクダン岩\nconst item1 = new RPGObject();\nitem1.mod(_iいわ);\nitem1.locate(7, 5, 'map1');\nitem1.atk = 99;\nitem1.onこうげきされた = () => {\n\tconst item2 = new RPGObject();\n\titem2.mod(_bばくえん);\n\titem2.locate(7, 5, 'map1');\n\titem2.velocityY = -1;\n\titem2.collisionFlag = false;\n\titem2.onふれはじめた = (event) => {\n\t\tHack.Attack.call(item2, event.mapX, event.mapY, 1);\n\t};\n\titem2.destroy(20);\n\titem1.destroy();\n};\n",
+	"image": "trimmed/map-20-1.png",
+	"description": "しげきを あたえると ばくはつするぞ！おすなよ ぜったいに おすなよ！",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/爆弾岩"
 }, {
-    "code": "// ふしぎなかべ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.clayWall);\nitem2.locate(7, 5, 'map1');\nitem2.opacity = 0.5;\n",
-    "image": "trimmed/map-17-0.png",
-    "description": "むこうがわが すけてみえる ふしぎなかべ。 opacity （オパシティ）を ０ にすると きえてまう",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/とうめいな壁"
+	"code": "// ふしぎなかべ\nconst item1 = new RPGObject();\nitem1.mod(_tつちかべ);\nitem1.locate(7, 5, 'map1');\nitem1.opacity = 0.5;\n",
+	"image": "trimmed/map-17-0.png",
+	"description": "むこうがわが すけてみえる ふしぎなかべ。 opacity （オパシティ）を ０ にすると きえてまう",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/とうめいな壁"
 }, {
-    "code": "// しゃべるかべ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.stoneWall);\nitem2.locate(7, 5, 'map1');\nitem2.onattacked = () => {\n\tHack.log('どうだ　おれさまは　かたいだろう！');\n};\n",
-    "image": "trimmed/map-17-1.png",
-    "description": "まえで こうげきすると しゃべる ふしぎなかべ。いっせつによると おおむかしの ざいにんが とこめられている とか",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/しゃべる壁"
+	"code": "// しゃべるかべ\nconst item1 = new RPGObject();\nitem1.mod(_iいしかべ);\nitem1.locate(7, 5, 'map1');\nitem1.onこうげきされた = () => {\n\tHack.log('どうだ　おれさまは　かたいだろう！');\n};\n",
+	"image": "trimmed/map-17-1.png",
+	"description": "まえで こうげきすると しゃべる ふしぎなかべ。いっせつによると おおむかしの ざいにんが とこめられている とか",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/しゃべる壁"
 }, {
-    "code": "// たからばこ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.box);\nitem2.locate(7, 5, 'map1');\nitem2.onattacked = () => {\n\tdelete item2.onattacked;\n\titem2.mod(Hack.assets.openedBox);\n\t// 出てくるもの　→\n};\n",
-    "image": "trimmed/map-21-0.png",
-    "description": "まえで こうげきすると かぱっとひらく (た)からばこ。なかに なにか いれられると いいんだどね",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/からばこ"
+	"code": "// たからばこ\nconst item1 = new RPGObject();\nitem1.mod(_tたからばこ);\nitem1.locate(7, 5, 'map1');\nitem1.onこうげきされた = () => {\n\tdelete item1.onこうげきされた;\n\titem1.mod(_tたからばこひらいた);\n\t// 出てくるもの　→\n};\n",
+	"image": "trimmed/map-21-0.png",
+	"description": "まえで こうげきすると かぱっとひらく (た)からばこ。なかに なにか いれられると いいんだどね",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/からばこ"
 }, {
-    "code": "// ツボ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.pot);\nitem2.locate(7, 5, 'map1');\nitem2.onattacked = () => {\n\t// ランダムなアイテムをだす\n\tconst mod = random([\n\t\tHack.assets.diamond,\n\t\tHack.assets.sapphire,\n\t\tHack.assets.ruby\n\t]);\n\tconst item2 = new RPGObject();\n\titem2.mod(mod);\n\titem2.locate(this.mapX, this.mapY);\n\titem2.onplayerenter = () => {\n\t\titem2.velocity(0, -8);\n\t\titem2.force(0, 0.8);\n\t\titem2.destroy(16);\n\t};\n\titem2.destroy();\n};\n",
-    "image": "trimmed/map-20-0.png",
-    "description": "ランダムなアイテムがでてくる ふしぎなツボ。なんでも だせる という ウワサ",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなツボ"
+	"code": "// ツボ\nconst item1 = new RPGObject();\nitem1.mod(_tつぼ);\nitem1.locate(7, 5, 'map1');\nitem1.onこうげきされた = () => {\n\t// ランダムなアイテムをだす\n\tconst mod = random([\n\t\t_dダイヤモンド,\n\t\t_sサファイア,\n\t\t_rルビー\n\t]);\n\tconst item2 = new RPGObject();\n\titem2.mod(mod);\n\titem2.locate(item1.mapX, item1.mapY);\n\titem2.onのった = () => {\n\t\titem2.velocity(0, -8);\n\t\titem2.force(0, 0.8);\n\t\titem2.destroy(16);\n\t};\n\titem1.destroy();\n};\n",
+	"image": "trimmed/map-20-0.png",
+	"description": "ランダムなアイテムがでてくる ふしぎなツボ。なんでも だせる という ウワサ",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなツボ"
 }, {
-    "code": "// 女の人\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.woman);\nitem2.locate(7, 5, 'map1');\nitem2.oncollided = () => {\n\tHack.log('こんにちは。ここは 1F です');\n};\n",
-    "image": "trimmed/woman.png",
-    "description": "しゃべる ひと。ふだんは、うけつけのしごとを しているらしい。ずっと おなじセリフしか いえないのかな？",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/女の人"
+	"code": "// 女の人\nconst item1 = new RPGObject();\nitem1.mod(_o女の人);\nitem1.locate(7, 5, 'map1');\nitem1.onぶつかった = () => {\n\tHack.log('こんにちは。ここは 1F です');\n};\n",
+	"image": "trimmed/woman.png",
+	"description": "しゃべる ひと。ふだんは、うけつけのしごとを しているらしい。ずっと おなじセリフしか いえないのかな？",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/女の人"
 }, {
-    "code": "// 男の子\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.boy);\nitem2.locate(7, 5, 'map1');\nitem2.onbecomeidle = () => {\n\titem2.walk();\n};\nitem2.oncollided = () => {\n\titem2.turn();\n\titem2.walk();\n};\n",
-    "image": "trimmed/boy.png",
-    "description": "ひたすら はしりつづける おとこのこ。めざしているところは じぶんでも よくわかっていない",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/男の子"
+	"code": "// 男の子\nconst item1 = new RPGObject();\nitem1.mod(_o男の子);\nitem1.locate(7, 5, 'map1');\nitem1.onとまるとき = () => {\n\titem1.walk();\n};\nitem1.onぶつかった = () => {\n\titem1.turn();\n\titem1.walk();\n};\n",
+	"image": "trimmed/boy.png",
+	"description": "ひたすら はしりつづける おとこのこ。めざしているところは じぶんでも よくわかっていない",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/男の子"
 }, {
-    "code": "// ワナ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.trap);\nitem2.locate(7, 5, 'map1');\nitem2.layer = RPGMap.Layer.Under;\nitem2.onplayerenter = () => {\n\titem2.mod(Hack.assets.usedTrap);\n\tplayer.hp -= 1;\n\tplayer.damageTime = 30;\n};\nitem2.onplayerexit = () => {\n\titem2.mod(Hack.assets.trap);\n};\n",
-    "image": "trimmed/map-22-0.png",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG,/wiki/トゲトゲ",
-    "description": "ふむとダメージをうける めいわくなゆか。でも たった１ダメージだね。カイゾウすると なんダメジにも できるらしい"
+	"code": "// わな\nconst item1 = new RPGObject();\nitem1.mod(_wわな);\nitem1.locate(7, 5, 'map1');\nitem1.layer = RPGMap.Layer.Under;\nitem1.onのった = () => {\n\titem1.mod(_wわなかかった);\n\tplayer.hp -= 1;\n\tplayer.damageTime = 30;\n};\nitem1.ononおりた = () => {\n\titem1.mod(_wわな);\n};\n",
+	"image": "trimmed/map-22-0.png",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG,/wiki/トゲトゲ",
+	"description": "ふむとダメージをうける めいわくなゆか。でも たった１ダメージだね。カイゾウすると なんダメジにも できるらしい"
 }, {
-    "code": "// ハート\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.heart);\nitem2.locate(7, 5, 'map1');\nitem2.onplayerenter = () => {\n\tplayer.hp += 1;\n\titem2.destroy();\n};\n",
-    "image": "trimmed/map-28-3.png",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wi,ki/ハート",
-    "description": "ライフを かいふくする うれしいアイテム！ += にすると プラスされる。ところで -= にするとどうなるのだろうか"
+	"code": "// ハート\nconst item1 = new RPGObject();\nitem1.mod(_hハート);\nitem1.locate(7, 5, 'map1');\nitem1.onのった = () => {\n\tplayer.hp += 1;\n\titem1.destroy();\n};\n",
+	"image": "trimmed/map-28-3.png",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wi,ki/ハート",
+	"description": "ライフを かいふくする うれしいアイテム！ += にすると プラスされる。ところで -= にするとどうなるのだろうか"
 }, {
-    "code": "// タタリ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.skull);\nitem2.locate(7, 5, 'map1');\nitem2.onplayerenter = () => {\n\tplayer.hp = 0;\n};\nitem2.onattacked = function(event) {\n\tevent.attacker.hp = 0;\n};\n",
-    "image": "trimmed/map-28-4.png",
-    "description": "ぜったいに ふんづけたり こうげきしたり してはいけない。ぜったいにだ",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/タタリ"
+	"code": "// タタリ\nconst item1 = new RPGObject();\nitem1.mod(_dドクロ);\nitem1.locate(7, 5, 'map1');\nitem1.onのった = () => {\n\tplayer.hp = 0;\n};\nitem1.onこうげきされた = function(event) {\n\tevent.attacker.hp = 0;\n};\n",
+	"image": "trimmed/map-28-4.png",
+	"description": "ぜったいに ふんづけたり こうげきしたり してはいけない。ぜったいにだ",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/タタリ"
 }, {
-    "code": "// コイン\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.coin);\nitem2.locate(7, 5, 'map1');\nitem2.velocity(1, 0);\nitem2.force(0, 0.5);\nitem2.ontriggerenter = () => {\n\titem2.destroy();\n\tHack.score += 1;\n};\n",
-    "image": "trimmed/map-28-5.png",
-    "description": "がめんを はねまわる コイン。",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/チャリンチャリン"
+	"code": "// コイン\nconst item1 = new RPGObject();\nitem1.mod(_kコイン);\nitem1.locate(7, 5, 'map1');\nitem1.velocity(1, 0);\nitem1.force(0, 0.5);\nitem1.onふれはじめた = () => {\n\titem1.destroy();\n\tHack.score += 1;\n};\n",
+	"image": "trimmed/map-28-5.png",
+	"description": "がめんを はねまわる コイン。",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/チャリンチャリン"
 }, {
-    "code": "// スター\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.star);\nitem2.locate(7, 5, 'map1');\nitem2.onplayerenter = () => {\n\tplayer.damageTime = 100;\n\titem2.destroy();\n};\n",
-    "image": "trimmed/map-28-6.png",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG,/wiki/スター",
-    "description": "ひろってから ３びょうちょい むてきになれる アイテム。３びょうちょい＝１００フレーム？ こも、カイゾウできるらしい"
+	"code": "// スター\nconst item1 = new RPGObject();\nitem1.mod(_hほし);\nitem1.locate(7, 5, 'map1');\nitem1.onのった = () => {\n\tplayer.damageTime = 100;\n\titem1.destroy();\n};\n",
+	"image": "trimmed/map-28-6.png",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG,/wiki/スター",
+	"description": "ひろってから ３びょうちょい むてきになれる アイテム。３びょうちょい＝１００フレーム？ こも、カイゾウできるらしい"
 }, {
-    "code": "// ふしぎなカギ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.key);\nitem2.locate(random(0, 15), random(0, 10), 'map1');\nitem2.onplayerenter = () => {\n\tHack.log('カチャリ という おと が きこえた');\n\titem2.destroy();\n};\n",
-    "image": "trimmed/map-28-7.png",
-    "description": "いつも ちがうところに でてくる ふしぎなかぎ。なにかと くみあわせて つかえそうだ",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなかぎ"
+	"code": "// ふしぎなカギ\nconst item1 = new RPGObject();\nitem1.mod(_kかぎ);\nitem1.locate(random(0, 15), random(0, 10), 'map1');\nitem1.onのった = () => {\n\tHack.log('カチャリ という おと が きこえた');\n\titem1.destroy();\n};\n",
+	"image": "trimmed/map-28-7.png",
+	"description": "いつも ちがうところに でてくる ふしぎなかぎ。なにかと くみあわせて つかえそうだ",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなかぎ"
 }, {
-    "code": "// 上りかいだん\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.upStair);\nitem2.locate(7, 5, 'map2');\nitem2.layer = RPGMap.Layer.Under;\nitem2.onplayerenter = () => {\n\tHack.changeMap('map1');\n};\n",
-    "image": "trimmed/map-20-2.png",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG,/wiki/上り階段",
-    "description": "まえのマップに つながっている のぼりせんようの かいだん。なかみは くだりかいだんと たいてかわらない"
+	"code": "// 上りかいだん\nconst item1 = new RPGObject();\nitem1.mod(_nのぼりかいだん);\nitem1.locate(7, 5, 'map2');\nitem1.layer = RPGMap.Layer.Under;\nitem1.onのった = () => {\n\tHack.changeMap('map1');\n};\n",
+	"image": "trimmed/map-20-2.png",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG,/wiki/上り階段",
+	"description": "まえのマップに つながっている のぼりせんようの かいだん。なかみは くだりかいだんと たいてかわらない"
 }, {
-    "code": "// じげんばくだん\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.bomb);\nitem2.locate(7, 5, 'map1');\nsetTimeout(() => {\n\tconst flame = new RPGObject();\n\tflame.mod(Hack.assets.explosion);\n\tflame.locate(7, 5);\n\tflame.collisionFlag = false;\n\tflame.ontriggerenter = (event) => {\n\t\tHack.Attack.call(flame, event.mapX, event.mapY, 1);\n\t};\n\tflame.destroy(20);\n\titem2.destroy();\n}, 3000);\n",
-    "image": "trimmed/map-29-0.png",
-    "description": "じげんしき ばくだん と たちのぼる ばくはつの エフェクト。じかん を ちょうせい できる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/時限爆弾"
+	"code": "// じげんばくだん\nconst item1 = new RPGObject();\nitem1.mod(_bばくだん);\nitem1.locate(7, 5, 'map1');\nsetTimeout(() => {\n\tconst item2 = new RPGObject();\n\titem2.mod(_bばくえん);\n\titem2.locate(7, 5);\n\titem2.collisionFlag = false;\n\titem2.onふれはじめた = (event) => {\n\t\tHack.Attack.call(item2, event.mapX, event.mapY, 1);\n\t};\n\titem2.destroy(20);\n\titem1.destroy();\n}, 3000);\n",
+	"image": "trimmed/map-29-0.png",
+	"description": "じげんしき ばくだん と たちのぼる ばくはつの エフェクト。じかん を ちょうせい できる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/時限爆弾"
 }, {
-    "code": "// ダイヤモンド\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.diamond);\nitem2.locate(7, 5, 'map1');\nitem2.onplayerenter = () => {\n\titem2.destroy();\n\tHack.score += 1;\n};\n",
-    "image": "trimmed/map-28-0.png",
-    "description": "ゲットすると、スコアになる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/うれしいダイヤモンド"
+	"code": "// ダイヤモンド\nconst item1 = new RPGObject();\nitem1.mod(_dダイヤモンド);\nitem1.locate(7, 5, 'map1');\nitem1.onのった = () => {\n\titem1.destroy();\n\tHack.score += 1;\n};\n",
+	"image": "trimmed/map-28-0.png",
+	"description": "ゲットすると、スコアになる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/うれしいダイヤモンド"
 }, {
-    "code": "// まほうじん\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.magic);\nitem2.locate(7, 5, 'map1');\nitem2.layer = RPGMap.Layer.Under;\nitem2.onplayerenter = () => {\n\tif (Hack.score >= 7) {\n\t\titem2.mod(Hack.assets.usedMagic);\n\t}\n};\n",
-    "image": "trimmed/map-16-9.png",
-    "description": "スコア７以上のとき うえにのると、まほうじんが光る(だけ)",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/スコアで光るまほうじん"
+	"code": "// まほうじん\nconst item1 = new RPGObject();\nitem1.mod(_mまほうじん);\nitem1.locate(7, 5, 'map1');\nitem1.layer = RPGMap.Layer.Under;\nitem1.onのった = () => {\n\tif (Hack.score >= 7) {\n\t\titem1.mod(_mまほうじんひかった);\n\t}\n};\n",
+	"image": "trimmed/map-16-9.png",
+	"description": "スコア７以上のとき うえにのると、まほうじんが光る(だけ)",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/スコアで光るまほうじん"
 }, {
-    "code": "// スコアでひらく たからばこ\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.box);\nitem2.locate(7, 5, 'map1');\nitem2.onattacked = () => {\n\tif (Hack.score < 5) {\n\t\tHack.log('たからばこは びくともしない ');\n\t} else {\n\t\titem2.mod(Hack.assets.openedBox);\n\t\tHack.log('ガチャ！たからばこが あいた！');\n\t\t// 出てくるもの　→\n\t}\n};\n",
-    "image": "trimmed/map-21-0.png",
-    "description": "スコアが足りないときは びくともしない ただの からばこ",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/かたいからばこ"
+	"code": "// スコアでひらく たからばこ\nconst item1 = new RPGObject();\nitem1.mod(_tたからばこ);\nitem1.locate(7, 5, 'map1');\nitem1.onこうげきされた = () => {\n\tif (Hack.score < 5) {\n\t\tHack.log('たからばこは びくともしない ');\n\t} else {\n\t\titem1.mod(_tたからばこひらいた);\n\t\tHack.log('ガチャ！たからばこが あいた！');\n\t\t// 出てくるもの　→\n\t}\n};\n",
+	"image": "trimmed/map-21-0.png",
+	"description": "スコアが足りないときは びくともしない ただの からばこ",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/かたいからばこ"
 }, {
-    "code": "// お花屋さん\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.girl);\nitem2.locate(7, 5, 'map1');\nitem2.oncollided = () => {\n\tif (Hack.score < 100) {\n\t\tHack.log('おはなは100エンです。おカネが たりないよ。');\n\t} else {\n\t\tHack.log('おはなは100エンです。はい、どうぞ');\n\t\tHack.score -= 100;\n\t\t// おはな\n\t\tconst item2 = new RPGObject();\n\t\titem2.mod(Hack.assets.flower);\n\t\titem2.locate(item2.mapX, item2.mapY + 1, 'map1');\n\t\titem2.layer = RPGMap.Layer.Under;\n\t\titem2.onplayerenter = () => {\n\t\t\titem2.destroy();\n\t\t};\n\t}\n};\n",
-    "image": "trimmed/girl.png",
-    "description": "おはなを うっている 女の子",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/おはなやさん"
+	"code": "// お花屋さん\nconst item1 = new RPGObject();\nitem1.mod(_o女の子);\nitem1.locate(7, 5, 'map1');\nitem1.onぶつかった = () => {\n\tif (Hack.score < 100) {\n\t\tHack.log('おはなは100エンです。おカネが たりないよ。');\n\t} else {\n\t\tHack.log('おはなは100エンです。はい、どうぞ');\n\t\tHack.score -= 100;\n\t\t// おはな\n\t\tconst item2 = new RPGObject();\n\t\titem2.mod(_hはな);\n\t\titem2.locate(item1.mapX, item1.mapY + 1, 'map1');\n\t\titem2.layer = RPGMap.Layer.Under;\n\t\titem2.onのった = () => {\n\t\t\titem2.destroy();\n\t\t};\n\t}\n};\n",
+	"image": "trimmed/girl.png",
+	"description": "おはなを うっている 女の子",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/おはなやさん"
 }, {
-    "code": "// ルーレット\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.ruby);\nitem2.locate(7, 5, 'map1');\nconst start = () => {\n\titem2.timer = setInterval(() => {\n\t\tconst randomMod = random([\n\t\t\tHack.assets.ruby,\n\t\t\tHack.assets.skull,\n\t\t\tHack.assets.poo\n\t\t]);\n\t\titem2.mod(randomMod);\n\t\titem2._mod = randomMod; // 判定のために入れておく\n\t}, 100);\n};\nconst stop = () => {\n\tclearInterval(item2.timer);\n\tif (item2._mod === Hack.assets.ruby) {\n\t\tHack.score += 1; // rubyなら、SCORE + 1\n\t}\n\tif (item2._mod === Hack.assets.skull) {\n\t\tHack.score -= 1; // skullなら、SCORE - 1\n\t}\n};\nitem2.flag = true;\nitem2.onattacked = () => {\n\tif (item2.flag) {\n\t\t// ルーレット開始！\n\t\tstart();\n\t\titem2.flag = false;\n\t} else {\n\t\t// ルーレット停止！\n\t\tstop();\n\t\titem2.flag = true;\n\t}\n};\n",
-    "image": "trimmed/map-28-2.png",
-    "description": "こうげきすると、ルーレットがはじまる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ルーレット"
+	"code": "// ルーレット\nconst item1 = new RPGObject();\nitem1.mod(_rルビー);\nitem1.locate(7, 5, 'map1');\nconst start = () => {\n\titem1.timer = setInterval(() => {\n\t\tconst randomMod = random([\n\t\t\t_rルビー,\n\t\t\t_dドクロ,\n\t\t\t_uうんこ\n\t\t]);\n\t\titem1.mod(randomMod);\n\t\titem1._mod = randomMod; // 判定のために入れておく\n\t}, 100);\n};\nconst stop = () => {\n\tclearInterval(item1.timer);\n\tif (item1._mod === _rルビー) {\n\t\tHack.score += 1; // rubyなら、SCORE + 1\n\t}\n\tif (item1._mod === _dドクロ) {\n\t\tHack.score -= 1; // skullなら、SCORE - 1\n\t}\n};\nitem1.flag = true;\nitem1.onこうげきされた = () => {\n\tif (item1.flag) {\n\t\t// ルーレット開始！\n\t\tstart();\n\t\titem1.flag = false;\n\t} else {\n\t\t// ルーレット停止！\n\t\tstop();\n\t\titem1.flag = true;\n\t}\n};\n",
+	"image": "trimmed/map-28-2.png",
+	"description": "こうげきすると、ルーレットがはじまる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ルーレット"
 }, {
-    "code": "// 色付きハート\nconst item2 = new RPGObject();\nitem2.mod(Hack.assets.heart);\nitem2.locate(7, 5, 'map1');\nitem2.color = 'white';\n",
-    "image": "trimmed/colorful.png",
-    "description": "ほかにも blue や orange など、さまざまな色がつかえる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/色付きハート"
+	"code": "// 色付きハート\nconst item1 = new RPGObject();\nitem1.mod(_hハート);\nitem1.locate(7, 5, 'map1');\nitem1.color = 'white';\n",
+	"image": "trimmed/colorful.png",
+	"description": "ほかにも blue や orange など、さまざまな色がつかえる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/色付きハート"
 }, {
-    "code": "// ばくえん\nconst item1 = new RPGObject();\nitem1.mod(Hack.assets.explosion);\nitem1.locate(7, 5, 'map1');\nitem1.velocityY = -1;\nitem1.collisionFlag = false;\nitem1.ontriggerenter = (event) => {\n\tHack.Attack.call(item1, event.mapX, event.mapY, 1);\n};\nitem1.destroy(20);\n",
-    "image": "trimmed/explosion.png",
-    "description": "立ち昇る爆炎。ふれると１のダメージを受ける",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/爆炎"
+	"code": "// ばくえん\nconst item1 = new RPGObject();\nitem1.mod(_bばくえん);\nitem1.locate(7, 5, 'map1');\nitem1.velocityY = -1;\nitem1.collisionFlag = false;\nitem1.onふれはじめた = (event) => {\n\tHack.Attack.call(item1, event.mapX, event.mapY, 1);\n};\nitem1.destroy(20);\n",
+	"image": "trimmed/explosion.png",
+	"description": "立ち昇る爆炎。ふれると１のダメージを受ける",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/爆炎"
 }, {
-    "code": "player.locate(14, 9);\n",
-    "image": "trimmed/knight.png",
-    "description": "プレイヤーの位置をかえる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/プレイヤー"
+	"code": "player.locate(14, 9);\n",
+	"image": "trimmed/knight.png",
+	"description": "プレイヤーの位置をかえる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/プレイヤー"
 }, {
-    "code": "player.onbecomeattack = () => {\n\tbeamSkill(player);\n};\n\n// ↓ビームの本体. この部分はひとつだけあれば良い\nfunction beamSkill(self) {\n\tconst beam = new RPGObject();\n\tbeam.mod(Hack.assets.beam);\n\tbeam.ontriggerenter = (event) => {\n\t\tif (event.hit !== self) {\n\t\t\tHack.Attack(event.mapX, event.mapY, 1);\n\t\t\tbeam.destroy();\n\t\t}\n\t};\n\tself.shoot(beam, self.forward, 10);\n}\n// ↑ビームの本体\n",
-    "image": "trimmed/map-27-2.png",
-    "description": "プレイヤーがビームを使えるようにする。beamという関数がひとつあれば、前半部分だけをコピーペーストして、他のキャラクターがビームを使えるようにもできる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ビーム"
+	"code": "player.onこうげきするとき = () => {\n\tbeamSkill(player);\n};\n\n// ↓ビームの本体. この部分はひとつだけあれば良い\nfunction beamSkill(self) {\n\tconst beam = new RPGObject();\n\tbeam.mod(_bビーム);\n\tbeam.onふれはじめた = (event) => {\n\t\tif (event.hit !== self) {\n\t\t\tHack.Attack(event.mapX, event.mapY, 1);\n\t\t\tbeam.destroy();\n\t\t}\n\t};\n\tself.shoot(beam, self.forward, 10);\n}\n// ↑ビームの本体\n",
+	"image": "trimmed/map-27-2.png",
+	"description": "プレイヤーがビームを使えるようにする。beamという関数がひとつあれば、前半部分だけをコピーペーストして、他のキャラクターがビームを使えるようにもできる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ビーム"
 }, {
-    "code": "// YouTube\n feeles.openMedia({\n\turl:'https://www.youtube.com/watch?v=B_jHOwhoAzY&t=2s',\n\tplaying: true\n});\n",
-    "label": "YouTube",
-    "description": "YouTubeのURLから好きな動画を再生できる"
+	"code": "// YouTube\n feeles.openMedia({\n\turl:'https://www.youtube.com/watch?v=B_jHOwhoAzY&t=2s',\n\tplaying: true\n});\n",
+	"label": "YouTube",
+	"description": "YouTubeのURLから好きな動画を再生できる"
 }, {
-    "code": "Hack.log('GAME START!!');\n",
-    "label": "ログ",
-    "description": "ゲーム画面に好きな文字を出せる",
-    "descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ログ"
+	"code": "Hack.log('GAME START!!');\n",
+	"label": "ログ",
+	"description": "ゲーム画面に好きな文字を出せる",
+	"descriptionMoreURL": "https://github.com/hackforplay/wiki-RPG/wiki/ログ"
 }, {
-    "code": "alert('気をつけて！');\n",
-    "label": "アラート",
-    "description": "好きな文字でアラートを出せる"
+	"code": "alert('気をつけて！');\n",
+	"label": "アラート",
+	"description": "好きな文字でアラートを出せる"
 }, {
-    "code": "if (confirm('ここに文字を入れる')) {\n\t// YESのとき\n} else {\n\t// NOのとき\n}\n",
-    "label": "質問",
-    "description": "好きな質問文でダイアログを出して、その結果によってコードを実行できる"
+	"code": "if (confirm('ここに文字を入れる')) {\n\t// YESのとき\n} else {\n\t// NOのとき\n}\n",
+	"label": "質問",
+	"description": "好きな質問文でダイアログを出して、その結果によってコードを実行できる"
 }]
