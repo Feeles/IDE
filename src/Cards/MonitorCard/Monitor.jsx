@@ -12,6 +12,7 @@ import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
 import ResolveProgress from './ResolveProgress';
+import ga from 'utils/google-analytics';
 
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
@@ -370,12 +371,8 @@ export default class Monitor extends PureComponent {
     if (/^\#\//.test(location.hash)) {
       const href = location.hash.substr(2);
       this.props.setLocation(href);
-      if (process.env.NODE_ENV === 'production') {
-        if (ga) {
-          ga('set', 'page', `/${href}`);
-          ga('send', 'pageview');
-        }
-      }
+      ga('set', 'page', `/${href}`);
+      ga('send', 'pageview');
     }
   };
 
