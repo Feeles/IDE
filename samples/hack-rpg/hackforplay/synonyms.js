@@ -42,3 +42,25 @@ export const assets = [
   ['key', '_kかぎ'],
   ['bomb', '_bばくだん']
 ];
+
+export const events = {
+/* onplayerenter => onのった */
+  'playerenter': 'のった',
+  'playerstay': 'いる',
+  'playerexit': 'おりた',
+  'walkstart': 'あるきはじめた',
+  'walkmove': 'あるいている',
+  'walkend': 'あるきおわった',
+  'triggerenter': 'ふれはじめた',
+  'triggerstay': 'ふれつづけている',
+  'triggerexit': 'ふれおわった',
+  'collided': 'ぶつかった',
+  'hpchange': 'HPかわった',
+  'becomeidle': 'とまるとき',
+  'becomewalk': 'あるくとき',
+  'becomeattack': 'こうげきするとき',
+  'becomedamaged': 'くらったとき',
+  'becomedead': 'たおれたとき',
+  'attacked': 'こうげきされた',
+  'enterframe': 'つねに'
+};
