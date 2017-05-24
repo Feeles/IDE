@@ -40,8 +40,8 @@ function gameStartLazy() {
 		effect1.ontriggerenter = (event) => {
 			// ドラゴン以外に当たったら...
 			if (event.hit !== item1) {
-				// 10 ダメージの攻撃！
-				Hack.Attack(event.mapX, event.mapY, 10);
+				// 1 ダメージの攻撃！
+				Hack.Attack(event.mapX, event.mapY, 1);
 			}
 		};
 
