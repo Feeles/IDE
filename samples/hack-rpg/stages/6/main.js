@@ -53,7 +53,7 @@ function gameStart() {
 	const bar = new Sprite(480, 32);
 	bar.image = game.assets['hackforplay/bar_green.png'];
 	// 体力ゲージの位置
-	bar.moveTo(0, 288);
+	bar.moveTo(0, 300);
 	// 体力ゲージを更新する...
 	bar.onenterframe = function() {
 		// プレイヤーの体力が、体力の最大値を超えないようにする
