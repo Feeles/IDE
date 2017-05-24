@@ -8,7 +8,7 @@ export default rollbar.init({
   payload: {
     environment: process.env.NODE_ENV,
     client: {
-      version: process.env.CORE_VERSION
+      version: CORE_VERSION
     }
   }
 });
