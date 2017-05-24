@@ -795,6 +795,8 @@ Hack.assets.minotaur = function() {
 	this.setFrame(BehaviorTypes.Attack, [3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, null]);
 	this.setFrame(BehaviorTypes.Damaged, [7, 7, 7, 7, 7, 7, 7, 7, 6, 6, 6, 6, 6, 6, 6, 6]);
 	this.setFrame(BehaviorTypes.Dead, [2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, null]);
+	this.directionType = 'double';
+	this.forward = [-1, 0];
 };
 var __Minotaur = enchant.Class(RPGObject, {
 	initialize: function() {
