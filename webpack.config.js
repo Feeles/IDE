@@ -17,6 +17,7 @@ const config = {
       'animate.css',
       'whatwg-fetch',
       './lib/url-search-params',
+      './lib/google-analytics',
       './src/utils/Rollbar',
       './src/main'
     ],
