@@ -48,8 +48,6 @@ const AlreadySetSymbol = Symbol('AlreadySetSymbol');
 
 import CodemirrorComponent from 'utils/CodemirrorComponent';
 
-export const FileEditorMap = new WeakMap();
-
 export default class Editor extends PureComponent {
   static propTypes = {
     file: PropTypes.object.isRequired,
@@ -108,13 +106,6 @@ export default class Editor extends PureComponent {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (FileEditorMap.has(prevProps.file)) {
-      const editor = FileEditorMap.get(prevProps.file);
-      FileEditorMap.set(this.props.file, editor);
-    }
-  }
-
   handleCodemirror = ref => {
     if (!ref) return;
     if (!ref[AlreadySetSymbol]) {
@@ -122,7 +113,6 @@ export default class Editor extends PureComponent {
       this.props.codemirrorRef(cm);
       this.showHint(cm);
       ref[AlreadySetSymbol] = true;
-      FileEditorMap.set(this.props.file, cm);
       cm.on('change', (doc, change) => {
         if (change.origin !== 'setValue') {
           this.props.onChange(doc.getValue(), change);
