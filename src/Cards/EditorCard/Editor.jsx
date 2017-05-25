@@ -42,15 +42,12 @@ CodeMirror.modeInfo.push({
 
 import './codemirror-hint-extension';
 
-import excessiveCare from './excessiveCare';
-
 import CodemirrorComponent from 'utils/CodemirrorComponent';
 
 export default class Editor extends PureComponent {
   static propTypes = {
     file: PropTypes.object.isRequired,
     getFiles: PropTypes.func.isRequired,
-    isCared: PropTypes.bool.isRequired,
     getConfig: PropTypes.func.isRequired,
     codemirrorRef: PropTypes.func.isRequired,
     snippets: PropTypes.array.isRequired,
@@ -64,7 +61,6 @@ export default class Editor extends PureComponent {
 
   static defaultProps = {
     getFiles: () => [],
-    isCared: false,
     codemirrorRef: () => {},
     snippets: [],
     showHint: true,
@@ -111,7 +107,7 @@ export default class Editor extends PureComponent {
     if (!this.props.showHint) {
       return;
     }
-    const { getFiles, isCared, getConfig } = this.props;
+    const { getFiles, getConfig } = this.props;
 
     cm.on('change', (_cm, change) => {
       if (change.origin === 'setValue' || change.origin === 'complete') return;
@@ -123,10 +119,6 @@ export default class Editor extends PureComponent {
         snippets: this.props.snippets
       });
     });
-
-    if (isCared) {
-      cm.on('beforeChange', excessiveCare);
-    }
   }
 
   render() {

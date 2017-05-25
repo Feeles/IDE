@@ -10,6 +10,7 @@ import { red50, red500 } from 'material-ui/styles/colors';
 import { Editor } from 'Cards/EditorCard/';
 import { SourceFile } from 'File/';
 import ShotCard from './';
+import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
   const { palette, spacing, prepareStyles } = context.muiTheme;
@@ -136,6 +137,7 @@ export default class ShotPane extends PureComponent {
   handleCodemirror = ref => {
     if (!ref) return;
     this.codemirror = ref;
+    this.codemirror.on('beforeChange', excessiveCare);
     this.codemirror.on('change', this.handleChange);
     this.codemirror.on('swapDoc', this.handleChange);
     this.codemirror.on('viewportChange', this.handleViewportChange);
