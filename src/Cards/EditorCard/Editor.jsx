@@ -51,8 +51,6 @@ export default class Editor extends PureComponent {
     file: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
     getFiles: PropTypes.func.isRequired,
-    handleRun: PropTypes.func.isRequired,
-    closeSelectedTab: PropTypes.func.isRequired,
     isCared: PropTypes.bool.isRequired,
     getConfig: PropTypes.func.isRequired,
     codemirrorRef: PropTypes.func.isRequired,
@@ -67,9 +65,7 @@ export default class Editor extends PureComponent {
 
   static defaultProps = {
     onChange: () => {},
-    handleRun: () => {},
     getFiles: () => [],
-    closeSelectedTab: () => {},
     isCared: false,
     codemirrorRef: () => {},
     snippets: [],
@@ -140,54 +136,11 @@ export default class Editor extends PureComponent {
     }
   }
 
-  beautify = cm => {
-    const { file } = this.props;
-    if (file.is('javascript') || file.is('json')) {
-      cm.setValue(
-        beautify(cm.getValue(), {
-          indent_with_tabs: true,
-          end_with_newline: true
-        })
-      );
-    } else if (file.is('html')) {
-      cm.setValue(
-        beautify.html(cm.getValue(), {
-          indent_with_tabs: true,
-          indent_inner_html: true,
-          extra_liners: []
-        })
-      );
-    } else if (file.is('css')) {
-      cm.setValue(
-        beautify.css(cm.getValue(), {
-          indent_with_tabs: true
-        })
-      );
-    }
-  };
-
   render() {
-    const {
-      file,
-      onChange,
-      handleRun,
-      closeSelectedTab,
-      getConfig,
-      lineNumbers,
-      foldGutter
-    } = this.props;
+    const { file, onChange, getConfig, lineNumbers, foldGutter } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const mode = meta && meta.mode;
-
-    const extraKeys = {
-      'Ctrl-Enter': handleRun,
-      'Cmd-Enter': handleRun,
-      'Ctrl-W': closeSelectedTab,
-      'Cmd-W': closeSelectedTab,
-      'Ctrl-Alt-B': this.beautify,
-      ...this.props.extraKeys
-    };
 
     const foldOptions = {
       widget: ' 📦 ',
@@ -204,7 +157,7 @@ export default class Editor extends PureComponent {
         keyMap="sublime"
         foldGutter={foldGutter}
         foldOptions={foldOptions}
-        extraKeys={extraKeys}
+        extraKeys={this.props.extraKeys}
         lint={mode === 'javascript' ? this.state.lint : null}
         ref={this.handleCodemirror}
         docsRef={this.props.docsRef}

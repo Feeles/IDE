@@ -370,6 +370,36 @@ export default class SourceEditor extends PureComponent {
     this.setLocation();
   };
 
+  handleRun = () => {
+    this.setLocation();
+  };
+
+  beautify = cm => {
+    const { file } = this.props;
+    if (file.is('javascript') || file.is('json')) {
+      cm.setValue(
+        beautify(cm.getValue(), {
+          indent_with_tabs: true,
+          end_with_newline: true
+        })
+      );
+    } else if (file.is('html')) {
+      cm.setValue(
+        beautify.html(cm.getValue(), {
+          indent_with_tabs: true,
+          indent_inner_html: true,
+          extra_liners: []
+        })
+      );
+    } else if (file.is('css')) {
+      cm.setValue(
+        beautify.css(cm.getValue(), {
+          indent_with_tabs: true
+        })
+      );
+    }
+  };
+
   render() {
     const {
       file,
@@ -386,12 +416,15 @@ export default class SourceEditor extends PureComponent {
 
     const snippets = getConfig('snippets')(file);
 
-    const props = Object.assign({}, this.props, {
-      codemirrorRef: this.handleCodemirror,
-      onChange: undefined,
-      handleRun: () => this.setLocation(),
-      showHint
-    });
+    const props = {
+      ...this.props,
+      onChange: undefined
+    };
+
+    const extraKeys = {
+      'Ctrl-Enter': this.handleRun,
+      'Ctrl-Alt-B': this.beautify
+    };
 
     return (
       <div style={styles.root}>
@@ -463,8 +496,11 @@ export default class SourceEditor extends PureComponent {
           </div>
           <Editor
             {...props}
+            codemirrorRef={this.handleCodemirror}
+            showHint={showHint}
             snippets={this.state.snippets}
             docsRef={this.props.docsRef}
+            extraKeys={extraKeys}
           />
         </div>
         <CreditBar
