@@ -5,28 +5,12 @@ import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
-import ReactCodeMirror from 'react-codemirror';
 
+import CodemirrorComponent from 'utils/CodemirrorComponent';
 import MDReactComponent from 'jsx/MDReactComponent';
 import { Tab } from 'ChromeTab/';
 
 const BarHeight = 36;
-
-const codemirrorOptions = {
-  lineNumbers: true,
-  mode: 'javascript',
-  matchBrackets: true,
-  keyMap: 'sublime',
-  scrollbarStyle: 'simple',
-  foldGutter: true,
-  foldOptions: {
-    widget: '✧⟣❃⟢✧',
-    minFoldSize: 1,
-    scanUp: false
-  },
-  gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-  readOnly: true
-};
 
 const mdComponents = [
   {
@@ -128,7 +112,13 @@ const mdComponents = [
 
       return (
         <div key={props.key + code} style={containerStyle}>
-          <ReactCodeMirror value={code} options={codemirrorOptions} />
+          <CodemirrorComponent
+            id="Readme"
+            value={code}
+            mode="javascript"
+            keyMap="sublime"
+            readOnly
+          />
         </div>
       );
     }

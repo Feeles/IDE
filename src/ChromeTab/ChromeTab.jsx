@@ -11,8 +11,6 @@ const MinTabWidth = 0;
 const TabHeight = 32;
 const TabSkewX = 24;
 
-import { FileEditorMap } from 'Cards/EditorCard/';
-
 const getStyles = (props, context, state) => {
   const { isSelected } = props;
   const { palette, spacing, fontFamily } = context.muiTheme;
@@ -103,6 +101,7 @@ export default class ChromeTabs extends PureComponent {
     isSelected: PropTypes.bool.isRequired,
     handleSelect: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
+    doc: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired
   };
 
@@ -114,17 +113,28 @@ export default class ChromeTabs extends PureComponent {
     containerStyle: {
       width: 0
     },
-    closerMouseOver: false
+    closerMouseOver: false,
+    hasChanged: false
   };
 
-  get hasChanged() {
-    if (FileEditorMap.has(this.props.file)) {
-      const editor = FileEditorMap.get(this.props.file);
-      return editor.getValue('\n') !== this.props.file.text;
-    } else {
-      return false;
+  componentDidMount() {
+    this.props.doc.on('change', this.handleChange);
+  }
+
+  componentWillUnount() {
+    this.props.doc.off('change', this.handleChange);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.file !== this.props.file) {
+      this.handleChange(this.props.doc);
     }
   }
+
+  handleChange = doc => {
+    const hasChanged = doc.getValue() !== this.props.file.text;
+    this.setState({ hasChanged });
+  };
 
   handleRef = ref => {
     if (!ref) return;
@@ -153,7 +163,7 @@ export default class ChromeTabs extends PureComponent {
 
     const handleRightTouchTap = e => {
       e.stopPropagation();
-      if (!this.hasChanged || confirm(localization.editorCard.notice)) {
+      if (!this.state.hasChanged || confirm(localization.editorCard.notice)) {
         handleClose(tab);
       }
     };
@@ -195,7 +205,7 @@ export default class ChromeTabs extends PureComponent {
             >
               {this.state.closerMouseOver
                 ? <NavigationClose color={alternateTextColor} />
-                : this.hasChanged
+                : this.state.hasChanged
                     ? <EditorModeEdit color={secondaryTextColor} />
                     : <NavigationClose color={secondaryTextColor} />}
             </IconButton>

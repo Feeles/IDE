@@ -7,17 +7,13 @@ export default ({ palette, paper }) =>
 textarea {
   font-size: 16px !important; /* In smartphone, will not scale automatically */
 }
-.ReactCodeMirror {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  transition: ${transitions.easeOut()};
-}
 .CodeMirror {
+  position: absolute;
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   width: 100%;
   height: 100%;
   background-color: ${grey100};
+  transition: ${transitions.easeOut()};
 }
 .CodeMirror-gutters {
   border-color: ${palette.primary1Color} !important;

@@ -105,7 +105,8 @@ export default class SourceEditor extends PureComponent {
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     closeSelectedTab: PropTypes.func.isRequired,
-    selectTabFromFile: PropTypes.func.isRequired
+    selectTabFromFile: PropTypes.func.isRequired,
+    docsRef: PropTypes.func
   };
 
   static contextTypes = {
@@ -143,16 +144,18 @@ export default class SourceEditor extends PureComponent {
     if (this.codemirror) {
       this.codemirror.on('beforeChange', this.handleIndexReplacement);
       this.codemirror.on('change', this.handleIndentLine);
-      this.codemirror.on('change', cm =>
+      const onChange = cm => {
         this.setState({
           hasHistory: cm.historySize().undo > 0,
           hasChanged: cm.getValue('\n') !== this.props.file.text
-        })
-      );
+        });
+      };
+      this.codemirror.on('change', onChange);
+      this.codemirror.on('swapDoc', onChange);
       this.codemirror.on('change', this.handleUpdateWidget);
+      this.codemirror.on('swapDoc', this.handleUpdateWidget);
       this.codemirror.on('update', this.handleRenderWidget);
 
-      this.codemirror.clearHistory();
       this.handleUpdateWidget(this.codemirror);
     }
   }
@@ -459,7 +462,11 @@ export default class SourceEditor extends PureComponent {
               <NavigationExpandLess color="white" />
             </Paper>
           </div>
-          <Editor {...props} snippets={this.state.snippets} />
+          <Editor
+            {...props}
+            snippets={this.state.snippets}
+            docsRef={this.props.docsRef}
+          />
         </div>
         <CreditBar
           file={file}

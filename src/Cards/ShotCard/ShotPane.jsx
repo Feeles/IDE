@@ -105,16 +105,15 @@ export default class ShotPane extends PureComponent {
         this.setState({ shooting: false });
       }, 1000);
     }
-  }
-
-  getHeight = () => {
-    if (!this.codemirror) {
-      return 0;
+    if (prevState.height !== this.state.height) {
+      setTimeout(() => {
+        // 表示可能領域が変わったので、トランジション後に再描画する
+        if (this.codemirror) {
+          this.codemirror.refresh();
+        }
+      }, 300);
     }
-    const lastLine = this.codemirror.lastLine() + 1;
-    const height = this.codemirror.heightAtLine(lastLine, 'local');
-    return height;
-  };
+  }
 
   shoot = async () => {
     if (this.state.shooting) return;
@@ -133,7 +132,7 @@ export default class ShotPane extends PureComponent {
     }
 
     this.codemirror.setValue(this.state.file.text);
-    this.setState({ canRestore: false, height: this.getHeight() });
+    this.setState({ canRestore: false });
   };
 
   async handleShot() {
@@ -149,9 +148,14 @@ export default class ShotPane extends PureComponent {
   handleCodemirror = ref => {
     if (!ref) return;
     this.codemirror = ref;
-    this.codemirror.on('viewportChange', () => {
-      this.setState({ height: this.getHeight() });
-    });
+    this.codemirror.on('viewportChange', this.handleViewportChange);
+    this.codemirror.on('swapDoc', this.handleViewportChange);
+  };
+
+  handleViewportChange = cm => {
+    const lastLine = cm.lastLine() + 1;
+    const height = cm.heightAtLine(lastLine, 'local');
+    this.setState({ height });
   };
 
   render() {

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ReactCodeMirror from 'react-codemirror';
 import beautify from 'js-beautify';
 import { JSHINT } from 'jshint';
 
@@ -57,6 +56,8 @@ export const MimeTypes = {
   'text/x-glsl': '.sort'
 };
 
+import CodemirrorComponent from 'utils/CodemirrorComponent';
+
 export const FileEditorMap = new WeakMap();
 
 export default class Editor extends PureComponent {
@@ -74,7 +75,8 @@ export default class Editor extends PureComponent {
     extraKeys: PropTypes.object.isRequired,
     lineNumbers: PropTypes.bool.isRequired,
     foldGutter: PropTypes.bool.isRequired,
-    findFile: PropTypes.func.isRequired
+    findFile: PropTypes.func.isRequired,
+    docsRef: PropTypes.func
   };
 
   static defaultProps = {
@@ -88,7 +90,8 @@ export default class Editor extends PureComponent {
     showHint: true,
     extraKeys: {},
     lineNumbers: true,
-    foldGutter: true
+    foldGutter: true,
+    docsRef: () => {}
   };
 
   state = {
@@ -130,7 +133,13 @@ export default class Editor extends PureComponent {
       this.showHint(cm);
       ref[AlreadySetSymbol] = true;
       FileEditorMap.set(this.props.file, cm);
+      cm.on('change', (doc, change) => {
+        if (change.origin !== 'setValue') {
+          this.props.onChange(doc.getValue(), change);
+        }
+      });
     }
+    this.ref = ref;
   };
 
   showHint(cm) {
@@ -193,54 +202,36 @@ export default class Editor extends PureComponent {
     } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
-    const gutters = [];
-    if (lineNumbers) {
-      gutters.push('CodeMirror-linenumbers');
-    }
-    if (foldGutter) {
-      gutters.push('CodeMirror-foldgutter');
-    }
+    const mode = meta && meta.mode;
 
-    const options = {
-      lineNumbers,
-      mode: meta && meta.mode,
-      indentUnit: 4,
-      indentWithTabs: true,
-      matchBrackets: true,
-      autoCloseBrackets: true,
-      keyMap: 'sublime',
-      // scrollbarStyle: 'simple',
-      foldGutter,
-      foldOptions: {
-        widget: ' 📦 ',
-        minFoldSize: 1,
-        scanUp: false
-      },
-      dragDrop: false,
-      gutters,
-      extraKeys: {
-        'Ctrl-Enter': handleRun,
-        'Cmd-Enter': handleRun,
-        'Ctrl-W': closeSelectedTab,
-        'Cmd-W': closeSelectedTab,
-        'Ctrl-Alt-B': this.beautify,
-        ...this.props.extraKeys
-      },
-      scrollbarStyle: null
+    const extraKeys = {
+      'Ctrl-Enter': handleRun,
+      'Cmd-Enter': handleRun,
+      'Ctrl-W': closeSelectedTab,
+      'Cmd-W': closeSelectedTab,
+      'Ctrl-Alt-B': this.beautify,
+      ...this.props.extraKeys
     };
-    if (this.state.jshintrc && options.mode === 'javascript') {
-      options.lint = this.state.jshintrc;
-      gutters.push('CodeMirror-lint-markers');
-    }
+
+    const foldOptions = {
+      widget: ' 📦 ',
+      minFoldSize: 1,
+      scanUp: false
+    };
 
     return (
-      <ReactCodeMirror
-        preserveScrollPosition
-        ref={this.handleCodemirror}
+      <CodemirrorComponent
+        id={file.key}
         value={file.text}
-        onChange={onChange}
-        options={options}
-        codeMirrorInstance={CodeMirror}
+        mode={mode}
+        lineNumbers={lineNumbers}
+        keyMap="sublime"
+        foldGutter={foldGutter}
+        foldOptions={foldOptions}
+        extraKeys={extraKeys}
+        lint={mode === 'javascript' ? this.state.lint : null}
+        ref={this.handleCodemirror}
+        docsRef={this.props.docsRef}
       />
     );
   }
