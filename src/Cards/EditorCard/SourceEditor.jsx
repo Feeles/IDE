@@ -16,7 +16,6 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 
-import DragTypes from 'utils/dragTypes';
 import ga from 'utils/google-analytics';
 import Editor from './Editor';
 import CreditBar from './CreditBar';

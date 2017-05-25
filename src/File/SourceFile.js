@@ -4,7 +4,6 @@ import { parse } from './JSON6';
 
 import _File from './_File';
 import configs from './configs';
-import { SourceEditor } from 'Cards/EditorCard/';
 import download from 'html/download';
 import composeOgp from './composeOgp';
 import { encode, decode } from './sanitizeHTML';
@@ -14,7 +13,6 @@ export default class SourceFile extends _File {
     name: '.SourceFile',
     text: '',
     json: null,
-    component: SourceEditor,
     sign: null
   };
 

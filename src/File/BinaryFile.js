@@ -2,14 +2,12 @@ import React from 'react';
 import md5 from 'md5';
 
 import _File from './_File';
-import { Preview } from 'Cards/EditorCard/';
 import { encode, decode } from './sanitizeHTML';
 
 export default class BinaryFile extends _File {
   static defaultProps = {
     name: '.BinaryFile',
     blob: null,
-    component: Preview,
     sign: null
   };
 

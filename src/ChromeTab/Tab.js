@@ -1,9 +1,8 @@
 import React from 'react';
 
-
 import { SourceFile } from 'File/';
 
-const getUniqueId = ((id) => () => 'Tab__' + ++id)(0);
+const getUniqueId = (id => () => 'Tab__' + ++id)(0);
 
 export default class Tab {
   constructor(props) {
@@ -12,11 +11,14 @@ export default class Tab {
   }
 
   get file() {
-    return this.props.getFile() || new SourceFile({
-      name: 'Not Found',
-      type: 'text/plain',
-      text: 'File Not Found :-/',
-    });
+    return (
+      this.props.getFile() ||
+      new SourceFile({
+        name: 'Not Found',
+        type: 'text/plain',
+        text: 'File Not Found :-/'
+      })
+    );
   }
 
   get label() {
@@ -32,27 +34,14 @@ export default class Tab {
     if (!tab.file || !this.file) {
       return false;
     }
-    return (tab.key === this.key) ||
-      tab.file.key === this.file.key;
-  };
+    return tab.key === this.key || tab.file.key === this.file.key;
+  }
 
   select(isSelected) {
     const props = Object.assign({}, this.props, {
       key: this.key,
-      isSelected,
+      isSelected
     });
     return new Tab(props);
-  }
-
-  renderContent(props) {
-    if (!this.file) {
-      return null;
-    }
-    return (
-      <this.file.component
-        file={this.file}
-        {...props}
-      />
-    );
   }
 }
