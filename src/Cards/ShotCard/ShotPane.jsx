@@ -120,10 +120,6 @@ export default class ShotPane extends PureComponent {
   };
 
   handleRestore = () => {
-    if (!this.codemirror) {
-      return;
-    }
-
     this.codemirror.setValue(this.state.file.text);
   };
 
