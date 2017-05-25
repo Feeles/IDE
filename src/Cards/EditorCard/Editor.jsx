@@ -44,8 +44,6 @@ import './codemirror-hint-extension';
 
 import excessiveCare from './excessiveCare';
 
-const AlreadySetSymbol = Symbol('AlreadySetSymbol');
-
 import CodemirrorComponent from 'utils/CodemirrorComponent';
 
 export default class Editor extends PureComponent {
@@ -108,18 +106,16 @@ export default class Editor extends PureComponent {
 
   handleCodemirror = ref => {
     if (!ref) return;
-    if (!ref[AlreadySetSymbol]) {
-      const cm = ref.getCodeMirror();
-      this.props.codemirrorRef(cm);
+    const cm = ref.getCodeMirror();
+    if (cm) {
       this.showHint(cm);
-      ref[AlreadySetSymbol] = true;
       cm.on('change', (doc, change) => {
         if (change.origin !== 'setValue') {
           this.props.onChange(doc.getValue(), change);
         }
       });
+      this.props.codemirrorRef(cm);
     }
-    this.ref = ref;
   };
 
   showHint(cm) {
