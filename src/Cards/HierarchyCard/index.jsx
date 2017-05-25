@@ -88,16 +88,23 @@ export default class HierarchyCard extends PureComponent {
 
   handleFileSelect = file => {
     const { selectTab, closeTab, tabs, findFile } = this.props;
+    if (file.is('text')) {
+      // SourceFile
+      const getFile = () => findFile(({ key }) => key === file.key);
+      const tab = new Tab({ getFile });
 
-    const getFile = () => findFile(({ key }) => key === file.key);
-    const tab = new Tab({ getFile });
+      const selected = tabs.find(tab => tab.isSelected);
 
-    const selected = tabs.find(tab => tab.isSelected);
-
-    if (selected && selected.is(tab)) {
-      closeTab(selected);
+      if (selected && selected.is(tab)) {
+        closeTab(selected);
+      } else {
+        selectTab(tab);
+      }
     } else {
-      selectTab(tab);
+      // BinaryFile
+      try {
+        window.open(file.blobURL, file.blobURL);
+      } catch (e) {}
     }
   };
 
