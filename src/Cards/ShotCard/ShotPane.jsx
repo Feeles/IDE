@@ -26,7 +26,7 @@ const getStyle = (props, context, state) => {
       width: '100%',
       height: height + spacing.desktopGutterMore,
       maxHeight: '100%',
-      marginLeft: shooting ? '-100%' : 0,
+      transform: `translate(${shooting ? '-500px' : 0})`,
       opacity: shooting ? 0 : 1,
       transition: transitions.easeOut()
     },
