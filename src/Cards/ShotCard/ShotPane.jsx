@@ -88,13 +88,6 @@ export default class ShotPane extends PureComponent {
     if (this.props.file !== nextProps.file) {
       const file = nextProps.file || SourceFile.shot('');
       this.setState({ file });
-
-      if (this.codemirror) {
-        // setState しただけでは
-        // ReactCodeMirror の componentWillReceiveProps に入らず
-        // エディタが更新されない. [バグ？]
-        this.codemirror.setValue(nextProps.file.text);
-      }
     }
   }
 
@@ -121,8 +114,8 @@ export default class ShotPane extends PureComponent {
     this.setState({ shooting: true });
   };
 
-  handleChange = text => {
-    const canRestore = text !== this.state.file.text;
+  handleChange = cm => {
+    const canRestore = cm.getValue() !== this.state.file.text;
     this.setState({ canRestore });
   };
 
@@ -132,7 +125,6 @@ export default class ShotPane extends PureComponent {
     }
 
     this.codemirror.setValue(this.state.file.text);
-    this.setState({ canRestore: false });
   };
 
   async handleShot() {
@@ -148,6 +140,8 @@ export default class ShotPane extends PureComponent {
   handleCodemirror = ref => {
     if (!ref) return;
     this.codemirror = ref;
+    this.codemirror.on('change', this.handleChange);
+    this.codemirror.on('swapDoc', this.handleChange);
     this.codemirror.on('viewportChange', this.handleViewportChange);
     this.codemirror.on('swapDoc', this.handleViewportChange);
   };
@@ -176,7 +170,6 @@ export default class ShotPane extends PureComponent {
             isSelected
             isCared
             file={this.state.file}
-            onChange={this.handleChange}
             getConfig={getConfig}
             codemirrorRef={this.handleCodemirror}
             snippets={this.props.completes}

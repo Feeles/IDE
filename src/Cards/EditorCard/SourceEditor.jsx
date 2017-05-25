@@ -416,11 +416,6 @@ export default class SourceEditor extends PureComponent {
 
     const snippets = getConfig('snippets')(file);
 
-    const props = {
-      ...this.props,
-      onChange: undefined
-    };
-
     const extraKeys = {
       'Ctrl-Enter': this.handleRun,
       'Ctrl-Alt-B': this.beautify
@@ -495,7 +490,7 @@ export default class SourceEditor extends PureComponent {
             </Paper>
           </div>
           <Editor
-            {...props}
+            {...this.props}
             codemirrorRef={this.handleCodemirror}
             showHint={showHint}
             snippets={this.state.snippets}

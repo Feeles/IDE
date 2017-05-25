@@ -49,7 +49,6 @@ import CodemirrorComponent from 'utils/CodemirrorComponent';
 export default class Editor extends PureComponent {
   static propTypes = {
     file: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
     getFiles: PropTypes.func.isRequired,
     isCared: PropTypes.bool.isRequired,
     getConfig: PropTypes.func.isRequired,
@@ -64,7 +63,6 @@ export default class Editor extends PureComponent {
   };
 
   static defaultProps = {
-    onChange: () => {},
     getFiles: () => [],
     isCared: false,
     codemirrorRef: () => {},
@@ -105,11 +103,6 @@ export default class Editor extends PureComponent {
     const cm = ref.getCodeMirror();
     if (cm) {
       this.showHint(cm);
-      cm.on('change', (doc, change) => {
-        if (change.origin !== 'setValue') {
-          this.props.onChange(doc.getValue(), change);
-        }
-      });
       this.props.codemirrorRef(cm);
     }
   };
@@ -137,7 +130,7 @@ export default class Editor extends PureComponent {
   }
 
   render() {
-    const { file, onChange, getConfig, lineNumbers, foldGutter } = this.props;
+    const { file, getConfig, lineNumbers, foldGutter } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const mode = meta && meta.mode;
