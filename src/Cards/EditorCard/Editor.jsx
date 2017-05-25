@@ -46,16 +46,6 @@ import excessiveCare from './excessiveCare';
 
 const AlreadySetSymbol = Symbol('AlreadySetSymbol');
 
-export const MimeTypes = {
-  'text/javascript': '.js',
-  'text/x-markdown': '.md',
-  'application/json': '.json',
-  'text/html': '.html',
-  'text/css': '.css',
-  'text/plain': '',
-  'text/x-glsl': '.sort'
-};
-
 import CodemirrorComponent from 'utils/CodemirrorComponent';
 
 export const FileEditorMap = new WeakMap();
