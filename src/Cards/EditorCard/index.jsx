@@ -219,6 +219,11 @@ export default class EditorCard extends PureComponent {
     const { prepareStyles, palette } = this.context.muiTheme;
 
     const tabs = [];
+    const containerWidth = this.tabContainer
+      ? this.tabContainer.getBoundingClientRect().width -
+          styles.tabContainer.paddingLeft -
+          styles.tabContainer.paddingRight
+      : 0;
     for (const tab of this.props.tabs) {
       if (tabs.length < MAX_TAB && this.state.docs) {
         const doc = this.state.docs.get(tab.file.key);
@@ -233,6 +238,7 @@ export default class EditorCard extends PureComponent {
               localization={localization}
               handleSelect={selectTab}
               handleClose={this.closeTab}
+              containerWidth={containerWidth}
               doc={doc}
             />
           );
@@ -246,7 +252,6 @@ export default class EditorCard extends PureComponent {
     return (
       <Card icon={EditorCard.icon()} {...this.props.cardPropsBag} fit>
         <div style={styles.root}>
-          <div style={styles.tabContainer}>
             {tabs}
           </div>
           <div style={styles.tabContentContainer}>
@@ -267,6 +272,7 @@ export default class EditorCard extends PureComponent {
               docsRef={docs => this.setState({ docs })}
             />
           </div>
+        <div style={styles.tabContainer} ref={ref => (this.tabContainer = ref)}>
         </div>
       </Card>
     );

@@ -12,14 +12,14 @@ const TabHeight = 32;
 const TabSkewX = 24;
 
 const getStyles = (props, context, state) => {
-  const { isSelected } = props;
+  const { containerWidth, isSelected } = props;
   const { palette, spacing, fontFamily } = context.muiTheme;
-  const { containerStyle, closerMouseOver } = state;
+  const { closerMouseOver } = state;
 
   const tabHeight = TabHeight + (isSelected ? 1 : 0);
   const tabWidth = Math.min(
     MaxTabWidth,
-    Math.max(MinTabWidth, parseInt(containerStyle.width) / props.tabs.length)
+    Math.max(MinTabWidth, containerWidth / props.tabs.length)
   );
   const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
   const backgroundColor = fade(
@@ -102,6 +102,7 @@ export default class ChromeTabs extends PureComponent {
     handleSelect: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
     doc: PropTypes.object.isRequired,
+    containerWidth: PropTypes.number.isRequired,
     localization: PropTypes.object.isRequired
   };
 
@@ -110,9 +111,6 @@ export default class ChromeTabs extends PureComponent {
   };
 
   state = {
-    containerStyle: {
-      width: 0
-    },
     closerMouseOver: false,
     hasChanged: false
   };
@@ -134,15 +132,6 @@ export default class ChromeTabs extends PureComponent {
   handleChange = doc => {
     const hasChanged = doc.getValue() !== this.props.file.text;
     this.setState({ hasChanged });
-  };
-
-  handleRef = ref => {
-    if (!ref) return;
-    const container = ref.parentNode;
-    if (container) {
-      const containerStyle = getComputedStyle(container);
-      this.setState({ containerStyle });
-    }
   };
 
   render() {
