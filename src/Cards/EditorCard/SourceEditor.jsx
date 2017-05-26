@@ -203,14 +203,10 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleUndo = () => {
-    if (!this.codemirror) {
-      return;
-    }
-
     this.codemirror.undo();
   };
 
-  handleUpdateWidget = (cm, change) => {
+  handleUpdateWidget = cm => {
     const { paper, palette } = this.context.muiTheme;
 
     this._widgets.clear();
