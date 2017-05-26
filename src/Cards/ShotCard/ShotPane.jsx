@@ -7,9 +7,10 @@ import AvStop from 'material-ui/svg-icons/av/stop';
 import transitions from 'material-ui/styles/transitions';
 import { red50, red500 } from 'material-ui/styles/colors';
 
-import { Editor } from 'Cards/EditorCard/';
 import { SourceFile } from 'File/';
 import ShotCard from './';
+import Editor from './Editor';
+import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
   const { palette, spacing, prepareStyles } = context.muiTheme;
@@ -26,7 +27,7 @@ const getStyle = (props, context, state) => {
       width: '100%',
       height: height + spacing.desktopGutterMore,
       maxHeight: '100%',
-      marginLeft: shooting ? '-100%' : 0,
+      transform: `translate(${shooting ? '-500px' : 0})`,
       opacity: shooting ? 0 : 1,
       transition: transitions.easeOut()
     },
@@ -66,7 +67,7 @@ export default class ShotPane extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
-    port: PropTypes.object,
+    postMessage: PropTypes.func.isRequired,
     file: PropTypes.object,
     completes: PropTypes.array
   };
@@ -84,17 +85,19 @@ export default class ShotPane extends PureComponent {
     file: this.props.file || SourceFile.shot('')
   };
 
+  componentDidMount() {
+    this.codeMirror.on('beforeChange', excessiveCare);
+    this.codeMirror.on('change', this.handleChange);
+    this.codeMirror.on('swapDoc', this.handleChange);
+    this.codeMirror.on('viewportChange', this.handleViewportChange);
+    this.codeMirror.on('swapDoc', this.handleViewportChange);
+    this.handleViewportChange(this.codeMirror);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.file !== nextProps.file) {
       const file = nextProps.file || SourceFile.shot('');
       this.setState({ file });
-
-      if (this.codemirror) {
-        // setState しただけでは
-        // ReactCodeMirror の componentWillReceiveProps に入らず
-        // エディタが更新されない. [バグ？]
-        this.codemirror.setValue(nextProps.file.text);
-      }
     }
   }
 
@@ -105,16 +108,15 @@ export default class ShotPane extends PureComponent {
         this.setState({ shooting: false });
       }, 1000);
     }
-  }
-
-  getHeight = () => {
-    if (!this.codemirror) {
-      return 0;
+    if (prevState.height !== this.state.height) {
+      setTimeout(() => {
+        // 表示可能領域が変わったので、トランジション後に再描画する
+        if (this.codeMirror) {
+          this.codeMirror.refresh();
+        }
+      }, 300);
     }
-    const lastLine = this.codemirror.lastLine() + 1;
-    const height = this.codemirror.heightAtLine(lastLine, 'local');
-    return height;
-  };
+  }
 
   shoot = async () => {
     if (this.state.shooting) return;
@@ -122,36 +124,29 @@ export default class ShotPane extends PureComponent {
     this.setState({ shooting: true });
   };
 
-  handleChange = text => {
-    const canRestore = text !== this.state.file.text;
+  handleChange = cm => {
+    const canRestore = cm.getValue() !== this.state.file.text;
     this.setState({ canRestore });
   };
 
   handleRestore = () => {
-    if (!this.codemirror) {
-      return;
-    }
-
-    this.codemirror.setValue(this.state.file.text);
-    this.setState({ canRestore: false, height: this.getHeight() });
+    this.codeMirror.setValue(this.state.file.text);
   };
 
   async handleShot() {
-    const text = this.codemirror
-      ? this.codemirror.getValue('\n')
+    const text = this.codeMirror
+      ? this.codeMirror.getValue('\n')
       : this.state.file.text;
     const name = this.state.file.name;
     const file = SourceFile.shot(text, name);
 
-    this.props.port.postMessage({ query: 'shot', value: file.serialize() });
+    this.props.postMessage(file.serialize());
   }
 
-  handleCodemirror = ref => {
-    if (!ref) return;
-    this.codemirror = ref;
-    this.codemirror.on('viewportChange', () => {
-      this.setState({ height: this.getHeight() });
-    });
+  handleViewportChange = cm => {
+    const lastLine = cm.lastLine() + 1;
+    const height = cm.heightAtLine(lastLine, 'local');
+    this.setState({ height });
   };
 
   render() {
@@ -172,13 +167,11 @@ export default class ShotPane extends PureComponent {
             isSelected
             isCared
             file={this.state.file}
-            onChange={this.handleChange}
             getConfig={getConfig}
-            codemirrorRef={this.handleCodemirror}
+            codemirrorRef={ref => (this.codeMirror = ref)}
             snippets={this.props.completes}
             extraKeys={extraKeys}
             lineNumbers={false}
-            foldGutter={false}
             findFile={this.props.findFile}
           />
         </div>

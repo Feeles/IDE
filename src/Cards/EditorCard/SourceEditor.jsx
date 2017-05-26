@@ -16,7 +16,6 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 
-import DragTypes from 'utils/dragTypes';
 import ga from 'utils/google-analytics';
 import Editor from './Editor';
 import CreditBar from './CreditBar';
@@ -105,7 +104,8 @@ export default class SourceEditor extends PureComponent {
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     closeSelectedTab: PropTypes.func.isRequired,
-    selectTabFromFile: PropTypes.func.isRequired
+    selectTabFromFile: PropTypes.func.isRequired,
+    docsRef: PropTypes.func
   };
 
   static contextTypes = {
@@ -143,17 +143,20 @@ export default class SourceEditor extends PureComponent {
     if (this.codemirror) {
       this.codemirror.on('beforeChange', this.handleIndexReplacement);
       this.codemirror.on('change', this.handleIndentLine);
-      this.codemirror.on('change', cm =>
+      const onChange = cm => {
         this.setState({
           hasHistory: cm.historySize().undo > 0,
           hasChanged: cm.getValue('\n') !== this.props.file.text
-        })
-      );
+        });
+      };
+      this.codemirror.on('change', onChange);
+      this.codemirror.on('swapDoc', onChange);
       this.codemirror.on('change', this.handleUpdateWidget);
+      this.codemirror.on('swapDoc', this.handleUpdateWidget);
       this.codemirror.on('update', this.handleRenderWidget);
 
-      this.codemirror.clearHistory();
       this.handleUpdateWidget(this.codemirror);
+      this.handleRenderWidget(this.codemirror);
     }
   }
 
@@ -200,14 +203,10 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleUndo = () => {
-    if (!this.codemirror) {
-      return;
-    }
-
     this.codemirror.undo();
   };
 
-  handleUpdateWidget = (cm, change) => {
+  handleUpdateWidget = cm => {
     const { paper, palette } = this.context.muiTheme;
 
     this._widgets.clear();
@@ -288,13 +287,6 @@ export default class SourceEditor extends PureComponent {
     return this.props.setLocation(href);
   };
 
-  handleCodemirror = ref => {
-    if (!ref) {
-      return;
-    }
-    this.codemirror = ref;
-  };
-
   handleAssetInsert = ({ code, description }) => {
     const { assetLineNumber } = this.state;
     const pos = new Pos(assetLineNumber, 0);
@@ -368,6 +360,36 @@ export default class SourceEditor extends PureComponent {
     this.setLocation();
   };
 
+  handleRun = () => {
+    this.setLocation();
+  };
+
+  beautify = cm => {
+    const { file } = this.props;
+    if (file.is('javascript') || file.is('json')) {
+      cm.setValue(
+        beautify(cm.getValue(), {
+          indent_with_tabs: true,
+          end_with_newline: true
+        })
+      );
+    } else if (file.is('html')) {
+      cm.setValue(
+        beautify.html(cm.getValue(), {
+          indent_with_tabs: true,
+          indent_inner_html: true,
+          extra_liners: []
+        })
+      );
+    } else if (file.is('css')) {
+      cm.setValue(
+        beautify.css(cm.getValue(), {
+          indent_with_tabs: true
+        })
+      );
+    }
+  };
+
   render() {
     const {
       file,
@@ -384,12 +406,15 @@ export default class SourceEditor extends PureComponent {
 
     const snippets = getConfig('snippets')(file);
 
-    const props = Object.assign({}, this.props, {
-      codemirrorRef: this.handleCodemirror,
-      onChange: undefined,
-      handleRun: () => this.setLocation(),
-      showHint
-    });
+    const extraKeys = {
+      'Ctrl-Enter': this.handleRun,
+      'Ctrl-Alt-B': this.beautify
+    };
+    const foldOptions = {
+      widget: ' 📦 ',
+      minFoldSize: 1,
+      scanUp: false
+    };
 
     return (
       <div style={styles.root}>
@@ -459,7 +484,15 @@ export default class SourceEditor extends PureComponent {
               <NavigationExpandLess color="white" />
             </Paper>
           </div>
-          <Editor {...props} snippets={this.state.snippets} />
+          <Editor
+            {...this.props}
+            showHint={showHint}
+            snippets={this.state.snippets}
+            codemirrorRef={ref => (this.codemirror = ref)}
+            docsRef={this.props.docsRef}
+            extraKeys={extraKeys}
+            foldOptions={foldOptions}
+          />
         </div>
         <CreditBar
           file={file}

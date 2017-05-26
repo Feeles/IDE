@@ -7,7 +7,8 @@ import transitions from 'material-ui/styles/transitions';
 
 import Card from '../CardWindow';
 import { SourceFile } from 'File/';
-import ChromeTab, { ChromeTabContent, Tab } from 'ChromeTab/';
+import SourceEditor from './SourceEditor';
+import ChromeTab, { Tab } from 'ChromeTab/';
 
 const MAX_TAB = 16;
 
@@ -39,7 +40,8 @@ const getStyles = (props, context) => {
     },
     tabContentContainer: {
       flex: '1 1 auto',
-      position: 'relative'
+      position: 'relative',
+      borderTop: `1px solid ${palette.primary1Color}`
     }
   };
 };
@@ -63,6 +65,10 @@ export default class EditorCard extends PureComponent {
     scrollToCard: PropTypes.func.isRequired,
     cards: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired
+  };
+
+  state = {
+    docs: null
   };
 
   static icon() {
@@ -182,6 +188,13 @@ export default class EditorCard extends PureComponent {
       .forEach(item => this.props.selectTab(item));
   };
 
+  closeTab = tab => {
+    if (this.state.docs) {
+      this.state.docs.delete(tab.file.key);
+    }
+    this.props.closeTab(tab);
+  };
+
   render() {
     if (!this.props.tabs.length) {
       return (
@@ -193,10 +206,8 @@ export default class EditorCard extends PureComponent {
 
     const {
       files,
-      tabs,
       putFile,
       selectTab,
-      closeTab,
       openFileDialog,
       localization,
       findFile,
@@ -207,46 +218,54 @@ export default class EditorCard extends PureComponent {
     } = this.props;
     const { prepareStyles, palette } = this.context.muiTheme;
 
+    const tabs = [];
+    for (const tab of this.props.tabs) {
+      if (tabs.length < MAX_TAB && this.state.docs) {
+        const doc = this.state.docs.get(tab.file.key);
+        if (doc) {
+          tabs.push(
+            <ChromeTab
+              key={tab.key}
+              tab={tab}
+              file={tab.file}
+              tabs={tabs}
+              isSelected={tab.isSelected}
+              localization={localization}
+              handleSelect={selectTab}
+              handleClose={this.closeTab}
+              doc={doc}
+            />
+          );
+        }
+      }
+    }
+    const selectedTab = this.props.tabs.find(item => item.isSelected);
+
     const styles = getStyles(this.props, this.context);
 
     return (
       <Card icon={EditorCard.icon()} {...this.props.cardPropsBag} fit>
         <div style={styles.root}>
           <div style={styles.tabContainer}>
-            {tabs
-              .slice(0, MAX_TAB)
-              .map(tab => (
-                <ChromeTab
-                  key={tab.key}
-                  tab={tab}
-                  file={tab.file}
-                  tabs={tabs}
-                  isSelected={tab.isSelected}
-                  localization={localization}
-                  handleSelect={selectTab}
-                  handleClose={closeTab}
-                />
-              ))}
+            {tabs}
           </div>
           <div style={styles.tabContentContainer}>
-            {tabs.map(tab => (
-              <ChromeTabContent key={tab.key} show={tab.isSelected}>
-                {tab.renderContent({
-                  getFiles: this.getFiles,
-                  closeSelectedTab: this.handleCloseSelectedTab,
-                  selectTabFromFile: this.handleSelectTabFromFile,
-                  setLocation: this.setLocation,
-                  href: this.props.href,
-                  getConfig,
-                  findFile,
-                  localization,
-                  port,
-                  reboot,
-                  openFileDialog,
-                  putFile
-                })}
-              </ChromeTabContent>
-            ))}
+            <SourceEditor
+              file={selectedTab.file}
+              getFiles={this.getFiles}
+              closeSelectedTab={this.handleCloseSelectedTab}
+              selectTabFromFile={this.handleSelectTabFromFile}
+              setLocation={this.setLocation}
+              href={this.props.href}
+              getConfig={getConfig}
+              findFile={findFile}
+              localization={localization}
+              port={port}
+              reboot={reboot}
+              openFileDialog={openFileDialog}
+              putFile={putFile}
+              docsRef={docs => this.setState({ docs })}
+            />
           </div>
         </div>
       </Card>
@@ -254,7 +273,5 @@ export default class EditorCard extends PureComponent {
   }
 }
 
-export { MimeTypes, FileEditorMap } from './Editor';
 export { default as Preview } from './Preview';
-export { default as Editor } from './Editor';
 export { default as SourceEditor } from './SourceEditor';

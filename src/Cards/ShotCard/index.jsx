@@ -42,6 +42,12 @@ export default class ShotCard extends PureComponent {
     }
   };
 
+  postMessage = value => {
+    if (this.props.port) {
+      this.props.port.postMessage({ query: 'shot', value });
+    }
+  };
+
   handleMessage = event => {
     const { query, value } = event.data || {};
     if (!query) return;
@@ -64,17 +70,21 @@ export default class ShotCard extends PureComponent {
   };
 
   render() {
+    const { visible } = this.props.cardPropsBag;
+
     return (
       <Card icon={ShotCard.icon()} {...this.props.cardPropsBag}>
-        <ShotPane
-          file={this.state.file}
-          completes={this.state.completes}
-          files={this.props.files}
-          findFile={this.props.findFile}
-          localization={this.props.localization}
-          getConfig={this.props.getConfig}
-          port={this.props.port}
-        />
+        {visible
+          ? <ShotPane
+              file={this.state.file}
+              completes={this.state.completes}
+              files={this.props.files}
+              findFile={this.props.findFile}
+              localization={this.props.localization}
+              getConfig={this.props.getConfig}
+              postMessage={this.postMessage}
+            />
+          : null}
       </Card>
     );
   }

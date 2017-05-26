@@ -3,67 +3,81 @@ import Snippet from './Snippet';
 import organization from 'organization';
 
 export default new Map([
-  ['codemirror', {
-    test: /^feeles\/codemirror\.json$/i,
-    multiple: false,
-    defaultValue: {},
-    defaultName: 'feeles/codemirror.json',
-  }],
-  ['palette', {
-    test: /^\.palette$/i,
-    multiple: false,
-    defaultValue: defaultPalette,
-    defaultName: '.palette',
-  }],
-  ['env', {
-    test: /^\.env$/i,
-    multiple: false,
-    defaultValue: {
-      MODULE: [true, 'boolean', 'A flag to use module bundler'],
-    },
-    defaultName: '.env',
-  }],
-  ['babelrc', {
-    test: /^\.babelrc$/i,
-    multiple: false,
-    defaultValue: {
-      presets: ['es2015'],
-    },
-    defaultName: '.babelrc',
-  }],
-  ['ogp', {
-    test: /^feeles\/ogp\.json$/i,
-    multiple: false,
-    defaultValue: organization.placeholder,
-    defaultName: 'feeles/ogp.json',
-  }],
-  ['snippets', {
-    test: /^snippets\/.*\.json$/i,
-    multiple: true,
-    defaultValue: {},
-    defaultName: 'snippets/snippet.json',
-    bundle: (files) => {
-      const snippets = files
-        .reduce((p, file) => {
+  [
+    'palette',
+    {
+      test: /^\.palette$/i,
+      multiple: false,
+      defaultValue: defaultPalette,
+      defaultName: '.palette'
+    }
+  ],
+  [
+    'env',
+    {
+      test: /^\.env$/i,
+      multiple: false,
+      defaultValue: {
+        MODULE: [true, 'boolean', 'A flag to use module bundler']
+      },
+      defaultName: '.env'
+    }
+  ],
+  [
+    'babelrc',
+    {
+      test: /^\.babelrc$/i,
+      multiple: false,
+      defaultValue: {
+        presets: ['es2015']
+      },
+      defaultName: '.babelrc'
+    }
+  ],
+  [
+    'ogp',
+    {
+      test: /^feeles\/ogp\.json$/i,
+      multiple: false,
+      defaultValue: organization.placeholder,
+      defaultName: 'feeles/ogp.json'
+    }
+  ],
+  [
+    'snippets',
+    {
+      test: /^snippets\/.*\.json$/i,
+      multiple: true,
+      defaultValue: {},
+      defaultName: 'snippets/snippet.json',
+      bundle: files => {
+        const snippets = files.reduce((p, file) => {
           const { name, json } = file;
-          Object.keys(json).forEach((scope) => {
+          Object.keys(json).forEach(scope => {
             p[scope] = (p[scope] || []).concat(
-              Object.keys(json[scope])
-                .map((key) => new Snippet(
-                  Object.assign({
-                    name,
-                    fileKey: file.key,
-                  }, json[scope][key])
-                ))
+              Object.keys(json[scope]).map(
+                key =>
+                  new Snippet(
+                    Object.assign(
+                      {
+                        name,
+                        fileKey: file.key
+                      },
+                      json[scope][key]
+                    )
+                  )
+              )
             );
           });
           return p;
         }, Object.create(null));
-      const scopes = Object.keys(snippets);
-      return (file) =>
-        scopes.filter((scope) => file.is(scope))
-          .map((scope) => snippets[scope])
-          .reduce((p, c) => p.concat(c), []);
-    },
-  }],
+        const scopes = Object.keys(snippets);
+        return file =>
+          scopes
+            .filter(scope => file.is(scope))
+            .map(scope => snippets[scope])
+            .reduce((p, c) => p.concat(c), []);
+      }
+    }
+  ]
 ]);
