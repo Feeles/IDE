@@ -7,9 +7,9 @@ import AvStop from 'material-ui/svg-icons/av/stop';
 import transitions from 'material-ui/styles/transitions';
 import { red50, red500 } from 'material-ui/styles/colors';
 
-import { Editor } from 'Cards/EditorCard/';
 import { SourceFile } from 'File/';
 import ShotCard from './';
+import Editor from './Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
