@@ -1063,10 +1063,6 @@ clap@^1.0.9:
   dependencies:
     chalk "^1.1.3"
 
-classnames@^2.2.5:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
-
 clean-css@4.0.x:
   version "4.0.12"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.0.12.tgz#a02e61707f1840bd3338f54dbc9acbda4e772fa3"
@@ -1117,10 +1113,6 @@ code-point-at@^1.0.0:
 codemirror@^4.5.0:
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-4.13.0.tgz#209772d38a7bb99647c37b500db121110dd9af6f"
-
-codemirror@^5.18.2:
-  version "5.25.2"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.25.2.tgz#8c77677ca9c9248d757d3a07ed1e89a8404850b7"
 
 color-convert@^1.3.0:
   version "1.9.0"
@@ -2708,10 +2700,6 @@ lodash.camelcase@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
 
-lodash.debounce@^4.0.8:
-  version "4.0.8"
-  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
-
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
@@ -3681,14 +3669,6 @@ react-addons-transition-group@^15.4.0:
   dependencies:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
-
-react-codemirror:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-codemirror/-/react-codemirror-0.3.0.tgz#cd6bd6ef458ec1e035cfd8b3fe7b30c8c7883c6c"
-  dependencies:
-    classnames "^2.2.5"
-    codemirror "^5.18.2"
-    lodash.debounce "^4.0.8"
 
 react-color@^2.4.0:
   version "2.11.7"
