@@ -81,6 +81,7 @@ export default class CardWindow extends PureComponent {
         ...fitWrap
       },
       innerContainer: {
+        position: 'relative',
         width: '100%',
         flexDirection: 'column',
         ...fitWrap

@@ -175,13 +175,12 @@ export default class SourceEditor extends PureComponent {
   }
 
   handleSave = async () => {
-    if (!this.codemirror) {
-      return;
-    }
-    const text = this.codemirror.getValue('\n');
-    const babelrc = this.props.getConfig('babelrc');
+    if (!this.codemirror) return;
 
+    this.beautify(this.codemirror); // Auto beautify
+    const text = this.codemirror.getValue();
     if (text === this.props.file.text) {
+      // No change
       return;
     }
 
@@ -193,6 +192,7 @@ export default class SourceEditor extends PureComponent {
     );
 
     // Like a watching
+    const babelrc = this.props.getConfig('babelrc');
     file.babel(babelrc).catch(e => {
       this.props.selectTabFromFile(file);
     });

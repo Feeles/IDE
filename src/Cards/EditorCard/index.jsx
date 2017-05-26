@@ -10,36 +10,26 @@ import { SourceFile } from 'File/';
 import SourceEditor from './SourceEditor';
 import ChromeTab, { Tab } from 'ChromeTab/';
 
-const MAX_TAB = 16;
+const MAX_TAB = 5;
 
 const getStyles = (props, context) => {
   const { palette, spacing, fontFamily } = context.muiTheme;
 
   return {
-    root: {
-      flex: 1,
-      position: 'relative',
-      opacity: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch',
-      overflow: 'hidden',
-      fontFamily,
-      transition: transitions.easeOut()
-    },
     tabContainer: {
+      position: 'absolute',
+      top: 0,
+      width: '100%',
+      boxSizing: 'border-box',
       display: 'flex',
       alignItems: 'flex-end',
       height: 32,
       paddingRight: 7,
-      paddingBottom: 10,
-      paddingLeft: 7,
-      marginBottom: -10,
-      overflow: 'hidden',
+      paddingLeft: 40,
       zIndex: 10
     },
     tabContentContainer: {
-      flex: '1 1 auto',
+      flex: 1,
       position: 'relative',
       borderTop: `1px solid ${palette.primary1Color}`
     }
@@ -217,8 +207,14 @@ export default class EditorCard extends PureComponent {
       reboot
     } = this.props;
     const { prepareStyles, palette } = this.context.muiTheme;
+    const styles = getStyles(this.props, this.context);
 
     const tabs = [];
+    const containerWidth = this.tabContainer
+      ? this.tabContainer.getBoundingClientRect().width -
+          styles.tabContainer.paddingLeft -
+          styles.tabContainer.paddingRight
+      : 0;
     for (const tab of this.props.tabs) {
       if (tabs.length < MAX_TAB && this.state.docs) {
         const doc = this.state.docs.get(tab.file.key);
@@ -233,6 +229,7 @@ export default class EditorCard extends PureComponent {
               localization={localization}
               handleSelect={selectTab}
               handleClose={this.closeTab}
+              containerWidth={containerWidth}
               doc={doc}
             />
           );
@@ -241,32 +238,28 @@ export default class EditorCard extends PureComponent {
     }
     const selectedTab = this.props.tabs.find(item => item.isSelected);
 
-    const styles = getStyles(this.props, this.context);
-
     return (
       <Card icon={EditorCard.icon()} {...this.props.cardPropsBag} fit>
-        <div style={styles.root}>
-          <div style={styles.tabContainer}>
-            {tabs}
-          </div>
-          <div style={styles.tabContentContainer}>
-            <SourceEditor
-              file={selectedTab.file}
-              getFiles={this.getFiles}
-              closeSelectedTab={this.handleCloseSelectedTab}
-              selectTabFromFile={this.handleSelectTabFromFile}
-              setLocation={this.setLocation}
-              href={this.props.href}
-              getConfig={getConfig}
-              findFile={findFile}
-              localization={localization}
-              port={port}
-              reboot={reboot}
-              openFileDialog={openFileDialog}
-              putFile={putFile}
-              docsRef={docs => this.setState({ docs })}
-            />
-          </div>
+        <div style={styles.tabContainer} ref={ref => (this.tabContainer = ref)}>
+          {tabs}
+        </div>
+        <div style={styles.tabContentContainer}>
+          <SourceEditor
+            file={selectedTab.file}
+            getFiles={this.getFiles}
+            closeSelectedTab={this.handleCloseSelectedTab}
+            selectTabFromFile={this.handleSelectTabFromFile}
+            setLocation={this.setLocation}
+            href={this.props.href}
+            getConfig={getConfig}
+            findFile={findFile}
+            localization={localization}
+            port={port}
+            reboot={reboot}
+            openFileDialog={openFileDialog}
+            putFile={putFile}
+            docsRef={docs => this.setState({ docs })}
+          />
         </div>
       </Card>
     );

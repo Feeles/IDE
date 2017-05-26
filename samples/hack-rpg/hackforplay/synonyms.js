@@ -26,7 +26,7 @@ export const assets = [
   ['heart', '_hハート'],
   ['tree', '_k木'],
   ['rock', '_iいわ'],
-  ['crayWall', '_tつちかべ'],
+  ['clayWall', '_tつちかべ'],
   ['stoneWall', '_iいしかべ'],
   ['box', '_tたからばこ'],
   ['openedBox', '_tたからばこひらいた'],
