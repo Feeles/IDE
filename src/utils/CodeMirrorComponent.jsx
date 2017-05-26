@@ -16,8 +16,7 @@ export default class CodeMirrorComponent extends PureComponent {
     matchBrackets: PropTypes.bool.isRequired,
     autoCloseBrackets: PropTypes.bool.isRequired,
     keyMap: PropTypes.string.isRequired,
-    foldGutter: PropTypes.bool.isRequired,
-    foldOptions: PropTypes.object.isRequired,
+    foldOptions: PropTypes.object,
     dragDrop: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
     readOnly: PropTypes.bool.isRequired
@@ -31,8 +30,6 @@ export default class CodeMirrorComponent extends PureComponent {
     matchBrackets: true,
     autoCloseBrackets: true,
     keyMap: 'default',
-    foldGutter: true,
-    foldOptions: {},
     dragDrop: false,
     extraKeys: {},
     readOnly: false
@@ -56,6 +53,7 @@ export default class CodeMirrorComponent extends PureComponent {
     }
     return {
       ...this.props,
+      foldGutter: !!this.props.foldOptions,
       gutters
     };
   }

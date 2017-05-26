@@ -156,6 +156,7 @@ export default class SourceEditor extends PureComponent {
       this.codemirror.on('update', this.handleRenderWidget);
 
       this.handleUpdateWidget(this.codemirror);
+      this.handleRenderWidget(this.codemirror);
     }
   }
 
@@ -420,6 +421,11 @@ export default class SourceEditor extends PureComponent {
       'Ctrl-Enter': this.handleRun,
       'Ctrl-Alt-B': this.beautify
     };
+    const foldOptions = {
+      widget: ' 📦 ',
+      minFoldSize: 1,
+      scanUp: false
+    };
 
     return (
       <div style={styles.root}>
@@ -496,6 +502,7 @@ export default class SourceEditor extends PureComponent {
             snippets={this.state.snippets}
             docsRef={this.props.docsRef}
             extraKeys={extraKeys}
+            foldOptions={foldOptions}
           />
         </div>
         <CreditBar

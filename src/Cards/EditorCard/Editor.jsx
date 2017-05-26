@@ -53,8 +53,8 @@ export default class Editor extends PureComponent {
     snippets: PropTypes.array.isRequired,
     showHint: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
+    foldOptions: PropTypes.object,
     lineNumbers: PropTypes.bool.isRequired,
-    foldGutter: PropTypes.bool.isRequired,
     findFile: PropTypes.func.isRequired,
     docsRef: PropTypes.func
   };
@@ -66,7 +66,6 @@ export default class Editor extends PureComponent {
     showHint: true,
     extraKeys: {},
     lineNumbers: true,
-    foldGutter: true,
     docsRef: () => {}
   };
 
@@ -122,16 +121,10 @@ export default class Editor extends PureComponent {
   }
 
   render() {
-    const { file, getConfig, lineNumbers, foldGutter } = this.props;
+    const { file, getConfig, lineNumbers } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const mode = meta && meta.mode;
-
-    const foldOptions = {
-      widget: ' 📦 ',
-      minFoldSize: 1,
-      scanUp: false
-    };
 
     return (
       <CodemirrorComponent
@@ -140,8 +133,7 @@ export default class Editor extends PureComponent {
         mode={mode}
         lineNumbers={lineNumbers}
         keyMap="sublime"
-        foldGutter={foldGutter}
-        foldOptions={foldOptions}
+        foldOptions={this.props.foldOptions}
         extraKeys={this.props.extraKeys}
         lint={mode === 'javascript' ? this.state.lint : null}
         ref={this.handleCodemirror}
