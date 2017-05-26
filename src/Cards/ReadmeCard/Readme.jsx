@@ -6,7 +6,7 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
-import CodemirrorComponent from 'utils/CodemirrorComponent';
+import CodeMirrorComponent from 'utils/CodeMirrorComponent';
 import MDReactComponent from 'jsx/MDReactComponent';
 import { Tab } from 'ChromeTab/';
 
@@ -112,7 +112,7 @@ const mdComponents = [
 
       return (
         <div key={props.key + code} style={containerStyle}>
-          <CodemirrorComponent
+          <CodeMirrorComponent
             id="Readme"
             value={code}
             mode="javascript"

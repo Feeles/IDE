@@ -42,7 +42,7 @@ CodeMirror.modeInfo.push({
 
 import './codemirror-hint-extension';
 
-import CodemirrorComponent from 'utils/CodemirrorComponent';
+import CodeMirrorComponent from 'utils/CodeMirrorComponent';
 
 export default class Editor extends PureComponent {
   static propTypes = {
@@ -127,7 +127,7 @@ export default class Editor extends PureComponent {
     const mode = meta && meta.mode;
 
     return (
-      <CodemirrorComponent
+      <CodeMirrorComponent
         id={file.key}
         value={file.text}
         mode={mode}
