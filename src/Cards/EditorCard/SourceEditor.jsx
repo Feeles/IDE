@@ -287,13 +287,6 @@ export default class SourceEditor extends PureComponent {
     return this.props.setLocation(href);
   };
 
-  handleCodemirror = ref => {
-    if (!ref) {
-      return;
-    }
-    this.codemirror = ref;
-  };
-
   handleAssetInsert = ({ code, description }) => {
     const { assetLineNumber } = this.state;
     const pos = new Pos(assetLineNumber, 0);
@@ -493,9 +486,9 @@ export default class SourceEditor extends PureComponent {
           </div>
           <Editor
             {...this.props}
-            codemirrorRef={this.handleCodemirror}
             showHint={showHint}
             snippets={this.state.snippets}
+            codemirrorRef={ref => (this.codemirror = ref)}
             docsRef={this.props.docsRef}
             extraKeys={extraKeys}
             foldOptions={foldOptions}
