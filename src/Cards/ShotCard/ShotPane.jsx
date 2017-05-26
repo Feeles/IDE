@@ -67,7 +67,7 @@ export default class ShotPane extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
-    port: PropTypes.object,
+    postMessage: PropTypes.func.isRequired,
     file: PropTypes.object,
     completes: PropTypes.array
   };
@@ -84,6 +84,15 @@ export default class ShotPane extends PureComponent {
     canRestore: false,
     file: this.props.file || SourceFile.shot('')
   };
+
+  componentDidMount() {
+    this.codeMirror.on('beforeChange', excessiveCare);
+    this.codeMirror.on('change', this.handleChange);
+    this.codeMirror.on('swapDoc', this.handleChange);
+    this.codeMirror.on('viewportChange', this.handleViewportChange);
+    this.codeMirror.on('swapDoc', this.handleViewportChange);
+    this.handleViewportChange(this.codeMirror);
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.file !== nextProps.file) {
@@ -102,8 +111,8 @@ export default class ShotPane extends PureComponent {
     if (prevState.height !== this.state.height) {
       setTimeout(() => {
         // 表示可能領域が変わったので、トランジション後に再描画する
-        if (this.codemirror) {
-          this.codemirror.refresh();
+        if (this.codeMirror) {
+          this.codeMirror.refresh();
         }
       }, 300);
     }
@@ -121,28 +130,18 @@ export default class ShotPane extends PureComponent {
   };
 
   handleRestore = () => {
-    this.codemirror.setValue(this.state.file.text);
+    this.codeMirror.setValue(this.state.file.text);
   };
 
   async handleShot() {
-    const text = this.codemirror
-      ? this.codemirror.getValue('\n')
+    const text = this.codeMirror
+      ? this.codeMirror.getValue('\n')
       : this.state.file.text;
     const name = this.state.file.name;
     const file = SourceFile.shot(text, name);
 
-    this.props.port.postMessage({ query: 'shot', value: file.serialize() });
+    this.props.postMessage(file.serialize());
   }
-
-  handleCodemirror = ref => {
-    if (!ref) return;
-    this.codemirror = ref;
-    this.codemirror.on('beforeChange', excessiveCare);
-    this.codemirror.on('change', this.handleChange);
-    this.codemirror.on('swapDoc', this.handleChange);
-    this.codemirror.on('viewportChange', this.handleViewportChange);
-    this.codemirror.on('swapDoc', this.handleViewportChange);
-  };
 
   handleViewportChange = cm => {
     const lastLine = cm.lastLine() + 1;
@@ -169,7 +168,7 @@ export default class ShotPane extends PureComponent {
             isCared
             file={this.state.file}
             getConfig={getConfig}
-            codemirrorRef={this.handleCodemirror}
+            codemirrorRef={ref => (this.codeMirror = ref)}
             snippets={this.props.completes}
             extraKeys={extraKeys}
             lineNumbers={false}
