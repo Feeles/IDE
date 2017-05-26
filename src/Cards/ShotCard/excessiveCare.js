@@ -7,13 +7,15 @@ export default function excessiveCare(cm, change) {
     let matchFlag = false;
     const replaced = [];
     change.text.forEach(function(input) {
-      if (input.match(/[！-～|”|’]/g)) {
+      if (input.match(/[！-～|”|’|、|。]/g)) {
         const han = input
           .replace(/[！-～]/g, function(s) {
             return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
           })
           .replace(/”/g, '"')
-          .replace(/’/g, "'");
+          .replace(/’/g, "'")
+          .replace(/、/g, ',')
+          .replace(/。/g, '.');
         replaced.push(han);
         matchFlag = true;
       } else {
