@@ -178,10 +178,12 @@ export default class SourceEditor extends PureComponent {
     if (!this.codemirror) {
       return;
     }
-    const text = this.codemirror.getValue('\n');
     const babelrc = this.props.getConfig('babelrc');
 
+    this.beautify(this.codemirror); // Auto beautify
+    const text = this.codemirror.getValue();
     if (text === this.props.file.text) {
+      // No change
       return;
     }
 
