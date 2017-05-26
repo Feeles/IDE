@@ -73,7 +73,7 @@ export default class CodeMirrorComponent extends PureComponent {
     }
   }
 
-  componentWillUnount() {
+  componentWillUnmount() {
     this.state.docs.clear();
     if (this.props.docsRef) {
       this.props.docsRef(null);
