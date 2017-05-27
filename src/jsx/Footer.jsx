@@ -143,7 +143,7 @@ export default class Footer extends PureComponent {
       },
       open: {
         position: 'fixed',
-        right: 8,
+        left: 8,
         bottom: this.state.open ? -40 : 8,
         zIndex: 1
       },
@@ -174,9 +174,6 @@ export default class Footer extends PureComponent {
             >
               <SocialShare />
             </FloatingActionButton>
-            <IconButton onTouchTap={() => this.setState({ open: false })}>
-              <NavigationClose />
-            </IconButton>
             <div style={{ flex: '1 1 auto' }} />
             <input
               readOnly
@@ -209,6 +206,9 @@ export default class Footer extends PureComponent {
               />
             </div>
             <div style={styles.blank} />
+            <IconButton onTouchTap={() => this.setState({ open: false })}>
+              <NavigationClose />
+            </IconButton>
           </Paper>
         </div>
       )
