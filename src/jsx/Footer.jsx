@@ -30,6 +30,9 @@ export default class Footer extends PureComponent {
   }
 
   componentDidMount() {
+    // 10 秒後に close する
+    setTimeout(() => this.setState({ open: false }), 10000);
+
     if (process.env.NODE_ENV !== 'production') {
       return;
     }
