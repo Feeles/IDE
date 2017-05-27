@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import transitions from 'material-ui/styles/transitions';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import SocialShare from 'material-ui/svg-icons/social/share';
 
@@ -132,20 +133,20 @@ export default class Footer extends PureComponent {
 
     const styles = {
       root: {
-        flex: '0 0 auto',
-        height: this.state.open ? '2.5rem' : 0,
-        overflow: 'hidden',
-        display: 'flex',
+        flex: 0,
+        display: this.state.open ? 'flex' : 'none',
+        height: '2.5rem',
         justifyContent: 'space-around',
         alignItems: 'center',
-        position: 'relative',
         zIndex: 1
       },
-      open: {
+      opener: {
         position: 'fixed',
         left: 8,
-        bottom: this.state.open ? -40 : 8,
-        zIndex: 1
+        bottom: 8,
+        transform: `translateY(${this.state.open ? 48 : 0}px)`,
+        zIndex: 1,
+        transition: transitions.easeOut(null, 'transform')
       },
       blank: {
         flex: '0 0 1rem'
@@ -165,16 +166,16 @@ export default class Footer extends PureComponent {
       /* z-index: inherit; の階層を Main 直下に置くことで フルスクリーンのとき奥に行くように */
       (
         <div>
+          <FloatingActionButton
+            mini
+            secondary
+            style={styles.opener}
+            onTouchTap={() => this.setState({ open: true })}
+          >
+            <SocialShare />
+          </FloatingActionButton>
           <Paper style={styles.root}>
-            <FloatingActionButton
-              mini
-              secondary
-              style={styles.open}
-              onTouchTap={() => this.setState({ open: true })}
-            >
-              <SocialShare />
-            </FloatingActionButton>
-            <div style={{ flex: '1 1 auto' }} />
+            <div style={{ flex: 1 }} />
             <input
               readOnly
               value={this.shareURL}
