@@ -1738,9 +1738,9 @@ etag@~1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.0.tgz#6f631aef336d6c46362b51764044ce216be3c051"
 
-eventemitter3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-2.0.3.tgz#b5e1079b59fb5e1ba2771c0a993be060a58c99ba"
+eventemitter2:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/eventemitter2/-/eventemitter2-4.1.0.tgz#b1fb8a1144e7dfcf80cecce9877ff6d68e7d8506"
 
 eventemitter3@1.x.x:
   version "1.2.0"
