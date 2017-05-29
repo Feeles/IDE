@@ -118,8 +118,29 @@ export default class Monitor extends PureComponent {
     }
   }
 
+  componentDidMount() {
+    if (window.ipcRenderer) {
+      this._emit = ipcRenderer.emit; // あとで戻せるようオリジナルを保持
+      const self = this;
+      ipcRenderer.emit = function(...args) {
+        // ipcRenderer.emit をオーバーライドし, 全ての postMessage で送る
+        if (self.state && self.state.port) {
+          self.state.port.postMessage({
+            query: 'ipcRenderer.emit',
+            value: args
+          });
+        }
+        this._emit.apply(this, ...args);
+      };
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('hashchange', this.handleHashChanged);
+    if (window.ipcRenderer) {
+      // オリジナルの参照を戻す. Monitor が複数 mount されることはない(はず)
+      ipcRenderer.emit = this._emit;
+    }
   }
 
   get iframe() {
