@@ -122,15 +122,15 @@ export default class Monitor extends PureComponent {
     if (window.ipcRenderer) {
       this._emit = ipcRenderer.emit; // あとで戻せるようオリジナルを保持
       const self = this;
-      ipcRenderer.emit = function(...args) {
+      ipcRenderer.emit = (...args) => {
         // ipcRenderer.emit をオーバーライドし, 全ての postMessage で送る
         if (self.state && self.state.port) {
           self.state.port.postMessage({
             query: 'ipcRenderer.emit',
-            value: args
+            value: JSON.parse(JSON.stringify(args))
           });
         }
-        this._emit.apply(this, ...args);
+        this._emit.apply(this, args);
       };
     }
   }
@@ -273,7 +273,7 @@ export default class Monitor extends PureComponent {
         break;
       case 'ipcRenderer.sendToHost':
         if (window.ipcRenderer) {
-          window.ipcRenderer.sendToHost(...data.value);
+          window.ipcRenderer.sendToHost(...Object.values(data.value));
         } else {
           console.warn('window.ipcRenderer is not defined');
         }
