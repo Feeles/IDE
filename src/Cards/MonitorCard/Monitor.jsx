@@ -250,6 +250,13 @@ export default class Monitor extends PureComponent {
           });
         }
         break;
+      case 'ipcRenderer.sendToHost':
+        if (window.ipcRenderer) {
+          window.ipcRenderer.sendToHost(...data.value);
+        } else {
+          console.warn('window.ipcRenderer is not defined');
+        }
+        break;
       case 'api.SpeechRecognition':
         const recognition = new SpeechRecognition();
         for (const prop of [
