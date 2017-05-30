@@ -204,7 +204,8 @@ export default class EditorCard extends PureComponent {
       getConfig,
       setConfig,
       port,
-      reboot
+      reboot,
+      cardPropsBag
     } = this.props;
     const { prepareStyles, palette } = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
@@ -239,7 +240,7 @@ export default class EditorCard extends PureComponent {
     const selectedTab = this.props.tabs.find(item => item.isSelected);
 
     return (
-      <Card icon={EditorCard.icon()} {...this.props.cardPropsBag} fit>
+      <Card icon={EditorCard.icon()} {...cardPropsBag} fit width={640}>
         <div style={styles.tabContainer} ref={ref => (this.tabContainer = ref)}>
           {tabs}
         </div>
