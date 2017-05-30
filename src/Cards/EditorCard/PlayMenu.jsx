@@ -33,6 +33,12 @@ export default class PlayMenu extends PureComponent {
   handlePlay = event => {
     const files = this.props.getFiles().filter(file => file.is('html'));
 
+    if (files.length <= 1) {
+      // 表示すべきリストがない
+      this.props.setLocation();
+      return;
+    }
+
     const parser = new DOMParser();
     const entries = files
       .map(file => {
