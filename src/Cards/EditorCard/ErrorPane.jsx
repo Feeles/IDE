@@ -2,87 +2,158 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import FlatButton from 'material-ui/FlatButton';
-import AlertError from 'material-ui/svg-icons/alert/error';
+import RaisedButton from 'material-ui/RaisedButton';
+import Paper from 'material-ui/Paper';
 import { red50, red500 } from 'material-ui/styles/colors';
+import ActionRestore from 'material-ui/svg-icons/action/restore';
 
 export default class ErrorPane extends PureComponent {
   static propTypes = {
     error: PropTypes.object,
     localization: PropTypes.object.isRequired,
-    onRestore: PropTypes.func.isRequired
+    onRestore: PropTypes.func.isRequired,
+    canRestore: PropTypes.bool.isRequired
   };
 
-  render() {
-    const { error, localization, onRestore } = this.props;
+  state = {
+    show: false,
+    expanded: false
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.error !== nextProps.error) {
+      this.setState({
+        show: !!nextProps.error
+      });
+    }
+  }
+
+  handleClose = () => {
+    this.setState({ show: false });
+  };
+
+  handleRestore = () => {
+    this.setState({ show: false }, () => {
+      this.props.onRestore();
+    });
+  };
+
+  renderAsDialog() {
+    const { localization, canRestore } = this.props;
 
     const styles = {
-      group: {
-        flex: 0,
-        backgroundColor: 'rgb(245, 245, 245)'
-      },
-      root: {
-        height: 120,
+      error: {
+        margin: 16,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         borderStyle: 'double',
         borderColor: red500,
         backgroundColor: red50,
         overflow: 'scroll'
       },
       heading: {
-        display: 'flex',
-        alignItems: 'center',
-        color: red500
+        color: 'rgba(255, 0, 0, .5)'
       },
-      errorIcon: {
-        marginLeft: 4,
-        marginRight: 4
-      },
-      restore: {
-        color: red500
+      close: {
+        alignSelf: 'flex-end'
       },
       blank: {
-        flex: 1
-      },
-      message: {
-        color: red500,
-        margin: 0,
-        padding: 8,
-        paddingTop: 0,
-        fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
+        flex: '0 0 1rem'
       }
     };
 
     return (
-      <CSSTransitionGroup
-        transitionName={{
-          enter: 'zoomInUp',
-          enterActive: 'animated',
-          leave: 'fadeOut',
-          leaveActive: 'animated'
-        }}
-        transitionEnterTimeout={1000}
-        transitionLeaveTimeout={500}
-        style={styles.groups}
+      <Paper key="error" zDepth={2} style={styles.error}>
+        <FlatButton
+          primary
+          label={localization.common.close}
+          style={styles.close}
+          onTouchTap={this.handleClose}
+        />
+        <h2 style={styles.heading}>{localization.editorCard.error}</h2>
+        <div style={styles.blank} />
+        <RaisedButton
+          primary
+          icon={<ActionRestore />}
+          label={localization.editorCard.restore}
+          onTouchTap={this.handleRestore}
+          disabled={!canRestore}
+        />
+        <div style={styles.blank} />
+      </Paper>
+    );
+  }
+
+  renderAsDock() {
+    const { expanded } = this.state;
+    const styles = {
+      message: {
+        position: 'relative',
+        maxHeight: this.props.error ? expanded ? 1000 : 32 : 0,
+        width: '100%',
+        boxSizing: 'border-box',
+        paddingLeft: 8,
+        overflow: 'scroll',
+        cursor: 'pointer'
+      },
+      messageText: {
+        margin: 8,
+        color: red500,
+        fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
+      }
+    };
+    return (
+      <div
+        style={styles.message}
+        onTouchTap={() => this.setState({ expanded: !expanded })}
       >
-        {error
-          ? <div key="error" style={styles.root}>
-              <div style={styles.heading}>
-                <AlertError
-                  key="alert"
-                  color={red500}
-                  style={styles.errorIcon}
-                />
-                <span>{localization.editorCard.error}</span>
-                <div style={styles.blank} />
-                <FlatButton
-                  label={localization.editorCard.restore}
-                  style={styles.restore}
-                  onTouchTap={onRestore}
-                />
-              </div>
-              <pre style={styles.message}>{error.message}</pre>
-            </div>
-          : null}
-      </CSSTransitionGroup>
+        <pre style={styles.messageText}>
+          {this.props.error && this.props.error.message}
+        </pre>
+      </div>
+    );
+  }
+
+  render() {
+    const { show } = this.state;
+    const { palette } = this.context.muiTheme;
+    const styles = {
+      root: {
+        borderTopStyle: show ? 'double' : 'none',
+        borderTopWidth: 3,
+        borderTopColor: palette.primary1Color
+      },
+      dialogRoot: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        zIndex: 100
+      }
+    };
+
+    return (
+      <div style={styles.root}>
+        {this.renderAsDock()}
+        <CSSTransitionGroup
+          transitionName={{
+            enter: 'zoomInUp',
+            enterActive: 'animated',
+            leave: 'fadeOut',
+            leaveActive: 'animated'
+          }}
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={500}
+          style={styles.dialogRoot}
+        >
+          {show ? this.renderAsDialog() : null}
+        </CSSTransitionGroup>
+      </div>
     );
   }
 }
