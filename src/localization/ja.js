@@ -118,6 +118,7 @@ export default {
     website: 'ウェブサイトのURL (なくてもよい)'
   },
   common: {
+    close: 'とじる',
     tapTwiceQuickly: 'すばやく２回クリック',
     cannotBeUndone: 'この操作は取り消せません',
     editFile: '書きかえる',
@@ -132,8 +133,8 @@ export default {
     play: 'プレイ',
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
     insert: '中に入れる',
-    error: 'エラー',
-    restore: 'エラーが起こる前にもどす'
+    error: '😇💭 あっ、ちょっと 入力ミスが...',
+    restore: 'ミスがおこる まえにもどす'
   },
   envCard: {
     title: 'スイッチ',

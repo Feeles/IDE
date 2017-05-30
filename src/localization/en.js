@@ -118,6 +118,7 @@ export default {
     website: 'Website URL (optional)'
   },
   common: {
+    close: 'Close',
     tapTwiceQuickly: 'Tap twice quickly',
     cannotBeUndone: 'This operation can not be undone',
     editFile: 'Edit File',
@@ -132,8 +133,8 @@ export default {
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
     insert: 'Insert',
-    error: 'Error',
-    restore: 'Restore before error occurs'
+    error: '😇💭 Oops, a little typo...',
+    restore: 'Restore before mistake'
   },
   envCard: {
     title: 'Parameters',

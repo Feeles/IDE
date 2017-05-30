@@ -91,6 +91,9 @@ const getStyle = (props, state, context) => {
   };
 };
 
+// file -> prevFile を参照する
+const prevFiles = new WeakMap();
+
 export default class SourceEditor extends PureComponent {
   static propTypes = {
     file: PropTypes.object.isRequired,
@@ -186,10 +189,12 @@ export default class SourceEditor extends PureComponent {
 
     this.setState({ hasChanged: false, loading: true });
 
+    const prevFile = this.props.file;
     const file = await this.props.putFile(
       this.props.file,
       this.props.file.set({ text })
     );
+    prevFiles.set(file, prevFile);
 
     // Like a watching
     const babelrc = this.props.getConfig('babelrc');
@@ -355,9 +360,12 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleRestore = () => {
-    // ひとつ戻して再実行する
-    this.handleUndo();
-    this.setLocation();
+    // 保存する前の状態に戻す
+    const prevFile = prevFiles.get(this.props.file);
+    if (prevFile) {
+      this.codemirror.setValue(prevFile.text);
+      this.setLocation();
+    }
   };
 
   handleRun = () => {
@@ -423,11 +431,6 @@ export default class SourceEditor extends PureComponent {
             item => `.${item.className} { ${item.style} } `
           )}
         </style>
-        <ErrorPane
-          error={file.error}
-          localization={localization}
-          onRestore={this.handleRestore}
-        />
         <div style={styles.menuBar}>
           <FlatButton
             label={localization.editorCard.undo}
@@ -494,6 +497,12 @@ export default class SourceEditor extends PureComponent {
             foldOptions={foldOptions}
           />
         </div>
+        <ErrorPane
+          error={file.error}
+          localization={localization}
+          onRestore={this.handleRestore}
+          canRestore={prevFiles.has(file)}
+        />
         <CreditBar
           file={file}
           openFileDialog={this.props.openFileDialog}
