@@ -17,6 +17,7 @@ export default class CardWindow extends PureComponent {
     cards: PropTypes.object.isRequired,
     icon: PropTypes.node.isRequired,
     fit: PropTypes.bool.isRequired,
+    width: PropTypes.number.isRequired,
     showAll: PropTypes.bool.isRequired
   };
 
@@ -24,7 +25,8 @@ export default class CardWindow extends PureComponent {
     visible: false,
     actions: [],
     icon: null,
-    fit: false
+    fit: false,
+    width: 480
   };
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -52,7 +54,7 @@ export default class CardWindow extends PureComponent {
   };
 
   render() {
-    const { isDragging, visible, fit, order } = this.props;
+    const { isDragging, visible, fit, width, order } = this.props;
 
     const fitWrap = fit
       ? {
@@ -71,7 +73,7 @@ export default class CardWindow extends PureComponent {
         maxHeight: '100%',
         direction: 'ltr',
         flex: '0 0 auto',
-        flexBasis: visible ? '500px' : 0,
+        flexBasis: visible ? width : 0,
         padding: visible ? '16px 20px 16px 0' : 0,
         overflow: visible ? 'initial' : 'hidden',
         ...fitWrap
