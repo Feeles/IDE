@@ -134,7 +134,8 @@ export default {
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
     insert: '中に入れる',
     error: '😇💭 あっ、ちょっと 入力ミスが...',
-    restore: 'ミスがおこる まえにもどす'
+    restore: 'ミスがおこる まえにもどす',
+    clickHere: '⭐️ まずは ここをクリック'
   },
   envCard: {
     title: 'スイッチ',

@@ -228,7 +228,7 @@ export default class SourceEditor extends PureComponent {
 
     if (begin || end) {
       const element = document.createElement('span');
-      element.textContent = text.replace(/\t/g, '    ');
+      element.textContent = this.props.localization.editorCard.clickHere;
       element.classList.add(`Feeles-asset-opener-${begin ? 'begin' : 'end'}`);
       element.onclick = () => {
         this.setState({
@@ -237,16 +237,17 @@ export default class SourceEditor extends PureComponent {
           appendToHead: !!begin
         });
       };
-      this._widgets.set(line, element);
+      const parent = document.createElement('div');
+      parent.classList.add('Feeles-asset-opener');
+      parent.appendChild(element);
+      this._widgets.set(line, parent);
     }
   };
 
   handleRenderWidget = cm => {
     // remove old widgets
     for (const widget of [
-      ...document.querySelectorAll(
-        '.Feeles-asset-opener-begin,.Feeles-asset-opener-end'
-      )
+      ...document.querySelectorAll('.Feeles-asset-opener')
     ]) {
       if (widget.parentNode) {
         widget.parentNode.removeChild(widget);

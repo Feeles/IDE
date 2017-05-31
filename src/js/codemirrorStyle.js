@@ -21,25 +21,27 @@ textarea {
 .CodeMirror-hints {
   z-index: 1000;
 }
-.Feeles-asset-opener-begin {
-  cursor: pointer;
-  margin: -20px 0 0 -5px;
+.Feeles-asset-opener {
+  width: 100%;
+  margin: -24px 0 0 -4px;
+  box-sizing: border-box;
+  padding: 0 20px;
   z-index: 2;
-  color: ${palette.alternateTextColor};
-  background-color: ${fade(palette.primary1Color, 1)};
-  padding: 2px 40px 2px 5px;
-  border-top-right-radius: 1rem;
-  white-space: pre;
-  box-shadow: ${paper.zDepthShadows[1]};
 }
-.Feeles-asset-opener-end {
+div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
+  opacity: 0.9;
+}
+.Feeles-asset-opener .Feeles-asset-opener-begin,
+.Feeles-asset-opener .Feeles-asset-opener-end {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
   cursor: pointer;
-  margin: -20px 0 0 -5px;
-  z-index: 2;
   color: ${palette.alternateTextColor};
   background-color: ${fade(palette.primary1Color, 1)};
-  padding: 2px 40px 2px 5px;
-  border-bottom-right-radius: 1rem;
+  padding: 6px 40px 6px 5px;
+  border-radius: 2px;
   white-space: pre;
   box-shadow: ${paper.zDepthShadows[1]};
 }
