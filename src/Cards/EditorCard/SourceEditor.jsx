@@ -529,7 +529,10 @@ function wait(millisec) {
 }
 
 function searchItemIndexes(text, keyword, limit = 1000) {
-  const regExp = new RegExp(String.raw`(const|let)\s${keyword}(\d+)\s`, 'g');
+  const regExp = new RegExp(
+    String.raw`(const|let|var)\s${keyword}(\d+)\s`,
+    'g'
+  );
   text = beautify(text);
 
   const indexes = [];
