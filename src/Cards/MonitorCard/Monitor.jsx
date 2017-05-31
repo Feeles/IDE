@@ -220,6 +220,14 @@ export default class Monitor extends PureComponent {
         const file = this.props.findFile(data.value);
         if (file) {
           reply({ value: file.blob });
+        } else if (data.value.indexOf('http') === 0) {
+          try {
+            const response = await fetch(data.value);
+            const blob = await response.blob();
+            reply({ value: blob });
+          } catch (e) {
+            reply({ error: e });
+          }
         } else {
           reply({ error: true });
         }
@@ -232,6 +240,14 @@ export default class Monitor extends PureComponent {
           const babelrc = this.props.getConfig('babelrc');
           const result = await file2.babel(babelrc);
           reply({ value: result.text });
+        } else if (data.value.indexOf('http') === 0) {
+          try {
+            const response = await fetch(data.value);
+            const text = await response.text();
+            reply({ value: text });
+          } catch (e) {
+            reply({ error: e });
+          }
         } else {
           reply({ error: true });
         }
@@ -242,6 +258,18 @@ export default class Monitor extends PureComponent {
           reply({
             value: await file4.toDataURL()
           });
+        } else if (data.value.indexOf('http') === 0) {
+          try {
+            const response = await fetch(data.value);
+            const blob = await response.blob();
+            const fileReader = new FileReader();
+            fileReader.onload = () => {
+              reply({ value: fileReader.result });
+            };
+            fileReader.readAsDataURL(blob);
+          } catch (e) {
+            reply({ error: e });
+          }
         } else {
           reply({ error: true });
         }
