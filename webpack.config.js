@@ -133,6 +133,13 @@ const config = {
       path: 'samples/mc',
       output: 'mc.json',
       ignore: /\.DS_Store$/
+    }),
+
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'dynamic.html',
+      template: 'samples/dynamic.hbs',
+      production: process.env.NODE_ENV === 'production'
     })
   ],
   devServer: {

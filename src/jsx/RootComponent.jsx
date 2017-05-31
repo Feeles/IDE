@@ -9,20 +9,25 @@ import { grey300, grey700 } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 
 import { readProject, findProject } from '../database/';
-import {
-  makeFromElement,
-  BinaryFile,
-  SourceFile,
-  validateType
-} from 'File/';
+import { makeFromElement, BinaryFile, SourceFile, validateType } from 'File/';
 import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
 
+const seedToFile = seed => {
+  if (validateType('blob', seed.type)) {
+    return new BinaryFile(seed);
+  } else {
+    return new SourceFile(seed);
+  }
+};
+
 class RootComponent extends Component {
   static propTypes = {
     rootElement: PropTypes.object.isRequired,
+    // Array of seed object
+    seeds: PropTypes.array,
     // A string as title of project opened
     title: PropTypes.string,
     // An URL string as JSON file provided
@@ -44,7 +49,7 @@ class RootComponent extends Component {
   };
 
   componentWillMount() {
-    const { title } = this.props;
+    const { title, seeds } = this.props;
 
     this.setLocalization(...(navigator.languages || [navigator.language]));
 
@@ -55,7 +60,13 @@ class RootComponent extends Component {
       });
     }
 
-    if (typeof title === 'string') {
+    if (Array.isArray(seeds)) {
+      const files = seeds;
+      this.setState({
+        last: 0,
+        files: seeds.map(seedToFile)
+      });
+    } else if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
     } else {
@@ -88,11 +99,8 @@ class RootComponent extends Component {
 
     query.each(value => {
       const seed = value.serializedFile;
-      if (validateType('blob', seed.type)) {
-        this.progress(new BinaryFile(seed));
-      } else {
-        this.progress(new SourceFile(seed));
-      }
+      const file = seedToFile(seed);
+      this.progress(file);
     });
   };
 
@@ -125,11 +133,8 @@ class RootComponent extends Component {
     });
 
     for (const seed of seeds) {
-      if (validateType('blob', seed.type)) {
-        await this.progress(new BinaryFile(seed));
-      } else {
-        await this.progress(new SourceFile(seed));
-      }
+      const file = seedToFile(seed);
+      await this.progress(file);
     }
   };
 
