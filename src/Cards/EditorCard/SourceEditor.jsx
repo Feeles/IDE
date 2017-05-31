@@ -228,7 +228,7 @@ export default class SourceEditor extends PureComponent {
 
     if (begin || end) {
       const element = document.createElement('span');
-      element.textContent = text.replace(/\t/g, '    ');
+      element.textContent = this.props.localization.editorCard.clickHere;
       element.classList.add(`Feeles-asset-opener-${begin ? 'begin' : 'end'}`);
       element.onclick = () => {
         this.setState({
@@ -237,16 +237,17 @@ export default class SourceEditor extends PureComponent {
           appendToHead: !!begin
         });
       };
-      this._widgets.set(line, element);
+      const parent = document.createElement('div');
+      parent.classList.add('Feeles-asset-opener');
+      parent.appendChild(element);
+      this._widgets.set(line, parent);
     }
   };
 
   handleRenderWidget = cm => {
     // remove old widgets
     for (const widget of [
-      ...document.querySelectorAll(
-        '.Feeles-asset-opener-begin,.Feeles-asset-opener-end'
-      )
+      ...document.querySelectorAll('.Feeles-asset-opener')
     ]) {
       if (widget.parentNode) {
         widget.parentNode.removeChild(widget);
@@ -363,7 +364,7 @@ export default class SourceEditor extends PureComponent {
     // 保存する前の状態に戻す
     const prevFile = prevFiles.get(this.props.file);
     if (prevFile) {
-      this.codemirror.setValue(prevFile.text);
+      this.setValue(prevFile.text);
       this.setLocation();
     }
   };
@@ -372,31 +373,38 @@ export default class SourceEditor extends PureComponent {
     this.setLocation();
   };
 
-  beautify = cm => {
+  beautify = () => {
     const { file } = this.props;
+    const prevValue = this.codemirror.getValue();
     if (file.is('javascript') || file.is('json')) {
-      cm.setValue(
-        beautify(cm.getValue(), {
+      this.setValue(
+        beautify(prevValue, {
           indent_with_tabs: true,
           end_with_newline: true
         })
       );
     } else if (file.is('html')) {
-      cm.setValue(
-        beautify.html(cm.getValue(), {
+      this.setValue(
+        beautify.html(prevValue, {
           indent_with_tabs: true,
           indent_inner_html: true,
           extra_liners: []
         })
       );
     } else if (file.is('css')) {
-      cm.setValue(
-        beautify.css(cm.getValue(), {
+      this.setValue(
+        beautify.css(prevValue, {
           indent_with_tabs: true
         })
       );
     }
   };
+
+  setValue(value) {
+    const { left, top } = this.codemirror.getScrollInfo();
+    this.codemirror.setValue(value);
+    this.codemirror.scrollTo(left, top);
+  }
 
   render() {
     const {
@@ -522,7 +530,10 @@ function wait(millisec) {
 }
 
 function searchItemIndexes(text, keyword, limit = 1000) {
-  const regExp = new RegExp(String.raw`(const|let)\s${keyword}(\d+)\s`, 'g');
+  const regExp = new RegExp(
+    String.raw`(const|let|var)\s${keyword}(\d+)\s`,
+    'g'
+  );
   text = beautify(text);
 
   const indexes = [];

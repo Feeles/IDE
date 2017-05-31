@@ -134,7 +134,8 @@ export default {
     notice: 'This tab has not saved. Are you sure?',
     insert: 'Insert',
     error: '😇💭 Oops, a little typo...',
-    restore: 'Restore before mistake'
+    restore: 'Restore before mistake',
+    clickHere: '⭐️ Click here'
   },
   envCard: {
     title: 'Parameters',
