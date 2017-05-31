@@ -20,6 +20,14 @@ import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
 
+const seedToFile = seed => {
+  if (validateType('blob', seed.type)) {
+    return new BinaryFile(seed);
+  } else {
+    return new SourceFile(seed);
+  }
+};
+
 class RootComponent extends Component {
   static propTypes = {
     rootElement: PropTypes.object.isRequired,
@@ -88,11 +96,8 @@ class RootComponent extends Component {
 
     query.each(value => {
       const seed = value.serializedFile;
-      if (validateType('blob', seed.type)) {
-        this.progress(new BinaryFile(seed));
-      } else {
-        this.progress(new SourceFile(seed));
-      }
+      const file = seedToFile(seed);
+      this.progress(file);
     });
   };
 
@@ -125,11 +130,8 @@ class RootComponent extends Component {
     });
 
     for (const seed of seeds) {
-      if (validateType('blob', seed.type)) {
-        await this.progress(new BinaryFile(seed));
-      } else {
-        await this.progress(new SourceFile(seed));
-      }
+      const file = seedToFile(seed);
+      await this.progress(file);
     }
   };
 
