@@ -363,7 +363,7 @@ export default class SourceEditor extends PureComponent {
     // 保存する前の状態に戻す
     const prevFile = prevFiles.get(this.props.file);
     if (prevFile) {
-      this.codemirror.setValue(prevFile.text);
+      this.setValue(prevFile.text);
       this.setLocation();
     }
   };
@@ -372,31 +372,38 @@ export default class SourceEditor extends PureComponent {
     this.setLocation();
   };
 
-  beautify = cm => {
+  beautify = () => {
     const { file } = this.props;
+    const prevValue = this.codemirror.getValue();
     if (file.is('javascript') || file.is('json')) {
-      cm.setValue(
-        beautify(cm.getValue(), {
+      this.setValue(
+        beautify(prevValue, {
           indent_with_tabs: true,
           end_with_newline: true
         })
       );
     } else if (file.is('html')) {
-      cm.setValue(
-        beautify.html(cm.getValue(), {
+      this.setValue(
+        beautify.html(prevValue, {
           indent_with_tabs: true,
           indent_inner_html: true,
           extra_liners: []
         })
       );
     } else if (file.is('css')) {
-      cm.setValue(
-        beautify.css(cm.getValue(), {
+      this.setValue(
+        beautify.css(prevValue, {
           indent_with_tabs: true
         })
       );
     }
   };
+
+  setValue(value) {
+    const { left, top } = this.codemirror.getScrollInfo();
+    this.codemirror.setValue(value);
+    this.codemirror.scrollTo(left, top);
+  }
 
   render() {
     const {
