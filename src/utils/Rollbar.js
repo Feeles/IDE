@@ -1,6 +1,6 @@
 import rollbar from 'rollbar';
 
-export default rollbar.init({
+export default new rollbar({
   enabled: !!process.env.ROLLBAR,
   accessToken: process.env.ROLLBAR,
   captureUncaught: true,
