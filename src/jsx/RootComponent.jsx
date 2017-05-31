@@ -31,6 +31,8 @@ const seedToFile = seed => {
 class RootComponent extends Component {
   static propTypes = {
     rootElement: PropTypes.object.isRequired,
+    // Array of seed object
+    seeds: PropTypes.array,
     // A string as title of project opened
     title: PropTypes.string,
     // An URL string as JSON file provided
@@ -52,7 +54,7 @@ class RootComponent extends Component {
   };
 
   componentWillMount() {
-    const { title } = this.props;
+    const { title, seeds } = this.props;
 
     this.setLocalization(...(navigator.languages || [navigator.language]));
 
@@ -63,7 +65,13 @@ class RootComponent extends Component {
       });
     }
 
-    if (typeof title === 'string') {
+    if (Array.isArray(seeds)) {
+      const files = seeds;
+      this.setState({
+        last: 0,
+        files: seeds.map(seedToFile)
+      });
+    } else if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
     } else {
