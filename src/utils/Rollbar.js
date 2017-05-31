@@ -1,4 +1,4 @@
-import rollbar from 'rollbar-browser';
+import rollbar from 'rollbar';
 
 export default rollbar.init({
   enabled: !!process.env.ROLLBAR,
