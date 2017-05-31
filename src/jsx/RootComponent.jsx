@@ -9,12 +9,7 @@ import { grey300, grey700 } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 
 import { readProject, findProject } from '../database/';
-import {
-  makeFromElement,
-  BinaryFile,
-  SourceFile,
-  validateType
-} from 'File/';
+import { makeFromElement, BinaryFile, SourceFile, validateType } from 'File/';
 import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
