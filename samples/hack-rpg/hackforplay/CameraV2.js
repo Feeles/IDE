@@ -132,7 +132,12 @@ var init = window.RPGMap.prototype.initialize;
 window.RPGMap.prototype.initialize = function(ux, uy, x, y) {
 	
 	init.apply(this, arguments);
-	
+
+	// FIX PATCH
+	x = x !== undefined ? x : 15;
+	y = y !== undefined ? y : 15;
+	// ---- tera
+
 	this._surface = new enchant.Surface(ux * x, uy * y);
 	
 };
