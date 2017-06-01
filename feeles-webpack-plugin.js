@@ -5,8 +5,7 @@ const path = require('path');
 const mime = require('mime');
 const unorm = require('unorm');
 
-const toPOSIX = str =>
-  (path.sep !== '/' ? str.split(path.sep).join(path.sep) : str);
+const toPOSIX = str => (path.sep !== '/' ? str.split(path.sep).join('/') : str);
 
 module.exports = class FeelesWebpackPlugin {
   constructor(params) {
