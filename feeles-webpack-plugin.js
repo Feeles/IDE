@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const fs = require('fs');
 const path = require('path');
@@ -10,11 +10,14 @@ const toPOSIX = str =>
 
 module.exports = class FeelesWebpackPlugin {
   constructor(params) {
-    params = Object.assign({
-      path: 'mount',
-      output: 'index.json',
-      ignore: /[]/
-    }, params);
+    params = Object.assign(
+      {
+        path: 'mount',
+        output: 'index.json',
+        ignore: /[]/
+      },
+      params
+    );
     this.fileTimestamps = new Map();
     this.filePromises = new Map();
     this.mountDir = path.resolve(params.path);
@@ -25,7 +28,7 @@ module.exports = class FeelesWebpackPlugin {
   apply(compiler) {
     // コンパイル開始
     compiler.plugin('compilation', (compilation, params) => {
-      const pushDirFiles = (dirPath) => {
+      const pushDirFiles = dirPath => {
         for (const name of fs.readdirSync(dirPath)) {
           const targetPath = path.resolve(dirPath, name);
           const stat = fs.statSync(targetPath);
@@ -73,7 +76,9 @@ module.exports = class FeelesWebpackPlugin {
 
       if (changed) {
         Promise.all(this.filePromises.values()).then(files => {
-          console.log(`📦 Feeles:${this.filePromises.size} files mounted\tin ${this.mountDir}`);
+          console.log(
+            `📦 Feeles:${this.filePromises.size} files mounted\tin ${this.mountDir}`
+          );
           const json = JSON.stringify(files);
           compilation.assets[this.output] = {
             source() {
@@ -113,4 +118,4 @@ module.exports = class FeelesWebpackPlugin {
       credits: []
     });
   }
-}
+};
