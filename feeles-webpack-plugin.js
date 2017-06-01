@@ -1,17 +1,22 @@
-'use strict'
+'use strict';
 
 const fs = require('fs');
 const path = require('path');
 const mime = require('mime');
 const unorm = require('unorm');
 
+const toPOSIX = str => (path.sep !== '/' ? str.split(path.sep).join('/') : str);
+
 module.exports = class FeelesWebpackPlugin {
   constructor(params) {
-    params = Object.assign({
-      path: 'mount',
-      output: 'index.json',
-      ignore: /[]/
-    }, params);
+    params = Object.assign(
+      {
+        path: 'mount',
+        output: 'index.json',
+        ignore: /[]/
+      },
+      params
+    );
     this.fileTimestamps = new Map();
     this.filePromises = new Map();
     this.mountDir = path.resolve(params.path);
@@ -22,7 +27,7 @@ module.exports = class FeelesWebpackPlugin {
   apply(compiler) {
     // コンパイル開始
     compiler.plugin('compilation', (compilation, params) => {
-      const pushDirFiles = (dirPath) => {
+      const pushDirFiles = dirPath => {
         for (const name of fs.readdirSync(dirPath)) {
           const targetPath = path.resolve(dirPath, name);
           const stat = fs.statSync(targetPath);
@@ -41,9 +46,11 @@ module.exports = class FeelesWebpackPlugin {
     compiler.plugin('emit', (compilation, callback) => {
       // すべてのファイルを JSON にシリアライズ
 
-      const dir = `${this.mountDir}/`;
       const targetFiles = compilation.fileDependencies.filter(filePath => {
-        return !filePath.indexOf(dir) && !this.ignore.test(filePath);
+        return (
+          filePath.startsWith(this.mountDir + path.sep) &&
+          !this.ignore.test(filePath)
+        );
       });
 
       let changed = false;
@@ -68,7 +75,9 @@ module.exports = class FeelesWebpackPlugin {
 
       if (changed) {
         Promise.all(this.filePromises.values()).then(files => {
-          console.log(`📦 Feeles:${this.filePromises.size} files mounted\tin ${this.mountDir}`);
+          console.log(
+            `📦 Feeles:${this.filePromises.size} files mounted\tin ${this.mountDir}`
+          );
           const json = JSON.stringify(files);
           compilation.assets[this.output] = {
             source() {
@@ -97,7 +106,7 @@ module.exports = class FeelesWebpackPlugin {
     filePath = unorm.nfc(filePath);
 
     return Promise.resolve({
-      name: path.relative(this.mountDir, filePath),
+      name: toPOSIX(path.relative(this.mountDir, filePath)),
       type: mime.lookup(filePath),
       lastModified: Date.parse(fs.statSync(filePath).mtime),
       composed: fs.readFileSync(filePath, 'base64'),
@@ -108,4 +117,4 @@ module.exports = class FeelesWebpackPlugin {
       credits: []
     });
   }
-}
+};
