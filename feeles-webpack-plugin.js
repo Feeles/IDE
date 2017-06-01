@@ -5,6 +5,9 @@ const path = require('path');
 const mime = require('mime');
 const unorm = require('unorm');
 
+const toPOSIX = str =>
+  (path.sep !== '/' ? str.split(path.sep).join(path.sep) : str);
+
 module.exports = class FeelesWebpackPlugin {
   constructor(params) {
     params = Object.assign({
@@ -41,9 +44,11 @@ module.exports = class FeelesWebpackPlugin {
     compiler.plugin('emit', (compilation, callback) => {
       // すべてのファイルを JSON にシリアライズ
 
-      const dir = `${this.mountDir}/`;
       const targetFiles = compilation.fileDependencies.filter(filePath => {
-        return !filePath.indexOf(dir) && !this.ignore.test(filePath);
+        return (
+          filePath.startsWith(this.mountDir + path.sep) &&
+          !this.ignore.test(filePath)
+        );
       });
 
       let changed = false;
@@ -97,7 +102,7 @@ module.exports = class FeelesWebpackPlugin {
     filePath = unorm.nfc(filePath);
 
     return Promise.resolve({
-      name: path.relative(this.mountDir, filePath),
+      name: toPOSIX(path.relative(this.mountDir, filePath)),
       type: mime.lookup(filePath),
       lastModified: Date.parse(fs.statSync(filePath).mtime),
       composed: fs.readFileSync(filePath, 'base64'),
