@@ -332,11 +332,11 @@ export default class Menu extends PureComponent {
           style={styles.toggle}
           labelStyle={styles.toggleLabel}
         />
-        {visits &&
+        {/* {visits &&
           <div style={styles.visits}>
             {visits.getAttribute('x-feeles-visits')}
             PV
-          </div>}
+          </div>} */}
         {this.props.showAll
           ? <IconButton
               tooltip={localization.menu.clone}
