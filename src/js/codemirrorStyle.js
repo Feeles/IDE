@@ -22,7 +22,7 @@ textarea {
   z-index: 1000;
 }
 .Feeles-asset-opener {
-  width: 100%;
+  width: 568px;
   margin: -24px 0 0 -4px;
   box-sizing: border-box;
   padding: 0 20px;
