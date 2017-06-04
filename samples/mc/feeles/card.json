@@ -24,7 +24,7 @@
         "visible": true,
         "order": 4,
         "init": {
-            "fileName": "main.js"
+            "fileName": "game.js"
         }
     },
     "ReadmeCard": {
@@ -47,7 +47,7 @@
         "order": 8
     },
     "HierarchyCard": {
-        "visible": true,
+        "visible": false,
         "order": 9
     },
     "CustomizeCard": {

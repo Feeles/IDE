@@ -1,25 +1,22 @@
-// ダイヤ (img src="")
-const btn = document.querySelector('.diamond');
-btn.onclick = async e => {
-	const response = await fetch('http://localhost:8080/give?player=@p&itemName=diamond&amount=1');
-	console.log(response);
+import 'hackforplay/core';
+
+// ゲームをつくる
+import gameFunc from './game';
+game.onload = () => {
+  gameFunc();
+  // Hack.player がないとき self.player を代わりに入れる
+  if (self.player && !Hack.player) {
+    Hack.player = self.player;
+  }
 };
 
-// 石（feeles.fetch => Data URL)
-(async() => {
+// マップをつくる
+import maps from './maps';
+Hack.onload = () => {
+  // Hack.maps を事前に作っておく
+  Hack.maps = Hack.maps || {};
+  maps();
+};
 
-	const response = await feeles.fetch('images/stone.png');
-	const blob = await response.blob();
-
-	const btn = document.querySelector('.stone');
-	const fileReader = new FileReader();
-	fileReader.onload = e => {
-		btn.src = fileReader.result;
-	};
-	fileReader.readAsDataURL(blob);
-	btn.onclick = async e => {
-		const response = await fetch('http://localhost:8080/give?player=@p&itemName=stone&amount=1');
-		console.log(response);
-	};
-
-})();
+// ゲームスタート
+Hack.start();
