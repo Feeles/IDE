@@ -1,0 +1,14 @@
+{
+    "indentUnit": 4,
+    "indentWithTabs": true,
+    "matchBrackets": true,
+    "autoCloseBrackets": true,
+    "keyMap": "sublime",
+    "scrollbarStyle": "simple",
+    "foldGutter": true,
+    "foldOptions": {
+        "widget": " 📦 ",
+        "minFoldSize": 1,
+        "scanUp": false
+    }
+}

@@ -1,8 +1,8 @@
 const a_href = false;
-const img_src = false;
+const img_src = true;
 const audio_src = false;
 const script_src = false;
-const xhr_url = false;
+const xhr_url = true;
 
 // Hyper link
 if (a_href) {
@@ -38,6 +38,9 @@ if (xhr_url) {
  * @param set: Function
  */
 function resourceLoader(node, src, set) {
+
+	if (src.startsWith('data:')) return set(src);
+	if (src.startsWith('blob:')) return set(src);
 
 	if (!isSameOrigin(src)) {
 		set(src);
@@ -159,7 +162,7 @@ const baseURL = (() => {
  * @return String
  */
 function getFeelesName(url) {
-	if (baseURL && typeof URL === 'function') {
+	if (baseURL) {
 		const fullPath = new URL(url, baseURL).href;
 		return fullPath.substr(baseURL.length);
 	}
@@ -183,3 +186,7 @@ function getOrigin(url) {
 	a.href = url;
 	return a.origin;
 }
+
+
+
+

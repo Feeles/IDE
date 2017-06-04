@@ -1,9 +1,0 @@
-[{
-    "label": "if",
-    "code": "if (true) {\n}\n",
-    "description": "( ) の中の条件が正しいときだけ、{ } の中に入ります"
-}, {
-    "label": "hello",
-    "code": "let item1 = 'hello';\ndocument.body.textContent = item1;\nconst item2 = 'hello';\ndocument.body.textContent = item2;\n",
-    "description": "画面に hello と表示します"
-}]
