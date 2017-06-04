@@ -7,3 +7,5 @@ install:
 script:
   - npm run production
 cache: yarn
+notifications:
+  slack: hackforplay:3ZXJmUzsYmjM86Ty3oXOvqpC
