@@ -14,7 +14,7 @@ function gameFunc() {
 		Hack.gameover(); // ゲームオーバー
 	};
 
-	/* \____ assets/ゲーム.json ____/ */
+	/* \____ assets/ゲーム.yml ____/ */
 
 }
 

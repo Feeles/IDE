@@ -8,13 +8,13 @@ import LinearProgress from 'material-ui/LinearProgress';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
-import HardwareKeyboardBackspace
-  from 'material-ui/svg-icons/hardware/keyboard-backspace';
+import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
+import jsyaml from 'js-yaml';
 
 import ga from 'utils/google-analytics';
 import Editor from './Editor';
@@ -168,7 +168,12 @@ export default class SourceEditor extends PureComponent {
       const file = this.props.findFile(this.state.assetFileName);
       if (file) {
         try {
-          return JSON.parse(file.text);
+          // TODO: File クラスで value を取り出せるよう抽象化
+          if (file.is('yaml')) {
+            return jsyaml.safeLoad(file.text);
+          } else {
+            return JSON.parse(file.text);
+          }
         } catch (e) {
           console.error(e);
         }
@@ -477,7 +482,7 @@ export default class SourceEditor extends PureComponent {
         <div style={styles.editorContainer}>
           <div style={styles.assetContainer}>
             <div style={styles.scroller}>
-              {this.assets.map((item, i) => (
+              {this.assets.map((item, i) =>
                 <AssetButton
                   {...item}
                   key={i}
@@ -485,7 +490,7 @@ export default class SourceEditor extends PureComponent {
                   findFile={this.props.findFile}
                   localization={this.props.localization}
                 />
-              ))}
+              )}
             </div>
             <Paper
               zDepth={2}

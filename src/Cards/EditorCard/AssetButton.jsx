@@ -66,6 +66,7 @@ export default class AssetButton extends PureComponent {
         overflow: 'hidden'
       },
       label: {
+        fontSize: 10,
         fontWeight: 600
       },
       description: {
