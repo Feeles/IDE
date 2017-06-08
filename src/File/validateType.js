@@ -9,6 +9,7 @@ const mimes = new Map([
   ['css', /^text\/css$/i],
   ['javascript', /^(text|application)\/javascript$/i],
   ['json', /^(text|application)\/json$/i],
+  ['yaml', /^text\/(x-)?yaml/],
   ['markdown', /^text\/(x-)?markdown$/i],
   ['glsl', /^text\/(x-)?glsl/i],
   ['image', /^image\/.*$/i],
@@ -23,6 +24,7 @@ const metas = [
     mimes.get('css'),
     mimes.get('javascript'),
     mimes.get('json'),
+    mimes.get('yaml'),
     mimes.get('markdown'),
     mimes.get('glsl')
   ]],

@@ -15,6 +15,7 @@ import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
+import jsyaml from 'js-yaml';
 
 import ga from 'utils/google-analytics';
 import Editor from './Editor';
@@ -168,7 +169,12 @@ export default class SourceEditor extends PureComponent {
       const file = this.props.findFile(this.state.assetFileName);
       if (file) {
         try {
-          return JSON.parse(file.text);
+          // TODO: File クラスで value を取り出せるよう抽象化
+          if (file.is('yaml')) {
+            return jsyaml.safeLoad(file.text);
+          } else {
+            return JSON.parse(file.text);
+          }
         } catch (e) {
           console.error(e);
         }
