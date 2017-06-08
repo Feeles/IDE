@@ -8,6 +8,7 @@ import 'codemirror/mode/meta';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/html-hint';
@@ -38,6 +39,15 @@ CodeMirror.modeInfo.push({
   name: 'glsl',
   mime: 'text/x-glsl',
   mode: 'glsl'
+});
+
+// YAML のエイリアス (.yml) (text/yaml)
+CodeMirror.modeInfo.push({
+  name: 'YAML',
+  mimes: ['text/yaml', 'text/x-yaml'],
+  mode: 'yaml',
+  ext: ['yml', 'yaml'],
+  alias: ['yml']
 });
 
 import './codemirror-hint-extension';
