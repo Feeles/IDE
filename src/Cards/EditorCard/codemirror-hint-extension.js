@@ -153,10 +153,14 @@ function getTokenInfo(instance) {
 // 同じ文字列または text に同じ文字列が入っているオブジェクトを排除する
 function uniquify(array) {
   const result = [];
-  for (const [index, current] of array.entries()) {
-    const text = current.text || current;
-    if (index === array.findIndex(item => text === item || text === item.text)) {
-      result[index] = current;
+  const textArray = array.map(
+    item => (typeof item.text === 'string' ? item.text : item)
+  );
+  for (const [index, text] of textArray.entries()) {
+    // indexOf で配列内の最初に出てくるインデックスを取得
+    // index と一致するなら配列内の最初の要素, 条件に合うものだけ push すればユニークになる
+    if (index === textArray.indexOf(text)) {
+      result.push(array[index]);
     }
   }
   return result;
