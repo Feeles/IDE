@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import EventEmitter from 'eventemitter2';
 import Snackbar from 'material-ui/Snackbar';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -79,7 +80,6 @@ export default class Main extends Component {
 
     tabs: [],
 
-    port: null,
     coreString: null,
 
     project: this.props.project,
@@ -92,7 +92,9 @@ export default class Main extends Component {
     cards: cardStateDefault,
     cardIcons: null,
     // Advanced Mode
-    showAll: false
+    showAll: false,
+    // card =(emit)=> globalEvent =(on)=> card
+    globalEvent: new EventEmitter({ wildcard: true })
   };
 
   get rootWidth() {
@@ -521,7 +523,6 @@ export default class Main extends Component {
           setOAuthId={this.setOAuthId}
           showAll={this.state.showAll}
           toggleShowAll={this.toggleShowAll}
-          port={this.state.port}
           cardIcons={this.state.cardIcons}
         />
         <CardContainer
@@ -533,8 +534,6 @@ export default class Main extends Component {
           closeTab={this.closeTab}
           setLocation={this.setLocation}
           openFileDialog={this.openFileDialog}
-          port={this.state.port}
-          setPort={port => this.setState({ port })}
           reboot={this.state.reboot}
           href={this.state.href}
           coreString={this.state.coreString}
@@ -547,6 +546,7 @@ export default class Main extends Component {
           deleteFile={this.deleteFile}
           oAuthId={this.state.oAuthId}
           ref={this.handleContainerRef}
+          globalEvent={this.state.globalEvent}
         />
         <Footer
           deployURL={this.props.deployURL}
@@ -558,6 +558,7 @@ export default class Main extends Component {
           localization={this.props.localization}
           getConfig={this.getConfig}
           setConfig={this.setConfig}
+          globalEvent={this.state.globalEvent}
         />
         <style>{codemirrorStyle(this.context.muiTheme)}</style>
         {userStyle ? <style>{userStyle.text}</style> : null}

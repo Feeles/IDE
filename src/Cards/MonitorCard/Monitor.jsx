@@ -61,7 +61,6 @@ export default class Monitor extends PureComponent {
     href: PropTypes.string.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    setPort: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -180,7 +179,7 @@ export default class Monitor extends PureComponent {
   }
 
   async startProcess() {
-    const { setPort, getConfig } = this.props;
+    const { getConfig } = this.props;
 
     const babelrc = getConfig('babelrc');
     const env = composeEnv(getConfig('env'));
@@ -199,32 +198,27 @@ export default class Monitor extends PureComponent {
 
     await tryLoading();
 
-    const channel = new MessageChannel();
-    channel.port1.addEventListener('message', event => {
+    const { port1, port2 } = new MessageChannel();
+    port1.addEventListener('message', event => {
       const reply = params => {
         params = { id: event.data.id, ...params };
-        channel.port1.postMessage(params);
+        port1.postMessage(params);
       };
 
       const { type, data } = event;
       const name = data.query ? `message.${data.query}` : 'message';
       this.props.globalEvent.emit(name, { type, data, reply });
     });
-    this.handlePort(channel.port1);
+    port1.start();
+    this.setState({ port: port1 });
 
     this.iframe.contentWindow.postMessage(
       {
         env
       },
       '*',
-      [channel.port2]
+      [port2]
     );
-  }
-
-  handlePort(port) {
-    this.props.setPort(port);
-    port.start();
-    this.setState({ port });
   }
 
   handlePostMessage = value => {
@@ -247,7 +241,6 @@ export default class Monitor extends PureComponent {
   };
 
   handleFetch = async ({ data, reply }) => {
-    console.log('message.fetch');
     const file = this.props.findFile(data.value);
     if (file) {
       reply({ value: file.blob });

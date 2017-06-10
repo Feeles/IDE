@@ -42,7 +42,6 @@ export default class MonitorCard extends PureComponent {
     isFullScreen: PropTypes.bool.isRequired,
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
-    setPort: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -189,7 +188,6 @@ export default class MonitorCard extends PureComponent {
               href={this.props.href}
               togglePopout={this.props.togglePopout}
               toggleFullScreen={this.props.toggleFullScreen}
-              setPort={this.props.setPort}
               localization={this.props.localization}
               getConfig={this.props.getConfig}
               addFile={this.props.addFile}

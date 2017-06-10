@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import EventEmitter from 'eventemitter2';
 
 import MediaCard from './MediaCard/';
 import MonitorCard from './MonitorCard/';
@@ -33,8 +32,6 @@ export default class CardContainer extends PureComponent {
     closeTab: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    port: PropTypes.object,
-    setPort: PropTypes.func.isRequired,
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
     coreString: PropTypes.string,
@@ -43,12 +40,11 @@ export default class CardContainer extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
-    oAuthId: PropTypes.string
+    oAuthId: PropTypes.string,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
-    // card =(emit)=> globalEvent =(on)=> card
-    globalEvent: new EventEmitter({ wildcard: true }),
     // smooth scroll のターゲット
     scrollTarget: null
   };
@@ -134,11 +130,10 @@ export default class CardContainer extends PureComponent {
       addFile: this.props.addFile,
       putFile: this.props.putFile,
       showAll: this.props.showAll,
-      globalEvent: this.state.globalEvent
+      globalEvent: this.props.globalEvent
     };
     const cardProps = {
       ...commonProps,
-      port: this.props.port,
       selectTab: this.props.selectTab,
       setLocation: this.props.setLocation,
       isPopout: this.props.monitorType === MonitorTypes.Popout,
@@ -158,7 +153,6 @@ export default class CardContainer extends PureComponent {
       reboot: this.props.reboot,
       saveAs: this.props.saveAs,
       isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
-      setPort: this.props.setPort,
       coreString: this.props.coreString
     };
 

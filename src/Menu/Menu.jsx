@@ -18,8 +18,7 @@ import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
-import NotificationSyncDisabled
-  from 'material-ui/svg-icons/notification/sync-disabled';
+import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import TwitterIcon from 'utils/TwitterIcon';
@@ -122,8 +121,7 @@ export default class Menu extends PureComponent {
     oAuthId: PropTypes.string,
     setOAuthId: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
-    toggleShowAll: PropTypes.func.isRequired,
-    port: PropTypes.object
+    toggleShowAll: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -171,8 +169,7 @@ export default class Menu extends PureComponent {
     const result = await this.props.openFileDialog(MetaDialog, {
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
-      findFile: this.props.findFile,
-      port: this.props.port
+      findFile: this.props.findFile
     });
     if (!result) return;
 
@@ -456,13 +453,13 @@ export default class Menu extends PureComponent {
           }}
           style={styles.button}
         >
-          {acceptedLanguages.map(lang => (
+          {acceptedLanguages.map(lang =>
             <MenuItem
               key={lang.accept[0]}
               primaryText={lang.native}
               onTouchTap={() => setLocalization(lang.accept[0])}
             />
-          ))}
+          )}
         </IconMenu>
         <Drawer
           open={this.state.open}
@@ -480,7 +477,7 @@ export default class Menu extends PureComponent {
                   name,
                   ...card
                 }))
-                .map(item => (
+                .map(item =>
                   <MenuItem
                     key={item.name}
                     primaryText={
@@ -496,7 +493,7 @@ export default class Menu extends PureComponent {
                       this.handleToggleDrawer();
                     }}
                   />
-                ))
+                )
             : null}
           <MenuItem
             primaryText={localization.menu.version}
