@@ -85,7 +85,7 @@ export default class ReadmeCard extends PureComponent {
       // feeles.openReamde()
       const selectedFile = this.props.findFile(value);
       if (!selectedFile) {
-        throw `Not Found Error: feeles.openReamde("${value}")`;
+        throw new Error(`Not Found Error: feeles.openReamde("${value}")`);
       }
       this.setState({ selectedFile });
       this.props.updateCard('ReadmeCard', { visible: true });
