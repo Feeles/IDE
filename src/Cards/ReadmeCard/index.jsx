@@ -61,15 +61,6 @@ export default class ReadmeCard extends PureComponent {
     }
   }
 
-  handleMessage = event => {
-    if (!event.data || !event.data.query) return;
-    const { query, value } = event.data;
-
-    // Completes
-    if (query === 'complete') {
-    }
-  };
-
   handleComplete = event => {
     const { value } = event.data;
     if (!shallowEqual(value, this.state.completes)) {
@@ -89,7 +80,7 @@ export default class ReadmeCard extends PureComponent {
       }
       this.setState({ selectedFile });
       this.props.updateCard('ReadmeCard', { visible: true });
-    } else if (query === 'readme') {
+    } else {
       // feeles.closeReadme()
       this.props.updateCard('ReadmeCard', { visible: false });
     }
