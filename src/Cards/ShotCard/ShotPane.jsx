@@ -67,9 +67,9 @@ export default class ShotPane extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
-    postMessage: PropTypes.func.isRequired,
     file: PropTypes.object,
-    completes: PropTypes.array
+    completes: PropTypes.array,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -139,8 +139,12 @@ export default class ShotPane extends PureComponent {
       : this.state.file.text;
     const name = this.state.file.name;
     const file = SourceFile.shot(text, name);
-
-    this.props.postMessage(file.serialize());
+    // frame に shot をおくる
+    const request = {
+      query: 'shot',
+      value: file.serialize()
+    };
+    this.props.globalEvent.emit('postMessage', request);
   }
 
   handleViewportChange = cm => {
