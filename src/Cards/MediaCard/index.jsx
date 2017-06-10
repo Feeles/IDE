@@ -33,7 +33,7 @@ export default class MediaCard extends PureComponent {
       // feeles.openMedia()
       this.setState({ playerState: value });
       this.props.updateCard('MediaCard', { visible: true });
-    } else if (query === 'media') {
+    } else {
       // feeles.closeMedia()
       this.props.updateCard('MediaCard', { visible: false });
     }

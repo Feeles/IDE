@@ -108,7 +108,7 @@ export default class EditorCard extends PureComponent {
       const getFile = () => this.props.findFile(value);
       this.props.selectTab(new Tab({ getFile }));
       this.props.updateCard('EditorCard', { visible: true });
-    } else if (query === 'editor') {
+    } else {
       // feeles.closeEditor()
       this.props.updateCard('EditorCard', { visible: false });
     }
