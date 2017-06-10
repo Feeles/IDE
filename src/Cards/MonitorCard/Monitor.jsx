@@ -13,6 +13,7 @@ import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
 import ResolveProgress from './ResolveProgress';
 import ga from 'utils/google-analytics';
+import uniqueId from 'utils/uniqueId';
 
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
@@ -104,6 +105,7 @@ export default class Monitor extends PureComponent {
 
     const { globalEvent } = this.props;
     const on = globalEvent.on.bind(globalEvent);
+    on('postMessage', this.handlePostMessage);
     on('message.fetch', this.handleFetch);
     on('message.resolve', this.handleResolve);
     on('message.fetchDataURL', this.handleFetchDataURL);
@@ -224,6 +226,25 @@ export default class Monitor extends PureComponent {
     port.start();
     this.setState({ port });
   }
+
+  handlePostMessage = value => {
+    // emitAsync('postMessage', value)
+    const { port } = this.state;
+    if (!port) return;
+    // reply を receive するための id
+    value = { id: uniqueId(), ...value };
+    return new Promise((resolve, reject) => {
+      // catch reply message (once)
+      const task = event => {
+        if (!event.data || event.data.id !== value.id) return;
+        if (port) port.removeEventListener('message', task);
+        resolve(event.data);
+      };
+      port.addEventListener('message', task);
+      // post message to frame
+      port.postMessage(value);
+    });
+  };
 
   handleFetch = async ({ data, reply }) => {
     console.log('message.fetch');
