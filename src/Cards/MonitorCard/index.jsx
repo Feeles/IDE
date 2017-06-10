@@ -51,7 +51,8 @@ export default class MonitorCard extends PureComponent {
     findFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     coreString: PropTypes.string,
-    saveAs: PropTypes.func.isRequired
+    saveAs: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -209,6 +210,7 @@ export default class MonitorCard extends PureComponent {
               setLocation={this.props.setLocation}
               frameWidth={this.state.frameWidth}
               frameHeight={this.state.frameHeight}
+              globalEvent={this.props.globalEvent}
             />
           </div>
         </CardMedia>

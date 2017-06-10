@@ -70,7 +70,8 @@ export default class Monitor extends PureComponent {
     saveAs: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
     frameWidth: PropTypes.number.isRequired,
-    frameHeight: PropTypes.number.isRequired
+    frameHeight: PropTypes.number.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -196,6 +197,11 @@ export default class Monitor extends PureComponent {
         channel.port1.postMessage(params);
       };
       this.handleMessage(event, reply);
+
+      // emit globalEvent
+      const { type, data } = event;
+      const name = data.query ? `message.${data.query}` : 'message';
+      this.props.globalEvent.emit(name, { type, data, reply });
     });
     this.handlePort(channel.port1);
 

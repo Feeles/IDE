@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import EventEmitter from 'eventemitter2';
 
 import MediaCard from './MediaCard/';
 import MonitorCard from './MonitorCard/';
@@ -46,6 +47,8 @@ export default class CardContainer extends PureComponent {
   };
 
   state = {
+    // card =(emit)=> globalEvent =(on)=> card
+    globalEvent: new EventEmitter({ wildcard: true }),
     // smooth scroll のターゲット
     scrollTarget: null
   };
@@ -130,7 +133,8 @@ export default class CardContainer extends PureComponent {
       findFile: this.props.findFile,
       addFile: this.props.addFile,
       putFile: this.props.putFile,
-      showAll: this.props.showAll
+      showAll: this.props.showAll,
+      globalEvent: this.state.globalEvent
     };
     const cardProps = {
       ...commonProps,
