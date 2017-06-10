@@ -58,7 +58,6 @@ export default class MonitorCard extends PureComponent {
   };
 
   state = {
-    port: null,
     frameWidth: 300,
     frameHeight: 150,
     processing: false
@@ -97,30 +96,17 @@ export default class MonitorCard extends PureComponent {
     );
   }
 
-  handleScreenShot = () => {
-    const { port, processing } = this.state;
-    if (!port || processing) return;
-
+  handleScreenShot = async () => {
+    if (this.state.processing) return;
+    this.setState({ processing: true });
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
       query: 'capture',
-      id: uniqueId(),
       type: 'image/jpeg'
     };
-    const task = async event => {
-      if (event.data && event.data.id === request.id) {
-        port.removeEventListener('message', task);
-        this.setState({ processing: false });
-      }
-    };
-    port.addEventListener('message', task);
-    port.postMessage(request);
-    this.setState({ processing: true });
-  };
-
-  setPort = port => {
-    this.setState({ port });
-    this.props.setPort(port);
+    await this.props.globalEvent.emitAsync('postMessage', request);
+    // capture がおわったら, processing state を元に戻す
+    this.setState({ processing: false });
   };
 
   render() {
@@ -203,7 +189,7 @@ export default class MonitorCard extends PureComponent {
               href={this.props.href}
               togglePopout={this.props.togglePopout}
               toggleFullScreen={this.props.toggleFullScreen}
-              setPort={this.setPort}
+              setPort={this.props.setPort}
               localization={this.props.localization}
               getConfig={this.props.getConfig}
               addFile={this.props.addFile}
