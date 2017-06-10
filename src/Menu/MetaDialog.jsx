@@ -13,7 +13,6 @@ import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import transitions from 'material-ui/styles/transitions';
 
 import organization from 'organization';
-import ScreenShotCard from '../Cards/ScreenShotCard';
 
 /**
  * OGPの設定を行い, デプロイが必要な場合 true で resolve する
@@ -138,7 +137,7 @@ class EditOGP extends PureComponent {
     const ogp = this.props.getConfig('ogp');
     let screenshots = [];
     try {
-      const file = this.props.findFile(ScreenShotCard.fileName);
+      const file = this.props.findFile('feeles/capture.json');
       screenshots = Object.values(JSON.parse(file.text));
     } catch (e) {}
     const images = []
