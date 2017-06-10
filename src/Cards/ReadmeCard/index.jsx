@@ -20,10 +20,10 @@ export default class ReadmeCard extends PureComponent {
     addFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
-    port: PropTypes.object,
     setLocation: PropTypes.func.isRequired,
     updateCard: PropTypes.func.isRequired,
-    cards: PropTypes.object.isRequired
+    cards: PropTypes.object.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -36,6 +36,10 @@ export default class ReadmeCard extends PureComponent {
   }
 
   componentWillMount() {
+    const { globalEvent } = this.props;
+    globalEvent.on('message.complete', this.handleComplete);
+    globalEvent.on('message.readme', this.handleReadme);
+
     try {
       const { init } = this.props.cards.ReadmeCard;
       if (init && init.fileName) {
@@ -55,15 +59,6 @@ export default class ReadmeCard extends PureComponent {
         });
       }
     }
-
-    if (this.props.port !== nextProps.port) {
-      if (this.props.port) {
-        this.props.port.removeEventListener('message', this.handleMessage);
-      }
-      if (nextProps.port) {
-        nextProps.port.addEventListener('message', this.handleMessage);
-      }
-    }
   }
 
   handleMessage = event => {
@@ -72,13 +67,21 @@ export default class ReadmeCard extends PureComponent {
 
     // Completes
     if (query === 'complete') {
-      if (!shallowEqual(value, this.state.completes)) {
-        this.setState({
-          completes: value
-        });
-      }
     }
-    if (query === 'readme' && value) {
+  };
+
+  handleComplete = event => {
+    const { value } = event.data;
+    if (!shallowEqual(value, this.state.completes)) {
+      this.setState({
+        completes: value
+      });
+    }
+  };
+
+  handleReadme = event => {
+    const { value } = event.data;
+    if (value) {
       // feeles.openReamde()
       const selectedFile = this.props.findFile(value);
       if (!selectedFile) {
@@ -90,21 +93,6 @@ export default class ReadmeCard extends PureComponent {
       // feeles.closeReadme()
       this.props.updateCard('ReadmeCard', { visible: false });
     }
-  };
-
-  handleShot = text => {
-    if (this.props.port) {
-      const babelrc = this.props.getConfig('babelrc');
-      return Promise.resolve()
-        .then(() => SourceFile.shot(text).babel(babelrc))
-        .then(file => {
-          this.props.port.postMessage({
-            query: 'shot',
-            value: file.serialize()
-          });
-        });
-    }
-    return Promise.reject();
   };
 
   handleSelect = (event, index, value) => {
@@ -153,9 +141,9 @@ export default class ReadmeCard extends PureComponent {
         underlineStyle={styles.underline}
         onChange={this.handleSelect}
       >
-        {markdowns.map(file => (
+        {markdowns.map(file =>
           <MenuItem key={file.key} value={file.key} primaryText={file.header} />
-        ))}
+        )}
       </DropDownMenu>
     ];
   }
@@ -190,7 +178,6 @@ export default class ReadmeCard extends PureComponent {
             getConfig={this.props.getConfig}
             localization={this.props.localization}
             completes={this.state.completes}
-            onShot={this.handleShot}
             setLocation={this.props.setLocation}
           />
         </CardText>
