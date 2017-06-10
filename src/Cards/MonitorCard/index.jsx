@@ -10,8 +10,7 @@ import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
-import HardwareDesktopWindows
-  from 'material-ui/svg-icons/hardware/desktop-windows';
+import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from './Monitor';
@@ -38,20 +37,19 @@ export default class MonitorCard extends PureComponent {
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    port: PropTypes.object,
     files: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
     isFullScreen: PropTypes.bool.isRequired,
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
-    setPort: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     coreString: PropTypes.string,
-    saveAs: PropTypes.func.isRequired
+    saveAs: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -97,25 +95,17 @@ export default class MonitorCard extends PureComponent {
     );
   }
 
-  handleScreenShot = () => {
-    const { port } = this.props;
-    if (!port || this.state.processing) return;
-
+  handleScreenShot = async () => {
+    if (this.state.processing) return;
+    this.setState({ processing: true });
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
       query: 'capture',
-      id: uniqueId(),
       type: 'image/jpeg'
     };
-    const task = async event => {
-      if (event.data && event.data.id === request.id) {
-        port.removeEventListener('message', task);
-        this.setState({ processing: false });
-      }
-    };
-    port.addEventListener('message', task);
-    port.postMessage(request);
-    this.setState({ processing: true });
+    await this.props.globalEvent.emitAsync('postMessage', request);
+    // capture がおわったら, processing state を元に戻す
+    this.setState({ processing: false });
   };
 
   render() {
@@ -198,7 +188,6 @@ export default class MonitorCard extends PureComponent {
               href={this.props.href}
               togglePopout={this.props.togglePopout}
               toggleFullScreen={this.props.toggleFullScreen}
-              setPort={this.props.setPort}
               localization={this.props.localization}
               getConfig={this.props.getConfig}
               addFile={this.props.addFile}
@@ -209,6 +198,7 @@ export default class MonitorCard extends PureComponent {
               setLocation={this.props.setLocation}
               frameWidth={this.state.frameWidth}
               frameHeight={this.state.frameHeight}
+              globalEvent={this.props.globalEvent}
             />
           </div>
         </CardMedia>

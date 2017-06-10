@@ -178,7 +178,6 @@ const mdStyle = (props, state, context) => {
 export default class Readme extends PureComponent {
   static propTypes = {
     file: PropTypes.object.isRequired,
-    onShot: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,

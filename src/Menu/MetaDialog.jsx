@@ -7,15 +7,12 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import TextField from 'material-ui/TextField';
 import { Card, CardMedia, CardHeader, CardActions } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
-import NavigationArrowForward
-  from 'material-ui/svg-icons/navigation/arrow-forward';
+import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forward';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import transitions from 'material-ui/styles/transitions';
 
 import organization from 'organization';
-import ScreenShotCard from '../Cards/ScreenShotCard';
-import uniqueId from 'utils/uniqueId';
 
 /**
  * OGPの設定を行い, デプロイが必要な場合 true で resolve する
@@ -29,7 +26,7 @@ export default class MetaDialog extends PureComponent {
     findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
-    port: PropTypes.object
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -69,7 +66,7 @@ export default class MetaDialog extends PureComponent {
       findFile: this.props.findFile,
       localization: this.props.localization,
       back: this.back,
-      port: this.props.port
+      globalEvent: this.props.globalEvent
     };
     switch (this.state.stepIndex) {
       case 0:
@@ -124,7 +121,7 @@ class EditOGP extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
     back: PropTypes.func.isRequired,
-    port: PropTypes.object
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -140,7 +137,7 @@ class EditOGP extends PureComponent {
     const ogp = this.props.getConfig('ogp');
     let screenshots = [];
     try {
-      const file = this.props.findFile(ScreenShotCard.fileName);
+      const file = this.props.findFile('feeles/capture.json');
       screenshots = Object.values(JSON.parse(file.text));
     } catch (e) {}
     const images = []
@@ -212,21 +209,14 @@ class EditOGP extends PureComponent {
     }
   };
 
-  handleCapture = () => {
-    const { port } = this.props;
+  handleScreenShot = () => {
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
       query: 'capture',
-      id: uniqueId(),
       type: 'image/jpeg'
     };
-    const task = event => {
-      if (event.data && event.data.id === request.id) {
-        port.removeEventListener('message', task);
-      }
-    };
-    port.addEventListener('message', task);
-    port.postMessage(request);
+    this.props.globalEvent.emit('postMessage', request);
+    // ダイアログを閉じる
     this.props.back();
   };
 
@@ -305,7 +295,7 @@ class EditOGP extends PureComponent {
               : <div style={styles.loading}>
                   <FloatingActionButton
                     style={styles.progress}
-                    onTouchTap={this.handleCapture}
+                    onTouchTap={this.handleScreenShot}
                   >
                     <ImagePhotoCamera />
                   </FloatingActionButton>

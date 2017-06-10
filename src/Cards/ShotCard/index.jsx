@@ -15,7 +15,7 @@ export default class ShotCard extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
-    port: PropTypes.object
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -27,45 +27,30 @@ export default class ShotCard extends PureComponent {
     return <ContentReply />;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.port !== nextProps.port) {
-      this.handlePort(this.props.port, nextProps.port);
-    }
+  componentWillMount() {
+    const { globalEvent } = this.props;
+    globalEvent.on('message.code', this.handleCode);
+    globalEvent.on('message.complete', this.handleComplete);
   }
 
-  handlePort = (prevPort, nextPort) => {
-    if (prevPort) {
-      prevPort.removeEventListener('message', this.handleMessage);
-    }
-    if (nextPort) {
-      nextPort.addEventListener('message', this.handleMessage);
-    }
-  };
-
-  postMessage = value => {
-    if (this.props.port) {
-      this.props.port.postMessage({ query: 'shot', value });
-    }
-  };
-
-  handleMessage = event => {
-    const { query, value } = event.data || {};
-    if (!query) return;
-
-    if (query === 'code' && value) {
+  handleCode = event => {
+    const { value } = event.data;
+    if (value) {
       // feeles.openCode()
       const file = this.props.findFile(value);
       this.setState({ file });
       this.props.updateCard('ShotCard', { visible: true });
-    } else if (query === 'code') {
+    } else {
       // feeles.closeCode()
       this.props.updateCard('ShotCard', { visible: false });
     }
-    if (query === 'complete') {
-      // feeles.exports
-      if (!shallowEqual(value, this.state.completes)) {
-        this.setState({ completes: value });
-      }
+  };
+
+  handleComplete = event => {
+    const { value } = event.data;
+    // feeles.exports
+    if (!shallowEqual(value, this.state.completes)) {
+      this.setState({ completes: value });
     }
   };
 
@@ -82,7 +67,7 @@ export default class ShotCard extends PureComponent {
               findFile={this.props.findFile}
               localization={this.props.localization}
               getConfig={this.props.getConfig}
-              postMessage={this.postMessage}
+              globalEvent={this.props.globalEvent}
             />
           : null}
       </Card>

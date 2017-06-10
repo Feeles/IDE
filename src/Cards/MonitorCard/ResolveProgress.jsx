@@ -7,7 +7,7 @@ const Timeout = 2000;
 
 export default class ResolveProgress extends PureComponent {
   static propTypes = {
-    port: PropTypes.object
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -18,28 +18,20 @@ export default class ResolveProgress extends PureComponent {
     visible: false
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.port !== nextProps.port) {
-      if (this.props.port) {
-        this.props.port.removeEventListener('message', this.handleMessage);
-      }
-      if (nextProps.port) {
-        nextProps.port.addEventListener('message', this.handleMessage);
-      }
-    }
+  componentWillMount() {
+    const { globalEvent } = this.props;
+    globalEvent.on('message.resolve', this.handleResolve);
   }
 
   _timer = null;
-  handleMessage = event => {
-    if (event.data && event.data.query === 'resolve') {
-      if (!this.state.visible) {
-        this.setState({ visible: true });
-      }
-      clearInterval(this._timer);
-      this._timer = setTimeout(() => {
-        this.setState({ visible: false });
-      }, Timeout);
+  handleResolve = ({ data }) => {
+    if (!this.state.visible) {
+      this.setState({ visible: true });
     }
+    clearInterval(this._timer);
+    this._timer = setTimeout(() => {
+      this.setState({ visible: false });
+    }, Timeout);
   };
 
   render() {

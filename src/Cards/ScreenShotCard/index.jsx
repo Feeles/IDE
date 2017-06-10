@@ -22,10 +22,10 @@ export default class ScreenShotCard extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
-    port: PropTypes.object,
     addFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired
+    updateCard: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -54,19 +54,15 @@ export default class ScreenShotCard extends PureComponent {
   }
 
   async componentWillMount() {
+    const { globalEvent } = this.props;
+    globalEvent.on('message.capture', this.handleCapture);
+
     this.setState({
       cache: await this.getCache()
     });
   }
 
   async componentWillReceiveProps(nextProps) {
-    if (this.props.port !== nextProps.port) {
-      nextProps.port.addEventListener('message', event => {
-        if (event.data && event.data.query === 'capture') {
-          this.handleCapture(event);
-        }
-      });
-    }
     if (this.props.files !== nextProps.files) {
       this.setState({
         cache: await this.getCache()

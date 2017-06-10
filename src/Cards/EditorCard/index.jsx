@@ -50,11 +50,11 @@ export default class EditorCard extends PureComponent {
     findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
-    port: PropTypes.object,
     reboot: PropTypes.bool.isRequired,
     scrollToCard: PropTypes.func.isRequired,
     cards: PropTypes.object.isRequired,
-    updateCard: PropTypes.func.isRequired
+    updateCard: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -69,6 +69,11 @@ export default class EditorCard extends PureComponent {
     muiTheme: PropTypes.object.isRequired
   };
 
+  componentWillMount() {
+    const { globalEvent } = this.props;
+    globalEvent.on('message.editor', this.handleEditor);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (this.props.tabs !== nextProps.tabs) {
       const prevSelected = this.props.tabs.find(t => t.isSelected);
@@ -77,9 +82,6 @@ export default class EditorCard extends PureComponent {
         // タブの選択が変化したら EditorCard にスクロールする
         this.props.scrollToCard('EditorCard');
       }
-    }
-    if (this.props.port !== nextProps.port) {
-      this.handlePort(this.props.port, nextProps.port);
     }
   }
 
@@ -99,21 +101,9 @@ export default class EditorCard extends PureComponent {
     this.props.scrollToCard('MonitorCard');
   };
 
-  handlePort = (prevPort, nextPort) => {
-    if (prevPort) {
-      prevPort.removeEventListener('message', this.handleMessage);
-    }
-    if (nextPort) {
-      nextPort.addEventListener('message', this.handleMessage);
-    }
-  };
-
-  // TODO: この辺の処理は共通化した方がよさそう
-  handleMessage = event => {
-    const { query, value } = event.data || {};
-    if (!query) return;
-
-    if (query === 'editor' && value) {
+  handleEditor = event => {
+    const { value } = event.data;
+    if (value) {
       // feeles.openEditor()
       const getFile = () => this.props.findFile(value);
       this.props.selectTab(new Tab({ getFile }));
@@ -203,7 +193,6 @@ export default class EditorCard extends PureComponent {
       findFile,
       getConfig,
       setConfig,
-      port,
       reboot,
       cardPropsBag
     } = this.props;
@@ -255,7 +244,6 @@ export default class EditorCard extends PureComponent {
             getConfig={getConfig}
             findFile={findFile}
             localization={localization}
-            port={port}
             reboot={reboot}
             openFileDialog={openFileDialog}
             putFile={putFile}

@@ -8,8 +8,8 @@ import ReactPlayer from 'react-player';
 export default class MediaCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
-    port: PropTypes.object,
-    updateCard: PropTypes.func.isRequired
+    updateCard: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -22,22 +22,14 @@ export default class MediaCard extends PureComponent {
     return <AvMusicVideo />;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.port !== nextProps.port) {
-      if (this.props.port) {
-        this.props.port.removeEventListener('message', this.handleMessage);
-      }
-      if (nextProps.port) {
-        nextProps.port.addEventListener('message', this.handleMessage);
-      }
-    }
+  componentWillMount() {
+    const { globalEvent } = this.props;
+    globalEvent.on('message.media', this.handleMedia);
   }
 
-  handleMessage = event => {
-    if (!event.data || !event.data.query) return;
-    const { query, value } = event.data;
-
-    if (query === 'media' && value) {
+  handleMedia = event => {
+    const { value } = event.data;
+    if (value) {
       // feeles.openMedia()
       this.setState({ playerState: value });
       this.props.updateCard('MediaCard', { visible: true });

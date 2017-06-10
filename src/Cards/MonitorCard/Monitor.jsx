@@ -13,6 +13,7 @@ import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
 import ResolveProgress from './ResolveProgress';
 import ga from 'utils/google-analytics';
+import uniqueId from 'utils/uniqueId';
 
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
@@ -60,7 +61,6 @@ export default class Monitor extends PureComponent {
     href: PropTypes.string.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    setPort: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -70,7 +70,8 @@ export default class Monitor extends PureComponent {
     saveAs: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
     frameWidth: PropTypes.number.isRequired,
-    frameHeight: PropTypes.number.isRequired
+    frameHeight: PropTypes.number.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -100,6 +101,19 @@ export default class Monitor extends PureComponent {
       // default href で起動
       this.props.setLocation();
     }
+
+    const { globalEvent } = this.props;
+    const on = globalEvent.on.bind(globalEvent);
+    on('postMessage', this.handlePostMessage);
+    on('message.fetch', this.handleFetch);
+    on('message.resolve', this.handleResolve);
+    on('message.fetchDataURL', this.handleFetchDataURL);
+    on('message.saveAs', this.handleSaveAs);
+    on('message.reload', this.handleReload);
+    on('message.replace', this.handleReplace);
+    on('message.error', this.handleError);
+    on('message.ipcRenderer.*', this.handleIpcRenderer);
+    on('message.api.SpeechRecognition', this.handleSpeechRecognition);
   }
 
   componentDidUpdate(prevProps, prevStates) {
@@ -165,7 +179,7 @@ export default class Monitor extends PureComponent {
   }
 
   async startProcess() {
-    const { setPort, getConfig } = this.props;
+    const { getConfig } = this.props;
 
     const babelrc = getConfig('babelrc');
     const env = composeEnv(getConfig('env'));
@@ -184,190 +198,206 @@ export default class Monitor extends PureComponent {
 
     await tryLoading();
 
-    const channel = new MessageChannel();
-    channel.port1.addEventListener('message', event => {
+    const { port1, port2 } = new MessageChannel();
+    port1.addEventListener('message', event => {
       const reply = params => {
-        params = Object.assign(
-          {
-            id: event.data.id
-          },
-          params
-        );
-        channel.port1.postMessage(params);
+        params = { id: event.data.id, ...params };
+        port1.postMessage(params);
       };
-      this.handleMessage(event, reply);
+
+      const { type, data } = event;
+      const name = data.query ? `message.${data.query}` : 'message';
+      this.props.globalEvent.emit(name, { type, data, reply });
     });
-    this.handlePort(channel.port1);
+    port1.start();
+    this.setState({ port: port1 });
 
     this.iframe.contentWindow.postMessage(
       {
         env
       },
       '*',
-      [channel.port2]
+      [port2]
     );
   }
 
-  handlePort(port) {
-    this.props.setPort(port);
-    port.start();
-    this.setState({ port });
-  }
+  handlePostMessage = value => {
+    // emitAsync('postMessage', value)
+    const { port } = this.state;
+    if (!port) return;
+    // reply を receive するための id
+    value = { id: uniqueId(), ...value };
+    return new Promise((resolve, reject) => {
+      // catch reply message (once)
+      const task = event => {
+        if (!event.data || event.data.id !== value.id) return;
+        if (port) port.removeEventListener('message', task);
+        resolve(event.data);
+      };
+      port.addEventListener('message', task);
+      // post message to frame
+      port.postMessage(value);
+    });
+  };
 
-  handleMessage = async ({ data }, reply) => {
-    switch (data.query) {
-      case 'fetch':
-        const file = this.props.findFile(data.value);
-        if (file) {
-          reply({ value: file.blob });
-        } else if (data.value.indexOf('http') === 0) {
-          try {
-            const response = await fetch(data.value);
-            const blob = await response.blob();
-            reply({ value: blob });
-          } catch (e) {
-            reply({ error: e });
-          }
-        } else {
-          reply({ error: true });
-        }
-        break;
-      case 'resolve':
-        const file2 =
-          this.props.findFile(`${data.value}.js`) ||
-          this.props.findFile(data.value);
-        if (file2) {
-          const babelrc = this.props.getConfig('babelrc');
-          const result = await file2.babel(babelrc);
-          reply({ value: result.text });
-        } else if (data.value.indexOf('http') === 0) {
-          try {
-            const response = await fetch(data.value);
-            const text = await response.text();
-            reply({ value: text });
-          } catch (e) {
-            reply({ error: e });
-          }
-        } else {
-          reply({ error: true });
-        }
-        break;
-      case 'fetchDataURL':
-        const file4 = this.props.findFile(data.value);
-        if (file4) {
-          reply({
-            value: await file4.toDataURL()
-          });
-        } else if (data.value.indexOf('http') === 0) {
-          try {
-            const response = await fetch(data.value);
-            const blob = await response.blob();
-            const fileReader = new FileReader();
-            fileReader.onload = () => {
-              reply({ value: fileReader.result });
-            };
-            fileReader.readAsDataURL(blob);
-          } catch (e) {
-            reply({ error: e });
-          }
-        } else {
-          reply({ error: true });
-        }
-        break;
-      case 'saveAs':
-        const [blob, name] = data.value;
-        const file3 = await makeFromFile(blob);
-        const exist = this.props.findFile(name);
-        if (exist) {
-          const { key } = exist;
-          await this.props.putFile(exist, file3.set({ key, name }));
-        } else {
-          await this.props.addFile(file3.set({ name }));
-        }
-        reply();
-        break;
-      case 'reload':
-        this.props.setLocation();
-        break;
-      case 'replace':
-        location.hash = data.value.replace(/^\/*/, '/');
-        break;
-      case 'error':
-        if (!this.state.error) {
-          this.setState({
-            error: new Error(data.value)
-          });
-        }
-        break;
-      case 'ipcRenderer.sendToHost':
-        if (window.ipcRenderer) {
-          window.ipcRenderer.sendToHost(...Object.values(data.value));
-        } else {
-          console.warn('window.ipcRenderer is not defined');
-        }
-        break;
-      case 'api.SpeechRecognition':
-        const recognition = new SpeechRecognition();
-        for (const prop of [
-          'lang',
-          'continuous',
-          'interimResults',
-          'maxAlternatives',
-          'serviceURI'
-        ]) {
-          if (data.value[prop] !== undefined) {
-            recognition[prop] = data.value[prop];
-          }
-        }
-        if (Array.isArray(data.value.grammars)) {
-          recognition.grammars = new webkitSpeechGrammarList();
-          for (const { src, weight } of data.value.grammars) {
-            recognition.grammars.addFromString(src, weight);
-          }
-        }
-        recognition.onresult = event => {
-          const results = [];
-          for (const items of event.results) {
-            const result = [];
-            result.isFinal = items.isFinal;
-            for (const { confidence, transcript } of items) {
-              result.push({ confidence, transcript });
-            }
-            results.push(result);
-          }
-          reply({
-            type: 'result',
-            event: {
-              results
-            }
-          });
-        };
-        recognition.onerror = event => {
-          reply({
-            type: 'error',
-            event: {
-              error: event.error
-            }
-          });
-        };
-        [
-          'audioend',
-          'audiostart',
-          'end',
-          'nomatch',
-          'soundend',
-          'soundstart',
-          'speechend',
-          'speechstart',
-          'start'
-        ].forEach(type => {
-          recognition[`on${type}`] = event => {
-            reply({ type });
-          };
-        });
-        recognition.start();
-        break;
+  handleFetch = async ({ data, reply }) => {
+    const file = this.props.findFile(data.value);
+    if (file) {
+      reply({ value: file.blob });
+    } else if (data.value.indexOf('http') === 0) {
+      try {
+        const response = await fetch(data.value);
+        const blob = await response.blob();
+        reply({ value: blob });
+      } catch (e) {
+        reply({ error: e });
+      }
+    } else {
+      reply({ error: true });
     }
+  };
+
+  handleResolve = async ({ data, reply }) => {
+    const file =
+      this.props.findFile(`${data.value}.js`) ||
+      this.props.findFile(data.value);
+    if (file) {
+      const babelrc = this.props.getConfig('babelrc');
+      const result = await file.babel(babelrc);
+      reply({ value: result.text });
+    } else if (data.value.indexOf('http') === 0) {
+      try {
+        const response = await fetch(data.value);
+        const text = await response.text();
+        reply({ value: text });
+      } catch (e) {
+        reply({ error: e });
+      }
+    } else {
+      reply({ error: true });
+    }
+  };
+
+  handleFetchDataURL = async ({ data, reply }) => {
+    const file = this.props.findFile(data.value);
+    if (file) {
+      reply({
+        value: await file.toDataURL()
+      });
+    } else if (data.value.indexOf('http') === 0) {
+      try {
+        const response = await fetch(data.value);
+        const blob = await response.blob();
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+          reply({ value: fileReader.result });
+        };
+        fileReader.readAsDataURL(blob);
+      } catch (e) {
+        reply({ error: e });
+      }
+    } else {
+      reply({ error: true });
+    }
+  };
+
+  handleSaveAs = async ({ data, reply }) => {
+    const [blob, name] = data.value;
+    const file3 = await makeFromFile(blob);
+    const exist = this.props.findFile(name);
+    if (exist) {
+      const { key } = exist;
+      await this.props.putFile(exist, file3.set({ key, name }));
+    } else {
+      await this.props.addFile(file3.set({ name }));
+    }
+    reply();
+  };
+
+  handleReload = () => {
+    this.props.setLocation();
+  };
+
+  handleReplace = ({ data }) => {
+    location.hash = data.value.replace(/^\/*/, '/');
+  };
+
+  handleError = ({ data }) => {
+    if (!this.state.error) {
+      this.setState({
+        error: new Error(data.value)
+      });
+    }
+  };
+
+  handleIpcRenderer = ({ data }) => {
+    if (window.ipcRenderer) {
+      window.ipcRenderer.sendToHost(...Object.values(data.value));
+    } else {
+      console.warn('window.ipcRenderer is not defined');
+    }
+  };
+
+  handleSpeechRecognition = ({ data }) => {
+    const recognition = new SpeechRecognition();
+    for (const prop of [
+      'lang',
+      'continuous',
+      'interimResults',
+      'maxAlternatives',
+      'serviceURI'
+    ]) {
+      if (data.value[prop] !== undefined) {
+        recognition[prop] = data.value[prop];
+      }
+    }
+    if (Array.isArray(data.value.grammars)) {
+      recognition.grammars = new webkitSpeechGrammarList();
+      for (const { src, weight } of data.value.grammars) {
+        recognition.grammars.addFromString(src, weight);
+      }
+    }
+    recognition.onresult = event => {
+      const results = [];
+      for (const items of event.results) {
+        const result = [];
+        result.isFinal = items.isFinal;
+        for (const { confidence, transcript } of items) {
+          result.push({ confidence, transcript });
+        }
+        results.push(result);
+      }
+      reply({
+        type: 'result',
+        event: {
+          results
+        }
+      });
+    };
+    recognition.onerror = event => {
+      reply({
+        type: 'error',
+        event: {
+          error: event.error
+        }
+      });
+    };
+    [
+      'audioend',
+      'audiostart',
+      'end',
+      'nomatch',
+      'soundend',
+      'soundstart',
+      'speechend',
+      'speechstart',
+      'start'
+    ].forEach(type => {
+      recognition[`on${type}`] = event => {
+        reply({ type });
+      };
+    });
+    recognition.start();
   };
 
   handlePopoutOpen = (...args) => {
@@ -474,7 +504,7 @@ export default class Monitor extends PureComponent {
           width={this.props.frameWidth}
           height={this.props.frameHeight}
         />
-        <ResolveProgress port={this.state.port} />
+        <ResolveProgress globalEvent={this.props.globalEvent} />
       </div>
     );
   }
