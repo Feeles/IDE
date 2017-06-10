@@ -10,8 +10,7 @@ import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
-import HardwareDesktopWindows
-  from 'material-ui/svg-icons/hardware/desktop-windows';
+import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from './Monitor';
@@ -38,7 +37,6 @@ export default class MonitorCard extends PureComponent {
     isPopout: PropTypes.bool.isRequired,
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
-    port: PropTypes.object,
     files: PropTypes.array.isRequired,
     cards: PropTypes.object.isRequired,
     isFullScreen: PropTypes.bool.isRequired,
@@ -60,6 +58,7 @@ export default class MonitorCard extends PureComponent {
   };
 
   state = {
+    port: null,
     frameWidth: 300,
     frameHeight: 150,
     processing: false
@@ -99,8 +98,8 @@ export default class MonitorCard extends PureComponent {
   }
 
   handleScreenShot = () => {
-    const { port } = this.props;
-    if (!port || this.state.processing) return;
+    const { port, processing } = this.state;
+    if (!port || processing) return;
 
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
@@ -117,6 +116,11 @@ export default class MonitorCard extends PureComponent {
     port.addEventListener('message', task);
     port.postMessage(request);
     this.setState({ processing: true });
+  };
+
+  setPort = port => {
+    this.setState({ port });
+    this.props.setPort(port);
   };
 
   render() {
@@ -199,7 +203,7 @@ export default class MonitorCard extends PureComponent {
               href={this.props.href}
               togglePopout={this.props.togglePopout}
               toggleFullScreen={this.props.toggleFullScreen}
-              setPort={this.props.setPort}
+              setPort={this.setPort}
               localization={this.props.localization}
               getConfig={this.props.getConfig}
               addFile={this.props.addFile}
