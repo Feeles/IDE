@@ -473,7 +473,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   loadDropdownConfig = () => {
-    const items = [].concat(
+    const items = [{}].concat(
       this.props
         .findFile(item => item.name.endsWith('.dropdown.yml'), true)
         .map(item => item.text)
