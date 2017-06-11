@@ -145,11 +145,10 @@ export async function putFile(projectId, serializedFile) {
 
 export async function deleteFile(projectId, ...fileNames) {
   // Update project's timestamp
-  await personalDB.projects
-    .where(projectId)
-    .modify({
-      updated: Date.now(),
-    });
+  const project = await personalDB.projects.get(projectId);
+  if (!project) {
+    project.modify({ updated: Date.now() });
+  }
   // Delete files included fileNames
   await personalDB.files
     .where('[projectId+fileName]').anyOfIgnoreCase([projectId, fileNames])
