@@ -150,7 +150,9 @@ export async function deleteFile(projectId, ...fileNames) {
     project.modify({ updated: Date.now() });
   }
   // Delete files included fileNames
+  const keys = fileNames.map(fn => [projectId + '', fn]);
   await personalDB.files
-    .where('[projectId+fileName]').anyOfIgnoreCase([projectId, fileNames])
+    .where('[projectId+fileName]')
+    .anyOfIgnoreCase(...keys)
     .delete();
 }
