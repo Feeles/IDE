@@ -15,6 +15,22 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import jsyaml from 'js-yaml';
+const tryParseYAML = (text, defaultValue = {}) => {
+  try {
+    return jsyaml.safeLoad(text);
+  } catch (e) {
+    console.error(e);
+    return defaultValue;
+  }
+};
+const tryParseJSON = (text, defaultValue = {}) => {
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(e);
+    return defaultValue;
+  }
+};
 
 import ga from 'utils/google-analytics';
 import Editor from './Editor';
@@ -121,6 +137,7 @@ export default class SourceEditor extends PureComponent {
     hasChanged: false,
     loading: false,
     snippets: [],
+    dropdowns: {},
 
     assetFileName: null,
     assetLineNumber: 0,
@@ -134,12 +151,16 @@ export default class SourceEditor extends PureComponent {
     this.setState({
       snippets: this.props.getConfig('snippets')(this.props.file)
     });
+    this.loadDropdownConfig();
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       snippets: nextProps.getConfig('snippets')(nextProps.file)
     });
+    if (this.props.files !== nextProps.files) {
+      this.loadDropdownConfig();
+    }
   }
 
   componentDidMount() {
@@ -167,15 +188,11 @@ export default class SourceEditor extends PureComponent {
     if (this.state.assetFileName) {
       const file = this.props.findFile(this.state.assetFileName);
       if (file) {
-        try {
-          // TODO: File クラスで value を取り出せるよう抽象化
-          if (file.is('yaml')) {
-            return jsyaml.safeLoad(file.text);
-          } else {
-            return JSON.parse(file.text);
-          }
-        } catch (e) {
-          console.error(e);
+        // TODO: File クラスで value を取り出せるよう抽象化
+        if (file.is('yaml')) {
+          return tryParseYAML(file.text, []);
+        } else {
+          return tryParseJSON(file.text, []);
         }
       }
     }
@@ -376,6 +393,22 @@ export default class SourceEditor extends PureComponent {
 
   handleRun = () => {
     this.setLocation();
+  };
+
+  loadDropdownConfig = () => {
+    const items = [].concat(
+      this.props
+        .findFile(item => item.name.endsWith('.dropdown.yml'), true)
+        .map(item => item.text)
+        .map(text => tryParseYAML(text, {})),
+      this.props
+        .findFile(item => item.name.endsWith('.dropdown.json'), true)
+        .map(item => item.text)
+        .map(text => tryParseJSON(text, {}))
+    );
+    this.setState({
+      dropdowns: Object.assign.apply(null, items)
+    });
   };
 
   beautify = () => {
