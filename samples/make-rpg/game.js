@@ -9,10 +9,10 @@ function gameFunc() {
 	player.locate(3, 5); // はじめの位置
 	player.hp = 3; // 体力
 	player.atk = 1; // こうげき力
-	player.onたおれたとき = () => {
+	player.on(/*▼ イベント*/('たおれたとき'), () => {
 		player.destroy(); // プレイヤーを消す
 		Hack.gameover(); // ゲームオーバー
-	};
+	});
 
 	/* \____ assets/ゲーム.yml ____/ */
 
