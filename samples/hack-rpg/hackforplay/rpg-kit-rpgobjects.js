@@ -837,7 +837,7 @@ Hack.assets.girl = function() {
 	this.width = 48;
 	this.height = 48;
 	this.offset = { x: -8, y: -18 };
-	var _0 = 0,
+	var _0 = 6,
 		_1 = _0 + 1,
 		_2 = _0 + 2;
 	this.setFrameD9(BehaviorTypes.Idle, [_1]);
