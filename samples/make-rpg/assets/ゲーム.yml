@@ -98,7 +98,7 @@
         if (event.hit !== item1) {
           Hack.Attack(event.mapX, event.mapY, item1.atk);
         }
-      };
+      });
     });
   image: trimmed/dragon.gif
   description: やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！
@@ -196,9 +196,9 @@
       item2.locate(7, 5, 'map1');
       item2.velocityY = -1;
       item2.collisionFlag = false;
-      item2.on( /*▼ イベント*/ ('ふれはじめた = (event) => {
+      item2.on( /*▼ イベント*/ ('ふれはじめた'), (event) => {
         Hack.Attack.call(item2, event.mapX, event.mapY, 1);
-      };
+      });
       item2.destroy(20);
       item1.destroy();
     });
@@ -256,11 +256,11 @@
       const item2 = new RPGObject();
       item2.mod(mod);
       item2.locate(item1.mapX, item1.mapY);
-      item2.on( /*▼ イベント*/ ('のった = () => {
+      item2.on( /*▼ イベント*/ ('のった'), () => {
         item2.velocity(0, -8);
         item2.force(0, 0.8);
         item2.destroy(16);
-      };
+      });
       item1.destroy();
     });
   image: trimmed/map-20-0.png
@@ -286,7 +286,7 @@
     item1.locate(7, 5, 'map1');
     item1.on( /*▼ イベント*/ ('とまるとき'), () => {
       item1.walk();
-    };
+    });
     item1.on( /*▼ イベント*/ ('ぶつかった'), () => {
       item1.turn();
       item1.walk();
@@ -479,7 +479,7 @@
         item2.layer = RPGMap.Layer.Under;
         item2.on( /*▼ イベント*/ ('のった'), () => {
           item2.destroy();
-        };
+        });
       }
     });
   image: trimmed/girl.png
