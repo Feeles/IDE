@@ -45,6 +45,48 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
   white-space: pre;
   box-shadow: ${paper.zDepthShadows[1]};
 }
+.Feeles-dropdown {
+  transform: translateY(-20px);
+  height: 0;
+  white-space: pre;
+  z-index: 3;
+}
+.Feeles-dropdown .Feeles-dropdown-shadow {
+  transform: translateX(-2px);
+  display: inline-block;
+  border-radius: 2px;
+  box-shadow: ${paper.zDepthShadows[1]};
+  height: 20px; /* TODO: Flexible font-size */
+}
+.Feeles-dropdown .Feeles-dropdown-button {
+  display: inline-block;
+  padding: 2px 12px 2px 2px;
+  border-radius: 2px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.Feeles-dropdown .Feeles-dropdown-blank {
+  display: inline-block;
+  transform: scaleY(0);
+}
+.Feeles-dropdown .Feeles-dropdown-label {
+  display: inline-block;
+  position: relative;
+  color: ${palette.alternateTextColor};
+  z-index: 1;
+  pointer-events: none;
+}
+.Feeles-dropdown .Feeles-dropdown-value {
+  display: inline-block;
+  border-radius: 2px;
+  margin: -1px -2px -1px -2px;
+  padding: 1px 0px 1px 4px;
+  color: transparent;
+  box-shadow: 0 0 0 100em ${palette.primary1Color};
+}
+div.CodeMirror.CodeMirror-focused .Feeles-dropdown-button {
+  opacity: 0.9;
+}
 .cm-s-default .cm-property {
   color: ${blueA700};
 }

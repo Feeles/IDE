@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
+import CodeMirror from 'codemirror';
 import FlatButton from 'material-ui/FlatButton';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
@@ -260,17 +261,93 @@ export default class SourceEditor extends PureComponent {
         });
       };
       const parent = document.createElement('div');
-      parent.classList.add('Feeles-asset-opener');
+      parent.classList.add('Feeles-widget', 'Feeles-asset-opener');
       parent.appendChild(element);
       this._widgets.set(line, parent);
+    }
+
+    // Syntax: /*▼ スキン */ (_kきし)
+    const dropdown = /^([^\/]*)\/\*(▼[^\*]*)(\*\/\s?\()([^\)]*)\)/.exec(text);
+    if (dropdown) {
+      const [_all, _prefix, _label, _right, _value] = dropdown;
+      const prefix = document.createElement('span');
+      prefix.textContent = _prefix.replace(/\t/g, '    ');
+      prefix.classList.add('Feeles-dropdown-blank');
+      const left = document.createElement('span');
+      left.textContent = '/*';
+      left.classList.add('Feeles-dropdown-blank');
+      const label = document.createElement('span');
+      label.textContent = _label;
+      label.classList.add('Feeles-dropdown-label');
+      const right = document.createElement('span');
+      right.textContent = _right;
+      right.classList.add('Feeles-dropdown-blank');
+      const value = document.createElement('span');
+      value.textContent = _value;
+      value.classList.add('Feeles-dropdown-value');
+      value.addEventListener('click', this.handleValueClick);
+      const button = document.createElement('span');
+      button.appendChild(left); // '/*'
+      button.appendChild(label); // '▼ スキン '
+      button.appendChild(right); // '*/ ('
+      button.appendChild(value); // _kきし
+      button.classList.add('Feeles-dropdown-button');
+      button.setAttribute('data-label', _label.substr(1).trim());
+      button.setAttribute('data-value', _value);
+      button.setAttribute('data-from-line', line);
+      const allOfLeft = _prefix + '/*' + _label + _right; // value より左の全て
+      button.setAttribute('data-from-ch', allOfLeft.length);
+      button.addEventListener('click', this.handleDropdownClick, true);
+      const shadow = document.createElement('span');
+      shadow.appendChild(button);
+      shadow.classList.add('Feeles-dropdown-shadow');
+      const parent = document.createElement('div');
+      parent.classList.add('Feeles-widget', 'Feeles-dropdown');
+      parent.appendChild(prefix);
+      parent.appendChild(shadow);
+      this._widgets.set(line, parent);
+    }
+  };
+
+  handleDropdownClick = event => {
+    // Open dropdown menu
+    const label = event.target.getAttribute('data-label');
+    const value = event.target.getAttribute('data-value');
+    const line = event.target.getAttribute('data-from-line') >> 0;
+    const ch = event.target.getAttribute('data-from-ch') >> 0;
+    const list = this.state.dropdowns[label];
+    if (label && list && value && line && ch && this.codemirror) {
+      const hint = {
+        from: { line, ch },
+        to: { line, ch: ch + value.length },
+        list: list.map(item => ({
+          text: item.body,
+          displayText: `${item.body} ${item.label}`
+        }))
+      };
+      this.codemirror.showHint({
+        completeSingle: false,
+        hint: () => hint
+      });
+      this.codemirror.focus();
+      // reload when completed
+      CodeMirror.on(hint, 'pick', this.handleRun);
+    }
+  };
+
+  handleValueClick = event => {
+    // Put cursor into editor
+    if (this.codemirror) {
+      const locate = { left: event.x, top: event.y };
+      const pos = this.codemirror.coordsChar(locate);
+      this.codemirror.focus();
+      this.codemirror.setCursor(pos);
     }
   };
 
   handleRenderWidget = cm => {
     // remove old widgets
-    for (const widget of [
-      ...document.querySelectorAll('.Feeles-asset-opener')
-    ]) {
+    for (const widget of [...document.querySelectorAll('.Feeles-widget')]) {
       if (widget.parentNode) {
         widget.parentNode.removeChild(widget);
       }
