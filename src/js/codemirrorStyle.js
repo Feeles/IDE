@@ -1,8 +1,7 @@
 import { grey100, grey300, blueA700 } from 'material-ui/styles/colors';
-import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
 
-export default ({ palette, paper }) =>
+export default ({ palette, paper, transitions }) =>
   `
 textarea {
   font-size: 16px !important; /* In smartphone, will not scale automatically */

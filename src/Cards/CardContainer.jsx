@@ -49,6 +49,10 @@ export default class CardContainer extends PureComponent {
     scrollTarget: null
   };
 
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
+  };
+
   scrollToCard = name => {
     // そのカードにスクロールする
     const scrollTarget = document.getElementById(name);
@@ -65,6 +69,9 @@ export default class CardContainer extends PureComponent {
   scroll() {
     // Scroll into view (shallow) element
     const { scrollTarget } = this.state;
+    // Is enable transitions?
+    const { transitions } = this.context.muiTheme;
+
     if (scrollTarget) {
       const rect = scrollTarget.getBoundingClientRect();
       const offset = 16;
@@ -75,7 +82,7 @@ export default class CardContainer extends PureComponent {
         difference = rect.right - window.innerWidth;
       }
 
-      if (Math.abs(difference) > 1) {
+      if (transitions.create() !== 'none' && Math.abs(difference) > 1) {
         const sign = Math.sign(difference);
         // smooth scroll
         scrollTarget.parentNode.scrollLeft += difference / 5 + sign * 5;
@@ -83,6 +90,7 @@ export default class CardContainer extends PureComponent {
           this.scroll();
         });
       } else {
+        scrollTarget.parentNode.scrollLeft += difference;
         this.setState({ scrollTarget: null });
       }
     }

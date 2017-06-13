@@ -4,7 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
-import transitions from 'material-ui/styles/transitions';
 import { red50, red500 } from 'material-ui/styles/colors';
 
 import { SourceFile } from 'File/';
@@ -13,7 +12,7 @@ import Editor from './Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
-  const { palette, spacing, prepareStyles } = context.muiTheme;
+  const { palette, spacing, transitions, prepareStyles } = context.muiTheme;
   const { shooting, height } = state;
 
   return {

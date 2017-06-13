@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Popout from 'jsx/ReactPopout';
 import IconButton from 'material-ui/IconButton';
 import NavigationRefreh from 'material-ui/svg-icons/navigation/refresh';
-import transitions from 'material-ui/styles/transitions';
 
 import { BinaryFile, SourceFile, makeFromFile } from 'File/';
 import composeEnv from 'File/composeEnv';
@@ -24,7 +23,7 @@ const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 
 const getStyle = (props, context, state) => {
-  const { palette, appBar } = context.muiTheme;
+  const { palette, appBar, transitions } = context.muiTheme;
   const fullScreen = (yes, no) => (props.isFullScreen ? yes : no);
 
   return {

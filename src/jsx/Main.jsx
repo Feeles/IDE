@@ -3,6 +3,23 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import EventEmitter from 'eventemitter2';
 import Snackbar from 'material-ui/Snackbar';
+import jsyaml from 'js-yaml';
+const tryParseYAML = (text, defaultValue = {}) => {
+  try {
+    return jsyaml.safeLoad(text);
+  } catch (e) {
+    console.error(e);
+    return defaultValue;
+  }
+};
+const tryParseJSON = (text, defaultValue = {}) => {
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    console.error(e);
+    return defaultValue;
+  }
+};
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -34,10 +51,11 @@ import Footer from './Footer';
 const DOWNLOAD_ENABLED =
   typeof document.createElement('a').download === 'string';
 
-const getStyle = (props, state, palette) => {
+const getStyle = (props, state, context) => {
   const shrinkLeft =
     parseInt(props.rootStyle.width, 10) - state.monitorWidth < 200;
   const shrinkRight = state.monitorWidth < 100;
+  const { palette } = context.muiTheme;
 
   return {
     shrinkLeft,
@@ -120,9 +138,9 @@ export default class Main extends Component {
   };
 
   componentWillMount() {
-    this.props.setMuiTheme({
-      palette: this.getConfig('palette')
-    });
+    const feelesrc = this.loadConfig('feelesrc');
+    this.props.setMuiTheme(feelesrc);
+
     const card = this.findFile('feeles/card.json');
     if (card) {
       this.setState({ cards: card.json });
@@ -298,9 +316,9 @@ export default class Main extends Component {
 
     // Update Mui theme
     if (key === 'palette') {
-      this.props.setMuiTheme({
-        palette: config
-      });
+      const feelesrc = this.loadConfig('feelesrc');
+      feelesrc.palette = config;
+      this.props.setMuiTheme(feelesrc);
     }
 
     const indent = '    ';
@@ -325,6 +343,20 @@ export default class Main extends Component {
         this._configs.delete(key);
       }
     }
+  };
+
+  loadConfig = ext => {
+    const json = `.${ext}.json`;
+    const yaml = `.${ext}.yml`;
+    const values = [].concat(
+      this.findFile(item => item.name.endsWith(json), true).map(file =>
+        tryParseJSON(file.text, {})
+      ),
+      this.findFile(item => item.name.endsWith(yaml), true).map(file =>
+        tryParseYAML(file.text, {})
+      )
+    );
+    return Object.assign({}, ...values);
   };
 
   selectTab = tab =>
@@ -489,7 +521,7 @@ export default class Main extends Component {
 
   render() {
     const { connectDropTarget, localization } = this.props;
-    const styles = getStyle(this.props, this.state, this.getConfig('palette'));
+    const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
       files: this.state.files,

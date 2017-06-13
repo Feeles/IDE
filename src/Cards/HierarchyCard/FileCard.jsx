@@ -4,7 +4,6 @@ import { DragSource } from 'react-dnd';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import { transparent } from 'material-ui/styles/colors';
-import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
 import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
@@ -15,7 +14,7 @@ import DragTypes from 'utils/dragTypes';
 
 const getStyles = (props, context) => {
   const { file, selectedFile, tabbedFiles, isDragging } = props;
-  const { palette, spacing } = context.muiTheme;
+  const { palette, spacing, transitions } = context.muiTheme;
 
   const isSelected = selectedFile === file;
   const backgroundColor = tabbedFiles.includes(file)

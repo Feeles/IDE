@@ -21,6 +21,10 @@ export default class Footer extends PureComponent {
     rewrite: false
   };
 
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
+  };
+
   get shareURL() {
     if (!this.props.deployURL) {
       return location.href;
@@ -130,6 +134,7 @@ export default class Footer extends PureComponent {
     if (this.state.rewrite) {
       return null;
     }
+    const { transitions } = this.context.muiTheme;
 
     const styles = {
       root: {

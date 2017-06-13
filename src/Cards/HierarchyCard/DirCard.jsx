@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import { transparent } from 'material-ui/styles/colors';
-import transitions from 'material-ui/styles/transitions';
 import { NativeTypes } from 'react-dnd-html5-backend';
 
 import FileCard from './FileCard';
@@ -12,7 +11,7 @@ import DragTypes from 'utils/dragTypes';
 const getStyles = (props, context) => {
   const { isRoot, isDirOpened, isOver, dragSource } = props;
   const cd = props.dir;
-  const { palette, spacing } = context.muiTheme;
+  const { palette, spacing, transitions } = context.muiTheme;
 
   const borderStyle = isOver && !cd.files.includes(dragSource)
     ? 'dashed'
@@ -133,12 +132,12 @@ class _DirCard extends PureComponent {
           cd,
           [].concat(
             isRoot ? null : <DirCloser key="closer" {...closerProps} />,
-            cd.dirs.map(dir => (
+            cd.dirs.map(dir =>
               <DirCard key={dir.path} dir={dir} {...transfer} />
-            )),
-            cd.files.map(file => (
+            ),
+            cd.files.map(file =>
               <FileCard key={file.key} file={file} {...transfer} />
-            ))
+            )
           ),
           <div
             style={prepareStyles(closed)}

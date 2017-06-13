@@ -1,7 +1,25 @@
+import transitions from 'material-ui/styles/transitions';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
-  redA100, pinkA100, purpleA100, deepPurpleA100, indigoA100, blueA100, lightBlueA100, cyanA100, tealA100, greenA100, lightGreenA100, limeA100, yellowA100, amberA100, orangeA100, deepOrangeA100, brown100, blueGrey100,
-  fullWhite,
+  redA100,
+  pinkA100,
+  purpleA100,
+  deepPurpleA100,
+  indigoA100,
+  blueA100,
+  lightBlueA100,
+  cyanA100,
+  tealA100,
+  greenA100,
+  lightGreenA100,
+  limeA100,
+  yellowA100,
+  amberA100,
+  orangeA100,
+  deepOrangeA100,
+  brown100,
+  blueGrey100,
+  fullWhite
 } from 'material-ui/styles/colors';
 import {
   fade,
@@ -11,31 +29,68 @@ import {
   decomposeColor
 } from 'material-ui/utils/colorManipulator';
 
-import organization from 'organization';
-
-const bgColors = [redA100, pinkA100, purpleA100, deepPurpleA100, indigoA100, blueA100, lightBlueA100, cyanA100, tealA100, greenA100, lightGreenA100, limeA100, yellowA100, amberA100, orangeA100, deepOrangeA100, brown100, blueGrey100];
+const bgColors = [
+  redA100,
+  pinkA100,
+  purpleA100,
+  deepPurpleA100,
+  indigoA100,
+  blueA100,
+  lightBlueA100,
+  cyanA100,
+  tealA100,
+  greenA100,
+  lightGreenA100,
+  limeA100,
+  yellowA100,
+  amberA100,
+  orangeA100,
+  deepOrangeA100,
+  brown100,
+  blueGrey100
+];
 
 // Twitter theme colors without 'ABB8C3' (Gray)
-const themeColors = ['#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#F78DA7', '#EB144C', '#9900EF'];
+const themeColors = [
+  '#FF6900',
+  '#FCB900',
+  '#7BDCB5',
+  '#00D084',
+  '#8ED1FC',
+  '#0693E3',
+  '#F78DA7',
+  '#EB144C',
+  '#9900EF'
+];
 
 export const defaultPalette = {
   canvasColor: fullWhite,
   primary1Color: random(themeColors),
   accent1Color: random(themeColors),
-  backgroundColor: fade(random(bgColors), 0.15),
-  ...organization.palette,
+  backgroundColor: fade(random(bgColors), 0.15)
 };
 
-export default ({ palette = {} }) => {
+export default feelesrc => {
+  // Mui Theme (plain object)
+  const theme = getMuiTheme({
+    palette: getPalette(feelesrc.palette)
+  });
+  // 影の設定
+  overrideShadow(theme, feelesrc.enableShadow);
+  // トランジションの設定
+  overrideTransition(theme, feelesrc.enableTransition);
+  return theme;
+};
 
-  const {
-    backgroundColor,
-    canvasColor,
-    primary1Color,
-    accent1Color
-  } = {...defaultPalette, ...palette};
+function getPalette(palette = {}) {
+  const { backgroundColor, canvasColor, primary1Color, accent1Color } = {
+    // random palette
+    ...defaultPalette,
+    // feelesrc::palette
+    ...palette
+  };
 
-  const theme = {
+  return {
     primary1Color,
     primary2Color: emphasize(primary1Color),
     primary3Color: monochrome(primary1Color),
@@ -51,15 +106,29 @@ export default ({ palette = {} }) => {
     pickerHeaderColor: primary1Color,
     clockCircleColor: fade(emphasize(canvasColor, 1), 0.07),
     shadowColor: fade(emphasize(canvasColor, 1), 1),
-
     backgroundColor,
+    ...palette
   };
+}
 
-  palette = {...theme, ...palette};
+function overrideShadow(theme, enableShadow = true) {
+  if (!enableShadow) {
+    // box-shadow: none
+    theme.paper.zDepthShadows = theme.paper.zDepthShadows.map(() => 'none');
+    theme.chip.shadow = 'none';
+  }
+}
 
-  return getMuiTheme({ palette });
-};
-
+function overrideTransition(theme, enableTransition = true) {
+  if (enableTransition) {
+    theme.transitions = transitions;
+  } else {
+    theme.transitions = {
+      easeOut: () => 'none',
+      create: () => 'none'
+    };
+  }
+}
 
 function monochrome(color) {
   color = decomposeColor(color);
@@ -70,6 +139,6 @@ function monochrome(color) {
 }
 
 function random(colors) {
-  const index = Math.random() * colors.length >> 0;
+  const index = (Math.random() * colors.length) >> 0;
   return colors[index];
 }
