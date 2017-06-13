@@ -10,7 +10,6 @@ import IconButton from 'material-ui/IconButton';
 import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forward';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
-import transitions from 'material-ui/styles/transitions';
 
 import organization from 'organization';
 
@@ -124,13 +123,13 @@ class EditOGP extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     images: [],
     isLoading: false
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
   };
 
   componentWillMount() {
@@ -222,6 +221,7 @@ class EditOGP extends PureComponent {
 
   render() {
     const { localization } = this.props;
+    const { transitions } = this.context.muiTheme;
     const ogp = this.props.getConfig('ogp');
 
     const styles = {

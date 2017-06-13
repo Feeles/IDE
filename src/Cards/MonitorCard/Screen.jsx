@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import transitions from 'material-ui/styles/transitions';
 
 import { SrcDocEnabled } from './setSrcDoc';
 import ErrorMessage from './ErrorMessage';
@@ -29,6 +28,10 @@ export default class Screen extends PureComponent {
 
   state = {
     loading: false
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
   };
 
   componentWillReceiveProps(nextProps) {
@@ -86,8 +89,8 @@ export default class Screen extends PureComponent {
 
   render() {
     const { display } = this.props;
-
     const { loading } = this.state;
+    const { transitions } = this.context.muiTheme;
 
     const style = {
       position: 'absolute',

@@ -8,7 +8,6 @@ import FlatButton from 'material-ui/FlatButton';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { emphasize, fade } from 'material-ui/utils/colorManipulator';
-import transitions from 'material-ui/styles/transitions';
 
 import organization from 'organization';
 import debugWindow from 'utils/debugWindow';
@@ -194,7 +193,7 @@ export default class ScreenShotCard extends PureComponent {
   }
 
   render() {
-    const { palette, paper } = this.context.muiTheme;
+    const { palette, paper, transitions } = this.context.muiTheme;
     const { selected, uploading } = this.state;
     const { localization } = this.props;
 

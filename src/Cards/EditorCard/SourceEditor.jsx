@@ -7,7 +7,6 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import transitions from 'material-ui/styles/transitions';
 import { fade } from 'material-ui/utils/colorManipulator';
 import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
@@ -41,7 +40,7 @@ import AssetButton from './AssetButton';
 import ErrorPane from './ErrorPane';
 
 const getStyle = (props, state, context) => {
-  const { palette } = context.muiTheme;
+  const { palette, transitions } = context.muiTheme;
 
   return {
     root: {
