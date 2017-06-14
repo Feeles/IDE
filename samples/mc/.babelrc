@@ -3,8 +3,5 @@
         "es2015", "stage-3"
     ],
     "ignore": [
-        "stages/*/code*.js",
-        "enchantjs/enchant.js",
-        "enchantjs/ui.enchant.js"
     ]
 }
