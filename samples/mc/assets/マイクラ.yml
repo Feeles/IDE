@@ -1,0 +1,88 @@
+- label: タイトル
+  code: |
+      mc.title('もじ');
+- label: サブタイトル
+  code: |
+      mc.title('もじ', 'subtitle');
+- label: タイトル（アクションバー）
+  code: |
+      mc.title('もじ', 'actionbar');
+- label: 召喚する
+  code: |
+      mc.summon('lightning_bolt'/*_mce*/, 0, 0, 0);
+- label: ブロックをおく
+  code: |
+      mc.blocks['stone'/*_mcb*/].put(0, 0, 0);
+- label: しゃべる
+  code: |
+      mc.say('マイクラ！');
+- label: アイテムをもらう
+  code: |
+      mc.give('diamond'/*_mci*/, 64);
+- label: 難易度を設定する
+  code: |
+      mc.difficulty('easy');
+- label: 時間を設定する
+  code: |
+      mc.setTime(0);
+- label: だれかをたおす
+  code: |
+      mc.kill('ユーザーネーム');
+- label: ゲームモードを設定する
+  code: |
+      mc.gamemode('creative');
+- label: ブロックで埋める
+  code: |
+      // （プレイヤーの位置からみて） -5 から +5 の範囲を石で埋める 
+      mc.fill('stone'/*_mcb*/, -5, -5, -5, 5, 5, 5);
+- label: ブロックをおきかえる
+  code: |
+      // （プレイヤーの位置からみて） -5 から +5 の範囲の水をダイヤモンドブロックにおきかえる
+      mc.replace('diamond_block'/*_mcb*/, 'water'/*_mcb*/, -5, -5, -5, 5, 5, 5);
+- label: ワープする（相対座標）
+  code: |
+      mc.locateBy(0, 3, 0);
+- label: ワープする（絶対座標）
+  code: |
+      mc.locateTo(0, 100, 0);
+- label: プレイヤーがうごいたら
+  code: |
+      mc.player.onうごいた = () => {
+
+          /* \____ assets/マイクラ.yml ____/ */
+
+      };
+- label: プレイヤーがやられたら
+  code: |
+      mc.player.onやられた = () => {
+
+          /* \____ assets/マイクラ.yml ____/ */
+
+      };
+- label: ブロックがこわれたら
+  code: |
+      mc.blocks['grass'/*_mcb*/].onこわれた = () => {
+
+          /* \____ assets/マイクラ.yml ____/ */
+
+      };
+- label: ブロックがおかれたら
+  code: |
+      mc.blocks['grass'/*_mcb*/].onおかれた = () => {
+
+          /* \____ assets/マイクラ.yml ____/ */
+
+      };
+- label: スクショ
+  code: |
+      mc.utils.capture(mc, 0, 100, 0);
+- label: まわりの座標
+  code: |
+      for (const [x, z] of mc.utils.way(8, 10)) {
+
+          // mc.blocks['stone'].put(x, 0, z);
+
+      }
+- label: コマンド実行
+  code: |
+      mc.execute('/say execute!!!!');

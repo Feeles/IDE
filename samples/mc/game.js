@@ -2,76 +2,63 @@ import 'hackforplay/core';
 // import 'mod/3d/core';
 
 import Minecraft from 'minecraft/core';
-import {
-	drawImage
-} from 'minecraft/utils';
 
-const rr = (range) => {
-	return Math.random() * range * 2 - range;
+
+const minecraft = new Minecraft();
+const mc = minecraft;
+
+
+
+mc.player.onうごいた = () => {
+
+	/* \____ assets/マイクラ.yml ____/ */
+
+};
+
+mc.player.onやられた = () => {
+
+	/* \____ assets/マイクラ.yml ____/ */
+
 };
 
 
-function gameFunc() {
+mc.blocks['grass' /*_mcb*/ ].onこわれた = () => {
 
-	const minecraft = new Minecraft();
-	const mc = minecraft;
+	/* \____ assets/マイクラ.yml ____/ */
 
-	mc.execute('gamemode c');
+};
 
-	mc.setTime(0);
+mc.blocks['grass' /*_mcb*/ ].onおかれた = () => {
 
-	mc.give('wool:3', 3);
+	/* \____ assets/マイクラ.yml ____/ */
 
-	mc.say('wwwwwwwww');
-
-	mc.blocks.stone.onこわれた = () => {
-
-		mc.kill(name);
-
-	};
-
-	mc.player.onやられた = () => {
-		Hack.gameover();
-	};
+};
 
 
 
-	mc.blocks.dirt.onこわれた = () => {
-		// mc.execute('xp 1000 @p');
-		mc.xp(1000);
-	};
-
-
-
-	setInterval(() => {
-
-		// mc.locateBy(rr(10), 0, rr(10));
-
-	}, 5000);
+/* \____ assets/マイクラ.yml ____/ */
 
 
 
 
-	drawImage(mc, 'trimmed/bat');
 
 
 
 
+export default function rpgGameFunc() {
 
 	Hack.changeMap('map1'); // map1 をロード
 
 	self.player = new Player(); // プレイヤーをつくる
 	player.mod(_kきし); // 見た目
 	player.locate(3, 5); // はじめの位置
-	player.hp = 3; // 体力
+	player.hp = 9999999999999; // 体力
 	player.atk = 1; // こうげき力
 	player.onたおれたとき = () => {
 		player.destroy(); // プレイヤーを消す
 		Hack.gameover(); // ゲームオーバー
 	};
 
-	/* \____ assets/ゲーム.json ____/ */
+	/* \____ assets/ゲーム.yml ____/ */
 
 }
-
-export default gameFunc;

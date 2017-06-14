@@ -5,12 +5,15 @@ import MinecraftEventEmitter from './event-emitter';
 
 import MinecraftPlayer from './player';
 
+import * as utils from './utils';
+
 
 class Minecraft extends MinecraftEventEmitter {
 
 	constructor() {
 		super();
 
+		this.utils = utils;
 
 		// API のバージョン
 		this.version = 1;
@@ -48,7 +51,24 @@ class Minecraft extends MinecraftEventEmitter {
 		});
 
 
-
+		this.colors = [
+			'white',
+			'orange',
+			'magenta',
+			'lightblue',
+			'yellow',
+			'lime',
+			'pink',
+			'gray',
+			'lightgray',
+			'cyan',
+			'purple',
+			'blue',
+			'brown',
+			'green',
+			'red',
+			'black'
+		];
 
 		this.on('BlockBroken', (data) => {
 
@@ -67,6 +87,14 @@ class Minecraft extends MinecraftEventEmitter {
 		this.on('PlayerDied', (data) => {
 
 			this.player.emit('died', {
+
+			});
+
+		});
+
+		this.on('PlayerTravelled', (data) => {
+
+			this.player.emit('travelled', {
 
 			});
 
@@ -95,20 +123,30 @@ class Minecraft extends MinecraftEventEmitter {
 
 			if (data.header.messagePurpose === 'commandResponse') {
 
-
 				const id = data.header.requestId;
 
-				this.listeners[id](data);
-				delete this.listeners[id];
+				if (id in this.listeners) {
+					this.listeners[id](data);
+					delete this.listeners[id];
+				}
 
 			}
-
-
-			console.info(data);
 
 		});
 
 	}
+
+
+	createTargetData(name, selector = 'allPlayers') {
+		return {
+			rules: [{
+				name: 'name',
+				value: name
+			}],
+			selector
+		};
+	}
+
 
 	send(purpose, type, body, idv = 0) {
 
@@ -135,6 +173,27 @@ class Minecraft extends MinecraftEventEmitter {
 			eventName
 		});
 	}
+
+
+	commandRequest(body) {
+
+		body = Object.assign({
+
+			origin: {},
+			overload: 'default',
+			version: this.version
+
+		}, body);
+
+		return this.send(
+			'commandRequest',
+			'commandRequest',
+			body
+		);
+	}
+
+
+
 
 
 	getPos(x, y, z, relative = true) {
@@ -191,22 +250,71 @@ class Minecraft extends MinecraftEventEmitter {
 	}
 
 
-	commandRequest(name) {
 
-		return this.send('commandRequest', 'commandRequest', {
-			name,
-			input: {},
-			origin: {},
-			overload: 'default',
-			version: this.version
+	fill(name, x1, y1, z1, x2, y2, z2, relative = true, oldBlockHandling = 'destroy') {
+
+		const [tileName, tileData] = name.split(':');
+
+		return this.commandRequest({
+			name: 'fill',
+			input: {
+				from: this.getPos(x1, y1, z1, relative),
+				to: this.getPos(x2, y2, z2, relative),
+				tileName,
+				tileData,
+				oldBlockHandling
+			}
+		});
+
+
+	}
+
+
+	replace(name, old, x1, y1, z1, x2, y2, z2) {
+
+		const [tileName1, tileData1] = name.split(':');
+		const [tileName2, tileData2] = old.split(':');
+
+		this.execute(`fill ~${x1} ~${y1} ~${z1} ~${x2} ~${y2} ~${z2} ${tileName1} ${tileData1 | 0} replace ${tileName2} ${tileData2 | 0}`);
+
+
+	}
+
+
+	summon(entity, x, y, z, relative = true) {
+		return this.commandRequest({
+			name: 'summon',
+			input: {
+				entityType: entity,
+				spawnPos: this.getPos(x, y, z, relative)
+			}
+		});
+	}
+
+	async gamemode(gameMode) {
+
+		const name = await this.getPlayerName();
+
+		return this.commandRequest({
+			name: 'gamemode',
+			input: {
+				gameMode,
+				player: this.createTargetData(name)
+			},
+			overload: 'byName'
 		});
 
 	}
 
 
+
 	async getPlayerName() {
 
-		const data = await this.commandRequest('getlocalplayername');
+		if (this.name) return this.name;
+
+		const data = await this.commandRequest({
+			name: 'getlocalplayername'
+		});
 
 		const name = this.name = data.body.localplayername;
 
@@ -238,16 +346,61 @@ class Minecraft extends MinecraftEventEmitter {
 	}
 
 
+	async getSpawnPoint() {
+
+		const name = await this.getPlayerName();
+
+		return this.send('commandRequest', 'commandRequest', {
+			name: 'getspawnpoint',
+			input: {
+				player: this.createTargetData(name)
+			},
+			origin: {},
+			overload: 'default',
+			version: this.version
+		});
+	}
+
+	async getChunks() {
+
+		return this.send('commandRequest', 'commandRequest', {
+			name: 'getchunks',
+			input: {
+				dimension: 'overworld'
+			},
+			origin: {},
+			overload: 'default',
+			version: this.version
+		});
+
+	}
+
+	async getChunkData(chunkX, chunkZ, height, dimension = 'overworld') {
+
+		return this.send('commandRequest', 'commandRequest', {
+			name: 'getchunkdata',
+			input: {
+				chunkX,
+				chunkZ,
+				height,
+				dimension
+			},
+			origin: {},
+			overload: 'default',
+			version: this.version
+		});
+
+	}
 
 
 	async execute(command) {
 
-		let name;
 
-		if (this.name) name = this.name;
-		else {
-			name = await this.getPlayerName();
-		}
+		// execute するときは最初の / がいらない
+		if (command[0] === '/') command = command.substr(1);
+
+
+		const name = await this.getPlayerName();
 
 		return this.send('commandRequest', 'commandRequest', {
 			name: 'execute',
@@ -298,7 +451,35 @@ class Minecraft extends MinecraftEventEmitter {
 	}
 
 
+	async title(text, type = 'title') {
 
+		const name = await this.getPlayerName();
+
+		const data = {
+			name: 'title',
+			input: {
+				player: this.createTargetData(name),
+				titleText: text.toString()
+			},
+			overload: type
+		};
+
+		data.input[type] = type;
+
+
+		return this.commandRequest(data);
+	}
+
+
+	difficulty(difficulty) {
+		return this.commandRequest({
+			name: 'difficulty',
+			input: {
+				difficulty
+			},
+			overload: 'byName'
+		});
+	}
 
 
 }

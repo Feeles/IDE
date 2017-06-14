@@ -2,5 +2,8 @@ export default {
 	broken: 'こわれた',
 	placed: 'おかれた',
 
-	died: 'やられた'
+	died: 'やられた',
+
+	travelled: 'うごいた',
+
 };

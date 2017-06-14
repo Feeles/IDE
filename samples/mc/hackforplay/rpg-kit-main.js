@@ -389,7 +389,7 @@ Hack.createMap = function (template) {
 	// テンプレートリテラルからマップを生成するラッパー
 	const zenkaku = /[０１２３４５６７８９]/g.exec(template);
 	if (zenkaku) {
-		Hack.log(`⚠️ 全角の ${zenkaku[0]} がマップに入っています!`);
+		Hack.log(`⚠️ 全かくの ${zenkaku[0]} がマップに入っています!`);
 	}
 	var source = template.split('\n')
 		.map(function (line) {
