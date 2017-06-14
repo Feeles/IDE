@@ -29,7 +29,8 @@ const config = {
       minimize: true,
       debug: false
     })
-  ]
+  ],
+  devtool: 'source-map'
 };
 
 if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
