@@ -136,47 +136,40 @@ function ciede2000(L1, a1, b1, L2, a2, b2, kL = 1, kC = 1, kH = 1) {
 
 
 
-/*
-
-var [L1, a1, b1] = rgbToLab(r1, g1, b1);
-var [L2, a2, b2] = rgbToLab(r2, g2, b2);
-distance = ciede2000(L1,a1,b1, L2,a2,b2);
-*/
 
 
+export async function drawImage(mc, src, _x, _y, _z, relative = true, scale = 1.0) {
 
+	let image;
 
-
-
-
-
-export async function drawImage(mc, src) {
-
-
-	const image = await feeles.fetchDataURL(src).then((url) => {
-		return new Promise((resolve) => {
-			const image = new Image();
-			image.onload = () => {
-				resolve(image);
-			};
-			image.src = url;
+	if (src instanceof HTMLCanvasElement) {
+		image = src;
+	} else {
+		const image = await feeles.fetchDataURL(src).then((url) => {
+			return new Promise((resolve) => {
+				const image = new Image();
+				image.onload = () => {
+					resolve(image);
+				};
+				image.onerror = (e) => {
+					// console.error(e);
+				};
+				image.src = url;
+			});
 		});
-	});
+	}
+
 
 
 	const minecraft = mc;
 
-
-
 	const canvas = document.createElement('canvas');
 
-	const w = image.width;
-	const h = image.height;
+	const w = (image.width * scale) | 0;
+	const h = (image.height * scale) | 0;
 
 	canvas.width = w;
 	canvas.height = h;
-
-	Hack.log(`${w} x ${h}`);
 
 	const context = canvas.getContext('2d');
 
@@ -233,8 +226,11 @@ export async function drawImage(mc, src) {
 	for (let x = 0; x < w; ++x) {
 		for (let y = 0; y < h; ++y) {
 
+			const __x = _x + x;
+			const __y = _y;
+			const __z = _z + y;
 
-			minecraft.setBlock('stone', x, 70, y, false);
+			minecraft.setBlock('stone', __x, __y, __z, relative);
 
 
 			await new Promise((resolve) => setTimeout(resolve, 0));
@@ -267,15 +263,48 @@ export async function drawImage(mc, src) {
 
 			const block = `concrete:${data}`;
 
-			console.log('s');
 
-
-			minecraft.setBlock(block, x, 70, y, false);
+			minecraft.setBlock(block, __x, __y, __z, relative);
 
 
 		}
 	}
 
 	// document.body.appendChild(canvas);
+
+};
+
+
+export function way(way, radius) {
+
+	const result = [];
+
+	for (let i = 0; i < way; ++i) {
+
+		const angle = Math.PI * 2 / way * i;
+
+		const x = (Math.sin(angle) * radius) | 0;
+		const y = (Math.cos(angle) * radius) | 0;
+
+		result.push([x, y]);
+
+	}
+
+	return result;
+
+};
+
+
+export function capture(mc, x, y, z, scale = 0.3) {
+
+	const canvas = document.querySelector('canvas');
+
+	// プレイヤーを 0, 110, 0 の位置に移動させる
+	mc.locateTo(x, y + 10, z);
+
+	// ゲーム画面のスクショを
+	// 0, 100, 0 の位置（絶対座標）に
+	// 0.3 倍の大きさで描画する
+	drawImage(mc, canvas, x, y, z, false, scale);
 
 };

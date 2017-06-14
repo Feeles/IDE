@@ -16,7 +16,7 @@ function maps() {
 	`);
 	Hack.maps.map1 = map1;
 
-	/* \____ assets/マップ.json ____/ */
+	/* \____ assets/マップ.yml ____/ */
 
 }
 
