@@ -152,8 +152,10 @@ const config = {
 };
 
 if (process.env.NODE_ENV !== 'production') {
-  // SourceMap
-  config.devtool = 'inline-source-map';
+  // for Development:
+  config.devtool = 'eval';
+} else {
+  config.devtool = 'source-map';
 }
 
 module.exports = async () => {
