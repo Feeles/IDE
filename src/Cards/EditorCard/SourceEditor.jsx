@@ -421,6 +421,8 @@ export default class SourceEditor extends PureComponent {
   };
 
   emphasizeTextMarker = async textMarker => {
+    const { transitions } = this.context.muiTheme;
+
     const begin = {
       className: textMarker.className,
       style: `opacity: 0; background-color: rgba(0,0,0,1)`
