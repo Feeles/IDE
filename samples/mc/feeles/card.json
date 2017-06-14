@@ -1,6 +1,6 @@
 {
     "MonitorCard": {
-        "visible": true,
+        "visible": false,
         "order": 1,
         "frame": {
             "size": [
