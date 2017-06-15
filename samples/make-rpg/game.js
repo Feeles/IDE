@@ -9,7 +9,7 @@ function gameFunc() {
 	player.locate(3, 5); // はじめの位置
 	player.hp = 3; // 体力
 	player.atk = 1; // こうげき力
-	player.on(/*▼ イベント*/('たおれたとき'), () => {
+	player.on( /*▼ イベント*/ ('たおれたとき'), () => {
 		player.destroy(); // プレイヤーを消す
 		Hack.gameover(); // ゲームオーバー
 	});
