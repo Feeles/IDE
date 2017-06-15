@@ -17,6 +17,10 @@ export default class AssetButton extends PureComponent {
     localization: PropTypes.object.isRequired
   };
 
+  static defaultProps = {
+    description: ''
+  };
+
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired
   };

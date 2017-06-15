@@ -1,0 +1,30 @@
+- label: プレイヤーがうごいたら
+  code: |
+      mc.player.on( /*▼ プレイヤーが*/ ('うごいた'), () => {
+
+
+      	/* \____ assets/actions.yml ____/ */
+
+      });
+- label: プレイヤーがやられたら
+  code: |
+      mc.player.on( /*▼ プレイヤーが*/ ('やられた'), () => {
+
+
+      	/* \____ assets/actions.yml ____/ */
+
+      });
+- label: ブロックがこわれたら
+  code: |
+      mc.blocks[ /*▼ ブロック*/ ('grass')].onこわれた = () => {
+
+          /* \____ assets/actions.yml ____/ */
+
+      };
+- label: ブロックがおかれたら
+  code: |
+      mc.blocks[ /*▼ ブロック*/ ('grass')].onおかれた = () => {
+
+          /* \____ assets/actions.yml ____/ */
+
+      };
