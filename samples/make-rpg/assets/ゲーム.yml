@@ -1,12 +1,11 @@
 - label: スライム
   code: |
-    // スライム
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_sスライム));
+    item1.mod(('▼ スキン', _sスライム));
     item1.hp = 3;
     item1.atk = 1;
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('とまるとき'), () => {
+    item1.on(('▼ イベント', 'とまるとき'), () => {
       item1.attack();
     });
   image: trimmed/slime.gif
@@ -14,17 +13,16 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/スライム'
 - label: イモムシ
   code: |
-    // イモムシ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_iいもむし));
+    item1.mod(('▼ スキン', _iいもむし));
     item1.hp = 2;
     item1.atk = 1;
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('とまるとき'), () => {
+    item1.on(('▼ イベント', 'とまるとき'), () => {
       item1.turn();
       item1.walk();
     });
-    item1.on( /*▼ イベント*/ ('たおれたとき'), () => {
+    item1.on(('▼ イベント', 'たおれたとき'), () => {
       Hack.score += 1;
     });
   image: trimmed/insect.gif
@@ -32,16 +30,15 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/イモムシ'
 - label: コウモリ
   code: |
-    // コウモリ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_kこうもり));
+    item1.mod(('▼ スキン', _kこうもり));
     item1.hp = 3;
     item1.atk = 1;
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('たおれたとき'), () => {
+    item1.on(('▼ イベント', 'たおれたとき'), () => {
       Hack.score += 1;
     });
-    item1.on( /*▼ イベント*/ ('とまるとき'), () => {
+    item1.on(('▼ イベント', 'とまるとき'), () => {
       const target = player;
       const moveX = 32 * Math.sign(target.mapX - item1.mapX);
       const moveY = 32 * Math.sign(target.mapY - item1.mapY);
@@ -55,9 +52,8 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/コウモリ'
 - label: ウロボロス
   code: |
-    // ウロボロス
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_uウロボロス));
+    item1.mod(('▼ スキン', _uウロボロス));
     item1.hp = 10;
     item1.atk = 1;
     item1.locate(7, 5, 'map1');
@@ -69,21 +65,20 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ウロボオス'
 - label: ドラゴン
   code: |
-    // ドラゴン
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_dドラゴン));
+    item1.mod(('▼ スキン', _dドラゴン));
     item1.hp = 10;
     item1.atk = 1;
     item1.locate(7, 5, 'map1');
     item1.scale(2, 2);
     item1.setFrame('Idle', [10]);
-    item1.on( /*▼ イベント*/ ('たおれたとき'), () => {
+    item1.on(('▼ イベント', 'たおれたとき'), () => {
       Hack.gameclear();
     });
-    item1.on( /*▼ イベント*/ ('つねに'), () => {
+    item1.on(('▼ イベント', 'つねに'), () => {
       if (game.frame % 3 > 0) return;
       const item2 = new RPGObject();
-      item2.mod( /*▼ スキン*/ (_bばくえん));
+      item2.mod(('▼ スキン', _bばくえん));
       item2.collisionFlag = false;
       item1.shoot(item2, item1.forward, 6);
       const fx = item1.forward.x,
@@ -94,7 +89,7 @@
       item2.scale(random(0.99, 1.5));
       item2.force(-fx * random(0, 0.199), -fy * random(0, 0.199));
       item2.destroy(20);
-      item2.on( /*▼ イベント*/ ('ふれはじめた = (event) => {
+      item2.on(('▼ イベント', 'ふれはじめた'), (event) => {
         if (event.hit !== item1) {
           Hack.Attack(event.mapX, event.mapY, item1.atk);
         }
@@ -105,14 +100,13 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ドラゴン'
 - label: ミノタウルス
   code: |
-    // ミノタウルス
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_mミノタウルス));
+    item1.mod(('▼ スキン', _mミノタウルス));
     item1.hp = 10;
     item1.atk = 1;
     item1.locate(7, 5, 'map1');
     item1.scale(2, 2);
-    item1.on( /*▼ イベント*/ ('とまるとき'), () => {
+    item1.on(('▼ イベント', 'とまるとき'), () => {
       item1.attack();
     });
   image: trimmed/minotaur.gif
@@ -120,12 +114,11 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス'
 - label: 下りかいだん
   code: |
-    // 下りかいだん
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_kくだりかいだん));
+    item1.mod(('▼ スキン', _kくだりかいだん));
     item1.locate(7, 5, 'map1');
     item1.layer = RPGMap.Layer.Under;
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       Hack.changeMap('map2');
     });
   image: trimmed/map-21-2.png
@@ -133,12 +126,11 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/下り階段'
 - label: ワープ
   code: |
-    // ワープ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_wワープ));
+    item1.mod(('▼ スキン', _wワープ));
     item1.locate(7, 5, 'map1');
     item1.layer = RPGMap.Layer.Under;
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       player.locate(11, 5);
     });
   image: trimmed/map-16-4.png
@@ -146,11 +138,10 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ワープゾーン'
 - label: しろ
   code: |
-    // しろ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_sしろ));
+    item1.mod(('▼ スキン', _sしろ));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       // ゲームクリア
       Hack.gameclear();
       player.destroy();
@@ -161,13 +152,12 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ゴールちてん'
 - label: お花
   code: |
-    // お花
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_hはな));
+    item1.mod(('▼ スキン', _hはな));
     item1.locate(7, 5, 'map1');
     item1.layer = RPGMap.Layer.Under;
     item1.collisionFlag = false;
-    item1.on( /*▼ イベント*/ ('こうげきされた'), () => {
+    item1.on(('▼ イベント', 'こうげきされた'), () => {
       item1.destroy();
     });
   image: trimmed/map-21-1.png
@@ -175,9 +165,8 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/お花畑'
 - label: 木
   code: |
-    // 木
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_k木));
+    item1.mod(('▼ スキン', _k木));
     item1.locate(7, 5, 'map1');
     item1.hp = 1;
   image: trimmed/map-26-0.png
@@ -185,18 +174,17 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/木'
 - label: バクダン岩
   code: |
-    // バクダン岩
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_iいわ));
+    item1.mod(('▼ スキン', _iいわ));
     item1.locate(7, 5, 'map1');
     item1.atk = 99;
-    item1.on( /*▼ イベント*/ ('こうげきされた'), () => {
+    item1.on(('▼ イベント', 'こうげきされた'), () => {
       const item2 = new RPGObject();
-      item2.mod( /*▼ スキン*/ (_bばくえん));
+      item2.mod(('▼ スキン', _bばくえん));
       item2.locate(7, 5, 'map1');
       item2.velocityY = -1;
       item2.collisionFlag = false;
-      item2.on( /*▼ イベント*/ ('ふれはじめた'), (event) => {
+      item2.on(('▼ イベント', 'ふれはじめた'), (event) => {
         Hack.Attack.call(item2, event.mapX, event.mapY, 1);
       });
       item2.destroy(20);
@@ -207,9 +195,8 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/爆弾岩'
 - label: ふしぎなかべ
   code: |
-    // ふしぎなかべ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_tつちかべ));
+    item1.mod(('▼ スキン', _tつちかべ));
     item1.locate(7, 5, 'map1');
     item1.opacity = 0.5;
   image: trimmed/map-17-0.png
@@ -217,11 +204,10 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/とうめいな壁'
 - label: しゃべるかべ
   code: |
-    // しゃべるかべ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_iいしかべ));
+    item1.mod(('▼ スキン', _iいしかべ));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('こうげきされた'), () => {
+    item1.on(('▼ イベント', 'こうげきされた'), () => {
       Hack.log('どうだ　おれさまは　かたいだろう！');
     });
   image: trimmed/map-17-1.png
@@ -229,24 +215,22 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/しゃべる壁'
 - label: たからばこ
   code: |
-    // たからばこ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_tたからばこ));
+    item1.mod(('▼ スキン', _tたからばこ));
     item1.locate(7, 5, 'map1');
     item1.onこうげきされた = () => {
       delete item1.onこうげきされた;
-      item1.mod( /*▼ スキン*/ (_tたからばこひらいた));
+      item1.mod(('▼ スキン', _tたからばこひらいた));
     };
   image: trimmed/map-21-0.png
   description: まえで こうげきすると かぱっとひらく (た)からばこ。なかに なにか いれられると いいんだどね
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/からばこ'
 - label: ツボ
   code: |
-    // ツボ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_tつぼ));
+    item1.mod(('▼ スキン', _tつぼ));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('こうげきされた'), () => {
+    item1.on(('▼ イベント', 'こうげきされた'), () => {
       // ランダムなアイテムをだす
       const mod = random([
         _dダイヤモンド,
@@ -256,7 +240,7 @@
       const item2 = new RPGObject();
       item2.mod(mod);
       item2.locate(item1.mapX, item1.mapY);
-      item2.on( /*▼ イベント*/ ('のった'), () => {
+      item2.on(('▼ イベント', 'のった'), () => {
         item2.velocity(0, -8);
         item2.force(0, 0.8);
         item2.destroy(16);
@@ -268,11 +252,10 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなツボ'
 - label: 女の人
   code: |
-    // 女の人
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_o女の人));
+    item1.mod(('▼ スキン', _o女の人));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('ぶつかった'), () => {
+    item1.on(('▼ イベント', 'ぶつかった'), () => {
       Hack.log('こんにちは。ここは 1F です');
     });
   image: trimmed/woman.png
@@ -280,14 +263,13 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/女の人'
 - label: 男の子
   code: |
-    // 男の子
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_o男の子));
+    item1.mod(('▼ スキン', _o男の子));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('とまるとき'), () => {
+    item1.on(('▼ イベント', 'とまるとき'), () => {
       item1.walk();
     });
-    item1.on( /*▼ イベント*/ ('ぶつかった'), () => {
+    item1.on(('▼ イベント', 'ぶつかった'), () => {
       item1.turn();
       item1.walk();
     });
@@ -296,29 +278,27 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/男の子'
 - label: わな
   code: |
-    // わな
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_wわな));
+    item1.mod(('▼ スキン', _wわな));
     item1.locate(7, 5, 'map1');
     item1.layer = RPGMap.Layer.Under;
-    item1.on( /*▼ イベント*/ ('のった'), () => {
-      item1.mod( /*▼ スキン*/ (_wわなかかった));
+    item1.on(('▼ イベント', 'のった'), () => {
+      item1.mod(('▼ スキン', _wわなかかった));
       player.hp -= 1;
       player.damageTime = 30;
     });
-    item1.on( /*▼ イベント*/ ('onおりた'), () => {
-      item1.mod( /*▼ スキン*/ (_wわな));
+    item1.on(('▼ イベント', 'onおりた'), () => {
+      item1.mod(('▼ スキン', _wわな));
     });
   image: trimmed/map-22-0.png
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG,/wiki/トゲトゲ'
   description: ふむとダメージをうける めいわくなゆか。でも たった１ダメージだね。カイゾウすると なんダメジにも できるらしい
 - label: ハート
   code: |
-    // ハート
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_hハート));
+    item1.mod(('▼ スキン', _hハート));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       player.hp += 1;
       item1.destroy();
     });
@@ -327,14 +307,13 @@
   description: ライフを かいふくする うれしいアイテム！ += にすると プラスされる。ところで -= にするとどうなるのだろうか
 - label: タタリ
   code: |
-    // タタリ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_dドクロ));
+    item1.mod(('▼ スキン', _dドクロ));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       player.hp = 0;
     });
-    item1.on( /*▼ イベント*/ ('こうげきされた'), (event) => {
+    item1.on(('▼ イベント', 'こうげきされた'), (event) => {
       event.attacker.hp = 0;
     });
   image: trimmed/map-28-4.png
@@ -342,13 +321,12 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/タタリ'
 - label: コイン
   code: |
-    // コイン
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_kコイン));
+    item1.mod(('▼ スキン', _kコイン));
     item1.locate(7, 5, 'map1');
     item1.velocity(1, 0);
     item1.force(0, 0.5);
-    item1.on( /*▼ イベント*/ ('ふれはじめた'), () => {
+    item1.on(('▼ イベント', 'ふれはじめた'), () => {
       item1.destroy();
       Hack.score += 1;
     });
@@ -357,11 +335,10 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/チャリンチャリン'
 - label: スター
   code: |
-    // スター
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_hほし));
+    item1.mod(('▼ スキン', _hほし));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       player.damageTime = 100;
       item1.destroy();
     });
@@ -370,11 +347,10 @@
   description: ひろってから ３びょうちょい むてきになれる アイテム。３びょうちょい＝１００フレーム？ こも、カイゾウできるらしい
 - label: ふしぎなカギ
   code: |
-    // ふしぎなカギ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_kかぎ));
+    item1.mod(('▼ スキン', _kかぎ));
     item1.locate(random(0, 15), random(0, 10), 'map1');
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       Hack.log('カチャリ という おと が きこえた');
       item1.destroy();
     });
@@ -383,12 +359,11 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなかぎ'
 - label: 上りかいだん
   code: |
-    // 上りかいだん
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_nのぼりかいだん));
+    item1.mod(('▼ スキン', _nのぼりかいだん));
     item1.locate(7, 5, 'map2');
     item1.layer = RPGMap.Layer.Under;
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       Hack.changeMap('map1');
     });
   image: trimmed/map-20-2.png
@@ -396,16 +371,15 @@
   description: まえのマップに つながっている のぼりせんようの かいだん。なかみは くだりかいだんと たいてかわらない
 - label: じげんばくだん
   code: |
-    // じげんばくだん
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_bばくだん));
+    item1.mod(('▼ スキン', _bばくだん));
     item1.locate(7, 5, 'map1');
     setTimeout(() => {
       const item2 = new RPGObject();
-      item2.mod( /*▼ スキン*/ (_bばくえん));
+      item2.mod(('▼ スキン', _bばくえん));
       item2.locate(7, 5);
       item2.collisionFlag = false;
-      item2.on( /*▼ イベント*/ ('ふれはじめた'), (event) => {
+      item2.on(('▼ イベント', 'ふれはじめた'), (event) => {
         Hack.Attack.call(item2, event.mapX, event.mapY, 1);
       });
       item2.destroy(20);
@@ -416,11 +390,10 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/時限爆弾'
 - label: ダイヤモンド
   code: |
-    // ダイヤモンド
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_dダイヤモンド));
+    item1.mod(('▼ スキン', _dダイヤモンド));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       item1.destroy();
       Hack.score += 1;
     });
@@ -429,14 +402,13 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/うれしいダイヤモンド'
 - label: まほうじん
   code: |
-    // まほうじん
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_mまほうじん));
+    item1.mod(('▼ スキン', _mまほうじん));
     item1.locate(7, 5, 'map1');
     item1.layer = RPGMap.Layer.Under;
-    item1.on( /*▼ イベント*/ ('のった'), () => {
+    item1.on(('▼ イベント', 'のった'), () => {
       if (Hack.score >= 7) {
-        item1.mod( /*▼ スキン*/ (_mまほうじんひかった));
+        item1.mod(('▼ スキン', _mまほうじんひかった));
       }
     });
   image: trimmed/map-16-9.png
@@ -444,15 +416,14 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/スコアで光るまほうじん'
 - label: スコアでひらく たからばこ
   code: |
-    // スコアでひらく たからばこ
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_tたからばこ));
+    item1.mod(('▼ スキン', _tたからばこ));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('こうげきされた'), () => {
+    item1.on(('▼ イベント', 'こうげきされた'), () => {
       if (Hack.score < 5) {
         Hack.log('たからばこは びくともしない ');
       } else {
-        item1.mod( /*▼ スキン*/ (_tたからばこひらいた));
+        item1.mod(('▼ スキン', _tたからばこひらいた));
         Hack.log('ガチャ！たからばこが あいた！');
         // 出てくるもの　→
       }
@@ -462,11 +433,10 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/かたいからばこ'
 - label: お花屋さん
   code: |
-    // お花屋さん
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_o女の子));
+    item1.mod(('▼ スキン', _o女の子));
     item1.locate(7, 5, 'map1');
-    item1.on( /*▼ イベント*/ ('ぶつかった'), () => {
+    item1.on(('▼ イベント', 'ぶつかった'), () => {
       if (Hack.score < 100) {
         Hack.log('おはなは100エンです。おカネが たりないよ。');
       } else {
@@ -474,10 +444,10 @@
         Hack.score -= 100;
         // おはな
         const item2 = new RPGObject();
-        item2.mod( /*▼ スキン*/ (_hはな));
+        item2.mod(('▼ スキン', _hはな));
         item2.locate(item1.mapX, item1.mapY + 1, 'map1');
         item2.layer = RPGMap.Layer.Under;
-        item2.on( /*▼ イベント*/ ('のった'), () => {
+        item2.on(('▼ イベント', 'のった'), () => {
           item2.destroy();
         });
       }
@@ -487,9 +457,8 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/おはなやさん'
 - label: ルーレット
   code: |
-    // ルーレット
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_rルビー));
+    item1.mod(('▼ スキン', _rルビー));
     item1.locate(7, 5, 'map1');
     const start = () => {
       item1.timer = setInterval(() => {
@@ -512,7 +481,7 @@
       }
     };
     item1.flag = true;
-    item1.on( /*▼ イベント*/ ('こうげきされた'), () => {
+    item1.on(('▼ イベント', 'こうげきされた'), () => {
       if (item1.flag) {
         // ルーレット開始！
         start();
@@ -528,9 +497,8 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ルーレット'
 - label: 色付きハート
   code: |
-    // 色付きハート
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_hハート));
+    item1.mod(('▼ スキン', _hハート));
     item1.locate(7, 5, 'map1');
     item1.color = 'white';
   image: trimmed/colorful.png
@@ -538,13 +506,12 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/色付きハート'
 - label: ばくえん
   code: |
-    // ばくえん
     const item1 = new RPGObject();
-    item1.mod( /*▼ スキン*/ (_bばくえん));
+    item1.mod(('▼ スキン', _bばくえん));
     item1.locate(7, 5, 'map1');
     item1.velocityY = -1;
     item1.collisionFlag = false;
-    item1.on( /*▼ イベント*/ ('ふれはじめた'), (event) => {
+    item1.on(('▼ イベント', 'ふれはじめた'), (event) => {
       Hack.Attack.call(item1, event.mapX, event.mapY, 1);
     });
     item1.destroy(20);
@@ -559,15 +526,15 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/プレイヤー'
 - label: ビーム
   code: |
-    player.on( /*▼ イベント*/ ('こうげきするとき'), () => {
+    player.on(('▼ イベント', 'こうげきするとき'), () => {
       beamSkill(player);
     });
 
     // ↓ビームの本体. この部分はひとつだけあれば良い
     function beamSkill(self) {
       const beam = new RPGObject();
-      beam.mod( /*▼ スキン*/ (_bビーム));
-      beam.on( /*▼ イベント*/ ('ふれはじめた'), (event) => {
+      beam.mod(('▼ スキン', _bビーム));
+      beam.on(('▼ イベント', 'ふれはじめた'), (event) => {
         if (event.hit !== self) {
           Hack.Attack(event.mapX, event.mapY, 1);
           beam.destroy();
@@ -581,7 +548,6 @@
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ビーム'
 - label: YouTube
   code: |
-    // YouTube
     feeles.openMedia({
       url: 'https://www.youtube.com/watch?v=B_jHOwhoAzY&t=2s',
       playing: true

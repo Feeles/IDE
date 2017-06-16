@@ -2,7 +2,7 @@ import Minecraft from 'minecraft/core';
 
 const mc = new Minecraft();
 
-mc.player.on( /*▼ プレイヤーが*/ ('うごいた'), () => {
+mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
 
 
 	/* \____ assets/actions.yml ____/ */
