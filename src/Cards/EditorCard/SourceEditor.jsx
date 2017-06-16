@@ -265,16 +265,15 @@ export default class SourceEditor extends PureComponent {
       this._widgets.set(line, parent);
     }
 
-    // Syntax: /*▼ スキン */ (_kきし)
-    const dropdown = /^([^\/]*)\/\*(▼[^\*]*)(\*\/\s?\()([^\)]*)\)/.exec(text);
+    // Syntax: ('▼ スキン', _kきし)
+    const dropdown = /^(.*\([\'\"])(▼[^\'\"]*)([\'\"]\,\s*)([^\)]*)\)/.exec(
+      text
+    );
     if (dropdown) {
       const [_all, _prefix, _label, _right, _value] = dropdown;
       const prefix = document.createElement('span');
       prefix.textContent = _prefix.replace(/\t/g, '    ');
       prefix.classList.add('Feeles-dropdown-blank');
-      const left = document.createElement('span');
-      left.textContent = '/*';
-      left.classList.add('Feeles-dropdown-blank');
       const label = document.createElement('span');
       label.textContent = _label;
       label.classList.add('Feeles-dropdown-label');
@@ -286,15 +285,14 @@ export default class SourceEditor extends PureComponent {
       value.classList.add('Feeles-dropdown-value');
       value.addEventListener('click', this.handleValueClick);
       const button = document.createElement('span');
-      button.appendChild(left); // '/*'
-      button.appendChild(label); // '▼ スキン '
-      button.appendChild(right); // '*/ ('
+      button.appendChild(label); // "▼ スキン"
+      button.appendChild(right); // "', "
       button.appendChild(value); // _kきし
       button.classList.add('Feeles-dropdown-button');
       button.setAttribute('data-label', _label.substr(1).trim());
       button.setAttribute('data-value', _value);
       button.setAttribute('data-from-line', line);
-      const allOfLeft = _prefix + '/*' + _label + _right; // value より左の全て
+      const allOfLeft = _prefix + _label + _right; // value より左の全て
       button.setAttribute('data-from-ch', allOfLeft.length);
       button.addEventListener('click', this.handleDropdownClick, true);
       const shadow = document.createElement('span');
