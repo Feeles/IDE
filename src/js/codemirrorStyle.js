@@ -51,7 +51,7 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
   z-index: 3;
 }
 .Feeles-dropdown .Feeles-dropdown-shadow {
-  transform: translateX(-2px);
+  transform: translateX(-20px);
   display: inline-block;
   border-radius: 2px;
   box-shadow: ${paper.zDepthShadows[1]};
@@ -59,7 +59,7 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
 }
 .Feeles-dropdown .Feeles-dropdown-button {
   display: inline-block;
-  padding: 2px 12px 2px 2px;
+  padding: 2px 10px 2px 20px;
   border-radius: 2px;
   overflow: hidden;
   cursor: pointer;
@@ -78,8 +78,8 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
 .Feeles-dropdown .Feeles-dropdown-value {
   display: inline-block;
   border-radius: 2px;
-  margin: -1px -2px -1px -2px;
-  padding: 1px 0px 1px 4px;
+  margin: -1px -2px -1px -4px;
+  padding: 1px 2px 1px 4px;
   color: transparent;
   box-shadow: 0 0 0 100em ${palette.primary1Color};
 }
