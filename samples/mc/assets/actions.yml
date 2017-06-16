@@ -1,21 +1,21 @@
 - label: タイトル
   code: |
-      mc.title('もじ', /*▼ タイトル*/ ('title'));
+      mc.title('もじ', ('▼ タイトル', 'title'));
 - label: スポーン
   code: |
-      mc.summon( /*▼ ブロック*/ ('lightning_bolt'), 0, 0, 0);
+      mc.summon(('▼ ブロック', 'lightning_bolt'), 0, 0, 0);
 - label: ブロック
   code: |
-      mc.blocks[ /*▼ ブロック*/ ('stone')].put(0, 0, 0);
+      mc.blocks[('▼ ブロック', 'stone')].put(0, 0, 0);
 - label: チャット
   code: |
       mc.say('マイクラ！');
 - label: アイテムをもらう
   code: |
-      mc.give( /*▼ ブロック*/ ('diamond'), 64);
+      mc.give(('▼ ブロック', 'diamond'), 64);
 - label: むずかしさを設定する
   code: |
-      mc.difficulty( /*▼ むずかしさ*/ ('e'));
+      mc.difficulty(('▼ むずかしさ', 'e'));
 - label: 時間を設定する
   code: |
       mc.setTime(0);
@@ -24,16 +24,16 @@
       mc.kill('ユーザーネーム');
 - label: ゲームモードを設定する
   code: |
-      mc.gamemode( /*▼ ゲームモード*/ ('c'));
+      mc.gamemode(('▼ ゲームモード', 'c'));
 - label: ブロックで埋める
   code: |
       // （プレイヤーの位置からみて） -5 から +5 の範囲を石で埋める
-      mc.fill( /*▼ ブロック*/ ('stone'), -5, -5, -5,  5, 5, 5);
+      mc.fill(('▼ ブロック', 'stone'), -5, -5, -5,  5, 5, 5);
 - label: ブロックをおきかえる
   code: |
       // （プレイヤーの位置からみて） -5 から +5 の範囲の水を
       // ダイヤモンドブロックにおきかえる
-      mc.replace( /*▼ ブロック*/ ('diamond_block'), /*▼ ブロック*/ ('water'), -5, -5, -5, 5, 5, 5);
+      mc.replace(('▼ ブロック*/ ('diamond_block'), /*▼ ブロック', 'water'), -5, -5, -5, 5, 5, 5);
 - label: ワープする（相対座標）
   code: |
       mc.locateBy(0, 3, 0);
