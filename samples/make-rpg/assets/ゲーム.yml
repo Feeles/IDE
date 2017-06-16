@@ -579,6 +579,15 @@
   image: trimmed/map-27-2.png
   description: プレイヤーがビームを使えるようにする。beamという関数がひとつあれば、前半部分だけをコピーペーストして、他のキャラクターがビームを使えるようにもできる
   descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ビーム'
+- label: じかんせいげん
+  code: |
+    setTimeout(() => {
+      // じかんせいげん（ゲームオーバー）
+      Hack.gameover();
+
+      //    ↓ タイマーのじかん
+    }, 1000 * 5);
+  description: 時間がたったらゲームオーバーになる
 - label: YouTube
   code: |
     // YouTube
