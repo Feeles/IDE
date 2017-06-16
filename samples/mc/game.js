@@ -5,9 +5,9 @@ const mc = new Minecraft();
 mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
 
 
-	/* \____ assets/actions.yml ____/ */
+	/*+ アクション */
 
 });
 
 
-/* \____ assets/events.yml ____/ */
+/*+ イベント */

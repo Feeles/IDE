@@ -528,6 +528,7 @@ export default class Main extends Component {
       localization,
       getConfig: this.getConfig,
       setConfig: this.setConfig,
+      loadConfig: this.loadConfig,
       findFile: this.findFile,
       addFile: this.addFile,
       putFile: this.putFile,

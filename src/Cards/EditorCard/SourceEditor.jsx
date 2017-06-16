@@ -36,6 +36,7 @@ import ga from 'utils/google-analytics';
 import Editor from './Editor';
 import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
+import AssetPane from './AssetPane';
 import AssetButton from './AssetButton';
 import ErrorPane from './ErrorPane';
 
@@ -113,10 +114,12 @@ const prevFiles = new WeakMap();
 export default class SourceEditor extends PureComponent {
   static propTypes = {
     file: PropTypes.object.isRequired,
+    files: PropTypes.array.isRequired,
     getFiles: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
     href: PropTypes.string.isRequired,
     getConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     reboot: PropTypes.bool.isRequired,
     localization: PropTypes.object.isRequired,
@@ -141,6 +144,7 @@ export default class SourceEditor extends PureComponent {
 
     assetFileName: null,
     assetLineNumber: 0,
+    assetScope: null,
     appendToHead: true,
     classNameStyles: []
   };
@@ -265,6 +269,42 @@ export default class SourceEditor extends PureComponent {
       this._widgets.set(line, parent);
     }
 
+    // Syntax: /*+ ゲーム */
+    const asset = /^(.*)(\/\*)(\+[^\*]+)(\*\/)/.exec(text);
+    if (asset) {
+      const [_all, _prefix, _left, _label, _right] = asset.map(t =>
+        t.replace(/\t/g, '    ')
+      );
+      const prefix = document.createElement('span');
+      prefix.textContent = _prefix;
+      prefix.classList.add('Feeles-asset-blank');
+      const left = document.createElement('span');
+      left.textContent = _left;
+      left.classList.add('Feeles-asset-blank');
+      const label = document.createElement('span');
+      label.textContent = _label;
+      const right = document.createElement('span');
+      right.textContent = _right;
+      right.classList.add('Feeles-asset-blank');
+      const button = document.createElement('span');
+      button.classList.add(`Feeles-asset-button`);
+      button.onclick = () => {
+        this.setState({
+          assetScope: _label.substr(1).trim(),
+          assetLineNumber: line,
+          appendToHead: false
+        });
+      };
+      button.appendChild(left);
+      button.appendChild(label);
+      button.appendChild(right);
+      const parent = document.createElement('div');
+      parent.classList.add('Feeles-widget', 'Feeles-asset');
+      parent.appendChild(prefix);
+      parent.appendChild(button);
+      this._widgets.set(line, parent);
+    }
+
     // Syntax: ('▼ スキン', _kきし)
     const dropdown = /^(.*\([\'\"])(▼[^\'\"]*)([\'\"]\,\s*)([^\)]*)\)/.exec(
       text
@@ -381,7 +421,10 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleAssetClose = () => {
-    this.setState({ assetFileName: null });
+    this.setState({
+      assetFileName: null,
+      assetScope: null
+    });
   };
 
   setLocation = async href => {
@@ -589,6 +632,17 @@ export default class SourceEditor extends PureComponent {
             />
           : null}
         <div style={styles.editorContainer}>
+          <AssetPane
+            open={!!this.state.assetScope && !this.state.assetFileName}
+            scope={this.state.assetScope}
+            loadConfig={this.props.loadConfig}
+            files={this.props.files}
+            findFile={this.props.findFile}
+            handleClose={this.handleAssetClose}
+            handleAssetInsert={this.handleAssetInsert}
+            localization={this.props.localization}
+            styles={styles}
+          />
           <div style={styles.assetContainer}>
             <div style={styles.scroller}>
               {this.assets.map((item, i) =>

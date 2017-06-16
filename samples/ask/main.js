@@ -5,7 +5,7 @@ async function start() {
 
 
 
-	/* \____ assets/sample.json ____/ */
+	/*+ アクション */
 
 }
 

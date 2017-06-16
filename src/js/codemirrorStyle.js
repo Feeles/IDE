@@ -27,9 +27,6 @@ textarea {
   padding: 0 20px;
   z-index: 2;
 }
-div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
-  opacity: 0.9;
-}
 .Feeles-asset-opener .Feeles-asset-opener-begin,
 .Feeles-asset-opener .Feeles-asset-opener-end {
   display: inline-block;
@@ -43,6 +40,25 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
   border-radius: 2px;
   white-space: pre;
   box-shadow: ${paper.zDepthShadows[1]};
+}
+.Feeles-asset {
+  transform: translateY(-22px);
+  height: 0;
+  white-space: pre;
+  z-index: 2;
+}
+.Feeles-asset .Feeles-asset-button {
+  display: inline-block;
+  padding: 4px 0;
+  border-radius: 2px;
+  cursor: pointer;
+  color: ${palette.alternateTextColor};
+  background-color: ${fade(palette.primary1Color, 1)};
+  box-shadow: ${paper.zDepthShadows[1]};
+}
+.Feeles-asset .Feeles-asset-blank {
+  display: inline-block;
+  transform: scaleY(0);
 }
 .Feeles-dropdown {
   transform: translateY(-20px);
@@ -83,6 +99,8 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset-opener {
   color: transparent;
   box-shadow: 0 0 0 100em ${palette.primary1Color};
 }
+div.CodeMirror.CodeMirror-focused .Feeles-asset-opener,
+div.CodeMirror.CodeMirror-focused .Feeles-asset,
 div.CodeMirror.CodeMirror-focused .Feeles-dropdown-button {
   opacity: 0.9;
 }
