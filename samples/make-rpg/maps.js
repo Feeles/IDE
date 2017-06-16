@@ -1,7 +1,6 @@
 import 'hackforplay/core';
 
 function maps() {
-	// map1
 	const map1 = Hack.createMap(`
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
@@ -16,7 +15,7 @@ function maps() {
 	`);
 	Hack.maps.map1 = map1;
 
-	/* \____ assets/マップ.yml ____/ */
+	/*+ マップ */
 
 }
 

@@ -1,0 +1,39 @@
+アクション:
+  - code: |
+      // 話す
+      await ask(`こんにちは`);
+    label: 話す
+    description: カッコの中のことばを話す
+  - code: |
+      // 聞く
+      const item1 = await ask();
+    label: 聞く
+    description: 相手のことばを聞きとる
+  - code: |
+      const item1 = await ask(); // 聞く
+      await ask(`${item1}`); // 話す
+    label: 聞く+話す
+    description: 相手のことばを聞きとって、そのまま返す
+  - code: |
+      const item1 = await ask(); // 聞く
+      await ask(`${item1}、いいね`); // 話す
+    label: あいづち
+    description: 相手のことばを聞きとって、それを「いいね」と言う
+  - code: |
+      await internet(`キーワード`).youtube(); // YouTube
+    label: YouTube
+    description: キーワードをYouTubeで調べる
+  - code: |
+      const item1 = await ask(); // 聞く
+      await internet(item1).youtube(); // YouTube
+    label: YouTubeでしらべる
+    description: 相手のことばを聞きとったあと、それをYouTubeで調べる
+  - code: |
+      await internet(`キーワード`).flickr(); // 画像
+    label: flickr
+    description: キーワードにヒットする画像を顔に出す
+  - code: |
+      const item1 = await ask(); // 聞く
+      await internet(item1).flickr(); // 画像
+    label: flickrでしらべる
+    description: 相手のことばを聞きとったあと、それにヒットする画像を顔に出す
