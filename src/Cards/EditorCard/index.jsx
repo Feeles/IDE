@@ -50,6 +50,7 @@ export default class EditorCard extends PureComponent {
     findFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     reboot: PropTypes.bool.isRequired,
     scrollToCard: PropTypes.func.isRequired,
     cards: PropTypes.object.isRequired,
@@ -236,12 +237,14 @@ export default class EditorCard extends PureComponent {
         <div style={styles.tabContentContainer}>
           <SourceEditor
             file={selectedTab.file}
+            files={this.props.files}
             getFiles={this.getFiles}
             closeSelectedTab={this.handleCloseSelectedTab}
             selectTabFromFile={this.handleSelectTabFromFile}
             setLocation={this.setLocation}
             href={this.props.href}
             getConfig={getConfig}
+            loadConfig={this.props.loadConfig}
             findFile={findFile}
             localization={localization}
             reboot={reboot}

@@ -18,6 +18,7 @@ export default class CardContainer extends PureComponent {
   static propTypes = {
     cards: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     updateCard: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
@@ -134,6 +135,7 @@ export default class CardContainer extends PureComponent {
       localization: this.props.localization,
       getConfig: this.props.getConfig,
       setConfig: this.props.setConfig,
+      loadConfig: this.props.loadConfig,
       findFile: this.props.findFile,
       addFile: this.props.addFile,
       putFile: this.props.putFile,
