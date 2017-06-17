@@ -1,0 +1,43 @@
+くみあわせ:
+  - label: レンキンジュツ
+    code: |+
+      mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
+
+        // まえ→あと
+        const まえ = ('▼ ブロック', 'dirt' /*土のブロック*/ ); // を,
+        const あと = ('▼ ブロック', 'gold_block' /*金のブロック*/ ); // にかえる!
+        mc.replace(あと, まえ, -1, -1, -1, 1, 1, 1);
+
+      });
+
+  - label: 超・コオリワタリ
+    code: |+
+      mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
+
+        // 足元をすべてぬりつぶす
+        const ブロック = ('▼ ブロック', 'ice' /*氷*/ );
+        const ひろさ = 5;
+        mc.execute(`fill ~-${ひろさ} ~-1 ~-${ひろさ} ~+${ひろさ} ~-1 ~+${ひろさ} ice`)
+
+      });
+
+  - label: ウィザーを３０秒でたおす方法
+    code: |+
+      // ゲームモード
+      mc.execute('gamemode ' + ('▼ ゲームモード', 's'));
+      // なんいど
+      mc.execute('difficulty ' + ('▼ なんいど', 'n'));
+      // ウィザー召喚！
+      mc.summon('wither', 40, 10, 0);
+      // 作戦開始！
+      setInterval(() => {
+
+        const ターゲット = ('▼ ターゲット', '@e[type=wither]'); // ウィザー
+        // となりに TNT をおく
+        mc.execute(`execute ${ターゲット} ~+2 ~ ~ setblock ~ ~ ~ tnt`);
+        // その下に レッドストーンブロック をおく
+        mc.execute(`execute ${ターゲット} ~+2 ~-1 ~ setblock ~ ~ ~ redstone_block`);
+        // おとり用の ヒツジ をはなす
+        mc.execute(`execute ${ターゲット} ~ ~ ~+10 summon sheep`);
+
+      }, 3000);
