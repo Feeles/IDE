@@ -14,9 +14,9 @@
   - label: アイテムをもらう
     code: |
         mc.give(('▼ ブロック', 'diamond'), 64);
-  - label: むずかしさを設定する
+  - label: なんいどを設定する
     code: |
-        mc.difficulty(('▼ むずかしさ', 'e'));
+        mc.difficulty(('▼ なんいど', 'e'));
   - label: 時間を設定する
     code: |
         mc.setTime(0);
