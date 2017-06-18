@@ -54,7 +54,7 @@ export default class ErrorPane extends PureComponent {
         borderStyle: 'double',
         borderColor: red500,
         backgroundColor: red50,
-        overflow: 'scroll'
+        overflow: 'hidden'
       },
       heading: {
         color: 'rgba(255, 0, 0, .5)'
@@ -94,7 +94,7 @@ export default class ErrorPane extends PureComponent {
     const styles = {
       message: {
         position: 'relative',
-        maxHeight: this.props.error ? expanded ? 1000 : 32 : 0,
+        maxHeight: this.props.error ? (expanded ? 1000 : 48) : 0,
         width: '100%',
         boxSizing: 'border-box',
         paddingLeft: 8,

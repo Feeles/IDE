@@ -311,9 +311,6 @@ export default class SourceEditor extends PureComponent {
     );
     if (dropdown) {
       const [_all, _prefix, _label, _right, _value] = dropdown;
-      const prefix = document.createElement('span');
-      prefix.textContent = _prefix.replace(/\t/g, '    ');
-      prefix.classList.add('Feeles-dropdown-blank');
       const label = document.createElement('span');
       label.textContent = _label;
       label.classList.add('Feeles-dropdown-label');
@@ -340,8 +337,12 @@ export default class SourceEditor extends PureComponent {
       shadow.classList.add('Feeles-dropdown-shadow');
       const parent = document.createElement('div');
       parent.classList.add('Feeles-widget', 'Feeles-dropdown');
-      parent.appendChild(prefix);
       parent.appendChild(shadow);
+
+      const pos = { line, ch: _prefix.length };
+      const { left, top } = this.codemirror.charCoords(pos);
+      parent.style.transform = `translate(${left - 50}px, -20px)`;
+
       this._widgets.set(line, parent);
     }
   };
