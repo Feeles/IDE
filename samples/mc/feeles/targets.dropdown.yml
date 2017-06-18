@@ -1,13 +1,13 @@
 ターゲット:
-  - body: @p
+  - body: "'@p'"
     label: プレイヤー
-  - body: @e[r=10]
+  - body: "'@e[r=10]'"
     label: ちかくにあるもの
-  - body: @e[type=zombie]
+  - body: "'@e[type=zombie]'"
     label: ゾンビ
-  - body: @e[type=creeper]
+  - body: "'@e[type=creeper]'"
     label: クリーパー
-  - body: @e[type=wither]
+  - body: "'@e[type=wither]'"
     label: ウィザー
-  - body: @e[type=dragon]
+  - body: "'@e[type=dragon]'"
     label: エンダードラゴン
