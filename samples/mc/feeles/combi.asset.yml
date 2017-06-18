@@ -1,4 +1,14 @@
 くみあわせ:
+  - label: 空中さんぽ
+    code: |+
+      setInterval(() => {
+
+        // ランダムな毛の色（すうじ）
+        const いろ = Math.random() * 17 >> 0;
+      	mc.setBlock(`wool ${いろ}`, 0, -1, 0);
+
+      }, 100);
+
   - label: レンキンジュツ
     code: |+
       mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
