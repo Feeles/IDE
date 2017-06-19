@@ -4,6 +4,7 @@ import MinecraftBlockManager from './block-manager';
 import MinecraftEventEmitter from './event-emitter';
 
 import MinecraftPlayer from './player';
+import MinecraftAgent from './agent';
 
 import * as utils from './utils';
 
@@ -36,6 +37,8 @@ class Minecraft extends MinecraftEventEmitter {
 		this.listeners = {};
 
 		this.player = new MinecraftPlayer();
+		
+		this.agent = new MinecraftAgent(this);
 
 
 		this.on('BlockPlaced', (data) => {
