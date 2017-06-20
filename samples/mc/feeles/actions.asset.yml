@@ -1,19 +1,25 @@
 アクション:
+  - label: いきもの
+    code: |
+        mc.summon(('▼ いきもの', 'pig' /*豚*/ ), 0, 0, 0);
+  - label: モンスター
+    code: |
+        mc.summon(('▼ モンスター', 'creeper' /*クリーパー*/ ), 0, 0, 0);
+  - label: ブロック
+    code: |
+        mc.blocks[('▼ ブロック', 'end_stone' /*エンドストーン*/ )].put(0, 0, 0);
+  - label: せっち
+    code: |
+        mc.blocks[('▼ せっち', 'crafting_table' /*作業台*/ )].put(0, 0, 0);
   - label: タイトル
     code: |
         mc.title('もじ', ('▼ タイトル', 'title'));
-  - label: スポーン
-    code: |
-        mc.summon(('▼ ブロック', 'lightning_bolt'), 0, 0, 0);
-  - label: ブロック
-    code: |
-        mc.blocks[('▼ ブロック', 'stone')].put(0, 0, 0);
   - label: チャット
     code: |
         mc.say('マイクラ！');
-  - label: アイテムをもらう
+  - label: たべもの
     code: |
-        mc.give(('▼ ブロック', 'diamond'), 64);
+        mc.give(('▼ たべもの', 'cake:1' /*ケーキ*/ ), 64);
   - label: なんいどを設定する
     code: |
         mc.difficulty(('▼ なんいど', 'e'));
@@ -28,8 +34,8 @@
         mc.gamemode(('▼ ゲームモード', 'c'));
   - label: ブロックで埋める
     code: |
-        // （プレイヤーの位置からみて） -5 から +5 の範囲を石で埋める
-        mc.fill(('▼ ブロック', 'stone'), -5, -5, -5,  5, 5, 5);
+        // （プレイヤーの位置からみて） -5 から +5 の範囲を TNT で埋める
+        mc.fill(('▼ ブロック', 'tnt' /*TNT 火薬*/ ), -5, -5, -5,  5, 5, 5);
   - label: ブロックをおきかえる
     code: |
         // （プレイヤーの位置からみて） -5 から +5 の範囲の水を
