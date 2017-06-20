@@ -29,3 +29,11 @@
     label: ノーマル
   - body: "'h'"
     label: ハード
+
+天気:
+  - body: "'clear'"
+    label: はれ
+  - body: "'rain'"
+    label: あめ
+  - body: "'thunder'"
+    label: かみなり
