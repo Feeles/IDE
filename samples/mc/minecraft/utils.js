@@ -308,3 +308,19 @@ export function capture(mc, x, y, z, scale = 0.3) {
 	drawImage(mc, canvas, x, y, z, false, scale);
 
 };
+
+export function wait(time) {
+	return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+
+
+export async function setInterval(promise, time) {
+
+	await promise();
+
+	await wait(time);
+
+	setInterval(promise, time);
+
+}

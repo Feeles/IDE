@@ -1,0 +1,35 @@
+
+方向:
+  - body: "'forward'"
+    label: 前
+  - body: "'back'"
+    label: 後
+  - body: "'left'"
+    label: 左
+  - body: "'right'"
+    label: 右
+  - body: "'up'"
+    label: 上
+  - body: "'down'"
+    label: 下
+
+回転方向:
+  - body: "'left'"
+    label: 左
+  - body: "'right'"
+    label: 右
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

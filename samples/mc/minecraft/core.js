@@ -37,7 +37,7 @@ class Minecraft extends MinecraftEventEmitter {
 		this.listeners = {};
 
 		this.player = new MinecraftPlayer();
-		
+
 		this.agent = new MinecraftAgent(this);
 
 
@@ -72,6 +72,21 @@ class Minecraft extends MinecraftEventEmitter {
 			'red',
 			'black'
 		];
+
+		this.directions = [
+			'forward',
+			'back',
+			'left',
+			'right',
+			'up',
+			'down'
+		];
+
+		this.turnDirections = [
+			'left',
+			'right'
+		];
+
 
 		this.on('BlockBroken', (data) => {
 
