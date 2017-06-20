@@ -29,3 +29,19 @@
     label: ノーマル
   - body: "'h'"
     label: ハード
+
+天気:
+  - body: "'clear'"
+    label: はれ
+  - body: "'rain'"
+    label: あめ
+  - body: "'thunder'"
+    label: かみなり
+
+サウンド:
+  - body: "'mob.pig.death'"
+    label: ブタの叫び声
+  - body: "'mob.pig.say'"
+    label: ブタの鳴き声
+  - body: "'mob.pig.step'"
+    label: ブタの足音
