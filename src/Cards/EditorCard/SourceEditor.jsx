@@ -360,7 +360,7 @@ export default class SourceEditor extends PureComponent {
         to: { line, ch: ch + value.length },
         list: list.map(item => ({
           text: item.body,
-          displayText: `${item.body} ${item.label}`
+          displayText: `${item.body} ${item.label || ''}`
         }))
       };
       this.codemirror.showHint({
