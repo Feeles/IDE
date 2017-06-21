@@ -340,8 +340,8 @@ export default class SourceEditor extends PureComponent {
       parent.appendChild(shadow);
 
       const pos = { line, ch: _prefix.length };
-      const { left, top } = this.codemirror.charCoords(pos);
-      parent.style.transform = `translate(${left - 50}px, -20px)`;
+      const { left, top } = this.codemirror.charCoords(pos, 'local');
+      parent.style.transform = `translate(${left - 4}px, -20px)`;
 
       this._widgets.set(line, parent);
     }
