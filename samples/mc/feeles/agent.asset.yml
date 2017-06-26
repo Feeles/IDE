@@ -1,60 +1,58 @@
 エージェント:
   - label: 移動
     code: |
-        mc.agent.move(('▼ 方向', 'forward'));
+        await mc.agent.move(('▼ 方向', 'forward'));
   - label: 方向転換
     code: |
-        mc.agent.turn(('▼ 回転方向', 'left'));
+        await mc.agent.turn(('▼ 回転方向', 'left'));
   - label: 攻撃
     code: |
-        mc.agent.attack(('▼ 方向', 'forward'));
+        await mc.agent.attack(('▼ 方向', 'forward'));
   - label: こわす
     code: |
-        mc.agent.destroy(('▼ 方向', 'forward'));
+        await mc.agent.destroy(('▼ 方向', 'forward'));
   - label: アイテムを落とす
     code: |
-        mc.agent.drop(1, 64, ('▼ 方向', 'forward'));
+        await mc.agent.drop(1, 64, ('▼ 方向', 'forward'));
   - label: 全てのアイテムを落とす
     code: |
-        mc.agent.dropAll(('▼ 方向', 'forward'));
+        await mc.agent.dropAll(('▼ 方向', 'forward'));
   - label: しらべる
     code: |
-        mc.agent.inspect(('▼ 方向', 'forward'));
+        await mc.agent.inspect(('▼ 方向', 'forward'));
   - label: しらべる（データ）
     code: |
-        mc.agent.inspectData(('▼ 方向', 'forward'));
+        await mc.agent.inspectData(('▼ 方向', 'forward'));
   - label: 検出
     code: |
-        mc.agent.detect(('▼ 方向', 'forward'));
+        await mc.agent.detect(('▼ 方向', 'forward'));
   - label: レッドストーンを検出
     code: |
-        mc.agent.detectRedstone(('▼ 方向', 'forward'));
+        await mc.agent.detectRedstone(('▼ 方向', 'forward'));
   - label: スロット移動
     code: |
-        mc.agent.transfer(1, 64, 2);
+        await mc.agent.transfer(1, 64, 2);
   - label: エージェントをつくる
     code: |
-        mc.agent.create();
+        await mc.agent.create();
   - label: プレイヤーの位置に移動
     code: |
-        mc.agent.tp();
+        await mc.agent.tp();
   - label: アイテムをあつめる
     code: |
-        mc.agent.collect(('▼ アイテム', 'diamond'));
+        await mc.agent.collect(('▼ アイテム', 'diamond'));
   - label: たがやす
     code: |
-        mc.agent.till(('▼ 方向', 'forward'));
+        await mc.agent.till(('▼ 方向', 'forward'));
   - label: アイテムをおく
     code: |
-        mc.agent.place(1, ('▼ 方向', 'forward'));
+        await mc.agent.place(1, ('▼ 方向', 'forward'));
   - label: アイテムの数を取得する
     code: |
-        mc.agent.getItemCount(1);
+        await mc.agent.getItemCount(1);
   - label: アイテムの空きを取得する
     code: |
-        mc.agent.getItemSpace(1);
+        await mc.agent.getItemSpace(1);
   - label: アイテムの詳細を取得する
     code: |
-        mc.agent.getItemDetail(1);
-
-
+        await mc.agent.getItemDetail(1);
