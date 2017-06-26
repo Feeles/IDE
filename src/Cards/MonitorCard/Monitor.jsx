@@ -113,6 +113,8 @@ export default class Monitor extends PureComponent {
     on('message.error', this.handleError);
     on('message.ipcRenderer.*', this.handleIpcRenderer);
     on('message.api.SpeechRecognition', this.handleSpeechRecognition);
+    on('message.setTimeout', this.handleSetTimeout);
+    on('message.clearTimeout', this.handleClearTimeout);
   }
 
   componentDidUpdate(prevProps, prevStates) {
@@ -335,6 +337,15 @@ export default class Monitor extends PureComponent {
     } else {
       console.warn('window.ipcRenderer is not defined');
     }
+  };
+
+  setTimeoutId = new Map();
+  handleSetTimeout = ({ data, reply }) => {
+    const { timeoutId, delay } = data.value;
+    this.setTimeoutId.set(timeoutId, setTimeout(reply, delay));
+  };
+  handleClearTimeout = ({ data }) => {
+    clearInterval(this.setTimeoutId.get(data.value.timeoutId));
   };
 
   handleSpeechRecognition = ({ data }) => {
