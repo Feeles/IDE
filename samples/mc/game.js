@@ -2,6 +2,7 @@ import Minecraft from 'minecraft/core';
 
 const mc = new Minecraft();
 
+// マイクラ世界のじかんをリセットする
 mc.setTime(0);
 
 mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
@@ -12,6 +13,10 @@ mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
 
 });
 
+// エージェントを自分のところにテレポートさせる
+mc.agent.tp();
+
+// エージェントをくり返しうごかす
 mc.utils.setInterval(async() => {
 
 
