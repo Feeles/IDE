@@ -310,16 +310,16 @@ export function capture(mc, x, y, z, scale = 0.3) {
 };
 
 export function wait(time) {
-	return new Promise((resolve) => setTimeout(resolve, time));
+	return new Promise((resolve) => feeles.setTimeout(resolve, time));
 }
 
 
 
 export async function setInterval(promise, time) {
 
-	await promise();
-
 	await wait(time);
+
+	await promise();
 
 	setInterval(promise, time);
 

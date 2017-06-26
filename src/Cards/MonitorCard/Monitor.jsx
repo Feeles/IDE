@@ -113,6 +113,10 @@ export default class Monitor extends PureComponent {
     on('message.error', this.handleError);
     on('message.ipcRenderer.*', this.handleIpcRenderer);
     on('message.api.SpeechRecognition', this.handleSpeechRecognition);
+    on('message.setTimeout', this.handleSetTimeout);
+    on('message.clearTimeout', this.handleClearTimeout);
+    on('message.setInterval', this.handleSetInterval);
+    on('message.clearInterval', this.handleClearInterval);
   }
 
   componentDidUpdate(prevProps, prevStates) {
@@ -335,6 +339,24 @@ export default class Monitor extends PureComponent {
     } else {
       console.warn('window.ipcRenderer is not defined');
     }
+  };
+
+  setTimeoutId = new Map();
+  handleSetTimeout = ({ data, reply }) => {
+    const { timeoutId, delay } = data.value;
+    this.setTimeoutId.set(timeoutId, setTimeout(reply, delay));
+  };
+  handleClearTimeout = ({ data }) => {
+    clearInterval(this.setTimeoutId.get(data.value.timeoutId));
+  };
+
+  setIntervalId = new Map();
+  handleSetInterval = ({ data, reply }) => {
+    const { intervalId, delay } = data.value;
+    this.setIntervalId.set(intervalId, setInterval(reply, delay));
+  };
+  handleClearInterval = ({ data }) => {
+    clearInterval(this.setIntervalId.get(data.value.intervalId));
   };
 
   handleSpeechRecognition = ({ data }) => {
