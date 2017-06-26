@@ -547,6 +547,20 @@
     image: trimmed/map-27-2.png
     description: プレイヤーがビームを使えるようにする。beamという関数がひとつあれば、前半部分だけをコピーペーストして、他のキャラクターがビームを使えるようにもできる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ビーム'
+  - label: 魔道書
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _m魔道書));
+      item1.locate(7, 5);
+      item1.on(('▼ イベント', 'のった'), () => {
+        // 魔道書のコードをひらく
+        feeles.openCode('code.js');
+
+        // なくなる
+        item1.destroy();
+      });
+    image: hackforplay/enchantbook.png
+    description: 魔道書を使えるようにする。魔道書のコードは code.js で書きかえることができる
   - label: じかんせいげん
     code: |
       setTimeout(() => {
