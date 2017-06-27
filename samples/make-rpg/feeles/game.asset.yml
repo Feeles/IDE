@@ -597,6 +597,21 @@
       // 文字をがめんに出す
       Hack.menuGroup.addChild(item1);
     description: じかんを表示する
+  - label: こうげき力
+    code: |
+      // あたらしい文字のばしょをきめる
+      const item1 = new ScoreLabel(10, 130);
+      // 文字をへんこうする
+      item1.label = 'ATK:';
+      // つねに、すうじをプレイヤーのこうげき力にする
+      feeles.setInterval(() => {
+        // すうじをプレイヤーのこうげき力にする
+        item1.score = player.atk;
+
+      }, 1000);
+      // 文字をがめんに出す
+      Hack.menuGroup.addChild(item1);
+    description: こうげき力を表示する
 
   - label: アラート
     code: |
