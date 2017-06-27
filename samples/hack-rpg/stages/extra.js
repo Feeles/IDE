@@ -27,7 +27,7 @@ export default function makeMagic(x, y, map, fileName) {
 	magic.layer = RPGMap.Layer.Under;
 	magic.collisionFlag = false;
 	if (flag) {
-		magic.mod(_mまほうじんひかった);
+		magic.mod(('▼ スキン', _mまほうじんひかった));
 		magic.onのった = () => {
 			if (confirm('このステージを 改造(かいぞう) しますか？')) {
 				feeles.openEditor(fileName);
@@ -36,7 +36,7 @@ export default function makeMagic(x, y, map, fileName) {
 			}
 		};
 	} else {
-		magic.mod(_mまほうじん);
+		magic.mod(('▼ スキン', _mまほうじん));
 		magic.onのった = () => {
 			Hack.log('ふういんのせいで つかえない');
 		};
