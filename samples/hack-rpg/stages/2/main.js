@@ -95,8 +95,8 @@ function gameStart() {
 	const item5 = new RPGObject();
 	item5.opacity = 0;
 	item5.mod(_o女の人);
-	// 女の人を 6, 3 の位置に移動する ( map1 )
-	item5.locate(6, 3, 'map1');
+	// 女の人を 4, 3 の位置に移動する ( map1 )
+	item5.locate(4, 3, 'map1');
 	// 女の人にプレイヤーがぶつかったら...
 	item5.onぶつかった = () => {
 		if (item1.parentNode) {
