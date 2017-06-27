@@ -8,7 +8,7 @@ import extra, {
 function gameStart() {
 
 	// map1 を読み込む
-	Hack.maps.map1.load();
+	Hack.changeMap('map1');
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();

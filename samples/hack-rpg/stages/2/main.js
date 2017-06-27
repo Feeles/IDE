@@ -8,6 +8,9 @@ import './maps';
 
 function gameStart() {
 
+	// map1 を読み込む
+	Hack.changeMap('map1');
+
 	// 解説の youtube を開く
 	feeles.openMedia({
 		url: 'https://www.youtube.com/embed/mLBb7WQTjoo'
@@ -15,10 +18,6 @@ function gameStart() {
 
 	// 説明書を表示する
 	// feeles.openReadme('stages/2/README.md');
-
-	// map1 を読み込む
-	Hack.maps.map1.load();
-
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
