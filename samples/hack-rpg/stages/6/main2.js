@@ -14,7 +14,7 @@ function gameStartLazy() {
 
 	// ドラゴン
 	const item1 = new RPGObject();
-	item1.mod(_dドラゴン);
+	item1.mod(('▼ スキン', _dドラゴン));
 	// ドラゴンの体力
 	item1.hp = 16;
 	// ドラゴンの位置を調整する
@@ -94,7 +94,7 @@ function gameStartLazy() {
 
 	// ルビー
 	const item2 = new RPGObject();
-	item2.mod(_rルビー);
+	item2.mod(('▼ スキン', _rルビー));
 	// ルビーを 11, 5 の位置に移動する ( map2 )
 	item2.locate(11, 5, 'map2');
 	// ルビーにプレイヤーが乗ったら...
@@ -114,7 +114,7 @@ function gameStartLazy() {
 
 		// かいだん
 		const item3 = new RPGObject();
-		item3.mod(_kくだりかいだん);
+		item3.mod(('▼ スキン', _kくだりかいだん));
 		// 階段を 14, 5 の位置に移動する ( map2 )
 		item3.locate(14, 5, 'map2');
 		// 階段にプレイヤーが乗ったら...

@@ -13,7 +13,7 @@ function gameStartLazy() {
 
 	// しろ
 	const item1 = new RPGObject();
-	item1.mod(_sしろ);
+	item1.mod(('▼ スキン', _sしろ));
 	// 城の透明度（うすさ）を 0 にする（見えなくする）
 	item1.opacity = 0;
 	// 城を 13, 5 の位置に移動する ( map4 )

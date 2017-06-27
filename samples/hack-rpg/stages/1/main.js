@@ -20,7 +20,7 @@ function gameStart() {
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(_kきし);
+	player.mod(('▼ スキン', _kきし));
 	// プレイヤーを　3,　5 の位置に移動する
 	player.locate(3, 5);
 	// プレイヤーの体力
@@ -41,7 +41,7 @@ function gameStart() {
 
 	// スライム
 	const item1 = new RPGObject();
-	item1.mod(_sスライム);
+	item1.mod(('▼ スキン', _sスライム));
 	// スライムの体力
 	item1.hp = 3;
 	// スライムの攻撃力
@@ -64,7 +64,7 @@ function gameStart() {
 
 	// 階段
 	const item2 = new RPGObject();
-	item2.mod(_kくだりかいだん);
+	item2.mod(('▼ スキン', _kくだりかいだん));
 	// 階段を 12, 5 の位置に移動 ( map1 )
 	item2.locate(12, 5, 'map1');
 	// 階段にプレイヤーが乗ったら...

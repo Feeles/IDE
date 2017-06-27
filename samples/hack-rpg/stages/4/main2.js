@@ -13,7 +13,7 @@ function gameStartLazy() {
 
 	// サファイア
 	const item1 = new RPGObject();
-	item1.mod(_sサファイア);
+	item1.mod(('▼ スキン', _sサファイア));
 	// サファイアを 13, 2 の位置に移動する ( map2 )
 	item1.locate(13, 2, 'map2');
 	// サファイアにプレイヤーが乗ったら...
@@ -29,7 +29,7 @@ function gameStartLazy() {
 
 	// かいだん
 	const item2 = new RPGObject();
-	item2.mod(_kくだりかいだん);
+	item2.mod(('▼ スキン', _kくだりかいだん));
 	// 階段を 7, 8 の位置に移動する ( map2 )
 	item2.locate(7, 8, 'map2');
 	// 階段は下の方に置く ( Under )
@@ -73,7 +73,7 @@ function gameStartLazy() {
 
 			// スライム
 			const item3 = new RPGObject();
-			item3.mod(_sスライム);
+			item3.mod(('▼ スキン', _sスライム));
 			// スライムの体力
 			item3.hp = 999;
 			// スライムを　x, y の位置に配置する ( map2 )

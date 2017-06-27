@@ -23,7 +23,7 @@ function gameStart() {
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(_kきし);
+	player.mod(('▼ スキン', _kきし));
 	// プレイヤーを　7, 1 の位置に移動する
 	player.locate(7, 1);
 	// プレイヤーの体力
@@ -47,7 +47,7 @@ function gameStart() {
 
 	// かいだん
 	const item1 = new RPGObject();
-	item1.mod(_kくだりかいだん);
+	item1.mod(('▼ スキン', _kくだりかいだん));
 	// 階段を 14, 6 の位置に移動する ( map1 )
 	item1.locate(14, 6, 'map1');
 	// 階段の透明度（うすさ）を 0 にする（見えなくする）

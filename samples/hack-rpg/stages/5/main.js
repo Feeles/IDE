@@ -21,7 +21,7 @@ function gameStart() {
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(_kきし);
+	player.mod(('▼ スキン', _kきし));
 	// プレイヤーを　7, 2 の位置に移動する
 	player.locate(7, 2);
 	// プレイヤーの体力
@@ -59,7 +59,7 @@ function gameStart() {
 
 	// コウモリ
 	const item4 = new RPGObject();
-	item4.mod(_kこうもり);
+	item4.mod(('▼ スキン', _kこうもり));
 	// コウモリを 11, 5 の位置に移動する ( map1 )
 	item4.locate(11, 5, 'map1');
 	//　コウモリを更新する...
@@ -73,7 +73,7 @@ function gameStart() {
 
 	// かいだん
 	const item2 = new RPGObject();
-	item2.mod(_nのぼりかいだん);
+	item2.mod(('▼ スキン', _nのぼりかいだん));
 	// 階段を 7, 8 の位置に移動する ( map1 )
 	item2.locate(7, 8, 'map1');
 	// 階段を下の方に置く ( Under )
@@ -114,7 +114,7 @@ function gameStart() {
 
 			// スライム
 			const item3 = new RPGObject();
-			item3.mod(_sスライム);
+			item3.mod(('▼ スキン', _sスライム));
 			// スライムの体力
 			item3.hp = 999;
 			// スライムの色を red (赤色) にする

@@ -12,7 +12,7 @@ function gameStart() {
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(_kきし);
+	player.mod(('▼ スキン', _kきし));
 	// プレイヤーを 7, 5 の位置に移動する
 	player.locate(7, 5);
 	// プレイヤーの体力
@@ -33,7 +33,7 @@ function gameStart() {
 
 	// 神官
 	const boy = new RPGObject();
-	boy.mod(_o男の子);
+	boy.mod(('▼ スキン', _o男の子));
 	// 神官を 7, ３ の位置に移動する
 	boy.locate(7, 3);
 	// フラグが立っていたら...
@@ -104,7 +104,7 @@ function createWarp(x, y, color, message, next) {
 
 	// ワープ床
 	const warp = new RPGObject();
-	warp.mod(_wワープ);
+	warp.mod(('▼ スキン', _wワープ));
 	// ワープ床を x, y の位置に移動する ( map1 )
 	warp.locate(x, y, 'map1');
 	// ワープ床の色を color にする

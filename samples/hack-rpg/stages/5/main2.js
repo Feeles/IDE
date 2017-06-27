@@ -13,7 +13,7 @@ function gameStartLazy() {
 
 	// クモ
 	const item1 = new RPGObject();
-	item1.mod(_kくも);
+	item1.mod(('▼ スキン', _kくも));
 	// クモを 7, 4 の位置に移動する ( map2 )
 	item1.locate(7, 4, 'map2');
 	// クモを更新する...
@@ -27,7 +27,7 @@ function gameStartLazy() {
 
 	// ダイアモンド
 	const item2 = new RPGObject();
-	item2.mod(_dダイヤモンド);
+	item2.mod(('▼ スキン', _dダイヤモンド));
 	// ダイアモンドを 4, 7 の位置に移動する ( map2 )
 	item2.locate(4, 7, 'map2');
 	// ダイアモンドにプレイヤーが乗ったら...
@@ -43,7 +43,7 @@ function gameStartLazy() {
 
 	// かいだん
 	const item3 = new RPGObject();
-	item3.mod(_kくだりかいだん);
+	item3.mod(('▼ スキン', _kくだりかいだん));
 	// 階段を 7, 0 の位置に移動する ( map2 )
 	item3.locate(7, 0, 'map2');
 	//　階段を下の方に置く ( Under )

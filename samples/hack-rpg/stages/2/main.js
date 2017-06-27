@@ -21,7 +21,7 @@ function gameStart() {
 
 	// プレイヤー（騎士）
 	const player = Hack.player = new Player();
-	player.mod(_kきし);
+	player.mod(('▼ スキン', _kきし));
 	// プレイヤーを 3, 5 の位置に移動する
 	player.locate(3, 5);
 	// プレイヤーの体力
@@ -45,7 +45,7 @@ function gameStart() {
 
 	// まどうしょ
 	const item1 = new RPGObject();
-	item1.mod(_m魔道書);
+	item1.mod(('▼ スキン', _m魔道書));
 	// 魔道書を 5, 3 の位置に移動する
 	item1.locate(5, 3);
 	// 魔道書にプレイヤーが乗ったら...
@@ -61,7 +61,7 @@ function gameStart() {
 
 	// スライム
 	const item2 = new RPGObject();
-	item2.mod(_sスライム);
+	item2.mod(('▼ スキン', _sスライム));
 	// スライムの体力
 	item2.hp = 99;
 	// スライムを 7, 5 の位置に移動する ( map1 )
@@ -72,7 +72,7 @@ function gameStart() {
 
 	// イモムシ
 	const item3 = new RPGObject();
-	item3.mod(_iいもむし);
+	item3.mod(('▼ スキン', _iいもむし));
 	// イモムシの体力
 	item3.hp = 9999;
 	// イモムシを 5, 7 の位置に移動する ( map1 )
@@ -83,7 +83,7 @@ function gameStart() {
 
 	// かいだん
 	const item4 = new RPGObject();
-	item4.mod(_kくだりかいだん);
+	item4.mod(('▼ スキン', _kくだりかいだん));
 	// 階段を 7, 9 の位置に移動する ( map1 )
 	item4.locate(7, 9, 'map1');
 	// 階段は下の方に配置する ( Under )
@@ -97,7 +97,7 @@ function gameStart() {
 	// まほうをすすめてくる女の人
 	const item5 = new RPGObject();
 	item5.opacity = 0;
-	item5.mod(_o女の人);
+	item5.mod(('▼ スキン', _o女の人));
 	// 女の人を 4, 3 の位置に移動する ( map1 )
 	item5.locate(4, 3, 'map1');
 	// 女の人にプレイヤーがぶつかったら...

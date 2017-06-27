@@ -21,7 +21,7 @@ function gameStartLazy() {
 
 	// かいだん
 	const item1 = new RPGObject();
-	item1.mod(_nのぼりかいだん);
+	item1.mod(('▼ スキン', _nのぼりかいだん));
 	// 階段を 14, 5 の位置に移動する　( map3 )
 	item1.locate(14, 5, 'map3');
 	// 階段を下の方に置く ( Under )
@@ -76,7 +76,7 @@ function gameStartLazy() {
 
 		// はこ
 		const item1 = new RPGObject();
-		item1.mod(_tたからばこ);
+		item1.mod(('▼ スキン', _tたからばこ));
 		// 宝箱を x, y の位置に移動する ( map3 )
 		item1.locate(x, y, 'map3');
 		// 宝箱にプレイヤーが乗ったら...
@@ -95,7 +95,7 @@ function gameStartLazy() {
 
 		// コイン
 		const item1 = new RPGObject();
-		item1.mod(_kコイン);
+		item1.mod(('▼ スキン', _kコイン));
 		// コインを x, y の位置に作る　( map3 )
 		item1.locate(x, y, 'map3');
 		// コインにプレイヤーが乗ったら...
