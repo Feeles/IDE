@@ -58,7 +58,7 @@
       item1.hp = 10;
       item1.atk = 1;
       item1.locate(7, 5, 'map1');
-      setInterval(() => {
+      feeles.setInterval(() => {
         item1.attack();
       }, 4000);
     image: trimmed/ouroboros.gif
@@ -375,7 +375,7 @@
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _bばくだん));
       item1.locate(7, 5, 'map1');
-      setTimeout(() => {
+      feeles.setTimeout(() => {
         const item2 = new RPGObject();
         item2.mod(('▼ スキン', _bばくえん));
         item2.locate(7, 5);
@@ -462,7 +462,7 @@
       item1.mod(('▼ スキン', _rルビー));
       item1.locate(7, 5, 'map1');
       const start = () => {
-        item1.timer = setInterval(() => {
+        item1.timer = feeles.setInterval(() => {
           const randomMod = random([
             _rルビー,
             _dドクロ,
@@ -473,7 +473,7 @@
         }, 100);
       };
       const stop = () => {
-        clearInterval(item1.timer);
+        feeles.clearInterval(item1.timer);
         if (item1._mod === _rルビー) {
           Hack.score += 1; // rubyなら、SCORE + 1
         }
@@ -563,7 +563,7 @@
     description: 魔道書を使えるようにする。魔道書のコードは code.js で書きかえることができる
   - label: じかんせいげん
     code: |
-      setTimeout(() => {
+      feeles.setTimeout(() => {
         // じかんせいげん（ゲームオーバー）
         Hack.gameover();
 
@@ -577,11 +577,42 @@
         playing: true
       });
     description: YouTubeのURLから好きな動画を再生できる
-  - label: ログ
+  - label: セリフ
     code: |
-      Hack.log('GAME START!!');
+      Hack.log('またあそんでね！');
     description: ゲーム画面に好きな文字を出せる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ログ'
+  - label: タイム
+    code: |
+      // あたらしい文字のばしょをきめる
+      const item1 = new ScoreLabel(10, 104);
+      // 文字をへんこうする
+      item1.label = 'TIME:';
+      // １秒ごとに、すうじを１ふやす
+      feeles.setInterval(() => {
+        // すうじを１ふやす
+        item1.score = item1.score + 1;
+
+      }, 1000);
+      // 文字をがめんに出す
+      Hack.menuGroup.addChild(item1);
+    description: じかんを表示する
+  - label: こうげき力
+    code: |
+      // あたらしい文字のばしょをきめる
+      const item1 = new ScoreLabel(10, 130);
+      // 文字をへんこうする
+      item1.label = 'ATK:';
+      // つねに、すうじをプレイヤーのこうげき力にする
+      feeles.setInterval(() => {
+        // すうじをプレイヤーのこうげき力にする
+        item1.score = player.atk;
+
+      }, 1000);
+      // 文字をがめんに出す
+      Hack.menuGroup.addChild(item1);
+    description: こうげき力を表示する
+
   - label: アラート
     code: |
       alert('気をつけて！');
