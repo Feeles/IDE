@@ -35,6 +35,10 @@ function gameStart() {
 		Hack.gameover();
 	};
 
+
+	/*+ ゲーム */
+
+
 	// スライム
 	const item1 = new RPGObject();
 	item1.mod(_sスライム);

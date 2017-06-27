@@ -28,6 +28,9 @@ function gameStart() {
 	};
 
 
+	/*+ ゲーム */
+
+
 	// 神官
 	const boy = new RPGObject();
 	boy.mod(_o男の子);

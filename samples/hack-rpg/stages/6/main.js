@@ -45,6 +45,10 @@ function gameStart() {
 	// 魔道書にプレイヤーを登録する
 	feeles.setAlias('player', player);
 
+
+	/*+ ゲーム */
+
+
 	// 	HP Gage
 	// 体力のゲージを作る
 	// 体力は最大で 9999

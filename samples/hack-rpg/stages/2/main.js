@@ -39,6 +39,10 @@ function gameStart() {
 	// 魔道書にプレイヤーを登録する
 	feeles.setAlias('player', player);
 
+
+	/*+ ゲーム */
+
+
 	// まどうしょ
 	const item1 = new RPGObject();
 	item1.mod(_m魔道書);

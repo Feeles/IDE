@@ -7,6 +7,10 @@ import extra from '../extra';
 
 function gameStartLazy() {
 
+
+	/*+ ゲーム */
+
+
 	// サファイア
 	const item1 = new RPGObject();
 	item1.mod(_sサファイア);

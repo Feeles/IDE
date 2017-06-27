@@ -41,6 +41,10 @@ function gameStart() {
 	// 魔道書にプレイヤーを登録する
 	feeles.setAlias('player', player);
 
+
+	/*+ ゲーム */
+
+
 	// かいだん
 	const item1 = new RPGObject();
 	item1.mod(_kくだりかいだん);

@@ -39,6 +39,10 @@ function gameStart() {
 	// 魔道書にプレイヤーを登録する
 	feeles.setAlias('player', player);
 
+
+	/*+ ゲーム */
+
+
 	// ATK Label
 	// 攻撃力を画面に表示する
 	var atkLabel = new ScoreLabel();

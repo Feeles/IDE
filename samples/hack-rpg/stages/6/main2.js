@@ -8,6 +8,10 @@ import extra from '../extra';
 
 function gameStartLazy() {
 
+
+	/*+ ゲーム */
+
+
 	// ドラゴン
 	const item1 = new RPGObject();
 	item1.mod(_dドラゴン);

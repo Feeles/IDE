@@ -7,6 +7,10 @@ import extra from '../extra';
 
 function gameStartLazy() {
 
+
+	/*+ ゲーム */
+
+
 	// クモ
 	const item1 = new RPGObject();
 	item1.mod(_kくも);

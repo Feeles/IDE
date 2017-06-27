@@ -28,6 +28,11 @@ Hack.start = function() {
 	Hack.dispatchEvent(new Event('load'));
 	game.start();
 	window.focus();
+
+	// player をグローバルに
+	if (!window.player && Hack.player) {
+		window.player = Hack.player;
+	}
 };
 
 
