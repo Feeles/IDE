@@ -69,6 +69,7 @@ export default class CloneDialog extends PureComponent {
 
   async refreshState(nextProject) {
     const projects = await personalDB.projects.toArray();
+    projects.sort((a, b) => b.updated - a.updated);
     this.setState({
       projects,
       currentProject: nextProject ||

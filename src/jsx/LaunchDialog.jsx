@@ -53,6 +53,7 @@ export default class LaunchDialog extends PureComponent {
       this.props.fallback();
       this.props.onRequestClose();
     } else {
+      projects.sort((a, b) => b.updated - a.updated);
       await new Promise((resolve, reject) => {
         this.setState({ projects }, resolve);
       });
