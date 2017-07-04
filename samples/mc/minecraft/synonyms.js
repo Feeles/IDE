@@ -1,9 +1,9 @@
-export default {
+export const events = {
 	broken: 'こわれた',
 	placed: 'おかれた',
 
 	died: 'やられた',
 
-	travelled: 'うごいた',
+	travelled: 'うごいた'
 
 };
