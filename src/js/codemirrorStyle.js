@@ -115,9 +115,7 @@ div.CodeMirror:not(.CodeMirror-focused) pre>span>span.cm-comment {
   background-color: ${grey100};
 }
 div.CodeMirror span.CodeMirror-matchingbracket {
-  font-size: 30px;
-  line-height: 16px;
-  vertical-align: middle;
+  text-shadow: 0 0 4px #000, 0 -8px 10px #000, 0 8px 10px #000;
 }
 div.CodeMirror.CodeMirror-focused pre>span>span.cm-comment {
   opacity: 0.5;
