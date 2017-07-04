@@ -72,7 +72,8 @@ export default class CloneDialog extends PureComponent {
     projects.sort((a, b) => b.updated - a.updated);
     this.setState({
       projects,
-      currentProject: nextProject ||
+      currentProject:
+        nextProject ||
         (this.hasSaved
           ? projects.find(item => item.id === this.state.currentProject.id)
           : null)
@@ -282,11 +283,15 @@ export default class CloneDialog extends PureComponent {
       >
         <Tabs>
           <Tab label={localization.cloneDialog.saveTitle}>
-            <h1 style={styles.header}>{localization.cloneDialog.saveHeader}</h1>
+            <h1 style={styles.header}>
+              {localization.cloneDialog.saveHeader}
+            </h1>
             <div style={styles.container}>
               {this.hasSaved
                 ? [
-                    <span key="">{localization.cloneDialog.autoSaved}</span>,
+                    <span key="">
+                      {localization.cloneDialog.autoSaved}
+                    </span>,
                     <Card key="current" style={styles.card}>
                       <CardHeader
                         title={
@@ -320,13 +325,15 @@ export default class CloneDialog extends PureComponent {
             </div>
           </Tab>
           <Tab label={localization.cloneDialog.loadTitle}>
-            <h1 style={styles.header}>{localization.cloneDialog.loadHeader}</h1>
+            <h1 style={styles.header}>
+              {localization.cloneDialog.loadHeader}
+            </h1>
             {!this.state.projects || !this.props.coreString
               ? <div style={{ textAlign: 'center' }}>
                   <CircularProgress size={120} />
                 </div>
               : <div style={styles.container}>
-                  {projects.map(item => (
+                  {projects.map(item =>
                     <ProjectCard
                       key={item.id}
                       project={item}
@@ -339,7 +346,7 @@ export default class CloneDialog extends PureComponent {
                       requestProjectSet={this.props.setProject}
                       localization={localization}
                     />
-                  ))}
+                  )}
                 </div>}
           </Tab>
           <Tab label={localization.cloneDialog.cloneTitle}>
@@ -352,14 +359,14 @@ export default class CloneDialog extends PureComponent {
               style={styles.group}
               onChange={this.handleBundleTypeChange}
             >
-              {BundleTypes.map(type => (
+              {BundleTypes.map(type =>
                 <RadioButton
                   key={type}
                   value={type}
                   label={localization.cloneDialog[type]}
                   style={styles.radio}
                 />
-              ))}
+              )}
             </RadioButtonGroup>,
             {bundleType === 'divide'
               ? <div style={styles.center}>
@@ -494,15 +501,21 @@ export class ProjectCard extends PureComponent {
         />
         <CardText expandable>
           <div>
-            <span style={styles.label}>{localization.cloneDialog.created}</span>
+            <span style={styles.label}>
+              {localization.cloneDialog.created}
+            </span>
             {new Date(project.created).toLocaleString()}
           </div>
           <div>
-            <span style={styles.label}>{localization.cloneDialog.updated}</span>
+            <span style={styles.label}>
+              {localization.cloneDialog.updated}
+            </span>
             {new Date(project.updated).toLocaleString()}
           </div>
           <div>
-            <span style={styles.label}>{localization.cloneDialog.size}</span>
+            <span style={styles.label}>
+              {localization.cloneDialog.size}
+            </span>
             {`${(project.size / 1024 / 1024).toFixed(2)}MB`}
           </div>
         </CardText>
