@@ -11,10 +11,12 @@ class MinecraftEventEmitter extends EventEmitter2 {
 		if (onName in this) {
 			this[onName](...args);
 		}
-
 		super.emit(name, ...args);
 
 		if (synonym) {
+			if (onSynonym in this) {
+				this[onSynonym](...args);
+			}
 			super.emit(synonym, ...args);
 		}
 
