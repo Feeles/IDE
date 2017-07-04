@@ -29,7 +29,7 @@ export default class AddDialog extends Component {
   handleAdd = () => {
     const { name } = this.state;
     const { mime } = CodeMirror.findModeByFileName(name) || {
-      mime: 'text/plane'
+      mime: 'text/plain'
     };
 
     this.props.resolve(
