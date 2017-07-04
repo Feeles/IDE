@@ -7,6 +7,8 @@ import MinecraftPlayer from './player';
 import MinecraftAgent from './agent';
 
 import * as utils from './utils';
+import { synonyms } from './synonyms';
+const $t = word => synonyms[word] || word;
 
 
 class Minecraft extends MinecraftEventEmitter {
@@ -250,7 +252,7 @@ class Minecraft extends MinecraftEventEmitter {
 
 	setBlock(_name, x, y, z, relative = true) {
 
-		const [name, tileData] = _name.split(':');
+		const [name, tileData] = $t(_name).split(':');
 
 		this.send('commandRequest', 'commandRequest', {
 			name: 'setblock',
@@ -271,7 +273,7 @@ class Minecraft extends MinecraftEventEmitter {
 
 	fill(name, x1, y1, z1, x2, y2, z2, relative = true, oldBlockHandling = 'destroy') {
 
-		const [tileName, tileData] = name.split(':');
+		const [tileName, tileData] = $t(name).split(':');
 
 		return this.commandRequest({
 			name: 'fill',
@@ -290,8 +292,8 @@ class Minecraft extends MinecraftEventEmitter {
 
 	replace(name, old, x1, y1, z1, x2, y2, z2) {
 
-		const [tileName1, tileData1] = name.split(':');
-		const [tileName2, tileData2] = old.split(':');
+		const [tileName1, tileData1] = $t(name).split(':');
+		const [tileName2, tileData2] = $t(old).split(':');
 
 		this.execute(`fill ~${x1} ~${y1} ~${z1} ~${x2} ~${y2} ~${z2} ${tileName1} ${tileData1 | 0} replace ${tileName2} ${tileData2 | 0}`);
 
@@ -303,7 +305,7 @@ class Minecraft extends MinecraftEventEmitter {
 		return this.commandRequest({
 			name: 'summon',
 			input: {
-				entityType: entity,
+				entityType: $t(entity),
 				spawnPos: this.getPos(x, y, z, relative)
 			}
 		});
@@ -443,7 +445,7 @@ class Minecraft extends MinecraftEventEmitter {
 
 
 	async give(item, amount) {
-		const [name, tileData] = item.split(':');
+		const [name, tileData] = $t(item).split(':');
 		return await this.execute(`give @p ${name} ${amount} ${tileData | 0}`);
 	}
 
