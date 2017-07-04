@@ -74,13 +74,14 @@ class FileCard extends PureComponent {
     muiTheme: PropTypes.object.isRequired
   };
 
-  handleConfirmSettings = event => {
+  handleConfirmSettings = async event => {
+    event.stopPropagation();
     const { file, openFileDialog, putFile } = this.props;
 
-    event.stopPropagation();
-    openFileDialog(PreferenceDialog, {
-      content: file
-    }).then(change => putFile(file, file.set(change)));
+    const change = await openFileDialog(PreferenceDialog, { content: file });
+    if (change) {
+      putFile(file, file.set(change));
+    }
   };
 
   handleNameChange = (event, name) => {
