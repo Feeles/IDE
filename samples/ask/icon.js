@@ -22,14 +22,14 @@ export default icon;
 document.querySelector('input.file').onchange = async e => {
 	const [file] = e.target.files;
 	const [ext] = file.name.split('.').slice(-1);
-	const fileName = `icons/default.${ext}`;
+	const fileName = `icons/default.${ext.toLowerCase()}`;
 	await feeles.saveAs(file, fileName);
 	await icon(fileName);
 };
 
 (async() => {
 	// もし icons/default.png があればアイコンにする
-	for (const ext of ['png', 'jpg', 'gif']) {
+	for (const ext of ['png', 'jpg', 'jpeg', 'gif']) {
 		const fileName = `icons/default.${ext}`;
 		try {
 			return await icon(fileName);

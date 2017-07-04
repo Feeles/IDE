@@ -44,15 +44,14 @@ export default class LaunchDialog extends PureComponent {
   async refreshState() {
     const url = location.origin + location.pathname;
     const projects = await personalDB.projects
-      .filter(item => {
-        return item.url === url;
-      })
+      .filter(item => item.url === url)
       .toArray();
 
     if (!projects.length) {
       this.props.fallback();
       this.props.onRequestClose();
     } else {
+      projects.sort((a, b) => b.updated - a.updated);
       await new Promise((resolve, reject) => {
         this.setState({ projects }, resolve);
       });
@@ -137,7 +136,7 @@ export default class LaunchDialog extends PureComponent {
           {localization.common.or}
         </div>
         <div style={styles.container}>
-          {this.state.projects.map(item => (
+          {this.state.projects.map(item =>
             <ProjectCard
               key={item.id}
               project={item}
@@ -146,7 +145,7 @@ export default class LaunchDialog extends PureComponent {
               onProcessEnd={() => this.refreshState()}
               localization={localization}
             />
-          ))}
+          )}
         </div>
       </Dialog>
     );
