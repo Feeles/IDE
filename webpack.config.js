@@ -148,15 +148,9 @@ const config = {
     // https://github.com/webpack/webpack-dev-server/issues/882
     // ngrok で https のテストをするとき "Invalid Host header" になるので.
     disableHostCheck: true
-  }
+  },
+  devtool: 'inline-source-map'
 };
-
-if (process.env.NODE_ENV !== 'production') {
-  // for Development:
-  config.devtool = 'eval';
-} else {
-  config.devtool = 'source-map';
-}
 
 module.exports = async () => {
   config.plugins.push(
