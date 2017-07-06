@@ -1,6 +1,6 @@
 import rollbar from 'rollbar';
 
-export default new rollbar({
+const Rollbar = new rollbar({
   enabled: !!process.env.ROLLBAR,
   accessToken: process.env.ROLLBAR,
   captureUncaught: true,
@@ -12,3 +12,10 @@ export default new rollbar({
     }
   }
 });
+
+Rollbar.global({
+  itemsPerMinute: 5,
+  maxItems: 10
+});
+
+export default Rollbar;
