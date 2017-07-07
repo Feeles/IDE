@@ -63,7 +63,12 @@ const config = {
       'process.env.ROLLBAR': JSON.stringify(process.env.ROLLBAR),
       'process.env.GA_TRACKING_ID': JSON.stringify(process.env.GA_TRACKING_ID)
     }),
+
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
+
+    // https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b
+    new webpack.optimize.ModuleConcatenationPlugin(),
+
     new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
 
     new HappyPack({
