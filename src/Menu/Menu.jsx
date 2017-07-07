@@ -483,10 +483,13 @@ export default class Menu extends PureComponent {
           onRequestChange={open => this.setState({ open })}
         >
           <AppBar
-            iconElementLeft={<IconButton> <NavigationArrowBack /> </IconButton>}
+            iconElementLeft={
+              <IconButton>
+                <NavigationArrowBack />
+              </IconButton>
+            }
             onLeftIconButtonTouchTap={this.handleToggleDrawer}
           />
-          {' '}
           {this.state.open
             ? Object.entries(this.props.cards)
                 .map(([name, card]) => ({

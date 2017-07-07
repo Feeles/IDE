@@ -59,13 +59,15 @@ export default {
     failedToSave: 'Failed to save this app.',
     failedToRemove: 'Failed to remove this app.',
     failedToOpenTab: 'Failed to open an app because new tab is blocked!!',
-    failedToRename: 'It is not possible to create two projects with the same title.',
+    failedToRename:
+      'It is not possible to create two projects with the same title.',
     titleIsRequired: 'Project title is required to open via URL.',
     autoSaved: 'It is automatically saved ;)',
     setTitle: 'Please set title'
   },
   saveDialog: {
-    title: 'You need to download it manually, because Your browser does not support HTML5!',
+    title:
+      'You need to download it manually, because Your browser does not support HTML5!',
     description: filename =>
       `Right click on the above link, click "download with alias", and save it with the name "${filename}"`,
     cancel: 'Cancel'
@@ -123,7 +125,8 @@ export default {
     tapTwiceQuickly: 'Tap twice quickly',
     cannotBeUndone: 'This operation can not be undone',
     editFile: 'Edit File',
-    conflict: 'A file with the same name already exists. Do you want to overwrite it?',
+    conflict:
+      'A file with the same name already exists. Do you want to overwrite it?',
     or: 'or',
     wantToOpen: name => `Do you want to open ${name}?`
   },
