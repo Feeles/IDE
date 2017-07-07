@@ -3,6 +3,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FeelesWebpackPlugin = require('./feeles-webpack-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
+const HappyPack = require('happypack');
 
 const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p';
 const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__';
@@ -31,7 +32,7 @@ const config = {
     loaders: [
       {
         test: /\.(jsx?)$/,
-        loaders: ['babel-loader?cacheDirectory'],
+        loaders: ['happypack/loader'],
         include: [path.resolve(__dirname, 'src')]
       },
       {
@@ -62,6 +63,10 @@ const config = {
     }),
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
     new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
+
+    new HappyPack({
+      loaders: ['babel-loader?cacheDirectory']
+    }),
 
     new HtmlWebpackPlugin({
       inject: false,
