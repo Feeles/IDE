@@ -16,6 +16,7 @@ import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
+import ActionHome from 'material-ui/svg-icons/action/home';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
@@ -284,6 +285,10 @@ export default class Menu extends PureComponent {
       open: !this.state.open
     });
 
+  handleHistoryBack = () => {
+    history.back();
+  };
+
   render() {
     const { localization, setLocalization, getConfig } = this.props;
 
@@ -311,15 +316,26 @@ export default class Menu extends PureComponent {
             onTouchTap={this.handleClone}
           />);
 
+    // showAll なときは Huberger Menu,
+    // そうでないときは Home Button
+    const leftIcon = (
+      <IconButton>
+        {this.props.showAll ? <NavigationMenu /> : <ActionHome />}
+      </IconButton>
+    );
+
+    const leftIconAction = this.props.showAll
+      ? this.handleToggleDrawer
+      : this.handleHistoryBack;
+
     return (
       <AppBar
         title={title}
         style={styles.root}
         titleStyle={{ flex: null }}
-        showMenuIconButton={this.props.showAll}
-        iconElementLeft={<IconButton><NavigationMenu /></IconButton>}
+        iconElementLeft={leftIcon}
         iconStyleLeft={styles.leftIcon}
-        onLeftIconButtonTouchTap={this.handleToggleDrawer}
+        onLeftIconButtonTouchTap={leftIconAction}
       >
         <div style={{ flex: 1 }} />
         <Toggle
@@ -467,10 +483,13 @@ export default class Menu extends PureComponent {
           onRequestChange={open => this.setState({ open })}
         >
           <AppBar
-            iconElementLeft={<IconButton> <NavigationArrowBack /> </IconButton>}
+            iconElementLeft={
+              <IconButton>
+                <NavigationArrowBack />
+              </IconButton>
+            }
             onLeftIconButtonTouchTap={this.handleToggleDrawer}
           />
-          {' '}
           {this.state.open
             ? Object.entries(this.props.cards)
                 .map(([name, card]) => ({
@@ -502,6 +521,11 @@ export default class Menu extends PureComponent {
               this.handleAbout();
               this.handleToggleDrawer();
             }}
+          />
+          <MenuItem
+            primaryText={localization.menu.home}
+            leftIcon={<ActionHome />}
+            onTouchTap={this.handleHistoryBack}
           />
         </Drawer>
         <Snackbar
