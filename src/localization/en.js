@@ -26,6 +26,7 @@ export default {
     viewTwitter: 'View web site',
     version: 'Version',
     home: 'Back to home',
+    homeIsNotSet: 'Home URL is not set',
     showAllUrls: 'Show all URLs',
     withTwitter: 'Log in with Twitter',
     withLine: 'Log in with LINE',
