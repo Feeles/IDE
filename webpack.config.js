@@ -47,7 +47,9 @@ const config = {
         test: /\.json$/,
         loaders: ['json-loader']
       }
-    ]
+    ],
+    // https://github.com/webpack/webpack/issues/5135
+    strictThisContextOnImports: true
   },
   resolve: {
     extensions: ['.js', '.jsx', '.html', '.json'],

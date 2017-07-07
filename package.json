@@ -42,7 +42,7 @@
     "style-loader": "^0.18.1",
     "svgo": "^0.7.2",
     "unorm": "^1.4.1",
-    "webpack": "^2.6.1",
+    "webpack": "^3.0.3",
     "webpack-dev-server": "^2.4.3"
   },
   "dependencies": {
