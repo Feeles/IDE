@@ -110,6 +110,7 @@ export default class Menu extends PureComponent {
     setLocalization: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
@@ -285,8 +286,13 @@ export default class Menu extends PureComponent {
       open: !this.state.open
     });
 
-  handleHistoryBack = () => {
-    history.back();
+  handleGoHome = () => {
+    const feelesrc = this.props.loadConfig('feelesrc');
+    if (feelesrc.homeURL) {
+      location.href = feelesrc.homeURL;
+    } else {
+      alert(this.props.localization.menu.homeIsNotSet);
+    }
   };
 
   render() {
@@ -326,7 +332,7 @@ export default class Menu extends PureComponent {
 
     const leftIconAction = this.props.showAll
       ? this.handleToggleDrawer
-      : this.handleHistoryBack;
+      : this.handleGoHome;
 
     return (
       <AppBar
@@ -525,7 +531,7 @@ export default class Menu extends PureComponent {
           <MenuItem
             primaryText={localization.menu.home}
             leftIcon={<ActionHome />}
-            onTouchTap={this.handleHistoryBack}
+            onTouchTap={this.handleGoHome}
           />
         </Drawer>
         <Snackbar
