@@ -32,7 +32,7 @@ const config = {
       {
         test: /\.(jsx?)$/,
         loaders: ['babel-loader?cacheDirectory'],
-        exclude: /node_modules|lib/
+        include: [path.resolve(__dirname, 'src')]
       },
       {
         test: /\.css$/,

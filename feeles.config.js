@@ -13,7 +13,7 @@ const config = {
       {
         test: /\.js$/,
         loaders: ['babel-loader?cacheDirectory'],
-        exclude: /node_modules/
+        include: [path.resolve(__dirname, 'src')]
       }
     ]
   },
