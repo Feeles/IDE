@@ -31,7 +31,7 @@ const config = {
     loaders: [
       {
         test: /\.(jsx?)$/,
-        loaders: ['babel-loader'],
+        loaders: ['babel-loader?cacheDirectory'],
         exclude: /node_modules|lib/
       },
       {
