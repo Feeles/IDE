@@ -25,6 +25,7 @@ export default {
     goToSee: 'Go to see 👀',
     viewTwitter: 'View web site',
     version: 'Version',
+    home: 'Back to home',
     showAllUrls: 'Show all URLs',
     withTwitter: 'Log in with Twitter',
     withLine: 'Log in with LINE',
