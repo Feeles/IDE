@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 const config = {
   entry: {
@@ -12,8 +13,8 @@ const config = {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['babel-loader'],
-        exclude: /node_modules/
+        loaders: ['babel-loader?cacheDirectory'],
+        include: [path.resolve(__dirname, 'src')]
       }
     ]
   },
