@@ -31,6 +31,14 @@
         /*+ アクション */
 
       };
+  - label: いちどだけ
+    code: |
+      feeles.setTimeout(() => {
+
+
+        /*+ アクション */
+
+      }, 1000);
   - label: つねに
     code: |
       mc.utils.setInterval(async() => {
