@@ -7,10 +7,10 @@
         mc.summon(('▼ モンスター', 'クリーパー'), 0, 0, 0);
   - label: ブロック
     code: |
-        mc.blocks[('▼ ブロック', 'エンドストーン')].put(0, 0, 0);
+        mc.setBlock(('▼ ブロック', 'エンドストーン'), 0, 0, 0);
   - label: せっち
     code: |
-        mc.blocks[('▼ せっち', '作業台')].put(0, 0, 0);
+        mc.setBlock(('▼ せっち', '作業台'), 0, 0, 0);
   - label: タイトル
     code: |
         mc.title('もじ', ('▼ タイトル', 'title'));
