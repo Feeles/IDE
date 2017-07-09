@@ -86,7 +86,7 @@
         mc.execute('/say execute!!!!');
   - label: 天気
     code: |
-      mc.execute(`weather ${('▼ 天気', 'rain')}`)
+      mc.execute(`weather ${('▼ 天気', 'rain')}`);
   - label: サウンド
     code: |
-      mc.execute(`playsound ${('▼ サウンド', 'mob.pig.say')} @p`)
+      mc.execute(`playsound ${('▼ サウンド', 'mob.pig.say')} @p`);
