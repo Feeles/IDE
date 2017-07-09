@@ -29,6 +29,9 @@
   - label: ざいりょう
     code: |
         mc.give(('▼ ざいりょう', '金の延べ棒'), 64);
+  - label: どうぐ
+    code: |
+        mc.give(('▼ どうぐ', '弓'), 1);
   - label: なんいどを設定する
     code: |
         mc.difficulty(('▼ なんいど', 'e'));
