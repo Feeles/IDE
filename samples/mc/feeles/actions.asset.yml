@@ -17,6 +17,9 @@
   - label: ステンドグラス
     code: |
         mc.setBlock(('▼ ステンドグラス', '白のステンドグラス'), 0, 3, 0);
+  - label: ウール
+    code: |
+        mc.setBlock(('▼ ウール', 'ピンクのウール'), 0, 0, 0);
   - label: しぜん
     code: |
         mc.setBlock(('▼ しぜん', '水'), 0, 0, 0);
