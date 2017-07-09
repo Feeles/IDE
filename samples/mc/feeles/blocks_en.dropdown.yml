@@ -140,7 +140,7 @@ Food:
   - body: "'spider_eye'"
 
 Nature:
-  - body: "'water'"
+  - body: "'flowing_water'"
   - body: "'flowing_lava'"
   - body: "'fire'"
   - body: "'cactus'"
