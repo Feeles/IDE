@@ -78,7 +78,7 @@
     code: |
         for (const [x, z] of mc.utils.way(8, 10)) {
 
-            mc.blocks['stone'].put(x, 0, z);
+            mc.setBlock(('▼ ブロック', 'TNT 火薬'), x, 0, z);
 
         }
   - label: コマンド実行
