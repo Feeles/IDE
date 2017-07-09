@@ -5,6 +5,9 @@
   - label: モンスター
     code: |
         mc.summon(('▼ モンスター', 'クリーパー'), 0, 0, 0);
+  - label: のりもの
+    code: |
+        mc.summon(('▼ のりもの', 'トロッコ'), 0, 0, 0);
   - label: ブロック
     code: |
         mc.setBlock(('▼ ブロック', 'エンドストーン'), 0, 0, 0);
@@ -14,6 +17,15 @@
   - label: レッドストーン
     code: |
         mc.setBlock(('▼ レッドストーン', 'レッドストーン'), 0, -1, 0);
+  - label: ステンドグラス
+    code: |
+        mc.setBlock(('▼ ステンドグラス', '白のステンドグラス'), 0, 3, 0);
+  - label: ウール
+    code: |
+        mc.setBlock(('▼ ウール', 'ピンクのウール'), 0, 0, 0);
+  - label: そうしょく
+    code: |
+        mc.setBlock(('▼ そうしょく', 'たいまつ'), 0, 0, 0);
   - label: しぜん
     code: |
         mc.setBlock(('▼ しぜん', '水'), 0, 0, 0);
@@ -29,6 +41,9 @@
   - label: ざいりょう
     code: |
         mc.give(('▼ ざいりょう', '金の延べ棒'), 64);
+  - label: どうぐ
+    code: |
+        mc.give(('▼ どうぐ', '弓'), 1);
   - label: なんいどを設定する
     code: |
         mc.difficulty(('▼ なんいど', 'e'));
@@ -63,7 +78,7 @@
     code: |
         for (const [x, z] of mc.utils.way(8, 10)) {
 
-            mc.blocks['stone'].put(x, 0, z);
+            mc.setBlock(('▼ ブロック', 'TNT 火薬'), x, 0, z);
 
         }
   - label: コマンド実行
@@ -71,7 +86,7 @@
         mc.execute('/say execute!!!!');
   - label: 天気
     code: |
-      mc.execute(`weather ${('▼ 天気', 'rain')}`)
+      mc.execute(`weather ${('▼ 天気', 'rain')}`);
   - label: サウンド
     code: |
-      mc.execute(`playsound ${('▼ サウンド', 'mob.pig.say')} @p`)
+      mc.execute(`playsound ${('▼ サウンド', 'mob.pig.say')} @p`);
