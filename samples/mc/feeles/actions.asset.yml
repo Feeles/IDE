@@ -7,10 +7,16 @@
         mc.summon(('▼ モンスター', 'クリーパー'), 0, 0, 0);
   - label: ブロック
     code: |
-        mc.blocks[('▼ ブロック', 'エンドストーン')].put(0, 0, 0);
+        mc.setBlock(('▼ ブロック', 'エンドストーン'), 0, 0, 0);
   - label: せっち
     code: |
-        mc.blocks[('▼ せっち', '作業台')].put(0, 0, 0);
+        mc.setBlock(('▼ せっち', '作業台'), 0, 0, 0);
+  - label: レッドストーン
+    code: |
+        mc.setBlock(('▼ レッドストーン', 'レッドストーン'), 0, -1, 0);
+  - label: しぜん
+    code: |
+        mc.setBlock(('▼ しぜん', '水'), 0, 0, 0);
   - label: タイトル
     code: |
         mc.title('もじ', ('▼ タイトル', 'title'));
@@ -20,6 +26,9 @@
   - label: たべもの
     code: |
         mc.give(('▼ たべもの', 'ケーキ'), 64);
+  - label: ざいりょう
+    code: |
+        mc.give(('▼ ざいりょう', '金の延べ棒'), 64);
   - label: なんいどを設定する
     code: |
         mc.difficulty(('▼ なんいど', 'e'));
