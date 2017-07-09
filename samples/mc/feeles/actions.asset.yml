@@ -5,6 +5,9 @@
   - label: モンスター
     code: |
         mc.summon(('▼ モンスター', 'クリーパー'), 0, 0, 0);
+  - label: のりもの
+    code: |
+        mc.summon(('▼ のりもの', 'トロッコ'), 0, 0, 0);
   - label: ブロック
     code: |
         mc.setBlock(('▼ ブロック', 'エンドストーン'), 0, 0, 0);
@@ -20,6 +23,9 @@
   - label: ウール
     code: |
         mc.setBlock(('▼ ウール', 'ピンクのウール'), 0, 0, 0);
+  - label: そうしょく
+    code: |
+        mc.setBlock(('▼ そうしょく', 'たいまつ'), 0, 0, 0);
   - label: しぜん
     code: |
         mc.setBlock(('▼ しぜん', '水'), 0, 0, 0);
