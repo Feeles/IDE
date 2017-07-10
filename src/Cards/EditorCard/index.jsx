@@ -59,7 +59,8 @@ export default class EditorCard extends PureComponent {
   };
 
   state = {
-    docs: null
+    // { [Tab.file.key]: Doc }
+    currentDoc: {}
   };
 
   static icon() {
@@ -169,11 +170,12 @@ export default class EditorCard extends PureComponent {
       .forEach(item => this.props.selectTab(item));
   };
 
-  closeTab = tab => {
-    if (this.state.docs) {
-      this.state.docs.delete(tab.file.key);
+  handleDocChanged = next => {
+    if (next) {
+      this.setState({ currentDoc: { [next.id]: next.doc } });
+    } else {
+      this.setState({ currentDoc: {} });
     }
-    this.props.closeTab(tab);
   };
 
   render() {
@@ -203,28 +205,27 @@ export default class EditorCard extends PureComponent {
     const tabs = [];
     const containerWidth = this.tabContainer
       ? this.tabContainer.getBoundingClientRect().width -
-          styles.tabContainer.paddingLeft -
-          styles.tabContainer.paddingRight
+        styles.tabContainer.paddingLeft -
+        styles.tabContainer.paddingRight
       : 0;
     for (const tab of this.props.tabs) {
-      if (tabs.length < MAX_TAB && this.state.docs) {
-        const doc = this.state.docs.get(tab.file.key);
-        if (doc) {
-          tabs.push(
-            <ChromeTab
-              key={tab.key}
-              tab={tab}
-              file={tab.file}
-              tabs={tabs}
-              isSelected={tab.isSelected}
-              localization={localization}
-              handleSelect={selectTab}
-              handleClose={this.closeTab}
-              containerWidth={containerWidth}
-              doc={doc}
-            />
-          );
-        }
+      if (tabs.length < MAX_TAB) {
+        // current tab でなければ undefined
+        const doc = this.state.currentDoc[tab.file.key];
+        tabs.push(
+          <ChromeTab
+            key={tab.key}
+            tab={tab}
+            file={tab.file}
+            tabs={tabs}
+            isSelected={tab.isSelected}
+            localization={localization}
+            handleSelect={selectTab}
+            handleClose={this.props.closeTab}
+            containerWidth={containerWidth}
+            doc={doc}
+          />
+        );
       }
     }
     const selectedTab = this.props.tabs.find(item => item.isSelected);
@@ -250,7 +251,7 @@ export default class EditorCard extends PureComponent {
             reboot={reboot}
             openFileDialog={openFileDialog}
             putFile={putFile}
-            docsRef={docs => this.setState({ docs })}
+            onDocChanged={this.handleDocChanged}
           />
         </div>
       </Card>

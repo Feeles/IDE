@@ -101,9 +101,9 @@ export default class ChromeTabs extends PureComponent {
     isSelected: PropTypes.bool.isRequired,
     handleSelect: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
-    doc: PropTypes.object.isRequired,
     containerWidth: PropTypes.number.isRequired,
-    localization: PropTypes.object.isRequired
+    localization: PropTypes.object.isRequired,
+    doc: PropTypes.object
   };
 
   static contextTypes = {
@@ -111,23 +111,40 @@ export default class ChromeTabs extends PureComponent {
   };
 
   state = {
+    doc: null,
     closerMouseOver: false,
     hasChanged: false
   };
 
   componentDidMount() {
-    this.props.doc.on('change', this.handleChange);
+    this.setDocIfNeeded(this.props.doc);
   }
 
   componentWillUnount() {
-    this.props.doc.off('change', this.handleChange);
+    if (this.state.doc) {
+      this.state.doc.off('change', this.handleChange);
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.file !== this.props.file) {
       this.handleChange(this.props.doc);
     }
+    if (prevProps.doc !== this.props.doc) {
+      this.setDocIfNeeded(this.props.doc);
+    }
   }
+
+  setDocIfNeeded = doc => {
+    if (this.state.doc !== doc && doc) {
+      doc.on('change', this.handleChange);
+      this.handleChange(doc);
+      if (this.state.doc) {
+        this.state.doc.off('change', this.handleChange);
+      }
+      this.setState({ doc });
+    }
+  };
 
   handleChange = doc => {
     const hasChanged = doc.getValue() !== this.props.file.text;
@@ -195,8 +212,8 @@ export default class ChromeTabs extends PureComponent {
               {this.state.closerMouseOver
                 ? <NavigationClose color={alternateTextColor} />
                 : this.state.hasChanged
-                    ? <EditorModeEdit color={secondaryTextColor} />
-                    : <NavigationClose color={secondaryTextColor} />}
+                  ? <EditorModeEdit color={secondaryTextColor} />
+                  : <NavigationClose color={secondaryTextColor} />}
             </IconButton>
           </div>
         </div>

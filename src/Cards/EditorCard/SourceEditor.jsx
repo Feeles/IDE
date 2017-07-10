@@ -127,7 +127,7 @@ export default class SourceEditor extends PureComponent {
     putFile: PropTypes.func.isRequired,
     closeSelectedTab: PropTypes.func.isRequired,
     selectTabFromFile: PropTypes.func.isRequired,
-    docsRef: PropTypes.func
+    onDocChanged: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -669,7 +669,7 @@ export default class SourceEditor extends PureComponent {
             showHint={showHint}
             snippets={this.state.snippets}
             codemirrorRef={ref => (this.codemirror = ref)}
-            docsRef={this.props.docsRef}
+            onDocChanged={this.props.onDocChanged}
             extraKeys={extraKeys}
             foldOptions={foldOptions}
           />
