@@ -296,7 +296,9 @@ Tool:
   - body: "'snowball:1'"
   - body: "'string'"
   - body: "'fireball:1'"
-  - body: "'xp_bottle'" # give するときは "experience_bottle"
+
+EXP:
+  - body: "'xp_bottle'"
   - body: "'xp_orb'"
 
 Animal:
