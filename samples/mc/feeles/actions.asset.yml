@@ -44,6 +44,12 @@
   - label: どうぐ
     code: |
         mc.give(('▼ どうぐ', '弓'), 1);
+  - label: そうび
+    code: |
+        mc.give(('▼ そうび', 'ダイヤモンドの剣'), 1);
+  - label: けいけんち
+    code: |
+        mc.summon('▼ けいけんち', '経験値オーブ');
   - label: なんいどを設定する
     code: |
         mc.difficulty(('▼ なんいど', 'e'));
@@ -71,9 +77,9 @@
   - label: ワープする（絶対座標）
     code: |
         mc.locateTo(0, 100, 0);
-  - label: スクショ
-    code: |
-        mc.utils.capture(mc, 0, 100, 0);
+  # - label: スクショ
+  #   code: |
+  #       mc.utils.capture(mc, 0, 100, 0);
   - label: まわりの座標
     code: |
         for (const [x, z] of mc.utils.way(8, 10)) {
