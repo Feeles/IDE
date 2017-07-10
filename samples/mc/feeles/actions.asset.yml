@@ -71,9 +71,9 @@
   - label: ワープする（絶対座標）
     code: |
         mc.locateTo(0, 100, 0);
-  - label: スクショ
-    code: |
-        mc.utils.capture(mc, 0, 100, 0);
+  # - label: スクショ
+  #   code: |
+  #       mc.utils.capture(mc, 0, 100, 0);
   - label: まわりの座標
     code: |
         for (const [x, z] of mc.utils.way(8, 10)) {
