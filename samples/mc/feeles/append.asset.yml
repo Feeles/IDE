@@ -38,8 +38,19 @@
           /*+ アクション */
 
       }, 0);
+  - label: 経験値フィーバー
+    code: |
+      // 経験値フィーバー
+      feeles.setInterval(() => {
+
+          mc.summon(('▼ けいけんち', '経験値オーブ'), 0, 0, 0);
+
+          /*+ アクション */
+
+      }, 200);
   - label: いちどだけ
     code: |
+      // いちどだけ
       feeles.setTimeout(() => {
 
 
@@ -48,6 +59,7 @@
       }, 1000);
   - label: つねに
     code: |
+      // つねに
       feeles.setInterval(() => {
 
 
