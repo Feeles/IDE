@@ -66,7 +66,7 @@ export default class Editor extends PureComponent {
     foldOptions: PropTypes.object,
     lineNumbers: PropTypes.bool.isRequired,
     findFile: PropTypes.func.isRequired,
-    docsRef: PropTypes.func
+    onDocChanged: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -75,8 +75,7 @@ export default class Editor extends PureComponent {
     snippets: [],
     showHint: true,
     extraKeys: {},
-    lineNumbers: true,
-    docsRef: () => {}
+    lineNumbers: true
   };
 
   state = {
@@ -140,6 +139,7 @@ export default class Editor extends PureComponent {
       <CodeMirrorComponent
         id={file.key}
         value={file.text}
+        onDocChanged={this.props.onDocChanged}
         mode={mode}
         lineNumbers={lineNumbers}
         keyMap="sublime"
@@ -147,7 +147,6 @@ export default class Editor extends PureComponent {
         extraKeys={this.props.extraKeys}
         lint={mode === 'javascript' ? this.state.lint : null}
         ref={this.handleCodemirror}
-        docsRef={this.props.docsRef}
       />
     );
   }

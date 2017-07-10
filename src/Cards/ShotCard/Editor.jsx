@@ -55,8 +55,7 @@ export default class Editor extends PureComponent {
     extraKeys: PropTypes.object.isRequired,
     foldOptions: PropTypes.object,
     lineNumbers: PropTypes.bool.isRequired,
-    findFile: PropTypes.func.isRequired,
-    docsRef: PropTypes.func
+    findFile: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -65,8 +64,7 @@ export default class Editor extends PureComponent {
     snippets: [],
     showHint: true,
     extraKeys: {},
-    lineNumbers: true,
-    docsRef: () => {}
+    lineNumbers: true
   };
 
   state = {
@@ -137,7 +135,6 @@ export default class Editor extends PureComponent {
         extraKeys={this.props.extraKeys}
         lint={mode === 'javascript' ? this.state.lint : null}
         ref={this.handleCodemirror}
-        docsRef={this.props.docsRef}
       />
     );
   }

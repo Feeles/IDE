@@ -6,7 +6,7 @@ import deepEqual from 'deep-equal';
 export default class CodeMirrorComponent extends PureComponent {
   static propTypes = {
     id: PropTypes.string.isRequired,
-    docsRef: PropTypes.func,
+    onDocChanged: PropTypes.func.isRequired,
     // CodeMirror options
     value: PropTypes.string.isRequired,
     mode: PropTypes.string,
@@ -32,7 +32,8 @@ export default class CodeMirrorComponent extends PureComponent {
     keyMap: 'default',
     dragDrop: false,
     extraKeys: {},
-    readOnly: false
+    readOnly: false,
+    onDocChanged: () => {}
   };
 
   state = {
@@ -61,21 +62,22 @@ export default class CodeMirrorComponent extends PureComponent {
   componentDidMount() {
     // initialize CodeMirror
     this.codeMirror = CodeMirror.fromTextArea(this.ref, this.props);
+    const { id } = this.props;
 
     const doc = this.codeMirror.getDoc();
     doc.setValue(this.props.value); // set default value
     doc.clearHistory();
-    this.state.docs.set(this.props.id, doc);
-    if (this.props.docsRef) {
-      this.props.docsRef(this.state.docs);
-    }
+    this.state.docs.set(id, doc);
+    this.props.onDocChanged({ id, doc }, null);
   }
 
   componentWillUnmount() {
-    this.state.docs.clear();
-    if (this.props.docsRef) {
-      this.props.docsRef(null);
+    const { id } = this.props;
+    const doc = this.state.docs.get(id);
+    if (doc) {
+      this.props.onDocChanged(null, { id, doc });
     }
+    this.state.docs.clear();
     this.codeMirror.toTextArea();
     this.codeMirror = null; // GC??
   }
@@ -83,19 +85,24 @@ export default class CodeMirrorComponent extends PureComponent {
   componentWillReceiveProps(nextProps) {
     // タブ, value の更新
     if (this.props.id !== nextProps.id) {
-      // 別のタブ(ファイル)に切り替わった
-      if (this.state.docs.has(nextProps.id)) {
-        // キャッシュを利用する
-        const doc = this.state.docs.get(nextProps.id);
-        this.codeMirror.swapDoc(doc);
-      } else {
+      // 前回のタブ
+      const prev = this.state.docs.get(this.props.id) || null;
+      // 次のタブ (or undefined)
+      let doc = this.state.docs.get(nextProps.id);
+      if (!doc) {
+        // 新しく開かれたタブ（キャッシュに存在しない）
         // copy をもとに新しい Doc を作り、 value を更新
-        const doc = this.codeMirror.getDoc().copy(false);
+        doc = this.codeMirror.getDoc().copy(false);
         doc.setValue(nextProps.value); // value の更新
         doc.clearHistory();
-        this.codeMirror.swapDoc(doc);
         this.state.docs.set(nextProps.id, doc);
       }
+      // 現在のタブと入れ替え
+      this.codeMirror.swapDoc(doc);
+      this.props.onDocChanged(
+        { id: nextProps.id, doc },
+        { id: this.props.id, doc: prev }
+      );
     } else {
       // 同じタブ(ファイル)
       this.setValueIfDifferent(nextProps.value); // value の更新
