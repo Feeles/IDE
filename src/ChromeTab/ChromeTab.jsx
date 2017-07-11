@@ -153,6 +153,7 @@ export default class ChromeTabs extends PureComponent {
 
   render() {
     const {
+      file,
       tab,
       isSelected,
       handleSelect,
@@ -163,13 +164,18 @@ export default class ChromeTabs extends PureComponent {
       palette: { secondaryTextColor, alternateTextColor },
       prepareStyles
     } = this.context.muiTheme;
-    const { closerMouseOver } = this.state;
+    const { closerMouseOver, doc } = this.state;
 
     const styles = getStyles(this.props, this.context, this.state);
 
     const handleRightTouchTap = e => {
       e.stopPropagation();
       if (!this.state.hasChanged || confirm(localization.editorCard.notice)) {
+        // タブがとじられるので Save されていない変更はリセットされる
+        if (doc) {
+          doc.setValue(file.text);
+          doc.clearHistory();
+        }
         handleClose(tab);
       }
     };
