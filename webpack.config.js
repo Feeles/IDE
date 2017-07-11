@@ -66,9 +66,6 @@ const config = {
 
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
 
-    // https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b
-    new webpack.optimize.ModuleConcatenationPlugin(),
-
     new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
 
     new HappyPack({
@@ -168,6 +165,10 @@ if (process.env.NODE_ENV !== 'production') {
   config.devtool = 'eval';
 } else {
   config.devtool = 'source-map';
+  config.plugins.push(
+    // https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b
+    new webpack.optimize.ModuleConcatenationPlugin()
+  );
 }
 
 module.exports = async () => {
