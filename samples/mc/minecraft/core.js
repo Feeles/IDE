@@ -48,6 +48,8 @@ class Minecraft extends MinecraftEventEmitter {
 			const type = data.body.properties.Type;
 			const blockName = blockNames[type];
 
+			// TODO: Support AuxType
+
 			this.blocks[blockName].emit('placed', {
 
 
