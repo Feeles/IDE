@@ -7,7 +7,7 @@ import MinecraftPlayer from './player';
 import MinecraftAgent from './agent';
 
 import * as utils from './utils';
-import { synonyms } from './synonyms';
+import { synonyms, reversed } from './synonyms';
 const $t = word => synonyms[word] || word;
 
 
@@ -47,6 +47,8 @@ class Minecraft extends MinecraftEventEmitter {
 
 			const type = data.body.properties.Type;
 			const blockName = blockNames[type];
+
+			// TODO: Support AuxType
 
 			this.blocks[blockName].emit('placed', {
 
@@ -123,7 +125,11 @@ class Minecraft extends MinecraftEventEmitter {
 
 		for (const key of Object.keys(blockNames)) {
 			const blockName = blockNames[key];
-			this.blocks[blockName] = new MinecraftBlockManager(blockName, this);
+			const synonym = reversed[blockName];
+			// シノニムと参照を同じにすることでイベントハンドラを共通にする
+			this.blocks[blockName] =
+			this.blocks[synonym] =
+				new MinecraftBlockManager(blockName, this);
 		}
 
 
