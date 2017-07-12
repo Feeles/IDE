@@ -13,6 +13,7 @@ import registerHTML from './registerHTML';
 import ResolveProgress from './ResolveProgress';
 import ga from 'utils/google-analytics';
 import uniqueId from 'utils/uniqueId';
+import { getPrimaryUser } from 'database/';
 
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
@@ -186,6 +187,7 @@ export default class Monitor extends PureComponent {
 
     const babelrc = getConfig('babelrc');
     const env = composeEnv(getConfig('env'));
+    env.USER_UUID = (await getPrimaryUser()).uuid;
 
     const htmlFile = this.props.findFile(this.props.href) || SourceFile.html();
 
