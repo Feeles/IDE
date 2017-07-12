@@ -14,7 +14,7 @@ const waiting = Promise.resolve()
   });
 
 // Override launcher
-window.h4p = async (params) => {
+window.h4p = async params => {
   await waiting;
   return window.h4p(params);
 };
