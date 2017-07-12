@@ -13,6 +13,7 @@ import registerHTML from './registerHTML';
 import ResolveProgress from './ResolveProgress';
 import ga from 'utils/google-analytics';
 import uniqueId from 'utils/uniqueId';
+import { getPrimaryUser } from 'database/';
 
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
@@ -182,10 +183,23 @@ export default class Monitor extends PureComponent {
   }
 
   async startProcess() {
-    const { getConfig } = this.props;
+    const { getConfig, findFile } = this.props;
 
     const babelrc = getConfig('babelrc');
+
+    // env
     const env = composeEnv(getConfig('env'));
+    const versionUUIDFile = findFile('feeles/.uuid');
+    if (versionUUIDFile) {
+      env.VERSION_UUID = versionUUIDFile.text;
+    } else {
+      // Backward compatibility
+      const element = document.querySelector('meta[name="version_uuid"]');
+      if (element) {
+        env.VERSION_UUID = element.getAttribute('content');
+      }
+    }
+    env.USER_UUID = (await getPrimaryUser()).uuid;
 
     const htmlFile = this.props.findFile(this.props.href) || SourceFile.html();
 
@@ -487,29 +501,30 @@ export default class Monitor extends PureComponent {
     const { error } = this.state;
     const { isPopout, reboot } = this.props;
 
-    const popout = isPopout && !reboot
-      ? <Popout
-          url={popoutURL}
-          title="app"
-          options={this.popoutOptions}
-          window={{
-            open: this.handlePopoutOpen,
-            addEventListener: window.addEventListener.bind(window),
-            removeEventListener: window.removeEventListener.bind(window)
-          }}
-          onClosing={this.handlePopoutClose}
-        >
-          <Screen
-            display
-            frameRef={this.handleFrame}
-            handleReload={() => this.props.setLocation()}
-            reboot={reboot}
-            error={error}
-            width={this.props.frameWidth}
-            height={this.props.frameHeight}
-          />
-        </Popout>
-      : null;
+    const popout =
+      isPopout && !reboot
+        ? <Popout
+            url={popoutURL}
+            title="app"
+            options={this.popoutOptions}
+            window={{
+              open: this.handlePopoutOpen,
+              addEventListener: window.addEventListener.bind(window),
+              removeEventListener: window.removeEventListener.bind(window)
+            }}
+            onClosing={this.handlePopoutClose}
+          >
+            <Screen
+              display
+              frameRef={this.handleFrame}
+              handleReload={() => this.props.setLocation()}
+              reboot={reboot}
+              error={error}
+              width={this.props.frameWidth}
+              height={this.props.frameHeight}
+            />
+          </Popout>
+        : null;
 
     const styles = getStyle(this.props, this.context, this.state);
 
