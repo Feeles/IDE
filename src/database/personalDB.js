@@ -104,12 +104,13 @@ export async function updateProject(projectId, update) {
     .first();
   const nextProject = { ...prevProject, ...update };
 
-  const duplicated = nextProject.title !== null
-    ? await personalDB.projects
-        .where('title')
-        .equalsIgnoreCase(nextProject.title)
-        .first()
-    : null;
+  const duplicated =
+    nextProject.title !== null
+      ? await personalDB.projects
+          .where('title')
+          .equalsIgnoreCase(nextProject.title)
+          .first()
+      : null;
   if (duplicated && duplicated.id !== nextProject.id) {
     // It is not possible to create two projects with the same title.
     throw 'failedToRename';

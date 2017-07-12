@@ -501,29 +501,30 @@ export default class Monitor extends PureComponent {
     const { error } = this.state;
     const { isPopout, reboot } = this.props;
 
-    const popout = isPopout && !reboot
-      ? <Popout
-          url={popoutURL}
-          title="app"
-          options={this.popoutOptions}
-          window={{
-            open: this.handlePopoutOpen,
-            addEventListener: window.addEventListener.bind(window),
-            removeEventListener: window.removeEventListener.bind(window)
-          }}
-          onClosing={this.handlePopoutClose}
-        >
-          <Screen
-            display
-            frameRef={this.handleFrame}
-            handleReload={() => this.props.setLocation()}
-            reboot={reboot}
-            error={error}
-            width={this.props.frameWidth}
-            height={this.props.frameHeight}
-          />
-        </Popout>
-      : null;
+    const popout =
+      isPopout && !reboot
+        ? <Popout
+            url={popoutURL}
+            title="app"
+            options={this.popoutOptions}
+            window={{
+              open: this.handlePopoutOpen,
+              addEventListener: window.addEventListener.bind(window),
+              removeEventListener: window.removeEventListener.bind(window)
+            }}
+            onClosing={this.handlePopoutClose}
+          >
+            <Screen
+              display
+              frameRef={this.handleFrame}
+              handleReload={() => this.props.setLocation()}
+              reboot={reboot}
+              error={error}
+              width={this.props.frameWidth}
+              height={this.props.frameHeight}
+            />
+          </Popout>
+        : null;
 
     const styles = getStyle(this.props, this.context, this.state);
 
