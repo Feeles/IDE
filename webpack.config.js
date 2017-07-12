@@ -21,8 +21,7 @@ const config = {
       './src/utils/google-analytics',
       './src/utils/Rollbar',
       './src/main'
-    ],
-    h4p: ['whatwg-fetch', 'entry-point-dev']
+    ]
   },
   output: {
     path: __dirname + '/dist/',
@@ -60,6 +59,7 @@ const config = {
       INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName),
+      ENTRY_POINT_DEV: JSON.stringify(`http://localhost:${port}`),
       'process.env.ROLLBAR': JSON.stringify(process.env.ROLLBAR),
       'process.env.GA_TRACKING_ID': JSON.stringify(process.env.GA_TRACKING_ID)
     }),
@@ -156,13 +156,19 @@ const config = {
     port,
     // https://github.com/webpack/webpack-dev-server/issues/882
     // ngrok で https のテストをするとき "Invalid Host header" になるので.
-    disableHostCheck: true
+    disableHostCheck: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*'
+    }
   }
 };
 
 if (process.env.NODE_ENV !== 'production') {
   // for Development:
   config.devtool = 'eval';
+  // entry point in Development
+  config.entry.h4p = ['whatwg-fetch', 'entry-point-dev'];
 } else {
   config.devtool = 'source-map';
   config.plugins.push(
