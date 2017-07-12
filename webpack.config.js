@@ -157,7 +157,11 @@ const config = {
     port,
     // https://github.com/webpack/webpack-dev-server/issues/882
     // ngrok で https のテストをするとき "Invalid Host header" になるので.
-    disableHostCheck: true
+    disableHostCheck: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': '*'
+    }
   }
 };
 
