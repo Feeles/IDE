@@ -21,8 +21,7 @@ const config = {
       './src/utils/google-analytics',
       './src/utils/Rollbar',
       './src/main'
-    ],
-    h4p: ['whatwg-fetch', 'entry-point-dev']
+    ]
   },
   output: {
     path: __dirname + '/dist/',
@@ -164,6 +163,8 @@ const config = {
 if (process.env.NODE_ENV !== 'production') {
   // for Development:
   config.devtool = 'eval';
+  // entry point in Development
+  config.entry.h4p = ['whatwg-fetch', 'entry-point-dev'];
 } else {
   config.devtool = 'source-map';
   config.plugins.push(
