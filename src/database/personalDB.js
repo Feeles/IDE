@@ -1,4 +1,5 @@
 import Dexie from 'dexie';
+import uuid from 'uuid/v1';
 
 const personalDB = new Dexie('personal');
 
@@ -20,6 +21,11 @@ personalDB
     });
   });
 
+personalDB.version(3).stores({
+  projects: '++id, &title, size, created, updated, url',
+  files: '++id, [projectId+fileName]',
+  users: '&uuid'
+});
 
 export default personalDB;
 
@@ -163,4 +169,18 @@ export async function deleteFile(projectId, ...fileNames) {
     .where('[projectId+fileName]')
     .anyOfIgnoreCase(...keys)
     .delete();
+}
+
+export async function getPrimaryUser() {
+  // Check exisiting user who is on head
+  return (
+    (await personalDB.users.toCollection().first()) || (await createUser())
+  );
+}
+
+async function createUser() {
+  // Create new user with random id
+  const user = { uuid: uuid() };
+  await personalDB.users.add(user);
+  return user;
 }
