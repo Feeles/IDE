@@ -183,10 +183,22 @@ export default class Monitor extends PureComponent {
   }
 
   async startProcess() {
-    const { getConfig } = this.props;
+    const { getConfig, findFile } = this.props;
 
     const babelrc = getConfig('babelrc');
+
+    // env
     const env = composeEnv(getConfig('env'));
+    const versionUUIDFile = findFile('feeles/.uuid');
+    if (versionUUIDFile) {
+      env.VERSION_UUID = versionUUIDFile.text;
+    } else {
+      // Backward compatibility
+      const element = document.querySelector('meta[name="version_uuid"]');
+      if (element) {
+        env.VERSION_UUID = element.getAttribute('content');
+      }
+    }
     env.USER_UUID = (await getPrimaryUser()).uuid;
 
     const htmlFile = this.props.findFile(this.props.href) || SourceFile.html();
