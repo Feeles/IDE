@@ -4,7 +4,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Insert chromosome into body from dist/main.js
 const waiting = Promise.resolve()
-  .then(() => fetch('./main.js'))
+  .then(() => fetch(`${ENTRY_POINT_DEV}/main.js`))
   .then(response => response.text())
   .then(text => {
     const script = document.createElement('script');
