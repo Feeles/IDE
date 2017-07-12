@@ -3,6 +3,11 @@ import Dexie from 'dexie';
 const personalDB = new Dexie('personal');
 
 // DB migrations
+personalDB.version(1).stores({
+  projects: '++id, &title, size, created, updated',
+  files: '++id, [projectId+fileName]'
+});
+
 personalDB
   .version(2)
   .stores({
@@ -15,10 +20,6 @@ personalDB
     });
   });
 
-personalDB.version(1).stores({
-  projects: '++id, &title, size, created, updated',
-  files: '++id, [projectId+fileName]'
-});
 
 export default personalDB;
 
