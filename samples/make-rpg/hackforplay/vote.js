@@ -1,8 +1,7 @@
 /* Feeles Voting System */
 const {USER_UUID, VERSION_UUID} = feeles.env;
 export const isEnabled = !!(USER_UUID && VERSION_UUID);
-export const API = `http://localhost:8000/api`;
-// export const API = `https://www.feeles.com/api`;
+export const API = `https://www.feeles.com/api`;
 export const API_V1 = `${API}/v1/vote?user=${USER_UUID}&version=${VERSION_UUID}`;
 export const REST_API_V1 = `${API}/v1/votes?user=${USER_UUID}&version=${VERSION_UUID}`;
 
