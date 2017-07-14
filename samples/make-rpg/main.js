@@ -2,6 +2,7 @@ import 'hackforplay/core';
 
 import gameFunc from './game';
 import maps from './maps';
+import vote from './hackforplay/vote';
 
 let gameOnLoad, hackOnLoad;
 
@@ -16,11 +17,22 @@ if (gameFunc._bundled) {
 }
 
 // ゲームをつくる
-game.onload = () => {
+game.onload = async () => {
 	gameOnLoad();
 	// Hack.player がないとき self.player を代わりに入れる
 	if (self.player && !Hack.player) {
 		Hack.player = self.player;
+	}
+
+	// ゲームクリアの投票（まだクリアしてない人だけ）
+	if (await vote('GAME') !== 'CLEAR') {
+
+		vote('GAME', 'START'); // ゲーム「スタート」
+
+		Hack.on('gameclear', () => {
+			vote('GAME', 'CLEAR'); // ゲーム「クリア」
+		});
+
 	}
 };
 
