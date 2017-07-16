@@ -287,7 +287,7 @@ class Minecraft extends MinecraftEventEmitter {
 				from: this.getPos(x1, y1, z1, relative),
 				to: this.getPos(x2, y2, z2, relative),
 				tileName,
-				tileData,
+				tileData | 0,
 				oldBlockHandling
 			}
 		});
@@ -348,18 +348,24 @@ class Minecraft extends MinecraftEventEmitter {
 
 	};
 
-
-	kill(name, selector = 'allPlayers') {
+	/**
+	 * (1) kill('player')
+	 * (2) kill('chicken', 20)
+	 */
+	kill(type = 'player', r = 1000) {
 		this.send('commandRequest', 'commandRequest', {
 			name: 'execute',
 			input: {
 				command: `kill`,
 				origin: {
 					rules: [{
-						name: 'name',
-						value: name
+						name: 'type',
+						value: type
+					}, {
+						name: 'r',
+						value: r
 					}],
-					selector
+					selector: 'allEntities'
 				},
 				position: this.getPos(0, 0, 0),
 			},
@@ -450,7 +456,7 @@ class Minecraft extends MinecraftEventEmitter {
 	}
 
 
-	async give(item, amount) {
+	async give(item, amount = 1) {
 		const [name, tileData] = $t(item).split(':');
 		return await this.execute(`give @p ${name} ${amount} ${tileData | 0}`);
 	}
