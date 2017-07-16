@@ -360,7 +360,7 @@ class Minecraft extends MinecraftEventEmitter {
 				origin: {
 					rules: [{
 						name: 'type',
-						value: type
+						value: $t(type)
 					}, {
 						name: 'r',
 						value: r
