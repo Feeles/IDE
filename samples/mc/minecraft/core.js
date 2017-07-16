@@ -287,7 +287,7 @@ class Minecraft extends MinecraftEventEmitter {
 				from: this.getPos(x1, y1, z1, relative),
 				to: this.getPos(x2, y2, z2, relative),
 				tileName,
-				tileData,
+				tileData | 0,
 				oldBlockHandling
 			}
 		});
