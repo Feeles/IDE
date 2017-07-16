@@ -56,9 +56,13 @@
   - label: 時間を設定する
     code: |
         mc.setTime(0);
-  - label: だれかをたおす
+  - label: じぶんをたおす
     code: |
-        mc.kill('ユーザーネーム');
+        mc.kill();
+  - label: サイコパス
+    code: |
+        // きょり 20 までに近づくと...(闇)
+        mc.kill(('▼ モンスター', 'ゾンビ'), 20);
   - label: ゲームモードを設定する
     code: |
         mc.gamemode(('▼ ゲームモード', 'c'));

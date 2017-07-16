@@ -348,18 +348,24 @@ class Minecraft extends MinecraftEventEmitter {
 
 	};
 
-
-	kill(name, selector = 'allPlayers') {
+	/**
+	 * (1) kill('player')
+	 * (2) kill('chicken', 20)
+	 */
+	kill(type = 'player', r = 1000) {
 		this.send('commandRequest', 'commandRequest', {
 			name: 'execute',
 			input: {
 				command: `kill`,
 				origin: {
 					rules: [{
-						name: 'name',
-						value: name
+						name: 'type',
+						value: type
+					}, {
+						name: 'r',
+						value: r
 					}],
-					selector
+					selector: 'allEntities'
 				},
 				position: this.getPos(0, 0, 0),
 			},
