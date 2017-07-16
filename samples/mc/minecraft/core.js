@@ -450,7 +450,7 @@ class Minecraft extends MinecraftEventEmitter {
 	}
 
 
-	async give(item, amount) {
+	async give(item, amount = 1) {
 		const [name, tileData] = $t(item).split(':');
 		return await this.execute(`give @p ${name} ${amount} ${tileData | 0}`);
 	}
