@@ -19,6 +19,10 @@ Player.prototype.checkInput = function(type) {
 
 Player.prototype.onenterframe = function() {
 	if (!Hack.isPlaying) return;
+
+
+	// console.log(this.x);
+
 	if (this.behavior === BehaviorTypes.Idle) {
 		if (this.checkInput('attack')) {
 			this.attack();
@@ -29,8 +33,9 @@ Player.prototype.onenterframe = function() {
 		var ver = hor ? 0 : this.checkInput('down') - this.checkInput('up');
 		if (hor || ver) {
 			// Turn
+
 			this.forward = [hor, ver];
-			this.walk(1);
+			this.walk();
 		}
 	}
 };

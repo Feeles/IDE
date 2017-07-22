@@ -4,6 +4,7 @@ import gameFunc from './game';
 import maps from './maps';
 import vote from './hackforplay/vote';
 
+
 let gameOnLoad, hackOnLoad;
 
 if (gameFunc._bundled) {
@@ -17,8 +18,14 @@ if (gameFunc._bundled) {
 }
 
 // ゲームをつくる
-game.onload = async () => {
+game.onload = async() => {
+
+	// gameOnLoad より先に実行するイベント
+	// lifelabel などが gameOnLoad 時に参照できない対策
+	game.dispatchEvent(new enchant.Event('initialize'));
+
 	gameOnLoad();
+
 	// Hack.player がないとき self.player を代わりに入れる
 	if (self.player && !Hack.player) {
 		Hack.player = self.player;

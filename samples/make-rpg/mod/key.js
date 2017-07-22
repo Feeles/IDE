@@ -240,8 +240,6 @@ var KeyClass = enchant.Class.create({
 
 });
 
-
-
 Object.keys(keyCode).forEach(function(key) {
 	Key[key] = new KeyClass();
 	Key[key].name = key;
@@ -257,7 +255,6 @@ const alias = {
 	'right': 'right'
 
 };
-
 
 
 core.on('enterframe', function() {
@@ -281,3 +278,6 @@ core.on('enterframe', function() {
 	});
 
 });
+
+
+export default Key;
