@@ -133,22 +133,6 @@ game.on('initialize', function() {
 		this.removeEventListener('enterframe', enterframe);
 	};
 
-	/*
-	Hack.lifeLabel = Hack.player && (function() {
-		var maxhp, hp;
-		maxhp = hp = this.life = Hack.player.hp;
-		Hack.player.on('hpchange', function() {
-			var hp = Hack.player.hp;
-			maxhp = Math.max(maxhp, hp);
-			Hack.lifeLabel.life = maxhp < Hack.lifeLabel._maxlife ? hp : (hp / maxhp) * Hack.lifeLabel._maxlife;
-		});
-		Hack.menuGroup.addChild(this);
-		return this;
-
-	}).call(new LifeLabel(Hack.menuGroup.x + 10, Hack.menuGroup.y + 72, 9));
-	*/
-
-
 	Hack.scoreLabel = (function(self, source) {
 		Object.keys(source).filter(function(key) {
 			var desc = Object.getOwnPropertyDescriptor(source, key);
