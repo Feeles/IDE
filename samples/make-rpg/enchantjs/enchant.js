@@ -168,6 +168,9 @@
 	// export enchant
 	window.enchant = enchant;
 
+	module.exports = enchant;
+
+
 	window.addEventListener("message", function(msg, origin) {
 		try {
 			var data = JSON.parse(msg.data);
@@ -273,7 +276,11 @@
 						definition[prop].enumerable = true;
 					}
 				} else {
-					definition[prop] = { value: definition[prop], enumerable: true, writable: true };
+					definition[prop] = {
+						value: definition[prop],
+						enumerable: true,
+						writable: true
+					};
 				}
 			}
 		}
@@ -2831,8 +2838,12 @@
 				m22h = mat[3] * h,
 				mdx = mat[4],
 				mdy = mat[5];
-			var xw = [mdx, m11w + mdx, m21h + mdx, m11w + m21h + mdx].sort(function(a, b) { return a - b; });
-			var yh = [mdy, m12w + mdy, m22h + mdy, m12w + m22h + mdy].sort(function(a, b) { return a - b; });
+			var xw = [mdx, m11w + mdx, m21h + mdx, m11w + m21h + mdx].sort(function(a, b) {
+				return a - b;
+			});
+			var yh = [mdy, m12w + mdy, m22h + mdy, m12w + m22h + mdy].sort(function(a, b) {
+				return a - b;
+			});
 
 			return {
 				left: xw[0],
@@ -5384,9 +5395,15 @@
 	enchant.Surface.load = function(src, callback, onerror) {
 		var image = new Image();
 		var surface = Object.create(enchant.Surface.prototype, {
-			context: { value: null },
-			_css: { value: 'url(' + src + ')' },
-			_element: { value: image }
+			context: {
+				value: null
+			},
+			_css: {
+				value: 'url(' + src + ')'
+			},
+			_element: {
+				value: image
+			}
 		});
 		enchant.EventTarget.call(surface);
 		onerror = onerror || function() {};
@@ -5536,7 +5553,9 @@
 		 */
 		enchant.Deferred.next = function(func) {
 			var q = new enchant.Deferred().next(func);
-			q._id = setTimeout(function() { q.call(); }, 0);
+			q._id = setTimeout(function() {
+				q.call();
+			}, 0);
 			return q;
 		};
 		/**
@@ -5576,7 +5595,9 @@
 		 */
 		enchant.Deferred.parallel = function(arg) {
 			var q = new enchant.Deferred();
-			q._id = setTimeout(function() { q.call(); }, 0);
+			q._id = setTimeout(function() {
+				q.call();
+			}, 0);
 			var progress = 0;
 			var ret = (arg instanceof Array) ? [] : {};
 			var p = new enchant.Deferred();
@@ -5592,18 +5613,26 @@
 									p.call(ret);
 								}
 							})
-							.error(function(err) { p.fail(err); });
+							.error(function(err) {
+								p.fail(err);
+							});
 						if (typeof queue._id === 'number') {
 							clearTimeout(queue._id);
 						}
-						queue._id = setTimeout(function() { queue.call(); }, 0);
+						queue._id = setTimeout(function() {
+							queue.call();
+						}, 0);
 					}(arg[prop], prop));
 				}
 			}
 			if (!progress) {
-				p._id = setTimeout(function() { p.call(ret); }, 0);
+				p._id = setTimeout(function() {
+					p.call(ret);
+				}, 0);
 			}
-			return q.next(function() { return p; });
+			return q.next(function() {
+				return p;
+			});
 		};
 	}
 
@@ -5665,8 +5694,12 @@
 			var clone;
 			if (this._element instanceof Audio) {
 				clone = Object.create(enchant.DOMSound.prototype, {
-					_element: { value: this._element.cloneNode(false) },
-					duration: { value: this.duration }
+					_element: {
+						value: this._element.cloneNode(false)
+					},
+					duration: {
+						value: this.duration
+					}
 				});
 			} else if (enchant.ENV.USE_FLASH_SOUND) {
 				return this;

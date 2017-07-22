@@ -12,7 +12,8 @@ Player.prototype.input = {
 };
 
 Player.prototype.checkInput = function(type) {
-	return this.input[type].map(function(name) {
+	const keyNames = Array.isArray(this.input[type]) ? this.input[type] : [this.input[type]];
+	return keyNames.map(function(name) {
 		return Key[name].pressed;
 	}).reduce(function(a, b) {
 		return a + b;

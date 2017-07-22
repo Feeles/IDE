@@ -519,34 +519,51 @@
     image: trimmed/explosion.png
     description: 立ち昇る爆炎。ふれると１のダメージを受ける
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/爆炎'
-  - label: プレイヤー
+  - label: プレイヤー２
     code: |
-      player.locate(14, 9);
-    image: trimmed/knight.png
+      const item1 = new Player();
+      item1.mod(('▼ スキン', _aあんこくきし)); // 見た目
+      item1.locate(7, 5); // はじめの位置
+      item1.hp = 3; // 2P の HP
+      item1.atk = 1; // 2P の こうげき力
+      item1.on('やられた', () => {
+        // プレイヤー２がやられたとき
+        Hack.gameclear();
+      });
+      // キーボードを変える
+      item1.input.left = 'a';
+      item1.input.right = 'd';
+      item1.input.up = 'w';
+      item1.input.down = 's';
+      item1.input.attack = 'f';
+      // ライフ
+      const item2 = new LifeLabel(250, 72, 0);
+      item1.onhpchange = () => {
+        item2.life = item1.hp;
+      };
+      Hack.menuGroup.addChild(item2);
+      // カメラ
+      const camera2 = new Camera();
+      camera2.target = item1;
+      // カメラを ヨコ 2 、タテ 1 のはいちにする
+      Camera.layout(2, 1);
+    image: trimmed/darknight.png
     description: プレイヤーの位置をかえる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/プレイヤー'
-  - label: ビーム
-    code: |
-      player.on(('▼ イベント', 'こうげきするとき'), () => {
-        beamSkill(player);
-      });
 
-      // ↓ビームの本体. この部分はひとつだけあれば良い
-      function beamSkill(self) {
-        const beam = new RPGObject();
-        beam.mod(('▼ スキン', _bビーム));
-        beam.on(('▼ イベント', 'ふれはじめた'), (event) => {
-          if (event.hit !== self) {
-            Hack.Attack(event.mapX, event.mapY, 1);
-            beam.destroy();
-          }
-        });
-        self.shoot(beam, self.forward, 10);
-      }
-      // ↑ビームの本体
-    image: trimmed/map-27-2.png
-    description: プレイヤーがビームを使えるようにする。beamという関数がひとつあれば、前半部分だけをコピーペーストして、他のキャラクターがビームを使えるようにもできる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ビーム'
+  - label: ズーム
+    code: |
+      // カメラを 2 倍にズーム
+      Camera.main.zoom(2);
+
+  - label: カメラ
+    code: |
+      // あたらしいカメラ
+      const item1 = new Camera(100, 100, 100, 100);
+      item1.target = player; // カメラの中心にいるターゲット
+      item1.borderStyle(4, 'red'); // まわりのワク
+      item1.zoom(0.5); // ズームのわりあい
+
   - label: 魔道書
     code: |
       const item1 = new RPGObject();
@@ -625,3 +642,42 @@
         // NOのとき
       }
     description: 好きな質問文でダイアログを出して、その結果によってコードを実行できる
+
+  - label: キー 押した
+    code: |
+      // キーを押したら
+      Key[('▼ キー', 'space')].press(() => {
+
+        // キーを押したとき、一度だけここが実行される
+        Hack.log('押されたよ〜');
+
+      });
+
+  - label: キー はなした
+    code: |
+      // キーをはなしたら
+      [('▼ キー', Key.space)].release(() => {
+
+        // キーをはなしたとき、一度だけここが実行される
+        Hack.log('はなされたよ〜');
+
+      });
+
+入力:
+  - label: キー 押した
+    code: |
+      if (('▼ キー', Key.space).clicked) {
+
+      }
+
+  - label: キー ずっと
+    code: |
+      if (('▼ キー', Key.space).pressed) {
+
+      }
+
+  - label: キー はなした
+    code: |
+      if (('▼ キー', Key.space).released) {
+
+      }

@@ -1,3 +1,6 @@
+import 'hackforplay/enchantjs-kit';
+
+
 function refocus() {
 	window.document.activeElement.blur(); // Blur an enchantBook
 	window.parent.focus(); // Blur an input in parent window
@@ -7,8 +10,6 @@ function refocus() {
 function getEditor() {
 	return Hack.enchantBook;
 }
-
-import 'hackforplay/enchantjs-kit';
 
 module.exports = Hack;
 
@@ -45,6 +46,8 @@ Hack.fun2str = function(func) {
 // textarea : 画面全体をおおう半透明のテキストエリア(DOM)
 Hack.textarea = (function() {
 	// scope: new Entity
+
+	this.name = 'HackTextarea';
 
 	this.width = game.width - 32;
 	this.height = game.height - 32;
@@ -166,6 +169,10 @@ Hack.enchantBook = (function() {
 	this._element.setAttribute('height', '320');
 	this._element.type = 'iframe';
 	game.rootScene.addChild(this);
+
+
+	this.name = 'EnchantBook';
+
 	return this;
 
 }).call(new enchant.Entity());
@@ -246,12 +253,17 @@ Hack.overlay = function() {
 					break;
 			}
 		}
+
+
+
+
 		return this;
 
 	}).call(Hack.createSprite(game.width, game.height, {
 		defaultParentNode: game.rootScene
 	}), arguments);
 };
+
 
 (function() {
 	var playing = true;
@@ -308,20 +320,28 @@ Hack.overlay = function() {
 // ゲームメニュー
 (function() {
 
+	game.rootScene.name = 'RootScene';
+
 	var visible, overlay;
 
 	var GUIParts = [];
 
 	// メニュー全体を包括するグループ つねに手前に描画される
 	// Hack.menuGroup でアクセスできる
-	var menuGroup = new Group();
-	game.rootScene.addChild(menuGroup);
+	const menuGroup = new enchant.Group();
+	menuGroup.name = 'MenuGroup';
+	menuGroup.order = 100;
+
+
 	menuGroup.on('enterframe', function() {
+		/*
 		if (game.rootScene.lastChild !== menuGroup) {
 			game.rootScene.addChild(menuGroup);
 		}
+		*/
 		menuGroup.moveTo(-game.rootScene.x, -game.rootScene.y); // 位置合わせ
 	});
+
 	Object.defineProperty(Hack, 'menuGroup', {
 		get: function() {
 			return menuGroup;
@@ -347,6 +367,10 @@ Hack.overlay = function() {
 			return opener;
 		}
 	});
+
+
+	game.rootScene.addChild(menuGroup);
+
 
 	// イベント Hack.onmenuopend が dispatch される
 	Hack.openMenu = function() {
@@ -396,9 +420,14 @@ Hack.overlay = function() {
 
 		// メニューを開くボタン
 		opener.image = game.assets['hackforplay/menu-button-menu.png'];
+
+		/*
 		opener.onenterframe = function() {
 			this.parentNode.addChild(this); // つねに手前に表示
 		};
+		*/
+
+
 		opener.ontouchend = function() {
 			if (visible) Hack.closeMenu();
 			else Hack.openMenu();
@@ -511,14 +540,15 @@ Hack.define = function(obj, prop, condition, predicate) {
 	Object.defineProperty(obj, prop, descriptor);
 };
 
+/*
 game.addEventListener('load', function() {
-
 	if (Hack.defaultParentNode) {
 		game.rootScene.addChild(Hack.defaultParentNode);
 	} else {
 		Hack.defaultParentNode = game.rootScene;
 	}
 });
+*/
 
 
 /**
@@ -543,5 +573,3 @@ game.addEventListener('load', function() {
 		throw new Error('Hack.css2rgb requires CSS style string or Array of number');
 	};
 })();
-
-
