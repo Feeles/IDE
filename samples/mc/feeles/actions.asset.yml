@@ -56,6 +56,10 @@
   - label: なんいどを設定する
     code: |
         mc.difficulty(('▼ なんいど', 'e'));
+  - label: タイマー
+    code: |
+        // 1000 なら 1 秒のタイマー
+        await mc.utils.wait(1000);
   - label: 時計の時間を設定する
     code: |
         mc.setTime(0);
