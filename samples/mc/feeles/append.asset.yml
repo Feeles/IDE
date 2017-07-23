@@ -4,11 +4,11 @@
       // ボス出現
       feeles.setTimeout(async() => {
 
-          mc.summon(('▼ モンスター', 'エンダードラゴン'), 0, 10, 0);
-
           mc.gamemode(('▼ ゲームモード', 's'));
 
           mc.difficulty(('▼ なんいど', 'e'));
+
+          mc.summon(('▼ モンスター', 'エンダードラゴン'), 0, 10, 0);
 
           mc.title('〜タイトル〜', ('▼ タイトル', 'title'));
 
