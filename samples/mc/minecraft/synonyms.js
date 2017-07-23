@@ -8,7 +8,11 @@ export const events = {
 
 	died: 'やられた',
 
-	travelled: 'うごいた'
+	travelled: 'うごいた',
+	walked: 'あるいた',
+	jumped: 'ジャンプした',
+	sneeked: 'スニークした',
+	dashed: 'ダッシュした'
 };
 
 export const synonyms = {};

@@ -2,9 +2,9 @@ import Minecraft from 'minecraft/core';
 
 const mc = new Minecraft();
 
-mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
+mc.player.on(('▼ プレイヤーが', 'ジャンプした'), async() => {
 
-	// １歩あるくたびに、出てくる
+	// ジャンプするたびに出てくる
 	mc.setBlock(('▼ しぜん', '赤のチューリップ'), 0, 0, 0);
 
 

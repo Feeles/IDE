@@ -114,12 +114,40 @@ class Minecraft extends MinecraftEventEmitter {
 
 		});
 
+		let previousTravelMethodType = 0;
+		let previousPositionY = 0;
+		let previousPositionHigher = false;
 		this.on('PlayerTravelled', (data) => {
+			const { TravelMethodType } = data.body.properties;
+			const { PosAvgY } = data.body.measurements;
+			const positionHigher = PosAvgY > previousPositionY;
 
-			this.player.emit('travelled', {
+			// Travelled はつねに emit
+			this.player.emit('travelled', {});
 
-			});
+			// あるいたときだけ emit
+			if (TravelMethodType === 0) {
+				this.player.emit('walked', {});
+			}
 
+			// ジャンプした瞬間をとらえて emit
+			if (TravelMethodType === 2 && (previousTravelMethodType !== 2 || positionHigher && !previousPositionHigher)) {
+				this.player.emit('jumped', {});
+			}
+
+			// スニーク状態であるいたときだけ emit
+			if (TravelMethodType === 7) {
+				this.player.emit('sneeked', {});
+			}
+
+			// 走ったときだけ emit
+			if (TravelMethodType === 8) {
+				this.player.emit('dashed', {});
+			}
+
+			previousTravelMethodType = TravelMethodType;
+			previousPositionY = PosAvgY;
+			previousPositionHigher = positionHigher;
 		});
 
 

@@ -1,16 +1,16 @@
 タイトル:
+  - body: "'title'"
+    label: メインタイトル
+  - body: "'subtitle'"
+    label: サブタイトル（タイトルといっしょに使う）
   - body: "'actionbar'"
     label: 小さな文字
   - body: "'clear'"
     label: タイトルの文字をけす
   #- body: "'reset'"
   #  label: 'times' のリセット用コマンド？
-  - body: "'subtitle'"
-    label: サブタイトル（タイトルといっしょに使う）
   #- body: "'times'"
   #  label: フェードイン/アウトの時間を細かく設定する
-  - body: "'title'"
-    label: メインタイトル
 
 ゲームモード:
   - body: "'s'"

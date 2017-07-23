@@ -2,13 +2,13 @@
   - label: ボス出現
     code: |
       // ボス出現
-      feeles.setTimeout(() => {
-
-          mc.summon(('▼ モンスター', 'エンダードラゴン'), 0, 10, 0);
+      feeles.setTimeout(async() => {
 
           mc.gamemode(('▼ ゲームモード', 's'));
 
           mc.difficulty(('▼ なんいど', 'e'));
+
+          mc.summon(('▼ モンスター', 'エンダードラゴン'), 0, 10, 0);
 
           mc.title('〜タイトル〜', ('▼ タイトル', 'title'));
 
@@ -27,7 +27,7 @@
   - label: せってい
     code: |
       // せってい
-      feeles.setTimeout(() => {
+      mc.utils.setTimeout(async() => {
 
           mc.gamemode(('▼ ゲームモード', 's'));
 
@@ -41,7 +41,7 @@
   - label: 経験値フィーバー
     code: |
       // 経験値フィーバー
-      feeles.setInterval(() => {
+      mc.utils.setInterval(async() => {
 
           mc.summon(('▼ けいけんち', '経験値オーブ'), 0, 0, 0);
 
@@ -51,7 +51,7 @@
   - label: いちどだけ
     code: |
       // いちどだけ
-      feeles.setTimeout(() => {
+      mc.utils.setTimeout(async() => {
 
 
           /*+ アクション */
@@ -60,7 +60,7 @@
   - label: つねに
     code: |
       // つねに
-      feeles.setInterval(() => {
+      mc.utils.setInterval(async() => {
 
 
           /*+ アクション */
@@ -68,7 +68,7 @@
       }, 1000);
   - label: プレイヤーがうごいたら
     code: |
-      mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
+      mc.player.on(('▼ プレイヤーが', 'うごいた'), async() => {
 
 
           /*+ アクション */
@@ -76,7 +76,7 @@
       });
   - label: プレイヤーがやられたら
     code: |
-      mc.player.on(('▼ プレイヤーが', 'やられた'), () => {
+      mc.player.on(('▼ プレイヤーが', 'やられた'), async() => {
 
 
       	 /*+ アクション */
@@ -84,7 +84,7 @@
       });
   - label: ブロックがこわれたら
     code: |
-      mc.blocks[('▼ ブロック', '草ブロック')].on('こわれた', () => {
+      mc.blocks[('▼ ブロック', '草ブロック')].on('こわれた', async() => {
 
 
         /*+ アクション */
@@ -92,7 +92,7 @@
       });
   - label: ブロックがおかれたら
     code: |
-      mc.blocks[('▼ ブロック', '荒れた土')].on('おかれた', () => {
+      mc.blocks[('▼ ブロック', '荒れた土')].on('おかれた', async() => {
 
 
         /*+ アクション */
@@ -101,7 +101,7 @@
   - label: 空中さんぽ
     code: |+
       // 空中さんぽ
-      setInterval(() => {
+      mc.utils.setInterval(async() => {
 
           // ランダムな毛の色（すうじ）
           const いろ = Math.random() * 17 >> 0;
@@ -112,7 +112,7 @@
   - label: レンキンジュツ
     code: |+
       // レンキンジュツ
-      mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
+      mc.player.on(('▼ プレイヤーが', 'うごいた'), async() => {
 
           // まえ→あと
           const まえ = ('▼ ブロック', '土'); // を,
@@ -121,16 +121,16 @@
 
       });
 
-  - label: 超・コオリワタリ
-    code: |+
-      // 超・コオリワタリ
-      mc.player.on(('▼ プレイヤーが', 'うごいた'), () => {
-
-          // 足元をすべてぬりつぶす
-          const ひろさ = 5;
-          mc.fill(('▼ ブロック', '氷'), -ひろさ, -1, -ひろさ, ひろさ, -1, ひろさ);
-
-      });
+  # - label: 超・コオリワタリ
+  #   code: |+
+  #     // 超・コオリワタリ
+  #     mc.player.on(('▼ プレイヤーが', 'うごいた'), async() => {
+  #
+  #         // 足元をすべてぬりつぶす
+  #         const ひろさ = 5;
+  #         mc.fill(('▼ ブロック', '氷'), -ひろさ, -1, -ひろさ, ひろさ, -1, ひろさ);
+  #
+  #     });
 
   - label:
     code: |+
@@ -141,7 +141,7 @@
       // ウィザー召喚！
       mc.summon('wither', 40, 10, 0);
       // ウィザーを３０秒でたおす方法
-      setInterval(() => {
+      mc.utils.setInterval(async() => {
 
           const ターゲット = ('▼ ターゲット', '@e[type=wither]'); // ウィザー
           // となりに TNT をおく

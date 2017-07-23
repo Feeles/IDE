@@ -1,4 +1,6 @@
 import MinecraftEventEmitter from './event-emitter';
+import { synonyms } from './synonyms';
+const $t = word => synonyms[word] || word;
 
 class MinecraftAgent extends MinecraftEventEmitter {
 
@@ -191,6 +193,8 @@ class MinecraftAgent extends MinecraftEventEmitter {
 	}
 
 	collect(item) {
+		item = $t(item);
+
 		return this.mc.commandRequest({
 			name: 'collect',
 			input: {
