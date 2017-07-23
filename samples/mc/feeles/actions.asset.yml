@@ -47,6 +47,9 @@
   - label: そうび
     code: |
         mc.give(('▼ そうび', 'ダイヤモンドの剣'));
+  - label: ベッド
+    code: |
+        mc.give(('▼ ベッド', 'ベッド'));
   - label: けいけんち
     code: |
         mc.summon(('▼ けいけんち', '経験値オーブ'));
