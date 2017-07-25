@@ -95,7 +95,7 @@ export default class MetaDialog extends PureComponent {
 
     const styles = {
       dialog: {
-        minHeight: 400,
+        // minHeight: 400,
         overflowX: 'auto',
         overflowY: 'scroll'
       }
@@ -358,8 +358,12 @@ class EditAuthor extends PureComponent {
 
     return (
       <div>
-        <h1>{localization.metaDialog.creator}</h1>
-        <h4>{localization.metaDialog.creatorConfirm}</h4>
+        <h1>
+          {localization.metaDialog.creator}
+        </h1>
+        <h4>
+          {localization.metaDialog.creatorConfirm}
+        </h4>
         <TextField
           id=""
           fullWidth
