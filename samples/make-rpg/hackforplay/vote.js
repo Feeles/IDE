@@ -40,8 +40,11 @@ async function getVotes() {
 		const text = await response.text();
 		const paginator = JSON.parse(text);
 		if (paginator.data) {
-			return paginator.data[0].value;
+			// paginator として利用する場合 (Empty の場合もある)
+			const [first] = paginator.data;
+			return first ? first.value : {};
 		} else {
+			// データだけを直接渡す場合
 			return paginator;
 		}
 	}
