@@ -534,15 +534,22 @@ export default class SourceEditor extends PureComponent {
   beautify = () => {
     const { file } = this.props;
     const prevValue = this.codemirror.getValue();
+    const setValueWithoutHistory = replacement => {
+      // undo => beautify => setValue することで history を 1 つに
+      const { left, top } = this.codemirror.getScrollInfo();
+      this.codemirror.undo();
+      this.codemirror.setValue(replacement);
+      this.codemirror.scrollTo(left, top);
+    };
     if (file.is('javascript') || file.is('json')) {
-      this.setValue(
+      setValueWithoutHistory(
         beautify(prevValue, {
           indent_with_tabs: true,
           end_with_newline: true
         })
       );
     } else if (file.is('html')) {
-      this.setValue(
+      setValueWithoutHistory(
         beautify.html(prevValue, {
           indent_with_tabs: true,
           indent_inner_html: true,
@@ -550,7 +557,7 @@ export default class SourceEditor extends PureComponent {
         })
       );
     } else if (file.is('css')) {
-      this.setValue(
+      setValueWithoutHistory(
         beautify.css(prevValue, {
           indent_with_tabs: true
         })
