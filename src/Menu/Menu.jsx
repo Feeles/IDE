@@ -204,6 +204,14 @@ export default class Menu extends PureComponent {
         }
       }
       body.append('ogp', JSON.stringify(this.props.getConfig('ogp')));
+
+      // .feelesrc.yml の情報を付与
+      const feelesrc = this.props.loadConfig('feelesrc');
+      if (!isUpdate && feelesrc.kitIdentifier) {
+        // キットの識別子 e.g. com.feeles.hack-rpg
+        body.append('kit_identifier', feelesrc.kitIdentifier);
+      }
+
       // store/update action
       const response = await fetch(actionURL, {
         method: 'POST',
