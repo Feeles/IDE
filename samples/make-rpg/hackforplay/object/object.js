@@ -387,11 +387,11 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 
 		}
 
-		this.dispatchEvent(new Event('walkend'));
-
 		// 移動の誤差を修正
 		this.x = beginX + tw * forward.x;
 		this.y = beginY + th * forward.y;
+
+		this.dispatchEvent(new Event('walkend'));
 
 		this.behavior = BehaviorTypes.Idle;
 
