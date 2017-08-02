@@ -44,3 +44,9 @@
       // さいしょの向きをかえる
       player.turn(1);
     description: プレイヤーの向きをかえる。player の部分を item1 などにかえれば、他のキャラクターの向きをかえられる
+
+  - label: 巨大化
+    code: |
+      // 見た目の大きさをかえる
+      player.scale(5);
+    description: プレイヤーの見た目の大きさをかえる。player の部分を item1 などにかえれば、他のキャラクターの大きさをかえられる
