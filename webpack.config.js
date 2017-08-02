@@ -30,6 +30,12 @@ const config = {
   module: {
     loaders: [
       {
+        enforce: 'pre',
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader'
+      },
+      {
         test: /\.(jsx?)$/,
         loaders: ['happypack/loader'],
         include: [path.resolve(__dirname, 'src')]
