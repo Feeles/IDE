@@ -591,8 +591,12 @@
   - label: YouTube
     code: |
       feeles.openMedia({
+        // YouTube などの URL
         url: 'https://www.youtube.com/watch?v=B_jHOwhoAzY&t=2s',
-        playing: true
+        // オートプレイ
+        playing: ('▼ フラグ', true),
+        // ボタンとバーを表示
+        controls: ('▼ フラグ', false)
       });
     description: YouTubeのURLから好きな動画を再生できる
   - label: セリフ
