@@ -379,6 +379,7 @@
         const item2 = new RPGObject();
         item2.mod(('▼ スキン', _bばくえん));
         item2.locate(7, 5);
+        item2.velocityY = -1;
         item2.collisionFlag = false;
         item2.on(('▼ イベント', 'ふれはじめた'), (event) => {
           Hack.Attack.call(item2, event.mapX, event.mapY, 1);
