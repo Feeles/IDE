@@ -98,3 +98,9 @@
     label: collisionFlag が true のとき、他のものとぶつかったときに発生するイベント
   - body: "'HPかわった'"
     label: item.hp が変化したときに発生するイベント
+
+フラグ:
+  - body: "true"
+    label: オン
+  - body: "false"
+    label: オフ
