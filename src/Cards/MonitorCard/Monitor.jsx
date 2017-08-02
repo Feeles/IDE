@@ -373,7 +373,7 @@ export default class Monitor extends PureComponent {
     clearInterval(this.setIntervalId.get(data.value.intervalId));
   };
 
-  handleSpeechRecognition = ({ data }) => {
+  handleSpeechRecognition = ({ data, reply }) => {
     const recognition = new SpeechRecognition();
     for (const prop of [
       'lang',
