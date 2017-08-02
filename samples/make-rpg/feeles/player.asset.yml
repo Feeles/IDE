@@ -38,3 +38,9 @@
       // 色をかえる
       player.color = ('▼ カラー', 'black');
     description: プレイヤーの色をかえる。player の部分を item1 などにかえれば、他のキャラクターの色をかえられる
+
+  - label: さいしょの向き
+    code: |
+      // さいしょの向きをかえる
+      player.turn(1);
+    description: プレイヤーの向きをかえる。player の部分を item1 などにかえれば、他のキャラクターの向きをかえられる
