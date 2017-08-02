@@ -501,7 +501,7 @@
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _hハート));
       item1.locate(7, 5, 'map1');
-      item1.color = 'white';
+      item1.color = ('▼ カラー', 'white');
     image: trimmed/colorful.png
     description: ほかにも blue や orange など、さまざまな色がつかえる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/色付きハート'

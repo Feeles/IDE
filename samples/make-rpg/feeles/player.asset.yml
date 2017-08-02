@@ -32,3 +32,9 @@
     image: trimmed/map-27-2.png
     description: プレイヤーがビームを使えるようにする。 player の部分を item1 などにかえれば、他のキャラクターがビームを使えるようにもできる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ビーム'
+
+  - label: カラーチェンジ
+    code: |
+      // 色をかえる
+      player.color = ('▼ カラー', 'black');
+    description: プレイヤーの色をかえる。player の部分を item1 などにかえれば、他のキャラクターの色をかえられる
