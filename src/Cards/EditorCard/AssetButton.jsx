@@ -64,7 +64,6 @@ export default class AssetButton extends PureComponent {
         marginBottom: 4
       },
       label: {
-        flex: '1 1 auto',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
