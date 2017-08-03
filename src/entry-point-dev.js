@@ -1,3 +1,4 @@
+/*global ENTRY_POINT_DEV INLINE_SCRIPT_ID*/
 if (process.env.NODE_ENV === 'production') {
   throw new Error('Do not exec entry-point-dev.js in production.');
 }

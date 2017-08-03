@@ -54,7 +54,7 @@ export default class Filename extends PureComponent {
       onChange(file, target.value);
       this.setState({ isEditing: false });
     };
-    ref.input.onblur = event => {
+    ref.input.onblur = () => {
       this.setState({ isEditing: false });
     };
   };
@@ -86,7 +86,9 @@ export default class Filename extends PureComponent {
 
     return (
       <div style={prepareStyles(styles.root)}>
-        <span style={prepareStyles(styles.path)}>{path}</span>
+        <span style={prepareStyles(styles.path)}>
+          {path}
+        </span>
         {isEditing
           ? <TextField
               id={name}
@@ -101,7 +103,9 @@ export default class Filename extends PureComponent {
             >
               {plane}
             </span>}
-        <span style={prepareStyles(styles.ext)}>{ext}</span>
+        <span style={prepareStyles(styles.ext)}>
+          {ext}
+        </span>
       </div>
     );
   }

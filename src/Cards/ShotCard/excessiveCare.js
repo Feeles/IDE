@@ -13,7 +13,7 @@ export default function excessiveCare(cm, change) {
             return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
           })
           .replace(/”/g, '"')
-          .replace(/’/g, "'")
+          .replace(/’/g, '\'')
           .replace(/、/g, ',')
           .replace(/。/g, '.');
         replaced.push(han);

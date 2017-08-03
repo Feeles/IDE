@@ -27,6 +27,12 @@ export default function LayeredStyle(props) {
   );
 }
 
+LayeredStyle.propTypes = {
+  style: PropTypes.object.isRequired,
+  styles: PropTypes.array.isRequired,
+  children: PropTypes.node.isRequired
+};
+
 function isEmpty(array) {
   return !array || !array.length;
 }

@@ -1,3 +1,4 @@
+/*global CORE_CDN_URL*/
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
@@ -92,7 +93,7 @@ const getStyles = (props, context) => {
     },
     toggle: {
       width: 'initial',
-      filter: `contrast(40%)`
+      filter: 'contrast(40%)'
     },
     toggleLabel: {
       color: palette.alternateTextColor
@@ -560,6 +561,10 @@ function lowerCaseAtFirst(string) {
 }
 
 class HoverMenuItem extends PureComponent {
+  static propTypes = {
+    style: PropTypes.object.isRequired
+  };
+
   state = {
     hover: false
   };

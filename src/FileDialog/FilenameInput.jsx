@@ -20,7 +20,8 @@ export default class FilenameInput extends Component {
   static propTypes = {
     defaultName: PropTypes.string,
     defaultType: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    style: PropTypes.object
   };
 
   state = {
@@ -99,9 +100,9 @@ export default class FilenameInput extends Component {
           onChange={this.handleTypeChange}
           style={dropDownStyle}
         >
-          {Object.keys(MimeTypes).map(type => (
+          {Object.keys(MimeTypes).map(type =>
             <MenuItem key={type} value={type} primaryText={MimeTypes[type]} />
-          ))}
+          )}
         </DropDownMenu>
       </div>
     );

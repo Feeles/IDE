@@ -24,4 +24,4 @@ export default function getHierarchy(items, path = '') {
     });
 
   return { files, dirs, path };
-};
+}

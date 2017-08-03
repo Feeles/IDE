@@ -47,7 +47,9 @@ export default class ReadmeCard extends PureComponent {
           selectedFile: this.props.findFile(init.fileName)
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      // continue regardless of error
+    }
   }
 
   componentWillReceiveProps(nextProps) {

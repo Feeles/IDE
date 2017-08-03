@@ -1,6 +1,6 @@
+/*global INLINE_SCRIPT_ID CORE_CDN_URL*/
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import EventEmitter from 'eventemitter2';
 import Snackbar from 'material-ui/Snackbar';
 import jsyaml from 'js-yaml';
@@ -33,16 +33,11 @@ import {
   putFile,
   deleteFile
 } from '../database/';
-import { BinaryFile, SourceFile, configs } from 'File/';
+import { SourceFile, configs } from 'File/';
 import codemirrorStyle from 'js/codemirrorStyle';
 import * as MonitorTypes from 'utils/MonitorTypes';
 import Menu from '../Menu/';
-import FileDialog, {
-  SaveDialog,
-  RenameDialog,
-  DeleteDialog
-} from 'FileDialog/';
-import { Tab } from 'ChromeTab/';
+import FileDialog, { SaveDialog } from 'FileDialog/';
 import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
@@ -128,11 +123,12 @@ export default class Main extends Component {
     if (typeof name === 'string') {
       name = name.replace(/^(\.\/|\/)*/, '');
     }
-    const pred = typeof name === 'function'
-      ? name
-      : file =>
-          !file.options.isTrashed &&
-          (file.name === name || file.moduleName === name);
+    const pred =
+      typeof name === 'function'
+        ? name
+        : file =>
+            !file.options.isTrashed &&
+            (file.name === name || file.moduleName === name);
 
     return multiple ? files.filter(pred) : files.find(pred) || null;
   };
@@ -150,15 +146,13 @@ export default class Main extends Component {
   componentDidMount() {
     document.title = this.getConfig('ogp')['og:title'] || '';
 
-    const chromosome =
-      document.getElementById(INLINE_SCRIPT_ID) ||
-      document.getElementById(this.props.inlineScriptId); // backword compatibility
+    const chromosome = document.getElementById(INLINE_SCRIPT_ID);
 
     if (chromosome) {
       this.setState({
         coreString: chromosome.textContent
       });
-    } else if (!!CORE_CDN_URL) {
+    } else if (CORE_CDN_URL) {
       fetch(CORE_CDN_URL, { mode: 'cors' })
         .then(response => {
           if (!response.ok) {
@@ -510,7 +504,7 @@ export default class Main extends Component {
   handleContainerRef = ref => {
     if (!this.state.cardIcons && ref) {
       const cardIcons = {};
-      for (const [name, instance] of Object.entries(ref.refs)) {
+      for (const [name, instance] of Object.entries(ref.cardRefs)) {
         if (instance.constructor.icon) {
           cardIcons[name] = instance.constructor.icon;
         }
@@ -520,7 +514,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { connectDropTarget, localization } = this.props;
+    const { localization } = this.props;
     const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
@@ -574,7 +568,6 @@ export default class Main extends Component {
           saveAs={this.saveAs}
           toggleFullScreen={this.handleToggleFullScreen}
           togglePopout={this.handleTogglePopout}
-          saveAs={this.saveAs}
           showNotice={this.handleShowNotice}
           deleteFile={this.deleteFile}
           oAuthId={this.state.oAuthId}
@@ -593,8 +586,14 @@ export default class Main extends Component {
           setConfig={this.setConfig}
           globalEvent={this.state.globalEvent}
         />
-        <style>{codemirrorStyle(this.context.muiTheme)}</style>
-        {userStyle ? <style>{userStyle.text}</style> : null}
+        <style>
+          {codemirrorStyle(this.context.muiTheme)}
+        </style>
+        {userStyle
+          ? <style>
+              {userStyle.text}
+            </style>
+          : null}
         <Snackbar
           open={this.state.notice !== null}
           message=""

@@ -19,7 +19,8 @@ export default class CodeMirrorComponent extends PureComponent {
     foldOptions: PropTypes.object,
     dragDrop: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
-    readOnly: PropTypes.bool.isRequired
+    readOnly: PropTypes.bool.isRequired,
+    foldGutter: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -48,9 +49,6 @@ export default class CodeMirrorComponent extends PureComponent {
     }
     if (this.props.foldGutter) {
       gutters.push('CodeMirror-foldgutter');
-    }
-    if (this.props.lint) {
-      gutters.push('CodeMirror-lint-markers');
     }
     return {
       ...this.props,

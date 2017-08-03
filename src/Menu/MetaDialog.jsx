@@ -120,7 +120,8 @@ class EditOGP extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired,
     back: PropTypes.func.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    localization: PropTypes.object.isRequired
   };
 
   state = {
@@ -138,7 +139,9 @@ class EditOGP extends PureComponent {
     try {
       const file = this.props.findFile('feeles/capture.json');
       screenshots = Object.values(JSON.parse(file.text));
-    } catch (e) {}
+    } catch (e) {
+      // continue regardless of error
+    }
     const images = []
       .concat(ogp['og:image'], ogp['twitter:image'])
       .concat(screenshots)

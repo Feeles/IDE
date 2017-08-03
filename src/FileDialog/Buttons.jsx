@@ -10,7 +10,8 @@ const Confirm = props => {
 
 Confirm.propTypes = {
   label: PropTypes.string.isRequired,
-  onTouchTap: PropTypes.func.isRequired
+  onTouchTap: PropTypes.func.isRequired,
+  style: PropTypes.object
 };
 
 Confirm.defaultProps = {
@@ -23,7 +24,8 @@ const Abort = props => {
 };
 
 Abort.propTypes = {
-  onTouchTap: PropTypes.func.isRequired
+  onTouchTap: PropTypes.func.isRequired,
+  style: PropTypes.object
 };
 
 Abort.defaultProps = {

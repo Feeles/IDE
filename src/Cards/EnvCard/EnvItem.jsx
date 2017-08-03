@@ -131,3 +131,9 @@ const Configurable = props => {
       return null;
   }
 };
+
+Configurable.propTypes = {
+  type: PropTypes.string.isRequired,
+  value: PropTypes.any.isRequired,
+  onChange: PropTypes.func.isRequired
+};

@@ -41,6 +41,7 @@ export default class CardContainer extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
+    deployURL: PropTypes.string.isRequired,
     oAuthId: PropTypes.string,
     globalEvent: PropTypes.object.isRequired
   };
@@ -49,6 +50,9 @@ export default class CardContainer extends PureComponent {
     // smooth scroll のターゲット
     scrollTarget: null
   };
+
+  // Card Element の参照を保持するオブジェクト
+  cardRefs = {};
 
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired
@@ -169,53 +173,57 @@ export default class CardContainer extends PureComponent {
     return (
       <div style={styles.container}>
         <MediaCard
-          ref="MediaCard"
+          ref={ref => (this.cardRefs.MediaCard = ref)}
           {...cardProps}
           cardPropsBag={bag('MediaCard')}
         />
         <MonitorCard
-          ref="MonitorCard"
+          ref={ref => (this.cardRefs.MonitorCard = ref)}
           {...cardProps}
           cardPropsBag={bag('MonitorCard')}
         />
         <PaletteCard
-          ref="PaletteCard"
+          ref={ref => (this.cardRefs.PaletteCard = ref)}
           {...cardProps}
           cardPropsBag={bag('PaletteCard')}
         />
-        <EnvCard ref="EnvCard" {...cardProps} cardPropsBag={bag('EnvCard')} />
+        <EnvCard
+          ref={ref => (this.cardRefs.EnvCard = ref)}
+          {...cardProps}
+          cardPropsBag={bag('EnvCard')}
+        />
         <ReadmeCard
-          ref="ReadmeCard"
+          ref={ref => (this.cardRefs.ReadmeCard = ref)}
           {...cardProps}
           cardPropsBag={bag('ReadmeCard')}
         />
         <CustomizeCard
-          ref="CustomizeCard"
+          ref={ref => (this.cardRefs.CustomizeCard = ref)}
           {...cardProps}
           cardPropsBag={bag('CustomizeCard')}
         />
         <CreditsCard
-          ref="CreditsCard"
+          ref={ref => (this.cardRefs.CreditsCard = ref)}
           {...cardProps}
           cardPropsBag={bag('CreditsCard')}
         />
         <ShotCard
-          ref="ShotCard"
+          ref={ref => (this.cardRefs.ShotCard = ref)}
           {...cardProps}
           cardPropsBag={bag('ShotCard')}
         />
         <EditorCard
-          ref="EditorCard"
+          ref={ref => (this.cardRefs.EditorCard = ref)}
           {...cardProps}
           cardPropsBag={bag('EditorCard')}
         />
         <HierarchyCard
-          ref="HierarchyCard"
+          ref={ref => (this.cardRefs.HierarchyCard = ref)}
           {...cardProps}
           cardPropsBag={bag('HierarchyCard')}
         />
         <ScreenShotCard
-          ref="ScreenShotCard"
+          ref={ref => (this.cardRefs.ScreenShotCard = ref)}
           {...cardProps}
           cardPropsBag={bag('ScreenShotCard')}
         />

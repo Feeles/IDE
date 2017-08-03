@@ -1,3 +1,4 @@
+/*global CORE_VERSION CORE_CDN_URL*/
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';

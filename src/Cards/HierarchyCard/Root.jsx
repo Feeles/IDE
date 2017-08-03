@@ -32,7 +32,8 @@ export default class Root extends PureComponent {
     handleFileMove: PropTypes.func.isRequired,
     handleNativeDrop: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    putFile: PropTypes.func.isRequired
+    putFile: PropTypes.func.isRequired,
+    handleNameChange: PropTypes.func.isRequired
   };
 
   static contextTypes = {

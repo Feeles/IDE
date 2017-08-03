@@ -19,6 +19,7 @@ export default class AddDialog extends Component {
   static propTypes = {
     resolve: PropTypes.func.isRequired,
     reject: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired,
     onRequestClose: PropTypes.func.isRequired
   };
 

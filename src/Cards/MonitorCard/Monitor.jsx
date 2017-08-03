@@ -22,6 +22,7 @@ const popoutURL = URL.createObjectURL(
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
+const webkitSpeechGrammarList = window.webkitSpeechGrammarList;
 
 const getStyle = (props, context, state) => {
   const { palette, appBar, transitions } = context.muiTheme;
@@ -138,9 +139,9 @@ export default class Monitor extends PureComponent {
 
   componentDidMount() {
     if (window.ipcRenderer) {
-      this._emit = ipcRenderer.emit; // あとで戻せるようオリジナルを保持
+      this._emit = window.ipcRenderer.emit; // あとで戻せるようオリジナルを保持
       const self = this;
-      ipcRenderer.emit = (...args) => {
+      window.ipcRenderer.emit = (...args) => {
         // ipcRenderer.emit をオーバーライドし, 全ての postMessage で送る
         if (self.state && self.state.port) {
           self.state.port.postMessage({
@@ -157,7 +158,7 @@ export default class Monitor extends PureComponent {
     window.removeEventListener('hashchange', this.handleHashChanged);
     if (window.ipcRenderer) {
       // オリジナルの参照を戻す. Monitor が複数 mount されることはない(はず)
-      ipcRenderer.emit = this._emit;
+      window.ipcRenderer.emit = this._emit;
     }
   }
 

@@ -4,9 +4,9 @@ import 'codemirror/addon/hint/anyword-hint';
 const anywordHint = CodeMirror.hint.anyword;
 
 CodeMirror.hint.javascript = (instance, options) => {
-  const { cursor, token, from, to, empty } = getTokenInfo(instance);
+  const { cursor, token, empty } = getTokenInfo(instance);
 
-  if (!/[\w\.\'\"\`]$/.test(token.string)) {
+  if (!/[\w.'"`]$/.test(token.string)) {
     return empty;
   }
 
@@ -34,7 +34,7 @@ CodeMirror.hint.javascript = (instance, options) => {
 const htmlHint = CodeMirror.hint.html;
 
 CodeMirror.hint.html = (instance, options) => {
-  const { cursor, token, from, to, empty } = getTokenInfo(instance);
+  const { cursor, token, empty } = getTokenInfo(instance);
 
   if (token.type === null) {
     return empty;
@@ -63,7 +63,7 @@ CodeMirror.hint.html = (instance, options) => {
 const cssHint = CodeMirror.hint.css;
 
 CodeMirror.hint.css = (instance, options) => {
-  const { cursor, token, from, to, empty } = getTokenInfo(instance);
+  const { cursor, token, empty } = getTokenInfo(instance);
 
   if (token.type === null) {
     return empty;
@@ -100,7 +100,7 @@ CodeMirror.hint.markdown = (instance, options) => {
     };
   }
 
-  if (!/[A-Za-z\.\'\"\`\(\[]$/.test(token.string)) {
+  if (!/[A-Za-z.'"`([]$/.test(token.string)) {
     return empty;
   }
 
@@ -115,7 +115,7 @@ CodeMirror.hint.markdown = (instance, options) => {
 };
 
 CodeMirror.hint.glsl = (instance, options) => {
-  const { cursor, token, from, to, empty } = getTokenInfo(instance);
+  const { token, empty } = getTokenInfo(instance);
 
   if (token.type === null) {
     return empty;

@@ -42,6 +42,7 @@ export default class MonitorCard extends PureComponent {
     isFullScreen: PropTypes.bool.isRequired,
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
+    showAll: PropTypes.bool.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
@@ -73,7 +74,9 @@ export default class MonitorCard extends PureComponent {
         const [frameWidth, frameHeight] = frame.size;
         this.setState({ frameWidth, frameHeight });
       }
-    } catch (e) {}
+    } catch (e) {
+      // continue regardless of error
+    }
   }
 
   get height() {
@@ -155,7 +158,11 @@ export default class MonitorCard extends PureComponent {
         </IconButton>,
         <IconMenu
           key="settings"
-          iconButtonElement={<IconButton><ActionSettings /></IconButton>}
+          iconButtonElement={
+            <IconButton>
+              <ActionSettings />
+            </IconButton>
+          }
         >
           <MenuItem
             primaryText={sizeValue}

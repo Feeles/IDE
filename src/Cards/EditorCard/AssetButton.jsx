@@ -67,9 +67,7 @@ export default class AssetButton extends PureComponent {
         flex: '1 1 auto',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
-        overflow: 'hidden'
-      },
-      label: {
+        overflow: 'hidden',
         fontSize: 10,
         fontWeight: 600
       },
@@ -108,7 +106,9 @@ export default class AssetButton extends PureComponent {
 
     return (
       <Paper style={styles.root} onTouchTap={this.handleOpen}>
-        <span style={styles.label}>{this.props.label}</span>
+        <span style={styles.label}>
+          {this.props.label}
+        </span>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
@@ -116,7 +116,9 @@ export default class AssetButton extends PureComponent {
           onRequestClose={() => this.setState({ open: false })}
         >
           <div style={styles.box}>
-            <span style={styles.label}>{this.props.label}</span>
+            <span style={styles.label}>
+              {this.props.label}
+            </span>
             <RaisedButton
               primary
               label={localization.editorCard.insert}
@@ -124,9 +126,13 @@ export default class AssetButton extends PureComponent {
               onTouchTap={this.handleInsert}
             />
           </div>
-          <div style={styles.description}>{this.props.description}</div>
+          <div style={styles.description}>
+            {this.props.description}
+          </div>
           <code style={styles.code}>
-            <pre style={styles.pre}>{this.props.code}</pre>
+            <pre style={styles.pre}>
+              {this.props.code}
+            </pre>
           </code>
         </Popover>
         <ContentAdd

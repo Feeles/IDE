@@ -7,16 +7,13 @@
 
 const commentRegExp = /\<\!\-\-[^\!]*\-\-\>/g;
 
-export function encode (text) {
-
+export function encode(text) {
   // 内容に HTML コメントが含まれている
   if (commentRegExp.test(text)) {
-
-    text = text.replace(commentRegExp, (hit) => {
+    text = text.replace(commentRegExp, hit => {
       console.log(hit);
       return `-->${hit}<!--`;
     });
-
   }
 
   return `<!--
@@ -27,17 +24,14 @@ ${text}
 const sanitizedRegExp = /\-\-\>\<\!\-\-([^\!]*)\-\-\>\<\!\-\-/g;
 
 export function decode(text) {
-
   // コメントを外す
-  text = text.replace(/^\s*\<\!\-\-\n?/, '').replace(/\n?\-\-\>\s*$/, '')
+  text = text.replace(/^\s*\<\!\-\-\n?/, '').replace(/\n?\-\-\>\s*$/, '');
 
   // 内容に HTML コメントが含まれていた
   if (sanitizedRegExp.test(text)) {
-
     text = text.replace(sanitizedRegExp, (hit, inner) => {
       return `<!--${inner}-->`;
     });
-
   }
 
   return text;

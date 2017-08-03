@@ -82,7 +82,7 @@ export default class CloneDialog extends PureComponent {
 
   handleClone = async () => {
     switch (this.state.bundleType) {
-      case 'embed':
+      case 'embed': {
         await this.props.saveAs(
           await SourceFile.embed({
             getConfig: this.props.getConfig,
@@ -93,8 +93,9 @@ export default class CloneDialog extends PureComponent {
         );
         this.props.onRequestClose();
         break;
+      }
 
-      case 'divide':
+      case 'divide': {
         await this.props.saveAs(
           await SourceFile.divide({
             getConfig: this.props.getConfig,
@@ -103,8 +104,9 @@ export default class CloneDialog extends PureComponent {
           })
         );
         break;
+      }
 
-      case 'cdn':
+      case 'cdn': {
         await this.props.saveAs(
           await SourceFile.cdn({
             getConfig: this.props.getConfig,
@@ -114,8 +116,9 @@ export default class CloneDialog extends PureComponent {
         );
         this.props.onRequestClose();
         break;
+      }
 
-      case 'project':
+      case 'project': {
         const text = JSON.stringify(
           await Promise.all(this.props.files.map(item => item.collect()))
         );
@@ -125,6 +128,7 @@ export default class CloneDialog extends PureComponent {
         );
         this.props.onRequestClose();
         break;
+      }
     }
   };
 
@@ -214,7 +218,7 @@ export default class CloneDialog extends PureComponent {
   };
 
   render() {
-    const { onRequestClose, content, localization, coreString } = this.props;
+    const { onRequestClose, localization, coreString } = this.props;
     const { bundleType, currentProject } = this.state;
 
     const styles = {

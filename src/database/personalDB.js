@@ -1,3 +1,4 @@
+/*global CORE_VERSION CORE_VERSION CORE_CDN_URL*/
 import Dexie from 'dexie';
 import uuid from 'uuid/v1';
 

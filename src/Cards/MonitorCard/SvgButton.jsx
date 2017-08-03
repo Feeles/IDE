@@ -5,7 +5,8 @@ import { fullWhite, transparent } from 'material-ui/styles/colors';
 export default class SvgButton extends PureComponent {
   static propTypes = {
     onTouchTap: PropTypes.func.isRequired,
-    style: PropTypes.object.isRequired
+    style: PropTypes.object.isRequired,
+    children: PropTypes.object.isRequired
   };
 
   static defaultProps = {

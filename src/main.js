@@ -1,6 +1,6 @@
+/*global EXPORT_VAR_NAME*/
 import init from './jsx/init';
 import { default as Feeles } from './jsx/RootComponent';
-
 
 const hasLoaded = new Promise((resolve, reject) => {
   if (document.readyState === 'complete') {
@@ -10,7 +10,7 @@ const hasLoaded = new Promise((resolve, reject) => {
   }
 });
 
-const h4p = async (props) => {
+const h4p = async props => {
   await hasLoaded;
   init(props);
 };
@@ -21,10 +21,9 @@ h4p.Feeles = Feeles;
 // Global export
 window[EXPORT_VAR_NAME] = h4p;
 
-
 // Auto launch from meta tags
 const launch = document.querySelector('script[x-feeles-launch]');
 if (launch) {
   const [type, arg] = launch.getAttribute('x-feeles-launch').split(',');
-  h4p({[type]: arg});
+  h4p({ [type]: arg });
 }

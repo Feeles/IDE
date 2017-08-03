@@ -1,3 +1,4 @@
+/*global CORE_VERSION*/
 import rollbar from 'rollbar';
 
 const Rollbar = new rollbar({
