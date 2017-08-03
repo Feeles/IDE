@@ -12,6 +12,11 @@ module.exports = {
     indent: ['off', 2],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
-    semi: ['error', 'always']
+    semi: ['error', 'always'],
+    'no-console': 'off',
+    'no-useless-escape': 'warn',
+    'no-unused-vars': 'warn',
+
+    'react/jsx-key': 'warn'
   }
 };
