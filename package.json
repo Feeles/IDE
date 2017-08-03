@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Feeles/IDE#readme",
   "devDependencies": {
     "babel-core": "^6.14.0",
+    "babel-eslint": "^7.2.3",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-runtime": "^6.15.0",
@@ -31,6 +32,9 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-3": "^6.17.0",
     "css-loader": "^0.28.4",
+    "eslint": "^4.3.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-react": "^7.1.0",
     "glsl-editor": "^1.0.0",
     "handlebars": "^4.0.5",
     "happypack": "^4.0.0-beta.1",

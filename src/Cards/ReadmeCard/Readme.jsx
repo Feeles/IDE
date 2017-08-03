@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -72,7 +73,11 @@ const mdComponents = [
     render(tag, props, children, component, mdStyles) {
       const file = component.props.findFile(decodeURIComponent(props.src));
       if (!file) {
-        return <span {...props}>{props.alt}</span>;
+        return (
+          <span {...props}>
+            {props.alt}
+          </span>
+        );
       }
       if (file.is('blob')) {
         return <img {...props} style={mdStyles.img} src={file.blobURL} />;

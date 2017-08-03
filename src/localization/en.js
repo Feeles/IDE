@@ -155,9 +155,9 @@ export default {
   },
   customizeCard: {
     title: 'Customize',
-    detail: `Click here for details`,
-    editor: `Tabs and line wrapping ...etc`,
-    style: `Color of text and background ...etc`
+    detail: 'Click here for details',
+    editor: 'Tabs and line wrapping ...etc',
+    style: 'Color of text and background ...etc'
   },
   creditsCard: {
     title: 'Credits'

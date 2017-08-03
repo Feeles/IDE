@@ -106,7 +106,7 @@ export default class SignDialog extends PureComponent {
         bodyStyle={{ overflow: 'scroll' }}
         onRequestClose={this.cancel}
       >
-        {this.state.files.map(item => (
+        {this.state.files.map(item =>
           <SignItem
             key={item.key}
             file={item}
@@ -116,7 +116,7 @@ export default class SignDialog extends PureComponent {
             onUpdate={this.handleUpdate}
             onComplete={this.handleComplete}
           />
-        ))}
+        )}
       </Dialog>
     );
   }
@@ -128,7 +128,8 @@ export class SignItem extends PureComponent {
     completeLabels: PropTypes.array.isRequired,
     completeUrls: PropTypes.array.isRequired,
     localization: PropTypes.object.isRequired,
-    onUpdate: PropTypes.func.isRequired
+    onUpdate: PropTypes.func.isRequired,
+    onComplete: PropTypes.func.isRequired
   };
 
   get label() {

@@ -23,6 +23,8 @@ export default class ScreenShotCard extends PureComponent {
     showNotice: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
+    deployURL: PropTypes.string.isRequired,
+    localization: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
   };

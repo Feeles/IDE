@@ -13,9 +13,8 @@ const getStyles = (props, context) => {
   const cd = props.dir;
   const { palette, spacing, transitions } = context.muiTheme;
 
-  const borderStyle = isOver && !cd.files.includes(dragSource)
-    ? 'dashed'
-    : 'solid';
+  const borderStyle =
+    isOver && !cd.files.includes(dragSource) ? 'dashed' : 'solid';
   const borderWidth = 4;
 
   return {
@@ -188,4 +187,10 @@ export const DirCloser = props => {
       <span style={props.labelStyle}>../</span>
     </div>
   );
+};
+
+DirCloser.propTypes = {
+  style: PropTypes.object.isRequired,
+  onTouchTap: PropTypes.func.isRequired,
+  labelStyle: PropTypes.object.isRequired
 };

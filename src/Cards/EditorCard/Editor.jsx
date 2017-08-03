@@ -23,15 +23,12 @@ import 'codemirror/addon/search/searchcursor';
 import 'codemirror/addon/fold/foldcode';
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
-import 'codemirror/addon/lint/lint';
-import 'codemirror/addon/lint/javascript-lint';
 import 'codemirror/keymap/sublime';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/dialog/dialog.css';
 // import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/addon/fold/foldgutter.css';
-import 'codemirror/addon/lint/lint.css';
 
 import glslMode from 'glsl-editor/glsl';
 glslMode(CodeMirror);
@@ -98,7 +95,9 @@ export default class Editor extends PureComponent {
         this.setState({
           jshintrc: JSON.parse(jshintrc.text)
         });
-      } catch (e) {}
+      } catch (e) {
+        // continue regardless of error
+      }
     }
   }
 
@@ -145,7 +144,6 @@ export default class Editor extends PureComponent {
         keyMap="sublime"
         foldOptions={this.props.foldOptions}
         extraKeys={this.props.extraKeys}
-        lint={mode === 'javascript' ? this.state.lint : null}
         ref={this.handleCodemirror}
       />
     );

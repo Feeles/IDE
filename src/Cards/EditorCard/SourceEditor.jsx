@@ -287,7 +287,7 @@ export default class SourceEditor extends PureComponent {
       right.textContent = _right;
       right.classList.add('Feeles-asset-blank');
       const button = document.createElement('span');
-      button.classList.add(`Feeles-asset-button`);
+      button.classList.add('Feeles-asset-button');
       button.onclick = () => {
         this.setState({
           assetScope: _label.substr(1).trim(),
@@ -467,7 +467,7 @@ export default class SourceEditor extends PureComponent {
 
     const begin = {
       className: textMarker.className,
-      style: `opacity: 0; background-color: rgba(0,0,0,1)`
+      style: 'opacity: 0; background-color: rgba(0,0,0,1)'
     };
     const end = {
       className: textMarker.className,
@@ -572,15 +572,7 @@ export default class SourceEditor extends PureComponent {
   }
 
   render() {
-    const {
-      file,
-      getConfig,
-      findFile,
-      localization,
-      href,
-
-      connectDropTarget
-    } = this.props;
+    const { file, getConfig, findFile, localization, href } = this.props;
     const { showHint } = this.state;
 
     const styles = getStyle(this.props, this.state, this.context);

@@ -1,3 +1,4 @@
+/*global CORE_VERSION CSS_PREFIX CORE_CDN_URL INLINE_SCRIPT_ID*/
 import React from 'react';
 import md5 from 'md5';
 import { parse } from './JSON6';

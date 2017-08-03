@@ -5,7 +5,7 @@ try {
     navigator.serviceWorker.controller &&
     navigator.serviceWorker.controller.state === 'activated';
 } catch (e) {
-
+  isServiceWorkerEnabled = false;
 }
 
 export default isServiceWorkerEnabled;

@@ -77,7 +77,7 @@ export default class Footer extends PureComponent {
     const id = 'line-wjs';
     if (document.querySelector(id)) {
       if (window.LineIt) {
-        LineIt.loadButton();
+        window.LineIt.loadButton();
       }
       return;
     }
@@ -86,7 +86,7 @@ export default class Footer extends PureComponent {
     js.src =
       'https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js';
     js.onload = () => {
-      LineIt.loadButton();
+      window.LineIt.loadButton();
     };
     const fjs = document.getElementsByTagName('script')[0];
     fjs.parentNode.insertBefore(js, fjs);
@@ -94,7 +94,7 @@ export default class Footer extends PureComponent {
 
   mountTweetButton() {
     if (window.twttr) {
-      twttr.widgets.load();
+      window.twttr.widgets.load();
     }
     /* https://dev.twitter.com/web/javascript/loading */
     window.twttr = (function(d, s, id) {
@@ -119,7 +119,7 @@ export default class Footer extends PureComponent {
   mountFacebookShare() {
     const { localization } = this.props;
     if (window.FB) {
-      FB.XFBML.parse();
+      window.FB.XFBML.parse();
     }
     /* https://developers.facebook.com/docs/plugins/share-button */
     (function(d, s, id) {

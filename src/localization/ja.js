@@ -152,9 +152,9 @@ export default {
   },
   customizeCard: {
     title: 'カスタマイズ',
-    detail: `くわしくはこちら`,
-    editor: `タブや行の折り返しなど`,
-    style: `文字の色や背景色など`
+    detail: 'くわしくはこちら',
+    editor: 'タブや行の折り返しなど',
+    style: '文字の色や背景色など'
   },
   creditsCard: {
     title: 'クレジット'

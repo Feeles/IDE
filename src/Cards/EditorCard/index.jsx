@@ -52,6 +52,7 @@ export default class EditorCard extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
     reboot: PropTypes.bool.isRequired,
+    href: PropTypes.string.isRequired,
     scrollToCard: PropTypes.func.isRequired,
     cards: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
@@ -95,7 +96,9 @@ export default class EditorCard extends PureComponent {
         const getFile = () => this.props.findFile(init.fileName);
         this.props.selectTab(new Tab({ getFile }));
       }
-    } catch (e) {}
+    } catch (e) {
+      // continue regardless of error
+    }
   }
 
   setLocation = href => {

@@ -23,7 +23,8 @@ export default class HierarchyCard extends PureComponent {
     closeTab: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired
+    localization: PropTypes.object.isRequired,
+    cardPropsBag: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -104,7 +105,9 @@ export default class HierarchyCard extends PureComponent {
       // BinaryFile
       try {
         window.open(file.blobURL, file.blobURL);
-      } catch (e) {}
+      } catch (e) {
+        // continue regardless of error
+      }
     }
   };
 

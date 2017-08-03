@@ -1,3 +1,4 @@
+/*global ga*/
 if (process.env.GA_TRACKING_ID) {
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
