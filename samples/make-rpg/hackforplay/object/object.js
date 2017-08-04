@@ -706,6 +706,39 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		var synonym = synonyms.events[eventType];
 		return this['on' + eventType] || this._listeners[eventType] ||
 			synonym && (this['on' + synonym] || this._listeners[synonym]);
+	},
+	start: function (virtual) {
+		let count = 0;
+		const override = async () => {
+			// １フレームだけディレイを入れる
+			await this.wait();
+			// count をインクリメントして同じ関数をコール
+			return virtual(this, ++count, override);
+		};
+		// 初回のみ即座にコール
+		virtual(this, count, override);
+	},
+	wait: function (second = 0) {
+		return new Promise((resolve, reject) => {
+			this.setTimeout(resolve, second * game.fps);
+		});
+	},
+	endless: async function (virtual) {
+		if (!this._endless) {
+			// ルーチンをスタート
+			let count = 0;
+			this._endless = virtual;
+			// this._endless が空で上書きされたときストップ
+			while (this._endless) {
+				// つねに this._endless をコールし続ける
+				await this._endless(this, count++);
+				// 安全ディレイ
+				await this.wait();
+			}
+		} else {
+			// 次回呼ぶ関数を上書き (フラグの役割を兼ねている)
+			this._endless = virtual;
+		}
 	}
 });
 
