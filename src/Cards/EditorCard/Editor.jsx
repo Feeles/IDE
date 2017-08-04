@@ -142,6 +142,7 @@ export default class Editor extends PureComponent {
         mode={mode}
         lineNumbers={lineNumbers}
         keyMap="sublime"
+        foldGutter
         foldOptions={this.props.foldOptions}
         extraKeys={this.props.extraKeys}
         ref={this.handleCodemirror}

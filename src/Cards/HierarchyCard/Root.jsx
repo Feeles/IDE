@@ -32,8 +32,7 @@ export default class Root extends PureComponent {
     handleFileMove: PropTypes.func.isRequired,
     handleNativeDrop: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
-    putFile: PropTypes.func.isRequired,
-    handleNameChange: PropTypes.func.isRequired
+    putFile: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -51,7 +50,6 @@ export default class Root extends PureComponent {
       handleDirToggle: this.props.handleDirToggle,
       handleFileMove: this.props.handleFileMove,
       handleNativeDrop: this.props.handleNativeDrop,
-      handleNameChange: this.props.handleNameChange,
       openFileDialog: this.props.openFileDialog,
       putFile: this.props.putFile
     };
