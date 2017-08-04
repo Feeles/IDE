@@ -722,6 +722,23 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		return new Promise((resolve, reject) => {
 			this.setTimeout(resolve, second * game.fps);
 		});
+	},
+	endless: async function (virtual) {
+		if (!this._endless) {
+			// ルーチンをスタート
+			let count = 0;
+			this._endless = virtual;
+			// this._endless が空で上書きされたときストップ
+			while (this._endless) {
+				// つねに this._endless をコールし続ける
+				await this._endless(this, count++);
+				// 安全ディレイ
+				await this.wait();
+			}
+		} else {
+			// 次回呼ぶ関数を上書き (フラグの役割を兼ねている)
+			this._endless = virtual;
+		}
 	}
 });
 
