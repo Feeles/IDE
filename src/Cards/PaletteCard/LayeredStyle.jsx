@@ -28,8 +28,8 @@ export default function LayeredStyle(props) {
 }
 
 LayeredStyle.propTypes = {
-  style: PropTypes.object.isRequired,
-  styles: PropTypes.array.isRequired,
+  style: PropTypes.object,
+  styles: PropTypes.array,
   children: PropTypes.node.isRequired
 };
 

@@ -41,7 +41,7 @@ export default class CardContainer extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
-    deployURL: PropTypes.string.isRequired,
+    deployURL: PropTypes.string,
     oAuthId: PropTypes.string,
     globalEvent: PropTypes.object.isRequired
   };
