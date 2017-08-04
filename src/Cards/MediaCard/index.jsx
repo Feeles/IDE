@@ -5,6 +5,18 @@ import { CardMedia } from 'material-ui/Card';
 import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import ReactPlayer from 'react-player';
 
+const defaultPlayerState = {
+  // https://github.com/CookPete/react-player#props
+  width: 'initial',
+  style: {
+    maxWidth: 500
+  },
+  soundcloudConfig: {
+    clientId: 'iFAPeKCVCOTKeA0nNJCHuVHif2gEBKbl',
+    showArtwork: true
+  }
+};
+
 export default class MediaCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
@@ -13,9 +25,7 @@ export default class MediaCard extends PureComponent {
   };
 
   state = {
-    playerState: {
-      // https://github.com/CookPete/react-player#props
-    }
+    playerState: {}
   };
 
   static icon() {
@@ -41,10 +51,7 @@ export default class MediaCard extends PureComponent {
 
   render() {
     const playerState = {
-      width: 'initial',
-      style: {
-        maxWidth: 500
-      },
+      ...defaultPlayerState,
       ...this.state.playerState
     };
 
@@ -52,9 +59,7 @@ export default class MediaCard extends PureComponent {
       <Card icon={MediaCard.icon()} {...this.props.cardPropsBag}>
         {this.state.playerState.url
           ? <ReactPlayer {...playerState} />
-          : <div>
-              URL not given
-            </div>}
+          : <div>URL not given</div>}
       </Card>
     );
   }
