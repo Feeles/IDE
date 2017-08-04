@@ -50,7 +50,6 @@ export default class Editor extends PureComponent {
     snippets: PropTypes.array.isRequired,
     showHint: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
-    foldOptions: PropTypes.object,
     lineNumbers: PropTypes.bool.isRequired,
     findFile: PropTypes.func.isRequired
   };
@@ -130,7 +129,6 @@ export default class Editor extends PureComponent {
         mode={mode}
         lineNumbers={lineNumbers}
         keyMap="sublime"
-        foldOptions={this.props.foldOptions}
         extraKeys={this.props.extraKeys}
         ref={this.handleCodemirror}
       />

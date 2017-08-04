@@ -52,7 +52,6 @@ export default class CodeMirrorComponent extends PureComponent {
     }
     return {
       ...this.props,
-      foldGutter: !!this.props.foldOptions,
       gutters
     };
   }
