@@ -487,41 +487,55 @@
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/おはなやさん'
   - label: ルーレット
     code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _rルビー));
-      item1.locate(7, 5, 'map1');
-      const start = () => {
-        item1.timer = feeles.setInterval(() => {
-          const randomMod = random([
-            _rルビー,
-            _dドクロ,
-            _uうんこ
+        const item1 = new RPGObject();
+        item1.mod(('▼ スキン', _rルビー));
+        item1.locate(7, 5, 'map1');
+        item1.うごいている = ('▼ フラグ', false);
+        item1.on(('▼ イベント', 'こうげきされた'), (event) => {
+        const self = event.target;
+        // うごいているかどうかを逆にする
+        self.うごいているか = !self.うごいているか;
+
+        if (self.うごいているか) {
+        	// ルーレット開始
+        	self.start(self.ルーレットプログラム);
+        }
+        });
+        // ルーレットがストップしたとき
+        item1.on('ストップ', (event) => {
+        const スキン = event.スキン;
+
+        // スコアのプログラム
+        if (スキン === _rルビー) {
+        	Hack.score += 1; // rubyなら、SCORE + 1
+        }
+        if (スキン === _dドクロ) {
+        	Hack.score -= 1; // skullなら、SCORE - 1
+        }
+        });
+        item1.ルーレットプログラム = async(self, count, next) => {
+
+          await self.wait(0.1);
+
+          const スキン = random([
+          	_rルビー,
+          	_dドクロ,
+          	_uうんこ
           ]);
-          item1.mod(randomMod);
-          item1._mod = randomMod; // 判定のために入れておく
-        }, 100);
-      };
-      const stop = () => {
-        feeles.clearInterval(item1.timer);
-        if (item1._mod === _rルビー) {
-          Hack.score += 1; // rubyなら、SCORE + 1
-        }
-        if (item1._mod === _dドクロ) {
-          Hack.score -= 1; // skullなら、SCORE - 1
-        }
-      };
-      item1.flag = true;
-      item1.on(('▼ イベント', 'こうげきされた'), () => {
-        if (item1.flag) {
-          // ルーレット開始！
-          start();
-          item1.flag = false;
-        } else {
-          // ルーレット停止！
-          stop();
-          item1.flag = true;
-        }
-      });
+          self.mod(スキン);
+
+          if (!item1.うごいているか) {
+          	// 止めたいとき
+          	const event = new Event('ストップ');
+          	event.スキン = スキン;
+          	self.dispatchEvent(event);
+          	// ストップ
+          	return;
+          }
+
+          // くりかえし
+          next();
+        };
     image: trimmed/map-28-2.png
     description: こうげきすると、ルーレットがはじまる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ルーレット'
