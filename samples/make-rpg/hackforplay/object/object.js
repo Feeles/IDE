@@ -708,7 +708,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			synonym && (this['on' + synonym] || this._listeners[synonym]);
 	},
 	start: function (virtual) {
-		let count = 0;
+		let count = 1;
 		const override = async () => {
 			// １フレームだけディレイを入れる
 			await this.wait();
@@ -726,7 +726,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 	endless: async function (virtual) {
 		if (!this._endless) {
 			// ルーチンをスタート
-			let count = 0;
+			let count = 1;
 			this._endless = virtual;
 			// this._endless が空で上書きされたときストップ
 			while (this._endless) {
