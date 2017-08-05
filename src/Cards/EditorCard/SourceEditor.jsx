@@ -532,7 +532,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   beautify = () => {
-    const { file } = this.props;
+    const { file, findFile } = this.props;
     const prevValue = this.codemirror.getValue();
     const setValueWithoutHistory = replacement => {
       // undo => beautify => setValue することで history を 1 つに
@@ -541,27 +541,17 @@ export default class SourceEditor extends PureComponent {
       this.codemirror.setValue(replacement);
       this.codemirror.scrollTo(left, top);
     };
+
+    // import .jsbeautifyrc
+    const runCommand = findFile(f => f.name.endsWith('.jsbeautifyrc'));
+    const configs = runCommand ? tryParseJSON(runCommand.text) : {};
+
     if (file.is('javascript') || file.is('json')) {
-      setValueWithoutHistory(
-        beautify(prevValue, {
-          indent_with_tabs: true,
-          end_with_newline: true
-        })
-      );
+      setValueWithoutHistory(beautify(prevValue, configs.js || {}));
     } else if (file.is('html')) {
-      setValueWithoutHistory(
-        beautify.html(prevValue, {
-          indent_with_tabs: true,
-          indent_inner_html: true,
-          extra_liners: []
-        })
-      );
+      setValueWithoutHistory(beautify.html(prevValue, configs.html || {}));
     } else if (file.is('css')) {
-      setValueWithoutHistory(
-        beautify.css(prevValue, {
-          indent_with_tabs: true
-        })
-      );
+      setValueWithoutHistory(beautify.css(prevValue, configs.css || {}));
     }
   };
 
