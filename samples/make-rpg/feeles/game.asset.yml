@@ -6,8 +6,11 @@
       item1.hp = 3;
       item1.atk = 1;
       item1.locate(7, 5, 'map1');
-      item1.on(('▼ イベント', 'とまるとき'), () => {
-        item1.attack();
+      item1.endless(async(self, count) => {
+
+        await self.attack(); // こうげきする
+
+        /*+ じどう*/
       });
     image: trimmed/slime.gif
     description: ムチのように からだをふりまわす、キケンなスライム。idle（まっている）→attack（こうげきする）→idle…を えいえんにくりかえすだけのあわれなそんざい
@@ -19,12 +22,16 @@
       item1.hp = 2;
       item1.atk = 1;
       item1.locate(7, 5, 'map1');
-      item1.on(('▼ イベント', 'とまるとき'), () => {
-        item1.turn();
-        item1.walk();
-      });
       item1.on(('▼ イベント', 'たおれたとき'), () => {
         Hack.score += 1;
+      });
+      item1.endless(async(self, count) => {
+
+        await self.walk(); // あるく
+
+        await self.turn(1); // ターンする
+
+        /*+ じどう*/
       });
     image: trimmed/insect.gif
     description: にげあしは おいらの とくぎなのさ。すばやく turn（ターン）して walk（あるく）のが ひけつさ
@@ -39,17 +46,24 @@
       item1.on(('▼ イベント', 'たおれたとき'), () => {
         Hack.score += 1;
       });
-      item1.on(('▼ イベント', 'とまるとき'), () => {
-        const target = player;
-        const moveX = 32 * Math.sign(target.mapX - item1.mapX);
-        const moveY = 32 * Math.sign(target.mapY - item1.mapY);
-        item1.forward = [moveX, moveY];
-        item1.tl.become('walk').moveBy(moveX, moveY, 30).then(() => {
-          Hack.Attack.call(item1, item1.mapX, item1.mapY, item1.atk);
-        }).become('attack', 20).become('idle', 20);
+      item1.endless(async(self, count) => {
+
+        const ターゲット = player;
+
+        const moveX = 32 * Math.sign(ターゲット.mapX - self.mapX);
+        const moveY = 32 * Math.sign(ターゲット.mapY - self.mapY);
+        self.forward = [moveX, moveY];
+
+        await self.walk(); // あるく
+
+        await self.attack(); // こうげきする
+
+        await self.wait(1); // やすむ
+
+        /*+ じどう*/
       });
     image: trimmed/bat.gif
-    description: ねらいをつけて おそってくる おそろしいコウモリ。 target に、むかってくる らしい
+    description: ねらいをつけて おそってくる おそろしいコウモリ。 ターゲットに、むかってくる らしい
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/コウモリ'
   - label: ウロボロス
     code: |
@@ -58,9 +72,14 @@
       item1.hp = 10;
       item1.atk = 1;
       item1.locate(7, 5, 'map1');
-      feeles.setInterval(() => {
-        item1.attack();
-      }, 4000);
+      item1.endless(async(self, count) => {
+
+        await self.wait(4); // 少しやすむ
+
+        await self.attack(); // こうげきする
+
+        /*+ じどう*/
+      });
     image: trimmed/ouroboros.gif
     description: ４秒おきに攻撃してくる大蛇ウロボロス。攻撃までの時間を変更することもできる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ウロボオス'
@@ -76,25 +95,29 @@
       item1.on(('▼ イベント', 'たおれたとき'), () => {
         Hack.gameclear();
       });
-      item1.on(('▼ イベント', 'つねに'), () => {
-        if (game.frame % 3 > 0) return;
-        const item2 = new RPGObject();
-        item2.mod(('▼ スキン', _bばくえん));
-        item2.collisionFlag = false;
-        item1.shoot(item2, item1.forward, 6);
-        const fx = item1.forward.x,
-            fy = item1.forward.y;
-        item2.moveBy(fx * random(64, 96), fy * random(64, 96));
-        item2.velocityX += random(-0.99, 1);
-        item2.velocityY += random(-0.99, 1);
-        item2.scale(random(0.99, 1.5));
-        item2.force(-fx * random(0, 0.199), -fy * random(0, 0.199));
-        item2.destroy(20);
-        item2.on(('▼ イベント', 'ふれはじめた'), (event) => {
-          if (event.hit !== item1) {
-            Hack.Attack(event.mapX, event.mapY, item1.atk);
+      item1.endless(async(self, count) => {
+
+        await self.wait(); // 少しやすむ
+
+        const ばくえん = new RPGObject();
+        ばくえん.mod(('▼ スキン', _bばくえん));
+        ばくえん.collisionFlag = false;
+        self.shoot(ばくえん, self.forward, 6);
+        const fx = self.forward.x,
+          fy = self.forward.y;
+        ばくえん.moveBy(fx * random(64, 96), fy * random(64, 96));
+        ばくえん.velocityX += random(-0.99, 1);
+        ばくえん.velocityY += random(-0.99, 1);
+        ばくえん.scale(random(0.99, 1.5));
+        ばくえん.force(-fx * random(0, 0.199), -fy * random(0, 0.199));
+        ばくえん.destroy(20);
+        ばくえん.on(('▼ イベント', 'ふれはじめた'), (event) => {
+          if (event.hit !== self) {
+            Hack.Attack(event.mapX, event.mapY, self.atk);
           }
         });
+
+        /*+ じどう*/
       });
     image: trimmed/dragon.gif
     description: やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！
@@ -107,8 +130,11 @@
       item1.atk = 1;
       item1.locate(7, 5, 'map1');
       item1.scale(2, 2);
-      item1.on(('▼ イベント', 'とまるとき'), () => {
-        item1.attack();
+      item1.endless(async(self, count) => {
+
+        await self.attack(); // こうげきする
+
+        /*+ じどう*/
       });
     image: trimmed/minotaur.gif
     description: ずっと攻撃を繰り返す 凶暴なミノタウルス
@@ -267,12 +293,14 @@
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _o男の子));
       item1.locate(7, 5, 'map1');
-      item1.on(('▼ イベント', 'とまるとき'), () => {
-        item1.walk();
-      });
       item1.on(('▼ イベント', 'ぶつかった'), () => {
         item1.turn();
-        item1.walk();
+      });
+      item1.endless(async(self, count) => {
+
+        await item1.walk();
+
+        /*+ じどう*/
       });
     image: trimmed/boy.png
     description: ひたすら はしりつづける おとこのこ。めざしているところは じぶんでも よくわかっていない
@@ -375,7 +403,7 @@
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _bばくだん));
       item1.locate(7, 5, 'map1');
-      feeles.setTimeout(() => {
+      item1.setTimeout(() => {
         const item2 = new RPGObject();
         item2.mod(('▼ スキン', _bばくえん));
         item2.locate(7, 5);
@@ -386,7 +414,7 @@
         });
         item2.destroy(20);
         item1.destroy();
-      }, 3000);
+      }, 90);
     image: trimmed/map-29-0.png
     description: じげんしき ばくだん と たちのぼる ばくはつの エフェクト。じかん を ちょうせい できる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/時限爆弾'
@@ -459,41 +487,55 @@
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/おはなやさん'
   - label: ルーレット
     code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _rルビー));
-      item1.locate(7, 5, 'map1');
-      const start = () => {
-        item1.timer = feeles.setInterval(() => {
-          const randomMod = random([
-            _rルビー,
-            _dドクロ,
-            _uうんこ
+        const item1 = new RPGObject();
+        item1.mod(('▼ スキン', _rルビー));
+        item1.locate(7, 5, 'map1');
+        item1.うごいている = ('▼ フラグ', false);
+        item1.on(('▼ イベント', 'こうげきされた'), (event) => {
+        const self = event.target;
+        // うごいているかどうかを逆にする
+        self.うごいているか = !self.うごいているか;
+
+        if (self.うごいているか) {
+        	// ルーレット開始
+        	self.start(self.ルーレットプログラム);
+        }
+        });
+        // ルーレットがストップしたとき
+        item1.on('ストップ', (event) => {
+        const スキン = event.スキン;
+
+        // スコアのプログラム
+        if (スキン === _rルビー) {
+        	Hack.score += 1; // rubyなら、SCORE + 1
+        }
+        if (スキン === _dドクロ) {
+        	Hack.score -= 1; // skullなら、SCORE - 1
+        }
+        });
+        item1.ルーレットプログラム = async(self, count, next) => {
+
+          await self.wait(0.1);
+
+          const スキン = random([
+          	_rルビー,
+          	_dドクロ,
+          	_uうんこ
           ]);
-          item1.mod(randomMod);
-          item1._mod = randomMod; // 判定のために入れておく
-        }, 100);
-      };
-      const stop = () => {
-        feeles.clearInterval(item1.timer);
-        if (item1._mod === _rルビー) {
-          Hack.score += 1; // rubyなら、SCORE + 1
-        }
-        if (item1._mod === _dドクロ) {
-          Hack.score -= 1; // skullなら、SCORE - 1
-        }
-      };
-      item1.flag = true;
-      item1.on(('▼ イベント', 'こうげきされた'), () => {
-        if (item1.flag) {
-          // ルーレット開始！
-          start();
-          item1.flag = false;
-        } else {
-          // ルーレット停止！
-          stop();
-          item1.flag = true;
-        }
-      });
+          self.mod(スキン);
+
+          if (!item1.うごいているか) {
+          	// 止めたいとき
+          	const event = new Event('ストップ');
+          	event.スキン = スキン;
+          	self.dispatchEvent(event);
+          	// ストップ
+          	return;
+          }
+
+          // くりかえし
+          next();
+        };
     image: trimmed/map-28-2.png
     description: こうげきすると、ルーレットがはじまる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ルーレット'

@@ -74,3 +74,13 @@
       // 見た目の大きさをかえる
       player.scale(5);
     description: プレイヤーの見た目の大きさをかえる。player の部分を item1 などにかえれば、他のキャラクターの大きさをかえられる
+
+  - label: 自動せいぎょ
+    code: |
+      // 自動せいぎょ
+      player.endless(async (self, count) => {
+
+        /*+ じどう*/
+
+      });
+    description: プレイヤーを自動でずっとうごかしつづける。途中でとめることもできる
