@@ -2,6 +2,7 @@ import 'hackforplay/core';
 
 import gameFunc from './game';
 import maps from './maps';
+import './update';
 import vote from './hackforplay/vote';
 
 
