@@ -73,7 +73,7 @@ function gameStart() {
 	// コウモリを 11, 5 の位置に移動する ( map1 )
 	item1.locate(11, 5, 'map1');
 	// コウモリを更新する...
-	item1.onのった = () => {
+	item1.onつねに = () => {
 		//　コウモリの横の位置をプレイヤーと同じにする
 		item1.y = Hack.player.y;
 	};
