@@ -13,7 +13,7 @@ async function gameFunc() {
 		Hack.gameover(); // ゲームオーバー
 	});
 	/*+ スキル */
-	
+
 
 
 	/*+ ゲーム */
@@ -21,14 +21,3 @@ async function gameFunc() {
 }
 
 export default gameFunc;
-
-
-
-
-
-/* こまかいゲームシステムを作ろう (アップデート関数) */
-Core.instance.on('enterframe', async() => {
-
-	/*+ 入力 */
-
-});
