@@ -7,6 +7,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentReply from 'material-ui/svg-icons/content/reply';
+import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 
 export default class AssetButton extends PureComponent {
   static propTypes = {
@@ -74,7 +75,12 @@ export default class AssetButton extends PureComponent {
         fontSize: 10,
         fontWeight: 600
       },
+      headerLabel: {
+        fontSize: 18,
+        fontWeight: 600
+      },
       description: {
+        marginTop: 8,
         fontSize: '.7rem'
       },
       code: {
@@ -122,8 +128,13 @@ export default class AssetButton extends PureComponent {
           onRequestClose={() => this.setState({ open: false })}
         >
           <div style={styles.box}>
-            <span style={styles.label}>
+            <span style={styles.headerLabel}>
               {this.props.label}
+              {this.props.descriptionMoreURL
+                ? <a href={this.props.descriptionMoreURL} target="_blank">
+                    <ActionOpenInNew />
+                  </a>
+                : null}
             </span>
             <RaisedButton
               primary
