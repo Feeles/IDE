@@ -1,8 +1,10 @@
 import 'hackforplay/core';
 
 /* こまかいゲームのルールを作ろう (アップデート関数) */
-Core.instance.on('enterframe', () => {
+function update() {
 
 
 	/*+ ルールついか */
-});
+}
+
+export default update;

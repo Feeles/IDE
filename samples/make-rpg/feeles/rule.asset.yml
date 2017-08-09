@@ -15,14 +15,14 @@
       }
   - label: HP１以上で
     code: |
-      if (Hack.score >= 1) {
+      if (player.hp >= 1) {
         // HP がいくつか以上のとき
 
         /*+ すること ルールついか */
       }
   - label: HP１以下で
     code: |
-      if (Hack.score <= 1) {
+      if (player.hp <= 1) {
         // HP がいくつか以下のとき
 
         /*+ すること ルールついか */
