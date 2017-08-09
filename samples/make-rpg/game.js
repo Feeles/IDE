@@ -8,16 +8,11 @@ async function gameFunc() {
 	self.player = new Player(); // プレイヤーをつくる
 	player.mod(('▼ スキン', _kきし)); // 見た目
 	player.locate(3, 5); // はじめの位置
-	player.on('たおれたとき', () => {
-		player.destroy(); // プレイヤーを消す
-		Hack.gameover(); // ゲームオーバー
-	});
 	/*+ スキル */
 
 
 
-	/*+ ゲーム */
-
+	/*+ モンスター アイテム せっち システム */
 }
 
 export default gameFunc;

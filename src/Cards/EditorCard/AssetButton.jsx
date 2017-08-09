@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import Popover from 'material-ui/Popover';
 import RaisedButton from 'material-ui/RaisedButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import ContentReply from 'material-ui/svg-icons/content/reply';
+import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 
 export default class AssetButton extends PureComponent {
   static propTypes = {
     code: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    descriptionMoreURL: PropTypes.string,
     label: PropTypes.string,
     image: PropTypes.string,
     onTouchTap: PropTypes.func.isRequired,
@@ -46,7 +50,7 @@ export default class AssetButton extends PureComponent {
         position: 'relative',
         width: 80,
         height: 80,
-        margin: 8,
+        margin: '8px 30px 0px 8px',
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
@@ -55,7 +59,8 @@ export default class AssetButton extends PureComponent {
         cursor: 'pointer'
       },
       popover: {
-        padding: 8
+        padding: 8,
+        maxWidth: 500
       },
       box: {
         display: 'flex',
@@ -70,7 +75,12 @@ export default class AssetButton extends PureComponent {
         fontSize: 10,
         fontWeight: 600
       },
+      headerLabel: {
+        fontSize: 18,
+        fontWeight: 600
+      },
       description: {
+        marginTop: 8,
         fontSize: '.7rem'
       },
       code: {
@@ -84,9 +94,12 @@ export default class AssetButton extends PureComponent {
       },
       button: {
         position: 'absolute',
-        right: 0,
-        bottom: 0,
+        right: -34,
+        bottom: -4,
         cursor: 'pointer'
+      },
+      icon: {
+        transform: 'rotateX(180deg) rotateZ(180deg)'
       }
     };
 
@@ -115,8 +128,13 @@ export default class AssetButton extends PureComponent {
           onRequestClose={() => this.setState({ open: false })}
         >
           <div style={styles.box}>
-            <span style={styles.label}>
+            <span style={styles.headerLabel}>
               {this.props.label}
+              {this.props.descriptionMoreURL
+                ? <a href={this.props.descriptionMoreURL} target="_blank">
+                    <ActionOpenInNew />
+                  </a>
+                : null}
             </span>
             <RaisedButton
               primary
@@ -134,11 +152,13 @@ export default class AssetButton extends PureComponent {
             </pre>
           </code>
         </Popover>
-        <ContentAdd
-          color={palette.primary1Color}
+        <FloatingActionButton
+          mini
           style={styles.button}
           onTouchTap={this.handleInsert}
-        />
+        >
+          <ContentReply style={styles.icon} />
+        </FloatingActionButton>
       </Paper>
     );
   }

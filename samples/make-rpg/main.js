@@ -2,7 +2,7 @@ import 'hackforplay/core';
 
 import gameFunc from './game';
 import maps from './maps';
-import './update';
+import update from './update';
 import vote from './hackforplay/vote';
 
 
@@ -31,6 +31,9 @@ game.onload = async() => {
 	if (self.player && !Hack.player) {
 		Hack.player = self.player;
 	}
+
+	// update 関数を開始
+	game.on('enterframe', update);
 
 	// ゲームクリアの投票（まだクリアしてない人だけ）
 	if (await vote('GAME') !== 'CLEAR') {

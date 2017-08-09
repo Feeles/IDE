@@ -1,0 +1,61 @@
+ルールついか:
+  - label: スコア１以上で
+    code: |
+      if (Hack.score >= 1) {
+        // スコアがいくつか以上のとき
+
+        /*+ すること ルールついか */
+      }
+  - label: スコア１以下で
+    code: |
+      if (Hack.score <= 1) {
+        // スコアがいくつか以下のとき
+
+        /*+ すること ルールついか */
+      }
+  - label: HP１以上で
+    code: |
+      if (player.hp >= 1) {
+        // HP がいくつか以上のとき
+
+        /*+ すること ルールついか */
+      }
+  - label: HP１以下で
+    code: |
+      if (player.hp <= 1) {
+        // HP がいくつか以下のとき
+
+        /*+ すること ルールついか */
+      }
+  - label: キー押したら
+    code: |
+      if (('▼ キー', Key.space).clicked) {
+        // キー 押したとき
+
+        /*+ すること ルールついか */
+      }
+  - label: キー押してる間
+    code: |
+      if (('▼ キー', Key.space).pressed) {
+        // キーを押している間ずっと
+
+        /*+ すること ルールついか */
+      }
+  - label: キーはなしたら
+    code: |
+      if (('▼ キー', Key.space).released) {
+        // キーをはなしたとき
+
+        /*+ すること ルールついか */
+      }
+すること:
+  - label: ゲームクリア
+    code: |
+      Hack.gameclear(); // ゲームクリア
+  - label: ゲームオーバー
+    code: |
+      Hack.gameover(); // ゲームオーバー
+      player.destroy(); // プレイヤーを消す
+  - label: 文字を表示
+    code: |
+      Hack.log('ステージ１ クリア！');

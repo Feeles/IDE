@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
+import { fade } from 'material-ui/utils/colorManipulator';
+import { emphasize } from 'material-ui/utils/colorManipulator';
 
 import AssetButton from './AssetButton';
 
@@ -13,8 +15,11 @@ export default class AssetPane extends PureComponent {
     handleAssetInsert: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired,
-    styles: PropTypes.object.isRequired
+    localization: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -35,34 +40,83 @@ export default class AssetPane extends PureComponent {
     }
   }
 
+  renderEachLabel(label, styles) {
+    const items = this.state.assets[label];
+    if (!items) return null;
+
+    return (
+      <div key={label} style={{ ...styles.wrapper }}>
+        <div style={{ ...styles.label }}>
+          {label}
+        </div>
+        {items.map((item, i) =>
+          <AssetButton
+            {...item}
+            key={i}
+            onTouchTap={this.props.handleAssetInsert}
+            findFile={this.props.findFile}
+            localization={this.props.localization}
+          />
+        )}
+      </div>
+    );
+  }
+
   render() {
+    const { scope, open } = this.props;
+    const { palette, transitions } = this.context.muiTheme;
+
     const styles = {
       root: {
-        ...this.props.styles.assetContainer,
-        height: this.props.open ? '100%' : 0
+        position: 'absolute',
+        width: '100%',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 10,
+        transition: transitions.easeOut(),
+        height: open ? '100%' : 0
       },
       scroller: {
-        ...this.props.styles.scroller
+        flex: 1,
+        overflowX: 'auto',
+        overflowY: 'scroll',
+        boxSizing: 'border-box',
+        paddingBottom: 60,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.55)
+      },
+      label: {
+        flex: '0 0 100%',
+        color: 'white',
+        textAlign: 'center',
+        marginTop: 16,
+        fontWeight: 600
+      },
+      wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
       },
       close: {
-        ...this.props.styles.closeAsset
+        marginBottom: 10,
+        textAlign: 'center',
+        backgroundColor: palette.primary1Color,
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
+        cursor: 'pointer',
+        height: open ? null : 0
       }
     };
 
-    const items = this.state.assets[this.props.scope] || [];
+    // e.g. scope === 'モンスター アイテム'
+    const labels = scope ? scope.trim().split(' ') : [];
 
     return (
       <div style={styles.root}>
         <div style={styles.scroller}>
-          {items.map((item, i) =>
-            <AssetButton
-              {...item}
-              key={i}
-              onTouchTap={this.props.handleAssetInsert}
-              findFile={this.props.findFile}
-              localization={this.props.localization}
-            />
-          )}
+          {labels.map(label => this.renderEachLabel(label, styles))}
         </div>
         <div style={styles.close} onTouchTap={this.props.handleClose}>
           <NavigationExpandLess color="white" />
