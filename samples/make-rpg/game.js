@@ -16,8 +16,7 @@ async function gameFunc() {
 
 
 
-	/*+ ゲーム */
-
+	/*+ モンスター アイテム せっち システム */
 }
 
 export default gameFunc;

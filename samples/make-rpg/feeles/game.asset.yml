@@ -1,4 +1,4 @@
-ゲーム:
+モンスター:
   - label: スライム
     code: |
       const item1 = new RPGObject();
@@ -13,7 +13,9 @@
         /*+ じどう*/
       });
     image: trimmed/slime.gif
-    description: ムチのように からだをふりまわす、キケンなスライム。idle（まっている）→attack（こうげきする）→idle…を えいえんにくりかえすだけのあわれなそんざい
+    description: >-
+      ムチのように からだをふりまわす、キケンなスライム。idle（まっている）→attack（こうげきする）→idle…を
+      えいえんにくりかえすだけのあわれなそんざい
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/スライム'
   - label: イモムシ
     code: |
@@ -139,6 +141,93 @@
     image: trimmed/minotaur.gif
     description: ずっと攻撃を繰り返す 凶暴なミノタウルス
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス'
+アイテム:
+  - label: ハート
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _hハート));
+      item1.locate(7, 5, 'map1');
+      item1.on(('▼ イベント', 'のった'), () => {
+        player.hp += 1;
+        item1.destroy();
+      });
+    image: trimmed/map-28-3.png
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wi,ki/ハート'
+    description: ライフを かいふくする うれしいアイテム！ += にすると プラスされる。ところで -= にするとどうなるのだろうか
+  - label: コイン
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _kコイン));
+      item1.locate(7, 5, 'map1');
+      item1.velocity(1, 0);
+      item1.force(0, 0.5);
+      item1.on(('▼ イベント', 'ふれはじめた'), () => {
+        item1.destroy();
+        Hack.score += 1;
+      });
+    image: trimmed/map-28-5.png
+    description: がめんを はねまわる コイン。
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/チャリンチャリン'
+  - label: スター
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _hほし));
+      item1.locate(7, 5, 'map1');
+      item1.on(('▼ イベント', 'のった'), () => {
+        player.damageTime = 100;
+        item1.destroy();
+      });
+    image: trimmed/map-28-6.png
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG,/wiki/スター'
+    description: ひろってから ３びょうちょい むてきになれる アイテム。３びょうちょい＝１００フレーム？ こも、カイゾウできるらしい
+  - label: ふしぎなカギ
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _kかぎ));
+      item1.locate(random(0, 15), random(0, 10), 'map1');
+      item1.on(('▼ イベント', 'のった'), () => {
+        Hack.log('カチャリ という おと が きこえた');
+        item1.destroy();
+      });
+    image: trimmed/map-28-7.png
+    description: いつも ちがうところに でてくる ふしぎなかぎ。なにかと くみあわせて つかえそうだ
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなかぎ'
+  - label: ダイヤモンド
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _dダイヤモンド));
+      item1.locate(7, 5, 'map1');
+      item1.on(('▼ イベント', 'のった'), () => {
+        item1.destroy();
+        Hack.score += 1;
+      });
+    image: trimmed/map-28-0.png
+    description: ゲットすると、スコアになる
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/うれしいダイヤモンド'
+  - label: 色付きハート
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _hハート));
+      item1.locate(7, 5, 'map1');
+      item1.color = ('▼ カラー', 'white');
+    image: trimmed/colorful.png
+    description: ほかにも blue や orange など、さまざまな色がつかえる
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/色付きハート'
+  - label: 魔道書
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _m魔道書));
+      item1.locate(7, 5);
+      item1.on(('▼ イベント', 'のった'), () => {
+        // 魔道書のコードをひらく
+        feeles.openCode('code.js');
+
+        // なくなる
+        item1.destroy();
+      });
+    image: hackforplay/enchantbook.png
+    description: 魔道書を使えるようにする。魔道書のコードは code.js で書きかえることができる
+せっち:
   - label: 下りかいだん
     code: |
       const item1 = new RPGObject();
@@ -252,6 +341,20 @@
     image: trimmed/map-21-0.png
     description: まえで こうげきすると かぱっとひらく (た)からばこ。なかに なにか いれられると いいんだどね
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/からばこ'
+  - label: タタリ
+    code: |
+      const item1 = new RPGObject();
+      item1.mod(('▼ スキン', _dドクロ));
+      item1.locate(7, 5, 'map1');
+      item1.on(('▼ イベント', 'のった'), () => {
+        player.hp = 0;
+      });
+      item1.on(('▼ イベント', 'こうげきされた'), (event) => {
+        event.attacker.hp = 0;
+      });
+    image: trimmed/map-28-4.png
+    description: ぜったいに ふんづけたり こうげきしたり してはいけない。ぜったいにだ
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/タタリ'
   - label: ツボ
     code: |
       const item1 = new RPGObject();
@@ -322,70 +425,6 @@
     image: trimmed/map-22-0.png
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG,/wiki/トゲトゲ'
     description: ふむとダメージをうける めいわくなゆか。でも たった１ダメージだね。カイゾウすると なんダメジにも できるらしい
-  - label: ハート
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _hハート));
-      item1.locate(7, 5, 'map1');
-      item1.on(('▼ イベント', 'のった'), () => {
-        player.hp += 1;
-        item1.destroy();
-      });
-    image: trimmed/map-28-3.png
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wi,ki/ハート'
-    description: ライフを かいふくする うれしいアイテム！ += にすると プラスされる。ところで -= にするとどうなるのだろうか
-  - label: タタリ
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _dドクロ));
-      item1.locate(7, 5, 'map1');
-      item1.on(('▼ イベント', 'のった'), () => {
-        player.hp = 0;
-      });
-      item1.on(('▼ イベント', 'こうげきされた'), (event) => {
-        event.attacker.hp = 0;
-      });
-    image: trimmed/map-28-4.png
-    description: ぜったいに ふんづけたり こうげきしたり してはいけない。ぜったいにだ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/タタリ'
-  - label: コイン
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _kコイン));
-      item1.locate(7, 5, 'map1');
-      item1.velocity(1, 0);
-      item1.force(0, 0.5);
-      item1.on(('▼ イベント', 'ふれはじめた'), () => {
-        item1.destroy();
-        Hack.score += 1;
-      });
-    image: trimmed/map-28-5.png
-    description: がめんを はねまわる コイン。
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/チャリンチャリン'
-  - label: スター
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _hほし));
-      item1.locate(7, 5, 'map1');
-      item1.on(('▼ イベント', 'のった'), () => {
-        player.damageTime = 100;
-        item1.destroy();
-      });
-    image: trimmed/map-28-6.png
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG,/wiki/スター'
-    description: ひろってから ３びょうちょい むてきになれる アイテム。３びょうちょい＝１００フレーム？ こも、カイゾウできるらしい
-  - label: ふしぎなカギ
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _kかぎ));
-      item1.locate(random(0, 15), random(0, 10), 'map1');
-      item1.on(('▼ イベント', 'のった'), () => {
-        Hack.log('カチャリ という おと が きこえた');
-        item1.destroy();
-      });
-    image: trimmed/map-28-7.png
-    description: いつも ちがうところに でてくる ふしぎなかぎ。なにかと くみあわせて つかえそうだ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなかぎ'
   - label: 上りかいだん
     code: |
       const item1 = new RPGObject();
@@ -418,18 +457,6 @@
     image: trimmed/map-29-0.png
     description: じげんしき ばくだん と たちのぼる ばくはつの エフェクト。じかん を ちょうせい できる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/時限爆弾'
-  - label: ダイヤモンド
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _dダイヤモンド));
-      item1.locate(7, 5, 'map1');
-      item1.on(('▼ イベント', 'のった'), () => {
-        item1.destroy();
-        Hack.score += 1;
-      });
-    image: trimmed/map-28-0.png
-    description: ゲットすると、スコアになる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/うれしいダイヤモンド'
   - label: まほうじん
     code: |
       const item1 = new RPGObject();
@@ -486,68 +513,10 @@
     description: おはなを うっている 女の子
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/おはなやさん'
   - label: ルーレット
-    code: |
-        const item1 = new RPGObject();
-        item1.mod(('▼ スキン', _rルビー));
-        item1.locate(7, 5, 'map1');
-        item1.うごいている = ('▼ フラグ', false);
-        item1.on(('▼ イベント', 'こうげきされた'), (event) => {
-        const self = event.target;
-        // うごいているかどうかを逆にする
-        self.うごいているか = !self.うごいているか;
-
-        if (self.うごいているか) {
-        	// ルーレット開始
-        	self.start(self.ルーレットプログラム);
-        }
-        });
-        // ルーレットがストップしたとき
-        item1.on('ストップ', (event) => {
-        const スキン = event.スキン;
-
-        // スコアのプログラム
-        if (スキン === _rルビー) {
-        	Hack.score += 1; // rubyなら、SCORE + 1
-        }
-        if (スキン === _dドクロ) {
-        	Hack.score -= 1; // skullなら、SCORE - 1
-        }
-        });
-        item1.ルーレットプログラム = async(self, count, next) => {
-
-          await self.wait(0.1);
-
-          const スキン = random([
-          	_rルビー,
-          	_dドクロ,
-          	_uうんこ
-          ]);
-          self.mod(スキン);
-
-          if (!item1.うごいているか) {
-          	// 止めたいとき
-          	const event = new Event('ストップ');
-          	event.スキン = スキン;
-          	self.dispatchEvent(event);
-          	// ストップ
-          	return;
-          }
-
-          // くりかえし
-          next();
-        };
+    code: "const item1 = new RPGObject();\nitem1.mod(('▼ スキン', _rルビー));\nitem1.locate(7, 5, 'map1');\nitem1.うごいている = ('▼ フラグ', false);\nitem1.on(('▼ イベント', 'こうげきされた'), (event) => {\nconst self = event.target;\n// うごいているかどうかを逆にする\nself.うごいているか = !self.うごいているか;\n\nif (self.うごいているか) {\n\t// ルーレット開始\n\tself.start(self.ルーレットプログラム);\n}\n});\n// ルーレットがストップしたとき\nitem1.on('ストップ', (event) => {\nconst スキン = event.スキン;\n\n// スコアのプログラム\nif (スキン === _rルビー) {\n\tHack.score += 1; // rubyなら、SCORE + 1\n}\nif (スキン === _dドクロ) {\n\tHack.score -= 1; // skullなら、SCORE - 1\n}\n});\nitem1.ルーレットプログラム = async(self, count, next) => {\n\n  await self.wait(0.1);\n\n  const スキン = random([\n  \t_rルビー,\n  \t_dドクロ,\n  \t_uうんこ\n  ]);\n  self.mod(スキン);\n\n  if (!item1.うごいているか) {\n  \t// 止めたいとき\n  \tconst event = new Event('ストップ');\n  \tevent.スキン = スキン;\n  \tself.dispatchEvent(event);\n  \t// ストップ\n  \treturn;\n  }\n\n  // くりかえし\n  next();\n};\n"
     image: trimmed/map-28-2.png
     description: こうげきすると、ルーレットがはじまる
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ルーレット'
-  - label: 色付きハート
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _hハート));
-      item1.locate(7, 5, 'map1');
-      item1.color = ('▼ カラー', 'white');
-    image: trimmed/colorful.png
-    description: ほかにも blue や orange など、さまざまな色がつかえる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/色付きハート'
   - label: ばくえん
     code: |
       const item1 = new RPGObject();
@@ -562,7 +531,11 @@
     image: trimmed/explosion.png
     description: 立ち昇る爆炎。ふれると１のダメージを受ける
     descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/爆炎'
+システム:
   - label: プレイヤー２
+    image: trimmed/darknight.png
+    description: 2P をついかする
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/プレイヤー２'
     code: |
       const item1 = new Player();
       item1.mod(('▼ スキン', _aあんこくきし)); // 見た目
@@ -590,15 +563,10 @@
       camera2.target = item1;
       // カメラを ヨコ 2 、タテ 1 のはいちにする
       Camera.layout(2, 1);
-    image: trimmed/darknight.png
-    description: プレイヤーの位置をかえる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/プレイヤー'
-
   - label: ズーム
     code: |
       // カメラを 2 倍にズーム
       Camera.main.zoom(2);
-
   - label: カメラ
     code: |
       // あたらしいカメラ
@@ -606,21 +574,6 @@
       item1.target = player; // カメラの中心にいるターゲット
       item1.borderStyle(4, 'red'); // まわりのワク
       item1.zoom(0.5); // ズームのわりあい
-
-  - label: 魔道書
-    code: |
-      const item1 = new RPGObject();
-      item1.mod(('▼ スキン', _m魔道書));
-      item1.locate(7, 5);
-      item1.on(('▼ イベント', 'のった'), () => {
-        // 魔道書のコードをひらく
-        feeles.openCode('code.js');
-
-        // なくなる
-        item1.destroy();
-      });
-    image: hackforplay/enchantbook.png
-    description: 魔道書を使えるようにする。魔道書のコードは code.js で書きかえることができる
   - label: じかんせいげん
     code: |
       feeles.setTimeout(() => {
@@ -676,7 +629,6 @@
       // 文字をがめんに出す
       Hack.menuGroup.addChild(item1);
     description: こうげき力を表示する
-
   - label: アラート
     code: |
       alert('気をつけて！');
@@ -689,7 +641,6 @@
         // NOのとき
       }
     description: 好きな質問文でダイアログを出して、その結果によってコードを実行できる
-
   - label: キー 押した
     code: |
       // キーを押したら
@@ -699,7 +650,6 @@
         Hack.log('押されたよ〜');
 
       });
-
   - label: キー はなした
     code: |
       // キーをはなしたら
@@ -709,7 +659,6 @@
         Hack.log('はなされたよ〜');
 
       });
-
 ルールついか:
   - label: スコア１以上
     code: |
@@ -718,7 +667,6 @@
 
         /*+ ルールついか*/
       }
-
   - label: スコア１以下
     code: |
       // スコアがいくつ以下か
@@ -726,7 +674,6 @@
 
         /*+ ルールついか*/
       }
-
   - label: HP１以上
     code: |
       // HP がいくつ以上か
@@ -734,7 +681,6 @@
 
         /*+ ルールついか*/
       }
-
   - label: HP１以下
     code: |
       // HP がいくつ以下か
@@ -742,7 +688,6 @@
 
         /*+ ルールついか*/
       }
-
   - label: キー 押した
     code: |
       // キー 押した
@@ -750,7 +695,6 @@
 
         /*+ ルールついか*/
       }
-
   - label: キー ずっと
     code: |
       // キー ずっと
@@ -758,7 +702,6 @@
 
         /*+ ルールついか*/
       }
-
   - label: キー はなした
     code: |
       // キー はなした
@@ -766,15 +709,12 @@
 
         /*+ ルールついか*/
       }
-
   - label: ゲームクリア
     code: |
       Hack.gameclear(); // ゲームクリア
-
   - label: ゲームオーバー
     code: |
       Hack.gameover(); // ゲームオーバー
-
   - label: 文字を表示
     code: |
       Hack.log('ステージ１ クリア！');
