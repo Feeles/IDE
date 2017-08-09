@@ -35,6 +35,28 @@ export default class AssetPane extends PureComponent {
     }
   }
 
+  renderEachLabel(label, styles) {
+    const items = this.state.assets[label];
+    if (!items) return null;
+
+    return (
+      <div key={label} style={{ ...styles.wrapper }}>
+        <div style={{ ...styles.label }}>
+          {label}
+        </div>
+        {items.map((item, i) =>
+          <AssetButton
+            {...item}
+            key={i}
+            onTouchTap={this.props.handleAssetInsert}
+            findFile={this.props.findFile}
+            localization={this.props.localization}
+          />
+        )}
+      </div>
+    );
+  }
+
   render() {
     const styles = {
       root: {
@@ -44,25 +66,31 @@ export default class AssetPane extends PureComponent {
       scroller: {
         ...this.props.styles.scroller
       },
+      label: {
+        flex: '0 0 100%',
+        color: 'white',
+        textAlign: 'center',
+        marginTop: 16,
+        fontWeight: 600
+      },
+      wrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center'
+      },
       close: {
         ...this.props.styles.closeAsset
       }
     };
+    const { scope } = this.props;
 
-    const items = this.state.assets[this.props.scope] || [];
+    // e.g. scope === 'モンスター アイテム'
+    const labels = scope ? scope.trim().split(' ') : [];
 
     return (
       <div style={styles.root}>
         <div style={styles.scroller}>
-          {items.map((item, i) =>
-            <AssetButton
-              {...item}
-              key={i}
-              onTouchTap={this.props.handleAssetInsert}
-              findFile={this.props.findFile}
-              localization={this.props.localization}
-            />
-          )}
+          {labels.map(label => this.renderEachLabel(label, styles))}
         </div>
         <div style={styles.close} onTouchTap={this.props.handleClose}>
           <NavigationExpandLess color="white" />

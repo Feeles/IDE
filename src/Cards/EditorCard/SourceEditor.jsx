@@ -87,15 +87,11 @@ const getStyle = (props, state, context) => {
       flex: 1,
       overflowX: 'auto',
       overflowY: 'scroll',
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
       boxSizing: 'border-box',
-      paddingTop: 20,
       paddingBottom: 60,
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
-      backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.25)
+      backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.55)
     },
     closeAsset: {
       marginBottom: 10,
@@ -269,7 +265,7 @@ export default class SourceEditor extends PureComponent {
       this._widgets.set(line, parent);
     }
 
-    // Syntax: /*+ ゲーム */
+    // Syntax: /*+ モンスター アイテム */
     const asset = /^(.*)(\/\*)(\+[^\*]+)(\*\/)/.exec(text);
     if (asset) {
       const [_all, _prefix, _left, _label, _right] = asset.map(t =>
