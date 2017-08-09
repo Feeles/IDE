@@ -7,11 +7,9 @@ import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import { fade } from 'material-ui/utils/colorManipulator';
 import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
-import { emphasize } from 'material-ui/utils/colorManipulator';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import jsyaml from 'js-yaml';
@@ -72,34 +70,6 @@ const getStyle = (props, state, context) => {
     progressColor: palette.primary1Color,
     progress: {
       borderRadius: 0
-    },
-    assetContainer: {
-      position: 'absolute',
-      width: '100%',
-      height: state.assetFileName ? '100%' : 0,
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
-      zIndex: 10,
-      transition: transitions.easeOut()
-    },
-    scroller: {
-      flex: 1,
-      overflowX: 'auto',
-      overflowY: 'scroll',
-      boxSizing: 'border-box',
-      paddingBottom: 60,
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.55)
-    },
-    closeAsset: {
-      marginBottom: 10,
-      textAlign: 'center',
-      backgroundColor: palette.primary1Color,
-      borderTopRightRadius: 0,
-      borderTopLeftRadius: 0,
-      cursor: 'pointer'
     }
   };
 };
@@ -243,28 +213,6 @@ export default class SourceEditor extends PureComponent {
   };
 
   updateWidget = (cm, line, text) => {
-    // Syntax: ____/ assets/sample.json \____
-    const begin = /\_{4,}\/(.*)\\\_{4,}/.exec(text);
-    // Syntax: \____ assets/sample.json ____/
-    const end = /\\\_{4,}(.*)\_{4,}\//.exec(text);
-
-    if (begin || end) {
-      const element = document.createElement('span');
-      element.textContent = this.props.localization.editorCard.clickHere;
-      element.classList.add(`Feeles-asset-opener-${begin ? 'begin' : 'end'}`);
-      element.onclick = () => {
-        this.setState({
-          assetFileName: (begin || end)[1].trim(),
-          assetLineNumber: line + (begin ? 1 : 0),
-          appendToHead: !!begin
-        });
-      };
-      const parent = document.createElement('div');
-      parent.classList.add('Feeles-widget', 'Feeles-asset-opener');
-      parent.appendChild(element);
-      this._widgets.set(line, parent);
-    }
-
     // Syntax: /*+ モンスター アイテム */
     const asset = /^(.*)(\/\*)(\+[^\*]+)(\*\/)/.exec(text);
     if (asset) {
@@ -619,7 +567,7 @@ export default class SourceEditor extends PureComponent {
           : null}
         <div style={styles.editorContainer}>
           <AssetPane
-            open={!!this.state.assetScope && !this.state.assetFileName}
+            open={!!this.state.assetScope}
             scope={this.state.assetScope}
             loadConfig={this.props.loadConfig}
             files={this.props.files}
@@ -627,28 +575,7 @@ export default class SourceEditor extends PureComponent {
             handleClose={this.handleAssetClose}
             handleAssetInsert={this.handleAssetInsert}
             localization={this.props.localization}
-            styles={styles}
           />
-          <div style={styles.assetContainer}>
-            <div style={styles.scroller}>
-              {this.assets.map((item, i) =>
-                <AssetButton
-                  {...item}
-                  key={i}
-                  onTouchTap={this.handleAssetInsert}
-                  findFile={this.props.findFile}
-                  localization={this.props.localization}
-                />
-              )}
-            </div>
-            <Paper
-              zDepth={2}
-              style={styles.closeAsset}
-              onTouchTap={this.handleAssetClose}
-            >
-              <NavigationExpandLess color="white" />
-            </Paper>
-          </div>
           <Editor
             {...this.props}
             showHint={showHint}

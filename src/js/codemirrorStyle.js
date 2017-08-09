@@ -20,27 +20,6 @@ textarea {
 .CodeMirror-hints {
   z-index: 1000;
 }
-.Feeles-asset-opener {
-  width: 568px;
-  margin: -24px 0 0 -4px;
-  box-sizing: border-box;
-  padding: 0 20px;
-  z-index: 2;
-}
-.Feeles-asset-opener .Feeles-asset-opener-begin,
-.Feeles-asset-opener .Feeles-asset-opener-end {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  text-align: center;
-  cursor: pointer;
-  color: ${palette.alternateTextColor};
-  background-color: ${fade(palette.primary1Color, 1)};
-  padding: 6px 40px 6px 5px;
-  border-radius: 2px;
-  white-space: pre;
-  box-shadow: ${paper.zDepthShadows[1]};
-}
 .Feeles-asset {
   transform: translateY(-22px);
   height: 0;
@@ -99,7 +78,6 @@ textarea {
   color: transparent;
   box-shadow: 0 0 0 100em ${palette.primary1Color};
 }
-div.CodeMirror.CodeMirror-focused .Feeles-asset-opener,
 div.CodeMirror.CodeMirror-focused .Feeles-asset,
 div.CodeMirror.CodeMirror-focused .Feeles-dropdown-button {
   opacity: 0.9;

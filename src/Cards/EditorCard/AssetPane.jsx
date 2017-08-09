@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
+import { fade } from 'material-ui/utils/colorManipulator';
+import { emphasize } from 'material-ui/utils/colorManipulator';
 
 import AssetButton from './AssetButton';
 
@@ -13,8 +15,11 @@ export default class AssetPane extends PureComponent {
     handleAssetInsert: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired,
-    styles: PropTypes.object.isRequired
+    localization: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -58,13 +63,29 @@ export default class AssetPane extends PureComponent {
   }
 
   render() {
+    const { scope, open } = this.props;
+    const { palette, transitions } = this.context.muiTheme;
+
     const styles = {
       root: {
-        ...this.props.styles.assetContainer,
-        height: this.props.open ? '100%' : 0
+        position: 'absolute',
+        width: '100%',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 10,
+        transition: transitions.easeOut(),
+        height: open ? '100%' : 0
       },
       scroller: {
-        ...this.props.styles.scroller
+        flex: 1,
+        overflowX: 'auto',
+        overflowY: 'scroll',
+        boxSizing: 'border-box',
+        paddingBottom: 60,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.55)
       },
       label: {
         flex: '0 0 100%',
@@ -79,10 +100,15 @@ export default class AssetPane extends PureComponent {
         justifyContent: 'center'
       },
       close: {
-        ...this.props.styles.closeAsset
+        marginBottom: 10,
+        textAlign: 'center',
+        backgroundColor: palette.primary1Color,
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
+        cursor: 'pointer',
+        height: open ? null : 0
       }
     };
-    const { scope } = this.props;
 
     // e.g. scope === 'モンスター アイテム'
     const labels = scope ? scope.trim().split(' ') : [];
