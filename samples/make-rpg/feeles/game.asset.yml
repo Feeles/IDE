@@ -1,5 +1,8 @@
 モンスター:
   - label: スライム
+    image: trimmed/slime.gif
+    description: ムチのように からだをふりまわす、キケンなスライム
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/スライム'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _sスライム));
@@ -12,12 +15,10 @@
 
         /*+ じどう*/
       });
-    image: trimmed/slime.gif
-    description: >-
-      ムチのように からだをふりまわす、キケンなスライム。idle（まっている）→attack（こうげきする）→idle…を
-      えいえんにくりかえすだけのあわれなそんざい
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/スライム'
   - label: イモムシ
+    image: trimmed/insect.gif
+    description: にげあしは おいらの とくぎなのさ。すばやく walk() して  turn() するのが ひけつさ
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/イモムシ'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _iいもむし));
@@ -35,10 +36,10 @@
 
         /*+ じどう*/
       });
-    image: trimmed/insect.gif
-    description: にげあしは おいらの とくぎなのさ。すばやく turn（ターン）して walk（あるく）のが ひけつさ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/イモムシ'
   - label: コウモリ
+    image: trimmed/bat.gif
+    description: ねらいをつけて おそってくる おそろしいコウモリ。 ターゲットに、むかってくる らしい
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/コウモリ'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _kこうもり));
@@ -64,10 +65,10 @@
 
         /*+ じどう*/
       });
-    image: trimmed/bat.gif
-    description: ねらいをつけて おそってくる おそろしいコウモリ。 ターゲットに、むかってくる らしい
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/コウモリ'
   - label: ウロボロス
+    image: trimmed/ouroboros.gif
+    description: ４秒おきに こうげきしてくる 大蛇ウロボロス。こうげきまでの秒数を かえることもできる
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ウロボロス'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _uウロボロス));
@@ -82,10 +83,10 @@
 
         /*+ じどう*/
       });
-    image: trimmed/ouroboros.gif
-    description: ４秒おきに攻撃してくる大蛇ウロボロス。攻撃までの時間を変更することもできる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ウロボオス'
   - label: ドラゴン
+    image: trimmed/dragon.gif
+    description: やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ドラゴン'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _dドラゴン));
@@ -121,10 +122,10 @@
 
         /*+ じどう*/
       });
-    image: trimmed/dragon.gif
-    description: やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ドラゴン'
   - label: ミノタウルス
+    image: trimmed/minotaur.gif
+    description: ずっと こうげきをくりかえす きょうぼうな ミノタウルス
+    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _mミノタウルス));
@@ -138,9 +139,6 @@
 
         /*+ じどう*/
       });
-    image: trimmed/minotaur.gif
-    description: ずっと攻撃を繰り返す 凶暴なミノタウルス
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス'
 アイテム:
   - label: ハート
     code: |
