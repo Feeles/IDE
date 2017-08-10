@@ -3,7 +3,14 @@ const url = require('url');
 const version = require('./version');
 
 const server = http.createServer(async (request, response) => {
-  const { pathname } = url.parse(request.url);
+  const paths = url.parse(request.url).pathname.split('/');
+
+  // 現在は日本語のみサポート
+  if (paths[1] !== 'ja') {
+    paths.splice(1, 0, 'ja');
+  }
+  const pathname = paths.join('/');
+
   response.writeHead(303, {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET',
