@@ -72,7 +72,7 @@ const config = {
 
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
 
-    new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
+    new OpenBrowserPlugin({ url: `http://localhost:${port}/ja/make-rpg.html` }),
 
     new HappyPack({
       loaders: ['babel-loader?cacheDirectory']
@@ -80,80 +80,80 @@ const config = {
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'index.html',
-      template: 'samples/hello-world.hbs',
+      filename: 'ja/index.html',
+      template: 'samples/ja/hello-world.hbs',
       production: process.env.NODE_ENV === 'production'
     }),
     new FeelesWebpackPlugin({
-      path: 'samples/hello-world',
-      output: 'index.json',
+      path: 'samples/ja/hello-world',
+      output: 'ja/hello-world.json',
       ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'hack-rpg.html',
-      template: 'samples/hack-rpg.hbs',
+      filename: 'ja/hack-rpg.html',
+      template: 'samples/ja/hack-rpg.hbs',
       production: process.env.NODE_ENV === 'production'
     }),
     new FeelesWebpackPlugin({
-      path: 'samples/hack-rpg',
-      output: 'hack-rpg.json',
+      path: 'samples/ja/hack-rpg',
+      output: 'ja/hack-rpg.json',
       ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'make-rpg.html',
-      template: 'samples/make-rpg.hbs',
+      filename: 'ja/make-rpg.html',
+      template: 'samples/ja/make-rpg.hbs',
       production: process.env.NODE_ENV === 'production'
     }),
     new FeelesWebpackPlugin({
-      path: 'samples/make-rpg',
-      output: 'make-rpg.json',
+      path: 'samples/ja/make-rpg',
+      output: 'ja/make-rpg.json',
       ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'ask.html',
-      template: 'samples/ask.hbs',
+      filename: 'ja/ask.html',
+      template: 'samples/ja/ask.hbs',
       production: process.env.NODE_ENV === 'production'
     }),
     new FeelesWebpackPlugin({
-      path: 'samples/ask',
-      output: 'ask.json',
+      path: 'samples/ja/ask',
+      output: 'ja/ask.json',
       ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'matterjs.html',
-      template: 'samples/matterjs.hbs',
+      filename: 'ja/matterjs.html',
+      template: 'samples/ja/matterjs.hbs',
       production: process.env.NODE_ENV === 'production'
     }),
     new FeelesWebpackPlugin({
-      path: 'samples/matterjs',
-      output: 'matterjs.json',
+      path: 'samples/ja/matterjs',
+      output: 'ja/matterjs.json',
       ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'mc.html',
-      template: 'samples/mc.hbs',
+      filename: 'ja/mc.html',
+      template: 'samples/ja/mc.hbs',
       production: process.env.NODE_ENV === 'production'
     }),
     new FeelesWebpackPlugin({
-      path: 'samples/mc',
-      output: 'mc.json',
+      path: 'samples/ja/mc',
+      output: 'ja/mc.json',
       ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'dynamic.html',
-      template: 'samples/dynamic.hbs',
+      filename: 'ja/dynamic.html',
+      template: 'samples/ja/dynamic.hbs',
       production: process.env.NODE_ENV === 'production'
     })
   ],
