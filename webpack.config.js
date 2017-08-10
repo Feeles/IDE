@@ -86,7 +86,7 @@ const config = {
     }),
     new FeelesWebpackPlugin({
       path: 'samples/ja/hello-world',
-      output: 'ja/hello-world.json',
+      output: 'ja/index.json',
       ignore: /\.DS_Store$/
     }),
 
