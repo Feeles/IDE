@@ -1,13 +1,38 @@
 import 'hackforplay/rpg-kit-main';
-import 'enchantjs/enchant';
+import { Sprite } from 'enchantjs/enchant';
 import 'enchantjs/ui.enchant';
 import 'hackforplay/hack';
 import * as synonyms from 'hackforplay/synonyms';
 
-const RPGObject = enchant.Class.create(enchant.Sprite, {
+// 1 フレーム ( enterframe ) 間隔で next する
+// Unity の StartCoroutine みたいな仕様
+function startFrameCoroutine(node, generator) {
+	return new Promise((resolve) => {
+		node.on('enterframe', function _() {
+			const { done } = generator.next();
+			if (done) {
+				node.removeEventListener('enterframe', _);
+				resolve();
+			}
+		});
+	});
+}
 
-	initialize(width, height, offsetX, offsetY) {
-		Sprite.call(this, width || 0, height || 0);
+const collection = [];
+
+class RPGObject extends Sprite {
+
+	// static collection = [];
+
+	static get collection() {
+		return collection;
+	}
+
+	constructor(width, height, offsetX, offsetY) {
+		super(width || 0, height || 0);
+
+		RPGObject.collection.push(this);
+
 		this.offset = {
 			x: offsetX || 0,
 			y: offsetY || 0
@@ -24,27 +49,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 
 		this.moveTo(game.width, game.height);
 
-		Object.defineProperty(this, 'mapX', {
-			configurable: true,
-			enumerable: true,
-			get: function() {
-				return (this.x - this.offset.x + 16) / 32 >> 0;
-			}
-		});
-		Object.defineProperty(this, 'mapY', {
-			configurable: true,
-			enumerable: true,
-			get: function() {
-				return (this.y - this.offset.y + 16) / 32 >> 0;
-			}
-		});
-		Object.defineProperty(this, 'map', {
-			configurable: true,
-			enumerable: true,
-			get: function() {
-				return this.parentNode ? this.parentNode.ref : null;
-			}
-		});
+
 		var collisionFlag = null; // this.collisionFlag (Default:true)
 		var noCollisionEvents = ['playerenter', 'playerstay', 'playerexit'];
 		Object.defineProperty(this, 'collisionFlag', {
@@ -93,19 +98,9 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			x: 0,
 			y: 0
 		};
+
 		this.directionType = null;
-		Object.defineProperty(this, 'direction', {
-			configurable: true,
-			enumerable: true,
-			get: this.getDirection,
-			set: this.setDirection
-		});
-		Object.defineProperty(this, 'forward', {
-			configurable: true,
-			enumerable: true,
-			get: this.getForward,
-			set: this.setForward
-		});
+
 
 		// 初期化
 		this.velocityX = this.velocityY = this.accelerationX = this.accelerationY = 0;
@@ -119,9 +114,19 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		this._layer = RPGMap.Layer.Middle;
 
 		Hack.defaultParentNode.addChild(this);
-	},
+	}
 
+	get map() {
+		return this.parentNode ? this.parentNode.ref : null;
+	}
 
+	get mapX() {
+		return Math.floor((this.x - this.offset.x + 16) / 32);
+	}
+
+	get mapY() {
+		return Math.floor((this.y - this.offset.y + 16) / 32);
+	}
 
 	geneticUpdate() {
 		if (!Hack.isPlaying) return;
@@ -145,7 +150,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			this.isBehaviorChanged = false;
 			this.dispatchEvent(new Event('become' + this.behavior));
 		}
-	},
+	}
 
 	locate(fromLeft, fromTop, mapName) {
 		if (mapName in Hack.maps &&
@@ -157,7 +162,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		this.moveTo(
 			fromLeft * 32 + this.offset.x,
 			fromTop * 32 + this.offset.y);
-	},
+	}
 
 	destroy(delay) {
 		if (delay > 0) this.setTimeout(_remove.bind(this), delay);
@@ -167,7 +172,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			this.remove();
 			if (this.shadow) this.shadow.remove();
 		}
-	},
+	}
 
 	setFrame(behavior, frame) {
 		// behavior is Type:string
@@ -181,17 +186,14 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 				};
 			}
 		}).call(this, frame);
-	},
+	}
 
 	getFrame() {
 		if (this.getFrameOfBehavior[this.behavior] instanceof Function) {
 			return this.getFrameOfBehavior[this.behavior].call(this);
 		}
 		return [];
-	},
-
-
-
+	}
 
 	setTimeout(callback, wait, timing = 'enterframe') {
 		var target = this.age + Math.max(1, wait),
@@ -210,7 +212,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		}
 		this.on(timing, task);
 		return stopTimeout.bind(this);
-	},
+	}
 
 	setInterval(callback, interval) {
 		var current = this.age,
@@ -230,7 +232,8 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		}
 		this.on('enterframe', task);
 		return stopInterval.bind(this);
-	},
+	}
+
 
 
 	async attack() {
@@ -244,7 +247,8 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		});
 
 		this.behavior = BehaviorTypes.Idle;
-	},
+	}
+
 
 
 	onattacked(event) {
@@ -253,8 +257,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			this.hp -= event.damage;
 		}
 
-	},
-
+	}
 
 
 	async walk(distance = 1, forward = null, setForward = true) {
@@ -273,15 +276,18 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		// distance 回歩く
 		for (let i = 0; i < distance; ++i) {
 
-			await this.walkImpl(forward || this.forward);
+
+			await startFrameCoroutine(
+				this,
+				this.walkImpl(forward || this.forward)
+			);
 
 		}
 
-	},
+	}
 
 
-
-	async walkImpl(forward) {
+	* walkImpl(forward) {
 
 		// タイルのサイズ
 		const tw = Hack.map.tileWidth;
@@ -377,13 +383,11 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 
 			this.dispatchEvent(new enchant.Event('walkmove'));
 
-
 			// 最終フレームなら待たない
 			if (frame === endFrame) break;
 
-			await new Promise((resolve) => {
-				this.setTimeout(resolve, 1);
-			});
+			// 1 フレーム待機する
+			yield;
 
 		}
 
@@ -395,143 +399,73 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 
 		this.behavior = BehaviorTypes.Idle;
 
-	},
+	}
 
-
-
-	// 旧 walk
-	_walk: function(distance, continuous) {
-		if (!this.isKinematic || !continuous && this.behavior !== BehaviorTypes.Idle || !Hack.isPlaying) return;
-		this.behavior = BehaviorTypes.Walk;
-		var f = this.forward,
-			d = typeof distance === 'number' ? distance >> 0 : 1,
-			s = Math.sign(d);
-		var _x = this.mapX + f.x * s,
-			_y = this.mapY + f.y * s,
-			tw = Hack.map.tileWidth,
-			th = Hack.map.tileHeight;
-		// Map Collision
-		var mapR = Hack.map.width / tw - 1,
-			mapB = Hack.map.height / th - 1;
-		var mapHit = Hack.map.hitTest(_x * tw, _y * th) || 0 > _x || _x > mapR || 0 > _y || _y > mapB;
-		// RPGObject(s) Collision
-		var hits = RPGObject.collection.filter(function(item) {
-			return item.isKinematic && item.collisionFlag && item.mapX === _x && item.mapY === _y;
-		});
-		if (!mapHit && !hits.length) {
-			if (continuous) {
-				this.frame = [];
-				this.frame = this.getFrame();
-			} else this.behavior = BehaviorTypes.Walk;
-			this.dispatchEvent(new Event('walkstart'));
-			var move = {
-				x: Math.round(f.x * tw * s),
-				y: Math.round(f.y * th * s)
-			};
-			var target = {
-				x: this.x + move.x,
-				y: this.y + move.y
-			};
-			var frame = this.getFrame().length;
-			var stopInterval = this.setInterval(function() {
-				this.moveBy(move.x / frame, move.y / frame);
-				this.moveTo(Math.round(this.x), Math.round(this.y));
-				this.dispatchEvent(new Event('walkmove'));
-			}, 1);
-			this.setTimeout(function() {
-				this.moveTo(target.x, target.y);
-				stopInterval();
-				this.dispatchEvent(new Event('walkend'));
-				// next step
-				if (Math.abs(d) > 1) this.walk(Math.sign(d) * (Math.abs(d) - 1), true);
-				else this.behavior = BehaviorTypes.Idle;
-			}, frame - 1);
-		} else {
-			// 直前のフレームで collided していたオブジェクトを除外
-			var e = new Event('collided');
-			e.map = mapHit;
-			e.hits = hits.filter(function(item) {
-				return !this._preventFrameHits || this._preventFrameHits.indexOf(item) < 0;
-			}, this);
-			e.hit = e.hits.length > 0 ? e.hits[0] : undefined;
-			if (e.hit || e.map) {
-				var e2 = new Event('collided');
-				e2.map = false;
-				e2.hits = [e2.hit = this];
-				this.dispatchEvent(e);
-				e.hits.forEach(function(item) {
-					item.dispatchEvent(e2);
-				});
-			}
-			this.behavior = BehaviorTypes.Idle;
-		}
-		this._preventFrameHits = hits;
-	},
-
-
-
-	velocity: function(x, y) {
+	velocity(x, y) {
 		this.velocityX = x;
 		this.velocityY = y;
-	},
-	force: function(x, y) {
+	}
+
+	force(x, y) {
 		this.accelerationX = x / this.mass;
 		this.accelerationY = y / this.mass;
-	},
-	hp: {
-		get() {
-			return this._hp;
-		},
-		set(value) {
-			if (typeof value === 'number' && !isNaN(value) && value !== this._hp) {
-				this.hpchangeFlag = true;
-				this._hp = value;
+	}
+
+	get hp() {
+		return this._hp;
+	}
+	set hp(value) {
+		if (typeof value === 'number' && !isNaN(value) && value !== this._hp) {
+			this.hpchangeFlag = true;
+			this._hp = value;
+		}
+	}
+
+
+	get behavior() {
+		return this._behavior;
+	}
+	set behavior(value) {
+		if (typeof value === 'string') {
+			this.isBehaviorChanged = true;
+			this._behavior = value;
+		}
+
+	}
+
+
+	get layer() {
+		return this._layer;
+	}
+	set layer(value) {
+		if (this === Hack.player) return this._layer; // プレイヤーのレイヤー移動を禁止
+		if (value === this._layer) return this._layer;
+
+		// Range of layer
+		var sortingOrder = Object.keys(RPGMap.Layer).map(function(key) {
+			return RPGMap.Layer[key];
+		});
+		var max = Math.max.apply(null, sortingOrder);
+		var min = Math.min.apply(null, sortingOrder);
+		this._layer = Math.max(Math.min(value, max), min);
+
+		// 他オブジェクトはプレイヤーレイヤーに干渉できないようにする
+		if (this._layer === RPGMap.Layer.Player) {
+			switch (Math.sign(value - this._layer)) {
+				case 1:
+					return this.bringOver();
+				case -1:
+					return this.bringUnder();
+				default:
+					break;
 			}
 		}
-	},
-	behavior: {
-		get: function() {
-			return this._behavior;
-		},
-		set: function(value) {
-			if (typeof value === 'string') {
-				this.isBehaviorChanged = true;
-				this._behavior = value;
-			}
-		}
-	},
-	layer: {
-		get: function() {
-			return this._layer;
-		},
-		set: function(value) {
-			if (this === Hack.player) return this._layer; // プレイヤーのレイヤー移動を禁止
-			if (value === this._layer) return this._layer;
 
-			// Range of layer
-			var sortingOrder = Object.keys(RPGMap.Layer).map(function(key) {
-				return RPGMap.Layer[key];
-			});
-			var max = Math.max.apply(null, sortingOrder);
-			var min = Math.min.apply(null, sortingOrder);
-			this._layer = Math.max(Math.min(value, max), min);
+		this.map.layerChangeFlag = true; // レイヤーをソートする
+	}
 
-			// 他オブジェクトはプレイヤーレイヤーに干渉できないようにする
-			if (this._layer === RPGMap.Layer.Player) {
-				switch (Math.sign(value - this._layer)) {
-					case 1:
-						return this.bringOver();
-					case -1:
-						return this.bringUnder();
-					default:
-						break;
-				}
-			}
 
-			this.map.layerChangeFlag = true; // レイヤーをソートする
-		}
-	},
-	bringOver: function() {
+	bringOver() {
 		// 現在のレイヤーより大きいレイヤーのうち最も小さいもの
 		var uppers = Object.keys(RPGMap.Layer).map(function(key) {
 			return RPGMap.Layer[key];
@@ -540,8 +474,9 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		}, this);
 		this.layer = uppers.length > 0 ? Math.min.apply(null, uppers) : this.layer;
 		return this.layer;
-	},
-	bringUnder: function() {
+	}
+
+	bringUnder() {
 		// 現在のレイヤーより小さいレイヤーのうち最も大きいもの
 		var unders = Object.keys(RPGMap.Layer).map(function(key) {
 			return RPGMap.Layer[key];
@@ -550,7 +485,8 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		}, this);
 		this.layer = unders.length > 0 ? Math.max.apply(null, unders) : this.layer;
 		return this.layer;
-	},
+	}
+
 	shoot(node, vector, speed) {
 		node.collisionFlag = false;
 
@@ -597,18 +533,20 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		node._rotation = angle;
 
 		return this;
-	},
+	}
 
-	mod: function(func) {
+
+	mod(func) {
 		func.call(this);
-	},
-	getForward: function() {
+	}
+
+	get forward() {
 		return {
 			x: this._forward.x,
 			y: this._forward.y
 		};
-	},
-	setForward: function(value) {
+	}
+	set forward(value) {
 		var vec =
 			value instanceof Array ? {
 				x: value[0],
@@ -642,16 +580,18 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 				this.frame = [dir * 9 + (this.frame % 9)];
 				break;
 		}
-	},
-	getDirection: function() {
+	}
+
+	get direction() {
 		switch (this.directionType) {
 			case 'double':
 				return this.forward.x;
 			case 'quadruple':
 				return Hack.Vec2Dir(this.forward);
 		}
-	},
-	setDirection: function(value) {
+	}
+
+	set direction(value) {
 		switch (this.directionType) {
 			case 'double':
 				this.forward = [Math.sign(value) || -1, 0];
@@ -660,8 +600,9 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 				this.forward = Hack.Dir2Vec(value);
 				break;
 		}
-	},
-	setFrameD9: function(behavior, frame) {
+	}
+
+	setFrameD9(behavior, frame) {
 		var array = typeof frame === 'function' ? frame() : frame;
 
 		this.setFrame(behavior, function() {
@@ -671,8 +612,9 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			}, this);
 			return _array;
 		});
-	},
-	turn: function(count) {
+	}
+
+	turn(count) {
 		var c, i;
 		switch (this.directionType) {
 			case 'double':
@@ -689,8 +631,9 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 				this.direction = [2, 3, 1, 0][i % 4]; // turn index to direction
 				break;
 		}
-	},
-	dispatchEvent: function(event) {
+	}
+
+	dispatchEvent(event) {
 		EventTarget.prototype.dispatchEvent.call(this, event);
 		// Synonym Event を発火
 		var synonym = synonyms.events[event.type];
@@ -700,16 +643,18 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			});
 			EventTarget.prototype.dispatchEvent.call(this, clone);
 		}
-	},
-	isListening: function(eventType) {
+	}
+
+	isListening(eventType) {
 		// eventType のリスナーを持っているか
 		var synonym = synonyms.events[eventType];
 		return this['on' + eventType] || this._listeners[eventType] ||
 			synonym && (this['on' + synonym] || this._listeners[synonym]);
-	},
-	start: function (virtual) {
+	}
+
+	start(virtual) {
 		let count = 1;
-		const override = async () => {
+		const override = async() => {
 			// １フレームだけディレイを入れる
 			await this.wait();
 			// count をインクリメントして同じ関数をコール
@@ -717,13 +662,15 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 		};
 		// 初回のみ即座にコール
 		virtual(this, count, override);
-	},
-	wait: function (second = 0) {
+	}
+
+	wait(second = 0) {
 		return new Promise((resolve, reject) => {
 			this.setTimeout(resolve, second * game.fps);
 		});
-	},
-	endless: async function (virtual) {
+	}
+
+	async endless(virtual) {
 		if (!this._endless) {
 			// ルーチンをスタート
 			let count = 1;
@@ -740,7 +687,7 @@ const RPGObject = enchant.Class.create(enchant.Sprite, {
 			this._endless = virtual;
 		}
 	}
-});
+}
 
 
 export default RPGObject;
