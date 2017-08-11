@@ -307,7 +307,12 @@ class RPGObject extends Sprite {
 		if (nextX < 0 || nextX >= tx || nextY < 0 || nextY >= ty) {
 
 			// 画面外なら歩かない
-			if (this.collideMapBoader) return;
+			if (this.collideMapBoader) {
+				this.dispatchCollidedEvent([], true);
+				// 1 フレーム待つ
+				yield;
+				return;
+			}
 			// 画面外に判定はない
 			else isHit = false;
 
@@ -328,18 +333,13 @@ class RPGObject extends Sprite {
 		});
 		this._collidedNodes.push(...newHits);
 
-		// 衝突イベント（仮）
-		const event = new enchant.Event('collided');
-		// event.map = false;
-		// event.hit = this;
-		// event.hits = [this];
-		this.dispatchEvent(event);
-		newHits.forEach((hitObj) => {
-			hitObj.dispatchEvent(event);
-		});
-
 		// 障害物があるので歩けない
-		if (isHit || hits.length) return;
+		if (isHit || hits.length) {
+			this.dispatchCollidedEvent(newHits, false);
+			// 1 フレーム待つ
+			yield;
+			return;
+		}
 
 		// 速度が 0.0 以下なら歩けない
 		if (this.speed <= 0.0) return;
@@ -399,6 +399,25 @@ class RPGObject extends Sprite {
 
 		this.behavior = BehaviorTypes.Idle;
 
+	}
+
+	dispatchCollidedEvent(hits, map) {
+		// 衝突イベントを dispatch
+		const event = new enchant.Event('collided');
+		event.map = map;
+		event.hit = hits[0];
+		event.hits = hits;
+		this.dispatchEvent(event);
+		if (hits.length) {
+			// 相手に対してイベントを dispatch
+			const event = new enchant.Event('collided');
+			event.map = false;
+			event.hit = this;
+			event.hits = [this];
+			hits.forEach((hitObj) => {
+				hitObj.dispatchEvent(event);
+			});
+		}
 	}
 
 	velocity(x, y) {
