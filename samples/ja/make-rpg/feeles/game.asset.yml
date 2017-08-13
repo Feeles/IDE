@@ -2,7 +2,7 @@
   - label: スライム
     image: trimmed/slime.gif
     description: ムチのように からだをふりまわす、キケンなスライム
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/スライム'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/スライム'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _sスライム));
@@ -18,7 +18,7 @@
   - label: イモムシ
     image: trimmed/insect.gif
     description: にげあしは おいらの とくぎなのさ。すばやく walk() して  turn() するのが ひけつさ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/イモムシ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/イモムシ'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _iいもむし));
@@ -39,7 +39,7 @@
   - label: コウモリ
     image: trimmed/bat.gif
     description: ねらいをつけて おそってくる おそろしいコウモリ。 ターゲットに、むかってくる らしい
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/コウモリ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/コウモリ'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _kこうもり));
@@ -68,7 +68,7 @@
   - label: ウロボロス
     image: trimmed/ouroboros.gif
     description: ４秒おきに こうげきしてくる 大蛇ウロボロス。こうげきまでの秒数を かえることもできる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ウロボロス'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ウロボロス'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _uウロボロス));
@@ -86,7 +86,7 @@
   - label: ドラゴン
     image: trimmed/dragon.gif
     description: やつが この めいきゅうの あるじ 獄炎(ごくえん) の ドラゴン だ！
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ドラゴン'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ドラゴン'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _dドラゴン));
@@ -125,7 +125,7 @@
   - label: ミノタウルス
     image: trimmed/minotaur.gif
     description: ずっと こうげきをくりかえす きょうぼうな ミノタウルス
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ミノタウルス'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ミノタウルス'
     code: |
       const item1 = new RPGObject();
       item1.mod(('▼ スキン', _mミノタウルス));
@@ -165,7 +165,7 @@
       });
     image: trimmed/map-28-5.png
     description: がめんを はねまわる コイン。
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/チャリンチャリン'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/チャリンチャリン'
   - label: スター
     code: |
       const item1 = new RPGObject();
@@ -189,7 +189,7 @@
       });
     image: trimmed/map-28-7.png
     description: いつも ちがうところに でてくる ふしぎなかぎ。なにかと くみあわせて つかえそうだ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなかぎ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ふしぎなかぎ'
   - label: ダイヤモンド
     code: |
       const item1 = new RPGObject();
@@ -201,7 +201,7 @@
       });
     image: trimmed/map-28-0.png
     description: ゲットすると、スコアになる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/うれしいダイヤモンド'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/うれしいダイヤモンド'
   - label: 色付きハート
     code: |
       const item1 = new RPGObject();
@@ -210,7 +210,7 @@
       item1.color = ('▼ カラー', 'white');
     image: trimmed/colorful.png
     description: ほかにも blue や orange など、さまざまな色がつかえる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/色付きハート'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/色付きハート'
   - label: 魔道書
     code: |
       const item1 = new RPGObject();
@@ -237,7 +237,7 @@
       });
     image: trimmed/map-21-2.png
     description: つぎのマップに つながっている くだりせんようの かいだん。カイゾウすると、つぎのマップからつぎのつぎのマップに つなげることも…
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/下り階段'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/下り階段'
   - label: ワープ
     code: |
       const item1 = new RPGObject();
@@ -249,7 +249,7 @@
       });
     image: trimmed/map-16-4.png
     description: ふむとワープできる すごいゆか。あかいろや みどりいろも そんざいするという うわさ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ワープゾーン'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ワープゾーン'
   - label: しろ
     code: |
       const item1 = new RPGObject();
@@ -263,7 +263,7 @@
       });
     image: trimmed/map-25-0.png
     description: あなたのかえりを まちわびている おしろ。ここへ たどりつくと ゲームクリアになる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ゴールちてん'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ゴールちてん'
   - label: お花
     code: |
       const item1 = new RPGObject();
@@ -276,7 +276,7 @@
       });
     image: trimmed/map-21-1.png
     description: まえで こうげきすると ちってしまう はかないはな。うえを あるくことができる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/お花畑'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/お花畑'
   - label: 木
     code: |
       const item1 = new RPGObject();
@@ -285,7 +285,7 @@
       item1.hp = 1;
     image: trimmed/map-26-0.png
     description: まえで こうげきすると あっけなく おれてしまう キ。うえをあるくことは でキない
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/木'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/木'
   - label: バクダン岩
     code: |
       const item1 = new RPGObject();
@@ -306,7 +306,7 @@
       });
     image: trimmed/map-20-1.png
     description: しげきを あたえると ばくはつするぞ！おすなよ ぜったいに おすなよ！
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/爆弾岩'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/爆弾岩'
   - label: ふしぎなかべ
     code: |
       const item1 = new RPGObject();
@@ -315,7 +315,7 @@
       item1.opacity = 0.5;
     image: trimmed/map-17-0.png
     description: むこうがわが すけてみえる ふしぎなかべ。 opacity （オパシティ）を ０ にすると きえてまう
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/とうめいな壁'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/とうめいな壁'
   - label: しゃべるかべ
     code: |
       const item1 = new RPGObject();
@@ -326,7 +326,7 @@
       });
     image: trimmed/map-17-1.png
     description: まえで こうげきすると しゃべる ふしぎなかべ。いっせつによると おおむかしの ざいにんが とこめられている とか
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/しゃべる壁'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/しゃべる壁'
   - label: たからばこ
     code: |
       const item1 = new RPGObject();
@@ -338,7 +338,7 @@
       };
     image: trimmed/map-21-0.png
     description: まえで こうげきすると かぱっとひらく (た)からばこ。なかに なにか いれられると いいんだどね
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/からばこ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/からばこ'
   - label: タタリ
     code: |
       const item1 = new RPGObject();
@@ -352,7 +352,7 @@
       });
     image: trimmed/map-28-4.png
     description: ぜったいに ふんづけたり こうげきしたり してはいけない。ぜったいにだ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/タタリ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/タタリ'
   - label: ツボ
     code: |
       const item1 = new RPGObject();
@@ -377,7 +377,7 @@
       });
     image: trimmed/map-20-0.png
     description: ランダムなアイテムがでてくる ふしぎなツボ。なんでも だせる という ウワサ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ふしぎなツボ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ふしぎなツボ'
   - label: 女の人
     code: |
       const item1 = new RPGObject();
@@ -388,7 +388,7 @@
       });
     image: trimmed/woman.png
     description: しゃべる ひと。ふだんは、うけつけのしごとを しているらしい。ずっと おなじセリフしか いえないのかな？
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/女の人'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/女の人'
   - label: 男の子
     code: |
       const item1 = new RPGObject();
@@ -405,7 +405,7 @@
       });
     image: trimmed/boy.png
     description: ひたすら はしりつづける おとこのこ。めざしているところは じぶんでも よくわかっていない
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/男の子'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/男の子'
   - label: わな
     code: |
       const item1 = new RPGObject();
@@ -454,7 +454,7 @@
       }, 90);
     image: trimmed/map-29-0.png
     description: じげんしき ばくだん と たちのぼる ばくはつの エフェクト。じかん を ちょうせい できる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/時限爆弾'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/時限爆弾'
   - label: まほうじん
     code: |
       const item1 = new RPGObject();
@@ -468,7 +468,7 @@
       });
     image: trimmed/map-16-9.png
     description: スコア７以上のとき うえにのると、まほうじんが光る(だけ)
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/スコアで光るまほうじん'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/スコアで光るまほうじん'
   - label: スコアでひらく たからばこ
     code: |
       const item1 = new RPGObject();
@@ -485,7 +485,7 @@
       });
     image: trimmed/map-21-0.png
     description: スコアが足りないときは びくともしない ただの からばこ
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/かたいからばこ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/かたいからばこ'
   - label: お花屋さん
     code: |
       const item1 = new RPGObject();
@@ -509,12 +509,12 @@
       });
     image: trimmed/girl.png
     description: おはなを うっている 女の子
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/おはなやさん'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/おはなやさん'
   - label: ルーレット
     code: "const item1 = new RPGObject();\nitem1.mod(('▼ スキン', _rルビー));\nitem1.locate(7, 5, 'map1');\nitem1.うごいている = ('▼ フラグ', false);\nitem1.on(('▼ イベント', 'こうげきされた'), (event) => {\nconst self = event.target;\n// うごいているかどうかを逆にする\nself.うごいているか = !self.うごいているか;\n\nif (self.うごいているか) {\n\t// ルーレット開始\n\tself.start(self.ルーレットプログラム);\n}\n});\n// ルーレットがストップしたとき\nitem1.on('ストップ', (event) => {\nconst スキン = event.スキン;\n\n// スコアのプログラム\nif (スキン === _rルビー) {\n\tHack.score += 1; // rubyなら、SCORE + 1\n}\nif (スキン === _dドクロ) {\n\tHack.score -= 1; // skullなら、SCORE - 1\n}\n});\nitem1.ルーレットプログラム = async(self, count, next) => {\n\n  await self.wait(0.1);\n\n  const スキン = random([\n  \t_rルビー,\n  \t_dドクロ,\n  \t_uうんこ\n  ]);\n  self.mod(スキン);\n\n  if (!item1.うごいているか) {\n  \t// 止めたいとき\n  \tconst event = new Event('ストップ');\n  \tevent.スキン = スキン;\n  \tself.dispatchEvent(event);\n  \t// ストップ\n  \treturn;\n  }\n\n  // くりかえし\n  next();\n};\n"
     image: trimmed/map-28-2.png
     description: こうげきすると、ルーレットがはじまる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ルーレット'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ルーレット'
   - label: ばくえん
     code: |
       const item1 = new RPGObject();
@@ -528,12 +528,12 @@
       item1.destroy(20);
     image: trimmed/explosion.png
     description: 立ち昇る爆炎。ふれると１のダメージを受ける
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/爆炎'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/爆炎'
 システム:
   - label: プレイヤー２
     image: trimmed/darknight.png
     description: 2P をついかする
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/プレイヤー２'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/プレイヤー２'
     code: |
       const item1 = new Player();
       item1.mod(('▼ スキン', _aあんこくきし)); // 見た目
@@ -596,7 +596,7 @@
     code: |
       Hack.log('またあそんでね！');
     description: ゲーム画面に好きな文字を出せる
-    descriptionMoreURL: 'https://github.com/hackforplay/wiki-RPG/wiki/ログ'
+    descriptionMoreURL: 'https://github.com/Feeles/IDE/wiki/ログ'
   - label: タイム
     code: |
       // あたらしい文字のばしょをきめる
