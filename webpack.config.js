@@ -93,18 +93,6 @@ const config = {
 
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'ja/hack-rpg.html',
-      template: 'samples/ja/hack-rpg.hbs',
-      production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/ja/hack-rpg'],
-      output: 'ja/hack-rpg.json',
-      ignore: /\.DS_Store$/
-    }),
-
-    new HtmlWebpackPlugin({
-      inject: false,
       filename: 'ja/make-rpg.html',
       template: 'samples/ja/make-rpg.hbs',
       production: process.env.NODE_ENV === 'production'
@@ -168,18 +156,6 @@ const config = {
     new FeelesWebpackPlugin({
       paths: ['samples/en/hello-world', 'samples/ja/hello-world'],
       output: 'en/index.json',
-      ignore: /\.DS_Store$/
-    }),
-
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: 'en/hack-rpg.html',
-      template: 'samples/en/hack-rpg.hbs',
-      production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/en/hack-rpg', 'samples/ja/hack-rpg'],
-      output: 'en/hack-rpg.json',
       ignore: /\.DS_Store$/
     }),
 
