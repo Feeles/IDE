@@ -6,7 +6,7 @@ const server = http.createServer(async (request, response) => {
   const paths = url.parse(request.url).pathname.split('/');
 
   // 現在は日本語のみサポート
-  if (paths[1] !== 'ja') {
+  if (paths[1] !== 'ja' && paths[1] !== 'h4p.js') {
     paths.splice(1, 0, 'ja');
   }
   const pathname = paths.join('/');
