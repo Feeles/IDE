@@ -18,20 +18,10 @@ function startFrameCoroutine(node, generator) {
 	});
 }
 
-const collection = [];
-
 class RPGObject extends Sprite {
-
-	// static collection = [];
-
-	static get collection() {
-		return collection;
-	}
 
 	constructor(width, height, offsetX, offsetY) {
 		super(width || 0, height || 0);
-
-		RPGObject.collection.push(this);
 
 		this.offset = {
 			x: offsetX || 0,
@@ -707,6 +697,12 @@ class RPGObject extends Sprite {
 		}
 	}
 }
+
+
+// RPGObject.collection に必要な初期化
+RPGObject._collectionTarget = [RPGObject];
+RPGObject.collection = [];
+RPGObject._collective = true;
 
 
 export default RPGObject;
