@@ -139,6 +139,123 @@
   - body: "'腐肉'"
   - body: "'クモの目'"
 
+ポーション:
+  - body: "'水入り瓶'"
+  - body: "'ありふれたポーション'"
+  - body: "'ありふれたポーション(延長)'"
+  - body: "'濃厚なポーション'"
+  - body: "'奇妙なポーション'"
+  - body: "'暗視のポーション'"
+  - body: "'暗視のポーション(延長)'"
+  - body: "'透明化のポーション'"
+  - body: "'透明化のポーション(延長)'"
+  - body: "'跳躍のポーション'"
+  - body: "'跳躍のポーション(延長)'"
+  - body: "'跳躍のポーションⅡ'"
+  - body: "'Potion of Fire Resistance'"
+  - body: "'Potion of Fire Resistance(延長)'"
+  - body: "'Potion of Swiftness'"
+  - body: "'Potion of Swiftness(延長)'"
+  - body: "'Potion of Swiftness Ⅱ 1:30'"
+  - body: "'Potion of Slowness'"
+  - body: "'Potion of Slowness(延長)'"
+  - body: "'Potion of Water Breathing'"
+  - body: "'Potion of Water Breathing(延長)'"
+  - body: "'Potion of Healing'"
+  - body: "'Potion of Healing Ⅱ'"
+  - body: "'Potion of Harming'"
+  - body: "'Potion of Harming Ⅱ'"
+  - body: "'Potion of Poison 0:45'"
+  - body: "'Potion of Poison 1:30'"
+  - body: "'Potion of Poison Ⅱ 0:22'"
+  - body: "'Potion of Regeneration 0:45'"
+  - body: "'Potion of Regeneration 1:30'"
+  - body: "'Potion of Regeneration Ⅱ 0:22'"
+  - body: "'Potion of Strength'"
+  - body: "'Potion of Strength(延長)'"
+  - body: "'Potion of Strength Ⅱ 1:30'"
+  - body: "'Potion of Weakness 1:30'"
+  - body: "'Potion of Weakness 4:00'"
+  - body: "'Potion of Decay 0:40'"
+
+スプラッシュポーション:
+  - body: "'splash_potion:0'" # Splash Water Bottle
+  - body: "'splash_potion:1'" # Splash Mundane Potion
+  - body: "'splash_potion:2'" # Splash Long Mundane Potion
+  - body: "'splash_potion:3'" # Splash Thick Potion
+  - body: "'splash_potion:4'" # Splash Awkward Potion
+  - body: "'splash_potion:5'" # Splash Potion of Night Vision 3:00
+  - body: "'splash_potion:6'" # Splash Potion of Night Vision 8:00
+  - body: "'splash_potion:7'" # Splash Potion of Invisibility 3:00
+  - body: "'splash_potion:8'" # Splash Potion of Invisibility 8:00
+  - body: "'splash_potion:9'" # Splash Potion of Leaping 3:00
+  - body: "'splash_potion:10'" # Splash Potion of Leaping 8:00
+  - body: "'splash_potion:11'" # Splash Potion of Leaping Ⅱ 1:30
+  - body: "'splash_potion:12'" # Splash Potion of Fire Resistance 3:00
+  - body: "'splash_potion:13'" # Splash Potion of Fire Resistance 8:00
+  - body: "'splash_potion:14'" # Splash Potion of Swiftness 3:00
+  - body: "'splash_potion:15'" # Splash Potion of Swiftness 8:00
+  - body: "'splash_potion:16'" # Splash Potion of Swiftness Ⅱ 1:30
+  - body: "'splash_potion:17'" # Splash Potion of Slowness 3:00
+  - body: "'splash_potion:18'" # Splash Potion of Slowness 8:00
+  - body: "'splash_potion:19'" # Splash Potion of Water Breathing 3:00
+  - body: "'splash_potion:20'" # Splash Potion of Water Breathing 8:00
+  - body: "'splash_potion:21'" # Splash Potion of Healing
+  - body: "'splash_potion:22'" # Splash Potion of Healing Ⅱ
+  - body: "'splash_potion:23'" # Splash Potion of Harming
+  - body: "'splash_potion:24'" # Splash Potion of Harming Ⅱ
+  - body: "'splash_potion:25'" # Splash Potion of Poison 0:45
+  - body: "'splash_potion:26'" # Splash Potion of Poison 1:30
+  - body: "'splash_potion:27'" # Splash Potion of Poison Ⅱ 0:22
+  - body: "'splash_potion:28'" # Splash Potion of Regeneration 0:45
+  - body: "'splash_potion:29'" # Splash Potion of Regeneration 1:30
+  - body: "'splash_potion:30'" # Splash Potion of Regeneration Ⅱ 0:22
+  - body: "'splash_potion:31'" # Splash Potion of Strength 3:00
+  - body: "'splash_potion:32'" # Splash Potion of Strength 8:00
+  - body: "'splash_potion:33'" # Splash Potion of Strength Ⅱ 1:30
+  - body: "'splash_potion:34'" # Splash Potion of Weakness 1:30
+  - body: "'splash_potion:35'" # Splash Potion of Weakness 4:00
+  - body: "'splash_potion:36'" # Splash Potion of Decay 0:40
+
+残留ポーション:
+  - body: "'lingering_potion:0'" # Lingering Water Bottle
+  - body: "'lingering_potion:1'" # Lingering Mundane Potion
+  - body: "'lingering_potion:2'" # Lingering Long Mundane Potion
+  - body: "'lingering_potion:3'" # Lingering Thick Potion
+  - body: "'lingering_potion:4'" # Lingering Awkward Potion
+  - body: "'lingering_potion:5'" # Lingering Potion of Night Vision 3:00
+  - body: "'lingering_potion:6'" # Lingering Potion of Night Vision 8:00
+  - body: "'lingering_potion:7'" # Lingering Potion of Invisibility 3:00
+  - body: "'lingering_potion:8'" # Lingering Potion of Invisibility 8:00
+  - body: "'lingering_potion:9'" # Lingering Potion of Leaping 3:00
+  - body: "'lingering_potion:10'" # Lingering Potion of Leaping 8:00
+  - body: "'lingering_potion:11'" # Lingering Potion of Leaping Ⅱ 1:30
+  - body: "'lingering_potion:12'" # Lingering Potion of Fire Resistance 3:00
+  - body: "'lingering_potion:13'" # Lingering Potion of Fire Resistance 8:00
+  - body: "'lingering_potion:14'" # Lingering Potion of Swiftness 3:00
+  - body: "'lingering_potion:15'" # Lingering Potion of Swiftness 8:00
+  - body: "'lingering_potion:16'" # Lingering Potion of Swiftness Ⅱ 1:30
+  - body: "'lingering_potion:17'" # Lingering Potion of Slowness 3:00
+  - body: "'lingering_potion:18'" # Lingering Potion of Slowness 8:00
+  - body: "'lingering_potion:19'" # Lingering Potion of Water Breathing 3:00
+  - body: "'lingering_potion:20'" # Lingering Potion of Water Breathing 8:00
+  - body: "'lingering_potion:21'" # Lingering Potion of Healing
+  - body: "'lingering_potion:22'" # Lingering Potion of Healing Ⅱ
+  - body: "'lingering_potion:23'" # Lingering Potion of Harming
+  - body: "'lingering_potion:24'" # Lingering Potion of Harming Ⅱ
+  - body: "'lingering_potion:25'" # Lingering Potion of Poison 0:45
+  - body: "'lingering_potion:26'" # Lingering Potion of Poison 1:30
+  - body: "'lingering_potion:27'" # Lingering Potion of Poison Ⅱ 0:22
+  - body: "'lingering_potion:28'" # Lingering Potion of Regeneration 0:45
+  - body: "'lingering_potion:29'" # Lingering Potion of Regeneration 1:30
+  - body: "'lingering_potion:30'" # Lingering Potion of Regeneration Ⅱ 0:22
+  - body: "'lingering_potion:31'" # Lingering Potion of Strength 3:00
+  - body: "'lingering_potion:32'" # Lingering Potion of Strength 8:00
+  - body: "'lingering_potion:33'" # Lingering Potion of Strength Ⅱ 1:30
+  - body: "'lingering_potion:34'" # Lingering Potion of Weakness 1:30
+  - body: "'lingering_potion:35'" # Lingering Potion of Weakness 4:00
+  - body: "'lingering_potion:36'" # Lingering Potion of Decay 0:40
+
 しぜん:
   - body: "'水'"
   - body: "'溶岩'"
@@ -291,7 +408,7 @@
   - body: "'ガラスビン'"
   - body: "'名札'"
   - body: "'ポートフォリオ'"
-  - body: "'ポーション'"
+  # - body: "'ポーション'"
   - body: "'ハサミ'"
   - body: "'雪玉'"
   - body: "'糸'"
