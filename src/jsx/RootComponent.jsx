@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
+import URLSearchParams from 'url-search-params';
 import { DragDropContext } from 'react-dnd';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { grey300, grey700 } from 'material-ui/styles/colors';
@@ -51,7 +52,11 @@ class RootComponent extends Component {
   componentWillMount() {
     const { title, seeds } = this.props;
 
-    this.setLocalization(...(navigator.languages || [navigator.language]));
+    const langs = []
+      .concat(new URLSearchParams(location.search).getAll('lang')) // ?lang=ll_CC
+      .concat(navigator.languages || navigator.language); // browser settings
+
+    this.setLocalization(langs);
 
     const deployInfo = document.querySelector('script[x-feeles-deploy]');
     if (deployInfo) {
@@ -160,11 +165,11 @@ class RootComponent extends Component {
     });
   }
 
-  setLocalization = (...langs) => {
-    const localization = getLocalization(...langs);
+  setLocalization = langs => {
+    const localization = getLocalization(langs);
     if (localization) {
       this.setState({ localization });
-      moment.locale(langs);
+      moment.locale(localization.ll_CC);
     } else {
       throw new TypeError(`setLocalization: Cannot parse ${langs.join()}`);
     }
@@ -220,7 +225,9 @@ class RootComponent extends Component {
           {title ? title.getAttribute('content') : document.title || '❤️'}
         </h1>
         {author &&
-          <h2 style={styles.header}>{author.getAttribute('content')}</h2>}
+          <h2 style={styles.header}>
+            {author.getAttribute('content')}
+          </h2>}
         {last < Infinity
           ? <span style={styles.count}>
               {indicator(files.length, last)}
