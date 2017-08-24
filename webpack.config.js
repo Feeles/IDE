@@ -82,12 +82,12 @@ const config = {
     new HtmlWebpackPlugin({
       inject: false,
       filename: 'ja/index.html',
-      template: 'samples/ja/hello-world.hbs',
+      template: 'templates/index.ja.hbs',
       production: process.env.NODE_ENV === 'production'
     }),
     new FeelesWebpackPlugin({
-      paths: ['samples/ja/hello-world'],
-      output: 'ja/index.json',
+      paths: ['samples/hello-world'],
+      output: 'index.json',
       ignore: /\.DS_Store$/
     }),
 
@@ -150,13 +150,8 @@ const config = {
     new HtmlWebpackPlugin({
       inject: false,
       filename: 'en/index.html',
-      template: 'samples/en/hello-world.hbs',
+      template: 'templates/index.en.hbs',
       production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/en/hello-world', 'samples/ja/hello-world'],
-      output: 'en/index.json',
-      ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
