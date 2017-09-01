@@ -174,6 +174,9 @@ export default class Main extends Component {
     if (this.props.project !== nextProps.project) {
       this.setProject(nextProps.project);
     }
+    if (this.props.localization !== nextProps.localization) {
+      this.setState({ reboot: true });
+    }
   }
 
   async componentDidUpdate(prevProps, prevState) {
