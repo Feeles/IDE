@@ -166,6 +166,7 @@ class RootComponent extends Component {
   }
 
   setLocalization = langs => {
+    langs = [].concat(langs);
     const localization = getLocalization(langs);
     if (localization) {
       this.setState({ localization });
