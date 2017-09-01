@@ -93,7 +93,7 @@ export default class Footer extends PureComponent {
   }
 
   mountTweetButton() {
-    if (window.twttr) {
+    if (window.twttr && window.twttr.widgets) {
       window.twttr.widgets.load();
     }
     /* https://dev.twitter.com/web/javascript/loading */
