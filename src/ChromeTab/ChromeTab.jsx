@@ -127,7 +127,7 @@ export default class ChromeTabs extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.file !== this.props.file) {
+    if (prevProps.file !== this.props.file && this.props.doc) {
       this.handleChange(this.props.doc);
     }
     if (prevProps.doc !== this.props.doc) {
@@ -215,11 +215,13 @@ export default class ChromeTabs extends PureComponent {
               onMouseEnter={handleRightMouseEnter}
               onMouseLeave={handleRightMouseLeave}
             >
-              {this.state.closerMouseOver
-                ? <NavigationClose color={alternateTextColor} />
-                : this.state.hasChanged
-                  ? <EditorModeEdit color={secondaryTextColor} />
-                  : <NavigationClose color={secondaryTextColor} />}
+              {this.state.closerMouseOver ? (
+                <NavigationClose color={alternateTextColor} />
+              ) : this.state.hasChanged ? (
+                <EditorModeEdit color={secondaryTextColor} />
+              ) : (
+                <NavigationClose color={secondaryTextColor} />
+              )}
             </IconButton>
           </div>
         </div>

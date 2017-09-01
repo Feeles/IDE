@@ -166,6 +166,7 @@ class RootComponent extends Component {
   }
 
   setLocalization = langs => {
+    langs = [].concat(langs);
     const localization = getLocalization(langs);
     if (localization) {
       this.setState({ localization });
@@ -224,15 +225,12 @@ class RootComponent extends Component {
         <h1 style={styles.header}>
           {title ? title.getAttribute('content') : document.title || '❤️'}
         </h1>
-        {author &&
-          <h2 style={styles.header}>
-            {author.getAttribute('content')}
-          </h2>}
-        {last < Infinity
-          ? <span style={styles.count}>
-              {indicator(files.length, last)}
-            </span>
-          : null}
+        {author && (
+          <h2 style={styles.header}>{author.getAttribute('content')}</h2>
+        )}
+        {last < Infinity ? (
+          <span style={styles.count}>{indicator(files.length, last)}</span>
+        ) : null}
         <span style={styles.header}>Made with Feeles</span>
         <LaunchDialog
           open={this.state.openDialog}
@@ -258,21 +256,23 @@ class RootComponent extends Component {
 
     return (
       <MuiThemeProvider muiTheme={this.state.muiTheme}>
-        {this.state.last > 0
-          ? this.renderLoading()
-          : <Main
-              files={this.state.files}
-              rootElement={rootElement}
-              rootStyle={getComputedStyle(rootElement)}
-              project={this.state.project}
-              launchIDE={this.launchIDE}
-              localization={this.state.localization}
-              setLocalization={this.setLocalization}
-              muiTheme={this.state.muiTheme}
-              setMuiTheme={this.setMuiTheme}
-              deployURL={this.state.deployURL}
-              setDeployURL={deployURL => this.setState({ deployURL })}
-            />}
+        {this.state.last > 0 ? (
+          this.renderLoading()
+        ) : (
+          <Main
+            files={this.state.files}
+            rootElement={rootElement}
+            rootStyle={getComputedStyle(rootElement)}
+            project={this.state.project}
+            launchIDE={this.launchIDE}
+            localization={this.state.localization}
+            setLocalization={this.setLocalization}
+            muiTheme={this.state.muiTheme}
+            setMuiTheme={this.setMuiTheme}
+            deployURL={this.state.deployURL}
+            setDeployURL={deployURL => this.setState({ deployURL })}
+          />
+        )}
       </MuiThemeProvider>
     );
   }

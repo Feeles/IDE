@@ -174,6 +174,9 @@ export default class Main extends Component {
     if (this.props.project !== nextProps.project) {
       this.setProject(nextProps.project);
     }
+    if (this.props.localization !== nextProps.localization) {
+      this.setState({ reboot: true });
+    }
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -592,14 +595,8 @@ export default class Main extends Component {
           setConfig={this.setConfig}
           globalEvent={this.state.globalEvent}
         />
-        <style>
-          {codemirrorStyle(this.context.muiTheme)}
-        </style>
-        {userStyle
-          ? <style>
-              {userStyle.text}
-            </style>
-          : null}
+        <style>{codemirrorStyle(this.context.muiTheme)}</style>
+        {userStyle ? <style>{userStyle.text}</style> : null}
         <Snackbar
           open={this.state.notice !== null}
           message=""
