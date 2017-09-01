@@ -127,7 +127,7 @@ export default class ChromeTabs extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.file !== this.props.file) {
+    if (prevProps.file !== this.props.file && this.props.doc) {
       this.handleChange(this.props.doc);
     }
     if (prevProps.doc !== this.props.doc) {
