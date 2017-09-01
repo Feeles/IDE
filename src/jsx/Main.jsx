@@ -592,14 +592,8 @@ export default class Main extends Component {
           setConfig={this.setConfig}
           globalEvent={this.state.globalEvent}
         />
-        <style>
-          {codemirrorStyle(this.context.muiTheme)}
-        </style>
-        {userStyle
-          ? <style>
-              {userStyle.text}
-            </style>
-          : null}
+        <style>{codemirrorStyle(this.context.muiTheme)}</style>
+        {userStyle ? <style>{userStyle.text}</style> : null}
         <Snackbar
           open={this.state.notice !== null}
           message=""
