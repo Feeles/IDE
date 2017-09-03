@@ -46,7 +46,8 @@ class RootComponent extends Component {
     muiTheme: getCustomTheme({}),
     openDialog: false,
     // continuous deploying URL (if null, do first deployment)
-    deployURL: null
+    deployURL: null,
+    errorText: null
   };
 
   componentWillMount() {
@@ -88,7 +89,9 @@ class RootComponent extends Component {
   launchIDE = async ({ id, title }) => {
     if (!id && !title) {
       // Required unique title of project to proxy it
-      throw new Error(this.state.localization.cloneDialog.titleIsRequired);
+      const { titleIsRequired } = this.state.localization.cloneDialog;
+      this.setState({ errorText: titleIsRequired });
+      console.error(titleIsRequired);
     }
 
     const { project, query, length } = await (id
@@ -124,12 +127,34 @@ class RootComponent extends Component {
 
   launchFromURL = async url => {
     // from json file URL
-    const response = await fetch(url);
-    const text = await response.text();
-    const seeds = JSON.parse(text);
+    let text;
+    try {
+      const response = await fetch(url);
+      text = await response.text();
+    } catch (e) {
+      this.setState({ errorText: e.message });
+      console.error(e);
+      return;
+    }
+
+    let seeds = [];
+    try {
+      seeds = JSON.parse(text);
+    } catch (e) {
+      console.log(text);
+      const errorText = `${url} is not valid JSON. Check the text in console.`;
+      console.error(errorText);
+      this.setState({ errorText });
+      return;
+    }
 
     if (!Array.isArray(seeds)) {
-      throw 'Source JSON file must be an array. Could not open the URL.';
+      console.log(seeds);
+      const errorText =
+        'Source JSON file must be an array. Check the value in cosole.';
+      console.error(errorText);
+      this.setState({ errorText });
+      return;
     }
 
     this.setState({
@@ -187,7 +212,7 @@ class RootComponent extends Component {
     });
 
   renderLoading = () => {
-    const { last, files } = this.state;
+    const { last, files, errorText } = this.state;
 
     const styles = {
       root: {
@@ -203,6 +228,9 @@ class RootComponent extends Component {
         fontWeight: 100,
         color: 'white',
         fontFamily: '"Apple Chancery", cursive'
+      },
+      errorText: {
+        color: 'red'
       },
       count: {
         color: grey700,
@@ -225,6 +253,7 @@ class RootComponent extends Component {
         <h1 style={styles.header}>
           {title ? title.getAttribute('content') : document.title || '❤️'}
         </h1>
+        {errorText && <span style={styles.errorText}>{errorText}</span>}
         {author && (
           <h2 style={styles.header}>{author.getAttribute('content')}</h2>
         )}
