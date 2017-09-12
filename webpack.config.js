@@ -72,7 +72,7 @@ const config = {
 
     new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
 
-    new OpenBrowserPlugin({ url: `http://localhost:${port}/ja/make-rpg.html` }),
+    new OpenBrowserPlugin({ url: `http://localhost:${port}/ja/mc.html` }),
 
     new HappyPack({
       loaders: ['babel-loader?cacheDirectory']
@@ -88,18 +88,6 @@ const config = {
     new FeelesWebpackPlugin({
       paths: ['samples/hello-world'],
       output: 'index.json',
-      ignore: /\.DS_Store$/
-    }),
-
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: 'ja/make-rpg.html',
-      template: 'samples/ja/make-rpg.hbs',
-      production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/ja/make-rpg'],
-      output: 'ja/make-rpg.json',
       ignore: /\.DS_Store$/
     }),
 
@@ -152,18 +140,6 @@ const config = {
       filename: 'en/index.html',
       template: 'templates/index.en.hbs',
       production: process.env.NODE_ENV === 'production'
-    }),
-
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: 'en/make-rpg.html',
-      template: 'samples/en/make-rpg.hbs',
-      production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/en/make-rpg', 'samples/ja/make-rpg'],
-      output: 'en/make-rpg.json',
-      ignore: /\.DS_Store$/
     }),
 
     new HtmlWebpackPlugin({
