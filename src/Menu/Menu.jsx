@@ -146,6 +146,27 @@ export default class Menu extends PureComponent {
     return `${origin}/p/${pathname.split('/').reverse()[0]}`;
   }
 
+  get filesForPublishing() {
+    // i18n 設定の固定:
+    // 1. i18n/ll_CC/ 以下のファイルを取得
+    const prefix = `i18n/${this.props.localization.ll_CC}/`;
+    const currentLocales = this.props.files.filter(file =>
+      file.name.startsWith(prefix)
+    );
+
+    // 2. i18n/ 以下のファイルをすべて削除し、
+    const withoutI18n = this.props.files.filter(
+      file => !file.name.startsWith('i18n/')
+    );
+
+    // 3. i18n/ll_CC/ 以下のファイルをルートに追加する
+    const intoRoot = currentLocales.map(file => {
+      const [, name] = file.name.split(prefix);
+      return file.set({ name });
+    });
+    return withoutI18n.concat(intoRoot);
+  }
+
   handleClone = () => {
     this.props.openFileDialog(CloneDialog, {
       coreString: this.props.coreString,
@@ -180,7 +201,7 @@ export default class Menu extends PureComponent {
 
     try {
       const composed = await Promise.all(
-        this.props.files.map(item => item.collect())
+        this.filesForPublishing.map(item => item.collect())
       );
 
       // isUpdate の場合は PUT products/:search, そうでない場合は POST products
