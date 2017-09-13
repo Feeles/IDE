@@ -340,17 +340,17 @@ export default class Menu extends PureComponent {
 
     const title =
       this.props.project &&
-      (this.props.project.title
-        ? <div style={styles.projectName}>
-            {this.props.project.title}
-          </div>
-        : <FlatButton
-            label={localization.cloneDialog.setTitle}
-            labelStyle={{
-              color: alternateTextColor
-            }}
-            onTouchTap={this.handleClone}
-          />);
+      (this.props.project.title ? (
+        <div style={styles.projectName}>{this.props.project.title}</div>
+      ) : (
+        <FlatButton
+          label={localization.cloneDialog.setTitle}
+          labelStyle={{
+            color: alternateTextColor
+          }}
+          onTouchTap={this.handleClone}
+        />
+      ));
 
     // showAll なときは Huberger Menu,
     // そうでないときは Home Button
@@ -386,109 +386,111 @@ export default class Menu extends PureComponent {
             {visits.getAttribute('x-feeles-visits')}
             PV
           </div>} */}
-        {this.props.showAll
-          ? <IconButton
-              tooltip={localization.menu.clone}
-              disabled={!this.props.coreString}
-              onTouchTap={this.handleClone}
-              style={styles.button}
-            >
-              <FileDownload color={alternateTextColor} />
-            </IconButton>
-          : null}
-        {this.state.isDeploying
-          ? <CircularProgress
-              size={24}
-              style={styles.progress}
-              color={alternateTextColor}
-            />
-          : null}
-        {!this.state.isDeploying && this.props.showAll
-          ? <IconMenu
-              iconButtonElement={
-                <IconButton tooltip={localization.menu.you}>
-                  <ActionAccountCircle color={alternateTextColor} />
-                </IconButton>
-              }
-              anchorOrigin={{
-                horizontal: 'right',
-                vertical: 'top'
-              }}
-              targetOrigin={{
-                horizontal: 'right',
-                vertical: 'bottom'
-              }}
-              style={styles.button}
-            >
-              {isLoggedin
-                ? null
-                : <MenuItem
-                    primaryText={localization.menu.deployAnonymous}
+        {this.props.showAll ? (
+          <IconButton
+            tooltip={localization.menu.clone}
+            disabled={!this.props.coreString}
+            onTouchTap={this.handleClone}
+            style={styles.button}
+          >
+            <FileDownload color={alternateTextColor} />
+          </IconButton>
+        ) : null}
+        {this.state.isDeploying ? (
+          <CircularProgress
+            size={24}
+            style={styles.progress}
+            color={alternateTextColor}
+          />
+        ) : null}
+        {!this.state.isDeploying && this.props.showAll ? (
+          <IconMenu
+            iconButtonElement={
+              <IconButton tooltip={localization.menu.you}>
+                <ActionAccountCircle color={alternateTextColor} />
+              </IconButton>
+            }
+            anchorOrigin={{
+              horizontal: 'right',
+              vertical: 'top'
+            }}
+            targetOrigin={{
+              horizontal: 'right',
+              vertical: 'bottom'
+            }}
+            style={styles.button}
+          >
+            {isLoggedin ? null : (
+              <MenuItem
+                primaryText={localization.menu.deployAnonymous}
+                leftIcon={<FileCloudUpload />}
+                onTouchTap={() => this.handleDeploy(false, false)}
+              />
+            )}
+            {isLoggedin ? (
+              <MenuItem
+                primaryText={localization.menu.deploySelf}
+                rightIcon={<ArrowDropRight />}
+                menuItems={[
+                  <MenuItem
+                    primaryText={localization.menu.update}
+                    disabled={!this.props.deployURL}
+                    leftIcon={<ActionAutorenew />}
+                    onTouchTap={() => this.handleDeploy(true, true)}
+                  />,
+                  <MenuItem
+                    primaryText={localization.menu.create}
                     leftIcon={<FileCloudUpload />}
-                    onTouchTap={() => this.handleDeploy(false, false)}
-                  />}
-              {isLoggedin
-                ? <MenuItem
-                    primaryText={localization.menu.deploySelf}
-                    rightIcon={<ArrowDropRight />}
-                    menuItems={[
-                      <MenuItem
-                        primaryText={localization.menu.update}
-                        disabled={!this.props.deployURL}
-                        leftIcon={<ActionAutorenew />}
-                        onTouchTap={() => this.handleDeploy(true, true)}
-                      />,
-                      <MenuItem
-                        primaryText={localization.menu.create}
-                        leftIcon={<FileCloudUpload />}
-                        onTouchTap={() => this.handleDeploy(true, false)}
-                      />
-                    ]}
+                    onTouchTap={() => this.handleDeploy(true, false)}
                   />
-                : <MenuItem
-                    primaryText={localization.menu.login}
-                    disabled={isLoggedin}
-                    leftIcon={<ActionAccountCircle />}
-                    rightIcon={<ArrowDropRight />}
-                    menuItems={[
-                      <HoverMenuItem
-                        primaryText={localization.menu.withTwitter}
-                        leftIcon={<TwitterIcon />}
-                        style={styles.twitter}
-                        onTouchTap={() =>
-                          this.handleLoginWithOAuth(organization.api.twitter)}
-                      />,
-                      <HoverMenuItem
-                        primaryText={localization.menu.withLine}
-                        leftIcon={<LineIcon />}
-                        style={styles.line}
-                        onTouchTap={() =>
-                          this.handleLoginWithOAuth(organization.api.line)}
-                      />,
-                      <HoverMenuItem
-                        primaryText={localization.menu.withFacebook}
-                        leftIcon={<FacebookIcon />}
-                        style={styles.facebook}
-                        onTouchTap={() =>
-                          this.handleLoginWithOAuth(organization.api.facebook)}
-                      />,
-                      <HoverMenuItem
-                        primaryText={localization.menu.withGoogle}
-                        leftIcon={<GoogleIcon />}
-                        style={styles.google}
-                        onTouchTap={() =>
-                          this.handleLoginWithOAuth(organization.api.google)}
-                      />
-                    ]}
-                  />}
-              {isLoggedin
-                ? <MenuItem
-                    primaryText={localization.menu.logout}
-                    onTouchTap={this.handleLogout}
+                ]}
+              />
+            ) : (
+              <MenuItem
+                primaryText={localization.menu.login}
+                disabled={isLoggedin}
+                leftIcon={<ActionAccountCircle />}
+                rightIcon={<ArrowDropRight />}
+                menuItems={[
+                  <HoverMenuItem
+                    primaryText={localization.menu.withTwitter}
+                    leftIcon={<TwitterIcon />}
+                    style={styles.twitter}
+                    onTouchTap={() =>
+                      this.handleLoginWithOAuth(organization.api.twitter)}
+                  />,
+                  <HoverMenuItem
+                    primaryText={localization.menu.withLine}
+                    leftIcon={<LineIcon />}
+                    style={styles.line}
+                    onTouchTap={() =>
+                      this.handleLoginWithOAuth(organization.api.line)}
+                  />,
+                  <HoverMenuItem
+                    primaryText={localization.menu.withFacebook}
+                    leftIcon={<FacebookIcon />}
+                    style={styles.facebook}
+                    onTouchTap={() =>
+                      this.handleLoginWithOAuth(organization.api.facebook)}
+                  />,
+                  <HoverMenuItem
+                    primaryText={localization.menu.withGoogle}
+                    leftIcon={<GoogleIcon />}
+                    style={styles.google}
+                    onTouchTap={() =>
+                      this.handleLoginWithOAuth(organization.api.google)}
                   />
-                : null}
-            </IconMenu>
-          : null}
+                ]}
+              />
+            )}
+            {isLoggedin ? (
+              <MenuItem
+                primaryText={localization.menu.logout}
+                onTouchTap={this.handleLogout}
+              />
+            ) : null}
+          </IconMenu>
+        ) : null}
         <IconMenu
           iconButtonElement={
             <IconButton tooltip={localization.menu.language}>
@@ -505,13 +507,13 @@ export default class Menu extends PureComponent {
           }}
           style={styles.button}
         >
-          {acceptedLanguages.map(lang =>
+          {acceptedLanguages.map(lang => (
             <MenuItem
               key={lang.accept[0]}
               primaryText={lang.native}
               onTouchTap={() => setLocalization(lang.accept[0])}
             />
-          )}
+          ))}
         </IconMenu>
         <Drawer
           open={this.state.open}
@@ -526,30 +528,28 @@ export default class Menu extends PureComponent {
             }
             onLeftIconButtonTouchTap={this.handleToggleDrawer}
           />
-          {this.state.open
-            ? Object.entries(this.props.cards)
-                .map(([name, card]) => ({
-                  name,
-                  ...card
-                }))
-                .map(item =>
-                  <MenuItem
-                    key={item.name}
-                    primaryText={
-                      localization[lowerCaseAtFirst(item.name)].title
-                    }
-                    leftIcon={
-                      this.props.cardIcons && this.props.cardIcons[item.name]
-                        ? this.props.cardIcons[item.name]()
-                        : null
-                    }
-                    onTouchTap={() => {
-                      this.props.updateCard(item.name, { visible: true });
-                      this.handleToggleDrawer();
-                    }}
-                  />
-                )
-            : null}
+          {this.state.open ? (
+            Object.entries(this.props.cards)
+              .map(([name, card]) => ({
+                name,
+                ...card
+              }))
+              .map(item => (
+                <MenuItem
+                  key={item.name}
+                  primaryText={localization[lowerCaseAtFirst(item.name)].title}
+                  leftIcon={
+                    this.props.cardIcons && this.props.cardIcons[item.name] ? (
+                      this.props.cardIcons[item.name]()
+                    ) : null
+                  }
+                  onTouchTap={() => {
+                    this.props.updateCard(item.name, { visible: true });
+                    this.handleToggleDrawer();
+                  }}
+                />
+              ))
+          ) : null}
           <MenuItem
             primaryText={localization.menu.version}
             leftIcon={<ActionHistory />}
