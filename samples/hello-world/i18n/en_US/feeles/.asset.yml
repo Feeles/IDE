@@ -1,0 +1,4 @@
+Asset:
+  - label: Log
+    code: |
+      console.log(('▼ Dropdown', 'hoge'));

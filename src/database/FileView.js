@@ -64,6 +64,7 @@ export default class FileView {
   updateIndex() {
     // files が変更されていればあらたにインデックス
     if (!this._changed) return;
+    this._changed = false;
 
     this.pathToFileMap = new Map();
     this.extToFilesMap = new Map();
@@ -100,6 +101,12 @@ export default class FileView {
         append(virtualPath.join('/'), file);
       }
     }
+  }
+
+  forceUpdate() {
+    const fileView = new FileView(this.files);
+    fileView.install(this.component);
+    return this.component.setStatePromise({ fileView });
   }
 
   /**
