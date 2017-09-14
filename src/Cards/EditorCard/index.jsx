@@ -38,6 +38,7 @@ const getStyles = (props, context) => {
 
 export default class EditorCard extends PureComponent {
   static propTypes = {
+    fileView: PropTypes.object.isRequired,
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     tabs: PropTypes.array.isRequired,
@@ -240,6 +241,7 @@ export default class EditorCard extends PureComponent {
         </div>
         <div style={styles.tabContentContainer}>
           <SourceEditor
+            fileView={this.props.fileView}
             file={selectedTab.file}
             files={this.props.files}
             getFiles={this.getFiles}

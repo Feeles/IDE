@@ -439,6 +439,7 @@ export default class Main extends Component {
     const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
+      fileView: this.state.fileView,
       files: this.state.fileView.files,
       localization,
       getConfig: this.getConfig,

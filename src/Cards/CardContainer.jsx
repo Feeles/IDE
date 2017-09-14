@@ -16,6 +16,7 @@ import * as MonitorTypes from 'utils/MonitorTypes';
 
 export default class CardContainer extends PureComponent {
   static propTypes = {
+    fileView: PropTypes.object.isRequired,
     cards: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
@@ -135,6 +136,7 @@ export default class CardContainer extends PureComponent {
     });
 
     const commonProps = {
+      fileView: this.props.fileView,
       files: this.props.files,
       localization: this.props.localization,
       getConfig: this.props.getConfig,

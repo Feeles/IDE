@@ -79,6 +79,7 @@ const prevFiles = new WeakMap();
 
 export default class SourceEditor extends PureComponent {
   static propTypes = {
+    fileView: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     getFiles: PropTypes.func.isRequired,
@@ -567,6 +568,7 @@ export default class SourceEditor extends PureComponent {
           : null}
         <div style={styles.editorContainer}>
           <AssetPane
+            fileView={this.props.fileView}
             open={!!this.state.assetScope}
             scope={this.state.assetScope}
             loadConfig={this.props.loadConfig}

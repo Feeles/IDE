@@ -8,12 +8,12 @@ import AssetButton from './AssetButton';
 
 export default class AssetPane extends PureComponent {
   static propTypes = {
+    fileView: PropTypes.object.isRequired,
     open: PropTypes.bool.isRequired,
     scope: PropTypes.string,
     loadConfig: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
     handleAssetInsert: PropTypes.func.isRequired,
-    files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
   };
@@ -33,7 +33,7 @@ export default class AssetPane extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps.files) {
+    if (this.props.fileView !== nextProps.fileView) {
       this.setState({
         assets: this.props.loadConfig('asset')
       });
