@@ -424,7 +424,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   beautify = () => {
-    const { file, findFile } = this.props;
+    const { file, fileView } = this.props;
     const prevValue = this.codemirror.getValue();
     const setValueWithoutHistory = replacement => {
       // undo => beautify => setValue することで history を 1 つに
@@ -435,8 +435,15 @@ export default class SourceEditor extends PureComponent {
     };
 
     // import .jsbeautifyrc
-    const runCommand = findFile(f => f.name.endsWith('.jsbeautifyrc'));
-    const configs = runCommand ? tryParseJSON(runCommand.text) : {};
+    let configs = {};
+    try {
+      const runCommand = fileView.getFileByFullPath('.jsbeautifyrc');
+      if (runCommand) {
+        configs = JSON.parse(runCommand.text);
+      }
+    } catch (error) {
+      console.error(error);
+    }
 
     if (file.is('javascript') || file.is('json')) {
       setValueWithoutHistory(beautify(prevValue, configs.js || {}));
