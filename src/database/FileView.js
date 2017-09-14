@@ -22,8 +22,13 @@ export default class FileView {
     component.deleteFile = this.deleteFile.bind(this);
   }
 
+  uninstall() {
+    this.component = null;
+  }
+
   setState({ files }) {
     if (!files) throw 'Cannot set other than files';
+    if (!this.component) throw 'Component is not been set';
     const fileView = new FileView(files);
     fileView.install(this.component);
     return this.component.setStatePromise({ fileView });

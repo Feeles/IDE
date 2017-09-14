@@ -232,6 +232,10 @@ export default class Main extends Component {
     document.title = this.getConfig('ogp')['og:title'] || '';
   }
 
+  componentWillUnmount() {
+    this.state.fileView.uninstall();
+  }
+
   async setStatePromise(state) {
     return new Promise((resolve, reject) => {
       this.setState(state, resolve);
