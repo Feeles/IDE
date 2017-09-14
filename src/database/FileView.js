@@ -9,6 +9,7 @@ import { putFile, deleteFile } from './';
 export default class FileView {
   constructor(files) {
     this.files = files;
+    this._changed = true; // files 変更フラグ
   }
 
   install(component) {
@@ -28,6 +29,7 @@ export default class FileView {
   }
 
   setState({ files }) {
+    this._changed = true; // Index するフラグ
     if (!files) throw 'Cannot set other than files';
     if (!this.component) throw 'Component is not been set';
     const fileView = new FileView(files);
@@ -36,7 +38,52 @@ export default class FileView {
   }
 
   /**
-   * ファイルを検索して取得する
+   * Map を用いてファイル名をインデックス
+   * files が変わったら適宜呼び出す
+   */
+  updateIndex() {
+    // files が変更されていればあらたにインデックス
+    if (!this._changed) return;
+
+    this.pathToFileMap = new Map();
+    this.extToFilesMap = new Map();
+
+    const append = (name, file) => {
+      // name => File
+      this.pathToFileMap.set(name, file);
+      // extention => File
+      const [, ...extArray] = name.split('.');
+      if (!extArray.length) return;
+      const ext = extArray.join('.');
+      if (this.extToFilesMap.has(ext)) {
+        const files = this.extToFilesMap.get(ext);
+        this.extToFilesMap.set(ext, files.concat(file));
+      } else {
+        this.extToFilesMap.set(ext, [file]);
+      }
+    };
+
+    // i18n 以外
+    const i18n = [];
+    for (const file of this.files) {
+      if (!file.name.startsWith('i18n/')) {
+        append(file.name, file);
+      } else {
+        i18n.push(file);
+      }
+    }
+    // i18n/{ll_CC} を追加
+    const { ll_CC } = this.component.props.localization;
+    for (const file of i18n) {
+      const [, locale, ...virtualPath] = file.name.split('/');
+      if (locale === ll_CC) {
+        append(virtualPath.join('/'), file);
+      }
+    }
+  }
+
+  /**
+   * ファイルを検索して取得する (後方互換性)
    * @param {String|Function} name ファイル名
    * @param {Boolean} multiple 全件取得フラグ
    */
