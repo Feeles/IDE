@@ -12,3 +12,5 @@ export {
   /* Users */
   getPrimaryUser
 } from './personalDB';
+
+export { default as FileView } from './FileView';
