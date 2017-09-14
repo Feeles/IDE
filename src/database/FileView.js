@@ -102,6 +102,11 @@ export default class FileView {
     }
   }
 
+  forceUpdate() {
+    this._changed = true;
+    this.updateIndex();
+  }
+
   /**
    * ファイルを検索して取得する (後方互換性)
    * @param {String|Function} name ファイル名

@@ -152,6 +152,7 @@ export default class Main extends Component {
       this.setProject(nextProps.project);
     }
     if (this.props.localization !== nextProps.localization) {
+      this.state.fileView.forceUpdate();
       this.setState({ reboot: true });
     }
   }
@@ -281,15 +282,15 @@ export default class Main extends Component {
   };
 
   loadConfig = ext => {
-    const json = `.${ext}.json`;
-    const yaml = `.${ext}.yml`;
+    const json = `${ext}.json`;
+    const yaml = `${ext}.yml`;
     const values = [].concat(
-      this.findFile(item => item.name.endsWith(json), true).map(file =>
-        tryParseJSON(file.text, {})
-      ),
-      this.findFile(item => item.name.endsWith(yaml), true).map(file =>
-        tryParseYAML(file.text, {})
-      )
+      this.state.fileView
+        .getFilesByExtention(json)
+        .map(file => tryParseJSON(file.text, {})),
+      this.state.fileView
+        .getFilesByExtention(yaml)
+        .map(file => tryParseYAML(file.text, {}))
     );
     return Object.assign({}, ...values);
   };
