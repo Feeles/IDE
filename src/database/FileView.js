@@ -38,6 +38,26 @@ export default class FileView {
   }
 
   /**
+   * ファイルパスでファイルを取得
+   * @param {String} path 取得したいファイルのパス
+   * @return {SourceFile|BinalyFile|null} ファイルまたは null
+   */
+  getFileByFullPath(path) {
+    this.updateIndex();
+    return this.pathToFileMap.get(path);
+  }
+
+  /**
+   * 任意の拡張子をもつすべてのファイルを取得
+   * @param {String} ext 取得したいファイルのパス
+   * @return {Array<SourceFile|BinalyFile>} ファイルの配列
+   */
+  getFilesByExtention(ext) {
+    this.updateIndex();
+    return this.extToFilesMap.get(ext) || [];
+  }
+
+  /**
    * Map を用いてファイル名をインデックス
    * files が変わったら適宜呼び出す
    */
