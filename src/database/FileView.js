@@ -20,6 +20,7 @@ export default class FileView {
     component.addFile = this.addFile.bind(this);
     component.putFile = this.putFile.bind(this);
     component.deleteFile = this.deleteFile.bind(this);
+    component.findFile = this.findFile.bind(this);
   }
 
   uninstall() {
@@ -32,6 +33,31 @@ export default class FileView {
     const fileView = new FileView(files);
     fileView.install(this.component);
     return this.component.setStatePromise({ fileView });
+  }
+
+  /**
+   * ファイルを検索して取得する
+   * @param {String|Function} name ファイル名
+   * @param {Boolean} multiple 全件取得フラグ
+   */
+  findFile(name, multiple = false) {
+    if (typeof name === 'string') {
+      name = name.replace(/^(\.\/|\/)*/, '');
+    }
+    const i18nName = `i18n/${this.component.props.localization.ll_CC}/${name}`;
+    const pred =
+      typeof name === 'function'
+        ? name
+        : file =>
+            !file.options.isTrashed &&
+            // 言語設定による動的ファイルパス解決
+            (file.name === i18nName ||
+              file.moduleName === i18nName ||
+              // 通常のファイルパス解決
+              file.name === name ||
+              file.moduleName === name);
+
+    return multiple ? this.files.filter(pred) : this.files.find(pred) || null;
   }
 
   /**

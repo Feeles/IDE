@@ -113,27 +113,6 @@ export default class Main extends Component {
     return parseInt(this.props.rootStyle.height, 10);
   }
 
-  findFile = (name, multiple = false) => {
-    const { files } = this.state.fileView;
-    if (typeof name === 'string') {
-      name = name.replace(/^(\.\/|\/)*/, '');
-    }
-    const i18nName = `i18n/${this.props.localization.ll_CC}/${name}`;
-    const pred =
-      typeof name === 'function'
-        ? name
-        : file =>
-            !file.options.isTrashed &&
-            // 言語設定による動的ファイルパス解決
-            (file.name === i18nName ||
-              file.moduleName === i18nName ||
-              // 通常のファイルパス解決
-              file.name === name ||
-              file.moduleName === name);
-
-    return multiple ? files.filter(pred) : files.find(pred) || null;
-  };
-
   componentWillMount() {
     // 互換性保持のため、 fileView に外から setState させる
     this.state.fileView.install(this);
