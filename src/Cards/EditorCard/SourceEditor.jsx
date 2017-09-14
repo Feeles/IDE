@@ -7,24 +7,6 @@ import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-b
 import ContentSave from 'material-ui/svg-icons/content/save';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
-import jsyaml from 'js-yaml';
-const tryParseYAML = (text, defaultValue = {}) => {
-  try {
-    return jsyaml.safeLoad(text);
-  } catch (e) {
-    console.error(e);
-    return defaultValue;
-  }
-};
-const tryParseJSON = (text, defaultValue = {}) => {
-  try {
-    return JSON.parse(text);
-  } catch (e) {
-    console.error(e);
-    return defaultValue;
-  }
-};
-
 import ga from 'utils/google-analytics';
 import Editor from './Editor';
 import CreditBar from './CreditBar';
@@ -147,21 +129,6 @@ export default class SourceEditor extends PureComponent {
       this.handleUpdateWidget(this.codemirror);
       this.handleRenderWidget(this.codemirror);
     }
-  }
-
-  get assets() {
-    if (this.state.assetFileName) {
-      const file = this.props.findFile(this.state.assetFileName);
-      if (file) {
-        // TODO: File クラスで value を取り出せるよう抽象化
-        if (file.is('yaml')) {
-          return tryParseYAML(file.text, []);
-        } else {
-          return tryParseJSON(file.text, []);
-        }
-      }
-    }
-    return [];
   }
 
   handleSave = async () => {
