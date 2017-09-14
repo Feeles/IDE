@@ -114,17 +114,17 @@ export default class SourceEditor extends PureComponent {
 
   componentWillMount() {
     this.setState({
-      snippets: this.props.getConfig('snippets')(this.props.file)
+      snippets: this.props.getConfig('snippets')(this.props.file),
+      dropdowns: this.props.loadConfig('dropdown')
     });
-    this.loadDropdownConfig();
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      snippets: nextProps.getConfig('snippets')(nextProps.file)
-    });
-    if (this.props.files !== nextProps.files) {
-      this.loadDropdownConfig();
+    if (this.props.fileView !== nextProps.fileView) {
+      this.setState({
+        snippets: nextProps.getConfig('snippets')(nextProps.file),
+        dropdowns: this.props.loadConfig('dropdown')
+      });
     }
   }
 
@@ -454,22 +454,6 @@ export default class SourceEditor extends PureComponent {
 
   handleRun = () => {
     this.setLocation();
-  };
-
-  loadDropdownConfig = () => {
-    const items = [{}].concat(
-      this.props
-        .findFile(item => item.name.endsWith('.dropdown.yml'), true)
-        .map(item => item.text)
-        .map(text => tryParseYAML(text, {})),
-      this.props
-        .findFile(item => item.name.endsWith('.dropdown.json'), true)
-        .map(item => item.text)
-        .map(text => tryParseJSON(text, {}))
-    );
-    this.setState({
-      dropdowns: Object.assign.apply(null, items)
-    });
   };
 
   beautify = () => {
