@@ -27,12 +27,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-import {
-  createProject,
-  updateProject,
-  putFile,
-  deleteFile
-} from '../database/';
+import { FileView, createProject, updateProject } from '../database/';
 import { SourceFile, configs } from 'File/';
 import codemirrorStyle from 'js/codemirrorStyle';
 import * as MonitorTypes from 'utils/MonitorTypes';
@@ -87,7 +82,7 @@ export default class Main extends Component {
   state = {
     monitorType: MonitorTypes.Card,
 
-    files: this.props.files,
+    fileView: new FileView(this.props.files),
     reboot: false,
     href: 'index.html',
 
@@ -118,28 +113,10 @@ export default class Main extends Component {
     return parseInt(this.props.rootStyle.height, 10);
   }
 
-  findFile = (name, multiple = false) => {
-    const { files } = this.state;
-    if (typeof name === 'string') {
-      name = name.replace(/^(\.\/|\/)*/, '');
-    }
-    const i18nName = `i18n/${this.props.localization.ll_CC}/${name}`;
-    const pred =
-      typeof name === 'function'
-        ? name
-        : file =>
-            !file.options.isTrashed &&
-            // 言語設定による動的ファイルパス解決
-            (file.name === i18nName ||
-              file.moduleName === i18nName ||
-              // 通常のファイルパス解決
-              file.name === name ||
-              file.moduleName === name);
-
-    return multiple ? files.filter(pred) : files.find(pred) || null;
-  };
-
   componentWillMount() {
+    // 互換性保持のため、 fileView に外から setState させる
+    this.state.fileView.install(this);
+
     const feelesrc = this.loadConfig('feelesrc');
     this.props.setMuiTheme(feelesrc);
 
@@ -186,7 +163,7 @@ export default class Main extends Component {
       this.setState({ reboot: false });
     }
     // 未オートセーブでファイルが更新されたとき、あらたにセーブデータを作る
-    if (!this.state.project && prevState.files !== this.state.files) {
+    if (!this.state.project && prevState.fileView !== this.state.fileView) {
       if (process.env.NODE_ENV !== 'production') {
         // development のときは自動で作られない
         return;
@@ -194,7 +171,7 @@ export default class Main extends Component {
       // Create new project
       try {
         const project = await createProject(
-          this.state.files.map(item => item.serialize())
+          this.state.fileView.files.map(item => item.serialize())
         );
         // add deployURL if exists
         const { deployURL } = this.props;
@@ -219,7 +196,7 @@ export default class Main extends Component {
           onActionTouchTap: () => {
             this.openFileDialog(CloneDialog, {
               coreString: this.state.coreString,
-              files: this.state.files,
+              files: this.state.fileView.files,
               saveAs: this.saveAs,
               project: this.state.project,
               setProject: this.setProject,
@@ -234,60 +211,15 @@ export default class Main extends Component {
     document.title = this.getConfig('ogp')['og:title'] || '';
   }
 
+  componentWillUnmount() {
+    this.state.fileView.uninstall();
+  }
+
   async setStatePromise(state) {
     return new Promise((resolve, reject) => {
       this.setState(state, resolve);
     });
   }
-
-  addFile = async file => {
-    const timestamp = file.lastModified || Date.now();
-    const remove = this.inspection(file);
-    if (file === remove) {
-      return file;
-    }
-    const files = this.state.files.concat(file).filter(item => item !== remove);
-
-    await this.setStatePromise({ files });
-    this.resetConfig(file.name);
-
-    if (this.state.project) {
-      await putFile(this.state.project.id, file.serialize());
-    }
-    return file;
-  };
-
-  putFile = async (prevFile, nextFile) => {
-    const timestamp = nextFile.lastModified || Date.now();
-    const remove = this.inspection(nextFile);
-    if (remove === nextFile) {
-      return prevFile;
-    }
-    const files = this.state.files
-      .filter(item => item !== remove && item.key !== prevFile.key)
-      .concat(nextFile);
-
-    await this.setStatePromise({ files });
-    this.resetConfig(prevFile.name);
-
-    if (this.state.project) {
-      await putFile(this.state.project.id, nextFile.serialize());
-    }
-    return nextFile;
-  };
-
-  deleteFile = async (...targets) => {
-    const timestamp = Date.now();
-
-    const keys = targets.map(item => item.key);
-    const files = this.state.files.filter(item => !keys.includes(item.key));
-    await this.setStatePromise({ files });
-
-    if (this.state.project) {
-      const fileNames = targets.map(item => item.name);
-      await deleteFile(this.state.project.id, ...fileNames);
-    }
-  };
 
   _configs = new Map();
   getConfig = key => {
@@ -441,27 +373,6 @@ export default class Main extends Component {
     }
   };
 
-  inspection = newFile => {
-    const conflict = this.state.files.find(
-      file =>
-        !file.options.isTrashed &&
-        file.key !== newFile.key &&
-        file.name === newFile.name
-    );
-
-    if (conflict) {
-      // TODO: FileDialog instead of.
-      console.log(newFile);
-      if (confirm(this.props.localization.common.conflict)) {
-        return conflict;
-      } else {
-        return newFile;
-      }
-    }
-
-    return null;
-  };
-
   setProject = project =>
     this.setStatePromise({
       project
@@ -527,7 +438,7 @@ export default class Main extends Component {
     const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
-      files: this.state.files,
+      files: this.state.fileView.files,
       localization,
       getConfig: this.getConfig,
       setConfig: this.setConfig,
