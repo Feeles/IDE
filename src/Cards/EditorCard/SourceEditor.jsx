@@ -1,15 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { DropTarget } from 'react-dnd';
 import CodeMirror from 'codemirror';
 import FlatButton from 'material-ui/FlatButton';
-import Paper from 'material-ui/Paper';
-import IconButton from 'material-ui/IconButton';
 import LinearProgress from 'material-ui/LinearProgress';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
-import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import jsyaml from 'js-yaml';
@@ -35,11 +30,10 @@ import Editor from './Editor';
 import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
 import AssetPane from './AssetPane';
-import AssetButton from './AssetButton';
 import ErrorPane from './ErrorPane';
 
 const getStyle = (props, state, context) => {
-  const { palette, transitions } = context.muiTheme;
+  const { palette } = context.muiTheme;
 
   return {
     root: {
@@ -193,6 +187,7 @@ export default class SourceEditor extends PureComponent {
     const babelrc = this.props.getConfig('babelrc');
     file.babel(babelrc).catch(e => {
       this.props.selectTabFromFile(file);
+      console.error(e);
     });
 
     this.setState({ loading: false });
@@ -205,10 +200,11 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleUpdateWidget = cm => {
-    const { paper, palette } = this.context.muiTheme;
-
     this._widgets.clear();
-    for (const [line, text] of cm.getValue('\n').split('\n').entries()) {
+    for (const [line, text] of cm
+      .getValue('\n')
+      .split('\n')
+      .entries()) {
       this.updateWidget(cm, line, text);
     }
   };
@@ -217,7 +213,7 @@ export default class SourceEditor extends PureComponent {
     // Syntax: /*+ モンスター アイテム */
     const asset = /^(.*)(\/\*)(\+[^\*]+)(\*\/)/.exec(text);
     if (asset) {
-      const [_all, _prefix, _left, _label, _right] = asset.map(t =>
+      const [, _prefix, _left, _label, _right] = asset.map(t =>
         t.replace(/\t/g, '    ')
       );
       const prefix = document.createElement('span');
@@ -255,7 +251,7 @@ export default class SourceEditor extends PureComponent {
       text
     );
     if (dropdown) {
-      const [_all, _prefix, _label, _right, _value] = dropdown;
+      const [, _prefix, _label, _right, _value] = dropdown;
       const label = document.createElement('span');
       label.textContent = _label;
       label.classList.add('Feeles-dropdown-label');
@@ -285,7 +281,7 @@ export default class SourceEditor extends PureComponent {
       parent.appendChild(shadow);
 
       const pos = { line, ch: _prefix.length };
-      const { left, top } = this.codemirror.charCoords(pos, 'local');
+      const { left } = this.codemirror.charCoords(pos, 'local');
       parent.style.transform = `translate(${left - 4}px, -20px)`;
 
       this._widgets.set(line, parent);
@@ -378,7 +374,7 @@ export default class SourceEditor extends PureComponent {
     return this.props.setLocation(href);
   };
 
-  handleAssetInsert = ({ code, description }) => {
+  handleAssetInsert = ({ code }) => {
     const { assetLineNumber } = this.state;
     const pos = new Pos(assetLineNumber, 0);
     const end = new Pos(pos.line + code.split('\n').length, 0);
@@ -507,12 +503,12 @@ export default class SourceEditor extends PureComponent {
   }
 
   render() {
-    const { file, getConfig, findFile, localization, href } = this.props;
+    const { file, localization } = this.props;
     const { showHint } = this.state;
 
     const styles = getStyle(this.props, this.state, this.context);
 
-    const snippets = getConfig('snippets')(file);
+    // const snippets = this.props.getConfig('snippets')(file);
 
     const extraKeys = {
       'Ctrl-Enter': this.handleRun,
@@ -560,19 +556,18 @@ export default class SourceEditor extends PureComponent {
             localization={this.props.localization}
           />
         </div>
-        {this.state.loading
-          ? <LinearProgress
-              color={styles.progressColor}
-              style={styles.progress}
-            />
-          : null}
+        {this.state.loading ? (
+          <LinearProgress
+            color={styles.progressColor}
+            style={styles.progress}
+          />
+        ) : null}
         <div style={styles.editorContainer}>
           <AssetPane
             fileView={this.props.fileView}
             open={!!this.state.assetScope}
             scope={this.state.assetScope}
             loadConfig={this.props.loadConfig}
-            files={this.props.files}
             findFile={this.props.findFile}
             handleClose={this.handleAssetClose}
             handleAssetInsert={this.handleAssetInsert}

@@ -46,10 +46,8 @@ export default class AssetPane extends PureComponent {
 
     return (
       <div key={label} style={{ ...styles.wrapper }}>
-        <div style={{ ...styles.label }}>
-          {label}
-        </div>
-        {items.map((item, i) =>
+        <div style={{ ...styles.label }}>{label}</div>
+        {items.map((item, i) => (
           <AssetButton
             {...item}
             key={i}
@@ -57,7 +55,7 @@ export default class AssetPane extends PureComponent {
             findFile={this.props.findFile}
             localization={this.props.localization}
           />
-        )}
+        ))}
       </div>
     );
   }
