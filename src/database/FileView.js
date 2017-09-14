@@ -40,7 +40,7 @@ export default class FileView {
    */
   async addFile(file) {
     const timestamp = file.lastModified || Date.now();
-    const remove = this.component.inspection(file);
+    const remove = this.inspection(file);
     if (file === remove) {
       return file;
     }
@@ -62,7 +62,7 @@ export default class FileView {
    */
   async putFile(prevFile, nextFile) {
     const timestamp = nextFile.lastModified || Date.now();
-    const remove = this.component.inspection(nextFile);
+    const remove = this.inspection(nextFile);
     if (remove === nextFile) {
       return prevFile;
     }
@@ -94,5 +94,31 @@ export default class FileView {
       const fileNames = targets.map(item => item.name);
       await deleteFile(this.component.state.project.id, ...fileNames);
     }
+  }
+
+  /**
+   * ファイル名の衝突をしらべる. TODO: FileDialog で実現すべき
+   * https://trello.com/c/Y4CbIH81/244-conflict-%E3%81%AF%E3%83%80%E3%82%A4%E3%82%A2%E3%83%AD%E3%82%B0%E3%81%AE%E3%81%A8%E3%81%93%E3%82%8D%E3%81%A7%E5%88%A4%E5%AE%9A%E3%81%99%E3%82%8B-filestore-%E3%81%A7%E3%81%AF%E7%84%A1%E8%A6%96
+   * @param {Array<SourceFile|BinalyFile>} newFile 追加予定のファイル
+   */
+  inspection(newFile) {
+    const conflict = this.files.find(
+      file =>
+        !file.options.isTrashed &&
+        file.key !== newFile.key &&
+        file.name === newFile.name
+    );
+
+    if (conflict) {
+      // TODO: FileDialog instead of.
+      console.log(newFile);
+      if (confirm(this.component.props.localization.common.conflict)) {
+        return conflict;
+      } else {
+        return newFile;
+      }
+    }
+
+    return null;
   }
 }

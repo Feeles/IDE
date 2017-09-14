@@ -394,27 +394,6 @@ export default class Main extends Component {
     }
   };
 
-  inspection = newFile => {
-    const conflict = this.state.fileView.files.find(
-      file =>
-        !file.options.isTrashed &&
-        file.key !== newFile.key &&
-        file.name === newFile.name
-    );
-
-    if (conflict) {
-      // TODO: FileDialog instead of.
-      console.log(newFile);
-      if (confirm(this.props.localization.common.conflict)) {
-        return conflict;
-      } else {
-        return newFile;
-      }
-    }
-
-    return null;
-  };
-
   setProject = project =>
     this.setStatePromise({
       project
