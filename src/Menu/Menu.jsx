@@ -24,7 +24,6 @@ import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-di
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import TwitterIcon from 'utils/TwitterIcon';
-import LineIcon from 'utils/LineIcon';
 import FacebookIcon from 'utils/FacebookIcon';
 import GoogleIcon from 'utils/GoogleIcon';
 
@@ -458,13 +457,6 @@ export default class Menu extends PureComponent {
                     style={styles.twitter}
                     onTouchTap={() =>
                       this.handleLoginWithOAuth(organization.api.twitter)}
-                  />,
-                  <HoverMenuItem
-                    primaryText={localization.menu.withLine}
-                    leftIcon={<LineIcon />}
-                    style={styles.line}
-                    onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.line)}
                   />,
                   <HoverMenuItem
                     primaryText={localization.menu.withFacebook}
