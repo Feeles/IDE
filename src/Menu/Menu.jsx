@@ -24,7 +24,6 @@ import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-di
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import TwitterIcon from 'utils/TwitterIcon';
-import LineIcon from 'utils/LineIcon';
 import FacebookIcon from 'utils/FacebookIcon';
 import GoogleIcon from 'utils/GoogleIcon';
 
@@ -453,18 +452,11 @@ export default class Menu extends PureComponent {
                 rightIcon={<ArrowDropRight />}
                 menuItems={[
                   <HoverMenuItem
-                    primaryText={localization.menu.withTwitter}
-                    leftIcon={<TwitterIcon />}
-                    style={styles.twitter}
+                    primaryText={localization.menu.withGoogle}
+                    leftIcon={<GoogleIcon />}
+                    style={styles.google}
                     onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.twitter)}
-                  />,
-                  <HoverMenuItem
-                    primaryText={localization.menu.withLine}
-                    leftIcon={<LineIcon />}
-                    style={styles.line}
-                    onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.line)}
+                      this.handleLoginWithOAuth(organization.api.google)}
                   />,
                   <HoverMenuItem
                     primaryText={localization.menu.withFacebook}
@@ -474,11 +466,11 @@ export default class Menu extends PureComponent {
                       this.handleLoginWithOAuth(organization.api.facebook)}
                   />,
                   <HoverMenuItem
-                    primaryText={localization.menu.withGoogle}
-                    leftIcon={<GoogleIcon />}
-                    style={styles.google}
+                    primaryText={localization.menu.withTwitter}
+                    leftIcon={<TwitterIcon />}
+                    style={styles.twitter}
                     onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.google)}
+                      this.handleLoginWithOAuth(organization.api.twitter)}
                   />
                 ]}
               />
@@ -528,28 +520,30 @@ export default class Menu extends PureComponent {
             }
             onLeftIconButtonTouchTap={this.handleToggleDrawer}
           />
-          {this.state.open ? (
-            Object.entries(this.props.cards)
-              .map(([name, card]) => ({
-                name,
-                ...card
-              }))
-              .map(item => (
-                <MenuItem
-                  key={item.name}
-                  primaryText={localization[lowerCaseAtFirst(item.name)].title}
-                  leftIcon={
-                    this.props.cardIcons && this.props.cardIcons[item.name] ? (
-                      this.props.cardIcons[item.name]()
-                    ) : null
-                  }
-                  onTouchTap={() => {
-                    this.props.updateCard(item.name, { visible: true });
-                    this.handleToggleDrawer();
-                  }}
-                />
-              ))
-          ) : null}
+          {this.state.open
+            ? Object.entries(this.props.cards)
+                .map(([name, card]) => ({
+                  name,
+                  ...card
+                }))
+                .map(item => (
+                  <MenuItem
+                    key={item.name}
+                    primaryText={
+                      localization[lowerCaseAtFirst(item.name)].title
+                    }
+                    leftIcon={
+                      this.props.cardIcons && this.props.cardIcons[item.name]
+                        ? this.props.cardIcons[item.name]()
+                        : null
+                    }
+                    onTouchTap={() => {
+                      this.props.updateCard(item.name, { visible: true });
+                      this.handleToggleDrawer();
+                    }}
+                  />
+                ))
+            : null}
           <MenuItem
             primaryText={localization.menu.version}
             leftIcon={<ActionHistory />}

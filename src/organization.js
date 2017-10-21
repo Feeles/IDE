@@ -26,7 +26,6 @@ export default {
     deploy: `${origin}/api/v1/products`,
     thumbnail: `${origin}/api/v1/thumbnails`,
     twitter: `${origin}/oauths/twitter`,
-    line: `${origin}/oauths/line`,
     facebook: `${origin}/oauths/facebook`,
     google: `${origin}/oauths/google`
   }
