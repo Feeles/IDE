@@ -66,6 +66,7 @@ export default class ShotPane extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     file: PropTypes.object,
     completes: PropTypes.array,
     globalEvent: PropTypes.object.isRequired
@@ -153,17 +154,20 @@ export default class ShotPane extends PureComponent {
   };
 
   render() {
-    const { localization, getConfig } = this.props;
+    const { localization, getConfig, loadConfig } = this.props;
     const styles = getStyle(this.props, this.context, this.state);
+    // TODO: Enter で実行か Shift-Enter で実行か
+    const { sendCodeOnEnter } = loadConfig('feelesrc');
+    const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter';
     const extraKeys = {
-      Enter: this.shoot
+      [shootKey]: this.shoot
     };
 
     return (
       <div>
-        {this.state.error
-          ? <pre style={styles.error}>{this.state.error.message}</pre>
-          : null}
+        {this.state.error ? (
+          <pre style={styles.error}>{this.state.error.message}</pre>
+        ) : null}
         {this.state.loading ? <LinearProgress /> : null}
         <div style={styles.editor}>
           <Editor

@@ -1,2 +1,3 @@
-homeURL: https://www.feeles.com
+homeURL: 'https://www.feeles.com'
 kitIdentifier: com.feeles.hello-world
+sendCodeOnEnter: true
