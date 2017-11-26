@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
@@ -56,6 +55,9 @@ const getStyle = (props, context, state) => {
       color: red500,
       fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
       overflow: 'scroll'
+    },
+    restore: {
+      margin: 4
     }
   };
 };
@@ -66,6 +68,7 @@ export default class ShotPane extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     file: PropTypes.object,
     completes: PropTypes.array,
     globalEvent: PropTypes.object.isRequired
@@ -153,17 +156,20 @@ export default class ShotPane extends PureComponent {
   };
 
   render() {
-    const { localization, getConfig } = this.props;
+    const { localization, getConfig, loadConfig } = this.props;
     const styles = getStyle(this.props, this.context, this.state);
+    // TODO: Enter で実行か Shift-Enter で実行か
+    const { sendCodeOnEnter } = loadConfig('feelesrc');
+    const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter';
     const extraKeys = {
-      Enter: this.shoot
+      [shootKey]: this.shoot
     };
 
     return (
       <div>
-        {this.state.error
-          ? <pre style={styles.error}>{this.state.error.message}</pre>
-          : null}
+        {this.state.error ? (
+          <pre style={styles.error}>{this.state.error.message}</pre>
+        ) : null}
         {this.state.loading ? <LinearProgress /> : null}
         <div style={styles.editor}>
           <Editor
@@ -190,10 +196,11 @@ export default class ShotPane extends PureComponent {
           />
           <span style={styles.label}>{localization.shotCard.shoot}</span>
           <div style={{ flex: 1 }} />
-          <FlatButton
+          <RaisedButton
             secondary
             label={localization.shotCard.restore}
             onTouchTap={this.handleRestore}
+            style={styles.restore}
             disabled={!this.state.canRestore}
           />
         </div>

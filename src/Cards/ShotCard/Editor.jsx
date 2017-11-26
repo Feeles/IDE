@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import beautify from 'js-beautify';
+// import beautify from 'js-beautify';
 import { JSHINT } from 'jshint';
 
 import CodeMirror from 'codemirror';
@@ -67,7 +67,7 @@ export default class Editor extends PureComponent {
     jshintrc: null
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     if (this.props.file === nextProps.file) {
       return false;
     }
@@ -102,7 +102,7 @@ export default class Editor extends PureComponent {
     if (!this.props.showHint) {
       return;
     }
-    const { getFiles, getConfig } = this.props;
+    const { getFiles } = this.props;
 
     cm.on('change', (_cm, change) => {
       if (change.origin === 'setValue' || change.origin === 'complete') return;
@@ -117,7 +117,7 @@ export default class Editor extends PureComponent {
   }
 
   render() {
-    const { file, getConfig, lineNumbers } = this.props;
+    const { file, lineNumbers } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const mode = meta && meta.mode;

@@ -15,6 +15,7 @@ export default class ShotCard extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
@@ -67,6 +68,7 @@ export default class ShotCard extends PureComponent {
               findFile={this.props.findFile}
               localization={this.props.localization}
               getConfig={this.props.getConfig}
+              loadConfig={this.props.loadConfig}
               globalEvent={this.props.globalEvent}
             />
           : null}
