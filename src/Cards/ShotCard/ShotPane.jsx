@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
@@ -56,6 +55,9 @@ const getStyle = (props, context, state) => {
       color: red500,
       fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
       overflow: 'scroll'
+    },
+    restore: {
+      margin: 4
     }
   };
 };
@@ -194,10 +196,11 @@ export default class ShotPane extends PureComponent {
           />
           <span style={styles.label}>{localization.shotCard.shoot}</span>
           <div style={{ flex: 1 }} />
-          <FlatButton
+          <RaisedButton
             secondary
             label={localization.shotCard.restore}
             onTouchTap={this.handleRestore}
+            style={styles.restore}
             disabled={!this.state.canRestore}
           />
         </div>
