@@ -34,6 +34,7 @@ export default class CodeMirrorComponent extends PureComponent {
     dragDrop: false,
     extraKeys: {},
     readOnly: false,
+    foldGutter: false,
     onDocChanged: () => {}
   };
 
