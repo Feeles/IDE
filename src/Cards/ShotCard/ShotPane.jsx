@@ -13,6 +13,13 @@ import excessiveCare from './excessiveCare';
 const getStyle = (props, context, state) => {
   const { palette, spacing, transitions, prepareStyles } = context.muiTheme;
   const { shooting, height } = state;
+  // TODO: ちゃんと実装する. 実際には Footer の状態でかわる
+  const maxEditorHeight = window.innerHeight - 200;
+
+  const editorHeight = Math.min(
+    height + spacing.desktopGutterMore,
+    maxEditorHeight
+  );
 
   return {
     root: {
@@ -23,8 +30,7 @@ const getStyle = (props, context, state) => {
       position: 'relative',
       boxSizing: 'border-box',
       width: '100%',
-      height: height + spacing.desktopGutterMore,
-      maxHeight: '100%',
+      height: editorHeight,
       transform: `translate(${shooting ? '-500px' : 0})`,
       opacity: shooting ? 0 : 1,
       transition: transitions.easeOut()
