@@ -45,6 +45,7 @@ export default class MonitorCard extends PureComponent {
     showAll: PropTypes.bool.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
@@ -132,16 +133,22 @@ export default class MonitorCard extends PureComponent {
     }
 
     const sizeValue = this.state.frameWidth + by + this.state.frameHeight;
-    const { localization, showAll } = this.props;
+    const { localization, showAll, loadConfig } = this.props;
+    const feelesrc = loadConfig('feelesrc');
 
     const actions = [
-      <IconButton key="refresh" onTouchTap={() => this.props.setLocation()}>
+      <IconButton
+        key="refresh"
+        disabled={feelesrc.disableReloadButton}
+        onTouchTap={() => this.props.setLocation()}
+      >
         <NavigationRefresh
           color={this.context.muiTheme.palette.primary1Color}
         />
       </IconButton>,
       <IconButton
         key="fullscreen"
+        disabled={feelesrc.disableFullScreenButton}
         onTouchTap={() => this.props.toggleFullScreen()}
       >
         <NavigationFullscreen />
