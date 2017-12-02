@@ -1,5 +1,6 @@
 homeURL: 'https://www.feeles.com'
 kitIdentifier: com.feeles.hello-world
 sendCodeOnEnter: false
+formatOnSendCode: true
 disableReloadButton: true
 disableFullScreenButton: true
