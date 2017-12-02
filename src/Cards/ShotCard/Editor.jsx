@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-// import beautify from 'js-beautify';
 import { JSHINT } from 'jshint';
 
 import CodeMirror from 'codemirror';

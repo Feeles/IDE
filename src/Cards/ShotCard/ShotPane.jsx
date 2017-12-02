@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import beautify from 'js-beautify';
 import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
@@ -142,9 +143,17 @@ export default class ShotPane extends PureComponent {
   };
 
   async handleShot() {
-    const text = this.codeMirror
+    let text = this.codeMirror
       ? this.codeMirror.getValue('\n')
       : this.state.file.text;
+
+    // コードのフォーマット
+    if (this.props.loadConfig('feelesrc').formatOnSendCode || false) {
+      const formatted = beautify(text);
+      this.codeMirror.setValue(formatted);
+    }
+
+    // コードをファイルにする
     const name = this.state.file.name;
     const file = SourceFile.shot(text, name);
     // frame に shot をおくる
