@@ -123,7 +123,8 @@ export default class Menu extends PureComponent {
     oAuthId: PropTypes.string,
     setOAuthId: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
-    toggleShowAll: PropTypes.func.isRequired
+    toggleShowAll: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -131,6 +132,7 @@ export default class Menu extends PureComponent {
   };
 
   state = {
+    overrideTitle: null,
     open: false,
     isDeploying: false,
     notice: null
@@ -324,6 +326,14 @@ export default class Menu extends PureComponent {
     }
   };
 
+  handleSetTitle = event => {
+    this.setState({ overrideTitle: event.data.value });
+  };
+
+  componentDidMount() {
+    this.props.globalEvent.on('message.menuTitle', this.handleSetTitle);
+  }
+
   render() {
     const { localization, setLocalization, getConfig } = this.props;
 
@@ -365,7 +375,7 @@ export default class Menu extends PureComponent {
 
     return (
       <AppBar
-        title={title}
+        title={this.state.overrideTitle || title}
         style={styles.root}
         titleStyle={{ flex: null }}
         iconElementLeft={leftIcon}
@@ -456,21 +466,24 @@ export default class Menu extends PureComponent {
                     leftIcon={<GoogleIcon />}
                     style={styles.google}
                     onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.google)}
+                      this.handleLoginWithOAuth(organization.api.google)
+                    }
                   />,
                   <HoverMenuItem
                     primaryText={localization.menu.withFacebook}
                     leftIcon={<FacebookIcon />}
                     style={styles.facebook}
                     onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.facebook)}
+                      this.handleLoginWithOAuth(organization.api.facebook)
+                    }
                   />,
                   <HoverMenuItem
                     primaryText={localization.menu.withTwitter}
                     leftIcon={<TwitterIcon />}
                     style={styles.twitter}
                     onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.twitter)}
+                      this.handleLoginWithOAuth(organization.api.twitter)
+                    }
                   />
                 ]}
               />
