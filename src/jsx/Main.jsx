@@ -284,13 +284,20 @@ export default class Main extends Component {
   loadConfig = ext => {
     const json = `${ext}.json`;
     const yaml = `${ext}.yml`;
+    // TODO: オブジェクト（ハッシュ）以外も使えるようにする
     const values = [].concat(
+      // .json (JSON)
       this.state.fileView
         .getFilesByExtention(json)
         .map(file => tryParseJSON(file.text, {})),
+      // .yml (YAML)
       this.state.fileView
         .getFilesByExtention(yaml)
-        .map(file => tryParseYAML(file.text, {}))
+        .map(file => tryParseYAML(file.text, {})),
+      // .(ext) (JSON)
+      this.state.fileView
+        .getFilesByExtention(ext)
+        .map(file => tryParseJSON(file.text, {}))
     );
     return Object.assign({}, ...values);
   };
