@@ -1,5 +1,3 @@
-import message from 'message';
-
-document.body.innerHTML = message;
+import './preload';
 
 /*+ Asset */

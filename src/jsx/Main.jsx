@@ -473,6 +473,7 @@ export default class Main extends Component {
           showAll={this.state.showAll}
           toggleShowAll={this.toggleShowAll}
           cardIcons={this.state.cardIcons}
+          globalEvent={this.state.globalEvent}
         />
         <CardContainer
           {...commonProps}
