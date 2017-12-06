@@ -149,7 +149,9 @@ export default class ShotPane extends PureComponent {
 
     // コードのフォーマット
     if (this.props.loadConfig('feelesrc').formatOnSendCode || false) {
-      const formatted = beautify(text);
+      // import .jsbeautifyrc
+      let configs = this.props.loadConfig('jsbeautifyrc');
+      const formatted = beautify(text, configs.js || {});
       this.codeMirror.setValue(formatted);
     }
 
