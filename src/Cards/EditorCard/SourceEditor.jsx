@@ -154,6 +154,9 @@ export default class SourceEditor extends PureComponent {
     const babelrc = this.props.getConfig('babelrc');
     file.babel(babelrc).catch(e => {
       this.props.selectTabFromFile(file);
+      // あらたな Babel Error が発生したときを検知して,
+      // ダイアログを表示させる (エラーの詳細は file.error を参照する)
+      this.forceUpdate(); // 再描画
       console.error(e);
     });
 
