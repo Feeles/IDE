@@ -10,7 +10,6 @@ import Drawer from 'material-ui/Drawer';
 import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Toggle from 'material-ui/Toggle';
-import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
@@ -20,14 +19,12 @@ import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
-import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import TwitterIcon from 'utils/TwitterIcon';
 import FacebookIcon from 'utils/FacebookIcon';
 import GoogleIcon from 'utils/GoogleIcon';
 
-import { BinaryFile, SourceFile } from 'File/';
 import { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
@@ -340,16 +337,12 @@ export default class Menu extends PureComponent {
   }
 
   render() {
-    const { localization, setLocalization, getConfig } = this.props;
+    const { localization, setLocalization } = this.props;
 
     const styles = getStyles(this.props, this.context);
 
-    const {
-      prepareStyles,
-      palette: { alternateTextColor }
-    } = this.context.muiTheme;
+    const { palette: { alternateTextColor } } = this.context.muiTheme;
 
-    const visits = document.querySelector('script[x-feeles-visits]');
     const isLoggedin = this.props.oAuthId !== null;
 
     const title =

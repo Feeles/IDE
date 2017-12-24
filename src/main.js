@@ -2,7 +2,7 @@
 import init from './jsx/init';
 import { default as Feeles } from './jsx/RootComponent';
 
-const hasLoaded = new Promise((resolve, reject) => {
+const hasLoaded = new Promise(resolve => {
   if (document.readyState === 'complete') {
     resolve();
   } else {
