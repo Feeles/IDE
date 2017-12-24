@@ -76,7 +76,9 @@ textarea {
   margin: -1px -2px -1px -4px;
   padding: 1px 2px 1px 4px;
   color: transparent;
+  /* CSS hacking */
   box-shadow: 0 0 0 100em ${palette.primary1Color};
+  filter: drop-shadow(0 0 30px transparent);
 }
 div.CodeMirror.CodeMirror-focused .Feeles-asset,
 div.CodeMirror.CodeMirror-focused .Feeles-dropdown-button {
