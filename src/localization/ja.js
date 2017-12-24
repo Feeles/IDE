@@ -5,7 +5,7 @@ export default {
 
   menu: {
     language: '言語',
-    clone: 'セーブ ロード クローン',
+    clone: 'セーブ ロード',
     aboutFeeles: 'この Feeles について',
     upload: '作品を公開',
     deploySelf: 'このアカウントで作品を公開',
@@ -38,8 +38,6 @@ export default {
     saveHeader: 'ブラウザにデータを保存する',
     loadTitle: 'ロード',
     loadHeader: 'ブラウザからデータを読み込む',
-    cloneTitle: 'クローン',
-    cloneHeader: 'クローンしてデスクトップに保存する',
     overwriteSave: '上書きして保存',
     saveInNew: '新しいスロットに保存',
     remove: '削除',
@@ -48,9 +46,6 @@ export default {
     created: '作成日時',
     updated: '更新日時',
     size: 'データサイズ',
-    embed: 'すべて１つのHTMLファイルにまとめる',
-    divide: 'HTMLファイルとライブラリで分ける',
-    cdn: 'ライブラリをインターネットから取得する',
     project: 'プロジェクトを JSON で書き出す',
     save: '保存する',
     cancel: 'キャンセル',
@@ -59,14 +54,16 @@ export default {
     saveAll: 'どちらも保存する',
     failedToSave: 'アプリの保存に失敗しました',
     failedToRemove: 'アプリの削除に失敗しました',
-    failedToOpenTab: 'ポップアップがブロックされたため、アプリの読み込みに失敗しました',
+    failedToOpenTab:
+      'ポップアップがブロックされたため、アプリの読み込みに失敗しました',
     failedToRename: '同じタイトルのプロジェクトを二つ作ることはできません',
     titleIsRequired: 'プロジェクトにはタイトルを必ずつけてください',
     autoSaved: 'オートセーブされています',
     setTitle: 'タイトルをつけてください'
   },
   saveDialog: {
-    title: 'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',
+    title:
+      'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',
     description: filename =>
       `上のリンクを右クリックして、「別名でダウンロード」をクリックし、「${filename}」という名前をつけて保存して下さい`,
     cancel: 'キャンセル'

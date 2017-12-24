@@ -5,7 +5,7 @@ export default {
 
   menu: {
     language: 'Launguage',
-    clone: 'Save, Load and Clone',
+    clone: 'Save and Load',
     aboutFeeles: 'About Feeles',
     upload: 'Upload',
     deploySelf: 'Publish with your account',
@@ -38,8 +38,6 @@ export default {
     saveHeader: 'Save to the browser',
     loadTitle: 'Load',
     loadHeader: 'Load from the browser',
-    cloneTitle: 'Clone',
-    cloneHeader: 'Clone to the desktop',
     overwriteSave: 'Overwrite Save',
     saveInNew: 'Save in New Slot',
     remove: 'Remove',
@@ -48,9 +46,6 @@ export default {
     created: 'Creation date and time',
     updated: 'Update date and time',
     size: 'Data size',
-    embed: 'All in one HTML file',
-    divide: 'Separate by HTML file and library',
-    cdn: 'Get the library from the internet',
     project: 'Export project as JSON',
     save: 'Save',
     cancel: 'Cancel',
