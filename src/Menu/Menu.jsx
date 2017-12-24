@@ -38,6 +38,15 @@ import debugWindow from 'utils/debugWindow';
 import open from 'utils/open';
 import ga from 'utils/google-analytics';
 
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
+
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
 
