@@ -1,5 +1,5 @@
 import { separate, validateType } from './';
-import babelWorker from '../workers/babel-worker';
+import babelFile from './babelFile';
 
 export default class _File {
   static defaultProps = {};
@@ -141,7 +141,7 @@ export default class _File {
       this.constructor._babelConfig = config;
     }
 
-    const promise = babelWorker(this, config).catch(err => {
+    const promise = babelFile(this, config).catch(err => {
       _babelError.set(this, err);
       throw err;
     });

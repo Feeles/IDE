@@ -1,4 +1,8 @@
 {
   "presets": [["es2015", { "modules": false }], "stage-3", "react"],
-  "plugins": ["transform-runtime", "transform-class-properties"]
+  "plugins": [
+    "transform-runtime",
+    "transform-class-properties",
+    "dynamic-import-webpack"
+  ]
 }
