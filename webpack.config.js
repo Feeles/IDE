@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FeelesWebpackPlugin = require('./feeles-webpack-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const HappyPack = require('happypack');
+const VersioningWebpackPlugin = require('./versioning-webpack-plugin');
 
 const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p';
 const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__';
@@ -13,7 +14,7 @@ const port = process.env.PORT || 8081;
 
 const config = {
   entry: {
-    main: [
+    h4p: [
       'normalize.css',
       'animate.css',
       'whatwg-fetch',
@@ -71,10 +72,8 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName),
-      ENTRY_POINT_DEV: JSON.stringify(`http://localhost:${port}`),
       'process.env.ROLLBAR': JSON.stringify(process.env.ROLLBAR),
       'process.env.GA_TRACKING_ID': JSON.stringify(process.env.GA_TRACKING_ID)
     }),
@@ -203,14 +202,17 @@ const config = {
 if (process.env.NODE_ENV !== 'production') {
   // for Development:
   config.devtool = 'eval';
-  // entry point in Development
-  config.entry.h4p = ['whatwg-fetch', 'entry-point-dev'];
 } else {
   config.devtool = 'source-map';
   config.plugins.push(
     // https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b
     new webpack.optimize.ModuleConcatenationPlugin()
   );
+}
+
+// Upload to Azure Blob Storage
+if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
+  config.plugins.push(new VersioningWebpackPlugin());
 }
 
 module.exports = async () => {

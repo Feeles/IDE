@@ -10,7 +10,6 @@ import Drawer from 'material-ui/Drawer';
 import Snackbar from 'material-ui/Snackbar';
 import CircularProgress from 'material-ui/CircularProgress';
 import Toggle from 'material-ui/Toggle';
-import PowerSettingsNew from 'material-ui/svg-icons/action/power-settings-new';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import FileCloudUpload from 'material-ui/svg-icons/file/cloud-upload';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
@@ -20,14 +19,12 @@ import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import ActionHome from 'material-ui/svg-icons/action/home';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
-import NotificationSyncDisabled from 'material-ui/svg-icons/notification/sync-disabled';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import TwitterIcon from 'utils/TwitterIcon';
 import FacebookIcon from 'utils/FacebookIcon';
 import GoogleIcon from 'utils/GoogleIcon';
 
-import { BinaryFile, SourceFile } from 'File/';
 import { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
@@ -37,6 +34,15 @@ import organization from 'organization';
 import debugWindow from 'utils/debugWindow';
 import open from 'utils/open';
 import ga from 'utils/google-analytics';
+
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -112,8 +118,6 @@ export default class Menu extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
-    coreString: PropTypes.string,
-    saveAs: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
     updateCard: PropTypes.func.isRequired,
@@ -170,9 +174,7 @@ export default class Menu extends PureComponent {
 
   handleClone = () => {
     this.props.openFileDialog(CloneDialog, {
-      coreString: this.props.coreString,
       files: this.props.files,
-      saveAs: this.props.saveAs,
       project: this.props.project,
       setProject: this.props.setProject,
       launchIDE: this.props.launchIDE,
@@ -335,16 +337,12 @@ export default class Menu extends PureComponent {
   }
 
   render() {
-    const { localization, setLocalization, getConfig } = this.props;
+    const { localization, setLocalization } = this.props;
 
     const styles = getStyles(this.props, this.context);
 
-    const {
-      prepareStyles,
-      palette: { alternateTextColor }
-    } = this.context.muiTheme;
+    const { palette: { alternateTextColor } } = this.context.muiTheme;
 
-    const visits = document.querySelector('script[x-feeles-visits]');
     const isLoggedin = this.props.oAuthId !== null;
 
     const title =
@@ -398,7 +396,6 @@ export default class Menu extends PureComponent {
         {this.props.showAll ? (
           <IconButton
             tooltip={localization.menu.clone}
-            disabled={!this.props.coreString}
             onTouchTap={this.handleClone}
             style={styles.button}
           >

@@ -1,12 +1,8 @@
-/*global CORE_VERSION CSS_PREFIX CORE_CDN_URL INLINE_SCRIPT_ID*/
-import React from 'react';
 import md5 from 'md5';
 import { parse } from './JSON6';
 
 import _File from './_File';
 import configs from './configs';
-import download from 'html/download';
-import composeOgp from './composeOgp';
 import { encode, decode } from './sanitizeHTML';
 
 export default class SourceFile extends _File {
@@ -130,84 +126,6 @@ export default class SourceFile extends _File {
 
   static shot(text, name = '') {
     return new SourceFile({ type: 'text/javascript', name, text });
-  }
-
-  static coreLibFilename = `feeles-${CORE_VERSION}.js`;
-
-  static async embed({ files, coreString, getConfig, deployURL }) {
-    const body = `
-    <script
-      type="text/javascript"
-      id=${INLINE_SCRIPT_ID}
-      x-feeles-launch=","
-      ${deployURL ? `x-feeles-deploy=${deployURL}` : ''}
-    >
-    ${coreString.replace(/\<\//g, '<\\/')}
-    </script>
-`;
-    return new SourceFile({
-      name: (getConfig('ogp')['og:title'] || 'index') + '.html',
-      type: 'text/html',
-      text: download({
-        CSS_PREFIX,
-        title: getConfig('ogp')['og:title'],
-        files: await Promise.all(files.map(file => file.compose())),
-        ogp: composeOgp(getConfig),
-        body
-      })
-    });
-  }
-
-  static async divide({ files, getConfig, deployURL }) {
-    const head = `
-    <script
-      async
-      src="${SourceFile.coreLibFilename}"
-      x-feeles-launch=","
-      ${deployURL ? `x-feeles-deploy=${deployURL}` : ''}
-    ></script>
-`;
-    return new SourceFile({
-      name: (getConfig('ogp')['og:title'] || 'index') + '.html',
-      type: 'text/html',
-      text: download({
-        CSS_PREFIX,
-        title: getConfig('ogp')['og:title'],
-        files: await Promise.all(files.map(file => file.compose())),
-        ogp: composeOgp(getConfig),
-        head
-      })
-    });
-  }
-
-  static async cdn({ files, src = CORE_CDN_URL, getConfig, deployURL }) {
-    const head = `
-    <script
-      async
-      src="${src}"
-      x-feeles-launch=" , "
-      ${deployURL ? `x-feeles-deploy=${deployURL}` : ''}
-    ></script>
-`;
-    return new SourceFile({
-      name: (getConfig('ogp')['og:title'] || 'index') + '.html',
-      type: 'text/html',
-      text: download({
-        CSS_PREFIX,
-        title: getConfig('ogp')['og:title'],
-        files: await Promise.all(files.map(file => file.compose())),
-        ogp: composeOgp(getConfig),
-        head
-      })
-    });
-  }
-
-  static async library({ coreString }) {
-    return new SourceFile({
-      name: SourceFile.coreLibFilename,
-      type: 'text/javascript',
-      text: coreString
-    });
   }
 
   static html() {
