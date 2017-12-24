@@ -4,18 +4,17 @@
   "description": "The hackable and serializable IDE to make learning material",
   "main": "dist/h4p.js",
   "scripts": {
-    "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline",
-    "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js -p && node_modules/webpack/bin/webpack.js -p --config feeles.config.js",
+    "start":
+      "node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline",
+    "production": "NODE_ENV=production node_modules/webpack/bin/webpack.js -p",
+    "build": "npm run production",
     "heroku-postbuild": "npm run production"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Feeles/IDE.git"
   },
-  "keywords": [
-    "h4p",
-    "hackforplay"
-  ],
+  "keywords": ["h4p", "hackforplay"],
   "author": "teramotodaiki",
   "license": "MIT",
   "bugs": {
