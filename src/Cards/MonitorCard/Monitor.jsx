@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Popout from 'jsx/ReactPopout';
-import IconButton from 'material-ui/IconButton';
-import NavigationRefreh from 'material-ui/svg-icons/navigation/refresh';
 
-import { BinaryFile, SourceFile, makeFromFile } from 'File/';
+import { SourceFile, makeFromFile } from 'File/';
 import composeEnv from 'File/composeEnv';
 import popoutTemplate from 'html/popout';
 import Screen from './Screen';
@@ -67,8 +65,6 @@ export default class Monitor extends PureComponent {
     addFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
-    coreString: PropTypes.string,
-    saveAs: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
     frameWidth: PropTypes.number.isRequired,
     frameHeight: PropTypes.number.isRequired,
@@ -121,7 +117,7 @@ export default class Monitor extends PureComponent {
     on('message.clearInterval', this.handleClearInterval);
   }
 
-  componentDidUpdate(prevProps, prevStates) {
+  componentDidUpdate(prevProps) {
     if (prevProps.reboot && !this.props.reboot) {
       if (this.props.isPopout || this.popoutClosed) {
         // react-popoutがpopoutWindowにDOMをrenderした後でstartする必要がある
@@ -245,7 +241,7 @@ export default class Monitor extends PureComponent {
     if (!port) return;
     // reply を receive するための id
     value = { id: uniqueId(), ...value };
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       // catch reply message (once)
       const task = event => {
         if (!event.data || event.data.id !== value.id) return;
@@ -429,7 +425,7 @@ export default class Monitor extends PureComponent {
       'speechstart',
       'start'
     ].forEach(type => {
-      recognition[`on${type}`] = event => {
+      recognition[`on${type}`] = () => {
         reply({ type });
       };
     });
@@ -490,7 +486,7 @@ export default class Monitor extends PureComponent {
   };
 
   handleHashChanged = () => {
-    if (/^\#\//.test(location.hash)) {
+    if (/^#\//.test(location.hash)) {
       const href = location.hash.substr(2);
       this.props.setLocation(href);
       ga('set', 'page', `/${href}`);

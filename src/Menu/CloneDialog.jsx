@@ -123,8 +123,8 @@ export default class CloneDialog extends PureComponent {
   };
 
   render() {
-    const { onRequestClose, localization, coreString } = this.props;
-    const { bundleType, currentProject } = this.state;
+    const { onRequestClose, localization } = this.props;
+    const { currentProject } = this.state;
 
     const styles = {
       body: {
@@ -234,7 +234,7 @@ export default class CloneDialog extends PureComponent {
           </Tab>
           <Tab label={localization.cloneDialog.loadTitle}>
             <h1 style={styles.header}>{localization.cloneDialog.loadHeader}</h1>
-            {!this.state.projects || !this.props.coreString ? (
+            {!this.state.projects ? (
               <div style={{ textAlign: 'center' }}>
                 <CircularProgress size={120} />
               </div>

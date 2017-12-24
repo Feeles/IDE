@@ -112,8 +112,6 @@ export default class Menu extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
-    coreString: PropTypes.string,
-    saveAs: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
     updateCard: PropTypes.func.isRequired,
@@ -170,9 +168,7 @@ export default class Menu extends PureComponent {
 
   handleClone = () => {
     this.props.openFileDialog(CloneDialog, {
-      coreString: this.props.coreString,
       files: this.props.files,
-      saveAs: this.props.saveAs,
       project: this.props.project,
       setProject: this.props.setProject,
       launchIDE: this.props.launchIDE,
@@ -398,7 +394,6 @@ export default class Menu extends PureComponent {
         {this.props.showAll ? (
           <IconButton
             tooltip={localization.menu.clone}
-            disabled={!this.props.coreString}
             onTouchTap={this.handleClone}
             style={styles.button}
           >

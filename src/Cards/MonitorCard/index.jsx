@@ -49,7 +49,6 @@ export default class MonitorCard extends PureComponent {
     addFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
-    coreString: PropTypes.string,
     saveAs: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
@@ -207,7 +206,6 @@ export default class MonitorCard extends PureComponent {
               addFile={this.props.addFile}
               findFile={this.props.findFile}
               putFile={this.props.putFile}
-              coreString={this.props.coreString}
               saveAs={this.props.saveAs}
               setLocation={this.props.setLocation}
               frameWidth={this.state.frameWidth}

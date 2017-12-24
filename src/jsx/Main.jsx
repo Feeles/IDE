@@ -88,8 +88,6 @@ export default class Main extends Component {
 
     tabs: [],
 
-    coreString: null,
-
     project: this.props.project,
     notice: null,
     // OAuth 認証によって得られる UUID.
@@ -128,23 +126,6 @@ export default class Main extends Component {
 
   componentDidMount() {
     document.title = this.getConfig('ogp')['og:title'] || '';
-
-    const chromosome = document.getElementById(INLINE_SCRIPT_ID);
-
-    if (chromosome) {
-      this.setState({
-        coreString: chromosome.textContent
-      });
-    } else if (CORE_CDN_URL) {
-      fetch(CORE_CDN_URL, { mode: 'cors' })
-        .then(response => {
-          if (!response.ok) {
-            throw response.error ? response.error() : response.statusText;
-          }
-          return response.text();
-        })
-        .then(coreString => this.setState({ coreString }));
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -196,9 +177,7 @@ export default class Main extends Component {
           autoHideDuration: 20000,
           onActionTouchTap: () => {
             this.openFileDialog(CloneDialog, {
-              coreString: this.state.coreString,
               files: this.state.fileView.files,
-              saveAs: this.saveAs,
               project: this.state.project,
               setProject: this.setProject,
               launchIDE: this.props.launchIDE,
@@ -466,7 +445,6 @@ export default class Main extends Component {
           {...commonProps}
           setLocalization={this.props.setLocalization}
           openFileDialog={this.openFileDialog}
-          coreString={this.state.coreString}
           saveAs={this.saveAs}
           project={this.state.project}
           setProject={this.setProject}
@@ -493,7 +471,6 @@ export default class Main extends Component {
           openFileDialog={this.openFileDialog}
           reboot={this.state.reboot}
           href={this.state.href}
-          coreString={this.state.coreString}
           monitorType={this.state.monitorType}
           saveAs={this.saveAs}
           toggleFullScreen={this.handleToggleFullScreen}

@@ -36,7 +36,6 @@ export default class CardContainer extends PureComponent {
     openFileDialog: PropTypes.func.isRequired,
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
-    coreString: PropTypes.string,
     monitorType: PropTypes.symbol.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
     togglePopout: PropTypes.func.isRequired,
@@ -168,8 +167,7 @@ export default class CardContainer extends PureComponent {
       cards: this.props.cards,
       reboot: this.props.reboot,
       saveAs: this.props.saveAs,
-      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
-      coreString: this.props.coreString
+      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen
     };
 
     return (
