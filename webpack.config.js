@@ -42,7 +42,7 @@ const config = {
       },
       {
         test: /\.worker\.js$/,
-        loaders: ['worker-loader', 'babel-loader'],
+        loaders: ['worker-loader?inline', 'babel-loader'],
         include: [path.resolve(__dirname, 'src/workers')]
       },
       {
