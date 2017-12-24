@@ -5,11 +5,6 @@ const version = require('./version');
 const server = http.createServer(async (request, response) => {
   const paths = url.parse(request.url).pathname.split('/');
 
-  // 現在は日本語のみサポート
-  if (paths[1] !== 'ja' && paths[1] !== 'h4p.js') {
-    paths.splice(1, 0, 'ja');
-  }
-
   let distination;
   if (paths[2] === 'hack-rpg.html') {
     // hack-rpg の場合は hack-rpg.hackforplay.xyz に移動
@@ -18,7 +13,7 @@ const server = http.createServer(async (request, response) => {
     // make-rpg の場合は make-rpg.hackforplay.xyz に移動
     distination = 'https://make-rpg.hackforplay.xyz/' + paths[1];
   } else {
-    // assets.feeles.com/public/v1XXX/ja/xxx.html に移動
+    // assets.feeles.com/public/v1XXX/xxx.html に移動
     distination = await version.currentUrl(paths.join('/'));
   }
 
