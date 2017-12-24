@@ -1,4 +1,3 @@
-/*global INLINE_SCRIPT_ID CORE_CDN_URL*/
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
@@ -196,7 +195,7 @@ export default class Main extends Component {
   }
 
   async setStatePromise(state) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.setState(state, resolve);
     });
   }
@@ -282,7 +281,7 @@ export default class Main extends Component {
   };
 
   selectTab = tab =>
-    new Promise((resolve, reject) => {
+    new Promise(resolve => {
       const tabs = this.state.tabs.map(item => {
         if (item.isSelected) return item.select(false);
         return item;
@@ -311,7 +310,7 @@ export default class Main extends Component {
     });
 
   closeTab = tab =>
-    new Promise((resolve, reject) => {
+    new Promise(resolve => {
       const tabs = this.state.tabs.filter(item => item.key !== tab.key);
       if (tab.isSelected && tabs.length > 0) {
         tabs[0] = tabs[0].select(true);

@@ -72,10 +72,8 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      INLINE_SCRIPT_ID: JSON.stringify('Feeles-Chromosome'),
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName),
-      ENTRY_POINT_DEV: JSON.stringify(`http://localhost:${port}`),
       'process.env.ROLLBAR': JSON.stringify(process.env.ROLLBAR),
       'process.env.GA_TRACKING_ID': JSON.stringify(process.env.GA_TRACKING_ID)
     }),
