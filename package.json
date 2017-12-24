@@ -48,7 +48,8 @@
     "svgo": "^0.7.2",
     "unorm": "^1.4.1",
     "webpack": "^3.0.3",
-    "webpack-dev-server": "^2.4.3"
+    "webpack-dev-server": "^2.4.3",
+    "worker-loader": "^1.1.0"
   },
   "dependencies": {
     "animate.css": "^3.5.2",

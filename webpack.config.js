@@ -41,6 +41,11 @@ const config = {
         include: [path.resolve(__dirname, 'src')]
       },
       {
+        test: /\.worker\.js$/,
+        loaders: ['worker-loader', 'babel-loader'],
+        include: [path.resolve(__dirname, 'src/workers')]
+      },
+      {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader']
       },
