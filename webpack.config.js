@@ -222,6 +222,5 @@ module.exports = async () => {
       CORE_CDN_URL: JSON.stringify(await version.nextUrl('h4p.js'))
     })
   );
-  version.quit();
   return config;
 };
