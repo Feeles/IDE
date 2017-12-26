@@ -42,15 +42,6 @@ const config = {
         include: [path.resolve(__dirname, 'src')]
       },
       {
-        test: /\.worker\.js$/,
-        loaders: ['worker-loader?inline', 'babel-loader'],
-        include: [path.resolve(__dirname, 'src/workers')]
-      },
-      {
-        test: /babel-standalone\/babel(\.min)?\.js$/,
-        loader: './lib/escape-loader'
-      },
-      {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader']
       },
