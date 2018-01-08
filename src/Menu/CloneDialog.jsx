@@ -9,7 +9,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 import { Card, CardHeader, CardActions, CardText } from 'material-ui/Card';
 import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
 import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
-import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { brown50, red400 } from 'material-ui/styles/colors';
 
@@ -20,7 +19,6 @@ import {
   deleteProject
 } from '../database/';
 import EditableLabel from 'jsx/EditableLabel';
-import isServiceWorkerEnabled from '../js/isServiceWorkerEnabled';
 
 export default class CloneDialog extends PureComponent {
   static propTypes = {
@@ -164,6 +162,7 @@ export default class CloneDialog extends PureComponent {
 
     const actions = [
       <FlatButton
+        key="showAll"
         label={localization.menu.showAllUrls}
         style={styles.button}
         onTouchTap={() =>
@@ -173,6 +172,7 @@ export default class CloneDialog extends PureComponent {
         }
       />,
       <FlatButton
+        key="cancel"
         label={localization.cloneDialog.cancel}
         style={styles.button}
         onTouchTap={onRequestClose}
@@ -285,22 +285,8 @@ export class ProjectCard extends PureComponent {
     requestTitleChange: () => {}
   };
 
-  handleLoad = async () => {
-    const { project } = this.props;
-    if (isServiceWorkerEnabled && project.title) {
-      location.href = `../${project.title}`;
-    } else {
-      await this.props.launchIDE(project);
-    }
-  };
-
-  handleOpenTab = async () => {
-    const { localization } = this.props;
-
-    const tab = window.open(`../${this.props.project.title}/`, '_blank');
-    if (!tab) {
-      alert(localization.cloneDialog.failedToOpenTab);
-    }
+  handleLoad = () => {
+    return this.props.launchIDE(this.props.project);
   };
 
   handleRemove = async () => {
@@ -378,12 +364,6 @@ export class ProjectCard extends PureComponent {
             icon={<ActionOpenInBrowser />}
             disabled={this.props.processing}
             onTouchTap={this.handleLoad}
-          />
-          <FlatButton
-            label={localization.cloneDialog.openInNewTab}
-            icon={<ActionOpenInNew />}
-            disabled={this.props.processing || !isServiceWorkerEnabled}
-            onTouchTap={this.handleOpenTab}
           />
           <FlatButton
             label={localization.cloneDialog.remove}
