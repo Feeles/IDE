@@ -189,6 +189,7 @@ export default class MonitorCard extends PureComponent {
         icon={MonitorCard.icon()}
         {...this.props.cardPropsBag}
         actions={actions}
+        disableCloseButton
       >
         <CardMedia style={styles.flexible}>
           <div style={styles.parent}>

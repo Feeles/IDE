@@ -18,6 +18,7 @@ export default class CardWindow extends PureComponent {
     icon: PropTypes.node.isRequired,
     fit: PropTypes.bool.isRequired,
     width: PropTypes.number.isRequired,
+    disableCloseButton: PropTypes.bool.isRequired,
     showAll: PropTypes.bool.isRequired
   };
 
@@ -26,6 +27,7 @@ export default class CardWindow extends PureComponent {
     actions: [],
     icon: null,
     fit: false,
+    disableCloseButton: false, // ボタンで閉じられないようにする
     width: 480
   };
 
@@ -129,11 +131,11 @@ export default class CardWindow extends PureComponent {
             </a>
             <div style={styles.blank} />
             {this.props.actions}
-            {this.props.showAll ? (
+            {this.props.disableCloseButton ? null : (
               <IconButton onTouchTap={this.closeCard} iconStyle={styles.close}>
                 <NavigationClose />
               </IconButton>
-            ) : null}
+            )}
           </div>
           {this.props.children}
         </Card>
