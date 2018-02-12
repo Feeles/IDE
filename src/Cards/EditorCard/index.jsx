@@ -19,7 +19,7 @@ const getStyles = (props, context) => {
     tabContainer: {
       position: 'absolute',
       top: 0,
-      width: '100%',
+      width: 'calc(100% - 48px)',
       boxSizing: 'border-box',
       display: 'flex',
       alignItems: 'flex-end',
