@@ -34,7 +34,9 @@ class RootComponent extends Component {
     // An URL string as JSON file provided
     jsonURL: PropTypes.string,
     // An URL string to continuous deploying
-    deployURL: PropTypes.string
+    deployURL: PropTypes.string,
+    // Handle file change
+    onChange: PropTypes.func
   };
 
   state = {
@@ -300,6 +302,7 @@ class RootComponent extends Component {
             setMuiTheme={this.setMuiTheme}
             deployURL={this.state.deployURL}
             setDeployURL={deployURL => this.setState({ deployURL })}
+            onChange={this.props.onChange}
           />
         )}
       </MuiThemeProvider>

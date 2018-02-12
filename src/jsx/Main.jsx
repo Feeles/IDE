@@ -71,7 +71,8 @@ export default class Main extends Component {
     setLocalization: PropTypes.func.isRequired,
     setMuiTheme: PropTypes.func.isRequired,
     deployURL: PropTypes.string,
-    setDeployURL: PropTypes.func.isRequired
+    setDeployURL: PropTypes.func.isRequired,
+    onChange: PropTypes.func
   };
 
   static contextTypes = {
@@ -142,6 +143,10 @@ export default class Main extends Component {
 
     if (this.state.reboot) {
       this.setState({ reboot: false });
+    }
+    // ファイル変更検知
+    if (this.props.onChange && prevState.fileView !== this.state.fileView) {
+      this.props.onChange({ files: this.state.fileView.files });
     }
     // 未オートセーブでファイルが更新されたとき、あらたにセーブデータを作る
     if (!this.state.project && prevState.fileView !== this.state.fileView) {
