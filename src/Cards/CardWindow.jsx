@@ -71,9 +71,10 @@ export default class CardWindow extends PureComponent {
         boxSizing: 'border-box',
         maxWidth: '100%',
         maxHeight: '100%',
+        height: '100%',
         direction: 'ltr',
         flex: '0 0 auto',
-        flexBasis: visible ? width : 0,
+        flexBasis: visible ? '50%' : 0,
         padding: visible ? '16px 20px 16px 0' : 0,
         overflow: visible ? 'initial' : 'hidden',
         ...fitWrap
@@ -128,14 +129,11 @@ export default class CardWindow extends PureComponent {
             </a>
             <div style={styles.blank} />
             {this.props.actions}
-            {this.props.showAll
-              ? <IconButton
-                  onTouchTap={this.closeCard}
-                  iconStyle={styles.close}
-                >
-                  <NavigationClose />
-                </IconButton>
-              : null}
+            {this.props.showAll ? (
+              <IconButton onTouchTap={this.closeCard} iconStyle={styles.close}>
+                <NavigationClose />
+              </IconButton>
+            ) : null}
           </div>
           {this.props.children}
         </Card>
