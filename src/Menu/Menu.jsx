@@ -56,6 +56,7 @@ const getStyles = (props, context) => {
       zIndex: null
     },
     leftIcon: {
+      display: props.showAll ? 'block' : 'none',
       marginTop: 0
     },
     button: {
@@ -319,15 +320,6 @@ export default class Menu extends PureComponent {
       open: !this.state.open
     });
 
-  handleGoHome = () => {
-    const feelesrc = this.props.loadConfig('feelesrc');
-    if (feelesrc.homeURL) {
-      location.href = feelesrc.homeURL;
-    } else {
-      alert(this.props.localization.menu.homeIsNotSet);
-    }
-  };
-
   handleSetTitle = event => {
     this.setState({ overrideTitle: event.data.value });
   };
@@ -359,26 +351,13 @@ export default class Menu extends PureComponent {
         />
       ));
 
-    // showAll なときは Huberger Menu,
-    // そうでないときは Home Button
-    const leftIcon = (
-      <IconButton>
-        {this.props.showAll ? <NavigationMenu /> : <ActionHome />}
-      </IconButton>
-    );
-
-    const leftIconAction = this.props.showAll
-      ? this.handleToggleDrawer
-      : this.handleGoHome;
-
     return (
       <AppBar
         title={this.state.overrideTitle || title}
         style={styles.root}
         titleStyle={{ flex: null }}
-        iconElementLeft={leftIcon}
-        iconStyleLeft={styles.leftIcon}
-        onLeftIconButtonTouchTap={leftIconAction}
+        iconStyleLeft={styles.leftIcon} 
+        onLeftIconButtonTouchTap={this.handleToggleDrawer}
       >
         <div style={{ flex: 1 }} />
         <Toggle
