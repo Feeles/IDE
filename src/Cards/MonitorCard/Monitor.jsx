@@ -536,6 +536,7 @@ export default class Monitor extends PureComponent {
           error={error}
           width={this.props.frameWidth}
           height={this.props.frameHeight}
+          isFullScreen={this.props.isFullScreen}
         />
         <ResolveProgress globalEvent={this.props.globalEvent} />
       </div>
