@@ -1,4 +1,5 @@
 /*global EXPORT_VAR_NAME*/
+import * as ReactDOM from 'react-dom';
 import init from './jsx/init';
 import { default as Feeles } from './jsx/RootComponent';
 
@@ -17,6 +18,7 @@ const h4p = async props => {
 
 h4p.init = init;
 h4p.Feeles = Feeles;
+h4p.unmount = (...args) => ReactDOM.unmountComponentAtNode(...args);
 
 // Global export
 window[EXPORT_VAR_NAME] = h4p;
