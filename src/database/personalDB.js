@@ -1,6 +1,7 @@
 /*global CORE_VERSION CORE_VERSION CORE_CDN_URL*/
 import Dexie from 'dexie';
 import uuid from 'uuid/v1';
+import deepEqual from 'deep-equal';
 
 const personalDB = new Dexie('personal');
 
@@ -103,15 +104,20 @@ export async function updateProject(projectId, update) {
     .where(':id')
     .equals(projectId)
     .first();
-  const nextProject = { ...prevProject, ...update };
+  const nextProject = { ...prevProject,
+    ...update
+  };
+  if (deepEqual(prevProject, nextProject)) {
+    return nextProject;
+  }
 
   const duplicated =
-    nextProject.title !== null
-      ? await personalDB.projects
-          .where('title')
-          .equalsIgnoreCase(nextProject.title)
-          .first()
-      : null;
+    nextProject.title !== null ?
+    await personalDB.projects
+    .where('title')
+    .equalsIgnoreCase(nextProject.title)
+    .first() :
+    null;
   if (duplicated && duplicated.id !== nextProject.id) {
     // It is not possible to create two projects with the same title.
     throw 'failedToRename';
@@ -163,7 +169,9 @@ export async function deleteFile(projectId, ...fileNames) {
   // Update project's timestamp
   const project = await personalDB.projects.get(projectId);
   if (!project) {
-    project.modify({ updated: Date.now() });
+    project.modify({
+      updated: Date.now()
+    });
   }
   // Delete files included fileNames
   const keys = fileNames.map(fn => [projectId + '', fn]);
@@ -182,7 +190,9 @@ export async function getPrimaryUser() {
 
 async function createUser() {
   // Create new user with random id
-  const user = { uuid: uuid() };
+  const user = {
+    uuid: uuid()
+  };
   await personalDB.users.add(user);
   return user;
 }
