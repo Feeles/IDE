@@ -13,6 +13,15 @@ import ga from 'utils/google-analytics';
 import uniqueId from 'utils/uniqueId';
 import { getPrimaryUser } from 'database/';
 
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
+
 const ConnectionTimeout = 1000;
 const popoutURL = URL.createObjectURL(
   new Blob([popoutTemplate()], { type: 'text/html' })

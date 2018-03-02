@@ -16,6 +16,15 @@ import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
 
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
+
 const seedToFile = seed => {
   if (validateType('blob', seed.type)) {
     return new BinaryFile(seed);
@@ -290,21 +299,21 @@ class RootComponent extends Component {
         {this.state.last > 0 ? (
           this.renderLoading()
         ) : (
-          <Main
-            files={this.state.files}
-            rootElement={rootElement}
-            rootStyle={getComputedStyle(rootElement)}
-            project={this.state.project}
-            launchIDE={this.launchIDE}
-            localization={this.state.localization}
-            setLocalization={this.setLocalization}
-            muiTheme={this.state.muiTheme}
-            setMuiTheme={this.setMuiTheme}
-            deployURL={this.state.deployURL}
-            setDeployURL={deployURL => this.setState({ deployURL })}
-            onChange={this.props.onChange}
-          />
-        )}
+            <Main
+              files={this.state.files}
+              rootElement={rootElement}
+              rootStyle={getComputedStyle(rootElement)}
+              project={this.state.project}
+              launchIDE={this.launchIDE}
+              localization={this.state.localization}
+              setLocalization={this.setLocalization}
+              muiTheme={this.state.muiTheme}
+              setMuiTheme={this.setMuiTheme}
+              deployURL={this.state.deployURL}
+              setDeployURL={deployURL => this.setState({ deployURL })}
+              onChange={this.props.onChange}
+            />
+          )}
       </MuiThemeProvider>
     );
   }

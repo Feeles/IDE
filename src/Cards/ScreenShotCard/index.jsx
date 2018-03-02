@@ -14,6 +14,15 @@ import organization from 'organization';
 import debugWindow from 'utils/debugWindow';
 import { SourceFile, BinaryFile } from 'File/';
 
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
+
 export default class ScreenShotCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
