@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import md5 from 'md5';
+import URLSearchParams from 'url-search-params';
 import Card from '../CardWindow';
 import { CardActions } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';

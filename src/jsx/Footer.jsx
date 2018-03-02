@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import URLSearchParams from 'url-search-params';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -97,7 +98,7 @@ export default class Footer extends PureComponent {
       window.twttr.widgets.load();
     }
     /* https://dev.twitter.com/web/javascript/loading */
-    window.twttr = (function(d, s, id) {
+    window.twttr = (function (d, s, id) {
       var js,
         fjs = d.getElementsByTagName(s)[0],
         t = window.twttr || {};
@@ -108,7 +109,7 @@ export default class Footer extends PureComponent {
       fjs.parentNode.insertBefore(js, fjs);
 
       t._e = [];
-      t.ready = function(f) {
+      t.ready = function (f) {
         t._e.push(f);
       };
 
@@ -122,7 +123,7 @@ export default class Footer extends PureComponent {
       window.FB.XFBML.parse();
     }
     /* https://developers.facebook.com/docs/plugins/share-button */
-    (function(d, s, id) {
+    (function (d, s, id) {
       var js,
         fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
