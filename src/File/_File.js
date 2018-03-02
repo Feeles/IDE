@@ -1,4 +1,7 @@
-import { separate, validateType } from './';
+import {
+  separate,
+  validateType
+} from './';
 import babelFile from './babelFile';
 
 export default class _File {
@@ -89,7 +92,9 @@ export default class _File {
 
   static _dataURLCache = new WeakMap();
   async toDataURL() {
-    const { _dataURLCache } = this.constructor;
+    const {
+      _dataURLCache
+    } = this.constructor;
 
     if (_dataURLCache.has(this)) {
       return _dataURLCache.get(this);
@@ -97,7 +102,9 @@ export default class _File {
     return await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
-        const { result } = reader;
+        const {
+          result
+        } = reader;
         _dataURLCache.set(this, result);
         resolve(result);
       };
@@ -132,8 +139,12 @@ export default class _File {
   static _babelCache = new WeakMap();
   static _babelConfig = null;
   static _babelError = new WeakMap();
-  babel(config) {
-    const { _babelCache, _babelConfig, _babelError } = this.constructor;
+  babel(config, onError = () => {}) {
+    const {
+      _babelCache,
+      _babelConfig,
+      _babelError
+    } = this.constructor;
     if (_babelConfig === config) {
       if (_babelCache.has(this)) return _babelCache.get(this);
       if (_babelError.has(this)) throw _babelError.get(this);
@@ -143,17 +154,22 @@ export default class _File {
 
     const promise = babelFile(this, config).catch(err => {
       _babelError.set(this, err);
-      throw err;
+      onError(err);
     });
     _babelCache.set(this, promise);
     return promise;
   }
 
   rename(newName) {
-    const { path, ext } = this;
+    const {
+      path,
+      ext
+    } = this;
     const name = path + newName + ext;
 
-    return this.set({ name });
+    return this.set({
+      name
+    });
   }
 
   move(newPath) {
@@ -161,10 +177,15 @@ export default class _File {
       newPath += '/';
     }
 
-    const { plane, ext } = this;
+    const {
+      plane,
+      ext
+    } = this;
     const name = newPath + plane + ext;
 
-    return this.set({ name });
+    return this.set({
+      name
+    });
   }
 
   serialize() {

@@ -152,7 +152,7 @@ export default class SourceEditor extends PureComponent {
 
     // Like a watching
     const babelrc = this.props.getConfig('babelrc');
-    file.babel(babelrc).catch(e => {
+    file.babel(babelrc, e => {
       this.props.selectTabFromFile(file);
       // あらたな Babel Error が発生したときを検知して,
       // ダイアログを表示させる (エラーの詳細は file.error を参照する)
