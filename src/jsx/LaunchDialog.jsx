@@ -22,7 +22,7 @@ export default class LaunchDialog extends PureComponent {
   };
 
   static defaultProps = {
-    fallback: () => {}
+    fallback: () => { }
   };
 
   state = {
@@ -63,7 +63,6 @@ export default class LaunchDialog extends PureComponent {
       await this.props.launchIDE(project);
       this.props.onRequestClose();
     } catch (e) {
-      console.error(1, e);
       alert(e.message || e);
     }
   }
@@ -75,7 +74,6 @@ export default class LaunchDialog extends PureComponent {
       await updateProject(project.id, { title });
       await this.refreshState();
     } catch (e) {
-      console.error(e);
       if (typeof e === 'string') {
         alert(localization.cloneDialog[e]);
       }

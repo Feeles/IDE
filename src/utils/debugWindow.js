@@ -8,7 +8,7 @@ export default async function debugWindow(response) {
     if (window.open(url) === undefined && confirm('Display page?')) {
       // Try opening the window again
       if (window.open(url) === undefined) {
-        console.error('debugWindow: Failed to open window! See raw response', response);
+        console.info('debugWindow: Failed to open window! See raw response', response);
       }
     }
 

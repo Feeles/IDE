@@ -7,7 +7,7 @@ const tryParseYAML = (text, defaultValue = {}) => {
   try {
     return jsyaml.safeLoad(text);
   } catch (e) {
-    console.error(e);
+    console.info(e);
     return defaultValue;
   }
 };
@@ -15,7 +15,7 @@ const tryParseJSON = (text, defaultValue = {}) => {
   try {
     return JSON.parse(text);
   } catch (e) {
-    console.error(e);
+    console.info(e);
     return defaultValue;
   }
 };
@@ -409,7 +409,7 @@ export default class Main extends Component {
 
   toggleShowAll = () => this.setStatePromise({ showAll: !this.state.showAll });
 
-  openFileDialog = () => console.error('openFileDialog has not be declared');
+  openFileDialog = () => console.info('openFileDialog has not be declared');
   handleFileDialog = ref => ref && (this.openFileDialog = ref.open);
 
   handleContainerRef = ref => {

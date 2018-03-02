@@ -102,7 +102,7 @@ class RootComponent extends Component {
       // Required unique title of project to proxy it
       const { titleIsRequired } = this.state.localization.cloneDialog;
       this.setState({ errorText: titleIsRequired });
-      console.error(titleIsRequired);
+      console.info(titleIsRequired);
     }
 
     const { project, query, length } = await (id
@@ -144,7 +144,6 @@ class RootComponent extends Component {
       text = await response.text();
     } catch (e) {
       this.setState({ errorText: e.message });
-      console.error(e);
       return;
     }
 
@@ -154,7 +153,7 @@ class RootComponent extends Component {
     } catch (e) {
       console.log(text);
       const errorText = `${url} is not valid JSON. Check the text in console.`;
-      console.error(errorText);
+      console.info(errorText);
       this.setState({ errorText });
       return;
     }
@@ -163,7 +162,7 @@ class RootComponent extends Component {
       console.log(seeds);
       const errorText =
         'Source JSON file must be an array. Check the value in cosole.';
-      console.error(errorText);
+      console.info(errorText);
       this.setState({ errorText });
       return;
     }

@@ -273,7 +273,7 @@ export default class Menu extends PureComponent {
         debugWindow(response);
       }
     } catch (e) {
-      console.error(e);
+      console.info(e);
     }
 
     this.setState({ isDeploying: false });
@@ -342,21 +342,21 @@ export default class Menu extends PureComponent {
       (this.props.project.title ? (
         <div style={styles.projectName}>{this.props.project.title}</div>
       ) : (
-        <FlatButton
-          label={localization.cloneDialog.setTitle}
-          labelStyle={{
-            color: alternateTextColor
-          }}
-          onTouchTap={this.handleClone}
-        />
-      ));
+          <FlatButton
+            label={localization.cloneDialog.setTitle}
+            labelStyle={{
+              color: alternateTextColor
+            }}
+            onTouchTap={this.handleClone}
+          />
+        ));
 
     return (
       <AppBar
         title={this.state.overrideTitle || title}
         style={styles.root}
         titleStyle={{ flex: null }}
-        iconStyleLeft={styles.leftIcon} 
+        iconStyleLeft={styles.leftIcon}
         onLeftIconButtonTouchTap={this.handleToggleDrawer}
       >
         <div style={{ flex: 1 }} />
@@ -431,39 +431,39 @@ export default class Menu extends PureComponent {
                 ]}
               />
             ) : (
-              <MenuItem
-                primaryText={localization.menu.login}
-                disabled={isLoggedin}
-                leftIcon={<ActionAccountCircle />}
-                rightIcon={<ArrowDropRight />}
-                menuItems={[
-                  <HoverMenuItem
-                    primaryText={localization.menu.withGoogle}
-                    leftIcon={<GoogleIcon />}
-                    style={styles.google}
-                    onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.google)
-                    }
-                  />,
-                  <HoverMenuItem
-                    primaryText={localization.menu.withFacebook}
-                    leftIcon={<FacebookIcon />}
-                    style={styles.facebook}
-                    onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.facebook)
-                    }
-                  />,
-                  <HoverMenuItem
-                    primaryText={localization.menu.withTwitter}
-                    leftIcon={<TwitterIcon />}
-                    style={styles.twitter}
-                    onTouchTap={() =>
-                      this.handleLoginWithOAuth(organization.api.twitter)
-                    }
-                  />
-                ]}
-              />
-            )}
+                <MenuItem
+                  primaryText={localization.menu.login}
+                  disabled={isLoggedin}
+                  leftIcon={<ActionAccountCircle />}
+                  rightIcon={<ArrowDropRight />}
+                  menuItems={[
+                    <HoverMenuItem
+                      primaryText={localization.menu.withGoogle}
+                      leftIcon={<GoogleIcon />}
+                      style={styles.google}
+                      onTouchTap={() =>
+                        this.handleLoginWithOAuth(organization.api.google)
+                      }
+                    />,
+                    <HoverMenuItem
+                      primaryText={localization.menu.withFacebook}
+                      leftIcon={<FacebookIcon />}
+                      style={styles.facebook}
+                      onTouchTap={() =>
+                        this.handleLoginWithOAuth(organization.api.facebook)
+                      }
+                    />,
+                    <HoverMenuItem
+                      primaryText={localization.menu.withTwitter}
+                      leftIcon={<TwitterIcon />}
+                      style={styles.twitter}
+                      onTouchTap={() =>
+                        this.handleLoginWithOAuth(organization.api.twitter)
+                      }
+                    />
+                  ]}
+                />
+              )}
             {isLoggedin ? (
               <MenuItem
                 primaryText={localization.menu.logout}
@@ -511,27 +511,27 @@ export default class Menu extends PureComponent {
           />
           {this.state.open
             ? Object.entries(this.props.cards)
-                .map(([name, card]) => ({
-                  name,
-                  ...card
-                }))
-                .map(item => (
-                  <MenuItem
-                    key={item.name}
-                    primaryText={
-                      localization[lowerCaseAtFirst(item.name)].title
-                    }
-                    leftIcon={
-                      this.props.cardIcons && this.props.cardIcons[item.name]
-                        ? this.props.cardIcons[item.name]()
-                        : null
-                    }
-                    onTouchTap={() => {
-                      this.props.updateCard(item.name, { visible: true });
-                      this.handleToggleDrawer();
-                    }}
-                  />
-                ))
+              .map(([name, card]) => ({
+                name,
+                ...card
+              }))
+              .map(item => (
+                <MenuItem
+                  key={item.name}
+                  primaryText={
+                    localization[lowerCaseAtFirst(item.name)].title
+                  }
+                  leftIcon={
+                    this.props.cardIcons && this.props.cardIcons[item.name]
+                      ? this.props.cardIcons[item.name]()
+                      : null
+                  }
+                  onTouchTap={() => {
+                    this.props.updateCard(item.name, { visible: true });
+                    this.handleToggleDrawer();
+                  }}
+                />
+              ))
             : null}
           <MenuItem
             primaryText={localization.menu.version}

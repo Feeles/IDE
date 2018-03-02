@@ -157,7 +157,7 @@ export default class SourceEditor extends PureComponent {
       // あらたな Babel Error が発生したときを検知して,
       // ダイアログを表示させる (エラーの詳細は file.error を参照する)
       this.forceUpdate(); // 再描画
-      console.error(e);
+      console.info(e);
     });
 
     this.setState({ loading: false });
@@ -445,7 +445,7 @@ export default class SourceEditor extends PureComponent {
         configs = JSON.parse(runCommand.text);
       }
     } catch (error) {
-      console.error(error);
+      console.info(error);
     }
 
     if (file.is('javascript') || file.is('json')) {
