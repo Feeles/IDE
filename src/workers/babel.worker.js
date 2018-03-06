@@ -17,14 +17,16 @@ self.addEventListener("message", function (event) {
       id: event.data.id,
       error: { message: error.message, loc: error.loc }
     });
-    // Throw useful error info into console
-    throw error;
+    // Show useful error info into console
+    console.warn(error);
   }
 });
 `;
 
 const url = URL.createObjectURL(
-  new Blob([prefix, babelStandaloneJs], { type: 'text/javascript' })
+  new Blob([prefix, babelStandaloneJs], {
+    type: 'text/javascript'
+  })
 );
 
 export default function BabelWorker() {
