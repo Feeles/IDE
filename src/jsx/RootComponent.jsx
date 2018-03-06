@@ -79,7 +79,6 @@ class RootComponent extends Component {
     }
 
     if (Array.isArray(seeds)) {
-      const files = seeds;
       this.setState({
         last: 0,
         files: seeds.map(seedToFile)
@@ -198,7 +197,7 @@ class RootComponent extends Component {
 
   async progress(file) {
     if (Math.random() < 0.1 || this.state.last === 1) {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve) => {
         requestAnimationFrame(resolve);
       });
     }
