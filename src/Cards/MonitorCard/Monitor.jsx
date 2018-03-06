@@ -30,8 +30,8 @@ const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const webkitSpeechGrammarList = window.webkitSpeechGrammarList;
 
-const getStyle = (props, context, state) => {
-  const { palette, appBar, transitions } = context.muiTheme;
+const getStyle = (props, context) => {
+  const { transitions } = context.muiTheme;
   const fullScreen = (yes, no) => (props.isFullScreen ? yes : no);
 
   return {
@@ -100,7 +100,7 @@ export default class Monitor extends PureComponent {
   componentWillMount() {
     // feeles.github.io/sample/#/path/to/index.html
     window.addEventListener('hashchange', this.handleHashChanged);
-    if (/^\#\//.test(location.hash)) {
+    if (/^#\//.test(location.hash)) {
       this.handleHashChanged();
     } else {
       // default href で起動
@@ -189,8 +189,6 @@ export default class Monitor extends PureComponent {
 
   async startProcess() {
     const { getConfig, findFile } = this.props;
-
-    const babelrc = getConfig('babelrc');
 
     // env
     const env = composeEnv(getConfig('env'));
