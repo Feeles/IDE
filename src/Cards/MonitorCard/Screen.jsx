@@ -32,10 +32,6 @@ export default class Screen extends PureComponent {
     loading: false
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   componentWillReceiveProps(nextProps) {
     if (this.props.reboot !== nextProps.reboot) {
       if (!nextProps.reboot) {
@@ -93,7 +89,6 @@ export default class Screen extends PureComponent {
   render() {
     const { display, isFullScreen } = this.props;
     const { loading } = this.state;
-    const { transitions } = this.context.muiTheme;
 
     const style = {
       position: 'absolute',
@@ -121,7 +116,7 @@ export default class Screen extends PureComponent {
       border: '0 none',
       flex: '0 0 auto',
       opacity: loading ? 0 : 1,
-      transition: loading ? 'none' : transitions.easeOut(null, 'opacity')
+      transition: loading ? 'none' : 'opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
     };
 
     const buttonStyle = {
