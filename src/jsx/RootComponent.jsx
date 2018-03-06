@@ -58,6 +58,7 @@ class RootComponent extends Component {
     openDialog: false,
     // continuous deploying URL (if null, do first deployment)
     deployURL: null,
+    retryCount: 0,
     errorText: null
   };
 
@@ -143,8 +144,17 @@ class RootComponent extends Component {
       const response = await fetch(url);
       text = await response.text();
     } catch (e) {
-      this.setState({ errorText: e.message });
-      return;
+      this.setState(prevState => ({
+        retryCount: prevState.retryCount + 1,
+        errorText: e.message
+      }));
+      // Auto retry
+      const delay = Math.pow(2, this.state.retryCount + 1);
+      return new Promise((resolve, reject) => {
+        window.setTimeout(() => {
+          this.launchFromURL(url).then(resolve, reject);
+        }, delay * 1000);
+      });
     }
 
     let seeds = [];
@@ -222,7 +232,7 @@ class RootComponent extends Component {
     });
 
   renderLoading = () => {
-    const { last, files, errorText } = this.state;
+    const { last, files, errorText, retryCount } = this.state;
 
     const styles = {
       root: {
@@ -264,6 +274,9 @@ class RootComponent extends Component {
           {title ? title.getAttribute('content') : document.title || '❤️'}
         </h1>
         {errorText && <span style={styles.errorText}>{errorText}</span>}
+        {retryCount > 0 ? (
+          <div>{Math.pow(2, retryCount)}秒後にもう一度接続します...</div>
+        ) : null}
         {author && (
           <h2 style={styles.header}>{author.getAttribute('content')}</h2>
         )}
