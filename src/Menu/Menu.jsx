@@ -411,12 +411,14 @@ export default class Menu extends PureComponent {
                 rightIcon={<ArrowDropRight />}
                 menuItems={[
                   <MenuItem
+                    key="1"
                     primaryText={localization.menu.update}
                     disabled={!this.props.deployURL}
                     leftIcon={<ActionAutorenew />}
                     onTouchTap={() => this.handleDeploy(true, true)}
                   />,
                   <MenuItem
+                    key="2"
                     primaryText={localization.menu.create}
                     leftIcon={<FileCloudUpload />}
                     onTouchTap={() => this.handleDeploy(true, false)}
@@ -431,6 +433,7 @@ export default class Menu extends PureComponent {
                   rightIcon={<ArrowDropRight />}
                   menuItems={[
                     <HoverMenuItem
+                      key="1"
                       primaryText={localization.menu.withGoogle}
                       leftIcon={<GoogleIcon />}
                       style={styles.google}
@@ -439,6 +442,7 @@ export default class Menu extends PureComponent {
                       }
                     />,
                     <HoverMenuItem
+                      key="2"
                       primaryText={localization.menu.withFacebook}
                       leftIcon={<FacebookIcon />}
                       style={styles.facebook}
@@ -447,6 +451,7 @@ export default class Menu extends PureComponent {
                       }
                     />,
                     <HoverMenuItem
+                      key="3"
                       primaryText={localization.menu.withTwitter}
                       leftIcon={<TwitterIcon />}
                       style={styles.twitter}
