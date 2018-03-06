@@ -7,7 +7,6 @@ import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-b
 import ContentSave from 'material-ui/svg-icons/content/save';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
-import ga from 'utils/google-analytics';
 import Editor from './Editor';
 import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
@@ -161,8 +160,6 @@ export default class SourceEditor extends PureComponent {
     });
 
     this.setState({ loading: false });
-
-    ga('send', 'event', 'Code', 'save', this.props.file.name);
   };
 
   handleUndo = () => {

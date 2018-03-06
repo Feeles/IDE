@@ -33,7 +33,6 @@ import { updateProject } from '../database/';
 import organization from 'organization';
 import debugWindow from 'utils/debugWindow';
 import open from 'utils/open';
-import ga from 'utils/google-analytics';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =
@@ -267,7 +266,6 @@ export default class Menu extends PureComponent {
             onActionTouchTap: () => window.open(`${api.origin}/p/${search}`)
           }
         });
-        ga('send', 'event', 'Account', 'deploy');
       } else {
         alert(localization.menu.failedToDeploy);
         debugWindow(response);
@@ -293,7 +291,6 @@ export default class Menu extends PureComponent {
           onActionTouchTap: this.handleLogout
         }
       });
-      ga('send', 'event', 'Account', 'login', url);
     };
     window.addEventListener('message', function task(event) {
       if (event.source === win) {
@@ -301,14 +298,12 @@ export default class Menu extends PureComponent {
         callback(event.data.id);
       }
     });
-    ga('send', 'event', 'Account', 'oauth', url);
   }
 
   handleLogout = () => {
     this.props.setOAuthId();
     this.handleRequestClose();
 
-    ga('send', 'event', 'Account', 'logout');
   };
 
   handleRequestClose = () => {

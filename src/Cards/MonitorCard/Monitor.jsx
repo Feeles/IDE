@@ -9,7 +9,6 @@ import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
 import ResolveProgress from './ResolveProgress';
-import ga from 'utils/google-analytics';
 import uniqueId from 'utils/uniqueId';
 import { getPrimaryUser } from 'database/';
 
@@ -502,8 +501,6 @@ export default class Monitor extends PureComponent {
     if (/^#\//.test(location.hash)) {
       const href = location.hash.substr(2);
       this.props.setLocation(href);
-      ga('set', 'page', `/${href}`);
-      ga('send', 'pageview');
     }
   };
 
