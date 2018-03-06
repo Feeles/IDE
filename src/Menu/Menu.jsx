@@ -16,9 +16,7 @@ import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
-import ActionHome from 'material-ui/svg-icons/action/home';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import TwitterIcon from 'utils/TwitterIcon';
@@ -535,11 +533,6 @@ export default class Menu extends PureComponent {
               this.handleAbout();
               this.handleToggleDrawer();
             }}
-          />
-          <MenuItem
-            primaryText={localization.menu.home}
-            leftIcon={<ActionHome />}
-            onTouchTap={this.handleGoHome}
           />
         </Drawer>
         <Snackbar

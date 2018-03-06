@@ -25,8 +25,6 @@ export default {
     goToSee: '見に行く 👀',
     viewTwitter: 'サイトを見に行く',
     version: 'バージョン',
-    home: 'ホームにもどる',
-    homeIsNotSet: 'ホームが設定されていません',
     showAllUrls: '全ての URL を表示',
     withTwitter: 'Twitterでログイン',
     withLine: 'LINEでログイン',
@@ -54,16 +52,14 @@ export default {
     saveAll: 'どちらも保存する',
     failedToSave: 'アプリの保存に失敗しました',
     failedToRemove: 'アプリの削除に失敗しました',
-    failedToOpenTab:
-      'ポップアップがブロックされたため、アプリの読み込みに失敗しました',
+    failedToOpenTab: 'ポップアップがブロックされたため、アプリの読み込みに失敗しました',
     failedToRename: '同じタイトルのプロジェクトを二つ作ることはできません',
     titleIsRequired: 'プロジェクトにはタイトルを必ずつけてください',
     autoSaved: 'オートセーブされています',
     setTitle: 'タイトルをつけてください'
   },
   saveDialog: {
-    title:
-      'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',
+    title: 'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',
     description: filename =>
       `上のリンクを右クリックして、「別名でダウンロード」をクリックし、「${filename}」という名前をつけて保存して下さい`,
     cancel: 'キャンセル'
