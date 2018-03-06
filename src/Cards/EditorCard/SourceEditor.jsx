@@ -178,7 +178,7 @@ export default class SourceEditor extends PureComponent {
 
   updateWidget = (cm, line, text) => {
     // Syntax: /*+ モンスター アイテム */
-    const asset = /^(.*)(\/\*)(\+[^\*]+)(\*\/)/.exec(text);
+    const asset = /^(.*)(\/\*)(\+[^*]+)(\*\/)/.exec(text);
     if (asset) {
       const [, _prefix, _left, _label, _right] = asset.map(t =>
         t.replace(/\t/g, '    ')
@@ -214,7 +214,7 @@ export default class SourceEditor extends PureComponent {
     }
 
     // Syntax: ('▼ スキン', _kきし)
-    const dropdown = /^(.*\([\'\"])(▼[^\'\"]*)([\'\"]\,\s*)([^\)]*)\)/.exec(
+    const dropdown = /^(.*\(['"])(▼[^'"]*)(['"],\s*)([^)]*)\)/.exec(
       text
     );
     if (dropdown) {
@@ -249,7 +249,7 @@ export default class SourceEditor extends PureComponent {
 
       const pos = { line, ch: _prefix.length };
       const { left } = this.codemirror.charCoords(pos, 'local');
-      parent.style.transform = `translate(${left - 4}px, -20px)`;
+      parent.style.transform = `translate(${left - 4}px, -1.5rem)`;
 
       this._widgets.set(line, parent);
     }
@@ -560,7 +560,7 @@ export default class SourceEditor extends PureComponent {
 }
 
 function wait(millisec) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(resolve, millisec);
   });
 }
