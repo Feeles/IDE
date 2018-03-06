@@ -14,6 +14,7 @@ module.exports = {
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
     'no-console': 'off',
+    'no-debugger': 'off',
     'no-useless-escape': 'warn',
     'no-unused-vars': 'warn',
 

@@ -12,6 +12,8 @@ import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
 import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
+import zenkakuToHankaku from './zenkakuToHankaku';
+
 
 const getStyle = (props, state, context) => {
   const { palette } = context.muiTheme;
@@ -111,6 +113,7 @@ export default class SourceEditor extends PureComponent {
 
   componentDidMount() {
     if (this.codemirror) {
+      this.codemirror.on('beforeChange', zenkakuToHankaku);
       this.codemirror.on('beforeChange', this.handleIndexReplacement);
       this.codemirror.on('change', this.handleIndentLine);
       const onChange = cm => {

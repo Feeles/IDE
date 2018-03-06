@@ -12,7 +12,7 @@ import Editor from './Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
-  const { palette, spacing, transitions, prepareStyles } = context.muiTheme;
+  const { palette, spacing, transitions } = context.muiTheme;
   const { shooting, height } = state;
   // TODO: ちゃんと実装する. 実際には Footer の状態でかわる
   const maxEditorHeight = window.innerHeight - 200;
