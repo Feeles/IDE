@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
 import Snackbar from 'material-ui/Snackbar';
 import jsyaml from 'js-yaml';
+import _ from 'lodash';
+
 const tryParseYAML = (text, defaultValue = {}) => {
   try {
     return jsyaml.safeLoad(text);
@@ -120,7 +122,7 @@ export default class Main extends Component {
 
     const card = this.findFile('feeles/card.json');
     if (card) {
-      this.setState({ cards: card.json });
+      this.setState({ cards: _.merge(card, card.json) });
     }
   }
 
