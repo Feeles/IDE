@@ -252,7 +252,7 @@ export default class SourceEditor extends PureComponent {
 
       const pos = { line, ch: _prefix.length };
       const { left } = this.codemirror.charCoords(pos, 'local');
-      parent.style.transform = `translate(${left - 4}px, -1.5rem)`;
+      parent.style.transform = `translate(${left - 4}px, -1.3rem)`;
 
       this._widgets.set(line, parent);
     }
