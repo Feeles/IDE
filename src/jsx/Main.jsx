@@ -122,7 +122,8 @@ export default class Main extends Component {
 
     const card = this.findFile('feeles/card.json');
     if (card) {
-      this.setState({ cards: _.merge(card, card.json) });
+      const cards = _.merge(this.state.cards, card.json);
+      this.setState({ cards });
     }
   }
 
