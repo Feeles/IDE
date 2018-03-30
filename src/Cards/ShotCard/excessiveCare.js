@@ -26,4 +26,14 @@ export default function excessiveCare(cm, change) {
       change.update(change.from, change.to, replaced, '');
     }
   }
+  if (change.origin === '+delete') {
+    // 特殊記号を消す前に警告を表示する
+    const removed = cm.doc.getRange(change.from, change.to);
+    if (/[=;.(){}*+-/'"]/.test(removed)) {
+      const message = `${removed} は とくべつな いみをもつ きごうです。ほんとうに けしていいですか？`;
+      if (!confirm(message)) {
+        change.cancel();
+      }
+    }
+  }
 }
