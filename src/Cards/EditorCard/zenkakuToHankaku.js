@@ -1,4 +1,4 @@
-const regExp = /[！-～|”|’|、|。|ー]/;
+const regExp = /[！-～”’、。ー]/;
 
 let userWasCanceled = false;
 
