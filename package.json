@@ -1,5 +1,5 @@
 {
-  "name": "FeelesIDE",
+  "name": "feeles-ide",
   "version": "0.1.0",
   "description": "The hackable and serializable IDE to make learning material",
   "main": "dist/h4p.js",
