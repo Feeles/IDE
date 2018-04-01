@@ -280,7 +280,7 @@ export default class SourceEditor extends PureComponent {
       });
       this.codemirror.focus();
       // reload when completed
-      CodeMirror.on(hint, 'pick', this.handleRun);
+      CodeMirror.on(hint, 'pick', this.handleSaveAndRun);
     }
   };
 
@@ -343,6 +343,8 @@ export default class SourceEditor extends PureComponent {
     await this.handleSave();
     return this.props.setLocation(href);
   };
+
+  handleSaveAndRun = () => this.setLocation();
 
   handleAssetInsert = ({ code }) => {
     const { assetLineNumber } = this.state;
@@ -422,10 +424,6 @@ export default class SourceEditor extends PureComponent {
     }
   };
 
-  handleRun = () => {
-    this.setLocation();
-  };
-
   beautify = () => {
     const { file, fileView } = this.props;
     const prevValue = this.codemirror.getValue();
@@ -472,7 +470,7 @@ export default class SourceEditor extends PureComponent {
     // const snippets = this.props.getConfig('snippets')(file);
 
     const extraKeys = {
-      'Ctrl-Enter': this.handleRun,
+      'Ctrl-Enter': this.handleSaveAndRun,
       'Ctrl-Alt-B': this.beautify
     };
     const foldOptions = {
@@ -503,7 +501,7 @@ export default class SourceEditor extends PureComponent {
             style={styles.barButton}
             labelStyle={styles.barButtonLabel}
             icon={<ContentSave />}
-            onTouchTap={this.handleSave}
+            onTouchTap={this.handleSaveAndRun}
           />
           <div
             style={{
