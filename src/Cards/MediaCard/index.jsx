@@ -37,6 +37,19 @@ export default class MediaCard extends PureComponent {
     globalEvent.on('message.media', this.handleMedia);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { visible } = this.props.cardPropsBag;
+    if (visible && !nextProps.cardPropsBag.visible) {
+      // カードが close されたとき動画を止める
+      this.setState({
+        playerState: {
+          ...this.state.playerState,
+          playing: false
+        }
+      });
+    }
+  }
+
   handleMedia = event => {
     const { value } = event.data;
     if (value) {
