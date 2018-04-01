@@ -221,7 +221,7 @@ export default class Monitor extends PureComponent {
     const { port1, port2 } = new MessageChannel();
     port1.addEventListener('message', event => {
       const reply = params => {
-        params = { id: event.data.id, ...params };
+        params = { id: event.data.id, ...(params || {}) };
         port1.postMessage(params);
       };
 
