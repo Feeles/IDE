@@ -301,7 +301,6 @@ export default class Menu extends PureComponent {
   handleLogout = () => {
     this.props.setOAuthId();
     this.handleRequestClose();
-
   };
 
   handleRequestClose = () => {
@@ -335,14 +334,14 @@ export default class Menu extends PureComponent {
       (this.props.project.title ? (
         <div style={styles.projectName}>{this.props.project.title}</div>
       ) : (
-          <FlatButton
-            label={localization.cloneDialog.setTitle}
-            labelStyle={{
-              color: alternateTextColor
-            }}
-            onTouchTap={this.handleClone}
-          />
-        ));
+        <FlatButton
+          label={localization.cloneDialog.setTitle}
+          labelStyle={{
+            color: alternateTextColor
+          }}
+          onTouchTap={this.handleClone}
+        />
+      ));
 
     return (
       <AppBar
@@ -426,42 +425,42 @@ export default class Menu extends PureComponent {
                 ]}
               />
             ) : (
-                <MenuItem
-                  primaryText={localization.menu.login}
-                  disabled={isLoggedin}
-                  leftIcon={<ActionAccountCircle />}
-                  rightIcon={<ArrowDropRight />}
-                  menuItems={[
-                    <HoverMenuItem
-                      key="1"
-                      primaryText={localization.menu.withGoogle}
-                      leftIcon={<GoogleIcon />}
-                      style={styles.google}
-                      onTouchTap={() =>
-                        this.handleLoginWithOAuth(organization.api.google)
-                      }
-                    />,
-                    <HoverMenuItem
-                      key="2"
-                      primaryText={localization.menu.withFacebook}
-                      leftIcon={<FacebookIcon />}
-                      style={styles.facebook}
-                      onTouchTap={() =>
-                        this.handleLoginWithOAuth(organization.api.facebook)
-                      }
-                    />,
-                    <HoverMenuItem
-                      key="3"
-                      primaryText={localization.menu.withTwitter}
-                      leftIcon={<TwitterIcon />}
-                      style={styles.twitter}
-                      onTouchTap={() =>
-                        this.handleLoginWithOAuth(organization.api.twitter)
-                      }
-                    />
-                  ]}
-                />
-              )}
+              <MenuItem
+                primaryText={localization.menu.login}
+                disabled={isLoggedin}
+                leftIcon={<ActionAccountCircle />}
+                rightIcon={<ArrowDropRight />}
+                menuItems={[
+                  <HoverMenuItem
+                    key="1"
+                    primaryText={localization.menu.withGoogle}
+                    leftIcon={<GoogleIcon />}
+                    style={styles.google}
+                    onTouchTap={() =>
+                      this.handleLoginWithOAuth(organization.api.google)
+                    }
+                  />,
+                  <HoverMenuItem
+                    key="2"
+                    primaryText={localization.menu.withFacebook}
+                    leftIcon={<FacebookIcon />}
+                    style={styles.facebook}
+                    onTouchTap={() =>
+                      this.handleLoginWithOAuth(organization.api.facebook)
+                    }
+                  />,
+                  <HoverMenuItem
+                    key="3"
+                    primaryText={localization.menu.withTwitter}
+                    leftIcon={<TwitterIcon />}
+                    style={styles.twitter}
+                    onTouchTap={() =>
+                      this.handleLoginWithOAuth(organization.api.twitter)
+                    }
+                  />
+                ]}
+              />
+            )}
             {isLoggedin ? (
               <MenuItem
                 primaryText={localization.menu.logout}
@@ -509,27 +508,27 @@ export default class Menu extends PureComponent {
           />
           {this.state.open
             ? Object.entries(this.props.cards)
-              .map(([name, card]) => ({
-                name,
-                ...card
-              }))
-              .map(item => (
-                <MenuItem
-                  key={item.name}
-                  primaryText={
-                    localization[lowerCaseAtFirst(item.name)].title
-                  }
-                  leftIcon={
-                    this.props.cardIcons && this.props.cardIcons[item.name]
-                      ? this.props.cardIcons[item.name]()
-                      : null
-                  }
-                  onTouchTap={() => {
-                    this.props.updateCard(item.name, { visible: true });
-                    this.handleToggleDrawer();
-                  }}
-                />
-              ))
+                .map(([name, card]) => ({
+                  name,
+                  ...card
+                }))
+                .map(item => (
+                  <MenuItem
+                    key={item.name}
+                    primaryText={
+                      localization[lowerCaseAtFirst(item.name)].title
+                    }
+                    leftIcon={
+                      this.props.cardIcons && this.props.cardIcons[item.name]
+                        ? this.props.cardIcons[item.name]()
+                        : null
+                    }
+                    onTouchTap={() => {
+                      this.props.updateCard(item.name, { visible: true });
+                      this.handleToggleDrawer();
+                    }}
+                  />
+                ))
             : null}
           <MenuItem
             primaryText={localization.menu.version}

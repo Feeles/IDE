@@ -70,9 +70,11 @@ export default class MediaCard extends PureComponent {
 
     return (
       <Card icon={MediaCard.icon()} {...this.props.cardPropsBag}>
-        {this.state.playerState.url
-          ? <ReactPlayer {...playerState} />
-          : <div>URL not given</div>}
+        {this.state.playerState.url ? (
+          <ReactPlayer {...playerState} />
+        ) : (
+          <div>URL not given</div>
+        )}
       </Card>
     );
   }

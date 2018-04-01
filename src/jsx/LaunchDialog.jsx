@@ -18,7 +18,7 @@ export default class LaunchDialog extends PureComponent {
   };
 
   static defaultProps = {
-    fallback: () => { }
+    fallback: () => {}
   };
 
   state = {
@@ -130,7 +130,7 @@ export default class LaunchDialog extends PureComponent {
           {localization.common.or}
         </div>
         <div style={styles.container}>
-          {this.state.projects.map(item =>
+          {this.state.projects.map(item => (
             <ProjectCard
               key={item.id}
               project={item}
@@ -139,7 +139,7 @@ export default class LaunchDialog extends PureComponent {
               onProcessEnd={() => this.refreshState()}
               localization={localization}
             />
-          )}
+          ))}
         </div>
       </Dialog>
     );

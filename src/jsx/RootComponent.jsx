@@ -211,7 +211,7 @@ class RootComponent extends Component {
 
   async progress(file) {
     if (Math.random() < 0.1 || this.state.last === 1) {
-      await new Promise((resolve) => {
+      await new Promise(resolve => {
         requestAnimationFrame(resolve);
       });
     }
