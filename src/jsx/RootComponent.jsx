@@ -45,7 +45,18 @@ class RootComponent extends Component {
     // An URL string to continuous deploying
     deployURL: PropTypes.string,
     // Handle file change
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    // Handle screenshot image change
+    onThumbnailChange: PropTypes.func,
+    // For using external DB
+    disableLocalSave: PropTypes.bool,
+    // For using external thumbnail manager
+    disableScreenShotCard: PropTypes.bool
+  };
+
+  static defaultProps = {
+    disableLocalSave: false,
+    disableScreenShotCard: false
   };
 
   state = {
@@ -63,7 +74,7 @@ class RootComponent extends Component {
   };
 
   componentWillMount() {
-    const { title, seeds } = this.props;
+    const { title, seeds, disableLocalSave } = this.props;
 
     const langs = []
       .concat(new URLSearchParams(location.search).getAll('lang')) // ?lang=ll_CC
@@ -86,6 +97,9 @@ class RootComponent extends Component {
     } else if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
+    } else if (disableLocalSave) {
+      // Use Feeles as a module. Do not access any local data.
+      this.defaultLaunch();
     } else {
       if (process.env.NODE_ENV !== 'production') {
         if (this.props.jsonURL) {
@@ -310,21 +324,24 @@ class RootComponent extends Component {
         {this.state.last > 0 ? (
           this.renderLoading()
         ) : (
-            <Main
-              files={this.state.files}
-              rootElement={rootElement}
-              rootStyle={getComputedStyle(rootElement)}
-              project={this.state.project}
-              launchIDE={this.launchIDE}
-              localization={this.state.localization}
-              setLocalization={this.setLocalization}
-              muiTheme={this.state.muiTheme}
-              setMuiTheme={this.setMuiTheme}
-              deployURL={this.state.deployURL}
-              setDeployURL={deployURL => this.setState({ deployURL })}
-              onChange={this.props.onChange}
-            />
-          )}
+          <Main
+            files={this.state.files}
+            rootElement={rootElement}
+            rootStyle={getComputedStyle(rootElement)}
+            project={this.state.project}
+            launchIDE={this.launchIDE}
+            localization={this.state.localization}
+            setLocalization={this.setLocalization}
+            muiTheme={this.state.muiTheme}
+            setMuiTheme={this.setMuiTheme}
+            deployURL={this.state.deployURL}
+            setDeployURL={deployURL => this.setState({ deployURL })}
+            onChange={this.props.onChange}
+            onThumbnailChange={this.props.onThumbnailChange}
+            disableLocalSave={this.props.disableLocalSave}
+            disableScreenShotCard={this.props.disableScreenShotCard}
+          />
+        )}
       </MuiThemeProvider>
     );
   }

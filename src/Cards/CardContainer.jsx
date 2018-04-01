@@ -43,7 +43,8 @@ export default class CardContainer extends PureComponent {
     showNotice: PropTypes.func.isRequired,
     deployURL: PropTypes.string,
     oAuthId: PropTypes.string,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    disableScreenShotCard: PropTypes.bool.isRequired
   };
 
   state = {
@@ -224,11 +225,13 @@ export default class CardContainer extends PureComponent {
           {...cardProps}
           cardPropsBag={bag('HierarchyCard')}
         />
-        <ScreenShotCard
-          ref={ref => (this.cardRefs.ScreenShotCard = ref)}
-          {...cardProps}
-          cardPropsBag={bag('ScreenShotCard')}
-        />
+        {this.props.disableScreenShotCard ? null : (
+          <ScreenShotCard
+            ref={ref => (this.cardRefs.ScreenShotCard = ref)}
+            {...cardProps}
+            cardPropsBag={bag('ScreenShotCard')}
+          />
+        )}
       </div>
     );
   }

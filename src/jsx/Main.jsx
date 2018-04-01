@@ -74,7 +74,10 @@ export default class Main extends Component {
     setMuiTheme: PropTypes.func.isRequired,
     deployURL: PropTypes.string,
     setDeployURL: PropTypes.func.isRequired,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    onThumbnailChange: PropTypes.func,
+    disableLocalSave: PropTypes.bool.isRequired,
+    disableScreenShotCard: PropTypes.bool.isRequired
   };
 
   static contextTypes = {
@@ -129,6 +132,34 @@ export default class Main extends Component {
 
   componentDidMount() {
     document.title = this.getConfig('ogp')['og:title'] || '';
+
+    // 定期的にスクリーンショットを撮る
+    if (this.props.onThumbnailChange) {
+      const { globalEvent } = this.state;
+      const cache = new Set();
+      globalEvent.on('message.capture', event => {
+        const { value } = event.data || {};
+        if (!cache.has(value)) {
+          this.props.onThumbnailChange(value);
+          cache.add(value);
+        }
+      });
+      const screenShotLater = async () => {
+        await new Promise(resolve => window.setTimeout(resolve, 10 * 1000));
+        const request = {
+          query: 'capture',
+          type: 'image/jpeg'
+        };
+        await this.state.globalEvent.emitAsync('postMessage', request);
+        screenShotLater();
+      };
+      screenShotLater();
+    }
+
+    if (this.props.onChange) {
+      // ファイルの内容を伝える（一番最初）
+      this.props.onChange({ files: this.props.files });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -155,6 +186,10 @@ export default class Main extends Component {
     if (!this.state.project && prevState.fileView !== this.state.fileView) {
       if (process.env.NODE_ENV !== 'production') {
         // development のときは自動で作られない
+        return;
+      }
+      if (this.props.disableLocalSave) {
+        // disableLocalSave のときは自動で作られない
         return;
       }
       // Create new project
@@ -428,7 +463,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { localization } = this.props;
+    const { localization, disableLocalSave } = this.props;
     const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
@@ -448,25 +483,27 @@ export default class Main extends Component {
 
     return (
       <div style={styles.root}>
-        <Menu
-          {...commonProps}
-          setLocalization={this.props.setLocalization}
-          openFileDialog={this.openFileDialog}
-          saveAs={this.saveAs}
-          project={this.state.project}
-          setProject={this.setProject}
-          cards={this.state.cards}
-          updateCard={this.updateCard}
-          launchIDE={this.props.launchIDE}
-          deployURL={this.props.deployURL}
-          setDeployURL={this.props.setDeployURL}
-          oAuthId={this.state.oAuthId}
-          setOAuthId={this.setOAuthId}
-          showAll={this.state.showAll}
-          toggleShowAll={this.toggleShowAll}
-          cardIcons={this.state.cardIcons}
-          globalEvent={this.state.globalEvent}
-        />
+        {disableLocalSave ? null : (
+          <Menu
+            {...commonProps}
+            setLocalization={this.props.setLocalization}
+            openFileDialog={this.openFileDialog}
+            saveAs={this.saveAs}
+            project={this.state.project}
+            setProject={this.setProject}
+            cards={this.state.cards}
+            updateCard={this.updateCard}
+            launchIDE={this.props.launchIDE}
+            deployURL={this.props.deployURL}
+            setDeployURL={this.props.setDeployURL}
+            oAuthId={this.state.oAuthId}
+            setOAuthId={this.setOAuthId}
+            showAll={this.state.showAll}
+            toggleShowAll={this.toggleShowAll}
+            cardIcons={this.state.cardIcons}
+            globalEvent={this.state.globalEvent}
+          />
+        )}
         <CardContainer
           {...commonProps}
           cards={this.state.cards}
@@ -487,6 +524,7 @@ export default class Main extends Component {
           oAuthId={this.state.oAuthId}
           ref={this.handleContainerRef}
           globalEvent={this.state.globalEvent}
+          disableScreenShotCard={this.props.disableScreenShotCard}
         />
         <Footer
           deployURL={this.props.deployURL}
