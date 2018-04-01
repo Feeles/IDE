@@ -2,14 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
-import { Card, CardHeader, CardActions, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import { brown50 } from 'material-ui/styles/colors';
 
 import { personalDB, updateProject } from '../database/';
-import EditableLabel from 'jsx/EditableLabel';
 import { ProjectCard } from '../Menu/CloneDialog';
 
 export default class LaunchDialog extends PureComponent {
