@@ -17,6 +17,7 @@ const config = {
     h4p: './src/main'
   },
   output: {
+    libraryTarget: 'umd',
     path: __dirname + '/dist/',
     filename: '[name].js'
   },
