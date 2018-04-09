@@ -46,6 +46,8 @@ class RootComponent extends Component {
     deployURL: PropTypes.string,
     // Handle file change
     onChange: PropTypes.func,
+    // Handle message from iframe
+    onMessage: PropTypes.func,
     // Handle screenshot image change
     onThumbnailChange: PropTypes.func,
     // For using external DB
@@ -337,6 +339,7 @@ class RootComponent extends Component {
             deployURL={this.state.deployURL}
             setDeployURL={deployURL => this.setState({ deployURL })}
             onChange={this.props.onChange}
+            onMessage={this.props.onMessage}
             onThumbnailChange={this.props.onThumbnailChange}
             disableLocalSave={this.props.disableLocalSave}
             disableScreenShotCard={this.props.disableScreenShotCard}

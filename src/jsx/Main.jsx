@@ -75,6 +75,7 @@ export default class Main extends Component {
     deployURL: PropTypes.string,
     setDeployURL: PropTypes.func.isRequired,
     onChange: PropTypes.func,
+    onMessage: PropTypes.func,
     onThumbnailChange: PropTypes.func,
     disableLocalSave: PropTypes.bool.isRequired,
     disableScreenShotCard: PropTypes.bool.isRequired
@@ -160,6 +161,13 @@ export default class Main extends Component {
       // ファイルの内容を伝える（一番最初）
       this.props.onChange({ files: this.props.files });
     }
+
+    // iframe からのイベントを伝える
+    this.state.globalEvent.on('message.dispatchOnMessage', event => {
+      if (this.props.onMessage) {
+        this.props.onMessage({ ...event });
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
