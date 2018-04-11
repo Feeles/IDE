@@ -33,25 +33,13 @@ const config = {
         test: /\.(jsx?)$/,
         loaders: ['happypack/loader'],
         include: [path.resolve(__dirname, 'src')]
-      },
-      {
-        test: /\.css$/,
-        loaders: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.(html|hbs)$/,
-        loaders: ['handlebars-loader']
-      },
-      {
-        test: /\.json$/,
-        loaders: ['json-loader']
       }
     ],
     // https://github.com/webpack/webpack/issues/5135
     strictThisContextOnImports: true
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.html', '.json']
+    extensions: ['.js', '.jsx']
   },
   plugins: [
     new webpack.DefinePlugin({
