@@ -5,7 +5,7 @@
   "main": "lib/main.js",
   "scripts": {
     "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline",
-    "production": "NODE_ENV=production babel -d lib src",
+    "production": "babel -d lib src",
     "build": "npm run production",
     "heroku-postbuild": "npm run production"
   },
