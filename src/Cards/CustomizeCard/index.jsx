@@ -6,9 +6,9 @@ import { CardHeader } from 'material-ui/Card';
 import ActionSettingsApplications
   from 'material-ui/svg-icons/action/settings-applications';
 
-import { SourceFile } from 'File/';
+import { SourceFile } from '../../File/';
 import EditFile from '../EditFile';
-import resolveOrigin from 'utils/resolveOrigin';
+import resolveOrigin from '../../utils/resolveOrigin';
 
 export default class CustomizeCard extends PureComponent {
   static propTypes = {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import Popover from 'material-ui/Popover';
 
-import { SignDialog } from 'FileDialog/';
+import { SignDialog } from '../../FileDialog/';
 
 const getStyle = (props, context) => {
   const { palette } = context.muiTheme;

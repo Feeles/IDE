@@ -6,7 +6,7 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { transparent } from 'material-ui/styles/colors';
 
-import DragTypes from 'utils/dragTypes';
+import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, state, context) => {
   const { isOver } = props;

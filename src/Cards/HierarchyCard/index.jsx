@@ -5,9 +5,9 @@ import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import Card from '../CardWindow';
-import { makeFromFile } from 'File/';
-import { SignDialog, AddDialog } from 'FileDialog/';
-import { Tab } from 'ChromeTab/';
+import { makeFromFile } from '../../File/';
+import { SignDialog, AddDialog } from '../../FileDialog/';
+import { Tab } from '../../ChromeTab/';
 import Root from './Root';
 import SearchBar from './SearchBar';
 

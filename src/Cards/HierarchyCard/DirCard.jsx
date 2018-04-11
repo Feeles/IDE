@@ -6,7 +6,7 @@ import { NativeTypes } from 'react-dnd-html5-backend';
 
 import FileCard from './FileCard';
 import getHierarchy from './getHierarchy';
-import DragTypes from 'utils/dragTypes';
+import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, context) => {
   const { isRoot, isDirOpened, isOver, dragSource } = props;

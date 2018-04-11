@@ -11,7 +11,7 @@ import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forwa
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
-import organization from 'organization';
+import organization from '../organization';
 
 /**
  * OGPの設定を行い, デプロイが必要な場合 true で resolve する
@@ -280,29 +280,31 @@ class EditOGP extends PureComponent {
           <CardMedia
             style={styles.media}
             overlay={
-              this.state.images.length > 1
-                ? <CardActions style={styles.navigation}>
-                    <IconButton onTouchTap={this.handlePrevious}>
-                      <NavigationArrowBack color="white" />
-                    </IconButton>
-                    <div style={{ flexGrow: 1 }} />
-                    <IconButton onTouchTap={this.handleNext}>
-                      <NavigationArrowForward color="white" />
-                    </IconButton>
-                  </CardActions>
-                : null
+              this.state.images.length > 1 ? (
+                <CardActions style={styles.navigation}>
+                  <IconButton onTouchTap={this.handlePrevious}>
+                    <NavigationArrowBack color="white" />
+                  </IconButton>
+                  <div style={{ flexGrow: 1 }} />
+                  <IconButton onTouchTap={this.handleNext}>
+                    <NavigationArrowForward color="white" />
+                  </IconButton>
+                </CardActions>
+              ) : null
             }
           >
-            {ogp['og:image']
-              ? <img style={styles.image} src={ogp['og:image']} />
-              : <div style={styles.loading}>
-                  <FloatingActionButton
-                    style={styles.progress}
-                    onTouchTap={this.handleScreenShot}
-                  >
-                    <ImagePhotoCamera />
-                  </FloatingActionButton>
-                </div>}
+            {ogp['og:image'] ? (
+              <img style={styles.image} src={ogp['og:image']} />
+            ) : (
+              <div style={styles.loading}>
+                <FloatingActionButton
+                  style={styles.progress}
+                  onTouchTap={this.handleScreenShot}
+                >
+                  <ImagePhotoCamera />
+                </FloatingActionButton>
+              </div>
+            )}
           </CardMedia>
           <CardHeader
             title={
@@ -361,12 +363,8 @@ class EditAuthor extends PureComponent {
 
     return (
       <div>
-        <h1>
-          {localization.metaDialog.creator}
-        </h1>
-        <h4>
-          {localization.metaDialog.creatorConfirm}
-        </h4>
+        <h1>{localization.metaDialog.creator}</h1>
+        <h4>{localization.metaDialog.creatorConfirm}</h4>
         <TextField
           id=""
           fullWidth

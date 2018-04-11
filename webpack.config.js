@@ -51,8 +51,7 @@ const config = {
     strictThisContextOnImports: true
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.html', '.json'],
-    modules: [path.resolve('./src'), 'node_modules']
+    extensions: ['.js', '.jsx', '.html', '.json']
   },
   plugins: [
     new webpack.DefinePlugin({

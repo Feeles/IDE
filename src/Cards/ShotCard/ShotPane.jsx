@@ -6,7 +6,7 @@ import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import { red50, red500 } from 'material-ui/styles/colors';
 
-import { SourceFile } from 'File/';
+import { SourceFile } from '../../File/';
 import ShotCard from './';
 import Editor from './Editor';
 import excessiveCare from './excessiveCare';

@@ -19,18 +19,18 @@ import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
-import TwitterIcon from 'utils/TwitterIcon';
-import FacebookIcon from 'utils/FacebookIcon';
-import GoogleIcon from 'utils/GoogleIcon';
+import TwitterIcon from '../utils/TwitterIcon';
+import FacebookIcon from '../utils/FacebookIcon';
+import GoogleIcon from '../utils/GoogleIcon';
 
 import { acceptedLanguages } from '../localization/';
 import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
 import MetaDialog from './MetaDialog';
 import { updateProject } from '../database/';
-import organization from 'organization';
-import debugWindow from 'utils/debugWindow';
-import open from 'utils/open';
+import organization from '../organization';
+import debugWindow from '../utils/debugWindow';
+import open from '../utils/open';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =

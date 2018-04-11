@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SourceFile } from 'File/';
+import { SourceFile } from '../File/';
 
 const getUniqueId = (id => () => 'Tab__' + ++id)(0);
 

@@ -10,9 +10,9 @@ import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { emphasize, fade } from 'material-ui/utils/colorManipulator';
 
-import organization from 'organization';
-import debugWindow from 'utils/debugWindow';
-import { SourceFile, BinaryFile } from 'File/';
+import organization from '../../organization';
+import debugWindow from '../../utils/debugWindow';
+import { SourceFile } from '../../File/';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =

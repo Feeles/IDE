@@ -8,7 +8,7 @@ import transitions from 'material-ui/styles/transitions';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import SocialShare from 'material-ui/svg-icons/social/share';
 
-import organization from 'organization';
+import organization from '../organization';
 
 export default class Footer extends PureComponent {
   static propTypes = {
@@ -98,7 +98,7 @@ export default class Footer extends PureComponent {
       window.twttr.widgets.load();
     }
     /* https://dev.twitter.com/web/javascript/loading */
-    window.twttr = (function (d, s, id) {
+    window.twttr = (function(d, s, id) {
       var js,
         fjs = d.getElementsByTagName(s)[0],
         t = window.twttr || {};
@@ -109,7 +109,7 @@ export default class Footer extends PureComponent {
       fjs.parentNode.insertBefore(js, fjs);
 
       t._e = [];
-      t.ready = function (f) {
+      t.ready = function(f) {
         t._e.push(f);
       };
 
@@ -123,13 +123,15 @@ export default class Footer extends PureComponent {
       window.FB.XFBML.parse();
     }
     /* https://developers.facebook.com/docs/plugins/share-button */
-    (function (d, s, id) {
+    (function(d, s, id) {
       var js,
         fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s);
       js.id = id;
-      js.src = `//connect.facebook.net/${localization.ll_CC}/sdk.js#xfbml=1&version=v2.8`;
+      js.src = `//connect.facebook.net/${
+        localization.ll_CC
+      }/sdk.js#xfbml=1&version=v2.8`;
       fjs.parentNode.insertBefore(js, fjs);
     })(document, 'script', 'facebook-jssdk');
   }

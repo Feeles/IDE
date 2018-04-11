@@ -6,7 +6,7 @@ import Table, { TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
-import { SourceFile } from 'File/';
+import { SourceFile } from '../File/';
 
 const getStyles = (props, context) => {
   return {
@@ -65,9 +65,7 @@ export default class AboutDialog extends PureComponent {
                 <TableRowColumn style={left}>
                   {aboutDialog.coreVersion}
                 </TableRowColumn>
-                <TableRowColumn>
-                  {CORE_VERSION}
-                </TableRowColumn>
+                <TableRowColumn>{CORE_VERSION}</TableRowColumn>
               </TableRow>
               <TableRow>
                 <TableRowColumn style={left}>

@@ -5,7 +5,7 @@ import { DropTarget } from 'react-dnd';
 import HardwareComputer from 'material-ui/svg-icons/hardware/computer';
 import { transparent } from 'material-ui/styles/colors';
 
-import DragTypes from 'utils/dragTypes';
+import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, context, state) => {
   const { isOver } = props;

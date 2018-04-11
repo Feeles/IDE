@@ -9,8 +9,8 @@ import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
 
 import Filename from './Filename';
-import { PreferenceDialog } from 'FileDialog/';
-import DragTypes from 'utils/dragTypes';
+import { PreferenceDialog } from '../../FileDialog/';
+import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, context) => {
   const { file, selectedFile, tabbedFiles, isDragging } = props;

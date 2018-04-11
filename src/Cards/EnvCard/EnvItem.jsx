@@ -4,7 +4,7 @@ import TextField from 'material-ui/TextField';
 import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 
-import EditableLabel from 'jsx/EditableLabel';
+import EditableLabel from '../../jsx/EditableLabel';
 
 export default class EnvItem extends PureComponent {
   static propTypes = {

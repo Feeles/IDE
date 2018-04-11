@@ -6,9 +6,9 @@ import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 import transitions from 'material-ui/styles/transitions';
 
 import Card from '../CardWindow';
-import { SourceFile } from 'File/';
+import { SourceFile } from '../../File/';
 import SourceEditor from './SourceEditor';
-import ChromeTab, { Tab } from 'ChromeTab/';
+import ChromeTab, { Tab } from '../../ChromeTab/';
 
 const MAX_TAB = 5;
 

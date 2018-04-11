@@ -18,7 +18,7 @@ import {
   updateProject,
   deleteProject
 } from '../database/';
-import EditableLabel from 'jsx/EditableLabel';
+import EditableLabel from '../jsx/EditableLabel';
 
 export default class CloneDialog extends PureComponent {
   static propTypes = {

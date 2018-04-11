@@ -29,11 +29,11 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 import { FileView, createProject, updateProject } from '../database/';
-import { SourceFile, configs } from 'File/';
-import codemirrorStyle from 'js/codemirrorStyle';
-import * as MonitorTypes from 'utils/MonitorTypes';
+import { SourceFile, configs } from '../File/';
+import codemirrorStyle from '../js/codemirrorStyle';
+import * as MonitorTypes from '../utils/MonitorTypes';
 import Menu from '../Menu/';
-import FileDialog, { SaveDialog } from 'FileDialog/';
+import FileDialog, { SaveDialog } from '../FileDialog/';
 import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';

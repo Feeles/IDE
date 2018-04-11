@@ -5,7 +5,7 @@ import { CardMedia } from 'material-ui/Card';
 import ContentReply from 'material-ui/svg-icons/content/reply';
 
 import ShotPane from './ShotPane';
-import shallowEqual from 'utils/shallowEqual';
+import shallowEqual from '../../utils/shallowEqual';
 
 export default class ShotCard extends PureComponent {
   static propTypes = {

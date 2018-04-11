@@ -1,8 +1,7 @@
 import React from 'react';
 import { Pos } from 'codemirror';
 
-
-import { separate } from 'File/';
+import { separate } from '../File/';
 
 export default class Snippet {
   constructor(props) {
@@ -12,9 +11,7 @@ export default class Snippet {
   }
 
   get text() {
-    return this.props.body
-      .replace(/\\n/g, '\n')
-      .replace(/\\t/g, '\t');
+    return this.props.body.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
   }
 
   get prefix() {
@@ -51,35 +48,36 @@ export default class Snippet {
   }
 
   hint(instance, self, data) {
-    const from  = self.asset ? new Pos(self.from.line + 1, 0) : self.from;
-    const to    = self.asset ? from : self.to;
-    const text  = self.asset ? data.text + '\n' : data.text;
+    const from = self.asset ? new Pos(self.from.line + 1, 0) : self.from;
+    const to = self.asset ? from : self.to;
+    const text = self.asset ? data.text + '\n' : data.text;
 
     instance.replaceRange(text, from, to, 'complete');
 
     const length = text.split('\n').length + (self.asset ? -1 : 0);
-    Array.from({ length }).forEach((v, i) => instance.indentLine(i + from.line));
+    Array.from({ length }).forEach((v, i) =>
+      instance.indentLine(i + from.line)
+    );
 
     const endLine = from.line + length - 1;
     const endCh = instance.getLine(endLine).length;
 
     return {
       from,
-      to: new Pos(endLine, endCh),
+      to: new Pos(endLine, endCh)
     };
   }
-
 }
 
-const getUniqueId = ((id) => () => 'Snippet__' + ++id)(0);
+const getUniqueId = (id => () => 'Snippet__' + ++id)(0);
 
-const parseElement = (html) => {
+const parseElement = html => {
   const span = document.createElement('span');
   span.innerHTML = html;
   if (span.firstChild) {
     const { tagName, attributes } = span.firstChild;
     const props = Array.from(attributes)
-      .map((attr) => ({ [attr.name]: attr.value }))
+      .map(attr => ({ [attr.name]: attr.value }))
       .reduce((p, c) => Object.assign(p, c), {});
     return React.createElement(tagName, props);
   }

@@ -7,9 +7,9 @@ import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
-import CodeMirrorComponent from 'utils/CodeMirrorComponent';
-import MDReactComponent from 'jsx/MDReactComponent';
-import { Tab } from 'ChromeTab/';
+import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
+import MDReactComponent from '../../jsx/MDReactComponent';
+import { Tab } from '../../ChromeTab/';
 
 const BarHeight = 36;
 

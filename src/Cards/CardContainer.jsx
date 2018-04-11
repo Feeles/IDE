@@ -12,7 +12,7 @@ import ShotCard from './ShotCard/';
 import EditorCard from './EditorCard/';
 import HierarchyCard from './HierarchyCard/';
 import ScreenShotCard from './ScreenShotCard/';
-import * as MonitorTypes from 'utils/MonitorTypes';
+import * as MonitorTypes from '../utils/MonitorTypes';
 
 export default class CardContainer extends PureComponent {
   static propTypes = {

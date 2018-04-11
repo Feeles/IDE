@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Popout from 'jsx/ReactPopout';
+import Popout from '../../jsx/ReactPopout';
 
-import { SourceFile, makeFromFile } from 'File/';
-import composeEnv from 'File/composeEnv';
-import popoutTemplate from 'html/popout';
+import { SourceFile, makeFromFile } from '../../File/';
+import composeEnv from '../../File/composeEnv';
+import popoutTemplate from '../../html/popout';
 import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
 import ResolveProgress from './ResolveProgress';
-import uniqueId from 'utils/uniqueId';
-import { getPrimaryUser } from 'database/';
+import uniqueId from '../../utils/uniqueId';
+import { getPrimaryUser } from '../../database/';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =

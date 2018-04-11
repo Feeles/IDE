@@ -49,7 +49,7 @@ CodeMirror.modeInfo.push({
 
 import './codemirror-hint-extension';
 
-import CodeMirrorComponent from 'utils/CodeMirrorComponent';
+import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 
 export default class Editor extends PureComponent {
   static propTypes = {
