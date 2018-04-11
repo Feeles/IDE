@@ -4,7 +4,6 @@ import Popout from '../../jsx/ReactPopout';
 
 import { SourceFile, makeFromFile } from '../../File/';
 import composeEnv from '../../File/composeEnv';
-import popoutTemplate from '../../html/popout';
 import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
@@ -22,8 +21,27 @@ const fetch =
   }).fetch;
 
 const ConnectionTimeout = 1000;
+const popoutTemplate = `<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style media="screen">
+        body {
+            margin: 0;
+        }
+        #popout-content-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+        }
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
+`;
 const popoutURL = URL.createObjectURL(
-  new Blob([popoutTemplate()], { type: 'text/html' })
+  new Blob([popoutTemplate], { type: 'text/html' })
 );
 
 const SpeechRecognition =
