@@ -1,4 +1,4 @@
-import screenJs from '../../../lib/screen';
+import screenJs from '../../lib/screen';
 import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
 
 /**
