@@ -2,7 +2,7 @@
   "name": "feeles-ide",
   "version": "0.3.0",
   "description": "The hackable and serializable IDE to make learning material",
-  "main": "dist/h4p.js",
+  "main": "lib/h4p.js",
   "scripts": {
     "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline",
     "production": "NODE_ENV=production babel -d lib src",
