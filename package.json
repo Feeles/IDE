@@ -1,6 +1,6 @@
 {
   "name": "feeles-ide",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "The hackable and serializable IDE to make learning material",
   "main": "lib/main.js",
   "scripts": {
