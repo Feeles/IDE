@@ -60,7 +60,7 @@ const config = {
       EXPORT_VAR_NAME: JSON.stringify(exportVarName)
     }),
 
-    new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
+    new webpack.LoaderOptionsPlugin({ minimize: false, debug: false }),
 
     new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
 
