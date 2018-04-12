@@ -5,9 +5,10 @@
   "main": "lib/main.js",
   "scripts": {
     "start": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline",
-    "production": "babel src --out-dir lib --copy-files",
-    "build": "npm run production",
-    "heroku-postbuild": "npm run production"
+    "babel": "babel src --out-dir lib --copy-files",
+    "webpack": "NODE_ENV=production webpack -p",
+    "build": "npm run babel && npm run webpack",
+    "heroku-postbuild": "npm run build"
   },
   "repository": {
     "type": "git",

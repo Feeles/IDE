@@ -14,11 +14,11 @@ const port = process.env.PORT || 8081;
 
 const config = {
   entry: {
-    h4p: './src/main'
+    index: './src/main'
   },
   output: {
-    libraryTarget: 'commonjs',
-    path: __dirname + '/dist/',
+    libraryTarget: 'umd',
+    path: __dirname + '/umd/',
     filename: '[name].js'
   },
   module: {
@@ -37,13 +37,13 @@ const config = {
       {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader']
-      },
+      }
     ],
     // https://github.com/webpack/webpack/issues/5135
     strictThisContextOnImports: true
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx', '.css']
   },
   plugins: [
     new webpack.DefinePlugin({
