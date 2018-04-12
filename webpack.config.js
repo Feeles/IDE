@@ -33,7 +33,11 @@ const config = {
         test: /\.(jsx?)$/,
         loaders: ['happypack/loader'],
         include: [path.resolve(__dirname, 'src')]
-      }
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader']
+      },
     ],
     // https://github.com/webpack/webpack/issues/5135
     strictThisContextOnImports: true
