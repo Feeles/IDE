@@ -74,7 +74,7 @@ textarea {
   display: inline-block;
   border-radius: 2px;
   margin: -1px -2px -1px -4px;
-  padding: 1px 2px 1px 4px;
+  padding: 0px 2px 0px 4px;
   color: transparent;
   /* CSS hacking */
   box-shadow: 0 0 0 100em ${palette.primary1Color};

@@ -52,6 +52,7 @@ const getStyle = (props, state, context) => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
+      lineHeight: 1.15,
       backgroundColor: palette.backgroundColor
     }
   };
