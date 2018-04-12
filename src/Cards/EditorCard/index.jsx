@@ -152,7 +152,7 @@ export default class EditorCard extends PureComponent {
         <IconButton
           iconStyle={styles.largeIcon}
           style={styles.large}
-          onTouchTap={() => this.setLocation()}
+          onClick={() => this.setLocation()}
         >
           <AVPlayCircleOutline color={palette.alternateTextColor} />
         </IconButton>

@@ -125,7 +125,7 @@ export default class LaunchDialog extends PureComponent {
             primary
             label={localization.launchDialog.startNew}
             style={styles.button}
-            onTouchTap={this.props.fallback}
+            onClick={this.props.fallback}
           />
           {localization.common.or}
         </div>

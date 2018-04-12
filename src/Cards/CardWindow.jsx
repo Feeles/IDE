@@ -126,13 +126,13 @@ export default class CardWindow extends PureComponent {
           containerStyle={styles.innerContainer}
         >
           <div style={styles.header}>
-            <a style={styles.a} onTouchTap={this.handleScroll}>
+            <a style={styles.a} onClick={this.handleScroll}>
               {this.props.icon}
             </a>
             <div style={styles.blank} />
             {this.props.actions}
             {this.props.disableCloseButton ? null : (
-              <IconButton onTouchTap={this.closeCard} iconStyle={styles.close}>
+              <IconButton onClick={this.closeCard} iconStyle={styles.close}>
                 <NavigationClose />
               </IconButton>
             )}

@@ -493,7 +493,7 @@ export default class SourceEditor extends PureComponent {
             style={styles.barButton}
             labelStyle={styles.barButtonLabel}
             icon={<HardwareKeyboardBackspace />}
-            onTouchTap={this.handleUndo}
+            onClick={this.handleUndo}
           />
           <FlatButton
             label={localization.editorCard.save}
@@ -501,7 +501,7 @@ export default class SourceEditor extends PureComponent {
             style={styles.barButton}
             labelStyle={styles.barButtonLabel}
             icon={<ContentSave />}
-            onTouchTap={this.handleSaveAndRun}
+            onClick={this.handleSaveAndRun}
           />
           <div
             style={{

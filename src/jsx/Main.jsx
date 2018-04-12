@@ -220,7 +220,7 @@ export default class Main extends Component {
           message: localization.cloneDialog.autoSaved,
           action: localization.cloneDialog.setTitle,
           autoHideDuration: 20000,
-          onActionTouchTap: () => {
+          onActionClick: () => {
             this.openFileDialog(CloneDialog, {
               files: this.state.fileView.files,
               project: this.state.project,

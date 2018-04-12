@@ -54,9 +54,9 @@ export default class AddDialog extends Component {
     const actions = [
       <Abort
         label={localization.addDialog.cancel}
-        onTouchTap={this.props.onRequestClose}
+        onClick={this.props.onRequestClose}
       />,
-      <Confirm label={localization.addDialog.add} onTouchTap={this.handleAdd} />
+      <Confirm label={localization.addDialog.add} onClick={this.handleAdd} />
     ];
 
     return (

@@ -200,7 +200,7 @@ export default class ChromeTabs extends PureComponent {
         <div style={prepareStyles(styles.center)}>
           <div
             style={prepareStyles(styles.innerItem)}
-            onTouchTap={() => handleSelect(tab)}
+            onClick={() => handleSelect(tab)}
           >
             <a
               href="#"
@@ -211,7 +211,7 @@ export default class ChromeTabs extends PureComponent {
             </a>
             <IconButton
               style={styles.rightButton}
-              onTouchTap={handleRightTouchTap}
+              onClick={handleRightTouchTap}
               onMouseEnter={handleRightMouseEnter}
               onMouseLeave={handleRightMouseLeave}
             >

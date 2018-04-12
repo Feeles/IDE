@@ -100,14 +100,14 @@ export default class CreditBar extends PureComponent {
               }
               style={styles.smallButton}
               labelStyle={styles.smallLabel}
-              onTouchTap={this.handleSignDialog}
+              onClick={this.handleSignDialog}
             />}
         {file.credits.length > 0
           ? <FlatButton
               label={localization.credit.credits}
               style={styles.smallButton}
               labelStyle={styles.smallLabel}
-              onTouchTap={this.handleShowCredits}
+              onClick={this.handleShowCredits}
             />
           : null}
         <Popover

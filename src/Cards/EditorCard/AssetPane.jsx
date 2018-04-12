@@ -51,7 +51,7 @@ export default class AssetPane extends PureComponent {
           <AssetButton
             {...item}
             key={i}
-            onTouchTap={this.props.handleAssetInsert}
+            onClick={this.props.handleAssetInsert}
             findFile={this.props.findFile}
             localization={this.props.localization}
           />
@@ -116,7 +116,7 @@ export default class AssetPane extends PureComponent {
         <div style={styles.scroller}>
           {labels.map(label => this.renderEachLabel(label, styles))}
         </div>
-        <div style={styles.close} onTouchTap={this.props.handleClose}>
+        <div style={styles.close} onClick={this.props.handleClose}>
           <NavigationExpandLess color="white" />
         </div>
       </div>

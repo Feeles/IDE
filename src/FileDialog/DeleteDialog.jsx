@@ -36,8 +36,8 @@ export default class DeleteDialog extends Component {
     };
 
     const actions = [
-      <Abort onTouchTap={onRequestClose} />,
-      <Confirm label="Delete" onTouchTap={this.handleDelete} />
+      <Abort onClick={onRequestClose} />,
+      <Confirm label="Delete" onClick={this.handleDelete} />
     ];
 
     return (

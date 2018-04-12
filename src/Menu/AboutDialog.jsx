@@ -82,7 +82,7 @@ export default class AboutDialog extends PureComponent {
                     primary
                     label={aboutDialog.change}
                     disabled={!this.state.inputSrc}
-                    onTouchTap={this.handleChangeSrc}
+                    onClick={this.handleChangeSrc}
                   />
                 </TableRowColumn>
               </TableRow>

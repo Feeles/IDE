@@ -95,10 +95,10 @@ export default class Filename extends PureComponent {
               defaultValue={plane}
               ref={this.handleInput}
               style={styles.textField}
-              onTouchTap={this.handleTextFieldTap}
+              onClick={this.handleTextFieldTap}
             />
           : <span
-              onTouchTap={this.handleDoubleTap}
+              onClick={this.handleDoubleTap}
               style={prepareStyles(styles.plane)}
             >
               {plane}

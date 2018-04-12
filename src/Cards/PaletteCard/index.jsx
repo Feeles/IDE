@@ -144,7 +144,7 @@ export default class PaletteCard extends PureComponent {
         <span style={styles.label}>{key}</span>
         <span
           style={prepareStyles(rectStyle)}
-          onTouchTap={event => this.handleRectClick(event, key)}
+          onClick={event => this.handleRectClick(event, key)}
         />
       </div>
     );
@@ -168,19 +168,19 @@ export default class PaletteCard extends PureComponent {
               prepareStyles(styles.body),
               prepareStyles(styles.overlay)
             ]}
-            onTouchTap={e => this.handleRectClick(e, 'backgroundColor')}
+            onClick={e => this.handleRectClick(e, 'backgroundColor')}
           >
             <Paper
               style={styles.canvas}
-              onTouchTap={e => this.handleRectClick(e, 'canvasColor')}
+              onClick={e => this.handleRectClick(e, 'canvasColor')}
             >
               <Paper
                 style={styles.primary}
-                onTouchTap={e => this.handleRectClick(e, 'primary1Color', true)}
+                onClick={e => this.handleRectClick(e, 'primary1Color', true)}
               />
               <Paper
                 style={styles.secondary}
-                onTouchTap={e => this.handleRectClick(e, 'accent1Color', true)}
+                onClick={e => this.handleRectClick(e, 'accent1Color', true)}
               />
               <div style={prepareStyles(styles.blank)} />
             </Paper>

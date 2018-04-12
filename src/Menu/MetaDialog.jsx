@@ -83,13 +83,13 @@ export default class MetaDialog extends PureComponent {
       <FlatButton
         key="1"
         label={localization.metaDialog.back}
-        onTouchTap={this.back}
+        onClick={this.back}
       />,
       <RaisedButton
         key="2"
         primary
         label={localization.metaDialog.next}
-        onTouchTap={this.next}
+        onClick={this.next}
       />
     ];
 
@@ -282,11 +282,11 @@ class EditOGP extends PureComponent {
             overlay={
               this.state.images.length > 1 ? (
                 <CardActions style={styles.navigation}>
-                  <IconButton onTouchTap={this.handlePrevious}>
+                  <IconButton onClick={this.handlePrevious}>
                     <NavigationArrowBack color="white" />
                   </IconButton>
                   <div style={{ flexGrow: 1 }} />
-                  <IconButton onTouchTap={this.handleNext}>
+                  <IconButton onClick={this.handleNext}>
                     <NavigationArrowForward color="white" />
                   </IconButton>
                 </CardActions>
@@ -299,7 +299,7 @@ class EditOGP extends PureComponent {
               <div style={styles.loading}>
                 <FloatingActionButton
                   style={styles.progress}
-                  onTouchTap={this.handleScreenShot}
+                  onClick={this.handleScreenShot}
                 >
                   <ImagePhotoCamera />
                 </FloatingActionButton>

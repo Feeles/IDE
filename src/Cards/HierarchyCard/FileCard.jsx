@@ -114,7 +114,7 @@ class FileCard extends PureComponent {
       <div style={root}>
         <Paper
           zDepth={isSelected ? 2 : 0}
-          onTouchTap={() => handleFileSelect(file)}
+          onClick={() => handleFileSelect(file)}
           style={card}
         >
           {connectDragSource(
@@ -125,7 +125,7 @@ class FileCard extends PureComponent {
           <div style={prepareStyles(container)}>
             <Filename file={file} onChange={this.handleNameChange} />
           </div>
-          <IconButton onTouchTap={this.handleConfirmSettings}>
+          <IconButton onClick={this.handleConfirmSettings}>
             <ActionSettings color={secondaryTextColor} />
           </IconButton>
         </Paper>

@@ -32,7 +32,7 @@ export default class EditFile extends PureComponent {
         disabled={!this.props.fileKey}
         label={localization.common.editFile}
         icon={<EditorModeEdit />}
-        onTouchTap={this.handleEdit}
+        onClick={this.handleEdit}
       />
     );
   }

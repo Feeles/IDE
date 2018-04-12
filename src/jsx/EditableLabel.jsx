@@ -106,10 +106,10 @@ export default class EditableLabel extends PureComponent {
           onKeyPress={this.handleKeyPress}
         />
       : labelText
-          ? <div style={style} onTouchTap={this.handleTouch}>
+          ? <div style={style} onClick={this.handleTouch}>
               {labelText}
             </div>
-          : <div style={hint} onTouchTap={this.handleTouch}>
+          : <div style={hint} onClick={this.handleTouch}>
               <ContentCreate color={secondaryTextColor} />
               {this.props.tapTwiceQuickly}
             </div>;

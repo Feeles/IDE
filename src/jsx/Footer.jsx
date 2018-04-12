@@ -180,7 +180,7 @@ export default class Footer extends PureComponent {
           mini
           secondary
           style={styles.opener}
-          onTouchTap={() => this.setState({ open: true })}
+          onClick={() => this.setState({ open: true })}
         >
           <SocialShare />
         </FloatingActionButton>
@@ -189,7 +189,7 @@ export default class Footer extends PureComponent {
           <input
             readOnly
             value={this.shareURL}
-            onTouchTap={this.handleLinkCopy}
+            onClick={this.handleLinkCopy}
           />
           <div style={styles.blank} />
           {/* Twitter */}
@@ -217,7 +217,7 @@ export default class Footer extends PureComponent {
             />
           </div>
           <div style={styles.blank} />
-          <IconButton onTouchTap={() => this.setState({ open: false })}>
+          <IconButton onClick={() => this.setState({ open: false })}>
             <NavigationClose />
           </IconButton>
         </Paper>

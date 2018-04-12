@@ -64,7 +64,7 @@ class _DesktopFile extends PureComponent {
         />
         <IconButton
           style={icon}
-          onTouchTap={() => this.input && this.input.click()}
+          onClick={() => this.input && this.input.click()}
         >
           <HardwareComputer color={palette.secondaryTextColor} />
         </IconButton>

@@ -118,7 +118,7 @@ export default class SearchBar extends PureComponent {
         <TrashBox
           showTrashes={showTrashes}
           putFile={putFile}
-          onTouchTap={this.handleTrashBoxTap}
+          onClick={this.handleTrashBoxTap}
         />
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
         <Paper zDepth={3} style={bar}>
@@ -136,7 +136,7 @@ export default class SearchBar extends PureComponent {
           />
           <IconButton
             disabled={!query}
-            onTouchTap={() => this.handleUpdate('')}
+            onClick={() => this.handleUpdate('')}
           >
             <NavigationClose color={secondaryTextColor} />
           </IconButton>
@@ -147,7 +147,7 @@ export default class SearchBar extends PureComponent {
               label={localization.hierarchyCard.emptyTrashBox}
               icon={<ActionDeleteForever color={alternateTextColor} />}
               style={empty}
-              onTouchTap={deleteAll}
+              onClick={deleteAll}
             />
           : null}
       </div>

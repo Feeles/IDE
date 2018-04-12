@@ -93,8 +93,8 @@ export default class SignDialog extends PureComponent {
     const { content, localization } = this.props;
 
     const actions = [
-      <Abort onTouchTap={this.cancel} />,
-      <Confirm label="OK" onTouchTap={this.handleSign} />
+      <Abort onClick={this.cancel} />,
+      <Confirm label="OK" onClick={this.handleSign} />
     ];
 
     return (

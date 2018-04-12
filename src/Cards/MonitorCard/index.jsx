@@ -93,7 +93,7 @@ export default class MonitorCard extends PureComponent {
       <MenuItem
         key={value}
         primaryText={value}
-        onTouchTap={() => this.changeSize(w, h)}
+        onClick={() => this.changeSize(w, h)}
       />
     );
   }
@@ -139,7 +139,7 @@ export default class MonitorCard extends PureComponent {
       <IconButton
         key="refresh"
         disabled={feelesrc.disableReloadButton}
-        onTouchTap={() => this.props.setLocation()}
+        onClick={() => this.props.setLocation()}
       >
         <NavigationRefresh
           color={this.context.muiTheme.palette.primary1Color}
@@ -148,7 +148,7 @@ export default class MonitorCard extends PureComponent {
       <IconButton
         key="fullscreen"
         disabled={feelesrc.disableFullScreenButton}
-        onTouchTap={() => this.props.toggleFullScreen()}
+        onClick={() => this.props.toggleFullScreen()}
       >
         <NavigationFullscreen />
       </IconButton>
@@ -158,7 +158,7 @@ export default class MonitorCard extends PureComponent {
         <IconButton
           key="screenshot"
           disabled={this.state.processing}
-          onTouchTap={this.handleScreenShot}
+          onClick={this.handleScreenShot}
         >
           <ImagePhotoCamera />
         </IconButton>,
@@ -178,7 +178,7 @@ export default class MonitorCard extends PureComponent {
           <MenuItem
             primaryText={localization.monitorCard.popout}
             leftIcon={<OpenInBrowser />}
-            onTouchTap={() => this.props.togglePopout()}
+            onClick={() => this.props.togglePopout()}
           />
         </IconMenu>
       );

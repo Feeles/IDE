@@ -41,7 +41,7 @@ const mdComponents = [
       return tag === 'a';
     },
     render(tag, props, children, component, mdStyles) {
-      const onTouchTap = () => {
+      const onClick = () => {
         component.props.setLocation(decodeURIComponent(props.href));
       };
       return (
@@ -51,7 +51,7 @@ const mdComponents = [
           label={children}
           style={mdStyles.raisedButton}
           labelStyle={mdStyles.raisedButtonLabel}
-          onTouchTap={onTouchTap}
+          onClick={onClick}
         />
       );
     }
@@ -84,7 +84,7 @@ const mdComponents = [
       }
 
       // Edit file
-      const onTouchTap = () => {
+      const onClick = () => {
         const getFile = () =>
           component.props.findFile(item => item.key === file.key);
         component.props.selectTab(new Tab({ getFile }));
@@ -97,7 +97,7 @@ const mdComponents = [
           icon={<EditorModeEdit />}
           style={mdStyles.raisedButton}
           labelStyle={mdStyles.raisedButtonLabel}
-          onTouchTap={onTouchTap}
+          onClick={onClick}
         />
       );
     }

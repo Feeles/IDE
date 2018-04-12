@@ -261,7 +261,7 @@ export default class Menu extends PureComponent {
             message: localization.menu.published,
             action: localization.menu.goToSee,
             autoHideDuration: 20000,
-            onActionTouchTap: () => window.open(`${api.origin}/p/${search}`)
+            onActionClick: () => window.open(`${api.origin}/p/${search}`)
           }
         });
       } else {
@@ -286,7 +286,7 @@ export default class Menu extends PureComponent {
           message: localization.menu.loggedIn,
           action: localization.menu.logout,
           autoHideDuration: 20000,
-          onActionTouchTap: this.handleLogout
+          onActionClick: this.handleLogout
         }
       });
     };
@@ -339,7 +339,7 @@ export default class Menu extends PureComponent {
           labelStyle={{
             color: alternateTextColor
           }}
-          onTouchTap={this.handleClone}
+          onClick={this.handleClone}
         />
       ));
 
@@ -349,7 +349,7 @@ export default class Menu extends PureComponent {
         style={styles.root}
         titleStyle={{ flex: null }}
         iconStyleLeft={styles.leftIcon}
-        onLeftIconButtonTouchTap={this.handleToggleDrawer}
+        onLeftIconButtonClick={this.handleToggleDrawer}
       >
         <div style={{ flex: 1 }} />
         <Toggle
@@ -367,7 +367,7 @@ export default class Menu extends PureComponent {
         {this.props.showAll ? (
           <IconButton
             tooltip={localization.menu.clone}
-            onTouchTap={this.handleClone}
+            onClick={this.handleClone}
             style={styles.button}
           >
             <FileDownload color={alternateTextColor} />
@@ -401,7 +401,7 @@ export default class Menu extends PureComponent {
               <MenuItem
                 primaryText={localization.menu.deployAnonymous}
                 leftIcon={<FileCloudUpload />}
-                onTouchTap={() => this.handleDeploy(false, false)}
+                onClick={() => this.handleDeploy(false, false)}
               />
             )}
             {isLoggedin ? (
@@ -414,13 +414,13 @@ export default class Menu extends PureComponent {
                     primaryText={localization.menu.update}
                     disabled={!this.props.deployURL}
                     leftIcon={<ActionAutorenew />}
-                    onTouchTap={() => this.handleDeploy(true, true)}
+                    onClick={() => this.handleDeploy(true, true)}
                   />,
                   <MenuItem
                     key="2"
                     primaryText={localization.menu.create}
                     leftIcon={<FileCloudUpload />}
-                    onTouchTap={() => this.handleDeploy(true, false)}
+                    onClick={() => this.handleDeploy(true, false)}
                   />
                 ]}
               />
@@ -436,7 +436,7 @@ export default class Menu extends PureComponent {
                     primaryText={localization.menu.withGoogle}
                     leftIcon={<GoogleIcon />}
                     style={styles.google}
-                    onTouchTap={() =>
+                    onClick={() =>
                       this.handleLoginWithOAuth(organization.api.google)
                     }
                   />,
@@ -445,7 +445,7 @@ export default class Menu extends PureComponent {
                     primaryText={localization.menu.withFacebook}
                     leftIcon={<FacebookIcon />}
                     style={styles.facebook}
-                    onTouchTap={() =>
+                    onClick={() =>
                       this.handleLoginWithOAuth(organization.api.facebook)
                     }
                   />,
@@ -454,7 +454,7 @@ export default class Menu extends PureComponent {
                     primaryText={localization.menu.withTwitter}
                     leftIcon={<TwitterIcon />}
                     style={styles.twitter}
-                    onTouchTap={() =>
+                    onClick={() =>
                       this.handleLoginWithOAuth(organization.api.twitter)
                     }
                   />
@@ -464,7 +464,7 @@ export default class Menu extends PureComponent {
             {isLoggedin ? (
               <MenuItem
                 primaryText={localization.menu.logout}
-                onTouchTap={this.handleLogout}
+                onClick={this.handleLogout}
               />
             ) : null}
           </IconMenu>
@@ -489,7 +489,7 @@ export default class Menu extends PureComponent {
             <MenuItem
               key={lang.accept[0]}
               primaryText={lang.native}
-              onTouchTap={() => setLocalization(lang.accept[0])}
+              onClick={() => setLocalization(lang.accept[0])}
             />
           ))}
         </IconMenu>
@@ -504,7 +504,7 @@ export default class Menu extends PureComponent {
                 <NavigationArrowBack />
               </IconButton>
             }
-            onLeftIconButtonTouchTap={this.handleToggleDrawer}
+            onLeftIconButtonClick={this.handleToggleDrawer}
           />
           {this.state.open
             ? Object.entries(this.props.cards)
@@ -523,7 +523,7 @@ export default class Menu extends PureComponent {
                         ? this.props.cardIcons[item.name]()
                         : null
                     }
-                    onTouchTap={() => {
+                    onClick={() => {
                       this.props.updateCard(item.name, { visible: true });
                       this.handleToggleDrawer();
                     }}
@@ -533,7 +533,7 @@ export default class Menu extends PureComponent {
           <MenuItem
             primaryText={localization.menu.version}
             leftIcon={<ActionHistory />}
-            onTouchTap={() => {
+            onClick={() => {
               this.handleAbout();
               this.handleToggleDrawer();
             }}

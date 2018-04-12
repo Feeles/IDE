@@ -47,7 +47,7 @@ export default class SaveDialog extends PureComponent {
     const actions = [
       <Abort
         primary
-        onTouchTap={onRequestClose}
+        onClick={onRequestClose}
         label={localization.saveDialog.cancel}
       />
     ];

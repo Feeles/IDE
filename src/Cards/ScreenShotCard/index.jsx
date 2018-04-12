@@ -246,7 +246,7 @@ export default class ScreenShotCard extends PureComponent {
         <GridTile
           key={hash}
           style={styles.tile(hash)}
-          onTouchTap={e => this.handleSelect(e, hash)}
+          onClick={e => this.handleSelect(e, hash)}
         >
           <img style={styles.image(hash)} src={url} />
         </GridTile>
@@ -261,7 +261,7 @@ export default class ScreenShotCard extends PureComponent {
         <GridList
           cellHeight={180}
           style={styles.root}
-          onTouchTap={event => this.handleSelect(event, null)}
+          onClick={event => this.handleSelect(event, null)}
         >
           {gridList}
         </GridList>
@@ -269,14 +269,14 @@ export default class ScreenShotCard extends PureComponent {
           <FlatButton
             label={localization.screenShotCard.coverImage}
             disabled={!selected || alreadySetImage}
-            onTouchTap={this.handleThumbnailSet}
+            onClick={this.handleThumbnailSet}
           />
           <div style={styles.blank} />
           <FlatButton
             label=""
             icon={<ActionDelete />}
             disabled={!selected}
-            onTouchTap={this.handleThumbnailDelete}
+            onClick={this.handleThumbnailDelete}
           />
         </CardActions>
       </Card>

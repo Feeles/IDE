@@ -552,7 +552,7 @@ export default class Monitor extends PureComponent {
     const styles = getStyle(this.props, this.context, this.state);
 
     return (
-      <div style={styles.root} onTouchTap={this.handleTouch}>
+      <div style={styles.root} onClick={this.handleTouch}>
         {popout}
         <Screen
           animation

@@ -208,7 +208,7 @@ export default class ShotPane extends PureComponent {
             icon={this.state.shooting ? <AvStop /> : ShotCard.icon()}
             labelPosition="before"
             disabled={this.state.shooting}
-            onTouchTap={this.shoot}
+            onClick={this.shoot}
             style={styles.shoot}
           />
           <span style={styles.label}>{localization.shotCard.shoot}</span>
@@ -216,7 +216,7 @@ export default class ShotPane extends PureComponent {
           <RaisedButton
             secondary
             label={localization.shotCard.restore}
-            onTouchTap={this.handleRestore}
+            onClick={this.handleRestore}
             style={styles.restore}
             disabled={!this.state.canRestore}
           />

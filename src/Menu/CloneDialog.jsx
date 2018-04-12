@@ -164,7 +164,7 @@ export default class CloneDialog extends PureComponent {
         key="showAll"
         label={localization.menu.showAllUrls}
         style={styles.button}
-        onTouchTap={() =>
+        onClick={() =>
           this.setState(prevState => {
             return { showAllUrls: !prevState.showAllUrls };
           })
@@ -174,7 +174,7 @@ export default class CloneDialog extends PureComponent {
         key="cancel"
         label={localization.cloneDialog.cancel}
         style={styles.button}
-        onTouchTap={onRequestClose}
+        onClick={onRequestClose}
       />
     ];
 
@@ -226,7 +226,7 @@ export default class CloneDialog extends PureComponent {
                     style={styles.card}
                     icon={<ContentAddCircle />}
                     disabled={this.state.processing}
-                    onTouchTap={this.handleCreate}
+                    onClick={this.handleCreate}
                   />
                 )}
             </div>
@@ -361,14 +361,14 @@ export class ProjectCard extends PureComponent {
             label={localization.cloneDialog.openOnThisTab}
             icon={<ActionOpenInBrowser />}
             disabled={this.props.processing}
-            onTouchTap={this.handleLoad}
+            onClick={this.handleLoad}
           />
           <FlatButton
             label={localization.cloneDialog.remove}
             icon={<ActionDelete color={red400} />}
             labelStyle={styles.remove}
             disabled={this.props.processing}
-            onTouchTap={this.handleRemove}
+            onClick={this.handleRemove}
           />
         </CardActions>
       </Card>

@@ -122,7 +122,7 @@ class _DirCard extends PureComponent {
     const closerProps = {
       style: prepareStyles(closer),
       labelStyle: prepareStyles(closerLabel),
-      onTouchTap: () => handleDirToggle(cd)
+      onClick: () => handleDirToggle(cd)
     };
 
     return connectDropTarget(
@@ -140,7 +140,7 @@ class _DirCard extends PureComponent {
           ),
           <div
             style={prepareStyles(closed)}
-            onTouchTap={() => handleDirToggle(cd)}
+            onClick={() => handleDirToggle(cd)}
           >
             {cd.path}
           </div>
@@ -183,7 +183,7 @@ export default DirCard;
 
 export const DirCloser = props => {
   return (
-    <div style={props.style} onTouchTap={props.onTouchTap}>
+    <div style={props.style} onClick={props.onClick}>
       <span style={props.labelStyle}>../</span>
     </div>
   );
@@ -191,6 +191,6 @@ export const DirCloser = props => {
 
 DirCloser.propTypes = {
   style: PropTypes.object.isRequired,
-  onTouchTap: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   labelStyle: PropTypes.object.isRequired
 };

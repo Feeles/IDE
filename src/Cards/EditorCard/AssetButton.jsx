@@ -16,7 +16,7 @@ export default class AssetButton extends PureComponent {
     descriptionMoreURL: PropTypes.string,
     label: PropTypes.string,
     image: PropTypes.string,
-    onTouchTap: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
   };
@@ -38,7 +38,7 @@ export default class AssetButton extends PureComponent {
   };
 
   handleInsert = event => {
-    this.props.onTouchTap(this.props);
+    this.props.onClick(this.props);
   };
 
   render() {
@@ -117,7 +117,7 @@ export default class AssetButton extends PureComponent {
     }
 
     return (
-      <Paper style={styles.root} onTouchTap={this.handleOpen}>
+      <Paper style={styles.root} onClick={this.handleOpen}>
         <span style={styles.label}>
           {this.props.label}
         </span>
@@ -140,7 +140,7 @@ export default class AssetButton extends PureComponent {
               primary
               label={localization.editorCard.insert}
               icon={<ContentAdd />}
-              onTouchTap={this.handleInsert}
+              onClick={this.handleInsert}
             />
           </div>
           <div style={styles.description}>
@@ -155,7 +155,7 @@ export default class AssetButton extends PureComponent {
         <FloatingActionButton
           mini
           style={styles.button}
-          onTouchTap={this.handleInsert}
+          onClick={this.handleInsert}
         >
           <ContentReply style={styles.icon} />
         </FloatingActionButton>

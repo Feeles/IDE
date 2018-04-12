@@ -28,7 +28,7 @@ class _TrashBox extends PureComponent {
   static propTypes = {
     showTrashes: PropTypes.bool.isRequired,
     putFile: PropTypes.func.isRequired,
-    onTouchTap: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired
@@ -41,7 +41,7 @@ class _TrashBox extends PureComponent {
   render() {
     const {
       showTrashes,
-      onTouchTap,
+      onClick,
 
       connectDropTarget
     } = this.props;
@@ -51,7 +51,7 @@ class _TrashBox extends PureComponent {
 
     return connectDropTarget(
       <div>
-        <IconButton style={icon} onTouchTap={onTouchTap}>
+        <IconButton style={icon} onClick={onClick}>
           {showTrashes
             ? <NavigationArrowBack color={palette.secondaryTextColor} />
             : <ActionDelete color={palette.secondaryTextColor} />}
