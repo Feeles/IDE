@@ -103,7 +103,8 @@ export async function updateProject(projectId, update) {
     .where(':id')
     .equals(projectId)
     .first();
-  const nextProject = { ...prevProject,
+  const nextProject = {
+    ...prevProject,
     ...update
   };
   if (deepEqual(prevProject, nextProject)) {
@@ -111,12 +112,12 @@ export async function updateProject(projectId, update) {
   }
 
   const duplicated =
-    nextProject.title !== null ?
-    await personalDB.projects
-    .where('title')
-    .equalsIgnoreCase(nextProject.title)
-    .first() :
-    null;
+    nextProject.title !== null
+      ? await personalDB.projects
+          .where('title')
+          .equalsIgnoreCase(nextProject.title)
+          .first()
+      : null;
   if (duplicated && duplicated.id !== nextProject.id) {
     // It is not possible to create two projects with the same title.
     throw 'failedToRename';
@@ -136,9 +137,12 @@ export async function deleteProject(projectId) {
 // Create or Update file
 export async function putFile(projectId, serializedFile) {
   // Update project's timestamp
-  await personalDB.projects.where(':id').equals(projectId).modify({
-    updated: serializedFile.lastModified || Date.now()
-  });
+  await personalDB.projects
+    .where(':id')
+    .equals(projectId)
+    .modify({
+      updated: serializedFile.lastModified || Date.now()
+    });
 
   const found = await personalDB.files
     .where('[projectId+fileName]')
@@ -156,9 +160,12 @@ export async function putFile(projectId, serializedFile) {
     return added;
   } else {
     // A file found, so modify it.
-    await personalDB.files.where(':id').equals(found.id).modify({
-      serializedFile
-    });
+    await personalDB.files
+      .where(':id')
+      .equals(found.id)
+      .modify({
+        serializedFile
+      });
 
     return serializedFile;
   }
