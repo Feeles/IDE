@@ -1,4 +1,3 @@
-/*global CORE_CDN_URL*/
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from 'material-ui/AppBar';
@@ -180,7 +179,6 @@ export default class Menu extends PureComponent {
   };
 
   handleDeploy = async (withOAuth, isUpdate) => {
-    if (!CORE_CDN_URL) return;
     const { localization } = this.props;
 
     const result = await this.props.openFileDialog(MetaDialog, {
@@ -203,7 +201,10 @@ export default class Menu extends PureComponent {
         : organization.api.deploy;
       const body = new URLSearchParams();
       body.append('json', JSON.stringify(composed));
-      body.append('script_src', CORE_CDN_URL);
+      body.append(
+        'script_src',
+        'https://unpkg.com/feeles-ide@latest/umd/index.js'
+      );
       if (withOAuth) {
         body.append('oauth_id', this.props.oAuthId);
       }

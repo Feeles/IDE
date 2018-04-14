@@ -1,4 +1,3 @@
-/*global CORE_VERSION CORE_VERSION CORE_CDN_URL*/
 import Dexie from 'dexie';
 import uuid from 'uuid/v1';
 import deepEqual from 'deep-equal';
@@ -46,8 +45,8 @@ export async function createProject(serializedFiles = []) {
     created: timestamp,
     updated: timestamp,
     url: location.origin + location.pathname,
-    CORE_VERSION: CORE_VERSION,
-    CORE_CDN_URL: CORE_CDN_URL,
+    CORE_VERSION: '',
+    CORE_CDN_URL: 'https://unpkg.com/feeles-ide@latest/umd/index.js',
     // Remote project (product) deployment URL<string>
     deployURL: null
   };
