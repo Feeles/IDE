@@ -24,7 +24,6 @@ import FacebookIcon from '../utils/FacebookIcon';
 import GoogleIcon from '../utils/GoogleIcon';
 
 import { acceptedLanguages } from '../localization/';
-import AboutDialog from './AboutDialog';
 import CloneDialog from './CloneDialog';
 import MetaDialog from './MetaDialog';
 import { updateProject } from '../database/';
@@ -176,13 +175,6 @@ export default class Menu extends PureComponent {
       project: this.props.project,
       setProject: this.props.setProject,
       launchIDE: this.props.launchIDE,
-      deployURL: this.props.deployURL
-    });
-  };
-
-  handleAbout = () => {
-    this.props.openFileDialog(AboutDialog, {
-      files: this.props.files,
       deployURL: this.props.deployURL
     });
   };
