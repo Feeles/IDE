@@ -301,6 +301,16 @@
     requestPostMessage('dispatchOnMessage', data);
   };
 
+  // 親ウィンドウで URL (Same Domain) を window.open する
+  feeles.openWindow = function(url, target, features, replace) {
+    requestPostMessage('openWindow', {
+      url: url,
+      target: target,
+      features: features,
+      replace: replace
+    });
+  };
+
   if (window.requirejs) {
     // Override require()
     window.requirejs.load = function(context, moduleName) {

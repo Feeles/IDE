@@ -141,6 +141,7 @@ export default class Monitor extends PureComponent {
     on('message.clearTimeout', this.handleClearTimeout);
     on('message.setInterval', this.handleSetInterval);
     on('message.clearInterval', this.handleClearInterval);
+    on('message.openWindow', this.handleOpenWindow);
   }
 
   componentDidUpdate(prevProps) {
@@ -396,6 +397,17 @@ export default class Monitor extends PureComponent {
   };
   handleClearInterval = ({ data }) => {
     clearInterval(this.setIntervalId.get(data.value.intervalId));
+  };
+
+  handleOpenWindow = ({ data: { value } }) => {
+    // value.url が相対パスかどうかを調べる
+    const a = document.createElement('a');
+    a.href = value.url;
+    if (a.host === location.host) {
+      window.open(value.url, value.target, value.features, value.replace);
+    } else {
+      throw new Error(`Cannot open ${value.url}`);
+    }
   };
 
   handleSpeechRecognition = ({ data, reply }) => {
