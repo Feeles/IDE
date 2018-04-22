@@ -71,6 +71,7 @@ const getStyle = (props, context, state) => {
 
 export default class ShotPane extends PureComponent {
   static propTypes = {
+    fileView: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -199,6 +200,8 @@ export default class ShotPane extends PureComponent {
             extraKeys={extraKeys}
             lineNumbers={false}
             findFile={this.props.findFile}
+            loadConfig={this.props.loadConfig}
+            fileView={this.props.fileView}
           />
         </div>
         <div style={styles.menu}>

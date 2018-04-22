@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardMedia } from 'material-ui/Card';
 import ContentReply from 'material-ui/svg-icons/content/reply';
 
 import ShotPane from './ShotPane';
@@ -10,6 +9,7 @@ import shallowEqual from '../../utils/shallowEqual';
 export default class ShotCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
+    fileView: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
@@ -60,18 +60,19 @@ export default class ShotCard extends PureComponent {
 
     return (
       <Card icon={ShotCard.icon()} {...this.props.cardPropsBag}>
-        {visible
-          ? <ShotPane
-              file={this.state.file}
-              completes={this.state.completes}
-              files={this.props.files}
-              findFile={this.props.findFile}
-              localization={this.props.localization}
-              getConfig={this.props.getConfig}
-              loadConfig={this.props.loadConfig}
-              globalEvent={this.props.globalEvent}
-            />
-          : null}
+        {visible ? (
+          <ShotPane
+            fileView={this.props.fileView}
+            file={this.state.file}
+            completes={this.state.completes}
+            files={this.props.files}
+            findFile={this.props.findFile}
+            localization={this.props.localization}
+            getConfig={this.props.getConfig}
+            loadConfig={this.props.loadConfig}
+            globalEvent={this.props.globalEvent}
+          />
+        ) : null}
       </Card>
     );
   }
