@@ -7,6 +7,7 @@ import 'codemirror/mode/meta';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/hint/html-hint';
@@ -27,8 +28,11 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/dialog/dialog.css';
 // import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/addon/fold/foldgutter.css';
-
 import glslMode from 'glsl-editor/glsl';
+
+import './codemirror-hint-extension';
+import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
+
 glslMode(CodeMirror);
 CodeMirror.modeInfo.push({
   name: 'glsl',
@@ -36,9 +40,14 @@ CodeMirror.modeInfo.push({
   mode: 'glsl'
 });
 
-import './codemirror-hint-extension';
-
-import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
+// YAML のエイリアス (.yml) (text/yaml)
+CodeMirror.modeInfo.push({
+  name: 'YAML',
+  mimes: ['text/yaml', 'text/x-yaml'],
+  mode: 'yaml',
+  ext: ['yml', 'yaml'],
+  alias: ['yml']
+});
 
 export default class Editor extends PureComponent {
   static propTypes = {
@@ -49,8 +58,10 @@ export default class Editor extends PureComponent {
     snippets: PropTypes.array.isRequired,
     showHint: PropTypes.bool.isRequired,
     extraKeys: PropTypes.object.isRequired,
+    foldOptions: PropTypes.object,
     lineNumbers: PropTypes.bool.isRequired,
-    findFile: PropTypes.func.isRequired
+    findFile: PropTypes.func.isRequired,
+    onDocChanged: PropTypes.func.isRequired
   };
 
   static defaultProps = {
@@ -59,7 +70,9 @@ export default class Editor extends PureComponent {
     snippets: [],
     showHint: true,
     extraKeys: {},
-    lineNumbers: true
+    lineNumbers: true,
+    foldOptions: {},
+    onDocChanged: () => {}
   };
 
   state = {
@@ -125,9 +138,12 @@ export default class Editor extends PureComponent {
       <CodeMirrorComponent
         id={file.key}
         value={file.text}
+        onDocChanged={this.props.onDocChanged}
         mode={mode}
         lineNumbers={lineNumbers}
         keyMap="sublime"
+        foldGutter
+        foldOptions={this.props.foldOptions}
         extraKeys={this.props.extraKeys}
         ref={this.handleCodemirror}
       />

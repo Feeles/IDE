@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import beautify from 'js-beautify';
 import { JSHINT } from 'jshint';
 
 import CodeMirror from 'codemirror';
@@ -29,8 +28,11 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/dialog/dialog.css';
 // import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/addon/fold/foldgutter.css';
-
 import glslMode from 'glsl-editor/glsl';
+
+import './codemirror-hint-extension';
+import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
+
 glslMode(CodeMirror);
 CodeMirror.modeInfo.push({
   name: 'glsl',
@@ -46,10 +48,6 @@ CodeMirror.modeInfo.push({
   ext: ['yml', 'yaml'],
   alias: ['yml']
 });
-
-import './codemirror-hint-extension';
-
-import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 
 export default class Editor extends PureComponent {
   static propTypes = {
@@ -72,14 +70,16 @@ export default class Editor extends PureComponent {
     snippets: [],
     showHint: true,
     extraKeys: {},
-    lineNumbers: true
+    lineNumbers: true,
+    foldOptions: {},
+    onDocChanged: () => {}
   };
 
   state = {
     jshintrc: null
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     if (this.props.file === nextProps.file) {
       return false;
     }
@@ -114,7 +114,7 @@ export default class Editor extends PureComponent {
     if (!this.props.showHint) {
       return;
     }
-    const { getFiles, getConfig } = this.props;
+    const { getFiles } = this.props;
 
     cm.on('change', (_cm, change) => {
       if (change.origin === 'setValue' || change.origin === 'complete') return;
@@ -129,7 +129,7 @@ export default class Editor extends PureComponent {
   }
 
   render() {
-    const { file, getConfig, lineNumbers } = this.props;
+    const { file, lineNumbers } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const mode = meta && meta.mode;
