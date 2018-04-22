@@ -8,7 +8,7 @@ import { red50, red500 } from 'material-ui/styles/colors';
 
 import { SourceFile } from '../../File/';
 import ShotCard from './';
-import Editor from './Editor';
+import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
