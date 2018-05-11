@@ -24,7 +24,7 @@ export default class ResolveProgress extends PureComponent {
   }
 
   _timer = null;
-  handleResolve = ({ data }) => {
+  handleResolve = () => {
     if (!this.state.visible) {
       this.setState({ visible: true });
     }

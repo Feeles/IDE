@@ -1,4 +1,3 @@
-import React from 'react';
 import { Pos } from 'codemirror';
 
 import { separate } from '../File/';
@@ -42,7 +41,7 @@ export default class Snippet {
     return this.props.fileKey;
   }
 
-  render(element, self, data) {
+  render(element) {
     element.textContent = this.props.prefix + ' ' + this.props.description;
     return element;
   }
@@ -70,16 +69,3 @@ export default class Snippet {
 }
 
 const getUniqueId = (id => () => 'Snippet__' + ++id)(0);
-
-const parseElement = html => {
-  const span = document.createElement('span');
-  span.innerHTML = html;
-  if (span.firstChild) {
-    const { tagName, attributes } = span.firstChild;
-    const props = Array.from(attributes)
-      .map(attr => ({ [attr.name]: attr.value }))
-      .reduce((p, c) => Object.assign(p, c), {});
-    return React.createElement(tagName, props);
-  }
-  return null;
-};

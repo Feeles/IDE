@@ -31,7 +31,7 @@ export default class CardWindow extends PureComponent {
     width: 480
   };
 
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.visible !== nextProps.visible && nextProps.visible) {
       this.handleScroll();
     }
@@ -56,7 +56,7 @@ export default class CardWindow extends PureComponent {
   };
 
   render() {
-    const { isDragging, visible, fit, width, order } = this.props;
+    const { visible, fit, order } = this.props;
 
     const fitWrap = fit
       ? {
@@ -142,8 +142,4 @@ export default class CardWindow extends PureComponent {
       </div>
     );
   }
-}
-
-function lowerCaseAtFirst(string) {
-  return string[0].toLowerCase() + string.substr(1);
 }

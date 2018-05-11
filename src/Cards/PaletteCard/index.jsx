@@ -4,7 +4,6 @@ import Card from '../CardWindow';
 import { CardActions, CardText } from 'material-ui/Card';
 import Popover from 'material-ui/Popover';
 import Paper from 'material-ui/Paper';
-import FlatButton from 'material-ui/FlatButton';
 import { convertColorToString } from 'material-ui/utils/colorManipulator';
 import { transparent, fullWhite } from 'material-ui/styles/colors';
 import ImagePalette from 'material-ui/svg-icons/image/palette';
@@ -83,8 +82,7 @@ export default class PaletteCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
-    setConfig: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired
+    setConfig: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -151,7 +149,6 @@ export default class PaletteCard extends PureComponent {
   }
 
   render() {
-    const { localization } = this.props;
     const { open, key, anchorEl, limited } = this.state;
     const { palette, prepareStyles } = this.context.muiTheme;
 
@@ -202,15 +199,17 @@ export default class PaletteCard extends PureComponent {
           }}
           onRequestClose={this.closePopover}
         >
-          {limited
-            ? <TwitterPicker
-                color={key && palette[key]}
-                onChangeComplete={this.handleChangeComplete}
-              />
-            : <ChromePicker
-                color={key && palette[key]}
-                onChangeComplete={this.handleChangeComplete}
-              />}
+          {limited ? (
+            <TwitterPicker
+              color={key && palette[key]}
+              onChangeComplete={this.handleChangeComplete}
+            />
+          ) : (
+            <ChromePicker
+              color={key && palette[key]}
+              onChangeComplete={this.handleChangeComplete}
+            />
+          )}
         </Popover>
       </Card>
     );

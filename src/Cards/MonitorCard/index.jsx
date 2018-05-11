@@ -14,7 +14,6 @@ import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windo
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from './Monitor';
-import uniqueId from '../../utils/uniqueId';
 
 const frameSizes = [
   [480, 320],

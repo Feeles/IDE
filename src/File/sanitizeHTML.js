@@ -5,7 +5,7 @@
  *   e.g. "<!-- {TEXT} -->" to "--><!-- {TEXT} --><!--"
  */
 
-const commentRegExp = /\<\!\-\-[^\!]*\-\-\>/g;
+const commentRegExp = /<!--[^!]*-->/g;
 
 export function encode(text) {
   // 内容に HTML コメントが含まれている
@@ -21,11 +21,11 @@ ${text}
 -->`;
 }
 
-const sanitizedRegExp = /\-\-\>\<\!\-\-([^\!]*)\-\-\>\<\!\-\-/g;
+const sanitizedRegExp = /--><!--([^!]*)--><!--/g;
 
 export function decode(text) {
   // コメントを外す
-  text = text.replace(/^\s*\<\!\-\-\n?/, '').replace(/\n?\-\-\>\s*$/, '');
+  text = text.replace(/^\s*<!--\n?/, '').replace(/\n?-->\s*$/, '');
 
   // 内容に HTML コメントが含まれていた
   if (sanitizedRegExp.test(text)) {

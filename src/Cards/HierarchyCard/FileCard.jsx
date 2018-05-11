@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
-import { transparent } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import ActionSettings from 'material-ui/svg-icons/action/settings';

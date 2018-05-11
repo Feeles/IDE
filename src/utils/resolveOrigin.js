@@ -1,5 +1,4 @@
-export default function (url) {
-
+export default function(url) {
   if (typeof URL === 'function') {
     return new URL(url).origin;
   }
@@ -8,5 +7,4 @@ export default function (url) {
   const a = document.createElement('a');
   a.href = url;
   return a.origin;
-
 }

@@ -9,34 +9,25 @@ const pool = new Map();
 // Receive messages from Babel
 worker.addEventListener('message', event => {
   // Result of transpiling
-  const {
-    id,
-    code,
-    error
-  } = event.data;
+  const { id, code, error } = event.data;
   if (!pool.has(id)) {
     // Not Found Error
     console.warn(`Error in Babel: Unknown id=${id}`, '_File.js:babelFile');
   }
-  const {
-    file,
-    resolve,
-    reject
-  } = pool.get(id);
+  const { file, resolve, reject } = pool.get(id);
   pool.delete(id);
 
   if (error) {
     // Got a Babel Error!
-    const {
-      loc,
-      message
-    } = error;
+    const { loc, message } = error;
     const babelError = new Error(message, file.name, loc.line);
     reject(babelError);
   } else {
-    resolve(file.set({
-      text: code
-    }));
+    resolve(
+      file.set({
+        text: code
+      })
+    );
   }
 });
 

@@ -10,23 +10,22 @@ export default (file, query, options = null) => {
     return false;
   }
 
-  return query.split(/\s+/)
-    .every((keyword) => {
-      if (!keyword) {
-        return true;
-      }
-      if (keyword[0] === ':') {
-        return true;
-      }
+  return query.split(/\s+/).every(keyword => {
+    if (!keyword) {
+      return true;
+    }
+    if (keyword[0] === ':') {
+      return true;
+    }
 
-      return includes(file.name, keyword);
-    });
+    return includes(file.name, keyword);
+  });
 };
 
-export const getOptions = (query) => query.split(/\s+/)
-  .reduce((p, keyword) => {
+export const getOptions = query =>
+  query.split(/\s+/).reduce((p, keyword) => {
     return {
       showInvisibles: p.showInvisibles || keyword[0] === '.',
-      showTrashes: p.showTrashes || keyword === ':trash',
+      showTrashes: p.showTrashes || keyword === ':trash'
     };
   }, {});

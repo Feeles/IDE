@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardMedia } from 'material-ui/Card';
 import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import ReactPlayer from 'react-player';
 

@@ -33,7 +33,7 @@ export default class MetaDialog extends PureComponent {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { stepIndex, isDeploying } = this.state;
+    const { stepIndex } = this.state;
     if (prevState.stepIndex !== stepIndex && stepIndex === 2) {
       // Close this dialog and start uploading
       this.props.resolve(true);
@@ -76,7 +76,6 @@ export default class MetaDialog extends PureComponent {
   }
 
   render() {
-    const { stepIndex } = this.state;
     const { localization } = this.props;
 
     const actions = [

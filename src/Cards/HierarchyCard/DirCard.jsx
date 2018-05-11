@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
-import { transparent } from 'material-ui/styles/colors';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import includes from 'lodash/includes';
 
 import FileCard from './FileCard';
-import getHierarchy from './getHierarchy';
 import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, context) => {
@@ -132,12 +130,12 @@ class _DirCard extends PureComponent {
           cd,
           [].concat(
             isRoot ? null : <DirCloser key="closer" {...closerProps} />,
-            cd.dirs.map(dir =>
+            cd.dirs.map(dir => (
               <DirCard key={dir.path} dir={dir} {...transfer} />
-            ),
-            cd.files.map(file =>
+            )),
+            cd.files.map(file => (
               <FileCard key={file.key} file={file} {...transfer} />
-            )
+            ))
           ),
           <div
             style={prepareStyles(closed)}
@@ -152,7 +150,7 @@ class _DirCard extends PureComponent {
 }
 
 const spec = {
-  drop(props, monitor, component) {
+  drop(props, monitor) {
     if (monitor.getDropResult()) {
       return;
     }

@@ -1,7 +1,4 @@
-import {
-  separate,
-  validateType
-} from './';
+import { separate, validateType } from './';
 import babelFile from './babelFile';
 
 export default class _File {
@@ -63,8 +60,8 @@ export default class _File {
         .trim() // 前後の空白を削除
         .replace(/\n[^]*$/, '') // 改行以降を削除
         .trim() // 前後の空白を削除
-        .replace(/^[\#\-]*\s*/, '') // 行頭の # - を削除
-        .replace(/[\*\~\_\[\]\(\)\`]/g, ''); // * ~ _ [] () `` を削除
+        .replace(/^[#-]*\s*/, '') // 行頭の # - を削除
+        .replace(/[*~_[\]()`]/g, ''); // * ~ _ [] () `` を削除
     }
     return this.plane + this.ext;
   }
@@ -92,19 +89,15 @@ export default class _File {
 
   static _dataURLCache = new WeakMap();
   async toDataURL() {
-    const {
-      _dataURLCache
-    } = this.constructor;
+    const { _dataURLCache } = this.constructor;
 
     if (_dataURLCache.has(this)) {
       return _dataURLCache.get(this);
     }
-    return await new Promise((resolve, reject) => {
+    return await new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = () => {
-        const {
-          result
-        } = reader;
+        const { result } = reader;
         _dataURLCache.set(this, result);
         resolve(result);
       };
@@ -140,11 +133,7 @@ export default class _File {
   static _babelConfig = null;
   static _babelError = new WeakMap();
   babel(config, onError = () => {}) {
-    const {
-      _babelCache,
-      _babelConfig,
-      _babelError
-    } = this.constructor;
+    const { _babelCache, _babelConfig, _babelError } = this.constructor;
     if (_babelConfig === config) {
       if (_babelCache.has(this)) return _babelCache.get(this);
       if (_babelError.has(this)) throw _babelError.get(this);
@@ -161,10 +150,7 @@ export default class _File {
   }
 
   rename(newName) {
-    const {
-      path,
-      ext
-    } = this;
+    const { path, ext } = this;
     const name = path + newName + ext;
 
     return this.set({
@@ -177,10 +163,7 @@ export default class _File {
       newPath += '/';
     }
 
-    const {
-      plane,
-      ext
-    } = this;
+    const { plane, ext } = this;
     const name = newPath + plane + ext;
 
     return this.set({

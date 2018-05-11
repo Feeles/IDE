@@ -5,7 +5,6 @@ import { CardText, CardActions } from 'material-ui/Card';
 import ActionTouchApp from 'material-ui/svg-icons/action/touch-app';
 
 import { SourceFile } from '../../File/';
-import { Tab } from '../../ChromeTab/';
 import EnvItem from './EnvItem';
 import EditFile from '../EditFile';
 

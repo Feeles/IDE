@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
-import RaisedButton from 'material-ui/RaisedButton';
-import Save from 'material-ui/svg-icons/content/save';
 
-import { Confirm, Abort } from './Buttons';
-import FilenameInput from './FilenameInput';
+import { Abort } from './Buttons';
 
 /**
  * HTML5 a要素のdownload属性が実装されていないブラウザのためのfallback
@@ -18,9 +15,10 @@ export default class SaveDialog extends PureComponent {
   };
 
   state = {
-    contents: this.props.content instanceof Array
-      ? this.props.content
-      : [this.props.content],
+    contents:
+      this.props.content instanceof Array
+        ? this.props.content
+        : [this.props.content],
     results: []
   };
 
@@ -28,9 +26,9 @@ export default class SaveDialog extends PureComponent {
     Promise.all(
       this.state.contents.map(
         item =>
-          new Promise((resolve, reject) => {
+          new Promise(resolve => {
             const reader = new FileReader();
-            reader.onload = e =>
+            reader.onload = () =>
               resolve({
                 name: item.name,
                 href: reader.result
@@ -46,6 +44,7 @@ export default class SaveDialog extends PureComponent {
 
     const actions = [
       <Abort
+        key="cancel"
         primary
         onClick={onRequestClose}
         label={localization.saveDialog.cancel}

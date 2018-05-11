@@ -4,7 +4,6 @@ import URLSearchParams from 'url-search-params';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import transitions from 'material-ui/styles/transitions';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import SocialShare from 'material-ui/svg-icons/social/share';
 
@@ -47,7 +46,7 @@ export default class Footer extends PureComponent {
     this.mountFacebookShare();
   }
 
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.deployURL !== nextProps.deployURL) {
       // ボタンを再描画させるため、一度中の要素をすべて消してしまう
       // state.rewrite はすぐに false になる
@@ -186,11 +185,7 @@ export default class Footer extends PureComponent {
         </FloatingActionButton>
         <Paper style={styles.root}>
           <div style={{ flex: 1 }} />
-          <input
-            readOnly
-            value={this.shareURL}
-            onClick={this.handleLinkCopy}
-          />
+          <input readOnly value={this.shareURL} onClick={this.handleLinkCopy} />
           <div style={styles.blank} />
           {/* Twitter */}
           <a

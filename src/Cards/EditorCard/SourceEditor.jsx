@@ -14,7 +14,6 @@ import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
 import zenkakuToHankaku from './zenkakuToHankaku';
 
-
 const getStyle = (props, state, context) => {
   const { palette } = context.muiTheme;
 
@@ -493,7 +492,7 @@ export default class SourceEditor extends PureComponent {
 }
 
 function wait(millisec) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, millisec);
   });
 }

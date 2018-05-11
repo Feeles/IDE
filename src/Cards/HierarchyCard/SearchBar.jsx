@@ -77,7 +77,6 @@ export default class SearchBar extends PureComponent {
 
   handleUpdate = query => {
     const { filterRef } = this.props;
-    const { showTrashes } = this.state;
 
     const options = getOptions(query);
     filterRef(file => search(file, query, options));
@@ -94,7 +93,7 @@ export default class SearchBar extends PureComponent {
     if (!showTrashes) {
       this.handleUpdate(':trash ' + query);
     } else {
-      this.handleUpdate(query.replace(/(^|\s)\:trash(\s|$)/g, '$1'));
+      this.handleUpdate(query.replace(/(^|\s):trash(\s|$)/g, '$1'));
     }
   };
 
@@ -134,22 +133,19 @@ export default class SearchBar extends PureComponent {
             onBlur={() => this.setState({ focus: false })}
             fullWidth
           />
-          <IconButton
-            disabled={!query}
-            onClick={() => this.handleUpdate('')}
-          >
+          <IconButton disabled={!query} onClick={() => this.handleUpdate('')}>
             <NavigationClose color={secondaryTextColor} />
           </IconButton>
         </Paper>
-        {showTrashes
-          ? <RaisedButton
-              secondary
-              label={localization.hierarchyCard.emptyTrashBox}
-              icon={<ActionDeleteForever color={alternateTextColor} />}
-              style={empty}
-              onClick={deleteAll}
-            />
-          : null}
+        {showTrashes ? (
+          <RaisedButton
+            secondary
+            label={localization.hierarchyCard.emptyTrashBox}
+            icon={<ActionDeleteForever color={alternateTextColor} />}
+            style={empty}
+            onClick={deleteAll}
+          />
+        ) : null}
       </div>
     );
   }

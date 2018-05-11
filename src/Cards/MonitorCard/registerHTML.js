@@ -97,7 +97,7 @@ export default async (html, findFile, env) => {
 const requireTemplate = src => `requirejs(['${src}'])`;
 
 const replaceUrls = async (text, findFile) => {
-  const regExp = /url\(([\w\/\.]*)\)/g;
+  const regExp = /url\(.*\)/g;
   const matches = text.match(regExp);
   if (!matches) return text;
 

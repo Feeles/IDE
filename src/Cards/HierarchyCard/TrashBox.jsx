@@ -10,7 +10,7 @@ import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, state, context) => {
   const { isOver } = props;
-  const { palette, spacing, prepareStyles } = context.muiTheme;
+  const { palette, spacing } = context.muiTheme;
 
   return {
     icon: {
@@ -52,9 +52,11 @@ class _TrashBox extends PureComponent {
     return connectDropTarget(
       <div>
         <IconButton style={icon} onClick={onClick}>
-          {showTrashes
-            ? <NavigationArrowBack color={palette.secondaryTextColor} />
-            : <ActionDelete color={palette.secondaryTextColor} />}
+          {showTrashes ? (
+            <NavigationArrowBack color={palette.secondaryTextColor} />
+          ) : (
+            <ActionDelete color={palette.secondaryTextColor} />
+          )}
         </IconButton>
       </div>
     );
@@ -62,7 +64,7 @@ class _TrashBox extends PureComponent {
 }
 
 const spec = {
-  drop(props, monitor, component) {
+  drop(props, monitor) {
     const { putFile } = props;
     const { files } = monitor.getItem();
 

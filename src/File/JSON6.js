@@ -6,8 +6,8 @@ export function parse(text) {
       .replace(/^\n/, '')
       .replace(/\n/g, '\\n')
       .replace(/\t/g, '\\t')
-      .replace(/\'/g, '\'')
-      .replace(/\"/g, '\\"');
+      .replace(/'/g, `'`)
+      .replace(/"/g, '\\"');
 
   text = text
     .split('`')

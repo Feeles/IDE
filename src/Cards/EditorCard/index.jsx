@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
-import transitions from 'material-ui/styles/transitions';
 
 import Card from '../CardWindow';
-import { SourceFile } from '../../File/';
 import SourceEditor from './SourceEditor';
 import ChromeTab, { Tab } from '../../ChromeTab/';
 
 const MAX_TAB = 5;
 
 const getStyles = (props, context) => {
-  const { palette, spacing, fontFamily } = context.muiTheme;
+  const { palette } = context.muiTheme;
 
   return {
     tabContainer: {
@@ -121,7 +119,6 @@ export default class EditorCard extends PureComponent {
   };
 
   renderBackground() {
-    const { localization } = this.props;
     const { palette } = this.context.muiTheme;
 
     const styles = {
@@ -192,18 +189,15 @@ export default class EditorCard extends PureComponent {
     }
 
     const {
-      files,
       putFile,
       selectTab,
       openFileDialog,
       localization,
       findFile,
       getConfig,
-      setConfig,
       reboot,
       cardPropsBag
     } = this.props;
-    const { prepareStyles, palette } = this.context.muiTheme;
     const styles = getStyles(this.props, this.context);
 
     const tabs = [];

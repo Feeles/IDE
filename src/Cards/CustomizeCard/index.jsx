@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
 import Card from '../CardWindow';
 import { CardHeader } from 'material-ui/Card';
-import ActionSettingsApplications
-  from 'material-ui/svg-icons/action/settings-applications';
+import ActionSettingsApplications from 'material-ui/svg-icons/action/settings-applications';
 
 import { SourceFile } from '../../File/';
 import EditFile from '../EditFile';
@@ -62,7 +60,9 @@ export default class CustomizeCard extends PureComponent {
 
     const subtitle = [
       <span key={1}>{title + ' - '}</span>,
-      <a key={2} href={href} target="blank">{resolveOrigin(href)}</a>
+      <a key={2} href={href} target="blank">
+        {resolveOrigin(href)}
+      </a>
     ];
 
     const styles = {

@@ -90,11 +90,9 @@ export default class SignDialog extends PureComponent {
   };
 
   render() {
-    const { content, localization } = this.props;
-
     const actions = [
-      <Abort onClick={this.cancel} />,
-      <Confirm label="OK" onClick={this.handleSign} />
+      <Abort key="cancel" onClick={this.cancel} />,
+      <Confirm key="ok" label="OK" onClick={this.handleSign} />
     ];
 
     return (
@@ -106,7 +104,7 @@ export default class SignDialog extends PureComponent {
         bodyStyle={{ overflow: 'scroll' }}
         onRequestClose={this.cancel}
       >
-        {this.state.files.map(item =>
+        {this.state.files.map(item => (
           <SignItem
             key={item.key}
             file={item}
@@ -116,7 +114,7 @@ export default class SignDialog extends PureComponent {
             onUpdate={this.handleUpdate}
             onComplete={this.handleComplete}
           />
-        )}
+        ))}
       </Dialog>
     );
   }

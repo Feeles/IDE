@@ -1,16 +1,10 @@
-import {
-  BinaryFile,
-  SourceFile,
-  validateType
-} from './';
-
+import { BinaryFile, SourceFile, validateType } from './';
 
 /**
  * @param file File|Blob
  * @return Promsie provides _File
  */
 export default function makeFromFile(file) {
-
   if (validateType('text', file.type)) {
     return SourceFile.load(file);
   }

@@ -174,7 +174,7 @@ export default class ScreenShotCard extends PureComponent {
   };
 
   handleThumbnailDelete = async () => {
-    const { selected, cache } = this.state;
+    const { selected } = this.state;
     // 選択アイテムを削除
     await this.setCache(selected, undefined);
     // 選択アイテムをとなりに移動

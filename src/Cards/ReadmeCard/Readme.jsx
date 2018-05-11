@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from 'material-ui/RaisedButton';
-import transitions from 'material-ui/styles/transitions';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
@@ -10,8 +9,6 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 import MDReactComponent from '../../jsx/MDReactComponent';
 import { Tab } from '../../ChromeTab/';
-
-const BarHeight = 36;
 
 const mdComponents = [
   {
@@ -37,7 +34,7 @@ const mdComponents = [
   },
   {
     // Feeles 内リンク
-    validate(tag, props) {
+    validate(tag) {
       return tag === 'a';
     },
     render(tag, props, children, component, mdStyles) {
@@ -67,17 +64,13 @@ const mdComponents = [
   },
   {
     // Feeles 内画像
-    validate(tag, props) {
+    validate(tag) {
       return tag === 'img';
     },
     render(tag, props, children, component, mdStyles) {
       const file = component.props.findFile(decodeURIComponent(props.src));
       if (!file) {
-        return (
-          <span {...props}>
-            {props.alt}
-          </span>
-        );
+        return <span {...props}>{props.alt}</span>;
       }
       if (file.is('blob')) {
         return <img {...props} style={mdStyles.img} src={file.blobURL} />;
@@ -104,10 +97,10 @@ const mdComponents = [
   },
   {
     // インタプリタ
-    validate(tag, props) {
+    validate(tag) {
       return tag === 'pre';
     },
-    render(tag, props, children, component, mdStyles) {
+    render(tag, props, children) {
       const code = children[0].props.children[0] || '';
       const containerStyle = {
         position: 'relative',

@@ -39,7 +39,7 @@ export default class HierarchyCard extends PureComponent {
   state = {
     openedPaths: [''],
     tabbedFiles: [],
-    filter: file => false
+    filter: () => false
   };
 
   componentWillReceiveProps(nextProps) {
@@ -54,7 +54,7 @@ export default class HierarchyCard extends PureComponent {
   }
 
   handleNativeDrop = (files, dir = null) => {
-    const { addFile, selectTab, openFileDialog } = this.props;
+    const { addFile, openFileDialog } = this.props;
 
     Promise.all(files.map(makeFromFile))
       .then(files =>
@@ -129,13 +129,7 @@ export default class HierarchyCard extends PureComponent {
   };
 
   render() {
-    const {
-      files,
-      selectTab,
-      putFile,
-      openFileDialog,
-      localization
-    } = this.props;
+    const { files, putFile, openFileDialog, localization } = this.props;
     const { filter } = this.state;
 
     const tabs = this.props.tabs.filter(tab => !tab.props.component);

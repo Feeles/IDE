@@ -36,8 +36,8 @@ export default class DeleteDialog extends Component {
     };
 
     const actions = [
-      <Abort onClick={onRequestClose} />,
-      <Confirm label="Delete" onClick={this.handleDelete} />
+      <Abort key="close" onClick={onRequestClose} />,
+      <Confirm key="delete" label="Delete" onClick={this.handleDelete} />
     ];
 
     return (
