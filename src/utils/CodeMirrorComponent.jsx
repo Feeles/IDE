@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import CodeMirror from 'codemirror';
 import deepEqual from 'deep-equal';
+import includes from 'lodash/includes';
 
 export default class CodeMirrorComponent extends PureComponent {
   static propTypes = {
@@ -108,7 +109,7 @@ export default class CodeMirrorComponent extends PureComponent {
     // options の更新
     const ignoreKeys = ['id', 'value'];
     for (const [key, nextValue] of Object.entries(nextProps)) {
-      if (ignoreKeys.includes(key)) continue;
+      if (includes(ignoreKeys, key)) continue;
       if (!deepEqual(this.props[key], nextProps[key])) {
         // options の変更を CodeMirror に伝える
         this.codeMirror.setOption(key, nextValue);

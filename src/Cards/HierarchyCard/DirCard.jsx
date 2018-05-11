@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import { transparent } from 'material-ui/styles/colors';
 import { NativeTypes } from 'react-dnd-html5-backend';
+import includes from 'lodash/includes';
 
 import FileCard from './FileCard';
 import getHierarchy from './getHierarchy';
@@ -14,7 +15,7 @@ const getStyles = (props, context) => {
   const { palette, spacing, transitions } = context.muiTheme;
 
   const borderStyle =
-    isOver && !cd.files.includes(dragSource) ? 'dashed' : 'solid';
+    isOver && !includes(cd.files, dragSource) ? 'dashed' : 'solid';
   const borderWidth = 4;
 
   return {
@@ -159,7 +160,7 @@ const spec = {
     switch (monitor.getItemType()) {
       case DragTypes.File:
         files
-          .filter(file => !props.dir.files.includes(file))
+          .filter(file => !includes(props.dir.files, file))
           .forEach(file => props.handleFileMove(file, props.dir));
         break;
       case NativeTypes.FILE:

@@ -1,4 +1,5 @@
 import { putFile, deleteFile } from './';
+import includes from 'lodash/includes';
 
 /**
  * ファイルの状態を In Memory & IndexedDB で保有するストア
@@ -187,8 +188,8 @@ export default class FileView {
     const timestamp = Date.now();
 
     const keys = targets.map(item => item.key);
-    const files = this.files.filter(item => !keys.includes(item.key));
     await this.setState({ files });
+    const files = this.files.filter(item => !includes(keys, item.key));
 
     if (this.component.state.project) {
       const fileNames = targets.map(item => item.name);

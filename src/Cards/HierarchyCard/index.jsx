@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import includes from 'lodash/includes';
 
 import Card from '../CardWindow';
 import { makeFromFile } from '../../File/';
@@ -112,7 +113,7 @@ export default class HierarchyCard extends PureComponent {
   };
 
   isDirOpened = (dir, passed, failed) => {
-    return this.state.openedPaths.includes(dir.path) ? passed : failed;
+    return includes(this.state.openedPaths, dir.path) ? passed : failed;
   };
 
   handleDelete = () => {

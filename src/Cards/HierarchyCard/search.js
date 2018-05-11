@@ -1,3 +1,5 @@
+import includes from 'lodash/includes';
+
 export default (file, query, options = null) => {
   options = options || getOptions(query);
 
@@ -17,7 +19,7 @@ export default (file, query, options = null) => {
         return true;
       }
 
-      return file.name.includes(keyword);
+      return includes(file.name, keyword);
     });
 };
 

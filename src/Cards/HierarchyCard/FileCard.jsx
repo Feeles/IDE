@@ -7,6 +7,7 @@ import { transparent } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
+import includes from 'lodash/includes';
 
 import Filename from './Filename';
 import { PreferenceDialog } from '../../FileDialog/';
@@ -17,7 +18,7 @@ const getStyles = (props, context) => {
   const { palette, spacing, transitions } = context.muiTheme;
 
   const isSelected = selectedFile === file;
-  const backgroundColor = tabbedFiles.includes(file)
+  const backgroundColor = includes(tabbedFiles, file)
     ? fade(palette.canvasColor, 1)
     : palette.disabledColor;
 

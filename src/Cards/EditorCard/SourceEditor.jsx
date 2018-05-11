@@ -6,6 +6,7 @@ import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-b
 import ContentSave from 'material-ui/svg-icons/content/save';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
+import includes from 'lodash/includes';
 import Editor from './Editor';
 import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
@@ -237,7 +238,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleIndexReplacement = (cm, change) => {
-    if (!['asset', 'paste'].includes(change.origin)) return;
+    if (!includes(['asset', 'paste'], change.origin)) return;
 
     for (const keyword of ['item', 'map']) {
       // すでに使われている item{N} のような変数を探す.
@@ -247,7 +248,7 @@ export default class SourceEditor extends PureComponent {
       if (usedIndexes.length < 1) continue;
 
       const sourceText = change.text.join('\n');
-      if (usedIndexes.some(i => sourceText.includes(keyword + i))) {
+      if (usedIndexes.some(i => includes(sourceText, keyword + i))) {
         // もし名前が競合していたら…
         const max = Math.max.apply(null, usedIndexes);
         const regExp = new RegExp(`${keyword}(\\d+)`, 'g');
@@ -335,7 +336,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleIndentLine = (cm, change) => {
-    if (!['asset', 'paste'].includes(change.origin)) return;
+    if (!includes(['asset', 'paste'], change.origin)) return;
     const { from } = change;
     const to = new Pos(from.line + change.text.length, 0);
     // インデント

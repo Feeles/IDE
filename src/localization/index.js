@@ -1,3 +1,4 @@
+import includes from 'lodash/includes';
 import en from './en';
 import ja from './ja';
 
@@ -8,7 +9,7 @@ export const defaultLanguage = 'en-us';
 export default languages => {
   for (const _lang of languages) {
     const lang = _lang.toLowerCase();
-    const hit = localizations.find(loc => loc.accept.includes(lang));
+    const hit = localizations.find(loc => includes(loc.accept, lang));
     if (hit) {
       return hit;
     }
