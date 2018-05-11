@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { JSHINT } from 'jshint';
 import deepEqual from 'deep-equal';
 import reduce from 'lodash/reduce';
+import includes from 'lodash/includes';
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
@@ -130,14 +131,17 @@ export default class Editor extends PureComponent {
       this.showHint(cm);
       this.props.codemirrorRef(cm);
       // ドロップダウンウィジェット
-      cm.on('change', this.handleUpdateWidget);
-      cm.on('swapDoc', this.handleUpdateWidget);
-
-      this.handleUpdateWidget(cm);
+      cm.on('changes', this.handleUpdateWidget);
+      cm.on('swapDoc', () => {
+        this.clearDropdown();
+        this.handleUpdateWidget(cm, []);
+      });
+      this.handleUpdateWidget(cm, []);
     }
   };
 
-  handleUpdateWidget = cm => {
+  handleUpdateWidget = (cm, batch) => {
+    const origin = batch[0] && batch[0].origin; // e.g. '+input'
     const dropdowns = reduce(
       cm.getValue('\n').split('\n'),
       (prev, text, line) => {
@@ -154,7 +158,10 @@ export default class Editor extends PureComponent {
       []
     );
     // 中身が変わっていたら更新
-    if (!deepEqual(dropdowns, this.state.dropdowns)) {
+    if (
+      includes(['setValue', 'undo'], origin) ||
+      !deepEqual(dropdowns, this.state.dropdowns)
+    ) {
       // 前回の LineWidget を消去
       for (const item of this.state.dropdownLineWidgets) {
         item.clear(); // remove element
@@ -169,6 +176,17 @@ export default class Editor extends PureComponent {
         dropdownLineWidgets
       });
     }
+  };
+
+  clearDropdown = () => {
+    // 全ての LineWidget を消去
+    for (const item of this.state.dropdownLineWidgets) {
+      item.clear(); // remove element
+    }
+    this.setState({
+      dropdowns: [],
+      dropdownLineWidgets: []
+    });
   };
 
   renderDropdown = (cm, segments, line) => {
