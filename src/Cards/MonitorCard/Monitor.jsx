@@ -7,7 +7,6 @@ import composeEnv from '../../File/composeEnv';
 import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
-import ResolveProgress from './ResolveProgress';
 import uniqueId from '../../utils/uniqueId';
 import { getPrimaryUser } from '../../database/';
 
@@ -576,7 +575,6 @@ export default class Monitor extends PureComponent {
           height={this.props.frameHeight}
           isFullScreen={this.props.isFullScreen}
         />
-        <ResolveProgress globalEvent={this.props.globalEvent} />
       </div>
     );
   }

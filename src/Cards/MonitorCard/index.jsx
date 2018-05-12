@@ -14,6 +14,7 @@ import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windo
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from './Monitor';
+import ResolveProgress from './ResolveProgress';
 
 const frameSizes = [
   [480, 320],
@@ -135,6 +136,9 @@ export default class MonitorCard extends PureComponent {
     const feelesrc = loadConfig('feelesrc');
 
     const actions = [
+      <IconButton key="progress" disabled>
+        <ResolveProgress size={24} globalEvent={this.props.globalEvent} />
+      </IconButton>,
       <IconButton
         key="refresh"
         disabled={feelesrc.disableReloadButton}

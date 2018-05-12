@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import CircularProgress from 'material-ui/CircularProgress';
 
 // Timeout [ms] 間 resolve がなければ、次の resolve まで hide
-const Timeout = 2000;
+const Timeout = 1000;
 
 export default class ResolveProgress extends PureComponent {
   static propTypes = {
+    size: PropTypes.number.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
@@ -42,8 +43,8 @@ export default class ResolveProgress extends PureComponent {
 
     return (
       <CircularProgress
-        size={100}
-        thickness={8}
+        size={this.props.size}
+        thickness={Math.max(1, this.props.size / 8)}
         color={palette.primary1Color}
       />
     );
