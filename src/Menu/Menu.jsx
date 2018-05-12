@@ -16,6 +16,7 @@ import ActionHistory from 'material-ui/svg-icons/action/history';
 import ActionAccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ActionAutorenew from 'material-ui/svg-icons/action/autorenew';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
 import TwitterIcon from '../utils/TwitterIcon';
@@ -318,7 +319,9 @@ export default class Menu extends PureComponent {
 
     const styles = getStyles(this.props, this.context);
 
-    const { palette: { alternateTextColor } } = this.context.muiTheme;
+    const {
+      palette: { alternateTextColor }
+    } = this.context.muiTheme;
 
     const isLoggedin = this.props.oAuthId !== null;
 
@@ -342,7 +345,11 @@ export default class Menu extends PureComponent {
         style={styles.root}
         titleStyle={{ flex: null }}
         iconStyleLeft={styles.leftIcon}
-        onLeftIconButtonClick={this.handleToggleDrawer}
+        iconElementLeft={
+          <IconButton onClick={this.handleToggleDrawer}>
+            <NavigationMenu />
+          </IconButton>
+        }
       >
         <div style={{ flex: 1 }} />
         <Toggle
@@ -493,11 +500,10 @@ export default class Menu extends PureComponent {
         >
           <AppBar
             iconElementLeft={
-              <IconButton>
+              <IconButton onClick={this.handleToggleDrawer}>
                 <NavigationArrowBack />
               </IconButton>
             }
-            onLeftIconButtonClick={this.handleToggleDrawer}
           />
           {this.state.open
             ? Object.entries(this.props.cards)
