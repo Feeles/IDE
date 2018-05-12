@@ -12,6 +12,8 @@ import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
 import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
+import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
+import AvPause from 'material-ui/svg-icons/av/pause';
 
 import Monitor from './Monitor';
 import ResolveProgress from './ResolveProgress';
@@ -60,7 +62,8 @@ export default class MonitorCard extends PureComponent {
   state = {
     frameWidth: 300,
     frameHeight: 150,
-    processing: false
+    processing: false,
+    isStopped: false // WIP
   };
 
   static icon() {
@@ -111,6 +114,18 @@ export default class MonitorCard extends PureComponent {
     this.setState({ processing: false });
   };
 
+  toggleStopped = () => {
+    // Monitor に stop/resume するようリクエスト
+    const query = this.state.isStopped ? 'resume' : 'stop';
+    const request = {
+      query
+    };
+    this.props.globalEvent.emit('postMessage', request);
+    this.setState({
+      isStopped: !this.state.isStopped
+    });
+  };
+
   render() {
     const styles = {
       flexible: {
@@ -147,6 +162,9 @@ export default class MonitorCard extends PureComponent {
         <NavigationRefresh
           color={this.context.muiTheme.palette.primary1Color}
         />
+      </IconButton>,
+      <IconButton key="stop_resume" onClick={this.toggleStopped}>
+        {this.state.isStopped ? <AvPlayArrow /> : <AvPause />}
       </IconButton>,
       <IconButton
         key="fullscreen"
