@@ -399,8 +399,16 @@ export default class SourceEditor extends PureComponent {
     // const snippets = this.props.getConfig('snippets')(file);
 
     const extraKeys = {
-      'Ctrl-Enter': this.handleSaveAndRun,
-      'Ctrl-Alt-B': this.beautify
+      'Ctrl-Enter': () => {
+        // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
+        // それをやり過ごしてから実行する
+        window.setTimeout(this.handleSaveAndRun, 10);
+      },
+      'Ctrl-Alt-B': () => {
+        // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
+        // それをやり過ごしてから実行する
+        window.setTimeout(this.beautify, 10);
+      }
     };
     const foldOptions = {
       widget: ' 📦 ',
