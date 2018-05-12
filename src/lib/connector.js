@@ -8,7 +8,12 @@
     };
   })(0);
 
+  // CORS 対策で fetch を使わない
   var fetchPolyfill = self.fetchPonyfill();
+  var fetch = fetchPolyfill.fetch;
+  var Request = fetchPolyfill.Request;
+  var Response = fetchPolyfill.Response;
+  var Headers = fetchPolyfill.Headers;
   // polyfill
   if (!self.fetch) {
     self.fetch = fetchPolyfill.fetch;
