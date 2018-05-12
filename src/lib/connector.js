@@ -8,6 +8,15 @@
     };
   })(0);
 
+  var fetchPolyfill = self.fetchPonyfill();
+  // polyfill
+  if (!self.fetch) {
+    self.fetch = fetchPolyfill.fetch;
+    self.Request = fetchPolyfill.Request;
+    self.Response = fetchPolyfill.Response;
+    self.Headers = fetchPolyfill.Headers;
+  }
+
   /**
    * @return Promise ({ port, model })
    */
