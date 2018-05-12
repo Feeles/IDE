@@ -62,35 +62,7 @@
                     .join(',') +
                   ';'
                 : '') + e.data.value.text;
-
-            // feeles/eval.js があるかどうか調べる
-            feeles
-              .resolve('feeles/eval')
-              .then(function() {
-                // feeles/eval.js が存在する
-                requirejs(
-                  ['feeles/eval'],
-                  function(module) {
-                    if (module && typeof module.default !== 'function') {
-                      var mes =
-                        'feeles/eval.js is found but not export function';
-                      throw new Error(mes);
-                    }
-                    // もし "feeles/eval.js" があれば,
-                    // default export された function に text を与えてコールする
-                    module.default(text);
-                  },
-                  function() {
-                    // なければ直接 eval する
-                    eval(text);
-                  }
-                );
-              })
-              .catch(function() {
-                // なければ直接 eval する
-                eval(text);
-              });
-
+            feeles.eval(text, e.data.value.text); // eval code
             window.focus();
             break;
           }
@@ -325,20 +297,34 @@
     });
   };
 
+  // eval する
+  feeles.eval =
+    feeles.eval ||
+    function(code) {
+      // もし feeles/eval.js があれば, default export function に
+      // code を与える. なければ直接 eval する
+      eval(code);
+    };
+
   if (window.requirejs) {
     // Override require()
     window.requirejs.load = function(context, moduleName) {
       // module resolver by feeles
-      feeles.resolve(moduleName).then(function(text) {
-        if (text.indexOf('define(function') === 0) {
-          // すでに AMD になっている
-          eval(text);
-        } else {
-          // JavaScript を AMD にして define
-          define(moduleName, new Function('require, exports, module', text));
-        }
-        context.completeLoad(moduleName);
-      });
+      feeles
+        .resolve(moduleName)
+        .then(function(text) {
+          if (text.indexOf('define(function') === 0) {
+            // すでに AMD になっている
+            eval(text);
+          } else {
+            // JavaScript を AMD にして define
+            define(moduleName, new Function('require, exports, module', text));
+          }
+          context.completeLoad(moduleName);
+        })
+        .catch(function() {
+          console.error(moduleName + ' is not found');
+        });
     };
 
     requirejs.onError = function(error) {
@@ -353,6 +339,17 @@
           : error + '';
       requestPostMessage('error', message);
     };
+
+    // feeles/eval.js が存在する場合, export default function を使う
+    window.requirejs(['feeles/eval'], function(module) {
+      if (module && typeof module.default !== 'function') {
+        var mes = 'feeles/eval.js is found but not export function';
+        throw new Error(mes);
+      }
+      // もし "feeles/eval.js" があれば,
+      // default export された function に text を与えてコールする
+      feeles.eval = module.default;
+    });
   }
 
   function declarateVars(array) {
