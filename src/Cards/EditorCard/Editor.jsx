@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import beautify from 'js-beautify';
 import { JSHINT } from 'jshint';
+import deepEqual from 'deep-equal';
+import reduce from 'lodash/reduce';
+import includes from 'lodash/includes';
 
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
@@ -29,8 +31,11 @@ import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/dialog/dialog.css';
 // import 'codemirror/addon/scroll/simplescrollbars.css';
 import 'codemirror/addon/fold/foldgutter.css';
-
 import glslMode from 'glsl-editor/glsl';
+
+import './codemirror-hint-extension';
+import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
+
 glslMode(CodeMirror);
 CodeMirror.modeInfo.push({
   name: 'glsl',
@@ -47,9 +52,8 @@ CodeMirror.modeInfo.push({
   alias: ['yml']
 });
 
-import './codemirror-hint-extension';
-
-import CodeMirrorComponent from 'utils/CodeMirrorComponent';
+// segments の参照と現在の line との関係を一旦保持するマップ
+const segmentsLineMap = new WeakMap();
 
 export default class Editor extends PureComponent {
   static propTypes = {
@@ -63,7 +67,9 @@ export default class Editor extends PureComponent {
     foldOptions: PropTypes.object,
     lineNumbers: PropTypes.bool.isRequired,
     findFile: PropTypes.func.isRequired,
-    onDocChanged: PropTypes.func.isRequired
+    onDocChanged: PropTypes.func.isRequired,
+    loadConfig: PropTypes.func.isRequired,
+    fileView: PropTypes.object.isRequired
   };
 
   static defaultProps = {
@@ -72,14 +78,18 @@ export default class Editor extends PureComponent {
     snippets: [],
     showHint: true,
     extraKeys: {},
-    lineNumbers: true
+    lineNumbers: true,
+    foldOptions: {},
+    onDocChanged: () => {}
   };
 
   state = {
-    jshintrc: null
+    jshintrc: null,
+    dropdowns: [],
+    dropdownLineWidgets: []
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     if (this.props.file === nextProps.file) {
       return false;
     }
@@ -99,6 +109,19 @@ export default class Editor extends PureComponent {
         // continue regardless of error
       }
     }
+    this.setState({
+      dropdownConfig: this.props.loadConfig('dropdown'),
+      dropdowns: [],
+      dropdownLineWidgets: []
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.fileView !== nextProps.fileView) {
+      this.setState({
+        dropdownConfig: this.props.loadConfig('dropdown')
+      });
+    }
   }
 
   handleCodemirror = ref => {
@@ -107,14 +130,133 @@ export default class Editor extends PureComponent {
     if (cm) {
       this.showHint(cm);
       this.props.codemirrorRef(cm);
+      // ドロップダウンウィジェット
+      cm.on('changes', this.handleUpdateWidget);
+      cm.on('swapDoc', () => {
+        this.clearDropdown();
+        this.handleUpdateWidget(cm, []);
+      });
+      this.handleUpdateWidget(cm, []);
     }
+  };
+
+  handleUpdateWidget = (cm, batch) => {
+    const origin = batch[0] && batch[0].origin; // e.g. '+input'
+    const dropdowns = reduce(
+      cm.getValue('\n').split('\n'),
+      (prev, text, line) => {
+        // Syntax: ('▼ スキン', _kきし)
+        const segments = /^(.*\(['"])(▼[^'"]*)(['"],\s*)([^)]*)\)/.exec(text);
+        if (segments) {
+          // line は独立して保持（異なる行でも移動しただけなら問題ない）
+          segmentsLineMap.set(segments, line);
+          // 新しいデータを格納
+          prev = prev.concat([segments]);
+        }
+        return prev;
+      },
+      []
+    );
+    // 中身が変わっていたら更新
+    if (
+      includes(['setValue', 'undo'], origin) ||
+      !deepEqual(dropdowns, this.state.dropdowns)
+    ) {
+      // 前回の LineWidget を消去
+      for (const item of this.state.dropdownLineWidgets) {
+        item.clear(); // remove element
+      }
+      // 今回の LineWidget を追加
+      const dropdownLineWidgets = dropdowns.map(segments => {
+        const line = segmentsLineMap.get(segments); // さっき保持した line
+        return this.renderDropdown(cm, segments, line);
+      });
+      this.setState({
+        dropdowns,
+        dropdownLineWidgets
+      });
+    }
+  };
+
+  clearDropdown = () => {
+    // 全ての LineWidget を消去
+    for (const item of this.state.dropdownLineWidgets) {
+      item.clear(); // remove element
+    }
+    this.setState({
+      dropdowns: [],
+      dropdownLineWidgets: []
+    });
+  };
+
+  renderDropdown = (cm, segments, line) => {
+    const [, _prefix, _label, _right, _value] = segments;
+
+    const label = document.createElement('span');
+    label.textContent = _label;
+    label.classList.add('Feeles-dropdown-label');
+    const right = document.createElement('span');
+    right.textContent = _right;
+    right.classList.add('Feeles-dropdown-blank');
+    const value = document.createElement('span');
+    value.textContent = _value;
+    value.classList.add('Feeles-dropdown-value');
+    value.addEventListener('click', this.handleValueClick);
+    const button = document.createElement('span');
+    button.appendChild(label); // "▼ スキン"
+    button.appendChild(right); // "', "
+    button.appendChild(value); // _kきし
+    button.classList.add('Feeles-dropdown-button');
+    const allOfLeft = _prefix + _label + _right; // value より左の全て
+    const ch = allOfLeft.length;
+
+    const shadow = document.createElement('span');
+    shadow.appendChild(button);
+    shadow.classList.add('Feeles-dropdown-shadow');
+    const parent = document.createElement('div');
+    parent.classList.add('Feeles-widget', 'Feeles-dropdown');
+    parent.appendChild(shadow);
+
+    const pos = { line, ch: _prefix.length };
+    const { left } = cm.charCoords(pos, 'local');
+    parent.style.transform = `translate(${left}px, -1.3rem)`;
+    // ウィジェット追加
+    const widget = cm.addLineWidget(line, parent);
+    // クリックイベント追加
+    button.addEventListener(
+      'click',
+      () => {
+        const line = cm.doc.getLineNumber(widget.line);
+        // Open dropdown menu
+        const listName = _label.substr(1).trim();
+        const list = this.state.dropdownConfig[listName];
+        if (list) {
+          const hint = {
+            from: { line, ch },
+            to: { line, ch: ch + _value.length },
+            list: list.map(item => ({
+              text: item.body,
+              displayText: `${item.body} ${item.label || ''}`
+            }))
+          };
+          // CodeMirror.on(hint, 'pick', this.handleSaveAndRun);
+          cm.showHint({
+            completeSingle: false,
+            hint: () => hint
+          });
+          cm.focus();
+        }
+      },
+      true
+    );
+    return widget;
   };
 
   showHint(cm) {
     if (!this.props.showHint) {
       return;
     }
-    const { getFiles, getConfig } = this.props;
+    const { getFiles } = this.props;
 
     cm.on('change', (_cm, change) => {
       if (change.origin === 'setValue' || change.origin === 'complete') return;
@@ -129,7 +271,7 @@ export default class Editor extends PureComponent {
   }
 
   render() {
-    const { file, getConfig, lineNumbers } = this.props;
+    const { file, lineNumbers } = this.props;
 
     const meta = CodeMirror.findModeByMIME(file.type);
     const mode = meta && meta.mode;

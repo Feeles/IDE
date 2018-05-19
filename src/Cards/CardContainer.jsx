@@ -12,7 +12,7 @@ import ShotCard from './ShotCard/';
 import EditorCard from './EditorCard/';
 import HierarchyCard from './HierarchyCard/';
 import ScreenShotCard from './ScreenShotCard/';
-import * as MonitorTypes from 'utils/MonitorTypes';
+import * as MonitorTypes from '../utils/MonitorTypes';
 
 export default class CardContainer extends PureComponent {
   static propTypes = {
@@ -43,7 +43,8 @@ export default class CardContainer extends PureComponent {
     showNotice: PropTypes.func.isRequired,
     deployURL: PropTypes.string,
     oAuthId: PropTypes.string,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    disableScreenShotCard: PropTypes.bool.isRequired
   };
 
   state = {
@@ -112,9 +113,11 @@ export default class CardContainer extends PureComponent {
         flex: 1,
         position: 'relative',
         display: 'flex',
+        flexWrap: 'wrap',
+        justfiyContent: 'space-between',
         alignItems: 'stretch',
-        overflowX: 'scroll',
-        overflowY: 'hidden',
+        overflowX: 'hidden',
+        overflowY: 'scroll',
         paddingLeft: 16,
         boxSizing: 'border-box',
         backgroundImage: bg && `url(${bg.blobURL})`,
@@ -222,11 +225,13 @@ export default class CardContainer extends PureComponent {
           {...cardProps}
           cardPropsBag={bag('HierarchyCard')}
         />
-        <ScreenShotCard
-          ref={ref => (this.cardRefs.ScreenShotCard = ref)}
-          {...cardProps}
-          cardPropsBag={bag('ScreenShotCard')}
-        />
+        {this.props.disableScreenShotCard ? null : (
+          <ScreenShotCard
+            ref={ref => (this.cardRefs.ScreenShotCard = ref)}
+            {...cardProps}
+            cardPropsBag={bag('ScreenShotCard')}
+          />
+        )}
       </div>
     );
   }

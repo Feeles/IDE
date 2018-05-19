@@ -1,3 +1,4 @@
+import includes from 'lodash/includes';
 import { putFile, deleteFile } from './';
 
 /**
@@ -34,7 +35,9 @@ export default class FileView {
     if (!this.component) throw 'Component is not been set';
     const fileView = new FileView(files);
     fileView.install(this.component);
-    return this.component.setStatePromise({ fileView });
+    return this.component.setStatePromise({
+      fileView
+    });
   }
 
   /**
@@ -106,7 +109,9 @@ export default class FileView {
   forceUpdate() {
     const fileView = new FileView(this.files);
     fileView.install(this.component);
-    return this.component.setStatePromise({ fileView });
+    return this.component.setStatePromise({
+      fileView
+    });
   }
 
   /**
@@ -139,14 +144,15 @@ export default class FileView {
    * @param {SourceFile|BinalyFile} file 追加するファイル
    */
   async addFile(file) {
-    const timestamp = file.lastModified || Date.now();
     const remove = this.inspection(file);
     if (file === remove) {
       return file;
     }
     const files = this.files.concat(file).filter(item => item !== remove);
 
-    await this.setState({ files });
+    await this.setState({
+      files
+    });
     await this.component.resetConfig(file.name);
 
     if (this.component.state.project) {
@@ -161,7 +167,6 @@ export default class FileView {
    * @param {SourceFile|BinalyFile} nextFile 追加するファイル
    */
   async putFile(prevFile, nextFile) {
-    const timestamp = nextFile.lastModified || Date.now();
     const remove = this.inspection(nextFile);
     if (remove === nextFile) {
       return prevFile;
@@ -170,7 +175,9 @@ export default class FileView {
       .filter(item => item !== remove && item.key !== prevFile.key)
       .concat(nextFile);
 
-    await this.setState({ files });
+    await this.setState({
+      files
+    });
     this.component.resetConfig(prevFile.name);
 
     if (this.component.state.project) {
@@ -184,11 +191,11 @@ export default class FileView {
    * @param {Array<SourceFile|BinalyFile>} targets 削除するファイル
    */
   async deleteFile(...targets) {
-    const timestamp = Date.now();
-
     const keys = targets.map(item => item.key);
-    const files = this.files.filter(item => !keys.includes(item.key));
-    await this.setState({ files });
+    const files = this.files.filter(item => !includes(keys, item.key));
+    await this.setState({
+      files
+    });
 
     if (this.component.state.project) {
       const fileNames = targets.map(item => item.name);

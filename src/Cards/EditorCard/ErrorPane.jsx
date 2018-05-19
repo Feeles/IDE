@@ -73,7 +73,7 @@ export default class ErrorPane extends PureComponent {
           primary
           label={localization.common.close}
           style={styles.close}
-          onTouchTap={this.handleClose}
+          onClick={this.handleClose}
         />
         <h2 style={styles.heading}>{localization.editorCard.error}</h2>
         <div style={styles.blank} />
@@ -81,7 +81,7 @@ export default class ErrorPane extends PureComponent {
           primary
           icon={<ActionRestore />}
           label={localization.editorCard.restore}
-          onTouchTap={this.handleRestore}
+          onClick={this.handleRestore}
           disabled={!canRestore}
         />
         <div style={styles.blank} />
@@ -110,7 +110,7 @@ export default class ErrorPane extends PureComponent {
     return (
       <div
         style={styles.message}
-        onTouchTap={() => this.setState({ expanded: !expanded })}
+        onClick={() => this.setState({ expanded: !expanded })}
       >
         <pre style={styles.messageText}>
           {this.props.error && this.props.error.message}

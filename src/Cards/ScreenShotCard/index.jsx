@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import md5 from 'md5';
+import URLSearchParams from 'url-search-params';
 import Card from '../CardWindow';
 import { CardActions } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';
@@ -9,9 +10,18 @@ import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { emphasize, fade } from 'material-ui/utils/colorManipulator';
 
-import organization from 'organization';
-import debugWindow from 'utils/debugWindow';
-import { SourceFile, BinaryFile } from 'File/';
+import organization from '../../organization';
+import debugWindow from '../../utils/debugWindow';
+import { SourceFile } from '../../File/';
+
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
 
 export default class ScreenShotCard extends PureComponent {
   static propTypes = {
@@ -164,7 +174,7 @@ export default class ScreenShotCard extends PureComponent {
   };
 
   handleThumbnailDelete = async () => {
-    const { selected, cache } = this.state;
+    const { selected } = this.state;
     // 選択アイテムを削除
     await this.setCache(selected, undefined);
     // 選択アイテムをとなりに移動
@@ -236,7 +246,7 @@ export default class ScreenShotCard extends PureComponent {
         <GridTile
           key={hash}
           style={styles.tile(hash)}
-          onTouchTap={e => this.handleSelect(e, hash)}
+          onClick={e => this.handleSelect(e, hash)}
         >
           <img style={styles.image(hash)} src={url} />
         </GridTile>
@@ -251,7 +261,7 @@ export default class ScreenShotCard extends PureComponent {
         <GridList
           cellHeight={180}
           style={styles.root}
-          onTouchTap={event => this.handleSelect(event, null)}
+          onClick={event => this.handleSelect(event, null)}
         >
           {gridList}
         </GridList>
@@ -259,14 +269,14 @@ export default class ScreenShotCard extends PureComponent {
           <FlatButton
             label={localization.screenShotCard.coverImage}
             disabled={!selected || alreadySetImage}
-            onTouchTap={this.handleThumbnailSet}
+            onClick={this.handleThumbnailSet}
           />
           <div style={styles.blank} />
           <FlatButton
             label=""
             icon={<ActionDelete />}
             disabled={!selected}
-            onTouchTap={this.handleThumbnailDelete}
+            onClick={this.handleThumbnailDelete}
           />
         </CardActions>
       </Card>

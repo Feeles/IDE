@@ -6,13 +6,13 @@ import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import { red50, red500 } from 'material-ui/styles/colors';
 
-import { SourceFile } from 'File/';
+import { SourceFile } from '../../File/';
 import ShotCard from './';
-import Editor from './Editor';
+import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
-  const { palette, spacing, transitions, prepareStyles } = context.muiTheme;
+  const { palette, spacing, transitions } = context.muiTheme;
   const { shooting, height } = state;
   // TODO: ちゃんと実装する. 実際には Footer の状態でかわる
   const maxEditorHeight = window.innerHeight - 200;
@@ -71,6 +71,7 @@ const getStyle = (props, context, state) => {
 
 export default class ShotPane extends PureComponent {
   static propTypes = {
+    fileView: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -199,6 +200,8 @@ export default class ShotPane extends PureComponent {
             extraKeys={extraKeys}
             lineNumbers={false}
             findFile={this.props.findFile}
+            loadConfig={this.props.loadConfig}
+            fileView={this.props.fileView}
           />
         </div>
         <div style={styles.menu}>
@@ -208,7 +211,7 @@ export default class ShotPane extends PureComponent {
             icon={this.state.shooting ? <AvStop /> : ShotCard.icon()}
             labelPosition="before"
             disabled={this.state.shooting}
-            onTouchTap={this.shoot}
+            onClick={this.shoot}
             style={styles.shoot}
           />
           <span style={styles.label}>{localization.shotCard.shoot}</span>
@@ -216,7 +219,7 @@ export default class ShotPane extends PureComponent {
           <RaisedButton
             secondary
             label={localization.shotCard.restore}
-            onTouchTap={this.handleRestore}
+            onClick={this.handleRestore}
             style={styles.restore}
             disabled={!this.state.canRestore}
           />

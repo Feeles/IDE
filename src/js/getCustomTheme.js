@@ -24,7 +24,6 @@ import {
 import {
   fade,
   emphasize,
-  getLuminance,
   convertColorToString,
   decomposeColor
 } from 'material-ui/utils/colorManipulator';

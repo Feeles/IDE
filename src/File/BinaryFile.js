@@ -1,4 +1,3 @@
-import React from 'react';
 import md5 from 'md5';
 
 import _File from './_File';
@@ -85,7 +84,7 @@ export default class BinaryFile extends _File {
    * @return Promise gives BinaryFile
    */
   static load(file) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       // get hash of TypedArray from binary
       const reader = new FileReader();
       reader.onload = e => {

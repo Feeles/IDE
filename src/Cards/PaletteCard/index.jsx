@@ -4,7 +4,6 @@ import Card from '../CardWindow';
 import { CardActions, CardText } from 'material-ui/Card';
 import Popover from 'material-ui/Popover';
 import Paper from 'material-ui/Paper';
-import FlatButton from 'material-ui/FlatButton';
 import { convertColorToString } from 'material-ui/utils/colorManipulator';
 import { transparent, fullWhite } from 'material-ui/styles/colors';
 import ImagePalette from 'material-ui/svg-icons/image/palette';
@@ -83,8 +82,7 @@ export default class PaletteCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
-    setConfig: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired
+    setConfig: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -144,14 +142,13 @@ export default class PaletteCard extends PureComponent {
         <span style={styles.label}>{key}</span>
         <span
           style={prepareStyles(rectStyle)}
-          onTouchTap={event => this.handleRectClick(event, key)}
+          onClick={event => this.handleRectClick(event, key)}
         />
       </div>
     );
   }
 
   render() {
-    const { localization } = this.props;
     const { open, key, anchorEl, limited } = this.state;
     const { palette, prepareStyles } = this.context.muiTheme;
 
@@ -168,19 +165,19 @@ export default class PaletteCard extends PureComponent {
               prepareStyles(styles.body),
               prepareStyles(styles.overlay)
             ]}
-            onTouchTap={e => this.handleRectClick(e, 'backgroundColor')}
+            onClick={e => this.handleRectClick(e, 'backgroundColor')}
           >
             <Paper
               style={styles.canvas}
-              onTouchTap={e => this.handleRectClick(e, 'canvasColor')}
+              onClick={e => this.handleRectClick(e, 'canvasColor')}
             >
               <Paper
                 style={styles.primary}
-                onTouchTap={e => this.handleRectClick(e, 'primary1Color', true)}
+                onClick={e => this.handleRectClick(e, 'primary1Color', true)}
               />
               <Paper
                 style={styles.secondary}
-                onTouchTap={e => this.handleRectClick(e, 'accent1Color', true)}
+                onClick={e => this.handleRectClick(e, 'accent1Color', true)}
               />
               <div style={prepareStyles(styles.blank)} />
             </Paper>
@@ -202,15 +199,17 @@ export default class PaletteCard extends PureComponent {
           }}
           onRequestClose={this.closePopover}
         >
-          {limited
-            ? <TwitterPicker
-                color={key && palette[key]}
-                onChangeComplete={this.handleChangeComplete}
-              />
-            : <ChromePicker
-                color={key && palette[key]}
-                onChangeComplete={this.handleChangeComplete}
-              />}
+          {limited ? (
+            <TwitterPicker
+              color={key && palette[key]}
+              onChangeComplete={this.handleChangeComplete}
+            />
+          ) : (
+            <ChromePicker
+              color={key && palette[key]}
+              onChangeComplete={this.handleChangeComplete}
+            />
+          )}
         </Popover>
       </Card>
     );

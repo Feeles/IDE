@@ -6,11 +6,11 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import { transparent } from 'material-ui/styles/colors';
 
-import DragTypes from 'utils/dragTypes';
+import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, state, context) => {
   const { isOver } = props;
-  const { palette, spacing, prepareStyles } = context.muiTheme;
+  const { palette, spacing } = context.muiTheme;
 
   return {
     icon: {
@@ -28,7 +28,7 @@ class _TrashBox extends PureComponent {
   static propTypes = {
     showTrashes: PropTypes.bool.isRequired,
     putFile: PropTypes.func.isRequired,
-    onTouchTap: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired
@@ -41,7 +41,7 @@ class _TrashBox extends PureComponent {
   render() {
     const {
       showTrashes,
-      onTouchTap,
+      onClick,
 
       connectDropTarget
     } = this.props;
@@ -51,10 +51,12 @@ class _TrashBox extends PureComponent {
 
     return connectDropTarget(
       <div>
-        <IconButton style={icon} onTouchTap={onTouchTap}>
-          {showTrashes
-            ? <NavigationArrowBack color={palette.secondaryTextColor} />
-            : <ActionDelete color={palette.secondaryTextColor} />}
+        <IconButton style={icon} onClick={onClick}>
+          {showTrashes ? (
+            <NavigationArrowBack color={palette.secondaryTextColor} />
+          ) : (
+            <ActionDelete color={palette.secondaryTextColor} />
+          )}
         </IconButton>
       </div>
     );
@@ -62,7 +64,7 @@ class _TrashBox extends PureComponent {
 }
 
 const spec = {
-  drop(props, monitor, component) {
+  drop(props, monitor) {
     const { putFile } = props;
     const { files } = monitor.getItem();
 

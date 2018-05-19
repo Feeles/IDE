@@ -1,5 +1,4 @@
-/*global requirejs define domtoimage EventEmitter2 feeles*/
-!(function() {
+/*global requirejs define domtoimage EventEmitter2 feeles*/ !(function() {
   // An array of stocks for feeles.export
   feeles.exports = [];
 
@@ -8,6 +7,20 @@
       return 'FEELES_UNIQ_ID-' + ++id;
     };
   })(0);
+
+  // CORS 対策で fetch を使わない
+  var fetchPolyfill = self.fetchPonyfill();
+  var fetch = fetchPolyfill.fetch;
+  var Request = fetchPolyfill.Request;
+  var Response = fetchPolyfill.Response;
+  var Headers = fetchPolyfill.Headers;
+  // polyfill
+  if (!self.fetch) {
+    self.fetch = fetchPolyfill.fetch;
+    self.Request = fetchPolyfill.Request;
+    self.Response = fetchPolyfill.Response;
+    self.Headers = fetchPolyfill.Headers;
+  }
 
   /**
    * @return Promise ({ port, model })
@@ -49,35 +62,7 @@
                     .join(',') +
                   ';'
                 : '') + e.data.value.text;
-
-            // feeles/eval.js があるかどうか調べる
-            feeles
-              .resolve('feeles/eval')
-              .then(function() {
-                // feeles/eval.js が存在する
-                requirejs(
-                  ['feeles/eval'],
-                  function(module) {
-                    if (module && typeof module.default !== 'function') {
-                      var mes =
-                        'feeles/eval.js is found but not export function';
-                      throw new Error(mes);
-                    }
-                    // もし "feeles/eval.js" があれば,
-                    // default export された function に text を与えてコールする
-                    module.default(text);
-                  },
-                  function() {
-                    // なければ直接 eval する
-                    eval(text);
-                  }
-                );
-              })
-              .catch(function() {
-                // なければ直接 eval する
-                eval(text);
-              });
-
+            feeles.eval(text, e.data.value.text); // eval code
             window.focus();
             break;
           }
@@ -119,7 +104,7 @@
       };
     })
     .catch(function(err) {
-      return console.error('feeles: Error in launch', err);
+      return console.info('feeles: Error in launch', err);
     });
 
   feeles.fetch = function(name) {
@@ -275,7 +260,9 @@
     return data.timeoutId;
   };
   feeles.clearTimeout = function(timeoutId) {
-    requestPostMessage('clearTimeout', { timeoutId: timeoutId });
+    requestPostMessage('clearTimeout', {
+      timeoutId: timeoutId
+    });
   };
   feeles.setInterval = function(func, delay) {
     var data = {
@@ -290,28 +277,59 @@
     return data.intervalId;
   };
   feeles.clearInterval = function(intervalId) {
-    requestPostMessage('clearInterval', { intervalId: intervalId });
+    requestPostMessage('clearInterval', {
+      intervalId: intervalId
+    });
   };
+
+  // Feeles の onMessage を dispatch する
+  feeles.dispatchOnMessage = function(data) {
+    requestPostMessage('dispatchOnMessage', data);
+  };
+
+  // 親ウィンドウで URL (Same Domain) を window.open する
+  feeles.openWindow = function(url, target, features, replace) {
+    requestPostMessage('openWindow', {
+      url: url,
+      target: target,
+      features: features,
+      replace: replace
+    });
+  };
+
+  // eval する
+  feeles.eval =
+    feeles.eval ||
+    function(code) {
+      // もし feeles/eval.js があれば, default export function に
+      // code を与える. なければ直接 eval する
+      eval(code);
+    };
 
   if (window.requirejs) {
     // Override require()
     window.requirejs.load = function(context, moduleName) {
       // module resolver by feeles
-      feeles.resolve(moduleName).then(function(text) {
-        if (text.indexOf('define(function') === 0) {
-          // すでに AMD になっている
-          eval(text);
-        } else {
-          // JavaScript を AMD にして define
-          define(moduleName, new Function('require, exports, module', text));
-        }
-        context.completeLoad(moduleName);
-      });
+      feeles
+        .resolve(moduleName)
+        .then(function(text) {
+          if (text.indexOf('define(function') === 0) {
+            // すでに AMD になっている
+            eval(text);
+          } else {
+            // JavaScript を AMD にして define
+            define(moduleName, new Function('require, exports, module', text));
+          }
+          context.completeLoad(moduleName);
+        })
+        .catch(function() {
+          console.error(moduleName + ' is not found');
+        });
     };
 
     requirejs.onError = function(error) {
       console.info('requirejsonError');
-      console.error(error);
+      console.info(error);
       var message =
         typeof error === 'object'
           ? 'Error: "' +
@@ -321,6 +339,25 @@
           : error + '';
       requestPostMessage('error', message);
     };
+
+    // feeles/eval.js が存在する場合, export default function を使う
+    feeles
+      .fetch('feeles/eval')
+      .then(function() {
+        // ファイルが見つかった
+        window.requirejs(['feeles/eval'], function(module) {
+          if (module && typeof module.default !== 'function') {
+            var mes = 'feeles/eval.js is found but not export function';
+            throw new Error(mes);
+          }
+          // もし "feeles/eval.js" があれば,
+          // default export された function に text を与えてコールする
+          feeles.eval = module.default;
+        });
+      })
+      .catch(function() {
+        // 見つからなければ良い
+      });
   }
 
   function declarateVars(array) {
@@ -362,6 +399,7 @@
 
     return declarates;
   }
+
   function requestPostMessage(query, value, reply, continuous) {
     var message = {
       id: getUniqueId(),
@@ -373,7 +411,7 @@
         if (reply) {
           _ref.port.addEventListener('message', function task(event) {
             if (event.data.id !== message.id) return;
-            if (continuous) {
+            if (!continuous) {
               _ref.port.removeEventListener('message', task);
             }
             event.resolve = resolve;

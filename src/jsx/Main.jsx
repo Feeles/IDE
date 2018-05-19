@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
 import Snackbar from 'material-ui/Snackbar';
 import jsyaml from 'js-yaml';
+import _ from 'lodash';
+
 const tryParseYAML = (text, defaultValue = {}) => {
   try {
     return jsyaml.safeLoad(text);
   } catch (e) {
-    console.error(e);
+    console.info(e);
     return defaultValue;
   }
 };
@@ -15,23 +17,17 @@ const tryParseJSON = (text, defaultValue = {}) => {
   try {
     return JSON.parse(text);
   } catch (e) {
-    console.error(e);
+    console.info(e);
     return defaultValue;
   }
 };
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
-
-// Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
-injectTapEventPlugin();
-
 import { FileView, createProject, updateProject } from '../database/';
-import { SourceFile, configs } from 'File/';
-import codemirrorStyle from 'js/codemirrorStyle';
-import * as MonitorTypes from 'utils/MonitorTypes';
+import { SourceFile, configs } from '../File/';
+import codemirrorStyle from '../js/codemirrorStyle';
+import * as MonitorTypes from '../utils/MonitorTypes';
 import Menu from '../Menu/';
-import FileDialog, { SaveDialog } from 'FileDialog/';
+import FileDialog, { SaveDialog } from '../FileDialog/';
 import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
@@ -52,10 +48,11 @@ const getStyle = (props, state, context) => {
 
     root: {
       position: 'relative',
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
       display: 'flex',
       flexDirection: 'column',
+      lineHeight: 1.15,
       backgroundColor: palette.backgroundColor
     }
   };
@@ -71,7 +68,12 @@ export default class Main extends Component {
     setLocalization: PropTypes.func.isRequired,
     setMuiTheme: PropTypes.func.isRequired,
     deployURL: PropTypes.string,
-    setDeployURL: PropTypes.func.isRequired
+    setDeployURL: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
+    onMessage: PropTypes.func,
+    onThumbnailChange: PropTypes.func,
+    disableLocalSave: PropTypes.bool.isRequired,
+    disableScreenShotCard: PropTypes.bool.isRequired
   };
 
   static contextTypes = {
@@ -119,12 +121,48 @@ export default class Main extends Component {
 
     const card = this.findFile('feeles/card.json');
     if (card) {
-      this.setState({ cards: card.json });
+      const cards = _.merge(this.state.cards, card.json);
+      this.setState({ cards });
     }
   }
 
   componentDidMount() {
     document.title = this.getConfig('ogp')['og:title'] || '';
+
+    // 定期的にスクリーンショットを撮る
+    if (this.props.onThumbnailChange) {
+      const { globalEvent } = this.state;
+      const cache = new Set();
+      globalEvent.on('message.capture', event => {
+        const { value } = event.data || {};
+        if (!cache.has(value)) {
+          this.props.onThumbnailChange(value);
+          cache.add(value);
+        }
+      });
+      const screenShotLater = async () => {
+        await new Promise(resolve => window.setTimeout(resolve, 10 * 1000));
+        const request = {
+          query: 'capture',
+          type: 'image/jpeg'
+        };
+        await this.state.globalEvent.emitAsync('postMessage', request);
+        screenShotLater();
+      };
+      screenShotLater();
+    }
+
+    if (this.props.onChange) {
+      // ファイルの内容を伝える（一番最初）
+      this.props.onChange({ files: this.props.files });
+    }
+
+    // iframe からのイベントを伝える
+    this.state.globalEvent.on('message.dispatchOnMessage', event => {
+      if (this.props.onMessage) {
+        this.props.onMessage({ ...event });
+      }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -143,10 +181,18 @@ export default class Main extends Component {
     if (this.state.reboot) {
       this.setState({ reboot: false });
     }
+    // ファイル変更検知
+    if (this.props.onChange && prevState.fileView !== this.state.fileView) {
+      this.props.onChange({ files: this.state.fileView.files });
+    }
     // 未オートセーブでファイルが更新されたとき、あらたにセーブデータを作る
     if (!this.state.project && prevState.fileView !== this.state.fileView) {
       if (process.env.NODE_ENV !== 'production') {
         // development のときは自動で作られない
+        return;
+      }
+      if (this.props.disableLocalSave) {
+        // disableLocalSave のときは自動で作られない
         return;
       }
       // Create new project
@@ -174,7 +220,7 @@ export default class Main extends Component {
           message: localization.cloneDialog.autoSaved,
           action: localization.cloneDialog.setTitle,
           autoHideDuration: 20000,
-          onActionTouchTap: () => {
+          onActionClick: () => {
             this.openFileDialog(CloneDialog, {
               files: this.state.fileView.files,
               project: this.state.project,
@@ -404,7 +450,7 @@ export default class Main extends Component {
 
   toggleShowAll = () => this.setStatePromise({ showAll: !this.state.showAll });
 
-  openFileDialog = () => console.error('openFileDialog has not be declared');
+  openFileDialog = () => console.info('openFileDialog has not be declared');
   handleFileDialog = ref => ref && (this.openFileDialog = ref.open);
 
   handleContainerRef = ref => {
@@ -420,7 +466,7 @@ export default class Main extends Component {
   };
 
   render() {
-    const { localization } = this.props;
+    const { localization, disableLocalSave } = this.props;
     const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
@@ -440,25 +486,27 @@ export default class Main extends Component {
 
     return (
       <div style={styles.root}>
-        <Menu
-          {...commonProps}
-          setLocalization={this.props.setLocalization}
-          openFileDialog={this.openFileDialog}
-          saveAs={this.saveAs}
-          project={this.state.project}
-          setProject={this.setProject}
-          cards={this.state.cards}
-          updateCard={this.updateCard}
-          launchIDE={this.props.launchIDE}
-          deployURL={this.props.deployURL}
-          setDeployURL={this.props.setDeployURL}
-          oAuthId={this.state.oAuthId}
-          setOAuthId={this.setOAuthId}
-          showAll={this.state.showAll}
-          toggleShowAll={this.toggleShowAll}
-          cardIcons={this.state.cardIcons}
-          globalEvent={this.state.globalEvent}
-        />
+        {disableLocalSave ? null : (
+          <Menu
+            {...commonProps}
+            setLocalization={this.props.setLocalization}
+            openFileDialog={this.openFileDialog}
+            saveAs={this.saveAs}
+            project={this.state.project}
+            setProject={this.setProject}
+            cards={this.state.cards}
+            updateCard={this.updateCard}
+            launchIDE={this.props.launchIDE}
+            deployURL={this.props.deployURL}
+            setDeployURL={this.props.setDeployURL}
+            oAuthId={this.state.oAuthId}
+            setOAuthId={this.setOAuthId}
+            showAll={this.state.showAll}
+            toggleShowAll={this.toggleShowAll}
+            cardIcons={this.state.cardIcons}
+            globalEvent={this.state.globalEvent}
+          />
+        )}
         <CardContainer
           {...commonProps}
           cards={this.state.cards}
@@ -479,6 +527,7 @@ export default class Main extends Component {
           oAuthId={this.state.oAuthId}
           ref={this.handleContainerRef}
           globalEvent={this.state.globalEvent}
+          disableScreenShotCard={this.props.disableScreenShotCard}
         />
         <Footer
           deployURL={this.props.deployURL}

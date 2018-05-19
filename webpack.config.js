@@ -14,18 +14,11 @@ const port = process.env.PORT || 8081;
 
 const config = {
   entry: {
-    h4p: [
-      'normalize.css',
-      'animate.css',
-      'whatwg-fetch',
-      './lib/url-search-params',
-      './src/utils/google-analytics',
-      './src/utils/Rollbar',
-      './src/main'
-    ]
+    index: './src/main'
   },
   output: {
-    path: __dirname + '/dist/',
+    libraryTarget: 'umd',
+    path: __dirname + '/umd/',
     filename: '[name].js'
   },
   module: {
@@ -44,32 +37,21 @@ const config = {
       {
         test: /\.css$/,
         loaders: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.(html|hbs)$/,
-        loaders: ['handlebars-loader']
-      },
-      {
-        test: /\.json$/,
-        loaders: ['json-loader']
       }
     ],
     // https://github.com/webpack/webpack/issues/5135
     strictThisContextOnImports: true
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.html', '.json'],
-    modules: [path.resolve('./src'), 'node_modules']
+    extensions: ['.js', '.jsx', '.css']
   },
   plugins: [
     new webpack.DefinePlugin({
       CSS_PREFIX: JSON.stringify(cssPrefix),
-      EXPORT_VAR_NAME: JSON.stringify(exportVarName),
-      'process.env.ROLLBAR': JSON.stringify(process.env.ROLLBAR),
-      'process.env.GA_TRACKING_ID': JSON.stringify(process.env.GA_TRACKING_ID)
+      EXPORT_VAR_NAME: JSON.stringify(exportVarName)
     }),
 
-    new webpack.LoaderOptionsPlugin({ minimize: true, debug: false }),
+    new webpack.LoaderOptionsPlugin({ minimize: false, debug: false }),
 
     new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
 
@@ -88,94 +70,7 @@ const config = {
       paths: ['samples/hello-world'],
       output: 'index.json',
       ignore: /\.DS_Store$/
-    }),
-
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: 'ask.html',
-      template: 'samples/ask.hbs',
-      production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/ask'],
-      output: 'ask.json',
-      ignore: /\.DS_Store$/
-    }),
-
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: 'matterjs.html',
-      template: 'samples/matterjs.hbs',
-      production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/matterjs'],
-      output: 'matterjs.json',
-      ignore: /\.DS_Store$/
-    }),
-
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: 'mc.html',
-      template: 'samples/mc.hbs',
-      production: process.env.NODE_ENV === 'production'
-    }),
-    new FeelesWebpackPlugin({
-      paths: ['samples/mc'],
-      output: 'mc.json',
-      ignore: /\.DS_Store$/
     })
-
-    // ---- en ----
-    // new HtmlWebpackPlugin({
-    //   inject: false,
-    //   filename: 'index.html',
-    //   template: 'templates/index.en.hbs',
-    //   production: process.env.NODE_ENV === 'production'
-    // }),
-
-    // new HtmlWebpackPlugin({
-    //   inject: false,
-    //   filename: 'en/ask.html',
-    //   template: 'samples/en/ask.hbs',
-    //   production: process.env.NODE_ENV === 'production'
-    // }),
-    // new FeelesWebpackPlugin({
-    //   paths: ['samples/en/ask', 'samples/ja/ask'],
-    //   output: 'en/ask.json',
-    //   ignore: /\.DS_Store$/
-    // }),
-
-    // new HtmlWebpackPlugin({
-    //   inject: false,
-    //   filename: 'en/matterjs.html',
-    //   template: 'samples/en/matterjs.hbs',
-    //   production: process.env.NODE_ENV === 'production'
-    // }),
-    // new FeelesWebpackPlugin({
-    //   paths: ['samples/en/matterjs', 'samples/ja/matterjs'],
-    //   output: 'en/matterjs.json',
-    //   ignore: /\.DS_Store$/
-    // }),
-
-    // new HtmlWebpackPlugin({
-    //   inject: false,
-    //   filename: 'en/mc.html',
-    //   template: 'samples/en/mc.hbs',
-    //   production: process.env.NODE_ENV === 'production'
-    // }),
-    // new FeelesWebpackPlugin({
-    //   paths: ['samples/en/mc', 'samples/ja/mc'],
-    //   output: 'en/mc.json',
-    //   ignore: /\.DS_Store$/
-    // }),
-
-    // new HtmlWebpackPlugin({
-    //   inject: false,
-    //   filename: 'en/dynamic.html',
-    //   template: 'samples/en/dynamic.hbs',
-    //   production: process.env.NODE_ENV === 'production'
-    // })
   ],
   devServer: {
     contentBase: 'dist',

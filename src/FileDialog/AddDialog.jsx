@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
 
-import { SourceFile } from 'File/';
+import { SourceFile } from '../File/';
 import { Confirm, Abort } from './Buttons';
 
 const getSeed = type => {
@@ -53,10 +53,15 @@ export default class AddDialog extends Component {
 
     const actions = [
       <Abort
+        key="cancel"
         label={localization.addDialog.cancel}
-        onTouchTap={this.props.onRequestClose}
+        onClick={this.props.onRequestClose}
       />,
-      <Confirm label={localization.addDialog.add} onTouchTap={this.handleAdd} />
+      <Confirm
+        key="add"
+        label={localization.addDialog.add}
+        onClick={this.handleAdd}
+      />
     ];
 
     return (
