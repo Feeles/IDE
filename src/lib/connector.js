@@ -341,15 +341,23 @@
     };
 
     // feeles/eval.js が存在する場合, export default function を使う
-    window.requirejs(['feeles/eval'], function(module) {
-      if (module && typeof module.default !== 'function') {
-        var mes = 'feeles/eval.js is found but not export function';
-        throw new Error(mes);
-      }
-      // もし "feeles/eval.js" があれば,
-      // default export された function に text を与えてコールする
-      feeles.eval = module.default;
-    });
+    feeles
+      .fetch('feeles/eval')
+      .then(function() {
+        // ファイルが見つかった
+        window.requirejs(['feeles/eval'], function(module) {
+          if (module && typeof module.default !== 'function') {
+            var mes = 'feeles/eval.js is found but not export function';
+            throw new Error(mes);
+          }
+          // もし "feeles/eval.js" があれば,
+          // default export された function に text を与えてコールする
+          feeles.eval = module.default;
+        });
+      })
+      .catch(function() {
+        // 見つからなければ良い
+      });
   }
 
   function declarateVars(array) {
