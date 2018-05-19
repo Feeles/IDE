@@ -220,11 +220,12 @@ export default class FileView {
       // TODO: FileDialog instead of.
       // 一時的に "強制上書き" にする
       console.log(newFile);
-      if (confirm(true || this.component.props.localization.common.conflict)) {
-        return conflict;
-      } else {
-        return newFile;
-      }
+      return conflict;
+      // if (confirm(this.component.props.localization.common.conflict)) {
+      //   return conflict;
+      // } else {
+      //   return newFile;
+      // }
     }
 
     return null;
