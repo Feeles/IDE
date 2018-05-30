@@ -188,6 +188,9 @@
     });
     return requestPostMessage('complete', propNames);
   };
+  feeles.runCode = function() {
+    return requestPostMessage('runCode', null);
+  };
 
   var SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;

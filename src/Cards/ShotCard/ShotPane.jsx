@@ -102,6 +102,7 @@ export default class ShotPane extends PureComponent {
     this.codeMirror.on('viewportChange', this.handleViewportChange);
     this.codeMirror.on('swapDoc', this.handleViewportChange);
     this.handleViewportChange(this.codeMirror);
+    this.props.globalEvent.on('message.runCode', this.handleShot);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -128,9 +129,13 @@ export default class ShotPane extends PureComponent {
     }
   }
 
-  shoot = async () => {
+  componentWillUnmount() {
+    this.props.globalEvent.off('message.runCode', this.handleShot);
+  }
+
+  handleShot = async () => {
     if (this.state.shooting) return;
-    await this.handleShot();
+    await this.shotCode();
     this.setState({ shooting: true });
   };
 
@@ -143,7 +148,7 @@ export default class ShotPane extends PureComponent {
     this.codeMirror.setValue(this.state.file.text);
   };
 
-  async handleShot() {
+  async shotCode() {
     let text = this.codeMirror
       ? this.codeMirror.getValue('\n')
       : this.state.file.text;
@@ -180,7 +185,7 @@ export default class ShotPane extends PureComponent {
     const { sendCodeOnEnter } = loadConfig('feelesrc');
     const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter';
     const extraKeys = {
-      [shootKey]: this.shoot
+      [shootKey]: this.handleShot
     };
 
     return (
@@ -211,7 +216,7 @@ export default class ShotPane extends PureComponent {
             icon={this.state.shooting ? <AvStop /> : ShotCard.icon()}
             labelPosition="before"
             disabled={this.state.shooting}
-            onClick={this.shoot}
+            onClick={this.handleShot}
             style={styles.shoot}
           />
           <span style={styles.label}>{localization.shotCard.shoot}</span>
