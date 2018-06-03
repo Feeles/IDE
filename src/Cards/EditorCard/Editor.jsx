@@ -131,16 +131,16 @@ export default class Editor extends PureComponent {
       this.showHint(cm);
       this.props.codemirrorRef(cm);
       // ドロップダウンウィジェット
-      cm.on('changes', this.handleUpdateWidget);
+      cm.on('changes', this.handleUpdateDropdown);
       cm.on('swapDoc', () => {
-        this.clearDropdown();
-        this.handleUpdateWidget(cm, []);
+        this.clearAllWidgets();
+        this.handleUpdateDropdown(cm, []);
       });
-      this.handleUpdateWidget(cm, []);
+      this.handleUpdateDropdown(cm, []);
     }
   };
 
-  handleUpdateWidget = (cm, batch) => {
+  handleUpdateDropdown = (cm, batch) => {
     const origin = batch[0] && batch[0].origin; // e.g. '+input'
     const dropdowns = reduce(
       cm.getValue('\n').split('\n'),
@@ -178,7 +178,7 @@ export default class Editor extends PureComponent {
     }
   };
 
-  clearDropdown = () => {
+  clearAllWidgets = () => {
     // 全ての LineWidget を消去
     for (const item of this.state.dropdownLineWidgets) {
       item.clear(); // remove element
