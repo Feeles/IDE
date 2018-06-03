@@ -4,7 +4,6 @@ import { JSHINT } from 'jshint';
 import deepEqual from 'deep-equal';
 import reduce from 'lodash/reduce';
 import includes from 'lodash/includes';
-
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
 import 'codemirror/mode/htmlmixed/htmlmixed';
@@ -86,7 +85,9 @@ export default class Editor extends PureComponent {
   state = {
     jshintrc: null,
     dropdowns: [],
-    dropdownLineWidgets: []
+    dropdownLineWidgets: [],
+    links: [],
+    linkLineWidgets: []
   };
 
   shouldComponentUpdate(nextProps) {
@@ -132,11 +133,14 @@ export default class Editor extends PureComponent {
       this.props.codemirrorRef(cm);
       // ドロップダウンウィジェット
       cm.on('changes', this.handleUpdateDropdown);
+      cm.on('changes', this.handleUpdateLink);
       cm.on('swapDoc', () => {
         this.clearAllWidgets();
         this.handleUpdateDropdown(cm, []);
+        this.handleUpdateLink(cm, []);
       });
       this.handleUpdateDropdown(cm, []);
+      this.handleUpdateLink(cm, []);
     }
   };
 
@@ -183,9 +187,14 @@ export default class Editor extends PureComponent {
     for (const item of this.state.dropdownLineWidgets) {
       item.clear(); // remove element
     }
+    for (const item of this.state.linkLineWidgets) {
+      item.clear(); // remove element
+    }
     this.setState({
       dropdowns: [],
-      dropdownLineWidgets: []
+      dropdownLineWidgets: [],
+      links: [],
+      linkLineWidgets: []
     });
   };
 
@@ -251,6 +260,80 @@ export default class Editor extends PureComponent {
     );
     return widget;
   };
+
+  handleUpdateLink = (cm, batch) => {
+    const origin = batch[0] && batch[0].origin; // e.g. '+input'
+    const eachLines = cm.getValue('\n').split('\n');
+    const links = [];
+    eachLines.map((currentLine, line) => {
+      // Syntax: // [で囲むと[リンク]になります
+      // Syntax: // `[これ]`はリンクにはなりません. `[これ]はなります
+      const commentStart = currentLine.indexOf('//');
+      let outerPrefix = currentLine.substr(0, commentStart);
+      const commentLine = currentLine.substr(commentStart);
+      if (commentStart > -1) {
+        commentLine.split('`').map((text, index, array) => {
+          let innerPrefix = '';
+          if (index % 2 === 0 || index === array.length - 1) {
+            let isFirst = true;
+            for (const linkAndMore of text.split('[')) {
+              if (!isFirst && includes(linkAndMore, ']')) {
+                const linkText = linkAndMore.split(']')[0];
+                const segments = {
+                  prefix: outerPrefix + innerPrefix,
+                  linkText
+                };
+                // line は独立して保持（異なる行でも移動しただけなら問題ない）
+                segmentsLineMap.set(segments, line);
+                // 新しいデータを格納
+                links.push(segments);
+              }
+              isFirst = false;
+              innerPrefix += `${linkAndMore}[`;
+            }
+          }
+          outerPrefix += text + '`';
+        });
+      }
+    });
+    // 中身が変わっていたら更新
+    if (
+      includes(['setValue', 'undo'], origin) ||
+      !deepEqual(links, this.state.links)
+    ) {
+      // 前回の LineWidget を消去
+      for (const item of this.state.linkLineWidgets) {
+        item.clear(); // remove element
+      }
+      // 今回の LineWidget を追加
+      const linkLineWidgets = links.map(segments => {
+        const line = segmentsLineMap.get(segments); // さっき保持した line
+        return this.renderlink(cm, segments, line);
+      });
+      this.setState({
+        links,
+        linkLineWidgets
+      });
+    }
+  };
+
+  renderlink(cm, segments, line) {
+    const { prefix, linkText } = segments;
+    const linkElement = document.createElement('a');
+    linkElement.href = `https://scrapbox.io/hackforplay/${encodeURIComponent(
+      linkText
+    )}`;
+    linkElement.target = '_blank';
+    linkElement.textContent = linkText;
+    linkElement.classList.add('Feeles-link');
+
+    const pos = { line, ch: prefix.length };
+    const { left } = cm.charCoords(pos, 'local');
+    linkElement.style.transform = `translate(${left}px, -1.2rem)`;
+    // ウィジェット追加
+    const widget = cm.addLineWidget(line, linkElement);
+    return widget;
+  }
 
   showHint(cm) {
     if (!this.props.showHint) {

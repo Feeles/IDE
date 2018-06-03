@@ -84,6 +84,12 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset,
 div.CodeMirror.CodeMirror-focused .Feeles-dropdown-button {
   opacity: 0.9;
 }
+a.Feeles-link {
+  display: inline-block;
+  position: absolute;
+  white-space: pre;
+  z-index: 3;
+}
 .cm-s-default .cm-property {
   color: ${blueA700};
 }
