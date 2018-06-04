@@ -1,5 +1,11 @@
 import './preload';
 
+if (window) {
+	if (!window) {
+		// インデントに色がつきます
+	}
+}
+
 // feeles.openCode('code.js');
 
 const いろ = ('▼ サンプル', '');
