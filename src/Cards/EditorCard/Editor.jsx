@@ -87,7 +87,9 @@ export default class Editor extends PureComponent {
     dropdowns: [],
     dropdownLineWidgets: [],
     links: [],
-    linkLineWidgets: []
+    linkLineWidgets: [],
+    separators: [],
+    separatorLineWidgets: []
   };
 
   shouldComponentUpdate(nextProps) {
@@ -134,13 +136,16 @@ export default class Editor extends PureComponent {
       // ドロップダウンウィジェット
       cm.on('changes', this.handleUpdateDropdown);
       cm.on('changes', this.handleUpdateLink);
+      cm.on('changes', this.handleUpdateSeparator);
       cm.on('swapDoc', () => {
         this.clearAllWidgets();
         this.handleUpdateDropdown(cm, []);
         this.handleUpdateLink(cm, []);
+        this.handleUpdateSeparator(cm, []);
       });
       this.handleUpdateDropdown(cm, []);
       this.handleUpdateLink(cm, []);
+      this.handleUpdateSeparator(cm, []);
     }
   };
 
@@ -190,11 +195,16 @@ export default class Editor extends PureComponent {
     for (const item of this.state.linkLineWidgets) {
       item.clear(); // remove element
     }
+    for (const item of this.state.separatorLineWidgets) {
+      item.clear(); // remove element
+    }
     this.setState({
       dropdowns: [],
       dropdownLineWidgets: [],
       links: [],
-      linkLineWidgets: []
+      linkLineWidgets: [],
+      separators: [],
+      separatorkLineWidgets: []
     });
   };
 
@@ -332,6 +342,58 @@ export default class Editor extends PureComponent {
     linkElement.style.transform = `translate(${left}px, -1.2rem)`;
     // ウィジェット追加
     const widget = cm.addLineWidget(line, linkElement);
+    return widget;
+  }
+
+  handleUpdateSeparator = (cm, batch) => {
+    const origin = batch[0] && batch[0].origin; // e.g. '+input'
+    const separators = [];
+    const allLines = cm.getValue('\n').split('\n');
+    // 連続した空行がある場合, もっとも下にある行を separator としたい
+    //  => 配列を逆順にループさせる
+    // 下にテキストがない場合は separator にしない
+    //  => テキストが見つかるまで expect: Boolean を false にする
+    let expect = false;
+    for (let line = allLines.length - 1; line >= 0; line--) {
+      const text = allLines[line];
+      if (expect && !text) {
+        const segments = {};
+        separators.push(segments);
+        segmentsLineMap.set(segments, line);
+      }
+      expect = !!text;
+    }
+    // 数が変わっていたら更新
+    if (
+      includes(['setValue', 'undo'], origin) ||
+      separators.length !== this.state.separators
+    ) {
+      // 前回の LineWidget を消去
+      for (const item of this.state.separatorLineWidgets) {
+        item.clear(); // remove element
+      }
+      // 今回の LineWidget を追加
+      const separatorLineWidgets = separators.map(segments => {
+        const line = segmentsLineMap.get(segments); // さっき保持した line
+        return this.renderSeparator(cm, segments, line);
+      });
+      this.setState({
+        separators,
+        separatorLineWidgets
+      });
+    }
+  };
+
+  renderSeparator(cm, segments, line) {
+    const separatorElement = document.createElement('div');
+    separatorElement.classList.add('Feeles-separator');
+    const paper = document.createElement('div');
+    separatorElement.appendChild(paper);
+    const close = document.createElement('span');
+    close.innerHTML = '&times;';
+    paper.appendChild(close);
+    // ウィジェット追加
+    const widget = cm.addLineWidget(line, separatorElement);
     return widget;
   }
 

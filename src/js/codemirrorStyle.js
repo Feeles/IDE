@@ -1,4 +1,5 @@
 import {
+  fullWhite,
   grey100,
   grey200,
   grey300,
@@ -20,6 +21,7 @@ textarea {
   width: 100%;
   height: 100%;
   transition: ${transitions.easeOut()};
+  background-color: ${fullWhite};
 }
 .CodeMirror-gutters {
   border-color: ${palette.primary1Color} !important;
@@ -96,6 +98,34 @@ a.Feeles-link {
   position: absolute;
   white-space: pre;
   z-index: 3;
+}
+.Feeles-separator {
+  display: inline-block;
+  background-color: ${grey400};
+  z-index: 3;
+  width: 100%;
+  height: 0.5em;
+  transform: translate(0px, -0.7em);
+  padding-top: 0.1em;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+.Feeles-separator>div {
+  background-color: ${fullWhite};
+  box-sizing: border-box;
+  border-top-left-radius: 8px;
+  width: 100%;
+  height: 100%;
+  margin-top: 1px;
+}
+.Feeles-separator>div>span {
+  color: ${grey400};
+  position: absolute;
+  right: 1em;
+  pointer-events: auto;
+}
+.Feeles-separator>div>span:hover {
+  cursor: pointer;
 }
 .cm-s-default .cm-property {
   color: ${blueA700};
