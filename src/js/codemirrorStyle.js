@@ -103,6 +103,7 @@ a.Feeles-link {
 
 .cm-tab {
   background-color: ${grey100};
+  opacity: 0.8;
 }
 .cm-tab + .cm-tab {
   background-color: ${grey200};
