@@ -182,7 +182,11 @@ export default class ShotPane extends PureComponent {
     if (cardAnchorEl) {
       const { offsetParent, offsetTop } = cardAnchorEl;
       const appendedHeight = height - this.state.height;
-      if (offsetTop + appendedHeight >= offsetParent.clientHeight) {
+      const containerHeight =
+        offsetParent.clientHeight -
+        parseInt(offsetParent.style.paddingTop, 10) -
+        parseInt(offsetParent.style.paddingBottom, 10);
+      if (offsetTop + appendedHeight >= containerHeight) {
         return;
       }
     }
