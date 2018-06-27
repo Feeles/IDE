@@ -70,6 +70,7 @@ export default class CardWindow extends PureComponent {
 
     const styles = {
       root: {
+        position: 'relative',
         width: 0,
         order,
         boxSizing: 'border-box',
@@ -142,6 +143,7 @@ export default class CardWindow extends PureComponent {
           {this.props.children}
         </Card>
         {this.props.footer}
+        <div id={`${this.props.name}-BottomAnchor`} />
       </div>
     );
   }

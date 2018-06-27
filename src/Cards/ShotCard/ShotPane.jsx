@@ -12,15 +12,8 @@ import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
-  const { palette, spacing, transitions } = context.muiTheme;
+  const { palette, transitions } = context.muiTheme;
   const { shooting, height } = state;
-  // TODO: ちゃんと実装する. 実際には Footer の状態でかわる
-  const maxEditorHeight = window.innerHeight - 200;
-
-  const editorHeight = Math.min(
-    height + spacing.desktopGutterMore,
-    maxEditorHeight
-  );
 
   return {
     root: {
@@ -31,7 +24,7 @@ const getStyle = (props, context, state) => {
       position: 'relative',
       boxSizing: 'border-box',
       width: '100%',
-      height: editorHeight,
+      height,
       transform: `translate(${shooting ? '-500px' : 0})`,
       opacity: shooting ? 0 : 1,
       transition: transitions.easeOut()
@@ -94,7 +87,8 @@ export default class ShotPane extends PureComponent {
     error: null,
     loading: false,
     canRestore: false,
-    file: this.props.file || SourceFile.shot('')
+    file: this.props.file || SourceFile.shot(''),
+    cardAnchorEl: null
   };
 
   componentDidMount() {
@@ -128,6 +122,12 @@ export default class ShotPane extends PureComponent {
           this.codeMirror.refresh();
         }
       }, 300);
+    }
+
+    // ShotCard の中にある最も下の要素を取得する
+    const cardAnchorEl = document.querySelector('#ShotCard-BottomAnchor');
+    if (!prevState.cardAnchorEl && cardAnchorEl) {
+      this.setState({ cardAnchorEl });
     }
   }
 
@@ -176,7 +176,17 @@ export default class ShotPane extends PureComponent {
 
   handleViewportChange = cm => {
     const lastLine = cm.lastLine() + 1;
-    const height = cm.heightAtLine(lastLine, 'local');
+    let height = cm.heightAtLine(lastLine, 'local');
+    // もしエディタの描画領域が広過ぎて ShotCard が画面からはみ出すなら, height を更新しない
+    const { cardAnchorEl } = this.state;
+    if (cardAnchorEl) {
+      const { offsetParent, offsetTop } = cardAnchorEl;
+      const appendedHeight = height - this.state.height;
+      if (offsetTop + appendedHeight >= offsetParent.clientHeight) {
+        return;
+      }
+    }
+
     this.setState({ height });
   };
 
