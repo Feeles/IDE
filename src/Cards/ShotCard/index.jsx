@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import ContentReply from 'material-ui/svg-icons/content/reply';
+import uniq from 'lodash/uniq';
 
 import ShotPane from './ShotPane';
 import shallowEqual from '../../utils/shallowEqual';
@@ -21,7 +22,8 @@ export default class ShotCard extends PureComponent {
 
   state = {
     file: null,
-    completes: []
+    completes: [],
+    footer: null
   };
 
   static icon() {
@@ -55,11 +57,26 @@ export default class ShotCard extends PureComponent {
     }
   };
 
+  handleSetLinkObjects = (linkObjects = []) => {
+    const links = linkObjects.map(obj => obj.linkText);
+    this.setState({
+      footer: this.renderFooter(uniq(links))
+    });
+  };
+
+  renderFooter(links) {
+    return <div>{links.map(link => <p key={link}>{link}</p>)}</div>;
+  }
+
   render() {
     const { visible } = this.props.cardPropsBag;
 
     return (
-      <Card icon={ShotCard.icon()} {...this.props.cardPropsBag}>
+      <Card
+        icon={ShotCard.icon()}
+        {...this.props.cardPropsBag}
+        footer={this.state.footer}
+      >
         {visible ? (
           <ShotPane
             fileView={this.props.fileView}
@@ -71,6 +88,7 @@ export default class ShotCard extends PureComponent {
             getConfig={this.props.getConfig}
             loadConfig={this.props.loadConfig}
             globalEvent={this.props.globalEvent}
+            handleSetLinkObjects={this.handleSetLinkObjects}
           />
         ) : null}
       </Card>

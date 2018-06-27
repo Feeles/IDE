@@ -68,7 +68,8 @@ export default class Editor extends PureComponent {
     findFile: PropTypes.func.isRequired,
     onDocChanged: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
-    fileView: PropTypes.object.isRequired
+    fileView: PropTypes.object.isRequired,
+    handleSetLinkObjects: PropTypes.func
   };
 
   static defaultProps = {
@@ -314,6 +315,11 @@ export default class Editor extends PureComponent {
         links,
         linkLineWidgets
       });
+      // ShotCard に Scrapbox 風のリンクを表示するために
+      // link object を ShotCard に渡す
+      if (this.props.handleSetLinkObjects) {
+        this.props.handleSetLinkObjects(links);
+      }
     }
   };
 

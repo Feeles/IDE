@@ -80,7 +80,8 @@ export default class ShotPane extends PureComponent {
     loadConfig: PropTypes.func.isRequired,
     file: PropTypes.object,
     completes: PropTypes.array,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    handleSetLinkObjects: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -228,6 +229,7 @@ export default class ShotPane extends PureComponent {
             findFile={this.props.findFile}
             loadConfig={this.props.loadConfig}
             fileView={this.props.fileView}
+            handleSetLinkObjects={this.props.handleSetLinkObjects}
           />
         </div>
       </div>

@@ -19,7 +19,8 @@ export default class CardWindow extends PureComponent {
     fit: PropTypes.bool.isRequired,
     width: PropTypes.number.isRequired,
     disableCloseButton: PropTypes.bool.isRequired,
-    showAll: PropTypes.bool.isRequired
+    showAll: PropTypes.bool.isRequired,
+    footer: PropTypes.node.isRequired
   };
 
   static defaultProps = {
@@ -28,7 +29,8 @@ export default class CardWindow extends PureComponent {
     icon: null,
     fit: false,
     disableCloseButton: false, // ボタンで閉じられないようにする
-    width: 480
+    width: 480,
+    footer: null
   };
 
   componentWillReceiveProps(nextProps) {
@@ -139,6 +141,7 @@ export default class CardWindow extends PureComponent {
           </div>
           {this.props.children}
         </Card>
+        {this.props.footer}
       </div>
     );
   }
