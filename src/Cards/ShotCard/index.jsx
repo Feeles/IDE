@@ -53,7 +53,7 @@ const getStyle = () => {
       overflow: 'hidden',
       display: '-webkit-box',
       WebkitLineClamp: 3,
-      '-webkit-box-orient': 'vertical',
+      WebkitBoxOrient: 'vertical',
       textOverflow: 'ellipsis'
     },
     cardIcon: {
@@ -121,7 +121,7 @@ export default class ShotCard extends PureComponent {
 
   renderFooter(titles) {
     const styles = getStyle();
-    return (
+    return titles.length > 0 ? (
       <div>
         <div style={styles.hintFlexbox}>
           <div style={styles.hintHeading}>💡 ヒント</div>
@@ -143,7 +143,7 @@ export default class ShotCard extends PureComponent {
                   <div style={styles.cardTitle}>{title}</div>
                   <img
                     src={scrapbox.icon(title)}
-                    alt={title}
+                    alt={`ページが存在しないか、アイコンが設定されていません`}
                     style={styles.cardIcon}
                   />
                 </Card>
@@ -152,7 +152,7 @@ export default class ShotCard extends PureComponent {
             .concat(<div key="$lastcard" />)}
         </div>
       </div>
-    );
+    ) : null;
   }
 
   render() {
