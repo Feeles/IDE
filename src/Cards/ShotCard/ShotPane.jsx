@@ -42,7 +42,8 @@ const getStyle = (props, context, state) => {
       flexDirection: 'row-reverse',
       justifyContent: 'space-between',
       alignItems: 'flex-end',
-      height: 36
+      height: '2.25em',
+      marginBottom: '0.25em'
     },
     shoot: {
       marginRight: 9,
@@ -194,21 +195,6 @@ export default class ShotPane extends PureComponent {
           <pre style={styles.error}>{this.state.error.message}</pre>
         ) : null}
         {this.state.loading ? <LinearProgress /> : null}
-        <div style={styles.editor}>
-          <Editor
-            isSelected
-            isCared
-            file={this.state.file}
-            getConfig={getConfig}
-            codemirrorRef={ref => (this.codeMirror = ref)}
-            snippets={this.props.completes}
-            extraKeys={extraKeys}
-            lineNumbers={false}
-            findFile={this.props.findFile}
-            loadConfig={this.props.loadConfig}
-            fileView={this.props.fileView}
-          />
-        </div>
         <div style={styles.menu}>
           <RaisedButton
             primary
@@ -227,6 +213,21 @@ export default class ShotPane extends PureComponent {
             onClick={this.handleRestore}
             style={styles.restore}
             disabled={!this.state.canRestore}
+          />
+        </div>
+        <div style={styles.editor}>
+          <Editor
+            isSelected
+            isCared
+            file={this.state.file}
+            getConfig={getConfig}
+            codemirrorRef={ref => (this.codeMirror = ref)}
+            snippets={this.props.completes}
+            extraKeys={extraKeys}
+            lineNumbers={false}
+            findFile={this.props.findFile}
+            loadConfig={this.props.loadConfig}
+            fileView={this.props.fileView}
           />
         </div>
       </div>
