@@ -1,24 +1,25 @@
 import transitions from 'material-ui/styles/transitions';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
-  redA100,
-  pinkA100,
-  purpleA100,
-  deepPurpleA100,
-  indigoA100,
-  blueA100,
-  lightBlueA100,
-  cyanA100,
-  tealA100,
-  greenA100,
-  lightGreenA100,
-  limeA100,
-  yellowA100,
-  amberA100,
-  orangeA100,
-  deepOrangeA100,
-  brown100,
-  blueGrey100,
+  // redA100,
+  // pinkA100,
+  // purpleA100,
+  // deepPurpleA100,
+  // indigoA100,
+  // blueA100,
+  // lightBlueA100,
+  // cyanA100,
+  // tealA100,
+  // greenA100,
+  // lightGreenA100,
+  // limeA100,
+  // yellowA100,
+  // amberA100,
+  // orangeA100,
+  // deepOrangeA100,
+  // brown100,
+  // blueGrey100,
+  grey700,
   fullWhite
 } from 'material-ui/styles/colors';
 import {
@@ -27,27 +28,6 @@ import {
   convertColorToString,
   decomposeColor
 } from 'material-ui/utils/colorManipulator';
-
-const bgColors = [
-  redA100,
-  pinkA100,
-  purpleA100,
-  deepPurpleA100,
-  indigoA100,
-  blueA100,
-  lightBlueA100,
-  cyanA100,
-  tealA100,
-  greenA100,
-  lightGreenA100,
-  limeA100,
-  yellowA100,
-  amberA100,
-  orangeA100,
-  deepOrangeA100,
-  brown100,
-  blueGrey100
-];
 
 // Twitter theme colors without 'ABB8C3' (Gray)
 const themeColors = [
@@ -66,7 +46,7 @@ export const defaultPalette = {
   canvasColor: fullWhite,
   primary1Color: random(themeColors),
   accent1Color: random(themeColors),
-  backgroundColor: fade(random(bgColors), 0.15)
+  backgroundColor: grey700
 };
 
 export default feelesrc => {
