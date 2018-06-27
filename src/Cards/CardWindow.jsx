@@ -20,7 +20,7 @@ export default class CardWindow extends PureComponent {
     width: PropTypes.number.isRequired,
     disableCloseButton: PropTypes.bool.isRequired,
     showAll: PropTypes.bool.isRequired,
-    footer: PropTypes.node.isRequired
+    footer: PropTypes.node
   };
 
   static defaultProps = {
@@ -142,7 +142,7 @@ export default class CardWindow extends PureComponent {
           </div>
           {this.props.children}
         </Card>
-        {this.props.footer}
+        {this.props.footer || null}
         <div id={`${this.props.name}-BottomAnchor`} />
       </div>
     );
