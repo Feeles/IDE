@@ -167,21 +167,29 @@ export default class FileView {
    * @param {SourceFile|BinalyFile} nextFile 追加するファイル
    */
   async putFile(prevFile, nextFile) {
+    console.time('putFile 1');
     const remove = this.inspection(nextFile);
+    console.timeEnd('putFile 1');
     if (remove === nextFile) {
       return prevFile;
     }
     const files = this.files
       .filter(item => item !== remove && item.key !== prevFile.key)
       .concat(nextFile);
+    console.time('putFile 2');
 
     await this.setState({
       files
     });
+    console.timeEnd('putFile 2');
+    console.time('putFile 3');
     this.component.resetConfig(prevFile.name);
+    console.timeEnd('putFile 3');
 
     if (this.component.state.project) {
+      console.time('putFile 4');
       await putFile(this.component.state.project.id, nextFile.serialize());
+      console.timeEnd('putFile 4');
     }
     return nextFile;
   }

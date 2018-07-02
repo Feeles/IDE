@@ -344,12 +344,17 @@ export default class Monitor extends PureComponent {
   };
 
   handleSaveAs = async ({ data, reply }) => {
+    console.time('handleSaveAs 1');
     const [blob, name] = data.value;
     const file3 = await makeFromFile(blob);
     const exist = this.props.findFile(name);
+    console.timeEnd('handleSaveAs 1');
+    console.time('handleSaveAs 2');
+
     if (exist) {
       const { key } = exist;
       await this.props.putFile(exist, file3.set({ key, name }));
+      console.timeEnd('handleSaveAs 2');
     } else {
       await this.props.addFile(file3.set({ name }));
     }
