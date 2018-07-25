@@ -25,8 +25,6 @@ export default {
     goToSee: '見に行く 👀',
     viewTwitter: 'サイトを見に行く',
     version: 'バージョン',
-    home: 'ホームにもどる',
-    homeIsNotSet: 'ホームが設定されていません',
     showAllUrls: '全ての URL を表示',
     withTwitter: 'Twitterでログイン',
     withLine: 'LINEでログイン',

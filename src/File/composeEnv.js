@@ -1,6 +1,6 @@
-export default (env) => {
+export default env => {
   const obj = Object.keys(env)
-    .filter((key) => env[key])
+    .filter(key => env[key])
     .reduce((p, key) => {
       const [value] = env[key];
       p[key] = value;

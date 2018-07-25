@@ -1,3 +1,4 @@
+import includes from 'lodash/includes';
 import { putFile, deleteFile } from './';
 
 /**
@@ -34,7 +35,9 @@ export default class FileView {
     if (!this.component) throw 'Component is not been set';
     const fileView = new FileView(files);
     fileView.install(this.component);
-    return this.component.setStatePromise({ fileView });
+    return this.component.setStatePromise({
+      fileView
+    });
   }
 
   /**
@@ -106,7 +109,9 @@ export default class FileView {
   forceUpdate() {
     const fileView = new FileView(this.files);
     fileView.install(this.component);
-    return this.component.setStatePromise({ fileView });
+    return this.component.setStatePromise({
+      fileView
+    });
   }
 
   /**
@@ -139,14 +144,15 @@ export default class FileView {
    * @param {SourceFile|BinalyFile} file 追加するファイル
    */
   async addFile(file) {
-    const timestamp = file.lastModified || Date.now();
     const remove = this.inspection(file);
     if (file === remove) {
       return file;
     }
     const files = this.files.concat(file).filter(item => item !== remove);
 
-    await this.setState({ files });
+    await this.setState({
+      files
+    });
     await this.component.resetConfig(file.name);
 
     if (this.component.state.project) {
@@ -161,20 +167,29 @@ export default class FileView {
    * @param {SourceFile|BinalyFile} nextFile 追加するファイル
    */
   async putFile(prevFile, nextFile) {
-    const timestamp = nextFile.lastModified || Date.now();
+    console.time('putFile 1');
     const remove = this.inspection(nextFile);
+    console.timeEnd('putFile 1');
     if (remove === nextFile) {
       return prevFile;
     }
     const files = this.files
       .filter(item => item !== remove && item.key !== prevFile.key)
       .concat(nextFile);
+    console.time('putFile 2');
 
-    await this.setState({ files });
+    await this.setState({
+      files
+    });
+    console.timeEnd('putFile 2');
+    console.time('putFile 3');
     this.component.resetConfig(prevFile.name);
+    console.timeEnd('putFile 3');
 
     if (this.component.state.project) {
+      console.time('putFile 4');
       await putFile(this.component.state.project.id, nextFile.serialize());
+      console.timeEnd('putFile 4');
     }
     return nextFile;
   }
@@ -184,11 +199,11 @@ export default class FileView {
    * @param {Array<SourceFile|BinalyFile>} targets 削除するファイル
    */
   async deleteFile(...targets) {
-    const timestamp = Date.now();
-
     const keys = targets.map(item => item.key);
-    const files = this.files.filter(item => !keys.includes(item.key));
-    await this.setState({ files });
+    const files = this.files.filter(item => !includes(keys, item.key));
+    await this.setState({
+      files
+    });
 
     if (this.component.state.project) {
       const fileNames = targets.map(item => item.name);
@@ -213,11 +228,12 @@ export default class FileView {
       // TODO: FileDialog instead of.
       // 一時的に "強制上書き" にする
       console.log(newFile);
-      if (confirm(true || this.component.props.localization.common.conflict)) {
-        return conflict;
-      } else {
-        return newFile;
-      }
+      return conflict;
+      // if (confirm(this.component.props.localization.common.conflict)) {
+      //   return conflict;
+      // } else {
+      //   return newFile;
+      // }
     }
 
     return null;

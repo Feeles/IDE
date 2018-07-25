@@ -5,9 +5,9 @@ import { DropTarget } from 'react-dnd';
 import HardwareComputer from 'material-ui/svg-icons/hardware/computer';
 import { transparent } from 'material-ui/styles/colors';
 
-import DragTypes from 'utils/dragTypes';
+import DragTypes from '../../utils/dragTypes';
 
-const getStyles = (props, context, state) => {
+const getStyles = (props, context) => {
   const { isOver } = props;
   const { palette, spacing, prepareStyles } = context.muiTheme;
 
@@ -44,11 +44,7 @@ class _DesktopFile extends PureComponent {
   };
 
   render() {
-    const {
-      onOpen,
-
-      connectDropTarget
-    } = this.props;
+    const { connectDropTarget } = this.props;
     const { palette } = this.context.muiTheme;
 
     const { input, icon } = getStyles(this.props, this.context);
@@ -64,7 +60,7 @@ class _DesktopFile extends PureComponent {
         />
         <IconButton
           style={icon}
-          onTouchTap={() => this.input && this.input.click()}
+          onClick={() => this.input && this.input.click()}
         >
           <HardwareComputer color={palette.secondaryTextColor} />
         </IconButton>

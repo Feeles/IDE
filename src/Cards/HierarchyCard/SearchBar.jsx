@@ -77,7 +77,6 @@ export default class SearchBar extends PureComponent {
 
   handleUpdate = query => {
     const { filterRef } = this.props;
-    const { showTrashes } = this.state;
 
     const options = getOptions(query);
     filterRef(file => search(file, query, options));
@@ -94,7 +93,7 @@ export default class SearchBar extends PureComponent {
     if (!showTrashes) {
       this.handleUpdate(':trash ' + query);
     } else {
-      this.handleUpdate(query.replace(/(^|\s)\:trash(\s|$)/g, '$1'));
+      this.handleUpdate(query.replace(/(^|\s):trash(\s|$)/g, '$1'));
     }
   };
 
@@ -118,7 +117,7 @@ export default class SearchBar extends PureComponent {
         <TrashBox
           showTrashes={showTrashes}
           putFile={putFile}
-          onTouchTap={this.handleTrashBoxTap}
+          onClick={this.handleTrashBoxTap}
         />
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
         <Paper zDepth={3} style={bar}>
@@ -134,22 +133,19 @@ export default class SearchBar extends PureComponent {
             onBlur={() => this.setState({ focus: false })}
             fullWidth
           />
-          <IconButton
-            disabled={!query}
-            onTouchTap={() => this.handleUpdate('')}
-          >
+          <IconButton disabled={!query} onClick={() => this.handleUpdate('')}>
             <NavigationClose color={secondaryTextColor} />
           </IconButton>
         </Paper>
-        {showTrashes
-          ? <RaisedButton
-              secondary
-              label={localization.hierarchyCard.emptyTrashBox}
-              icon={<ActionDeleteForever color={alternateTextColor} />}
-              style={empty}
-              onTouchTap={deleteAll}
-            />
-          : null}
+        {showTrashes ? (
+          <RaisedButton
+            secondary
+            label={localization.hierarchyCard.emptyTrashBox}
+            icon={<ActionDeleteForever color={alternateTextColor} />}
+            style={empty}
+            onClick={deleteAll}
+          />
+        ) : null}
       </div>
     );
   }

@@ -60,8 +60,8 @@ export default class _File {
         .trim() // 前後の空白を削除
         .replace(/\n[^]*$/, '') // 改行以降を削除
         .trim() // 前後の空白を削除
-        .replace(/^[\#\-]*\s*/, '') // 行頭の # - を削除
-        .replace(/[\*\~\_\[\]\(\)\`]/g, ''); // * ~ _ [] () `` を削除
+        .replace(/^[#-]*\s*/, '') // 行頭の # - を削除
+        .replace(/[*~_[\]()`]/g, ''); // * ~ _ [] () `` を削除
     }
     return this.plane + this.ext;
   }
@@ -94,7 +94,7 @@ export default class _File {
     if (_dataURLCache.has(this)) {
       return _dataURLCache.get(this);
     }
-    return await new Promise((resolve, reject) => {
+    return await new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = () => {
         const { result } = reader;
@@ -132,7 +132,7 @@ export default class _File {
   static _babelCache = new WeakMap();
   static _babelConfig = null;
   static _babelError = new WeakMap();
-  babel(config) {
+  babel(config, onError = () => {}) {
     const { _babelCache, _babelConfig, _babelError } = this.constructor;
     if (_babelConfig === config) {
       if (_babelCache.has(this)) return _babelCache.get(this);
@@ -143,7 +143,7 @@ export default class _File {
 
     const promise = babelFile(this, config).catch(err => {
       _babelError.set(this, err);
-      throw err;
+      onError(err);
     });
     _babelCache.set(this, promise);
     return promise;
@@ -153,7 +153,9 @@ export default class _File {
     const { path, ext } = this;
     const name = path + newName + ext;
 
-    return this.set({ name });
+    return this.set({
+      name
+    });
   }
 
   move(newPath) {
@@ -164,7 +166,9 @@ export default class _File {
     const { plane, ext } = this;
     const name = newPath + plane + ext;
 
-    return this.set({ name });
+    return this.set({
+      name
+    });
   }
 
   serialize() {

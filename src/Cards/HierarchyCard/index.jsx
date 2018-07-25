@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import includes from 'lodash/includes';
 
 import Card from '../CardWindow';
-import { makeFromFile } from 'File/';
-import { SignDialog, AddDialog } from 'FileDialog/';
-import { Tab } from 'ChromeTab/';
+import { makeFromFile } from '../../File/';
+import { SignDialog, AddDialog } from '../../FileDialog/';
+import { Tab } from '../../ChromeTab/';
 import Root from './Root';
 import SearchBar from './SearchBar';
 
@@ -38,7 +39,7 @@ export default class HierarchyCard extends PureComponent {
   state = {
     openedPaths: [''],
     tabbedFiles: [],
-    filter: file => false
+    filter: () => false
   };
 
   componentWillReceiveProps(nextProps) {
@@ -53,7 +54,7 @@ export default class HierarchyCard extends PureComponent {
   }
 
   handleNativeDrop = (files, dir = null) => {
-    const { addFile, selectTab, openFileDialog } = this.props;
+    const { addFile, openFileDialog } = this.props;
 
     Promise.all(files.map(makeFromFile))
       .then(files =>
@@ -112,7 +113,7 @@ export default class HierarchyCard extends PureComponent {
   };
 
   isDirOpened = (dir, passed, failed) => {
-    return this.state.openedPaths.includes(dir.path) ? passed : failed;
+    return includes(this.state.openedPaths, dir.path) ? passed : failed;
   };
 
   handleDelete = () => {
@@ -128,13 +129,7 @@ export default class HierarchyCard extends PureComponent {
   };
 
   render() {
-    const {
-      files,
-      selectTab,
-      putFile,
-      openFileDialog,
-      localization
-    } = this.props;
+    const { files, putFile, openFileDialog, localization } = this.props;
     const { filter } = this.state;
 
     const tabs = this.props.tabs.filter(tab => !tab.props.component);

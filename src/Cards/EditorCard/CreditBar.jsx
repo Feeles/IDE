@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import Popover from 'material-ui/Popover';
 
-import { SignDialog } from 'FileDialog/';
+import { SignDialog } from '../../FileDialog/';
 
 const getStyle = (props, context) => {
   const { palette } = context.muiTheme;
@@ -100,14 +100,14 @@ export default class CreditBar extends PureComponent {
               }
               style={styles.smallButton}
               labelStyle={styles.smallLabel}
-              onTouchTap={this.handleSignDialog}
+              onClick={this.handleSignDialog}
             />}
         {file.credits.length > 0
           ? <FlatButton
               label={localization.credit.credits}
               style={styles.smallButton}
               labelStyle={styles.smallLabel}
-              onTouchTap={this.handleShowCredits}
+              onClick={this.handleShowCredits}
             />
           : null}
         <Popover

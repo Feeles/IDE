@@ -1,7 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import transitions from 'material-ui/styles/transitions';
-import { fade } from 'material-ui/utils/colorManipulator';
 
 const getStyles = (props, context) => {
   const { show } = props;
@@ -50,9 +48,7 @@ export default class ChromeTabContent extends PureComponent {
 
     return (
       <div style={prepareStyles(root)}>
-        <div style={prepareStyles(container)}>
-          {children}
-        </div>
+        <div style={prepareStyles(container)}>{children}</div>
       </div>
     );
   }

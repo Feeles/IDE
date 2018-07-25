@@ -1,29 +1,54 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Popout from 'jsx/ReactPopout';
+import Popout from '../../jsx/ReactPopout';
 
-import { SourceFile, makeFromFile } from 'File/';
-import composeEnv from 'File/composeEnv';
-import popoutTemplate from 'html/popout';
+import { SourceFile, makeFromFile } from '../../File/';
+import composeEnv from '../../File/composeEnv';
 import Screen from './Screen';
 import setSrcDoc from './setSrcDoc';
 import registerHTML from './registerHTML';
-import ResolveProgress from './ResolveProgress';
-import ga from 'utils/google-analytics';
-import uniqueId from 'utils/uniqueId';
-import { getPrimaryUser } from 'database/';
+import uniqueId from '../../utils/uniqueId';
+import { getPrimaryUser } from '../../database/';
+
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
 
 const ConnectionTimeout = 1000;
+const popoutTemplate = `<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style media="screen">
+        body {
+            margin: 0;
+        }
+        #popout-content-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+        }
+        </style>
+    </head>
+    <body>
+    </body>
+</html>
+`;
 const popoutURL = URL.createObjectURL(
-  new Blob([popoutTemplate()], { type: 'text/html' })
+  new Blob([popoutTemplate], { type: 'text/html' })
 );
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const webkitSpeechGrammarList = window.webkitSpeechGrammarList;
 
-const getStyle = (props, context, state) => {
-  const { palette, appBar, transitions } = context.muiTheme;
+const getStyle = (props, context) => {
+  const { transitions } = context.muiTheme;
   const fullScreen = (yes, no) => (props.isFullScreen ? yes : no);
 
   return {
@@ -92,7 +117,7 @@ export default class Monitor extends PureComponent {
   componentWillMount() {
     // feeles.github.io/sample/#/path/to/index.html
     window.addEventListener('hashchange', this.handleHashChanged);
-    if (/^\#\//.test(location.hash)) {
+    if (/^#\//.test(location.hash)) {
       this.handleHashChanged();
     } else {
       // default href で起動
@@ -115,6 +140,7 @@ export default class Monitor extends PureComponent {
     on('message.clearTimeout', this.handleClearTimeout);
     on('message.setInterval', this.handleSetInterval);
     on('message.clearInterval', this.handleClearInterval);
+    on('message.openWindow', this.handleOpenWindow);
   }
 
   componentDidUpdate(prevProps) {
@@ -182,8 +208,6 @@ export default class Monitor extends PureComponent {
   async startProcess() {
     const { getConfig, findFile } = this.props;
 
-    const babelrc = getConfig('babelrc');
-
     // env
     const env = composeEnv(getConfig('env'));
     const versionUUIDFile = findFile('feeles/.uuid');
@@ -215,7 +239,7 @@ export default class Monitor extends PureComponent {
     const { port1, port2 } = new MessageChannel();
     port1.addEventListener('message', event => {
       const reply = params => {
-        params = { id: event.data.id, ...params };
+        params = { id: event.data.id, ...(params || {}) };
         port1.postMessage(params);
       };
 
@@ -277,8 +301,12 @@ export default class Monitor extends PureComponent {
       this.props.findFile(data.value);
     if (file) {
       const babelrc = this.props.getConfig('babelrc');
-      const result = await file.babel(babelrc);
-      reply({ value: result.text });
+      const result = await file.babel(babelrc, e => {
+        reply({ error: e });
+      });
+      if (result) {
+        reply({ value: result.text });
+      }
     } else if (data.value.indexOf('http') === 0) {
       try {
         const response = await fetch(data.value);
@@ -316,12 +344,17 @@ export default class Monitor extends PureComponent {
   };
 
   handleSaveAs = async ({ data, reply }) => {
+    console.time('handleSaveAs 1');
     const [blob, name] = data.value;
     const file3 = await makeFromFile(blob);
     const exist = this.props.findFile(name);
+    console.timeEnd('handleSaveAs 1');
+    console.time('handleSaveAs 2');
+
     if (exist) {
       const { key } = exist;
       await this.props.putFile(exist, file3.set({ key, name }));
+      console.timeEnd('handleSaveAs 2');
     } else {
       await this.props.addFile(file3.set({ name }));
     }
@@ -368,6 +401,17 @@ export default class Monitor extends PureComponent {
   };
   handleClearInterval = ({ data }) => {
     clearInterval(this.setIntervalId.get(data.value.intervalId));
+  };
+
+  handleOpenWindow = ({ data: { value } }) => {
+    // value.url が相対パスかどうかを調べる
+    const a = document.createElement('a');
+    a.href = value.url;
+    if (a.host === location.host) {
+      window.open(value.url, value.target, value.features, value.replace);
+    } else {
+      throw new Error(`Cannot open ${value.url}`);
+    }
   };
 
   handleSpeechRecognition = ({ data, reply }) => {
@@ -489,8 +533,6 @@ export default class Monitor extends PureComponent {
     if (/^#\//.test(location.hash)) {
       const href = location.hash.substr(2);
       this.props.setLocation(href);
-      ga('set', 'page', `/${href}`);
-      ga('send', 'pageview');
     }
   };
 
@@ -526,7 +568,7 @@ export default class Monitor extends PureComponent {
     const styles = getStyle(this.props, this.context, this.state);
 
     return (
-      <div style={styles.root} onTouchTap={this.handleTouch}>
+      <div style={styles.root} onClick={this.handleTouch}>
         {popout}
         <Screen
           animation
@@ -536,8 +578,8 @@ export default class Monitor extends PureComponent {
           error={error}
           width={this.props.frameWidth}
           height={this.props.frameHeight}
+          isFullScreen={this.props.isFullScreen}
         />
-        <ResolveProgress globalEvent={this.props.globalEvent} />
       </div>
     );
   }

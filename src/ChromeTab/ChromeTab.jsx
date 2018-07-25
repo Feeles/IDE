@@ -152,19 +152,12 @@ export default class ChromeTabs extends PureComponent {
   };
 
   render() {
-    const {
-      file,
-      tab,
-      isSelected,
-      handleSelect,
-      handleClose,
-      localization
-    } = this.props;
+    const { file, tab, handleSelect, handleClose, localization } = this.props;
     const {
       palette: { secondaryTextColor, alternateTextColor },
       prepareStyles
     } = this.context.muiTheme;
-    const { closerMouseOver, doc } = this.state;
+    const { doc } = this.state;
 
     const styles = getStyles(this.props, this.context, this.state);
 
@@ -180,11 +173,11 @@ export default class ChromeTabs extends PureComponent {
       }
     };
 
-    const handleRightMouseEnter = e => {
+    const handleRightMouseEnter = () => {
       this.setState({ closerMouseOver: true });
     };
 
-    const handleRightMouseLeave = e => {
+    const handleRightMouseLeave = () => {
       this.setState({ closerMouseOver: false });
     };
 
@@ -200,7 +193,7 @@ export default class ChromeTabs extends PureComponent {
         <div style={prepareStyles(styles.center)}>
           <div
             style={prepareStyles(styles.innerItem)}
-            onTouchTap={() => handleSelect(tab)}
+            onClick={() => handleSelect(tab)}
           >
             <a
               href="#"
@@ -211,7 +204,7 @@ export default class ChromeTabs extends PureComponent {
             </a>
             <IconButton
               style={styles.rightButton}
-              onTouchTap={handleRightTouchTap}
+              onClick={handleRightTouchTap}
               onMouseEnter={handleRightMouseEnter}
               onMouseLeave={handleRightMouseLeave}
             >

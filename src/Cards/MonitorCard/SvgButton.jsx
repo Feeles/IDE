@@ -4,7 +4,7 @@ import { fullWhite, transparent } from 'material-ui/styles/colors';
 
 export default class SvgButton extends PureComponent {
   static propTypes = {
-    onTouchTap: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
     style: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired
   };
@@ -28,7 +28,7 @@ export default class SvgButton extends PureComponent {
     };
 
     return (
-      <button style={style} onTouchTap={this.props.onTouchTap}>
+      <button style={style} onClick={this.props.onClick}>
         <svg fill={fullWhite} style={svgStyle} viewBox="0 0 24 24">
           <path d={this.props.children} />
         </svg>

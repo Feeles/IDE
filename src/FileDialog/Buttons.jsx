@@ -10,7 +10,7 @@ const Confirm = props => {
 
 Confirm.propTypes = {
   label: PropTypes.string.isRequired,
-  onTouchTap: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   style: PropTypes.object
 };
 
@@ -24,7 +24,7 @@ const Abort = props => {
 };
 
 Abort.propTypes = {
-  onTouchTap: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   style: PropTypes.object
 };
 

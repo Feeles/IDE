@@ -18,7 +18,7 @@ import {
   updateProject,
   deleteProject
 } from '../database/';
-import EditableLabel from 'jsx/EditableLabel';
+import EditableLabel from '../jsx/EditableLabel';
 
 export default class CloneDialog extends PureComponent {
   static propTypes = {
@@ -103,7 +103,6 @@ export default class CloneDialog extends PureComponent {
         await this.refreshState();
       }
     } catch (e) {
-      console.error(e);
       if (typeof e === 'string') {
         alert(localization.cloneDialog[e]);
       }
@@ -165,7 +164,7 @@ export default class CloneDialog extends PureComponent {
         key="showAll"
         label={localization.menu.showAllUrls}
         style={styles.button}
-        onTouchTap={() =>
+        onClick={() =>
           this.setState(prevState => {
             return { showAllUrls: !prevState.showAllUrls };
           })
@@ -175,7 +174,7 @@ export default class CloneDialog extends PureComponent {
         key="cancel"
         label={localization.cloneDialog.cancel}
         style={styles.button}
-        onTouchTap={onRequestClose}
+        onClick={onRequestClose}
       />
     ];
 
@@ -220,16 +219,16 @@ export default class CloneDialog extends PureComponent {
                   </Card>
                 ]
               ) : (
-                <RaisedButton
-                  fullWidth
-                  key={'new_project'}
-                  label={localization.cloneDialog.saveInNew}
-                  style={styles.card}
-                  icon={<ContentAddCircle />}
-                  disabled={this.state.processing}
-                  onTouchTap={this.handleCreate}
-                />
-              )}
+                  <RaisedButton
+                    fullWidth
+                    key={'new_project'}
+                    label={localization.cloneDialog.saveInNew}
+                    style={styles.card}
+                    icon={<ContentAddCircle />}
+                    disabled={this.state.processing}
+                    onClick={this.handleCreate}
+                  />
+                )}
             </div>
           </Tab>
           <Tab label={localization.cloneDialog.loadTitle}>
@@ -239,23 +238,23 @@ export default class CloneDialog extends PureComponent {
                 <CircularProgress size={120} />
               </div>
             ) : (
-              <div style={styles.container}>
-                {projects.map(item => (
-                  <ProjectCard
-                    key={item.id}
-                    project={item}
-                    showURL={this.state.showAllUrls}
-                    launchIDE={this.props.launchIDE}
-                    processing={this.state.processing}
-                    onProcessStart={this.handleProcessStart}
-                    onProcessEnd={this.handleProcessEnd}
-                    requestTitleChange={this.handleTitleChange}
-                    requestProjectSet={this.props.setProject}
-                    localization={localization}
-                  />
-                ))}
-              </div>
-            )}
+                <div style={styles.container}>
+                  {projects.map(item => (
+                    <ProjectCard
+                      key={item.id}
+                      project={item}
+                      showURL={this.state.showAllUrls}
+                      launchIDE={this.props.launchIDE}
+                      processing={this.state.processing}
+                      onProcessStart={this.handleProcessStart}
+                      onProcessEnd={this.handleProcessEnd}
+                      requestTitleChange={this.handleTitleChange}
+                      requestProjectSet={this.props.setProject}
+                      localization={localization}
+                    />
+                  ))}
+                </div>
+              )}
           </Tab>
         </Tabs>
       </Dialog>
@@ -279,10 +278,10 @@ export class ProjectCard extends PureComponent {
   static defaultProps = {
     showURL: false,
     processing: false,
-    onProcessStart: () => {},
-    onProcessEnd: () => {},
-    requestProjectSet: () => {},
-    requestTitleChange: () => {}
+    onProcessStart: () => { },
+    onProcessEnd: () => { },
+    requestProjectSet: () => { },
+    requestTitleChange: () => { }
   };
 
   handleLoad = () => {
@@ -302,7 +301,6 @@ export class ProjectCard extends PureComponent {
       await deleteProject(project.id);
       await this.props.requestProjectSet(null);
     } catch (e) {
-      console.error(e);
       alert(localization.cloneDialog.failedToRemove);
     }
     this.props.onProcessEnd();
@@ -363,14 +361,14 @@ export class ProjectCard extends PureComponent {
             label={localization.cloneDialog.openOnThisTab}
             icon={<ActionOpenInBrowser />}
             disabled={this.props.processing}
-            onTouchTap={this.handleLoad}
+            onClick={this.handleLoad}
           />
           <FlatButton
             label={localization.cloneDialog.remove}
             icon={<ActionDelete color={red400} />}
             labelStyle={styles.remove}
             disabled={this.props.processing}
-            onTouchTap={this.handleRemove}
+            onClick={this.handleRemove}
           />
         </CardActions>
       </Card>

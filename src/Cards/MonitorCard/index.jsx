@@ -12,9 +12,11 @@ import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
 import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
+import AvPlayArrow from 'material-ui/svg-icons/av/play-arrow';
+import AvPause from 'material-ui/svg-icons/av/pause';
 
 import Monitor from './Monitor';
-import uniqueId from 'utils/uniqueId';
+import ResolveProgress from './ResolveProgress';
 
 const frameSizes = [
   [480, 320],
@@ -60,7 +62,8 @@ export default class MonitorCard extends PureComponent {
   state = {
     frameWidth: 300,
     frameHeight: 150,
-    processing: false
+    processing: false,
+    isStopped: false // WIP
   };
 
   static icon() {
@@ -93,7 +96,7 @@ export default class MonitorCard extends PureComponent {
       <MenuItem
         key={value}
         primaryText={value}
-        onTouchTap={() => this.changeSize(w, h)}
+        onClick={() => this.changeSize(w, h)}
       />
     );
   }
@@ -104,11 +107,24 @@ export default class MonitorCard extends PureComponent {
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
       query: 'capture',
-      type: 'image/jpeg'
+      type: 'image/jpeg',
+      requestedBy: 'user-action' // ユーザーがリクエストしたことを表す
     };
     await this.props.globalEvent.emitAsync('postMessage', request);
     // capture がおわったら, processing state を元に戻す
     this.setState({ processing: false });
+  };
+
+  toggleStopped = () => {
+    // Monitor に stop/resume するようリクエスト
+    const query = this.state.isStopped ? 'resume' : 'stop';
+    const request = {
+      query
+    };
+    this.props.globalEvent.emit('postMessage', request);
+    this.setState({
+      isStopped: !this.state.isStopped
+    });
   };
 
   render() {
@@ -136,19 +152,25 @@ export default class MonitorCard extends PureComponent {
     const feelesrc = loadConfig('feelesrc');
 
     const actions = [
+      <IconButton key="progress" disabled>
+        <ResolveProgress size={24} globalEvent={this.props.globalEvent} />
+      </IconButton>,
       <IconButton
         key="refresh"
         disabled={feelesrc.disableReloadButton}
-        onTouchTap={() => this.props.setLocation()}
+        onClick={() => this.props.setLocation()}
       >
         <NavigationRefresh
           color={this.context.muiTheme.palette.primary1Color}
         />
       </IconButton>,
+      <IconButton key="stop_resume" onClick={this.toggleStopped}>
+        {this.state.isStopped ? <AvPlayArrow /> : <AvPause />}
+      </IconButton>,
       <IconButton
         key="fullscreen"
         disabled={feelesrc.disableFullScreenButton}
-        onTouchTap={() => this.props.toggleFullScreen()}
+        onClick={() => this.props.toggleFullScreen()}
       >
         <NavigationFullscreen />
       </IconButton>
@@ -158,7 +180,7 @@ export default class MonitorCard extends PureComponent {
         <IconButton
           key="screenshot"
           disabled={this.state.processing}
-          onTouchTap={this.handleScreenShot}
+          onClick={this.handleScreenShot}
         >
           <ImagePhotoCamera />
         </IconButton>,
@@ -178,7 +200,7 @@ export default class MonitorCard extends PureComponent {
           <MenuItem
             primaryText={localization.monitorCard.popout}
             leftIcon={<OpenInBrowser />}
-            onTouchTap={() => this.props.togglePopout()}
+            onClick={() => this.props.togglePopout()}
           />
         </IconMenu>
       );
@@ -189,6 +211,7 @@ export default class MonitorCard extends PureComponent {
         icon={MonitorCard.icon()}
         {...this.props.cardPropsBag}
         actions={actions}
+        disableCloseButton
       >
         <CardMedia style={styles.flexible}>
           <div style={styles.parent}>

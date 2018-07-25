@@ -6,21 +6,14 @@ import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import { red50, red500 } from 'material-ui/styles/colors';
 
-import { SourceFile } from 'File/';
+import { SourceFile } from '../../File/';
 import ShotCard from './';
-import Editor from './Editor';
+import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
-  const { palette, spacing, transitions, prepareStyles } = context.muiTheme;
+  const { palette, transitions } = context.muiTheme;
   const { shooting, height } = state;
-  // TODO: ちゃんと実装する. 実際には Footer の状態でかわる
-  const maxEditorHeight = window.innerHeight - 200;
-
-  const editorHeight = Math.min(
-    height + spacing.desktopGutterMore,
-    maxEditorHeight
-  );
 
   return {
     root: {
@@ -31,7 +24,7 @@ const getStyle = (props, context, state) => {
       position: 'relative',
       boxSizing: 'border-box',
       width: '100%',
-      height: editorHeight,
+      height,
       transform: `translate(${shooting ? '-500px' : 0})`,
       opacity: shooting ? 0 : 1,
       transition: transitions.easeOut()
@@ -42,7 +35,8 @@ const getStyle = (props, context, state) => {
       flexDirection: 'row-reverse',
       justifyContent: 'space-between',
       alignItems: 'flex-end',
-      height: 36
+      height: '2.25em',
+      marginBottom: '0.25em'
     },
     shoot: {
       marginRight: 9,
@@ -71,6 +65,7 @@ const getStyle = (props, context, state) => {
 
 export default class ShotPane extends PureComponent {
   static propTypes = {
+    fileView: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -78,7 +73,8 @@ export default class ShotPane extends PureComponent {
     loadConfig: PropTypes.func.isRequired,
     file: PropTypes.object,
     completes: PropTypes.array,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    handleSetLinkObjects: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -91,7 +87,8 @@ export default class ShotPane extends PureComponent {
     error: null,
     loading: false,
     canRestore: false,
-    file: this.props.file || SourceFile.shot('')
+    file: this.props.file || SourceFile.shot(''),
+    cardAnchorEl: null
   };
 
   componentDidMount() {
@@ -101,6 +98,7 @@ export default class ShotPane extends PureComponent {
     this.codeMirror.on('viewportChange', this.handleViewportChange);
     this.codeMirror.on('swapDoc', this.handleViewportChange);
     this.handleViewportChange(this.codeMirror);
+    this.props.globalEvent.on('message.runCode', this.handleShot);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -125,11 +123,21 @@ export default class ShotPane extends PureComponent {
         }
       }, 300);
     }
+
+    // ShotCard の中にある最も下の要素を取得する
+    const cardAnchorEl = document.querySelector('#ShotCard-BottomAnchor');
+    if (!prevState.cardAnchorEl && cardAnchorEl) {
+      this.setState({ cardAnchorEl });
+    }
   }
 
-  shoot = async () => {
+  componentWillUnmount() {
+    this.props.globalEvent.off('message.runCode', this.handleShot);
+  }
+
+  handleShot = async () => {
     if (this.state.shooting) return;
-    await this.handleShot();
+    await this.shotCode();
     this.setState({ shooting: true });
   };
 
@@ -142,7 +150,7 @@ export default class ShotPane extends PureComponent {
     this.codeMirror.setValue(this.state.file.text);
   };
 
-  async handleShot() {
+  async shotCode() {
     let text = this.codeMirror
       ? this.codeMirror.getValue('\n')
       : this.state.file.text;
@@ -168,7 +176,21 @@ export default class ShotPane extends PureComponent {
 
   handleViewportChange = cm => {
     const lastLine = cm.lastLine() + 1;
-    const height = cm.heightAtLine(lastLine, 'local');
+    let height = cm.heightAtLine(lastLine, 'local');
+    // もしエディタの描画領域が広過ぎて ShotCard が画面からはみ出すなら, height を更新しない
+    const { cardAnchorEl } = this.state;
+    if (cardAnchorEl) {
+      const { offsetParent, offsetTop } = cardAnchorEl;
+      const appendedHeight = height - this.state.height;
+      const containerHeight =
+        offsetParent.clientHeight -
+        parseInt(offsetParent.style.paddingTop, 10) -
+        parseInt(offsetParent.style.paddingBottom, 10);
+      if (offsetTop + appendedHeight >= containerHeight) {
+        return;
+      }
+    }
+
     this.setState({ height });
   };
 
@@ -179,7 +201,7 @@ export default class ShotPane extends PureComponent {
     const { sendCodeOnEnter } = loadConfig('feelesrc');
     const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter';
     const extraKeys = {
-      [shootKey]: this.shoot
+      [shootKey]: this.handleShot
     };
 
     return (
@@ -188,6 +210,26 @@ export default class ShotPane extends PureComponent {
           <pre style={styles.error}>{this.state.error.message}</pre>
         ) : null}
         {this.state.loading ? <LinearProgress /> : null}
+        <div style={styles.menu}>
+          <RaisedButton
+            primary
+            label={localization.shotCard.button}
+            icon={this.state.shooting ? <AvStop /> : ShotCard.icon()}
+            labelPosition="before"
+            disabled={this.state.shooting}
+            onClick={this.handleShot}
+            style={styles.shoot}
+          />
+          <span style={styles.label}>{localization.shotCard.shoot}</span>
+          <div style={{ flex: 1 }} />
+          <RaisedButton
+            secondary
+            label={localization.shotCard.restore}
+            onClick={this.handleRestore}
+            style={styles.restore}
+            disabled={!this.state.canRestore}
+          />
+        </div>
         <div style={styles.editor}>
           <Editor
             isSelected
@@ -199,26 +241,9 @@ export default class ShotPane extends PureComponent {
             extraKeys={extraKeys}
             lineNumbers={false}
             findFile={this.props.findFile}
-          />
-        </div>
-        <div style={styles.menu}>
-          <RaisedButton
-            primary
-            label={localization.shotCard.button}
-            icon={this.state.shooting ? <AvStop /> : ShotCard.icon()}
-            labelPosition="before"
-            disabled={this.state.shooting}
-            onTouchTap={this.shoot}
-            style={styles.shoot}
-          />
-          <span style={styles.label}>{localization.shotCard.shoot}</span>
-          <div style={{ flex: 1 }} />
-          <RaisedButton
-            secondary
-            label={localization.shotCard.restore}
-            onTouchTap={this.handleRestore}
-            style={styles.restore}
-            disabled={!this.state.canRestore}
+            loadConfig={this.props.loadConfig}
+            fileView={this.props.fileView}
+            handleSetLinkObjects={this.props.handleSetLinkObjects}
           />
         </div>
       </div>

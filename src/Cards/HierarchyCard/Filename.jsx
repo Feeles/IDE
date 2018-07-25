@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 
-import { separate } from 'File/';
+import { separate } from '../../File/';
 
 const getStyles = (props, context) => {
   const { palette } = context.muiTheme;
@@ -95,10 +95,10 @@ export default class Filename extends PureComponent {
               defaultValue={plane}
               ref={this.handleInput}
               style={styles.textField}
-              onTouchTap={this.handleTextFieldTap}
+              onClick={this.handleTextFieldTap}
             />
           : <span
-              onTouchTap={this.handleDoubleTap}
+              onClick={this.handleDoubleTap}
               style={prepareStyles(styles.plane)}
             >
               {plane}

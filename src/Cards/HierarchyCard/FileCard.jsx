@@ -3,21 +3,21 @@ import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
-import { transparent } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
+import includes from 'lodash/includes';
 
 import Filename from './Filename';
-import { PreferenceDialog } from 'FileDialog/';
-import DragTypes from 'utils/dragTypes';
+import { PreferenceDialog } from '../../FileDialog/';
+import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, context) => {
   const { file, selectedFile, tabbedFiles, isDragging } = props;
   const { palette, spacing, transitions } = context.muiTheme;
 
   const isSelected = selectedFile === file;
-  const backgroundColor = tabbedFiles.includes(file)
+  const backgroundColor = includes(tabbedFiles, file)
     ? fade(palette.canvasColor, 1)
     : palette.disabledColor;
 
@@ -114,7 +114,7 @@ class FileCard extends PureComponent {
       <div style={root}>
         <Paper
           zDepth={isSelected ? 2 : 0}
-          onTouchTap={() => handleFileSelect(file)}
+          onClick={() => handleFileSelect(file)}
           style={card}
         >
           {connectDragSource(
@@ -125,7 +125,7 @@ class FileCard extends PureComponent {
           <div style={prepareStyles(container)}>
             <Filename file={file} onChange={this.handleNameChange} />
           </div>
-          <IconButton onTouchTap={this.handleConfirmSettings}>
+          <IconButton onClick={this.handleConfirmSettings}>
             <ActionSettings color={secondaryTextColor} />
           </IconButton>
         </Paper>

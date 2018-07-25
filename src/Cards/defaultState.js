@@ -49,4 +49,8 @@ export default {
     visible: false,
     order: 9
   },
+  ScreenShotCard: {
+    visible: false,
+    order: 10
+  }
 };

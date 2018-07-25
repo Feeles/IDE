@@ -108,7 +108,7 @@ export default class SourceFile extends _File {
    * @return Promise gives SourceFile
    */
   static load(file) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = e => {
         resolve(

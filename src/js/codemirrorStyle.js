@@ -1,4 +1,12 @@
-import { grey100, grey300, blueA700 } from 'material-ui/styles/colors';
+import {
+  grey100,
+  grey200,
+  grey300,
+  grey400,
+  grey500,
+  grey600,
+  blueA700
+} from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 
 export default ({ palette, paper, transitions }) =>
@@ -11,7 +19,6 @@ textarea {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   width: 100%;
   height: 100%;
-  background-color: ${grey100};
   transition: ${transitions.easeOut()};
 }
 .CodeMirror-gutters {
@@ -74,7 +81,7 @@ textarea {
   display: inline-block;
   border-radius: 2px;
   margin: -1px -2px -1px -4px;
-  padding: 1px 2px 1px 4px;
+  padding: 0px 2px 0px 4px;
   color: transparent;
   /* CSS hacking */
   box-shadow: 0 0 0 100em ${palette.primary1Color};
@@ -84,15 +91,34 @@ div.CodeMirror.CodeMirror-focused .Feeles-asset,
 div.CodeMirror.CodeMirror-focused .Feeles-dropdown-button {
   opacity: 0.9;
 }
+a.Feeles-link {
+  display: inline-block;
+  position: absolute;
+  white-space: pre;
+  z-index: 3;
+}
 .cm-s-default .cm-property {
   color: ${blueA700};
 }
-div.CodeMirror:not(.CodeMirror-focused) pre>span {
+
+.cm-tab {
+  background-color: ${grey100};
+  opacity: 0.8;
+}
+.cm-tab + .cm-tab {
+  background-color: ${grey200};
+}
+.cm-tab + .cm-tab + .cm-tab {
   background-color: ${grey300};
 }
-div.CodeMirror:not(.CodeMirror-focused) pre>span>span.cm-tab,
-div.CodeMirror:not(.CodeMirror-focused) pre>span>span.cm-comment {
-  background-color: ${grey100};
+.cm-tab + .cm-tab + .cm-tab + .cm-tab {
+  background-color: ${grey400};
+}
+.cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
+  background-color: ${grey500};
+}
+.cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
+  background-color: ${grey600};
 }
 div.CodeMirror span.CodeMirror-matchingbracket {
   text-shadow: 0 0 4px #000, 0 -8px 10px #000, 0 8px 10px #000;

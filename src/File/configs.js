@@ -1,6 +1,6 @@
 import { defaultPalette } from '../js/getCustomTheme';
 import Snippet from './Snippet';
-import organization from 'organization';
+import organization from '../organization';
 
 export default new Map([
   [

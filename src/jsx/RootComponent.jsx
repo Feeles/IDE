@@ -10,11 +10,20 @@ import { grey300, grey700 } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 
 import { readProject, findProject } from '../database/';
-import { makeFromElement, BinaryFile, SourceFile, validateType } from 'File/';
+import { makeFromElement, BinaryFile, SourceFile, validateType } from '../File/';
 import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
+
+import fetchPonyfill from 'fetch-ponyfill';
+const fetch =
+  window.fetch ||
+  // for IE11
+  fetchPonyfill({
+    // TODO: use babel-runtime to rewrite this into require("babel-runtime/core-js/promise")
+    Promise
+  }).fetch;
 
 const seedToFile = seed => {
   if (validateType('blob', seed.type)) {
@@ -34,7 +43,22 @@ class RootComponent extends Component {
     // An URL string as JSON file provided
     jsonURL: PropTypes.string,
     // An URL string to continuous deploying
-    deployURL: PropTypes.string
+    deployURL: PropTypes.string,
+    // Handle file change
+    onChange: PropTypes.func,
+    // Handle message from iframe
+    onMessage: PropTypes.func,
+    // Handle screenshot image change
+    onThumbnailChange: PropTypes.func,
+    // For using external DB
+    disableLocalSave: PropTypes.bool,
+    // For using external thumbnail manager
+    disableScreenShotCard: PropTypes.bool
+  };
+
+  static defaultProps = {
+    disableLocalSave: false,
+    disableScreenShotCard: false
   };
 
   state = {
@@ -47,11 +71,12 @@ class RootComponent extends Component {
     openDialog: false,
     // continuous deploying URL (if null, do first deployment)
     deployURL: null,
+    retryCount: 0,
     errorText: null
   };
 
   componentWillMount() {
-    const { title, seeds } = this.props;
+    const { title, seeds, disableLocalSave } = this.props;
 
     const langs = []
       .concat(new URLSearchParams(location.search).getAll('lang')) // ?lang=ll_CC
@@ -67,7 +92,6 @@ class RootComponent extends Component {
     }
 
     if (Array.isArray(seeds)) {
-      const files = seeds;
       this.setState({
         last: 0,
         files: seeds.map(seedToFile)
@@ -75,6 +99,9 @@ class RootComponent extends Component {
     } else if (typeof title === 'string') {
       // From indexedDB
       this.launchIDE({ title });
+    } else if (disableLocalSave) {
+      // Use Feeles as a module. Do not access any local data.
+      this.defaultLaunch();
     } else {
       if (process.env.NODE_ENV !== 'production') {
         if (this.props.jsonURL) {
@@ -91,7 +118,7 @@ class RootComponent extends Component {
       // Required unique title of project to proxy it
       const { titleIsRequired } = this.state.localization.cloneDialog;
       this.setState({ errorText: titleIsRequired });
-      console.error(titleIsRequired);
+      console.info(titleIsRequired);
     }
 
     const { project, query, length } = await (id
@@ -132,9 +159,17 @@ class RootComponent extends Component {
       const response = await fetch(url);
       text = await response.text();
     } catch (e) {
-      this.setState({ errorText: e.message });
-      console.error(e);
-      return;
+      this.setState(prevState => ({
+        retryCount: prevState.retryCount + 1,
+        errorText: e.message
+      }));
+      // Auto retry
+      const delay = Math.pow(2, this.state.retryCount + 1);
+      return new Promise((resolve, reject) => {
+        window.setTimeout(() => {
+          this.launchFromURL(url).then(resolve, reject);
+        }, delay * 1000);
+      });
     }
 
     let seeds = [];
@@ -143,7 +178,7 @@ class RootComponent extends Component {
     } catch (e) {
       console.log(text);
       const errorText = `${url} is not valid JSON. Check the text in console.`;
-      console.error(errorText);
+      console.info(errorText);
       this.setState({ errorText });
       return;
     }
@@ -152,7 +187,7 @@ class RootComponent extends Component {
       console.log(seeds);
       const errorText =
         'Source JSON file must be an array. Check the value in cosole.';
-      console.error(errorText);
+      console.info(errorText);
       this.setState({ errorText });
       return;
     }
@@ -178,7 +213,7 @@ class RootComponent extends Component {
 
   async progress(file) {
     if (Math.random() < 0.1 || this.state.last === 1) {
-      await new Promise((resolve, reject) => {
+      await new Promise(resolve => {
         requestAnimationFrame(resolve);
       });
     }
@@ -212,7 +247,7 @@ class RootComponent extends Component {
     });
 
   renderLoading = () => {
-    const { last, files, errorText } = this.state;
+    const { last, files, errorText, retryCount } = this.state;
 
     const styles = {
       root: {
@@ -254,6 +289,9 @@ class RootComponent extends Component {
           {title ? title.getAttribute('content') : document.title || '❤️'}
         </h1>
         {errorText && <span style={styles.errorText}>{errorText}</span>}
+        {retryCount > 0 ? (
+          <div>{Math.pow(2, retryCount)}秒後にもう一度接続します...</div>
+        ) : null}
         {author && (
           <h2 style={styles.header}>{author.getAttribute('content')}</h2>
         )}
@@ -300,6 +338,11 @@ class RootComponent extends Component {
             setMuiTheme={this.setMuiTheme}
             deployURL={this.state.deployURL}
             setDeployURL={deployURL => this.setState({ deployURL })}
+            onChange={this.props.onChange}
+            onMessage={this.props.onMessage}
+            onThumbnailChange={this.props.onThumbnailChange}
+            disableLocalSave={this.props.disableLocalSave}
+            disableScreenShotCard={this.props.disableScreenShotCard}
           />
         )}
       </MuiThemeProvider>
