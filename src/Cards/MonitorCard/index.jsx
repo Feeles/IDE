@@ -107,7 +107,8 @@ export default class MonitorCard extends PureComponent {
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
       query: 'capture',
-      type: 'image/jpeg'
+      type: 'image/jpeg',
+      requestedBy: 'user-action' // ユーザーがリクエストしたことを表す
     };
     await this.props.globalEvent.emitAsync('postMessage', request);
     // capture がおわったら, processing state を元に戻す

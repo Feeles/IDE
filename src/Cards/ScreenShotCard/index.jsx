@@ -127,9 +127,20 @@ export default class ScreenShotCard extends PureComponent {
     this.setState({ selected });
   };
 
-  // 'capture' message をうけとったとき
+  /**
+   * 'capture' message を受け取った時のハンドラ
+   * キャプチャを呼び出すものは２つある
+   *   1. portal 用の自動撮影（Main）
+   *   2. ユーザーがボタンを押して撮影（MonitorCard）
+   * 1 の場合はスクリーンショットカードには載せない
+   * （アップロードもしない）
+   * 1 or 2 を判別するには payload の
+   * event.data.requestedBy を用いる
+   */
   handleCapture = async event => {
-    const { value } = event.data;
+    const { value, requestedBy } = event.data;
+    if (requestedBy !== 'user-action') return;
+
     const uploading = md5(value);
 
     // キャッシュを確認

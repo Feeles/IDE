@@ -70,11 +70,12 @@
             // Screen Shot
             var canvas = document.querySelector('canvas');
             if (canvas) {
-              port.postMessage({
-                query: e.data.query,
-                id: e.data.id,
-                value: canvas.toDataURL(e.data.type)
-              });
+              // payload も含めて全部送り返す
+              port.postMessage(
+                Object.assign({}, e.data, {
+                  value: canvas.toDataURL(e.data.type)
+                })
+              );
             } else {
               var bgcolor = getComputedStyle(document.body).backgroundColor;
               var params = {
@@ -87,11 +88,12 @@
                   ? domtoimage.toJpeg(document.body, params)
                   : domtoimage.toPng(document.body, params);
               promise.then(function(dataURL) {
-                port.postMessage({
-                  query: e.data.query,
-                  id: e.data.id,
-                  value: dataURL
-                });
+                // payload も含めて全部送り返す
+                port.postMessage(
+                  Object.assign({}, e.data, {
+                    value: dataURL
+                  })
+                );
               });
             }
             break;

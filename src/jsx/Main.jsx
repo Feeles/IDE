@@ -144,7 +144,8 @@ export default class Main extends Component {
         await new Promise(resolve => window.setTimeout(resolve, 10 * 1000));
         const request = {
           query: 'capture',
-          type: 'image/jpeg'
+          type: 'image/jpeg',
+          requestedBy: 'auto' // 自動的にリクエストされることを表す
         };
         await this.state.globalEvent.emitAsync('postMessage', request);
         screenShotLater();
@@ -258,7 +259,9 @@ export default class Main extends Component {
       );
 
       const value = files
-        ? multiple ? bundle(files) : files.json
+        ? multiple
+          ? bundle(files)
+          : files.json
         : defaultValue;
       this._configs.set(key, value);
       return value;
