@@ -64,7 +64,7 @@ export default class ScreenShotCard extends PureComponent {
     }
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const { globalEvent } = this.props;
     globalEvent.on('message.capture', this.handleCapture);
 
@@ -73,8 +73,8 @@ export default class ScreenShotCard extends PureComponent {
     });
   }
 
-  async componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps.files) {
+  async componentDidUpdate(prevProps) {
+    if (prevProps.files !== this.props.files) {
       this.setState({
         cache: await this.getCache()
       });

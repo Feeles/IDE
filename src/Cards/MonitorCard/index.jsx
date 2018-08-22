@@ -70,7 +70,7 @@ export default class MonitorCard extends PureComponent {
     return <HardwareDesktopWindows />;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     try {
       const { frame } = this.props.cards.MonitorCard;
       if (frame && Array.isArray(frame.size)) {

@@ -32,9 +32,9 @@ export default class Screen extends PureComponent {
     loading: false
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.reboot !== nextProps.reboot) {
-      if (!nextProps.reboot) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.reboot !== this.props.reboot) {
+      if (!this.props.reboot) {
         this.setState({ loading: true }, () => {
           setTimeout(() => {
             this.setState({ loading: false });
@@ -43,8 +43,8 @@ export default class Screen extends PureComponent {
       }
     }
     if (this.iframe) {
-      this.iframe.width = `${nextProps.width}px`;
-      this.iframe.height = `${nextProps.height}px`;
+      this.iframe.width = `${this.props.width}px`;
+      this.iframe.height = `${this.props.height}px`;
     }
   }
 
@@ -116,7 +116,9 @@ export default class Screen extends PureComponent {
       border: '0 none',
       flex: '0 0 auto',
       opacity: loading ? 0 : 1,
-      transition: loading ? 'none' : 'opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
+      transition: loading
+        ? 'none'
+        : 'opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
     };
 
     const buttonStyle = {

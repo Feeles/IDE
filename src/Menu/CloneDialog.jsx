@@ -45,7 +45,7 @@ export default class CloneDialog extends PureComponent {
     return !!this.state.currentProject;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.refreshState();
   }
 

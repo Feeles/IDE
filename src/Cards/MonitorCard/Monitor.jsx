@@ -114,7 +114,22 @@ export default class Monitor extends PureComponent {
 
   popoutClosed = false;
 
-  componentWillMount() {
+  componentDidMount() {
+    if (window.ipcRenderer) {
+      this._emit = window.ipcRenderer.emit; // あとで戻せるようオリジナルを保持
+      const self = this;
+      window.ipcRenderer.emit = (...args) => {
+        // ipcRenderer.emit をオーバーライドし, 全ての postMessage で送る
+        if (self.state && self.state.port) {
+          self.state.port.postMessage({
+            query: 'ipcRenderer.emit',
+            value: JSON.parse(JSON.stringify(args))
+          });
+        }
+        this._emit.apply(this, args);
+      };
+    }
+
     // feeles.github.io/sample/#/path/to/index.html
     window.addEventListener('hashchange', this.handleHashChanged);
     if (/^#\//.test(location.hash)) {
@@ -156,23 +171,6 @@ export default class Monitor extends PureComponent {
     }
     if (prevProps.isPopout && !this.props.isPopout) {
       this.popoutClosed = true; // Use delay
-    }
-  }
-
-  componentDidMount() {
-    if (window.ipcRenderer) {
-      this._emit = window.ipcRenderer.emit; // あとで戻せるようオリジナルを保持
-      const self = this;
-      window.ipcRenderer.emit = (...args) => {
-        // ipcRenderer.emit をオーバーライドし, 全ての postMessage で送る
-        if (self.state && self.state.port) {
-          self.state.port.postMessage({
-            query: 'ipcRenderer.emit',
-            value: JSON.parse(JSON.stringify(args))
-          });
-        }
-        this._emit.apply(this, args);
-      };
     }
   }
 

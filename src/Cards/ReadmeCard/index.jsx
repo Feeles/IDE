@@ -34,7 +34,7 @@ export default class ReadmeCard extends PureComponent {
     return <MapsMap />;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { globalEvent } = this.props;
     globalEvent.on('message.complete', this.handleComplete);
     globalEvent.on('message.readme', this.handleReadme);
@@ -51,8 +51,8 @@ export default class ReadmeCard extends PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps.files) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.files !== this.props.files) {
       // TODO: watch file
       if (this.state.selectedFile) {
         this.setState({

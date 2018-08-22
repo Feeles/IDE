@@ -101,14 +101,12 @@ export default class ShotPane extends PureComponent {
     this.props.globalEvent.on('message.runCode', this.handleShot);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.file !== nextProps.file) {
-      const file = nextProps.file || SourceFile.shot('');
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.file !== this.props.file) {
+      const file = this.props.file || SourceFile.shot('');
       this.setState({ file });
     }
-  }
 
-  componentDidUpdate(prevProps, prevState) {
     if (!prevState.shooting && this.state.shooting) {
       // shooting アニメーションをもとにもどす
       setTimeout(() => {

@@ -31,14 +31,14 @@ export default class MediaCard extends PureComponent {
     return <AvMusicVideo />;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { globalEvent } = this.props;
     globalEvent.on('message.media', this.handleMedia);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { visible } = this.props.cardPropsBag;
-    if (visible && !nextProps.cardPropsBag.visible) {
+  componentDidUpdate(prevProps) {
+    const { visible } = prevProps.cardPropsBag;
+    if (visible && !this.props.cardPropsBag.visible) {
       // カードが close されたとき動画を止める
       this.setState({
         playerState: {

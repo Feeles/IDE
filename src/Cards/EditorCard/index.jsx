@@ -71,15 +71,10 @@ export default class EditorCard extends PureComponent {
     muiTheme: PropTypes.object.isRequired
   };
 
-  componentWillMount() {
-    const { globalEvent } = this.props;
-    globalEvent.on('message.editor', this.handleEditor);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.tabs !== nextProps.tabs) {
-      const prevSelected = this.props.tabs.find(t => t.isSelected);
-      const nextSelected = nextProps.tabs.find(t => t.isSelected);
+  componentDidUpdate(prevProps) {
+    if (prevProps.tabs !== this.props.tabs) {
+      const prevSelected = prevProps.tabs.find(t => t.isSelected);
+      const nextSelected = this.props.tabs.find(t => t.isSelected);
       if (prevSelected !== nextSelected) {
         // タブの選択が変化したら EditorCard にスクロールする
         this.props.scrollToCard('EditorCard');
@@ -88,6 +83,8 @@ export default class EditorCard extends PureComponent {
   }
 
   componentDidMount() {
+    const { globalEvent } = this.props;
+    globalEvent.on('message.editor', this.handleEditor);
     // init.fileName があるとき Mount 後に selectTab しておく
     try {
       const { init } = this.props.cards.EditorCard;

@@ -93,21 +93,18 @@ export default class SourceEditor extends PureComponent {
 
   _widgets = new Map();
 
-  componentWillMount() {
-    this.setState({
-      snippets: this.props.getConfig('snippets')(this.props.file)
-    });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.fileView !== nextProps.fileView) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.fileView !== this.props.fileView) {
       this.setState({
-        snippets: nextProps.getConfig('snippets')(nextProps.file)
+        snippets: this.props.getConfig('snippets')(this.props.file)
       });
     }
   }
 
   componentDidMount() {
+    this.setState({
+      snippets: this.props.getConfig('snippets')(this.props.file)
+    });
     if (this.codemirror) {
       this.codemirror.on('beforeChange', zenkakuToHankaku);
       this.codemirror.on('beforeChange', this.handleIndexReplacement);

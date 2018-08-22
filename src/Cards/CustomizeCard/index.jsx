@@ -27,7 +27,7 @@ export default class CustomizeCard extends PureComponent {
     return <ActionSettingsApplications />;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     (async () => {
       const cssFileKey = await this.addFileIfNotExist(
         'feeles/codemirror.css',

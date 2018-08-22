@@ -24,10 +24,10 @@ export default class ErrorPane extends PureComponent {
     muiTheme: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.error !== nextProps.error) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.error !== this.props.error) {
       this.setState({
-        show: !!nextProps.error
+        show: !!this.props.error
       });
     }
   }

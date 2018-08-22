@@ -19,7 +19,7 @@ export default class ResolveProgress extends PureComponent {
     visible: false
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { globalEvent } = this.props;
     globalEvent.on('message.resolve', this.handleResolve);
   }

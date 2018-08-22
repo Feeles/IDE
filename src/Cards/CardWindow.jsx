@@ -33,8 +33,8 @@ export default class CardWindow extends PureComponent {
     footer: null
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.visible !== nextProps.visible && nextProps.visible) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.visible !== this.props.visible && this.props.visible) {
       this.handleScroll();
     }
   }

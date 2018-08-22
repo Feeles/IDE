@@ -81,36 +81,36 @@ export default class CodeMirrorComponent extends PureComponent {
     this.codeMirror = null; // GC??
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     // タブ, value の更新
-    if (this.props.id !== nextProps.id) {
+    if (prevProps.id !== this.props.id) {
       // 前回のタブ
-      const prev = this.state.docs.get(this.props.id) || null;
+      const prev = this.state.docs.get(prevProps.id) || null;
       // 次のタブ (or undefined)
-      let doc = this.state.docs.get(nextProps.id);
+      let doc = this.state.docs.get(this.props.id);
       if (!doc) {
         // 新しく開かれたタブ（キャッシュに存在しない）
         // copy をもとに新しい Doc を作り、 value を更新
         doc = this.codeMirror.getDoc().copy(false);
-        doc.setValue(nextProps.value); // value の更新
+        doc.setValue(this.props.value); // value の更新
         doc.clearHistory();
-        this.state.docs.set(nextProps.id, doc);
+        this.state.docs.set(this.props.id, doc);
       }
       // 現在のタブと入れ替え
       this.codeMirror.swapDoc(doc);
-      this.props.onDocChanged(
-        { id: nextProps.id, doc },
-        { id: this.props.id, doc: prev }
+      prevProps.onDocChanged(
+        { id: this.props.id, doc },
+        { id: prevProps.id, doc: prev }
       );
     } else {
       // 同じタブ(ファイル)
-      this.setValueIfDifferent(nextProps.value); // value の更新
+      this.setValueIfDifferent(this.props.value); // value の更新
     }
     // options の更新
     const ignoreKeys = ['id', 'value'];
-    for (const [key, nextValue] of Object.entries(nextProps)) {
+    for (const [key, nextValue] of Object.entries(this.props)) {
       if (includes(ignoreKeys, key)) continue;
-      if (!deepEqual(this.props[key], nextProps[key])) {
+      if (!deepEqual(prevProps[key], this.props[key])) {
         // options の変更を CodeMirror に伝える
         this.codeMirror.setOption(key, nextValue);
       }

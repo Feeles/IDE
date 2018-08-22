@@ -98,7 +98,7 @@ export default class Editor extends PureComponent {
     return true;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const jshintrc = this.props.findFile('.jshintrc');
     if (jshintrc) {
       // .jshintrc があれば JSHint でチェック
@@ -118,8 +118,8 @@ export default class Editor extends PureComponent {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.fileView !== nextProps.fileView) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.fileView !== this.props.fileView) {
       this.setState({
         dropdownConfig: this.props.loadConfig('dropdown')
       });

@@ -85,7 +85,7 @@ export default class ShotCard extends PureComponent {
     return <ContentReply />;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { globalEvent } = this.props;
     globalEvent.on('message.code', this.handleCode);
     globalEvent.on('message.complete', this.handleComplete);

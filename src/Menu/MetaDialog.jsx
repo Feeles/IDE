@@ -132,7 +132,7 @@ class EditOGP extends PureComponent {
     muiTheme: PropTypes.object.isRequired
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const ogp = this.props.getConfig('ogp');
     let screenshots = [];
     try {

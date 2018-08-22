@@ -46,15 +46,13 @@ export default class Footer extends PureComponent {
     this.mountFacebookShare();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.deployURL !== nextProps.deployURL) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.deployURL !== this.props.deployURL) {
       // ボタンを再描画させるため、一度中の要素をすべて消してしまう
       // state.rewrite はすぐに false になる
       this.setState({ rewrite: true });
     }
-  }
 
-  componentDidUpdate() {
     if (this.state.rewrite) {
       this.setState({ rewrite: false });
     } else {

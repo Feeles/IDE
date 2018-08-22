@@ -21,8 +21,8 @@ export default class CreditsCard extends PureComponent {
     return <ActionCopyright />;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.files !== this.props.files) {
       const next = this.getCredits();
       if (!shallowEqual(this.state.credits, next)) {
         this.setState({ credits: next });

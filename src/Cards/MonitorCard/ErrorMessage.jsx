@@ -21,10 +21,10 @@ export default class ErrorMessage extends PureComponent {
     return this.props.error ? this.props.error.message : '';
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.error !== nextProps.error) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.error !== this.props.error) {
       this.setState({
-        open: nextProps.error !== null
+        open: this.props.error !== null
       });
     }
   }
@@ -58,15 +58,15 @@ export default class ErrorMessage extends PureComponent {
       }
     };
 
-    return this.state.open
-      ? <div style={styles.root}>
-          <SvgButton style={styles.button} onClick={this.handleClose}>
-            {
-              'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'
-            }
-          </SvgButton>
-          <pre style={styles.pre}>{this.message}</pre>
-        </div>
-      : null;
+    return this.state.open ? (
+      <div style={styles.root}>
+        <SvgButton style={styles.button} onClick={this.handleClose}>
+          {
+            'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'
+          }
+        </SvgButton>
+        <pre style={styles.pre}>{this.message}</pre>
+      </div>
+    ) : null;
   }
 }

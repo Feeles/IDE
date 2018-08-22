@@ -26,14 +26,14 @@ export default class AssetPane extends PureComponent {
     assets: {}
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       assets: this.props.loadConfig('asset')
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.fileView !== nextProps.fileView) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.fileView !== this.props.fileView) {
       this.setState({
         assets: this.props.loadConfig('asset')
       });

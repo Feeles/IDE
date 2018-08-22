@@ -42,13 +42,13 @@ export default class HierarchyCard extends PureComponent {
     filter: () => false
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     if (
-      this.props.files !== nextProps.files ||
-      this.props.tabs !== nextProps.tabs
+      prevProps.files !== this.props.files ||
+      prevProps.tabs !== this.props.tabs
     ) {
       this.setState({
-        tabbedFiles: nextProps.tabs.map(tab => tab.file)
+        tabbedFiles: this.props.tabs.map(tab => tab.file)
       });
     }
   }

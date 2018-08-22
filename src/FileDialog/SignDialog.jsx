@@ -24,7 +24,7 @@ export default class SignDialog extends PureComponent {
   _completeLabels = new Set();
   _completeUrls = new Set();
 
-  componentWillMount() {
+  componentDidMount() {
     for (const file of this.props.getFiles()) {
       for (const item of file.credits) {
         this._completeLabels.add(item.label);

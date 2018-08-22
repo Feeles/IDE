@@ -188,12 +188,6 @@ export default class Readme extends PureComponent {
     muiTheme: PropTypes.object.isRequired
   };
 
-  componentWillReceiveProps(nextProps, nextContext) {
-    if (this.context.muiTheme !== nextContext.muiTheme) {
-      this.forceUpdate();
-    }
-  }
-
   render() {
     const mdStyles = mdStyle(this.props, this.state, this.context);
 

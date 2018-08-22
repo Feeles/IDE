@@ -25,14 +25,14 @@ export default class LaunchDialog extends PureComponent {
     projects: null
   };
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.open) {
       this.refreshState();
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.open && nextProps.open) {
+  componentDidUpdate(prevProps) {
+    if (!prevProps.open && this.props.open) {
       this.refreshState();
     }
   }

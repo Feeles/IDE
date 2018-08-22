@@ -10,7 +10,12 @@ import { grey300, grey700 } from 'material-ui/styles/colors';
 import transitions from 'material-ui/styles/transitions';
 
 import { readProject, findProject } from '../database/';
-import { makeFromElement, BinaryFile, SourceFile, validateType } from '../File/';
+import {
+  makeFromElement,
+  BinaryFile,
+  SourceFile,
+  validateType
+} from '../File/';
 import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
@@ -75,7 +80,7 @@ class RootComponent extends Component {
     errorText: null
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { title, seeds, disableLocalSave } = this.props;
 
     const langs = []
@@ -290,7 +295,10 @@ class RootComponent extends Component {
         </h1>
         {errorText && <span style={styles.errorText}>{errorText}</span>}
         {retryCount > 0 ? (
-          <div>{Math.pow(2, retryCount)}秒後にもう一度接続します...</div>
+          <div>
+            {Math.pow(2, retryCount)}
+            秒後にもう一度接続します...
+          </div>
         ) : null}
         {author && (
           <h2 style={styles.header}>{author.getAttribute('content')}</h2>
@@ -356,6 +364,6 @@ export default DragDropContext(dndBackend)(RootComponent);
 function indicator(val, last) {
   const length = 32;
   const sum = Math.max(1, val + last) + 0.00001;
-  const progress = Math.floor(val / sum * length);
+  const progress = Math.floor((val / sum) * length);
   return '='.repeat(progress) + '+' + '-'.repeat(length - 1 - progress);
 }

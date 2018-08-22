@@ -29,17 +29,17 @@ export default class EnvCard extends PureComponent {
     return <ActionTouchApp />;
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.files !== nextProps.files) {
-      const envFile = this.props.findFile('.env');
+  componentDidUpdate(prevProps) {
+    if (prevProps.files !== this.props.files) {
+      const envFile = prevProps.findFile('.env');
       this.setState({
-        env: this.props.getConfig('env'),
+        env: prevProps.getConfig('env'),
         fileKey: envFile ? envFile.key : ''
       });
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const envFile = this.props.findFile('.env');
     if (!envFile) {
       const env = this.props.getConfig('env');
