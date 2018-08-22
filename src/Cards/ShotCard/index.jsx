@@ -136,6 +136,7 @@ export default class ShotCard extends PureComponent {
               <a
                 key={title}
                 href={scrapbox.url(title)}
+                rel="noopener noreferrer"
                 target="_blank"
                 style={styles.cardLink}
               >

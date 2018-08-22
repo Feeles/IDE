@@ -69,7 +69,12 @@ export default class SaveDialog extends PureComponent {
       >
         {this.state.results.map((item, i) => (
           <div key={i} style={divStyle}>
-            <a target="_blank" href={item.href} style={linkStyle}>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href={item.href}
+              style={linkStyle}
+            >
               {item.name}
             </a>
             <p>{localization.saveDialog.description(item.name)}</p>

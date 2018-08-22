@@ -41,9 +41,13 @@ export default class CreditsCard extends PureComponent {
   renderCredit(credit) {
     return (
       <div key={credit.hash}>
-        {credit.url
-          ? <a href={credit.url} target="_blank">{credit.label}</a>
-          : <span>{credit.label}</span>}
+        {credit.url ? (
+          <a href={credit.url} rel="noopener noreferrer" target="_blank">
+            {credit.label}
+          </a>
+        ) : (
+          <span>{credit.label}</span>
+        )}
       </div>
     );
   }

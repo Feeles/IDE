@@ -76,11 +76,18 @@ export default class CreditBar extends PureComponent {
   };
 
   renderCredit(credit, styles) {
-    return credit.url
-      ? <a href={credit.url} target="_blank" style={styles.smallLabel}>
-          {credit.label}
-        </a>
-      : <span style={styles.smallLabel}>{credit.label}</span>;
+    return credit.url ? (
+      <a
+        href={credit.url}
+        rel="noopener noreferrer"
+        target="_blank"
+        style={styles.smallLabel}
+      >
+        {credit.label}
+      </a>
+    ) : (
+      <span style={styles.smallLabel}>{credit.label}</span>
+    );
   }
 
   render() {
@@ -89,27 +96,27 @@ export default class CreditBar extends PureComponent {
 
     return (
       <div style={styles.root}>
-        {file.credit && file.credit !== file.sign
-          ? this.renderCredit(file.credit, styles)
-          : <FlatButton
-              secondary={!file.sign}
-              label={
-                file.sign
-                  ? file.sign.label
-                  : localization.credit.writeAuthorName
-              }
-              style={styles.smallButton}
-              labelStyle={styles.smallLabel}
-              onClick={this.handleSignDialog}
-            />}
-        {file.credits.length > 0
-          ? <FlatButton
-              label={localization.credit.credits}
-              style={styles.smallButton}
-              labelStyle={styles.smallLabel}
-              onClick={this.handleShowCredits}
-            />
-          : null}
+        {file.credit && file.credit !== file.sign ? (
+          this.renderCredit(file.credit, styles)
+        ) : (
+          <FlatButton
+            secondary={!file.sign}
+            label={
+              file.sign ? file.sign.label : localization.credit.writeAuthorName
+            }
+            style={styles.smallButton}
+            labelStyle={styles.smallLabel}
+            onClick={this.handleSignDialog}
+          />
+        )}
+        {file.credits.length > 0 ? (
+          <FlatButton
+            label={localization.credit.credits}
+            style={styles.smallButton}
+            labelStyle={styles.smallLabel}
+            onClick={this.handleShowCredits}
+          />
+        ) : null}
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}

@@ -129,7 +129,11 @@ export default class AssetButton extends PureComponent {
             <span style={styles.headerLabel}>
               {this.props.label}
               {this.props.descriptionMoreURL ? (
-                <a href={this.props.descriptionMoreURL} target="_blank">
+                <a
+                  href={this.props.descriptionMoreURL}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <ActionOpenInNew />
                 </a>
               ) : null}
