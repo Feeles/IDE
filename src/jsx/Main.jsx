@@ -112,7 +112,11 @@ export default class Main extends Component {
     return parseInt(this.props.rootStyle.height, 10);
   }
 
-  componentWillMount() {
+  /**
+   * 元々 componentWillMount で実装されていた処理.
+   * render が最初に呼ばれたときに一度だけ呼ばれる
+   */
+  componentWillMountCompat() {
     // 互換性保持のため、 fileView に外から setState させる
     this.state.fileView.install(this);
 
@@ -122,6 +126,7 @@ export default class Main extends Component {
     const card = this.findFile('feeles/card.json');
     if (card) {
       const cards = _.merge(this.state.cards, card.json);
+      // ここで setState するのはアンチパターン
       this.setState({ cards });
     }
   }
@@ -166,18 +171,16 @@ export default class Main extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.project !== nextProps.project) {
-      this.setProject(nextProps.project);
+  async componentDidUpdate(prevProps, prevState) {
+    const { localization, project } = this.props;
+
+    if (prevProps.project !== project) {
+      this.setProject(project);
     }
-    if (this.props.localization !== nextProps.localization) {
+    if (prevProps.localization !== localization) {
       this.state.fileView.forceUpdate();
       this.setState({ reboot: true });
     }
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    const { localization } = this.props;
 
     if (this.state.reboot) {
       this.setState({ reboot: false });
@@ -469,6 +472,14 @@ export default class Main extends Component {
   };
 
   render() {
+    if (this.componentWillMountCompat) {
+      // render よりも先に呼ばれるライフサイクルメソッドがないので,
+      // ここで呼んでいる. 一度しか呼ばれないように参照を null にする
+      this.componentWillMountCompat();
+      this.componentWillMountCompat = null;
+      return null;
+    }
+
     const { localization, disableLocalSave } = this.props;
     const styles = getStyle(this.props, this.state, this.context);
 
