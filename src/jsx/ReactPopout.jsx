@@ -11,6 +11,7 @@ Copyright (c) 2015 Jake Ginnivan
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
+import PropTypes from 'prop-types';
 
 const _CONTAINER_ID = Symbol('container_id');
 
@@ -23,13 +24,13 @@ export default class PopoutWindow extends React.Component {
    * @type {{title: *, url: *, onClosing: *, options: *, window: *, containerId: *}}
    */
   static propTypes = {
-    title: React.PropTypes.string.isRequired,
-    url: React.PropTypes.string,
-    onClosing: React.PropTypes.func,
-    options: React.PropTypes.object,
-    window: React.PropTypes.object,
-    containerId: React.PropTypes.string,
-    children: React.PropTypes.element
+    title: PropTypes.string.isRequired,
+    url: PropTypes.string,
+    onClosing: PropTypes.func,
+    options: PropTypes.object,
+    window: PropTypes.object,
+    containerId: PropTypes.string,
+    children: PropTypes.element
   };
 
   state = {
