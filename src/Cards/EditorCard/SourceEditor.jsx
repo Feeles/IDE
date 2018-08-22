@@ -1,18 +1,18 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import CodeMirror from 'codemirror';
 import FlatButton from 'material-ui/FlatButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
 import ContentSave from 'material-ui/svg-icons/content/save';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
-import ga from 'utils/google-analytics';
+import includes from 'lodash/includes';
 import Editor from './Editor';
 import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
 import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
+import zenkakuToHankaku from './zenkakuToHankaku';
 
 const getStyle = (props, state, context) => {
   const { palette } = context.muiTheme;
@@ -83,7 +83,6 @@ export default class SourceEditor extends PureComponent {
     hasChanged: false,
     loading: false,
     snippets: [],
-    dropdowns: {},
 
     assetFileName: null,
     assetLineNumber: 0,
@@ -96,22 +95,21 @@ export default class SourceEditor extends PureComponent {
 
   componentWillMount() {
     this.setState({
-      snippets: this.props.getConfig('snippets')(this.props.file),
-      dropdowns: this.props.loadConfig('dropdown')
+      snippets: this.props.getConfig('snippets')(this.props.file)
     });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.fileView !== nextProps.fileView) {
       this.setState({
-        snippets: nextProps.getConfig('snippets')(nextProps.file),
-        dropdowns: this.props.loadConfig('dropdown')
+        snippets: nextProps.getConfig('snippets')(nextProps.file)
       });
     }
   }
 
   componentDidMount() {
     if (this.codemirror) {
+      this.codemirror.on('beforeChange', zenkakuToHankaku);
       this.codemirror.on('beforeChange', this.handleIndexReplacement);
       this.codemirror.on('change', this.handleIndentLine);
       const onChange = cm => {
@@ -152,17 +150,15 @@ export default class SourceEditor extends PureComponent {
 
     // Like a watching
     const babelrc = this.props.getConfig('babelrc');
-    file.babel(babelrc).catch(e => {
+    file.babel(babelrc, e => {
       this.props.selectTabFromFile(file);
       // あらたな Babel Error が発生したときを検知して,
       // ダイアログを表示させる (エラーの詳細は file.error を参照する)
       this.forceUpdate(); // 再描画
-      console.error(e);
+      console.info(e);
     });
 
     this.setState({ loading: false });
-
-    ga('send', 'event', 'Code', 'save', this.props.file.name);
   };
 
   handleUndo = () => {
@@ -181,7 +177,7 @@ export default class SourceEditor extends PureComponent {
 
   updateWidget = (cm, line, text) => {
     // Syntax: /*+ モンスター アイテム */
-    const asset = /^(.*)(\/\*)(\+[^\*]+)(\*\/)/.exec(text);
+    const asset = /^(.*)(\/\*)(\+[^*]+)(\*\/)/.exec(text);
     if (asset) {
       const [, _prefix, _left, _label, _right] = asset.map(t =>
         t.replace(/\t/g, '    ')
@@ -215,73 +211,6 @@ export default class SourceEditor extends PureComponent {
       parent.appendChild(button);
       this._widgets.set(line, parent);
     }
-
-    // Syntax: ('▼ スキン', _kきし)
-    const dropdown = /^(.*\([\'\"])(▼[^\'\"]*)([\'\"]\,\s*)([^\)]*)\)/.exec(
-      text
-    );
-    if (dropdown) {
-      const [, _prefix, _label, _right, _value] = dropdown;
-      const label = document.createElement('span');
-      label.textContent = _label;
-      label.classList.add('Feeles-dropdown-label');
-      const right = document.createElement('span');
-      right.textContent = _right;
-      right.classList.add('Feeles-dropdown-blank');
-      const value = document.createElement('span');
-      value.textContent = _value;
-      value.classList.add('Feeles-dropdown-value');
-      value.addEventListener('click', this.handleValueClick);
-      const button = document.createElement('span');
-      button.appendChild(label); // "▼ スキン"
-      button.appendChild(right); // "', "
-      button.appendChild(value); // _kきし
-      button.classList.add('Feeles-dropdown-button');
-      button.setAttribute('data-label', _label.substr(1).trim());
-      button.setAttribute('data-value', _value);
-      button.setAttribute('data-from-line', line);
-      const allOfLeft = _prefix + _label + _right; // value より左の全て
-      button.setAttribute('data-from-ch', allOfLeft.length);
-      button.addEventListener('click', this.handleDropdownClick, true);
-      const shadow = document.createElement('span');
-      shadow.appendChild(button);
-      shadow.classList.add('Feeles-dropdown-shadow');
-      const parent = document.createElement('div');
-      parent.classList.add('Feeles-widget', 'Feeles-dropdown');
-      parent.appendChild(shadow);
-
-      const pos = { line, ch: _prefix.length };
-      const { left } = this.codemirror.charCoords(pos, 'local');
-      parent.style.transform = `translate(${left - 4}px, -20px)`;
-
-      this._widgets.set(line, parent);
-    }
-  };
-
-  handleDropdownClick = event => {
-    // Open dropdown menu
-    const label = event.target.getAttribute('data-label');
-    const value = event.target.getAttribute('data-value');
-    const line = event.target.getAttribute('data-from-line') >> 0;
-    const ch = event.target.getAttribute('data-from-ch') >> 0;
-    const list = this.state.dropdowns[label];
-    if (label && list && value && line && ch && this.codemirror) {
-      const hint = {
-        from: { line, ch },
-        to: { line, ch: ch + value.length },
-        list: list.map(item => ({
-          text: item.body,
-          displayText: `${item.body} ${item.label || ''}`
-        }))
-      };
-      this.codemirror.showHint({
-        completeSingle: false,
-        hint: () => hint
-      });
-      this.codemirror.focus();
-      // reload when completed
-      CodeMirror.on(hint, 'pick', this.handleRun);
-    }
   };
 
   handleValueClick = event => {
@@ -296,7 +225,7 @@ export default class SourceEditor extends PureComponent {
 
   handleRenderWidget = cm => {
     // remove old widgets
-    for (const widget of [...document.querySelectorAll('.Feeles-widget')]) {
+    for (const widget of [...document.querySelectorAll('.Feeles-asset')]) {
       if (widget.parentNode) {
         widget.parentNode.removeChild(widget);
       }
@@ -308,7 +237,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleIndexReplacement = (cm, change) => {
-    if (!['asset', 'paste'].includes(change.origin)) return;
+    if (!includes(['asset', 'paste'], change.origin)) return;
 
     for (const keyword of ['item', 'map']) {
       // すでに使われている item{N} のような変数を探す.
@@ -318,7 +247,7 @@ export default class SourceEditor extends PureComponent {
       if (usedIndexes.length < 1) continue;
 
       const sourceText = change.text.join('\n');
-      if (usedIndexes.some(i => sourceText.includes(keyword + i))) {
+      if (usedIndexes.some(i => includes(sourceText, keyword + i))) {
         // もし名前が競合していたら…
         const max = Math.max.apply(null, usedIndexes);
         const regExp = new RegExp(`${keyword}(\\d+)`, 'g');
@@ -343,6 +272,8 @@ export default class SourceEditor extends PureComponent {
     await this.handleSave();
     return this.props.setLocation(href);
   };
+
+  handleSaveAndRun = () => this.setLocation();
 
   handleAssetInsert = ({ code }) => {
     const { assetLineNumber } = this.state;
@@ -404,7 +335,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleIndentLine = (cm, change) => {
-    if (!['asset', 'paste'].includes(change.origin)) return;
+    if (!includes(['asset', 'paste'], change.origin)) return;
     const { from } = change;
     const to = new Pos(from.line + change.text.length, 0);
     // インデント
@@ -420,10 +351,6 @@ export default class SourceEditor extends PureComponent {
       this.setValue(prevFile.text);
       this.setLocation();
     }
-  };
-
-  handleRun = () => {
-    this.setLocation();
   };
 
   beautify = () => {
@@ -445,7 +372,7 @@ export default class SourceEditor extends PureComponent {
         configs = JSON.parse(runCommand.text);
       }
     } catch (error) {
-      console.error(error);
+      console.info(error);
     }
 
     if (file.is('javascript') || file.is('json')) {
@@ -472,8 +399,16 @@ export default class SourceEditor extends PureComponent {
     // const snippets = this.props.getConfig('snippets')(file);
 
     const extraKeys = {
-      'Ctrl-Enter': this.handleRun,
-      'Ctrl-Alt-B': this.beautify
+      'Ctrl-Enter': () => {
+        // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
+        // それをやり過ごしてから実行する
+        window.setTimeout(this.handleSaveAndRun, 10);
+      },
+      'Ctrl-Alt-B': () => {
+        // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
+        // それをやり過ごしてから実行する
+        window.setTimeout(this.beautify, 10);
+      }
     };
     const foldOptions = {
       widget: ' 📦 ',
@@ -495,7 +430,7 @@ export default class SourceEditor extends PureComponent {
             style={styles.barButton}
             labelStyle={styles.barButtonLabel}
             icon={<HardwareKeyboardBackspace />}
-            onTouchTap={this.handleUndo}
+            onClick={this.handleUndo}
           />
           <FlatButton
             label={localization.editorCard.save}
@@ -503,7 +438,7 @@ export default class SourceEditor extends PureComponent {
             style={styles.barButton}
             labelStyle={styles.barButtonLabel}
             icon={<ContentSave />}
-            onTouchTap={this.handleSave}
+            onClick={this.handleSaveAndRun}
           />
           <div
             style={{
@@ -542,6 +477,8 @@ export default class SourceEditor extends PureComponent {
             onDocChanged={this.props.onDocChanged}
             extraKeys={extraKeys}
             foldOptions={foldOptions}
+            loadConfig={this.props.loadConfig}
+            fileView={this.props.fileView}
           />
         </div>
         <ErrorPane
@@ -563,7 +500,7 @@ export default class SourceEditor extends PureComponent {
 }
 
 function wait(millisec) {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     setTimeout(resolve, millisec);
   });
 }

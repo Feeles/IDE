@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import URLSearchParams from 'url-search-params';
 import Paper from 'material-ui/Paper';
 import IconButton from 'material-ui/IconButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import transitions from 'material-ui/styles/transitions';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import SocialShare from 'material-ui/svg-icons/social/share';
 
-import organization from 'organization';
+import organization from '../organization';
 
 export default class Footer extends PureComponent {
   static propTypes = {
@@ -46,7 +46,7 @@ export default class Footer extends PureComponent {
     this.mountFacebookShare();
   }
 
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.deployURL !== nextProps.deployURL) {
       // ボタンを再描画させるため、一度中の要素をすべて消してしまう
       // state.rewrite はすぐに false になる
@@ -128,7 +128,9 @@ export default class Footer extends PureComponent {
       if (d.getElementById(id)) return;
       js = d.createElement(s);
       js.id = id;
-      js.src = `//connect.facebook.net/${localization.ll_CC}/sdk.js#xfbml=1&version=v2.8`;
+      js.src = `//connect.facebook.net/${
+        localization.ll_CC
+      }/sdk.js#xfbml=1&version=v2.8`;
       fjs.parentNode.insertBefore(js, fjs);
     })(document, 'script', 'facebook-jssdk');
   }
@@ -177,17 +179,13 @@ export default class Footer extends PureComponent {
           mini
           secondary
           style={styles.opener}
-          onTouchTap={() => this.setState({ open: true })}
+          onClick={() => this.setState({ open: true })}
         >
           <SocialShare />
         </FloatingActionButton>
         <Paper style={styles.root}>
           <div style={{ flex: 1 }} />
-          <input
-            readOnly
-            value={this.shareURL}
-            onTouchTap={this.handleLinkCopy}
-          />
+          <input readOnly value={this.shareURL} onClick={this.handleLinkCopy} />
           <div style={styles.blank} />
           {/* Twitter */}
           <a
@@ -214,7 +212,7 @@ export default class Footer extends PureComponent {
             />
           </div>
           <div style={styles.blank} />
-          <IconButton onTouchTap={() => this.setState({ open: false })}>
+          <IconButton onClick={() => this.setState({ open: false })}>
             <NavigationClose />
           </IconButton>
         </Paper>

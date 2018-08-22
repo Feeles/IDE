@@ -1,15 +1,71 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Card from '../CardWindow';
-import { CardMedia } from 'material-ui/Card';
+import Card from 'material-ui/Card';
+import CardWindow from '../CardWindow';
 import ContentReply from 'material-ui/svg-icons/content/reply';
+import uniq from 'lodash/uniq';
 
 import ShotPane from './ShotPane';
-import shallowEqual from 'utils/shallowEqual';
+import shallowEqual from '../../utils/shallowEqual';
+
+const scrapbox = {
+  url: title => `https://scrapbox.io/hackforplay/${encodeURIComponent(title)}`,
+  page: title =>
+    `https://scrapbox.io/api/pages/hackforplay/${encodeURIComponent(title)}`,
+  icon: title =>
+    `https://scrapbox.io/api/pages/hackforplay/${encodeURIComponent(
+      title
+    )}/icon`
+};
+
+const getStyle = () => {
+  return {
+    hintFlexbox: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '1em 0'
+    },
+    hintHeading: {
+      fontSize: '1.5em',
+      fontWeight: 600,
+      marginRight: '1em'
+    },
+    cardLink: {
+      textDecoration: 'none'
+    },
+    cardFlexbox: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'stretch',
+      overflow: 'hidden'
+    },
+    card: {
+      width: '10em',
+      height: '10em',
+      marginRight: '1em',
+      wordBreak: 'break-all',
+      padding: '1em'
+    },
+    cardTitle: {
+      margin: 0,
+      overflow: 'hidden',
+      display: '-webkit-box',
+      WebkitLineClamp: 3,
+      WebkitBoxOrient: 'vertical',
+      textOverflow: 'ellipsis'
+    },
+    cardIcon: {
+      width: '100%'
+    }
+  };
+};
 
 export default class ShotCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
+    fileView: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
@@ -21,7 +77,8 @@ export default class ShotCard extends PureComponent {
 
   state = {
     file: null,
-    completes: []
+    completes: [],
+    footer: null
   };
 
   static icon() {
@@ -55,24 +112,73 @@ export default class ShotCard extends PureComponent {
     }
   };
 
+  handleSetLinkObjects = (linkObjects = []) => {
+    const titles = linkObjects.map(obj => obj.linkText);
+    this.setState({
+      footer: this.renderFooter(uniq(titles))
+    });
+  };
+
+  renderFooter(titles) {
+    const styles = getStyle();
+    return titles.length > 0 ? (
+      <div>
+        <div style={styles.hintFlexbox}>
+          <div style={styles.hintHeading}>💡 ヒント</div>
+          <div>
+            <a href="http://scrapbox.io">Scrapbox</a> にとびます
+            (実験段階の機能)
+          </div>
+        </div>
+        <div style={styles.cardFlexbox}>
+          {titles
+            .map(title => (
+              <a
+                key={title}
+                href={scrapbox.url(title)}
+                target="_blank"
+                style={styles.cardLink}
+              >
+                <Card style={styles.card}>
+                  <div style={styles.cardTitle}>{title}</div>
+                  <img
+                    src={scrapbox.icon(title)}
+                    alt={`ページが存在しないか、アイコンが設定されていません`}
+                    style={styles.cardIcon}
+                  />
+                </Card>
+              </a>
+            ))
+            .concat(<div key="$lastcard" />)}
+        </div>
+      </div>
+    ) : null;
+  }
+
   render() {
     const { visible } = this.props.cardPropsBag;
 
     return (
-      <Card icon={ShotCard.icon()} {...this.props.cardPropsBag}>
-        {visible
-          ? <ShotPane
-              file={this.state.file}
-              completes={this.state.completes}
-              files={this.props.files}
-              findFile={this.props.findFile}
-              localization={this.props.localization}
-              getConfig={this.props.getConfig}
-              loadConfig={this.props.loadConfig}
-              globalEvent={this.props.globalEvent}
-            />
-          : null}
-      </Card>
+      <CardWindow
+        icon={ShotCard.icon()}
+        {...this.props.cardPropsBag}
+        footer={this.state.footer}
+      >
+        {visible ? (
+          <ShotPane
+            fileView={this.props.fileView}
+            file={this.state.file}
+            completes={this.state.completes}
+            files={this.props.files}
+            findFile={this.props.findFile}
+            localization={this.props.localization}
+            getConfig={this.props.getConfig}
+            loadConfig={this.props.loadConfig}
+            globalEvent={this.props.globalEvent}
+            handleSetLinkObjects={this.handleSetLinkObjects}
+          />
+        ) : null}
+      </CardWindow>
     );
   }
 }

@@ -8,8 +8,10 @@ export default function open(url, target, options) {
     options = [
       `width=${width}`,
       `height=${height}`,
-      `left=${Math.round((screen.width / 2) - (width / 2))}`,
-      `top=${screen.height > width ? Math.round((screen.height / 2) - (height / 2)) : 0}`,
+      `left=${Math.round(screen.width / 2 - width / 2)}`,
+      `top=${
+        screen.height > width ? Math.round(screen.height / 2 - height / 2) : 0
+      }`
     ].join();
   }
   const dialog = window.open(url, target, options);

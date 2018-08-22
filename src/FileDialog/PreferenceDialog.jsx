@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 
 import { Confirm, Abort } from './Buttons';
 
-const getStyles = (props, context) => {
+const getStyles = () => {
   return {
     root: {
       fontSize: 16
@@ -35,7 +35,7 @@ export default class RenameDialog extends Component {
   };
 
   confirm = () => {
-    const { onRequestClose, resolve, content } = this.props;
+    const { onRequestClose, resolve } = this.props;
     const { changed, name, type } = this.state;
 
     resolve(changed ? { name, type } : {});
@@ -51,15 +51,20 @@ export default class RenameDialog extends Component {
   };
 
   render() {
-    const { onRequestClose, content } = this.props;
+    const { onRequestClose } = this.props;
     const { changed, name, type } = this.state;
 
     const actions = [
-      <Abort onTouchTap={onRequestClose} />,
-      <Confirm label="Confirm" disabled={!changed} onTouchTap={this.confirm} />
+      <Abort key="close" onClick={onRequestClose} />,
+      <Confirm
+        key="confirm"
+        label="Confirm"
+        disabled={!changed}
+        onClick={this.confirm}
+      />
     ];
 
-    const { root, left, dropDown } = getStyles(this.props, this.context);
+    const { root, left } = getStyles(this.props, this.context);
 
     return (
       <Dialog

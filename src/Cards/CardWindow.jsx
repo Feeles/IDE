@@ -18,7 +18,9 @@ export default class CardWindow extends PureComponent {
     icon: PropTypes.node.isRequired,
     fit: PropTypes.bool.isRequired,
     width: PropTypes.number.isRequired,
-    showAll: PropTypes.bool.isRequired
+    disableCloseButton: PropTypes.bool.isRequired,
+    showAll: PropTypes.bool.isRequired,
+    footer: PropTypes.node
   };
 
   static defaultProps = {
@@ -26,10 +28,12 @@ export default class CardWindow extends PureComponent {
     actions: [],
     icon: null,
     fit: false,
-    width: 480
+    disableCloseButton: false, // ボタンで閉じられないようにする
+    width: 480,
+    footer: null
   };
 
-  componentWillReceiveProps(nextProps, nextState) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.visible !== nextProps.visible && nextProps.visible) {
       this.handleScroll();
     }
@@ -54,7 +58,7 @@ export default class CardWindow extends PureComponent {
   };
 
   render() {
-    const { isDragging, visible, fit, width, order } = this.props;
+    const { visible, fit, order } = this.props;
 
     const fitWrap = fit
       ? {
@@ -66,14 +70,16 @@ export default class CardWindow extends PureComponent {
 
     const styles = {
       root: {
+        position: 'relative',
         width: 0,
         order,
         boxSizing: 'border-box',
         maxWidth: '100%',
         maxHeight: '100%',
+        height: '100%',
         direction: 'ltr',
         flex: '0 0 auto',
-        flexBasis: visible ? width : 0,
+        flexBasis: visible ? '50%' : 0,
         padding: visible ? '16px 20px 16px 0' : 0,
         overflow: visible ? 'initial' : 'hidden',
         ...fitWrap
@@ -123,27 +129,22 @@ export default class CardWindow extends PureComponent {
           containerStyle={styles.innerContainer}
         >
           <div style={styles.header}>
-            <a style={styles.a} onTouchTap={this.handleScroll}>
+            <a style={styles.a} onClick={this.handleScroll}>
               {this.props.icon}
             </a>
             <div style={styles.blank} />
             {this.props.actions}
-            {this.props.showAll
-              ? <IconButton
-                  onTouchTap={this.closeCard}
-                  iconStyle={styles.close}
-                >
-                  <NavigationClose />
-                </IconButton>
-              : null}
+            {this.props.disableCloseButton ? null : (
+              <IconButton onClick={this.closeCard} iconStyle={styles.close}>
+                <NavigationClose />
+              </IconButton>
+            )}
           </div>
           {this.props.children}
         </Card>
+        {this.props.footer || null}
+        <div id={`${this.props.name}-BottomAnchor`} />
       </div>
     );
   }
-}
-
-function lowerCaseAtFirst(string) {
-  return string[0].toLowerCase() + string.substr(1);
 }

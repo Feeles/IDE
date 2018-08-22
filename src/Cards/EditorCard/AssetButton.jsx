@@ -16,7 +16,7 @@ export default class AssetButton extends PureComponent {
     descriptionMoreURL: PropTypes.string,
     label: PropTypes.string,
     image: PropTypes.string,
-    onTouchTap: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
   };
@@ -37,8 +37,8 @@ export default class AssetButton extends PureComponent {
     this.setState({ open: true, anchorEl: event.currentTarget });
   };
 
-  handleInsert = event => {
-    this.props.onTouchTap(this.props);
+  handleInsert = () => {
+    this.props.onClick(this.props);
   };
 
   render() {
@@ -117,10 +117,8 @@ export default class AssetButton extends PureComponent {
     }
 
     return (
-      <Paper style={styles.root} onTouchTap={this.handleOpen}>
-        <span style={styles.label}>
-          {this.props.label}
-        </span>
+      <Paper style={styles.root} onClick={this.handleOpen}>
+        <span style={styles.label}>{this.props.label}</span>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
@@ -130,32 +128,28 @@ export default class AssetButton extends PureComponent {
           <div style={styles.box}>
             <span style={styles.headerLabel}>
               {this.props.label}
-              {this.props.descriptionMoreURL
-                ? <a href={this.props.descriptionMoreURL} target="_blank">
-                    <ActionOpenInNew />
-                  </a>
-                : null}
+              {this.props.descriptionMoreURL ? (
+                <a href={this.props.descriptionMoreURL} target="_blank">
+                  <ActionOpenInNew />
+                </a>
+              ) : null}
             </span>
             <RaisedButton
               primary
               label={localization.editorCard.insert}
               icon={<ContentAdd />}
-              onTouchTap={this.handleInsert}
+              onClick={this.handleInsert}
             />
           </div>
-          <div style={styles.description}>
-            {this.props.description}
-          </div>
+          <div style={styles.description}>{this.props.description}</div>
           <code style={styles.code}>
-            <pre style={styles.pre}>
-              {this.props.code}
-            </pre>
+            <pre style={styles.pre}>{this.props.code}</pre>
           </code>
         </Popover>
         <FloatingActionButton
           mini
           style={styles.button}
-          onTouchTap={this.handleInsert}
+          onClick={this.handleInsert}
         >
           <ContentReply style={styles.icon} />
         </FloatingActionButton>

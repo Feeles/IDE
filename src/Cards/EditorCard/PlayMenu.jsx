@@ -134,13 +134,13 @@ export default class PlayMenu extends PureComponent {
           label={localization.editorCard.play}
           style={styles.button}
           icon={<AVPlayCircleOutline />}
-          onTouchTap={() => this.props.setLocation()}
+          onClick={() => this.props.setLocation()}
         />
         <FlatButton
           primary
           style={styles.dropDown}
           icon={<NavigationArrowDropDown />}
-          onTouchTap={this.handlePlay}
+          onClick={this.handlePlay}
         />
         <Popover
           open={this.state.open}

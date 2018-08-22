@@ -11,9 +11,10 @@ module.exports = {
   rules: {
     indent: ['off', 2],
     'linebreak-style': ['error', 'unix'],
-    quotes: ['error', 'single'],
+    quotes: ['error', 'single', { allowTemplateLiterals: true }],
     semi: ['error', 'always'],
     'no-console': 'off',
+    'no-debugger': 'off',
     'no-useless-escape': 'warn',
     'no-unused-vars': 'warn',
 

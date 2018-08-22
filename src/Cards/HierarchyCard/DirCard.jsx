@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
-import { transparent } from 'material-ui/styles/colors';
 import { NativeTypes } from 'react-dnd-html5-backend';
+import includes from 'lodash/includes';
 
 import FileCard from './FileCard';
-import getHierarchy from './getHierarchy';
-import DragTypes from 'utils/dragTypes';
+import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, context) => {
   const { isRoot, isDirOpened, isOver, dragSource } = props;
@@ -14,7 +13,7 @@ const getStyles = (props, context) => {
   const { palette, spacing, transitions } = context.muiTheme;
 
   const borderStyle =
-    isOver && !cd.files.includes(dragSource) ? 'dashed' : 'solid';
+    isOver && !includes(cd.files, dragSource) ? 'dashed' : 'solid';
   const borderWidth = 4;
 
   return {
@@ -122,7 +121,7 @@ class _DirCard extends PureComponent {
     const closerProps = {
       style: prepareStyles(closer),
       labelStyle: prepareStyles(closerLabel),
-      onTouchTap: () => handleDirToggle(cd)
+      onClick: () => handleDirToggle(cd)
     };
 
     return connectDropTarget(
@@ -131,16 +130,16 @@ class _DirCard extends PureComponent {
           cd,
           [].concat(
             isRoot ? null : <DirCloser key="closer" {...closerProps} />,
-            cd.dirs.map(dir =>
+            cd.dirs.map(dir => (
               <DirCard key={dir.path} dir={dir} {...transfer} />
-            ),
-            cd.files.map(file =>
+            )),
+            cd.files.map(file => (
               <FileCard key={file.key} file={file} {...transfer} />
-            )
+            ))
           ),
           <div
             style={prepareStyles(closed)}
-            onTouchTap={() => handleDirToggle(cd)}
+            onClick={() => handleDirToggle(cd)}
           >
             {cd.path}
           </div>
@@ -151,7 +150,7 @@ class _DirCard extends PureComponent {
 }
 
 const spec = {
-  drop(props, monitor, component) {
+  drop(props, monitor) {
     if (monitor.getDropResult()) {
       return;
     }
@@ -159,7 +158,7 @@ const spec = {
     switch (monitor.getItemType()) {
       case DragTypes.File:
         files
-          .filter(file => !props.dir.files.includes(file))
+          .filter(file => !includes(props.dir.files, file))
           .forEach(file => props.handleFileMove(file, props.dir));
         break;
       case NativeTypes.FILE:
@@ -183,7 +182,7 @@ export default DirCard;
 
 export const DirCloser = props => {
   return (
-    <div style={props.style} onTouchTap={props.onTouchTap}>
+    <div style={props.style} onClick={props.onClick}>
       <span style={props.labelStyle}>../</span>
     </div>
   );
@@ -191,6 +190,6 @@ export const DirCloser = props => {
 
 DirCloser.propTypes = {
   style: PropTypes.object.isRequired,
-  onTouchTap: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   labelStyle: PropTypes.object.isRequired
 };

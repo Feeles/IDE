@@ -2,14 +2,10 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
-import { Card, CardHeader, CardActions, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import { brown50 } from 'material-ui/styles/colors';
 
 import { personalDB, updateProject } from '../database/';
-import EditableLabel from 'jsx/EditableLabel';
 import { ProjectCard } from '../Menu/CloneDialog';
 
 export default class LaunchDialog extends PureComponent {
@@ -52,7 +48,7 @@ export default class LaunchDialog extends PureComponent {
       this.props.onRequestClose();
     } else {
       projects.sort((a, b) => b.updated - a.updated);
-      await new Promise((resolve, reject) => {
+      await new Promise(resolve => {
         this.setState({ projects }, resolve);
       });
     }
@@ -63,7 +59,6 @@ export default class LaunchDialog extends PureComponent {
       await this.props.launchIDE(project);
       this.props.onRequestClose();
     } catch (e) {
-      console.error(1, e);
       alert(e.message || e);
     }
   }
@@ -75,7 +70,6 @@ export default class LaunchDialog extends PureComponent {
       await updateProject(project.id, { title });
       await this.refreshState();
     } catch (e) {
-      console.error(e);
       if (typeof e === 'string') {
         alert(localization.cloneDialog[e]);
       }
@@ -131,12 +125,12 @@ export default class LaunchDialog extends PureComponent {
             primary
             label={localization.launchDialog.startNew}
             style={styles.button}
-            onTouchTap={this.props.fallback}
+            onClick={this.props.fallback}
           />
           {localization.common.or}
         </div>
         <div style={styles.container}>
-          {this.state.projects.map(item =>
+          {this.state.projects.map(item => (
             <ProjectCard
               key={item.id}
               project={item}
@@ -145,7 +139,7 @@ export default class LaunchDialog extends PureComponent {
               onProcessEnd={() => this.refreshState()}
               localization={localization}
             />
-          )}
+          ))}
         </div>
       </Dialog>
     );

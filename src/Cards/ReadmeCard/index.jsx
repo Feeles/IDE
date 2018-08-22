@@ -7,9 +7,8 @@ import MenuItem from 'material-ui/MenuItem';
 import MapsMap from 'material-ui/svg-icons/maps/map';
 
 import Readme from './Readme';
-import { SourceFile } from 'File/';
 import EditFile from '../EditFile';
-import shallowEqual from 'utils/shallowEqual';
+import shallowEqual from '../../utils/shallowEqual';
 
 export default class ReadmeCard extends PureComponent {
   static propTypes = {
@@ -134,9 +133,9 @@ export default class ReadmeCard extends PureComponent {
         underlineStyle={styles.underline}
         onChange={this.handleSelect}
       >
-        {markdowns.map(file =>
+        {markdowns.map(file => (
           <MenuItem key={file.key} value={file.key} primaryText={file.header} />
-        )}
+        ))}
       </DropDownMenu>
     ];
   }

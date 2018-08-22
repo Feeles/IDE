@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import FlatButton from 'material-ui/FlatButton';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 
-import { Tab } from 'ChromeTab/';
+import { Tab } from '../ChromeTab/';
 
 export default class EditFile extends PureComponent {
   static propTypes = {
@@ -32,7 +32,7 @@ export default class EditFile extends PureComponent {
         disabled={!this.props.fileKey}
         label={localization.common.editFile}
         icon={<EditorModeEdit />}
-        onTouchTap={this.handleEdit}
+        onClick={this.handleEdit}
       />
     );
   }

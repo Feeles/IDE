@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import ActionCopyright from 'material-ui/svg-icons/action/copyright';
 
-import shallowEqual from 'utils/shallowEqual';
-import uniqueBy from 'utils/uniqueBy';
+import shallowEqual from '../../utils/shallowEqual';
+import uniqueBy from '../../utils/uniqueBy';
 
 export default class CreditsCard extends PureComponent {
   static propTypes = {
