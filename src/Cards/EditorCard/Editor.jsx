@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { JSHINT } from 'jshint';
 import deepEqual from 'deep-equal';
@@ -54,7 +54,7 @@ CodeMirror.modeInfo.push({
 // segments の参照と現在の line との関係を一旦保持するマップ
 const segmentsLineMap = new WeakMap();
 
-export default class Editor extends PureComponent {
+export default class Editor extends Component {
   static propTypes = {
     file: PropTypes.object.isRequired,
     getFiles: PropTypes.func.isRequired,

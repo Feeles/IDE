@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const getStyles = (props, context) => {
@@ -23,7 +23,7 @@ const getStyles = (props, context) => {
   };
 };
 
-export default class ChromeTabContent extends PureComponent {
+export default class ChromeTabContent extends Component {
   static propTypes = {
     show: PropTypes.bool.isRequired,
     children: PropTypes.node.isRequired
