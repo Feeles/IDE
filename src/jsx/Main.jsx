@@ -31,7 +31,6 @@ import FileDialog, { SaveDialog } from '../FileDialog/';
 import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
-import Footer from './Footer';
 
 const DOWNLOAD_ENABLED =
   typeof document.createElement('a').download === 'string';
@@ -542,11 +541,6 @@ export default class Main extends Component {
           ref={this.handleContainerRef}
           globalEvent={this.state.globalEvent}
           disableScreenShotCard={this.props.disableScreenShotCard}
-        />
-        <Footer
-          deployURL={this.props.deployURL}
-          localization={localization}
-          showNotice={this.handleShowNotice}
         />
         <FileDialog
           ref={this.handleFileDialog}
