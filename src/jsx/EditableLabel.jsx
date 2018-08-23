@@ -98,20 +98,22 @@ export default class EditableLabel extends PureComponent {
     delete props.tapTwiceQuickly;
     delete props.openImmediately;
 
-    return isEditing
-      ? <TextField
-          {...props}
-          ref={ref => ref && (this.input = ref.input)}
-          onBlur={this.handleBlur}
-          onKeyPress={this.handleKeyPress}
-        />
-      : labelText
-          ? <div style={style} onClick={this.handleTouch}>
-              {labelText}
-            </div>
-          : <div style={hint} onClick={this.handleTouch}>
-              <ContentCreate color={secondaryTextColor} />
-              {this.props.tapTwiceQuickly}
-            </div>;
+    return isEditing ? (
+      <TextField
+        {...props}
+        ref={ref => ref && (this.input = ref.input)}
+        onBlur={this.handleBlur}
+        onKeyPress={this.handleKeyPress}
+      />
+    ) : labelText ? (
+      <div style={style} onClick={this.handleTouch}>
+        {labelText}
+      </div>
+    ) : (
+      <div style={hint} onClick={this.handleTouch}>
+        <ContentCreate color={secondaryTextColor} />
+        {this.props.tapTwiceQuickly}
+      </div>
+    );
   }
 }

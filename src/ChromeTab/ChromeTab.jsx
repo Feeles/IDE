@@ -21,7 +21,7 @@ const getStyles = (props, context, state) => {
     MaxTabWidth,
     Math.max(MinTabWidth, containerWidth / props.tabs.length)
   );
-  const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
+  const blank = tabHeight / Math.tan(((90 - TabSkewX) / 180) * Math.PI);
   const backgroundColor = fade(
     isSelected ? palette.canvasColor : emphasize(palette.canvasColor),
     1

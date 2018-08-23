@@ -219,16 +219,16 @@ export default class CloneDialog extends PureComponent {
                   </Card>
                 ]
               ) : (
-                  <RaisedButton
-                    fullWidth
-                    key={'new_project'}
-                    label={localization.cloneDialog.saveInNew}
-                    style={styles.card}
-                    icon={<ContentAddCircle />}
-                    disabled={this.state.processing}
-                    onClick={this.handleCreate}
-                  />
-                )}
+                <RaisedButton
+                  fullWidth
+                  key={'new_project'}
+                  label={localization.cloneDialog.saveInNew}
+                  style={styles.card}
+                  icon={<ContentAddCircle />}
+                  disabled={this.state.processing}
+                  onClick={this.handleCreate}
+                />
+              )}
             </div>
           </Tab>
           <Tab label={localization.cloneDialog.loadTitle}>
@@ -238,23 +238,23 @@ export default class CloneDialog extends PureComponent {
                 <CircularProgress size={120} />
               </div>
             ) : (
-                <div style={styles.container}>
-                  {projects.map(item => (
-                    <ProjectCard
-                      key={item.id}
-                      project={item}
-                      showURL={this.state.showAllUrls}
-                      launchIDE={this.props.launchIDE}
-                      processing={this.state.processing}
-                      onProcessStart={this.handleProcessStart}
-                      onProcessEnd={this.handleProcessEnd}
-                      requestTitleChange={this.handleTitleChange}
-                      requestProjectSet={this.props.setProject}
-                      localization={localization}
-                    />
-                  ))}
-                </div>
-              )}
+              <div style={styles.container}>
+                {projects.map(item => (
+                  <ProjectCard
+                    key={item.id}
+                    project={item}
+                    showURL={this.state.showAllUrls}
+                    launchIDE={this.props.launchIDE}
+                    processing={this.state.processing}
+                    onProcessStart={this.handleProcessStart}
+                    onProcessEnd={this.handleProcessEnd}
+                    requestTitleChange={this.handleTitleChange}
+                    requestProjectSet={this.props.setProject}
+                    localization={localization}
+                  />
+                ))}
+              </div>
+            )}
           </Tab>
         </Tabs>
       </Dialog>
@@ -278,10 +278,10 @@ export class ProjectCard extends PureComponent {
   static defaultProps = {
     showURL: false,
     processing: false,
-    onProcessStart: () => { },
-    onProcessEnd: () => { },
-    requestProjectSet: () => { },
-    requestTitleChange: () => { }
+    onProcessStart: () => {},
+    onProcessEnd: () => {},
+    requestProjectSet: () => {},
+    requestTitleChange: () => {}
   };
 
   handleLoad = () => {

@@ -6,3 +6,4 @@
 /src/lib/require.js
 package.json
 src/jsx/ReactPopout.jsx
+src/jsx/MDReactComponent.jsx

@@ -86,26 +86,24 @@ export default class Filename extends PureComponent {
 
     return (
       <div style={prepareStyles(styles.root)}>
-        <span style={prepareStyles(styles.path)}>
-          {path}
-        </span>
-        {isEditing
-          ? <TextField
-              id={name}
-              defaultValue={plane}
-              ref={this.handleInput}
-              style={styles.textField}
-              onClick={this.handleTextFieldTap}
-            />
-          : <span
-              onClick={this.handleDoubleTap}
-              style={prepareStyles(styles.plane)}
-            >
-              {plane}
-            </span>}
-        <span style={prepareStyles(styles.ext)}>
-          {ext}
-        </span>
+        <span style={prepareStyles(styles.path)}>{path}</span>
+        {isEditing ? (
+          <TextField
+            id={name}
+            defaultValue={plane}
+            ref={this.handleInput}
+            style={styles.textField}
+            onClick={this.handleTextFieldTap}
+          />
+        ) : (
+          <span
+            onClick={this.handleDoubleTap}
+            style={prepareStyles(styles.plane)}
+          >
+            {plane}
+          </span>
+        )}
+        <span style={prepareStyles(styles.ext)}>{ext}</span>
       </div>
     );
   }

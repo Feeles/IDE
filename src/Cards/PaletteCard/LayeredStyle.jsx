@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 
 export default function LayeredStyle(props) {
   if (isEmpty(props.styles)) {
-    return (
-      <div {...props}>
-        {props.children}
-      </div>
-    );
+    return <div {...props}>{props.children}</div>;
   }
 
   const styles = [props.style].concat(props.styles).filter(s => s);

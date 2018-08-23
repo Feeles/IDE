@@ -7,8 +7,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
-import NavigationArrowDropDown
-  from 'material-ui/svg-icons/navigation/arrow-drop-down';
+import NavigationArrowDropDown from 'material-ui/svg-icons/navigation/arrow-drop-down';
 import { fade } from 'material-ui/utils/colorManipulator';
 
 export default class PlayMenu extends PureComponent {

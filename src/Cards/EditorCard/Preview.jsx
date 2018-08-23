@@ -52,9 +52,10 @@ export default class Preview extends PureComponent {
         const ratio = size =>
           Math.max(size.height, 1) / Math.max(size.width, 1);
         const screenRect = this.container.getBoundingClientRect();
-        const scale = ratio(screenRect) > ratio(image)
-          ? screenRect.width / image.width
-          : screenRect.height / image.height;
+        const scale =
+          ratio(screenRect) > ratio(image)
+            ? screenRect.width / image.width
+            : screenRect.height / image.height;
         this.setState({ scale: scale * 0.9 });
       };
       image.src = file.blobURL;
@@ -66,9 +67,11 @@ export default class Preview extends PureComponent {
 
     const { root, img } = getStyles(this.props, this.context, this.state);
 
-    const content = file.is('image')
-      ? <img src={file.blobURL} alt={file.name} style={img} />
-      : file.is('audio') ? <audio src={file.blobURL} controls /> : null;
+    const content = file.is('image') ? (
+      <img src={file.blobURL} alt={file.name} style={img} />
+    ) : file.is('audio') ? (
+      <audio src={file.blobURL} controls />
+    ) : null;
 
     const creditStyle = {
       position: 'absolute',
