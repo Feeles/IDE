@@ -66,8 +66,6 @@ export default class Main extends Component {
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     setMuiTheme: PropTypes.func.isRequired,
-    deployURL: PropTypes.string,
-    setDeployURL: PropTypes.func.isRequired,
     onChange: PropTypes.func,
     onMessage: PropTypes.func,
     onThumbnailChange: PropTypes.func,
@@ -90,10 +88,6 @@ export default class Main extends Component {
 
     project: this.props.project,
     notice: null,
-    // OAuth 認証によって得られる UUID.
-    // あくまで発行しているのは feeles.com である
-    // この値はユーザが見えるところには表示してはならない
-    oAuthId: null,
 
     cards: cardStateDefault,
     // Advanced Mode
@@ -202,14 +196,7 @@ export default class Main extends Component {
         const project = await createProject(
           this.state.fileView.files.map(item => item.serialize())
         );
-        // add deployURL if exists
-        const { deployURL } = this.props;
-        if (deployURL) {
-          const nextProject = await updateProject(project.id, { deployURL });
-          await this.setProject(nextProject);
-        } else {
-          await this.setProject(project);
-        }
+        await this.setProject(project);
       } catch (e) {
         console.log(e);
         if (typeof e === 'string' && e in localization.cloneDialog) {
@@ -227,8 +214,7 @@ export default class Main extends Component {
               files: this.state.fileView.files,
               project: this.state.project,
               setProject: this.setProject,
-              launchIDE: this.props.launchIDE,
-              deployURL: this.props.deployURL
+              launchIDE: this.props.launchIDE
             });
           }
         }
@@ -447,11 +433,6 @@ export default class Main extends Component {
       notice
     });
 
-  setOAuthId = (oAuthId = null) =>
-    this.setStatePromise({
-      oAuthId
-    });
-
   toggleShowAll = () => this.setStatePromise({ showAll: !this.state.showAll });
 
   openFileDialog = () => console.info('openFileDialog has not be declared');
@@ -496,10 +477,6 @@ export default class Main extends Component {
             setProject={this.setProject}
             updateCard={this.updateCard}
             launchIDE={this.props.launchIDE}
-            deployURL={this.props.deployURL}
-            setDeployURL={this.props.setDeployURL}
-            oAuthId={this.state.oAuthId}
-            setOAuthId={this.setOAuthId}
             showAll={this.state.showAll}
             toggleShowAll={this.toggleShowAll}
             globalEvent={this.state.globalEvent}
@@ -522,7 +499,6 @@ export default class Main extends Component {
           togglePopout={this.handleTogglePopout}
           showNotice={this.handleShowNotice}
           deleteFile={this.deleteFile}
-          oAuthId={this.state.oAuthId}
           ref={this.handleContainerRef}
           globalEvent={this.state.globalEvent}
           disableScreenShotCard={this.props.disableScreenShotCard}

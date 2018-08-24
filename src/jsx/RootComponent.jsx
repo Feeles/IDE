@@ -47,8 +47,6 @@ class RootComponent extends Component {
     title: PropTypes.string,
     // An URL string as JSON file provided
     jsonURL: PropTypes.string,
-    // An URL string to continuous deploying
-    deployURL: PropTypes.string,
     // Handle file change
     onChange: PropTypes.func,
     // Handle message from iframe
@@ -74,8 +72,6 @@ class RootComponent extends Component {
     localization: null,
     muiTheme: getCustomTheme({}),
     openDialog: false,
-    // continuous deploying URL (if null, do first deployment)
-    deployURL: null,
     retryCount: 0,
     errorText: null
   };
@@ -88,13 +84,6 @@ class RootComponent extends Component {
       .concat(navigator.languages || navigator.language); // browser settings
 
     this.setLocalization(langs);
-
-    const deployInfo = document.querySelector('script[x-feeles-deploy]');
-    if (deployInfo) {
-      this.setState({
-        deployURL: deployInfo.getAttribute('x-feeles-deploy')
-      });
-    }
 
     if (Array.isArray(seeds)) {
       this.setState({
@@ -133,8 +122,7 @@ class RootComponent extends Component {
     this.setState({
       last: length,
       files: [],
-      project,
-      deployURL: project.deployURL
+      project
     });
 
     query.each(value => {
@@ -344,8 +332,6 @@ class RootComponent extends Component {
             setLocalization={this.setLocalization}
             muiTheme={this.state.muiTheme}
             setMuiTheme={this.setMuiTheme}
-            deployURL={this.state.deployURL}
-            setDeployURL={deployURL => this.setState({ deployURL })}
             onChange={this.props.onChange}
             onMessage={this.props.onMessage}
             onThumbnailChange={this.props.onThumbnailChange}

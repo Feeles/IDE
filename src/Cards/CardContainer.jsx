@@ -41,8 +41,6 @@ export default class CardContainer extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
-    deployURL: PropTypes.string,
-    oAuthId: PropTypes.string,
     globalEvent: PropTypes.object.isRequired,
     disableScreenShotCard: PropTypes.bool.isRequired
   };
@@ -158,8 +156,6 @@ export default class CardContainer extends PureComponent {
       togglePopout: this.props.togglePopout,
       toggleFullScreen: this.props.toggleFullScreen,
       deleteFile: this.props.deleteFile,
-      deployURL: this.props.deployURL,
-      oAuthId: this.props.oAuthId,
       showNotice: this.props.showNotice,
       updateCard: this.props.updateCard,
       tabs: this.props.tabs,

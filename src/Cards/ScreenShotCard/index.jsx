@@ -32,7 +32,6 @@ export default class ScreenShotCard extends PureComponent {
     showNotice: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
-    deployURL: PropTypes.string,
     localization: PropTypes.object.isRequired,
     updateCard: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
@@ -49,15 +48,6 @@ export default class ScreenShotCard extends PureComponent {
     selected: null,
     uploading: null
   };
-
-  get search() {
-    try {
-      const { pathname } = new URL(this.props.deployURL);
-      return pathname.split('/').pop();
-    } catch (e) {
-      return null;
-    }
-  }
 
   async componentDidMount() {
     const { globalEvent } = this.props;

@@ -46,9 +46,7 @@ export async function createProject(serializedFiles = []) {
     updated: timestamp,
     url: location.origin + location.pathname,
     CORE_VERSION: '',
-    CORE_CDN_URL: 'https://unpkg.com/feeles-ide@latest/umd/index.js',
-    // Remote project (product) deployment URL<string>
-    deployURL: null
+    CORE_CDN_URL: 'https://unpkg.com/feeles-ide@latest/umd/index.js'
   };
   project.id = await personalDB.projects.add(project);
   // Insert files of project

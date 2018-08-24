@@ -28,8 +28,7 @@ export default class CloneDialog extends PureComponent {
     localization: PropTypes.object.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
-    launchIDE: PropTypes.func.isRequired,
-    deployURL: PropTypes.string
+    launchIDE: PropTypes.func.isRequired
   };
 
   state = {
@@ -74,11 +73,6 @@ export default class CloneDialog extends PureComponent {
       );
       await this.props.setProject(project);
       await this.refreshState(project);
-
-      const { deployURL } = this.props;
-      if (deployURL) {
-        await updateProject(project.id, { deployURL });
-      }
     } catch (e) {
       console.log(e);
       if (typeof e === 'string' && e in this.props.localization.cloneDialog) {
