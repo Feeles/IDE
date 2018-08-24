@@ -99,7 +99,7 @@ export default {
     index: '目次'
   },
   shotCard: {
-    title: 'クイック',
+    title: 'マドウショ',
     shoot: '書きかえたら、',
     button: 'コードをおくる',
     restore: '元にもどす'
@@ -142,7 +142,7 @@ export default {
     title: 'カラー'
   },
   monitorCard: {
-    title: 'ガメン',
+    title: 'ゲーム',
     popout: 'ポップアウト'
   },
   customizeCard: {
