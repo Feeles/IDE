@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import ActionCopyright from 'material-ui/svg-icons/action/copyright';
 
 import shallowEqual from '../../utils/shallowEqual';
 import uniqueBy from '../../utils/uniqueBy';
@@ -16,10 +15,6 @@ export default class CreditsCard extends PureComponent {
   state = {
     credits: this.getCredits()
   };
-
-  static icon() {
-    return <ActionCopyright />;
-  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.files !== this.props.files) {
@@ -54,7 +49,10 @@ export default class CreditsCard extends PureComponent {
 
   render() {
     return (
-      <Card icon={CreditsCard.icon()} {...this.props.cardPropsBag}>
+      <Card
+        icon={this.props.localization.creditsCard.title}
+        {...this.props.cardPropsBag}
+      >
         {this.state.credits.map(this.renderCredit)}
       </Card>
     );

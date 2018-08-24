@@ -6,7 +6,6 @@ import Popover from 'material-ui/Popover';
 import Paper from 'material-ui/Paper';
 import { convertColorToString } from 'material-ui/utils/colorManipulator';
 import { transparent, fullWhite } from 'material-ui/styles/colors';
-import ImagePalette from 'material-ui/svg-icons/image/palette';
 import { ChromePicker, TwitterPicker } from 'react-color';
 
 import LayeredStyle from './LayeredStyle';
@@ -97,10 +96,6 @@ export default class PaletteCard extends PureComponent {
     limited: false
   };
 
-  static icon() {
-    return <ImagePalette />;
-  }
-
   handleRectClick = (event, key, limited = false) => {
     event.stopPropagation();
     const anchorEl = event.target;
@@ -157,7 +152,10 @@ export default class PaletteCard extends PureComponent {
     styles.label = prepareStyles(styles.label);
 
     return (
-      <Card icon={PaletteCard.icon()} {...this.props.cardPropsBag}>
+      <Card
+        icon={this.props.localization.paletteCard.title}
+        {...this.props.cardPropsBag}
+      >
         <CardActions>
           <LayeredStyle
             styles={[

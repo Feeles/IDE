@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
-import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import includes from 'lodash/includes';
 
@@ -31,10 +30,6 @@ export default class HierarchyCard extends PureComponent {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired
   };
-
-  static icon() {
-    return <FileFolderOpen />;
-  }
 
   state = {
     openedPaths: [''],
@@ -155,7 +150,11 @@ export default class HierarchyCard extends PureComponent {
     };
 
     return (
-      <Card icon={HierarchyCard.icon()} {...this.props.cardPropsBag} fit>
+      <Card
+        icon={this.props.localization.hierarchyCard.title}
+        {...this.props.cardPropsBag}
+        fit
+      >
         <SearchBar
           files={files}
           filterRef={filter => this.setState({ filter })}

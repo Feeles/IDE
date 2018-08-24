@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
-import ContentCreate from 'material-ui/svg-icons/content/create';
 import AVPlayCircleOutline from 'material-ui/svg-icons/av/play-circle-outline';
 
 import Card from '../CardWindow';
@@ -62,10 +61,6 @@ export default class EditorCard extends PureComponent {
     // { [Tab.file.key]: Doc }
     currentDoc: {}
   };
-
-  static icon() {
-    return <ContentCreate />;
-  }
 
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired
@@ -179,7 +174,11 @@ export default class EditorCard extends PureComponent {
   render() {
     if (!this.props.tabs.length) {
       return (
-        <Card icon={EditorCard.icon()} {...this.props.cardPropsBag} fit>
+        <Card
+          icon={this.props.localization.editorCard.title}
+          {...this.props.cardPropsBag}
+          fit
+        >
           {this.renderBackground()}
         </Card>
       );
@@ -226,7 +225,12 @@ export default class EditorCard extends PureComponent {
     const selectedTab = this.props.tabs.find(item => item.isSelected);
 
     return (
-      <Card icon={EditorCard.icon()} {...cardPropsBag} fit width={640}>
+      <Card
+        icon={this.props.localization.editorCard.title}
+        {...cardPropsBag}
+        fit
+        width={640}
+      >
         <div style={styles.tabContainer} ref={ref => (this.tabContainer = ref)}>
           {tabs}
         </div>

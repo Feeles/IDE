@@ -6,7 +6,6 @@ import Card from '../CardWindow';
 import { CardActions } from 'material-ui/Card';
 import { GridList, GridTile } from 'material-ui/GridList';
 import FlatButton from 'material-ui/FlatButton';
-import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { emphasize, fade } from 'material-ui/utils/colorManipulator';
 
@@ -42,10 +41,6 @@ export default class ScreenShotCard extends PureComponent {
   static contextTypes = {
     muiTheme: PropTypes.object.isRequired
   };
-
-  static icon() {
-    return <ImagePhotoCamera />;
-  }
 
   static fileName = 'feeles/capture.json';
 
@@ -268,7 +263,10 @@ export default class ScreenShotCard extends PureComponent {
       this.props.getConfig('ogp')['og:image'] === this.state.cache[selected];
 
     return (
-      <Card icon={ScreenShotCard.icon()} {...this.props.cardPropsBag}>
+      <Card
+        icon={this.props.localization.screenShotCard.title}
+        {...this.props.cardPropsBag}
+      >
         <GridList
           cellHeight={180}
           style={styles.root}

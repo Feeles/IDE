@@ -10,7 +10,6 @@ import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
 import ActionSettings from 'material-ui/svg-icons/action/settings';
 import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
 import DeviceDevices from 'material-ui/svg-icons/device/devices';
-import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
 import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 
 import Monitor from './Monitor';
@@ -62,10 +61,6 @@ export default class MonitorCard extends PureComponent {
     frameHeight: 150,
     processing: false
   };
-
-  static icon() {
-    return <HardwareDesktopWindows />;
-  }
 
   componentDidMount() {
     try {
@@ -190,7 +185,7 @@ export default class MonitorCard extends PureComponent {
 
     return (
       <Card
-        icon={MonitorCard.icon()}
+        icon={this.props.localization.monitorCard.title}
         {...this.props.cardPropsBag}
         actions={actions}
         disableCloseButton

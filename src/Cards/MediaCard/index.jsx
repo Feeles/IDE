@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import ReactPlayer from 'react-player';
 
 const defaultPlayerState = {
@@ -26,10 +25,6 @@ export default class MediaCard extends PureComponent {
   state = {
     playerState: {}
   };
-
-  static icon() {
-    return <AvMusicVideo />;
-  }
 
   componentDidMount() {
     const { globalEvent } = this.props;
@@ -68,7 +63,10 @@ export default class MediaCard extends PureComponent {
     };
 
     return (
-      <Card icon={MediaCard.icon()} {...this.props.cardPropsBag}>
+      <Card
+        icon={this.props.localization.mediaCard.title}
+        {...this.props.cardPropsBag}
+      >
         {this.state.playerState.url ? (
           <ReactPlayer {...playerState} />
         ) : (

@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import LinearProgress from 'material-ui/LinearProgress';
 import AvStop from 'material-ui/svg-icons/av/stop';
 import { red50, red500 } from 'material-ui/styles/colors';
+import ContentReply from 'material-ui/svg-icons/content/reply';
 
 import { SourceFile } from '../../File/';
 import ShotCard from './';
@@ -212,7 +213,7 @@ export default class ShotPane extends PureComponent {
           <RaisedButton
             primary
             label={localization.shotCard.button}
-            icon={this.state.shooting ? <AvStop /> : ShotCard.icon()}
+            icon={this.state.shooting ? <AvStop /> : <ContentReply />}
             labelPosition="before"
             disabled={this.state.shooting}
             onClick={this.handleShot}

@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from 'material-ui/Card';
 import CardWindow from '../CardWindow';
-import ContentReply from 'material-ui/svg-icons/content/reply';
 import uniq from 'lodash/uniq';
 
 import ShotPane from './ShotPane';
@@ -81,10 +80,6 @@ export default class ShotCard extends PureComponent {
     footer: null
   };
 
-  static icon() {
-    return <ContentReply />;
-  }
-
   componentDidMount() {
     const { globalEvent } = this.props;
     globalEvent.on('message.code', this.handleCode);
@@ -161,7 +156,7 @@ export default class ShotCard extends PureComponent {
 
     return (
       <CardWindow
-        icon={ShotCard.icon()}
+        icon={this.props.localization.shotCard.title}
         {...this.props.cardPropsBag}
         footer={this.state.footer}
       >

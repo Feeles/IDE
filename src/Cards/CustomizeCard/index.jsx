@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import { CardHeader } from 'material-ui/Card';
-import ActionSettingsApplications from 'material-ui/svg-icons/action/settings-applications';
 
 import { SourceFile } from '../../File/';
 import EditFile from '../EditFile';
@@ -22,10 +21,6 @@ export default class CustomizeCard extends PureComponent {
   state = {
     cssFileKey: ''
   };
-
-  static icon() {
-    return <ActionSettingsApplications />;
-  }
 
   componentDidMount() {
     (async () => {
@@ -87,7 +82,10 @@ export default class CustomizeCard extends PureComponent {
     const { localization } = this.props;
 
     return (
-      <Card icon={CustomizeCard.icon()} {...this.props.cardPropsBag}>
+      <Card
+        icon={this.props.localization.customizeCard.title}
+        {...this.props.cardPropsBag}
+      >
         {this.renderBlock(
           localization.customizeCard.style,
           'http://codemirror.net/doc/manual.html#styling',

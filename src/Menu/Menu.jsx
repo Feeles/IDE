@@ -19,10 +19,12 @@ import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import ArrowDropRight from 'material-ui/svg-icons/navigation-arrow-drop-right';
 import { emphasize } from 'material-ui/utils/colorManipulator';
+
 import TwitterIcon from '../utils/TwitterIcon';
 import FacebookIcon from '../utils/FacebookIcon';
 import GoogleIcon from '../utils/GoogleIcon';
 
+import icons from './icons';
 import { acceptedLanguages } from '../localization/';
 import CloneDialog from './CloneDialog';
 import MetaDialog from './MetaDialog';
@@ -105,8 +107,6 @@ const getStyles = (props, context) => {
 
 export default class Menu extends PureComponent {
   static propTypes = {
-    cards: PropTypes.object.isRequired,
-    cardIcons: PropTypes.object,
     files: PropTypes.array.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -505,29 +505,19 @@ export default class Menu extends PureComponent {
               </IconButton>
             }
           />
+
           {this.state.open
-            ? Object.entries(this.props.cards)
-                .map(([name, card]) => ({
-                  name,
-                  ...card
-                }))
-                .map(item => (
-                  <MenuItem
-                    key={item.name}
-                    primaryText={
-                      localization[lowerCaseAtFirst(item.name)].title
-                    }
-                    leftIcon={
-                      this.props.cardIcons && this.props.cardIcons[item.name]
-                        ? this.props.cardIcons[item.name]()
-                        : null
-                    }
-                    onClick={() => {
-                      this.props.updateCard(item.name, { visible: true });
-                      this.handleToggleDrawer();
-                    }}
-                  />
-                ))
+            ? icons.map((item, index) => (
+                <MenuItem
+                  key={index}
+                  primaryText={localization[lowerCaseAtFirst(item.name)].title}
+                  leftIcon={item.icon}
+                  onClick={() => {
+                    this.props.updateCard(item.name, { visible: true });
+                    this.handleToggleDrawer();
+                  }}
+                />
+              ))
             : null}
           <MenuItem
             primaryText={localization.menu.version}

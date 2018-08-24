@@ -96,7 +96,6 @@ export default class Main extends Component {
     oAuthId: null,
 
     cards: cardStateDefault,
-    cardIcons: null,
     // Advanced Mode
     showAll: false,
     // card =(emit)=> globalEvent =(on)=> card
@@ -458,18 +457,6 @@ export default class Main extends Component {
   openFileDialog = () => console.info('openFileDialog has not be declared');
   handleFileDialog = ref => ref && (this.openFileDialog = ref.open);
 
-  handleContainerRef = ref => {
-    if (!this.state.cardIcons && ref) {
-      const cardIcons = {};
-      for (const [name, instance] of Object.entries(ref.cardRefs)) {
-        if (instance.constructor.icon) {
-          cardIcons[name] = instance.constructor.icon;
-        }
-      }
-      this.setState({ cardIcons });
-    }
-  };
-
   render() {
     if (this.componentWillMountCompat) {
       // render よりも先に呼ばれるライフサイクルメソッドがないので,
@@ -507,7 +494,6 @@ export default class Main extends Component {
             saveAs={this.saveAs}
             project={this.state.project}
             setProject={this.setProject}
-            cards={this.state.cards}
             updateCard={this.updateCard}
             launchIDE={this.props.launchIDE}
             deployURL={this.props.deployURL}
@@ -516,7 +502,6 @@ export default class Main extends Component {
             setOAuthId={this.setOAuthId}
             showAll={this.state.showAll}
             toggleShowAll={this.toggleShowAll}
-            cardIcons={this.state.cardIcons}
             globalEvent={this.state.globalEvent}
           />
         )}
