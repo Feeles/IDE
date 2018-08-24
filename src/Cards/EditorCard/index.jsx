@@ -22,7 +22,7 @@ const getStyles = (props, context) => {
       alignItems: 'flex-end',
       height: 32,
       paddingRight: 7,
-      paddingLeft: 40,
+      paddingLeft: 80,
       zIndex: 10
     },
     tabContentContainer: {
