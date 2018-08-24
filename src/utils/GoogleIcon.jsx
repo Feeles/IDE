@@ -1,14 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import SvgIcon from 'material-ui/SvgIcon';
 
-GoogleIcon.propTypes = {
-  style: PropTypes.object.isRequired
-};
+GoogleIcon.propTypes = {};
 
 export default function GoogleIcon(props) {
   const style = {
-    ...props.style,
     width: 48,
     height: 48,
     margin: 0
