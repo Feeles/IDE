@@ -138,10 +138,5 @@ export default {
   },
   mediaCard: {
     title: 'Media'
-  },
-  screenShotCard: {
-    title: 'ScreenShot',
-    coverImage: 'Set as cover image',
-    set: 'Cover image is successfully set! 📸 '
   }
 };

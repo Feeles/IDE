@@ -48,9 +48,5 @@ export default {
   CustomizeCard: {
     visible: false,
     order: 9
-  },
-  ScreenShotCard: {
-    visible: false,
-    order: 10
   }
 };

@@ -11,7 +11,6 @@ import CreditsCard from './CreditsCard/';
 import ShotCard from './ShotCard/';
 import EditorCard from './EditorCard/';
 import HierarchyCard from './HierarchyCard/';
-import ScreenShotCard from './ScreenShotCard/';
 import * as MonitorTypes from '../utils/MonitorTypes';
 
 export default class CardContainer extends PureComponent {
@@ -41,8 +40,7 @@ export default class CardContainer extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
-    globalEvent: PropTypes.object.isRequired,
-    disableScreenShotCard: PropTypes.bool.isRequired
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -221,13 +219,6 @@ export default class CardContainer extends PureComponent {
           {...cardProps}
           cardPropsBag={bag('HierarchyCard')}
         />
-        {this.props.disableScreenShotCard ? null : (
-          <ScreenShotCard
-            ref={ref => (this.cardRefs.ScreenShotCard = ref)}
-            {...cardProps}
-            cardPropsBag={bag('ScreenShotCard')}
-          />
-        )}
       </div>
     );
   }

@@ -137,10 +137,5 @@ export default {
   },
   mediaCard: {
     title: 'メディア'
-  },
-  screenShotCard: {
-    title: 'スクショ',
-    coverImage: 'カバー画像にする',
-    set: 'カバー画像がセットされました! 📸 '
   }
 };

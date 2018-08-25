@@ -54,14 +54,11 @@ class RootComponent extends Component {
     // Handle screenshot image change
     onThumbnailChange: PropTypes.func,
     // For using external DB
-    disableLocalSave: PropTypes.bool,
-    // For using external thumbnail manager
-    disableScreenShotCard: PropTypes.bool
+    disableLocalSave: PropTypes.bool
   };
 
   static defaultProps = {
-    disableLocalSave: false,
-    disableScreenShotCard: false
+    disableLocalSave: false
   };
 
   state = {
@@ -336,7 +333,6 @@ class RootComponent extends Component {
             onMessage={this.props.onMessage}
             onThumbnailChange={this.props.onThumbnailChange}
             disableLocalSave={this.props.disableLocalSave}
-            disableScreenShotCard={this.props.disableScreenShotCard}
           />
         )}
       </MuiThemeProvider>

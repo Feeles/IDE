@@ -4,7 +4,6 @@ import ContentReply from 'material-ui/svg-icons/content/reply';
 import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
 import ContentCreate from 'material-ui/svg-icons/content/create';
 import MapsMap from 'material-ui/svg-icons/maps/map';
-import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
 import ImagePalette from 'material-ui/svg-icons/image/palette';
 import ActionTouchApp from 'material-ui/svg-icons/action/touch-app';
 import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
@@ -31,10 +30,6 @@ export default [
   {
     name: 'ReadmeCard',
     icon: <MapsMap />
-  },
-  {
-    name: 'ScreenShotCard',
-    icon: <ImagePhotoCamera />
   },
   {
     name: 'PaletteCard',

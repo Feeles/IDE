@@ -34,10 +34,6 @@
             "fileName": "README.md"
         }
     },
-    "ScreenShotCard": {
-        "visible": false,
-        "order": 6
-    },
     "PaletteCard": {
         "visible": false,
         "order": 7

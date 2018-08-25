@@ -69,8 +69,7 @@ export default class Main extends Component {
     onChange: PropTypes.func,
     onMessage: PropTypes.func,
     onThumbnailChange: PropTypes.func,
-    disableLocalSave: PropTypes.bool.isRequired,
-    disableScreenShotCard: PropTypes.bool.isRequired
+    disableLocalSave: PropTypes.bool.isRequired
   };
 
   static contextTypes = {
@@ -501,7 +500,6 @@ export default class Main extends Component {
           deleteFile={this.deleteFile}
           ref={this.handleContainerRef}
           globalEvent={this.state.globalEvent}
-          disableScreenShotCard={this.props.disableScreenShotCard}
         />
         <FileDialog
           ref={this.handleFileDialog}
