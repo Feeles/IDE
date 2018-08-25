@@ -8,7 +8,6 @@ import { red50, red500 } from 'material-ui/styles/colors';
 import ContentReply from 'material-ui/svg-icons/content/reply';
 
 import { SourceFile } from '../../File/';
-import ShotCard from './';
 import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 

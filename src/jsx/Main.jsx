@@ -22,7 +22,7 @@ const tryParseJSON = (text, defaultValue = {}) => {
   }
 };
 
-import { FileView, createProject, updateProject } from '../database/';
+import { FileView, createProject } from '../database/';
 import { SourceFile, configs } from '../File/';
 import codemirrorStyle from '../js/codemirrorStyle';
 import * as MonitorTypes from '../utils/MonitorTypes';
