@@ -64,17 +64,6 @@ export default {
     openProject: 'Open this project',
     startNew: 'Start new'
   },
-  metaDialog: {
-    back: 'Back',
-    next: 'Next',
-    creator: 'Creator Information',
-    title: 'Title',
-    description: 'description',
-    creatorConfirm: 'Filling is optional. Do not write personal information!',
-    nickname: 'Nickname',
-    homepage: 'Homepage (If any)',
-    twitterId: 'Twitter ID (If any)'
-  },
   readmeCard: {
     title: 'Getting Started',
     index: 'Index'

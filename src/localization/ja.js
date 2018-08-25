@@ -58,17 +58,6 @@ export default {
     openProject: 'このプロジェクトを開く',
     startNew: 'あたらしく始める'
   },
-  metaDialog: {
-    back: 'もどる',
-    next: '次へ',
-    creator: 'クリエータについて',
-    title: 'タイトル',
-    description: '説明文',
-    creatorConfirm: 'ここは書かなくてもOK! 本名はぜったいに書かないで下さい',
-    nickname: 'ニックネーム',
-    homepage: 'ホームページ (もしあれば)',
-    twitterId: 'ツイッター ID (もしあれば)'
-  },
   addDialog: {
     title: 'ファイルを追加する',
     fileName: 'ファイル名',

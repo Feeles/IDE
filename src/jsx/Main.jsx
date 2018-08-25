@@ -123,8 +123,6 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
-    document.title = this.getConfig('ogp')['og:title'] || '';
-
     // 定期的にスクリーンショットを撮る
     if (this.props.onThumbnailChange) {
       const { globalEvent } = this.state;
@@ -219,8 +217,6 @@ export default class Main extends Component {
         }
       });
     }
-
-    document.title = this.getConfig('ogp')['og:title'] || '';
   }
 
   componentWillUnmount() {
