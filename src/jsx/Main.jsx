@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
 import Snackbar from 'material-ui/Snackbar';
 import jsyaml from 'js-yaml';
-import _ from 'lodash';
 
 const tryParseYAML = (text, defaultValue = {}) => {
   try {
@@ -28,7 +27,6 @@ import codemirrorStyle from '../js/codemirrorStyle';
 import * as MonitorTypes from '../utils/MonitorTypes';
 import Menu from '../Menu/';
 import FileDialog, { SaveDialog } from '../FileDialog/';
-import cardStateDefault from '../Cards/defaultState';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
 
@@ -59,6 +57,8 @@ const getStyle = (props, state, context) => {
 
 export default class Main extends Component {
   static propTypes = {
+    cardProps: PropTypes.object.isRequired,
+    setCardProps: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
     project: PropTypes.object,
@@ -87,8 +87,6 @@ export default class Main extends Component {
 
     project: this.props.project,
     notice: null,
-
-    cards: cardStateDefault,
     // Advanced Mode
     showAll: false,
     // card =(emit)=> globalEvent =(on)=> card
@@ -113,13 +111,6 @@ export default class Main extends Component {
 
     const feelesrc = this.loadConfig('feelesrc');
     this.props.setMuiTheme(feelesrc);
-
-    const card = this.findFile('feeles/card.json');
-    if (card) {
-      const cards = _.merge(this.state.cards, card.json);
-      // ここで setState するのはアンチパターン
-      this.setState({ cards });
-    }
   }
 
   componentDidMount() {
@@ -337,7 +328,7 @@ export default class Main extends Component {
         );
       }
 
-      this.updateCard('EditorCard', { visible: true });
+      this.setCardVisibility('EditorCard', true);
     });
 
   closeTab = tab =>
@@ -417,12 +408,6 @@ export default class Main extends Component {
     }));
   };
 
-  updateCard = (name, props) => {
-    const nextCard = { ...this.state.cards };
-    nextCard[name] = { ...nextCard[name], ...props };
-    return this.setStatePromise({ cards: nextCard });
-  };
-
   handleShowNotice = notice =>
     this.setStatePromise({
       notice
@@ -432,6 +417,22 @@ export default class Main extends Component {
 
   openFileDialog = () => console.info('openFileDialog has not be declared');
   handleFileDialog = ref => ref && (this.openFileDialog = ref.open);
+
+  setCardVisibility = (name, visible = false) => {
+    this.props.setCardProps(prevProps => {
+      const current = prevProps[name];
+      if (!current) {
+        throw TypeError(`Property ${name} is not found in cardProps`);
+      }
+      return {
+        ...prevProps,
+        [name]: {
+          ...current,
+          visible
+        }
+      };
+    });
+  };
 
   render() {
     if (this.componentWillMountCompat) {
@@ -470,7 +471,7 @@ export default class Main extends Component {
             saveAs={this.saveAs}
             project={this.state.project}
             setProject={this.setProject}
-            updateCard={this.updateCard}
+            setCardVisibility={this.setCardVisibility}
             launchIDE={this.props.launchIDE}
             showAll={this.state.showAll}
             toggleShowAll={this.toggleShowAll}
@@ -479,8 +480,8 @@ export default class Main extends Component {
         )}
         <CardContainer
           {...commonProps}
-          cards={this.state.cards}
-          updateCard={this.updateCard}
+          cardProps={this.props.cardProps}
+          setCardVisibility={this.setCardVisibility}
           tabs={this.state.tabs}
           selectTab={this.selectTab}
           closeTab={this.closeTab}

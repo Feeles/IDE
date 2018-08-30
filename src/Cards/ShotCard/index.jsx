@@ -65,7 +65,7 @@ export default class ShotCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -92,10 +92,10 @@ export default class ShotCard extends PureComponent {
       // feeles.openCode()
       const file = this.props.findFile(value);
       this.setState({ file });
-      this.props.updateCard('ShotCard', { visible: true });
+      this.props.setCardVisibility('ShotCard', true);
     } else {
       // feeles.closeCode()
-      this.props.updateCard('ShotCard', { visible: false });
+      this.props.setCardVisibility('ShotCard', false);
     }
   };
 

@@ -19,8 +19,8 @@ export default class ReadmeCard extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     setLocation: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired,
-    cards: PropTypes.object.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
+    cardProps: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
@@ -35,7 +35,7 @@ export default class ReadmeCard extends PureComponent {
     globalEvent.on('message.readme', this.handleReadme);
 
     try {
-      const { init } = this.props.cards.ReadmeCard;
+      const { init } = this.props.cardProps.ReadmeCard;
       if (init && init.fileName) {
         this.setState({
           selectedFile: this.props.findFile(init.fileName)
@@ -75,10 +75,10 @@ export default class ReadmeCard extends PureComponent {
         throw new Error(`Not Found Error: feeles.openReamde("${value}")`);
       }
       this.setState({ selectedFile });
-      this.props.updateCard('ReadmeCard', { visible: true });
+      this.props.setCardVisibility('ReadmeCard', true);
     } else {
       // feeles.closeReadme()
-      this.props.updateCard('ReadmeCard', { visible: false });
+      this.props.setCardVisibility('ReadmeCard', false);
     }
   };
 

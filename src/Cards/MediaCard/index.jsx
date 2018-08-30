@@ -18,7 +18,7 @@ const defaultPlayerState = {
 export default class MediaCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
@@ -49,10 +49,10 @@ export default class MediaCard extends PureComponent {
     if (value) {
       // feeles.openMedia()
       this.setState({ playerState: value });
-      this.props.updateCard('MediaCard', { visible: true });
+      this.props.setCardVisibility('MediaCard', true);
     } else {
       // feeles.closeMedia()
-      this.props.updateCard('MediaCard', { visible: false });
+      this.props.setCardVisibility('MediaCard', false);
     }
   };
 

@@ -63,7 +63,7 @@ export default class Menu extends PureComponent {
     setLocalization: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
     toggleShowAll: PropTypes.func.isRequired,
@@ -222,7 +222,7 @@ export default class Menu extends PureComponent {
                   primaryText={localization[lowerCaseAtFirst(item.name)].title}
                   leftIcon={item.icon}
                   onClick={() => {
-                    this.props.updateCard(item.name, { visible: true });
+                    this.props.setCardVisibility(item.name, true);
                     this.handleToggleDrawer();
                   }}
                 />

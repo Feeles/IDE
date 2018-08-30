@@ -11,10 +11,10 @@ export default class CardWindow extends PureComponent {
     name: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
     order: PropTypes.number.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
     scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired,
-    cards: PropTypes.object.isRequired,
+    cardProps: PropTypes.object.isRequired,
     icon: PropTypes.node.isRequired,
     fit: PropTypes.bool.isRequired,
     width: PropTypes.number.isRequired,
@@ -50,7 +50,7 @@ export default class CardWindow extends PureComponent {
   }
 
   closeCard = () => {
-    this.props.updateCard(this.props.name, { visible: false });
+    this.props.setCardVisibility(this.props.name, false);
   };
 
   handleScroll = () => {
