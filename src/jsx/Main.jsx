@@ -466,6 +466,7 @@ export default class Main extends Component {
         {disableLocalSave ? null : (
           <Menu
             {...commonProps}
+            cardProps={this.props.cardProps}
             setLocalization={this.props.setLocalization}
             openFileDialog={this.openFileDialog}
             saveAs={this.saveAs}

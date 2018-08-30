@@ -12,6 +12,8 @@ import ActionLanguage from 'material-ui/svg-icons/action/language';
 import ActionHistory from 'material-ui/svg-icons/action/history';
 import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
+import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
 import icons from './icons';
 import { acceptedLanguages } from '../localization/';
@@ -57,13 +59,14 @@ const getStyles = (props, context) => {
 
 export default class Menu extends PureComponent {
   static propTypes = {
+    cardProps: PropTypes.object.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
-    setCardVisibility: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
     toggleShowAll: PropTypes.func.isRequired,
@@ -121,6 +124,27 @@ export default class Menu extends PureComponent {
   componentDidMount() {
     this.props.globalEvent.on('message.menuTitle', this.handleSetTitle);
   }
+
+  renderMenuItem = (item, index) => {
+    const { localization } = this.props;
+    const lowerCase = lowerCaseAtFirst(item.name);
+    const localized = localization[lowerCase];
+    const visible = this.props.cardProps[item.name].visible;
+    return (
+      <MenuItem
+        key={index}
+        primaryText={localized ? localized.title : item.name}
+        leftIcon={item.icon}
+        rightIcon={
+          visible ? <ToggleCheckBox /> : <ToggleCheckBoxOutlineBlank />
+        }
+        onClick={() => {
+          this.props.setCardVisibility(item.name, !visible);
+          this.handleToggleDrawer();
+        }}
+      />
+    );
+  };
 
   render() {
     const { localization, setLocalization } = this.props;
@@ -215,19 +239,7 @@ export default class Menu extends PureComponent {
               </IconButton>
             }
           />
-          {this.state.open
-            ? icons.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  primaryText={localization[lowerCaseAtFirst(item.name)].title}
-                  leftIcon={item.icon}
-                  onClick={() => {
-                    this.props.setCardVisibility(item.name, true);
-                    this.handleToggleDrawer();
-                  }}
-                />
-              ))
-            : null}
+          {this.state.open ? icons.map(this.renderMenuItem) : null}
           <MenuItem
             primaryText={localization.menu.version}
             leftIcon={<ActionHistory />}
