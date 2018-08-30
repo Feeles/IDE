@@ -188,7 +188,6 @@ export default class MonitorCard extends PureComponent {
         icon={this.props.localization.monitorCard.title}
         {...this.props.cardPropsBag}
         actions={actions}
-        disableCloseButton
       >
         <CardMedia style={styles.flexible}>
           <div style={styles.parent}>

@@ -127,7 +127,6 @@ export default class CardContainer extends PureComponent {
       name,
       visible: this.props.cardProps[name].visible,
       order: this.props.cardProps[name].order,
-      setCardVisibility: this.props.setCardVisibility,
       scrollToCard: this.scrollToCard,
       cardProps: this.props.cardProps,
       showAll: this.props.showAll

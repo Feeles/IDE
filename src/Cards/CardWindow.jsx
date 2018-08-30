@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 const HeaderHeight = 32;
 
@@ -11,14 +9,12 @@ export default class CardWindow extends PureComponent {
     name: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
     order: PropTypes.number.isRequired,
-    setCardVisibility: PropTypes.func.isRequired,
     scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired,
     cardProps: PropTypes.object.isRequired,
     icon: PropTypes.node.isRequired,
     fit: PropTypes.bool.isRequired,
     width: PropTypes.number.isRequired,
-    disableCloseButton: PropTypes.bool.isRequired,
     showAll: PropTypes.bool.isRequired,
     footer: PropTypes.node
   };
@@ -28,7 +24,6 @@ export default class CardWindow extends PureComponent {
     actions: [],
     icon: null,
     fit: false,
-    disableCloseButton: false, // ボタンで閉じられないようにする
     width: 480,
     footer: null
   };
@@ -48,10 +43,6 @@ export default class CardWindow extends PureComponent {
     }
     return props;
   }
-
-  closeCard = () => {
-    this.props.setCardVisibility(this.props.name, false);
-  };
 
   handleScroll = () => {
     this.props.scrollToCard(this.props.name);
@@ -115,9 +106,6 @@ export default class CardWindow extends PureComponent {
       },
       a: {
         display: 'inherit'
-      },
-      close: {
-        transform: 'scale(0.8)'
       }
     };
 
@@ -134,11 +122,6 @@ export default class CardWindow extends PureComponent {
             </a>
             <div style={styles.blank} />
             {this.props.actions}
-            {this.props.disableCloseButton ? null : (
-              <IconButton onClick={this.closeCard} iconStyle={styles.close}>
-                <NavigationClose />
-              </IconButton>
-            )}
           </div>
           {this.props.children}
         </Card>
