@@ -1,33 +1,32 @@
 export default {
   MonitorCard: {
     visible: true,
-    order: 0,
+    order: 1,
     frame: {
       src: 'index.html',
-      size: [800, 600]
+      size: [480, 320]
     }
   },
   ShotCard: {
     visible: false,
-    order: 1,
+    order: 2,
     init: {
       fileName: 'main.js'
     }
-  },
-  EditorCard: {
-    visible: false,
-    order: 2
   },
   MediaCard: {
     visible: false,
     order: 3
   },
-  CreditsCard: {
-    visible: false,
-    order: 4
+  EditorCard: {
+    visible: true,
+    order: 4,
+    init: {
+      fileName: 'main.js'
+    }
   },
   ReadmeCard: {
-    visible: false,
+    visible: true,
     order: 5,
     init: {
       fileName: 'README.md'
@@ -35,18 +34,22 @@ export default {
   },
   PaletteCard: {
     visible: false,
-    order: 6
-  },
-  HierarchyCard: {
-    visible: false,
     order: 7
   },
   EnvCard: {
     visible: false,
     order: 8
   },
+  HierarchyCard: {
+    visible: true,
+    order: 9
+  },
   CustomizeCard: {
     visible: false,
-    order: 9
+    order: 10
+  },
+  CreditsCard: {
+    visible: false,
+    order: 11
   }
 };
