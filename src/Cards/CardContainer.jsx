@@ -43,60 +43,33 @@ export default class CardContainer extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
-  state = {
-    // smooth scroll のターゲット
-    scrollTarget: null
-  };
-
   // Card Element の参照を保持するオブジェクト
   cardRefs = {};
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
+  componentDidUpdate(prevProps) {
+    // visible が false から true にかわったらスクロールする
+    if (prevProps.cardProps !== this.props.cardProps) {
+      for (const name of Object.keys(this.props.cardProps)) {
+        const prev = prevProps.cardProps[name];
+        const { visible } = this.props.cardProps[name];
+        if ((!prev || !prev.visible) && visible) {
+          this.scrollToCard(name);
+        }
+      }
+    }
+  }
 
   scrollToCard = name => {
     // そのカードにスクロールする
     const scrollTarget = document.getElementById(name);
     if (scrollTarget) {
-      const startSmoothScroll = !this.state.scrollTarget;
-      this.setState({ scrollTarget }, () => {
-        if (startSmoothScroll) {
-          this.scroll();
-        }
+      scrollTarget.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest'
       });
     }
   };
-
-  scroll() {
-    // Scroll into view (shallow) element
-    const { scrollTarget } = this.state;
-    // Is enable transitions?
-    const { transitions } = this.context.muiTheme;
-
-    if (scrollTarget) {
-      const rect = scrollTarget.getBoundingClientRect();
-      const offset = 16;
-      let difference = 0;
-      if (rect.left < offset) {
-        difference = rect.left - offset;
-      } else if (rect.right > window.innerWidth) {
-        difference = rect.right - window.innerWidth;
-      }
-
-      if (transitions.create() !== 'none' && Math.abs(difference) > 1) {
-        const sign = Math.sign(difference);
-        // smooth scroll
-        scrollTarget.parentNode.scrollLeft += difference / 5 + sign * 5;
-        requestAnimationFrame(() => {
-          this.scroll();
-        });
-      } else {
-        scrollTarget.parentNode.scrollLeft += difference;
-        this.setState({ scrollTarget: null });
-      }
-    }
-  }
 
   render() {
     // (暫定) 背景画像
@@ -127,7 +100,6 @@ export default class CardContainer extends PureComponent {
       name,
       visible: this.props.cardProps[name].visible,
       order: this.props.cardProps[name].order,
-      scrollToCard: this.scrollToCard,
       cardProps: this.props.cardProps,
       showAll: this.props.showAll
     });

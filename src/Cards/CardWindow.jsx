@@ -9,7 +9,6 @@ export default class CardWindow extends PureComponent {
     name: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
     order: PropTypes.number.isRequired,
-    scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired,
     cardProps: PropTypes.object.isRequired,
     icon: PropTypes.node.isRequired,
@@ -28,12 +27,6 @@ export default class CardWindow extends PureComponent {
     footer: null
   };
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.visible !== this.props.visible && this.props.visible) {
-      this.handleScroll();
-    }
-  }
-
   get cardProps() {
     const props = {
       ...this.props
@@ -43,10 +36,6 @@ export default class CardWindow extends PureComponent {
     }
     return props;
   }
-
-  handleScroll = () => {
-    this.props.scrollToCard(this.props.name);
-  };
 
   render() {
     const { visible, fit, order } = this.props;
@@ -96,16 +85,8 @@ export default class CardWindow extends PureComponent {
         overflowX: 'auto',
         overflowY: 'hidden'
       },
-      title: {
-        flex: '0 0 auto',
-        marginLeft: 6,
-        fontSize: '.8rem'
-      },
       blank: {
         flex: '1 1 auto'
-      },
-      a: {
-        display: 'inherit'
       }
     };
 
@@ -117,9 +98,7 @@ export default class CardWindow extends PureComponent {
           containerStyle={styles.innerContainer}
         >
           <div style={styles.header}>
-            <a style={styles.a} onClick={this.handleScroll}>
-              {this.props.icon}
-            </a>
+            <span>{this.props.icon}</span>
             <div style={styles.blank} />
             {this.props.actions}
           </div>
