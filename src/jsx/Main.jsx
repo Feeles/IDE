@@ -3,6 +3,13 @@ import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
 import Snackbar from 'material-ui/Snackbar';
 import jsyaml from 'js-yaml';
+import AppBar from 'material-ui/AppBar';
+import IconButton from 'material-ui/IconButton';
+import MenuItem from 'material-ui/MenuItem';
+import Drawer from 'material-ui/Drawer';
+import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
+import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
 const tryParseYAML = (text, defaultValue = {}) => {
   try {
@@ -29,6 +36,7 @@ import Menu from '../Menu/';
 import FileDialog, { SaveDialog } from '../FileDialog/';
 import CardContainer from '../Cards/CardContainer';
 import CloneDialog from '../Menu/CloneDialog';
+import icons from './icons';
 
 const DOWNLOAD_ENABLED =
   typeof document.createElement('a').download === 'string';
@@ -59,6 +67,8 @@ export default class Main extends Component {
   static propTypes = {
     cardProps: PropTypes.object.isRequired,
     setCardProps: PropTypes.func.isRequired,
+    openSidebar: PropTypes.bool.isRequired,
+    mini: PropTypes.bool.isRequired,
     files: PropTypes.array.isRequired,
     rootStyle: PropTypes.object.isRequired,
     project: PropTypes.object,
@@ -77,6 +87,7 @@ export default class Main extends Component {
   };
 
   state = {
+    openSidebar: false,
     monitorType: MonitorTypes.Card,
 
     fileView: new FileView(this.props.files),
@@ -152,6 +163,13 @@ export default class Main extends Component {
   }
 
   async componentDidUpdate(prevProps, prevState) {
+    // mini の場合, openSidebar の props に追従 (stateless)
+    if (this.props.mini && this.props.openSidebar !== this.state.openSidebar) {
+      this.setState({
+        openSidebar: this.props.openSidebar
+      });
+    }
+
     const { localization, project } = this.props;
 
     if (prevProps.project !== project) {
@@ -434,6 +452,35 @@ export default class Main extends Component {
     });
   };
 
+  toggleSidebar = () => {
+    if (this.props.mini) return; // mini の場合, stateless
+    this.setState({
+      openSidebar: !this.state.openSidebar
+    });
+  };
+
+  renderMenuItem = (item, index) => {
+    const { localization } = this.props;
+
+    const lowerCase =
+      item.name.substr(0, 1).toLowerCase() + item.name.substr(1);
+    const localized = localization[lowerCase];
+    const visible = this.props.cardProps[item.name].visible;
+    return (
+      <MenuItem
+        key={index}
+        primaryText={localized ? localized.title : item.name}
+        leftIcon={item.icon}
+        rightIcon={
+          visible ? <ToggleCheckBox /> : <ToggleCheckBoxOutlineBlank />
+        }
+        onClick={() => {
+          this.setCardVisibility(item.name, !visible);
+        }}
+      />
+    );
+  };
+
   render() {
     if (this.componentWillMountCompat) {
       // render よりも先に呼ばれるライフサイクルメソッドがないので,
@@ -443,7 +490,7 @@ export default class Main extends Component {
       return null;
     }
 
-    const { localization, disableLocalSave } = this.props;
+    const { localization, mini } = this.props;
     const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
@@ -463,10 +510,11 @@ export default class Main extends Component {
 
     return (
       <div style={styles.root}>
-        {disableLocalSave ? null : (
+        {mini ? null : (
           <Menu
             {...commonProps}
             cardProps={this.props.cardProps}
+            toggleSidebar={this.toggleSidebar}
             setLocalization={this.props.setLocalization}
             openFileDialog={this.openFileDialog}
             saveAs={this.saveAs}
@@ -479,6 +527,22 @@ export default class Main extends Component {
             globalEvent={this.state.globalEvent}
           />
         )}
+        <Drawer
+          open={this.state.openSidebar}
+          docked={this.props.mini}
+          onRequestChange={this.toggleSidebar}
+        >
+          {this.props.mini ? null : (
+            <AppBar
+              iconElementLeft={
+                <IconButton onClick={this.toggleSidebar}>
+                  <NavigationArrowBack />
+                </IconButton>
+              }
+            />
+          )}
+          {icons.map(this.renderMenuItem)}
+        </Drawer>
         <CardContainer
           {...commonProps}
           cardProps={this.props.cardProps}

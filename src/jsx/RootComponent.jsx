@@ -45,6 +45,10 @@ class RootComponent extends Component {
     cardProps: PropTypes.object,
     // Handler of changing cardProps
     onCardPropsChange: PropTypes.func,
+    // Toggle left menubar
+    openSidebar: PropTypes.bool,
+    // Disappear top navbar
+    mini: PropTypes.bool,
     // Root element
     rootElement: PropTypes.object.isRequired,
     // Array of seed object
@@ -64,6 +68,8 @@ class RootComponent extends Component {
   };
 
   static defaultProps = {
+    openSidebar: false,
+    mini: false,
     disableLocalSave: false
   };
 
@@ -370,6 +376,8 @@ class RootComponent extends Component {
           <Main
             cardProps={this.state.cardProps}
             setCardProps={this.setCardProps}
+            openSidebar={this.props.openSidebar}
+            mini={this.props.mini}
             files={this.state.files}
             rootElement={rootElement}
             rootStyle={getComputedStyle(rootElement)}
