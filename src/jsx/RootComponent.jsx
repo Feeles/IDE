@@ -20,6 +20,7 @@ import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
+import defaultCardProps from '../Cards/defaultState';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =
@@ -40,6 +41,15 @@ const seedToFile = seed => {
 
 class RootComponent extends Component {
   static propTypes = {
+    // Props of cardProps
+    cardProps: PropTypes.object,
+    // Handler of changing cardProps
+    onCardPropsChange: PropTypes.func,
+    // Toggle left menubar
+    openSidebar: PropTypes.bool,
+    // Disappear top navbar
+    mini: PropTypes.bool,
+    // Root element
     rootElement: PropTypes.object.isRequired,
     // Array of seed object
     seeds: PropTypes.array,
@@ -58,10 +68,13 @@ class RootComponent extends Component {
   };
 
   static defaultProps = {
+    openSidebar: false,
+    mini: false,
     disableLocalSave: false
   };
 
   state = {
+    cardProps: null,
     last: Infinity,
     files: [],
     // An object has project info
@@ -73,8 +86,31 @@ class RootComponent extends Component {
     errorText: null
   };
 
+  componentDidUpdate(prevProps) {
+    // onCardPropsChange があるのに cardProps がないということは
+    // 上位 component が props を変更してもここには来ないということなので, エラー
+    if (this.props.onCardPropsChange && !this.props.cardProps) {
+      throw new TypeError(
+        'Props onCardPropsChange was given but missing cardProps!'
+      );
+    }
+
+    // 基本的に cardProps は props で与えられたものをそのまま使う (Stateless)
+    // onCardPropsChange が与えられなかった場合のみ内部的に state を変える
+    if (prevProps.cardProps !== this.props.cardProps) {
+      this.setState({
+        cardProps: this.props.cardProps
+      });
+    }
+  }
+
   componentDidMount() {
     const { title, seeds, disableLocalSave } = this.props;
+
+    // cardProps が与えられなかった場合は defaultCardProps をセットする
+    this.setState({
+      cardProps: this.props.cardProps || defaultCardProps
+    });
 
     const langs = []
       .concat(new URLSearchParams(location.search).getAll('lang')) // ?lang=ll_CC
@@ -236,6 +272,24 @@ class RootComponent extends Component {
       openDialog: false
     });
 
+  /**
+   * cardProps を変更する場合ここを通す
+   * @param prevPropsToProps {Function} prevProps => props
+   */
+  setCardProps = prevPropsToProps => {
+    if (this.props.onCardPropsChange) {
+      // onCardPropsChange がある場合, 変更は上位の component に委ねる
+      // cardProps が与えられていれば RootComponent はステートレスにふるまう
+      const nextProps = prevPropsToProps(this.props.cardProps);
+      this.props.onCardPropsChange(nextProps);
+    } else {
+      // onCardPropsChange がない場合, ここで一時的に state を変更する
+      this.setState({
+        cardProps: prevPropsToProps(this.state.cardProps)
+      });
+    }
+  };
+
   renderLoading = () => {
     const { last, files, errorText, retryCount } = this.state;
 
@@ -318,8 +372,12 @@ class RootComponent extends Component {
       <MuiThemeProvider muiTheme={this.state.muiTheme}>
         {this.state.last > 0 ? (
           this.renderLoading()
-        ) : (
+        ) : this.state.cardProps ? (
           <Main
+            cardProps={this.state.cardProps}
+            setCardProps={this.setCardProps}
+            openSidebar={this.props.openSidebar}
+            mini={this.props.mini}
             files={this.state.files}
             rootElement={rootElement}
             rootStyle={getComputedStyle(rootElement)}
@@ -334,7 +392,7 @@ class RootComponent extends Component {
             onThumbnailChange={this.props.onThumbnailChange}
             disableLocalSave={this.props.disableLocalSave}
           />
-        )}
+        ) : null}
       </MuiThemeProvider>
     );
   }

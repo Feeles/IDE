@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 const HeaderHeight = 32;
 
@@ -11,14 +9,11 @@ export default class CardWindow extends PureComponent {
     name: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
     order: PropTypes.number.isRequired,
-    updateCard: PropTypes.func.isRequired,
-    scrollToCard: PropTypes.func.isRequired,
     actions: PropTypes.array.isRequired,
-    cards: PropTypes.object.isRequired,
+    cardProps: PropTypes.object.isRequired,
     icon: PropTypes.node.isRequired,
     fit: PropTypes.bool.isRequired,
     width: PropTypes.number.isRequired,
-    disableCloseButton: PropTypes.bool.isRequired,
     showAll: PropTypes.bool.isRequired,
     footer: PropTypes.node
   };
@@ -28,16 +23,9 @@ export default class CardWindow extends PureComponent {
     actions: [],
     icon: null,
     fit: false,
-    disableCloseButton: false, // ボタンで閉じられないようにする
     width: 480,
     footer: null
   };
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.visible !== this.props.visible && this.props.visible) {
-      this.handleScroll();
-    }
-  }
 
   get cardProps() {
     const props = {
@@ -48,14 +36,6 @@ export default class CardWindow extends PureComponent {
     }
     return props;
   }
-
-  closeCard = () => {
-    this.props.updateCard(this.props.name, { visible: false });
-  };
-
-  handleScroll = () => {
-    this.props.scrollToCard(this.props.name);
-  };
 
   render() {
     const { visible, fit, order } = this.props;
@@ -105,19 +85,8 @@ export default class CardWindow extends PureComponent {
         overflowX: 'auto',
         overflowY: 'hidden'
       },
-      title: {
-        flex: '0 0 auto',
-        marginLeft: 6,
-        fontSize: '.8rem'
-      },
       blank: {
         flex: '1 1 auto'
-      },
-      a: {
-        display: 'inherit'
-      },
-      close: {
-        transform: 'scale(0.8)'
       }
     };
 
@@ -129,16 +98,9 @@ export default class CardWindow extends PureComponent {
           containerStyle={styles.innerContainer}
         >
           <div style={styles.header}>
-            <a style={styles.a} onClick={this.handleScroll}>
-              {this.props.icon}
-            </a>
+            <span>{this.props.icon}</span>
             <div style={styles.blank} />
             {this.props.actions}
-            {this.props.disableCloseButton ? null : (
-              <IconButton onClick={this.closeCard} iconStyle={styles.close}>
-                <NavigationClose />
-              </IconButton>
-            )}
           </div>
           {this.props.children}
         </Card>

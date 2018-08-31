@@ -5,15 +5,11 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
-import Drawer from 'material-ui/Drawer';
 import Toggle from 'material-ui/Toggle';
 import FileDownload from 'material-ui/svg-icons/file/file-download';
 import ActionLanguage from 'material-ui/svg-icons/action/language';
-import ActionHistory from 'material-ui/svg-icons/action/history';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 
-import icons from './icons';
 import { acceptedLanguages } from '../localization/';
 import CloneDialog from './CloneDialog';
 
@@ -57,13 +53,15 @@ const getStyles = (props, context) => {
 
 export default class Menu extends PureComponent {
   static propTypes = {
+    cardProps: PropTypes.object.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
+    toggleSidebar: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
     toggleShowAll: PropTypes.func.isRequired,
@@ -109,11 +107,6 @@ export default class Menu extends PureComponent {
     });
   };
 
-  handleToggleDrawer = () =>
-    this.setState({
-      open: !this.state.open
-    });
-
   handleSetTitle = event => {
     this.setState({ overrideTitle: event.data.value });
   };
@@ -152,7 +145,7 @@ export default class Menu extends PureComponent {
         titleStyle={{ flex: null }}
         iconStyleLeft={styles.leftIcon}
         iconElementLeft={
-          <IconButton onClick={this.handleToggleDrawer}>
+          <IconButton onClick={this.props.toggleSidebar}>
             <NavigationMenu />
           </IconButton>
         }
@@ -203,45 +196,7 @@ export default class Menu extends PureComponent {
             />
           ))}
         </IconMenu>
-        <Drawer
-          open={this.state.open}
-          docked={false}
-          onRequestChange={open => this.setState({ open })}
-        >
-          <AppBar
-            iconElementLeft={
-              <IconButton onClick={this.handleToggleDrawer}>
-                <NavigationArrowBack />
-              </IconButton>
-            }
-          />
-          {this.state.open
-            ? icons.map((item, index) => (
-                <MenuItem
-                  key={index}
-                  primaryText={localization[lowerCaseAtFirst(item.name)].title}
-                  leftIcon={item.icon}
-                  onClick={() => {
-                    this.props.updateCard(item.name, { visible: true });
-                    this.handleToggleDrawer();
-                  }}
-                />
-              ))
-            : null}
-          <MenuItem
-            primaryText={localization.menu.version}
-            leftIcon={<ActionHistory />}
-            onClick={() => {
-              this.handleAbout();
-              this.handleToggleDrawer();
-            }}
-          />
-        </Drawer>
       </AppBar>
     );
   }
-}
-
-function lowerCaseAtFirst(string) {
-  return string[0].toLowerCase() + string.substr(1);
 }

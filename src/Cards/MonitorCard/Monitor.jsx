@@ -78,7 +78,6 @@ const getStyle = (props, context) => {
 export default class Monitor extends PureComponent {
   static propTypes = {
     files: PropTypes.array.isRequired,
-    cards: PropTypes.object.isRequired,
     isPopout: PropTypes.bool.isRequired,
     isFullScreen: PropTypes.bool.isRequired,
     reboot: PropTypes.bool.isRequired,

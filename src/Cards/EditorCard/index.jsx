@@ -52,8 +52,8 @@ export default class EditorCard extends PureComponent {
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
     scrollToCard: PropTypes.func.isRequired,
-    cards: PropTypes.object.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    cardProps: PropTypes.object.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
@@ -82,7 +82,7 @@ export default class EditorCard extends PureComponent {
     globalEvent.on('message.editor', this.handleEditor);
     // init.fileName があるとき Mount 後に selectTab しておく
     try {
-      const { init } = this.props.cards.EditorCard;
+      const { init } = this.props.cardProps.EditorCard;
       if (init && init.fileName) {
         const getFile = () => this.props.findFile(init.fileName);
         this.props.selectTab(new Tab({ getFile }));
@@ -103,10 +103,10 @@ export default class EditorCard extends PureComponent {
       // feeles.openEditor()
       const getFile = () => this.props.findFile(value);
       this.props.selectTab(new Tab({ getFile }));
-      this.props.updateCard('EditorCard', { visible: true });
+      this.props.setCardVisibility('EditorCard', true);
     } else {
       // feeles.closeEditor()
-      this.props.updateCard('EditorCard', { visible: false });
+      this.props.setCardVisibility('EditorCard', false);
     }
   };
 

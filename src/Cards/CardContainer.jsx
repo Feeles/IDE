@@ -16,10 +16,10 @@ import * as MonitorTypes from '../utils/MonitorTypes';
 export default class CardContainer extends PureComponent {
   static propTypes = {
     fileView: PropTypes.object.isRequired,
-    cards: PropTypes.object.isRequired,
+    cardProps: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
-    updateCard: PropTypes.func.isRequired,
+    setCardVisibility: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
@@ -43,60 +43,33 @@ export default class CardContainer extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
-  state = {
-    // smooth scroll のターゲット
-    scrollTarget: null
-  };
-
   // Card Element の参照を保持するオブジェクト
   cardRefs = {};
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
+  componentDidUpdate(prevProps) {
+    // visible が false から true にかわったらスクロールする
+    if (prevProps.cardProps !== this.props.cardProps) {
+      for (const name of Object.keys(this.props.cardProps)) {
+        const prev = prevProps.cardProps[name];
+        const { visible } = this.props.cardProps[name];
+        if ((!prev || !prev.visible) && visible) {
+          this.scrollToCard(name);
+        }
+      }
+    }
+  }
 
   scrollToCard = name => {
     // そのカードにスクロールする
     const scrollTarget = document.getElementById(name);
     if (scrollTarget) {
-      const startSmoothScroll = !this.state.scrollTarget;
-      this.setState({ scrollTarget }, () => {
-        if (startSmoothScroll) {
-          this.scroll();
-        }
+      scrollTarget.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'nearest'
       });
     }
   };
-
-  scroll() {
-    // Scroll into view (shallow) element
-    const { scrollTarget } = this.state;
-    // Is enable transitions?
-    const { transitions } = this.context.muiTheme;
-
-    if (scrollTarget) {
-      const rect = scrollTarget.getBoundingClientRect();
-      const offset = 16;
-      let difference = 0;
-      if (rect.left < offset) {
-        difference = rect.left - offset;
-      } else if (rect.right > window.innerWidth) {
-        difference = rect.right - window.innerWidth;
-      }
-
-      if (transitions.create() !== 'none' && Math.abs(difference) > 1) {
-        const sign = Math.sign(difference);
-        // smooth scroll
-        scrollTarget.parentNode.scrollLeft += difference / 5 + sign * 5;
-        requestAnimationFrame(() => {
-          this.scroll();
-        });
-      } else {
-        scrollTarget.parentNode.scrollLeft += difference;
-        this.setState({ scrollTarget: null });
-      }
-    }
-  }
 
   render() {
     // (暫定) 背景画像
@@ -125,11 +98,9 @@ export default class CardContainer extends PureComponent {
 
     const bag = name => ({
       name,
-      visible: this.props.cards[name].visible,
-      order: this.props.cards[name].order,
-      updateCard: this.props.updateCard,
-      scrollToCard: this.scrollToCard,
-      cards: this.props.cards,
+      visible: this.props.cardProps[name].visible,
+      order: this.props.cardProps[name].order,
+      cardProps: this.props.cardProps,
       showAll: this.props.showAll
     });
 
@@ -144,10 +115,7 @@ export default class CardContainer extends PureComponent {
       addFile: this.props.addFile,
       putFile: this.props.putFile,
       showAll: this.props.showAll,
-      globalEvent: this.props.globalEvent
-    };
-    const cardProps = {
-      ...commonProps,
+      globalEvent: this.props.globalEvent,
       selectTab: this.props.selectTab,
       setLocation: this.props.setLocation,
       isPopout: this.props.monitorType === MonitorTypes.Popout,
@@ -155,13 +123,13 @@ export default class CardContainer extends PureComponent {
       toggleFullScreen: this.props.toggleFullScreen,
       deleteFile: this.props.deleteFile,
       showNotice: this.props.showNotice,
-      updateCard: this.props.updateCard,
+      setCardVisibility: this.props.setCardVisibility,
       tabs: this.props.tabs,
       closeTab: this.props.closeTab,
       openFileDialog: this.props.openFileDialog,
       href: this.props.href,
       scrollToCard: this.scrollToCard,
-      cards: this.props.cards,
+      cardProps: this.props.cardProps,
       reboot: this.props.reboot,
       saveAs: this.props.saveAs,
       isFullScreen: this.props.monitorType === MonitorTypes.FullScreen
@@ -171,52 +139,52 @@ export default class CardContainer extends PureComponent {
       <div style={styles.container}>
         <MediaCard
           ref={ref => (this.cardRefs.MediaCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('MediaCard')}
         />
         <MonitorCard
           ref={ref => (this.cardRefs.MonitorCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('MonitorCard')}
         />
         <PaletteCard
           ref={ref => (this.cardRefs.PaletteCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('PaletteCard')}
         />
         <EnvCard
           ref={ref => (this.cardRefs.EnvCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('EnvCard')}
         />
         <ReadmeCard
           ref={ref => (this.cardRefs.ReadmeCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('ReadmeCard')}
         />
         <CustomizeCard
           ref={ref => (this.cardRefs.CustomizeCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('CustomizeCard')}
         />
         <CreditsCard
           ref={ref => (this.cardRefs.CreditsCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('CreditsCard')}
         />
         <ShotCard
           ref={ref => (this.cardRefs.ShotCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('ShotCard')}
         />
         <EditorCard
           ref={ref => (this.cardRefs.EditorCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('EditorCard')}
         />
         <HierarchyCard
           ref={ref => (this.cardRefs.HierarchyCard = ref)}
-          {...cardProps}
+          {...commonProps}
           cardPropsBag={bag('HierarchyCard')}
         />
       </div>

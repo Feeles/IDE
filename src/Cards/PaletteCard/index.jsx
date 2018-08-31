@@ -80,6 +80,7 @@ const getStyles = (props, context) => {
 export default class PaletteCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
+    localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired
   };

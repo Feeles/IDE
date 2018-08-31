@@ -37,7 +37,7 @@ export default class MonitorCard extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     toggleFullScreen: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
-    cards: PropTypes.object.isRequired,
+    cardProps: PropTypes.object.isRequired,
     isFullScreen: PropTypes.bool.isRequired,
     reboot: PropTypes.bool.isRequired,
     href: PropTypes.string.isRequired,
@@ -64,7 +64,7 @@ export default class MonitorCard extends PureComponent {
 
   componentDidMount() {
     try {
-      const { frame } = this.props.cards.MonitorCard;
+      const { frame } = this.props.cardProps.MonitorCard;
       if (frame && Array.isArray(frame.size)) {
         const [frameWidth, frameHeight] = frame.size;
         this.setState({ frameWidth, frameHeight });
@@ -188,13 +188,11 @@ export default class MonitorCard extends PureComponent {
         icon={this.props.localization.monitorCard.title}
         {...this.props.cardPropsBag}
         actions={actions}
-        disableCloseButton
       >
         <CardMedia style={styles.flexible}>
           <div style={styles.parent}>
             <Monitor
               files={this.props.files}
-              cards={this.props.cards}
               isPopout={this.props.isPopout}
               isFullScreen={this.props.isFullScreen}
               reboot={this.props.reboot}
