@@ -19,6 +19,7 @@ export default class MediaCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     setCardVisibility: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
