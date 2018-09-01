@@ -59,6 +59,9 @@ const getStyle = (props, state, context) => {
       flexDirection: 'column',
       lineHeight: 1.15,
       backgroundColor: palette.backgroundColor
+    },
+    sidebar: {
+      position: 'absolute'
     }
   };
 };
@@ -531,6 +534,7 @@ export default class Main extends Component {
           open={this.state.openSidebar}
           docked={this.props.mini}
           onRequestChange={this.toggleSidebar}
+          containerStyle={styles.sidebar}
         >
           {this.props.mini ? null : (
             <AppBar
