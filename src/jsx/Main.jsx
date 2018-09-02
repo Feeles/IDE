@@ -122,9 +122,6 @@ export default class Main extends Component {
   componentWillMountCompat() {
     // 互換性保持のため、 fileView に外から setState させる
     this.state.fileView.install(this);
-
-    const feelesrc = this.loadConfig('feelesrc');
-    this.props.setMuiTheme(feelesrc);
   }
 
   componentDidMount() {
@@ -163,6 +160,9 @@ export default class Main extends Component {
         this.props.onMessage({ ...event });
       }
     });
+
+    const feelesrc = this.loadConfig('feelesrc');
+    this.props.setMuiTheme(feelesrc);
   }
 
   async componentDidUpdate(prevProps, prevState) {
