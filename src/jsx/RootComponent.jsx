@@ -102,15 +102,32 @@ class RootComponent extends Component {
         cardProps: this.props.cardProps
       });
     }
+
+    if (this.state.last === 0 && this.state.cardProps === null) {
+      // ファイルのロードが終了したので, cardProps を設定する
+      if (this.props.cardProps) {
+        // 上位の component から props が与えられている
+        this.setState({
+          cardProps: this.props.cardProps
+        });
+      } else {
+        // 与えられていないので、feeles/card.json を探す
+        const card = this.state.files.find(
+          file => file.name === 'feeles/card.json'
+        );
+        if (!card) {
+          throw new Error('Missing feeles/card.json');
+        } else {
+          this.setState({
+            cardProps: card.json
+          });
+        }
+      }
+    }
   }
 
   componentDidMount() {
     const { title, seeds, disableLocalSave } = this.props;
-
-    // cardProps が与えられなかった場合は defaultCardProps をセットする
-    this.setState({
-      cardProps: this.props.cardProps || defaultCardProps
-    });
 
     const langs = []
       .concat(new URLSearchParams(location.search).getAll('lang')) // ?lang=ll_CC
