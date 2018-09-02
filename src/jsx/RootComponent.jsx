@@ -20,7 +20,6 @@ import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
-import defaultCardProps from '../Cards/defaultState';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =
