@@ -128,11 +128,7 @@ class RootComponent extends Component {
   componentDidMount() {
     const { title, seeds, disableLocalSave } = this.props;
 
-    const langs = []
-      .concat(new URLSearchParams(location.search).getAll('lang')) // ?lang=ll_CC
-      .concat(navigator.languages || navigator.language); // browser settings
-
-    this.setLocalization(langs);
+    this.setLocalization(this.langs);
 
     if (Array.isArray(seeds)) {
       this.setState({
@@ -156,10 +152,20 @@ class RootComponent extends Component {
     }
   }
 
+  get langs() {
+    return []
+      .concat(new URLSearchParams(location.search).getAll('lang')) // ?lang=ll_CC
+      .concat(navigator.languages || navigator.language); // browser settings
+  }
+
+  get localization() {
+    return this.state.localization || getLocalization(this.langs);
+  }
+
   launchIDE = async ({ id, title }) => {
     if (!id && !title) {
       // Required unique title of project to proxy it
-      const { titleIsRequired } = this.state.localization.cloneDialog;
+      const { titleIsRequired } = this.localization.cloneDialog;
       this.setState({ errorText: titleIsRequired });
       console.info(titleIsRequired);
     }
@@ -364,7 +370,7 @@ class RootComponent extends Component {
         <span style={styles.header}>Made with Feeles</span>
         <LaunchDialog
           open={this.state.openDialog}
-          localization={this.state.localization}
+          localization={this.localization}
           launchIDE={this.launchIDE}
           fallback={this.defaultLaunch}
           onRequestClose={this.closeDialog}
@@ -399,7 +405,7 @@ class RootComponent extends Component {
             rootStyle={getComputedStyle(rootElement)}
             project={this.state.project}
             launchIDE={this.launchIDE}
-            localization={this.state.localization}
+            localization={this.localization}
             setLocalization={this.setLocalization}
             muiTheme={this.state.muiTheme}
             setMuiTheme={this.setMuiTheme}
