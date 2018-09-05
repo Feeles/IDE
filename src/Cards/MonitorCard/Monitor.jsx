@@ -368,8 +368,12 @@ export default class Monitor extends PureComponent {
 
   handleError = ({ data }) => {
     if (!this.state.error) {
+      const error = new Error(data.value.message || '');
+      for (const key of Object.keys(data.value)) {
+        error[key] = data.value[key];
+      }
       this.setState({
-        error: new Error(data.value)
+        error
       });
     }
   };

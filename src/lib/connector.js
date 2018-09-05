@@ -302,6 +302,12 @@
     });
   };
 
+  // error を IDE に投げる
+  feeles.throwError = function(error) {
+    var clonable = Object.assign({}, error);
+    requestPostMessage('error', clonable);
+  };
+
   // eval する
   feeles.eval =
     feeles.eval ||
@@ -327,7 +333,9 @@
           }
           context.completeLoad(moduleName);
         })
-        .catch(function() {
+        .catch(function(error) {
+          console.error(error);
+          debugger;
           console.error(moduleName + ' is not found');
         });
     };
@@ -342,7 +350,7 @@
             '"' +
             (error.requireMap ? ' in ' + error.requireMap.name + '.js' : '')
           : error + '';
-      requestPostMessage('error', message);
+      feeles.throwError('error', { message: message });
     };
 
     // feeles/eval.js が存在する場合, export default function を使う
