@@ -304,7 +304,12 @@
 
   // error を IDE に投げる
   feeles.throwError = function(error) {
-    var clonable = Object.assign({}, error);
+    var keys = ['message', 'name', 'fileName', 'lineNumber', 'columnNumber', 'stack'];
+    var clonable = {};
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      clonable[key] = error[key];
+    }
     requestPostMessage('error', clonable);
   };
 
