@@ -304,7 +304,14 @@
 
   // error を IDE に投げる
   feeles.throwError = function(error) {
-    var keys = ['message', 'name', 'fileName', 'lineNumber', 'columnNumber', 'stack'];
+    var keys = [
+      'message',
+      'name',
+      'fileName',
+      'lineNumber',
+      'columnNumber',
+      'stack'
+    ];
     var clonable = {};
     for (var i = 0; i < keys.length; i++) {
       var key = keys[i];
@@ -339,23 +346,28 @@
           context.completeLoad(moduleName);
         })
         .catch(function(error) {
-          console.error(error);
-          debugger;
           console.error(moduleName + ' is not found');
+          define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
+          context.completeLoad(moduleName);
         });
     };
 
     requirejs.onError = function(error) {
       console.info('requirejsonError');
       console.info(error);
+      var fileName = error.requireMap
+        ? ' in ' + error.requireMap.name + '.js'
+        : '';
       var message =
         typeof error === 'object'
-          ? 'Error: "' +
-            error.message +
-            '"' +
-            (error.requireMap ? ' in ' + error.requireMap.name + '.js' : '')
+          ? 'Error: "' + error.message + '"' + fileName
           : error + '';
-      feeles.throwError('error', { message: message });
+      feeles.throwError({
+        name: error.name,
+        message: message,
+        stack: error.stack,
+        fileName: fileName
+      });
     };
 
     // feeles/eval.js が存在する場合, export default function を使う
