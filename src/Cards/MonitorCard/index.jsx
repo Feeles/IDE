@@ -59,7 +59,8 @@ export default class MonitorCard extends PureComponent {
   state = {
     frameWidth: 300,
     frameHeight: 150,
-    processing: false
+    processing: false,
+    statusLabel: null
   };
 
   componentDidMount() {
@@ -72,11 +73,21 @@ export default class MonitorCard extends PureComponent {
     } catch (e) {
       // continue regardless of error
     }
+    this.props.globalEvent.on('message.statusLabel', this.setStatusLabel);
   }
 
   get height() {
     return ((this.state.frameHeight / this.state.frameWidth) * 100) >> 0;
   }
+
+  setStatusLabel = ({ data }) => {
+    const { value } = data;
+    if (typeof value !== 'string')
+      throw new TypeError(`Cannot make statusLabel ${value}`);
+    this.setState({
+      statusLabel: value
+    });
+  };
 
   changeSize(frameWidth, frameHeight) {
     this.setState({ frameWidth, frameHeight });
@@ -132,6 +143,7 @@ export default class MonitorCard extends PureComponent {
     const feelesrc = loadConfig('feelesrc');
 
     const actions = [
+      <span key="status">{this.state.statusLabel}</span>,
       <IconButton key="progress" disabled>
         <ResolveProgress size={24} globalEvent={this.props.globalEvent} />
       </IconButton>,
