@@ -9,6 +9,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentReply from 'material-ui/svg-icons/content/reply';
 import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
 
+const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
+
 export default class AssetButton extends PureComponent {
   static propTypes = {
     code: PropTypes.string.isRequired,
@@ -56,7 +58,10 @@ export default class AssetButton extends PureComponent {
         flexDirection: 'column',
         justifyContent: 'center',
         border: `4px outset ${palette.primary1Color}`,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        backgroundSize: 'contain',
+        backgroundPosition: '50% 50%',
+        backgroundRepeat: 'no-repeat'
       },
       popover: {
         padding: 8,
@@ -104,15 +109,13 @@ export default class AssetButton extends PureComponent {
     };
 
     if (this.props.image) {
-      const file = this.props.findFile(this.props.image);
-      if (file) {
-        styles.root = {
-          ...styles.root,
-          backgroundImage: `url(${file.blobURL})`,
-          backgroundSize: 'contain',
-          backgroundPosition: '50% 50%',
-          backgroundRepeat: 'no-repeat'
-        };
+      if (protocols.some(p => this.props.image.indexOf(p) === 0)) {
+        styles.root.backgroundImage = `url(${this.props.image})`;
+      } else {
+        const file = this.props.findFile(this.props.image);
+        if (file) {
+          styles.root.backgroundImage = `url(${file.blobURL})`;
+        }
       }
     }
 
