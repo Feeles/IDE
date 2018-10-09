@@ -1,5 +1,21 @@
 {
-  "presets": [["es2015", { "modules": false }], "stage-3", "react"],
-  "plugins": ["transform-runtime", "transform-class-properties"],
-  "ignore": ["src/lib/**"]
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions"]
+        }
+      }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "transform-runtime",
+    "transform-class-properties",
+    "transform-object-rest-spread"
+  ],
+  "ignore": [
+    "src/lib/**"
+  ]
 }
