@@ -78,7 +78,7 @@ module.exports = class FeelesWebpackPlugin {
           const stats = fs.statSync(targetPath);
           if (stats.isFile() && !this.ignore.test(targetPath)) {
             // 次の emit の compilation.fileDependencies に含める
-            params.compilationDependencies.push(targetPath);
+            params.compilationDependencies.add(targetPath);
           }
           if (stats.isDirectory()) {
             pushDirFiles(targetPath);
@@ -171,7 +171,7 @@ module.exports = class FeelesWebpackPlugin {
     compiler.plugin('after-emit', (compilation, callback) => {
       // 次の emit の compilation.fileDependencies に含める
       for (let mountDir of this.mountDirs) {
-        compilation.contextDependencies.push(mountDir);
+        compilation.contextDependencies.add(mountDir);
       }
       callback();
     });
