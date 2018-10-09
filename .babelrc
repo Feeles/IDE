@@ -1,19 +1,19 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/env",
       {
         "targets": {
           "browsers": ["last 2 versions"]
         }
       }
     ],
-    "react"
+    "@babel/react"
   ],
   "plugins": [
-    "transform-runtime",
-    "transform-class-properties",
-    "transform-object-rest-spread"
+    "@babel/transform-runtime",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-spread"
   ],
   "ignore": [
     "src/lib/**"
