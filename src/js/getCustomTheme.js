@@ -1,5 +1,5 @@
 import transitions from '@material-ui/core/styles/transitions';
-import getMuiTheme from '@material-ui/core/styles/getMuiTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { grey500, fullWhite } from '@material-ui/core/styles/colors';
 import {
   fade,
