@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import beautify from 'js-beautify';
-import RaisedButton from '@material-ui/core/RaisedButton';
+import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AvStop from '@material-ui/icons/Stop';
 import red from '@material-ui/core/colors/red';
@@ -209,8 +209,9 @@ export default class ShotPane extends PureComponent {
         ) : null}
         {this.state.loading ? <LinearProgress /> : null}
         <div style={styles.menu}>
-          <RaisedButton
-            primary
+          <Button
+            variant="raised"
+            color="primary"
             label={localization.shotCard.button}
             icon={this.state.shooting ? <AvStop /> : <ContentReply />}
             labelPosition="before"
@@ -220,8 +221,9 @@ export default class ShotPane extends PureComponent {
           />
           <span style={styles.label}>{localization.shotCard.shoot}</span>
           <div style={{ flex: 1 }} />
-          <RaisedButton
-            secondary
+          <Button
+            variant="raised"
+            color="secondary"
             label={localization.shotCard.restore}
             onClick={this.handleRestore}
             style={styles.restore}

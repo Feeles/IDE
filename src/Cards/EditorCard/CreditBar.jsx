@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from '@material-ui/core/FlatButton';
+import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 
 import { SignDialog } from '../../FileDialog/';
@@ -99,8 +99,8 @@ export default class CreditBar extends PureComponent {
         {file.credit && file.credit !== file.sign ? (
           this.renderCredit(file.credit, styles)
         ) : (
-          <FlatButton
-            secondary={!file.sign}
+          <Button
+            color={file.sign ? 'default' : 'secondary'}
             label={
               file.sign ? file.sign.label : localization.credit.writeAuthorName
             }
@@ -110,7 +110,7 @@ export default class CreditBar extends PureComponent {
           />
         )}
         {file.credits.length > 0 ? (
-          <FlatButton
+          <Button
             label={localization.credit.credits}
             style={styles.smallButton}
             labelStyle={styles.smallLabel}

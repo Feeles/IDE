@@ -4,7 +4,7 @@ import AutoComplete from '@material-ui/core/AutoComplete';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import ActionSearch from '@material-ui/icons/Search';
-import RaisedButton from '@material-ui/core/RaisedButton';
+import Button from '@material-ui/core/Button';
 import ActionDeleteForever from '@material-ui/icons/DeleteForever';
 import NavigationClose from '@material-ui/icons/Close';
 
@@ -138,8 +138,9 @@ export default class SearchBar extends PureComponent {
           </IconButton>
         </Paper>
         {showTrashes ? (
-          <RaisedButton
-            secondary
+          <Button
+            variant="raised"
+            color="secondary"
             label={localization.hierarchyCard.emptyTrashBox}
             icon={<ActionDeleteForever color={alternateTextColor} />}
             style={empty}

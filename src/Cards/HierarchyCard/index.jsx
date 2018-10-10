@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FloatingActionButton from '@material-ui/core/FloatingActionButton';
+import Button from '@material-ui/core/Button';
 import ContentAdd from '@material-ui/icons/Add';
 import includes from 'lodash/includes';
 
@@ -166,13 +166,14 @@ export default class HierarchyCard extends PureComponent {
           localization={localization}
         />
         <Root files={files.filter(filter)} {...transfer} />
-        <FloatingActionButton
+        <Button
+          variant="fab"
           mini
           style={styles.button}
           onClick={this.handleAdd}
         >
           <ContentAdd />
-        </FloatingActionButton>
+        </Button>
       </Card>
     );
   }

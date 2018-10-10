@@ -2,8 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
-import RaisedButton from '@material-ui/core/RaisedButton';
-import FloatingActionButton from '@material-ui/core/FloatingActionButton';
+import Button from '@material-ui/core/Button';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import ContentAdd from '@material-ui/icons/Add';
 import ContentReply from '@material-ui/icons/Reply';
@@ -141,8 +140,9 @@ export default class AssetButton extends PureComponent {
                 </a>
               ) : null}
             </span>
-            <RaisedButton
-              primary
+            <Button
+              variant="raised"
+              color="primary"
               label={localization.editorCard.insert}
               icon={<ContentAdd />}
               onClick={this.handleInsert}
@@ -153,13 +153,14 @@ export default class AssetButton extends PureComponent {
             <pre style={styles.pre}>{this.props.code}</pre>
           </code>
         </Popover>
-        <FloatingActionButton
+        <Button
+          variant="fab"
           mini
           style={styles.button}
           onClick={this.handleInsert}
         >
           <ContentReply style={styles.icon} />
-        </FloatingActionButton>
+        </Button>
       </Paper>
     );
   }

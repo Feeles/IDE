@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import Dialog from '@material-ui/core/Dialog';
 import { Tabs, Tab } from '@material-ui/core/Tabs';
-import RaisedButton from '@material-ui/core/RaisedButton';
-import FlatButton from '@material-ui/core/FlatButton';
+import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Card,
@@ -160,7 +159,8 @@ export default class CloneDialog extends PureComponent {
     };
 
     const actions = [
-      <FlatButton
+      <Button
+        variant="flat"
         key="showAll"
         label={localization.menu.showAllUrls}
         style={styles.button}
@@ -170,7 +170,8 @@ export default class CloneDialog extends PureComponent {
           })
         }
       />,
-      <FlatButton
+      <Button
+        variant="flat"
         key="cancel"
         label={localization.cloneDialog.cancel}
         style={styles.button}
@@ -219,7 +220,8 @@ export default class CloneDialog extends PureComponent {
                   </Card>
                 ]
               ) : (
-                <RaisedButton
+                <Button
+                  variant="raised"
                   fullWidth
                   key={'new_project'}
                   label={localization.cloneDialog.saveInNew}
@@ -357,13 +359,15 @@ export class ProjectCard extends PureComponent {
           </div>
         </CardText>
         <CardActions>
-          <FlatButton
+          <Button
+            variant="flat"
             label={localization.cloneDialog.openOnThisTab}
             icon={<ActionOpenInBrowser />}
             disabled={this.props.processing}
             onClick={this.handleLoad}
           />
-          <FlatButton
+          <Button
+            variant="flat"
             label={localization.cloneDialog.remove}
             icon={<ActionDelete color={red['400']} />}
             labelStyle={styles.remove}

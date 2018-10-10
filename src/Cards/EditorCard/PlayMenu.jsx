@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from '@material-ui/core/FlatButton';
+import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -128,15 +128,17 @@ export default class PlayMenu extends PureComponent {
 
     return (
       <div>
-        <FlatButton
-          primary
+        <Button
+          variant="flat"
+          color="primary"
           label={localization.editorCard.play}
           style={styles.button}
           icon={<AVPlayCircleOutline />}
           onClick={() => this.props.setLocation()}
         />
-        <FlatButton
-          primary
+        <Button
+          variant="flat"
+          color="primary"
           style={styles.dropDown}
           icon={<NavigationArrowDropDown />}
           onClick={this.handlePlay}

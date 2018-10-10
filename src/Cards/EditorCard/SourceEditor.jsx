@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from '@material-ui/core/FlatButton';
+import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
 import ContentSave from '@material-ui/icons/Save';
@@ -421,7 +421,8 @@ export default class SourceEditor extends PureComponent {
           )}
         </style>
         <div style={styles.menuBar}>
-          <FlatButton
+          <Button
+            variant="flat"
             label={localization.editorCard.undo}
             disabled={!this.state.hasHistory}
             style={styles.barButton}
@@ -429,7 +430,8 @@ export default class SourceEditor extends PureComponent {
             icon={<HardwareKeyboardBackspace />}
             onClick={this.handleUndo}
           />
-          <FlatButton
+          <Button
+            variant="flat"
             label={localization.editorCard.save}
             disabled={!this.state.hasChanged}
             style={styles.barButton}

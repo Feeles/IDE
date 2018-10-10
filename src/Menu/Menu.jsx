@@ -4,8 +4,9 @@ import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import IconMenu from '@material-ui/core/IconMenu';
 import MenuItem from '@material-ui/core/MenuItem';
-import FlatButton from '@material-ui/core/FlatButton';
-import Toggle from '@material-ui/core/Toggle';
+import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import FileDownload from '@material-ui/icons/CloudDownload';
 import ActionLanguage from '@material-ui/icons/Language';
 import NavigationMenu from '@material-ui/icons/Menu';
@@ -129,7 +130,8 @@ export default class Menu extends PureComponent {
       (this.props.project.title ? (
         <div style={styles.projectName}>{this.props.project.title}</div>
       ) : (
-        <FlatButton
+        <Button
+          variant="flat"
           label={localization.cloneDialog.setTitle}
           labelStyle={{
             color: alternateTextColor
@@ -151,12 +153,16 @@ export default class Menu extends PureComponent {
         }
       >
         <div style={{ flex: 1 }} />
-        <Toggle
+        <FormControlLabel
+          control={
+            <Switch
+              checked={this.props.showAll}
+              onChange={this.props.toggleShowAll}
+              style={styles.toggle}
+            />
+          }
           label={this.props.showAll ? '' : localization.menu.showAll}
-          toggled={this.props.showAll}
-          onToggle={this.props.toggleShowAll}
-          style={styles.toggle}
-          labelStyle={styles.toggleLabel}
+          style={styles.toggleLabel}
         />
         {/* {visits &&
           <div style={styles.visits}>

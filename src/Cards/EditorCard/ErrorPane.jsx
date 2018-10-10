@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
-import FlatButton from '@material-ui/core/FlatButton';
-import RaisedButton from '@material-ui/core/RaisedButton';
+import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import red from '@material-ui/core/colors/red';
 import ActionRestore from '@material-ui/icons/Restore';
@@ -69,16 +68,18 @@ export default class ErrorPane extends PureComponent {
 
     return (
       <Paper key="error" zDepth={2} style={styles.error}>
-        <FlatButton
-          primary
+        <Button
+          variant="flat"
+          color="primary"
           label={localization.common.close}
           style={styles.close}
           onClick={this.handleClose}
         />
         <h2 style={styles.heading}>{localization.editorCard.error}</h2>
         <div style={styles.blank} />
-        <RaisedButton
-          primary
+        <Button
+          variant="raised"
+          color="primary"
           icon={<ActionRestore />}
           label={localization.editorCard.restore}
           onClick={this.handleRestore}

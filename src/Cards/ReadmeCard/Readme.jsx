@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import RaisedButton from '@material-ui/core/RaisedButton';
+import Button from '@material-ui/core/Button';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 import EditorModeEdit from '@material-ui/icons/Edit';
@@ -18,8 +18,9 @@ const mdComponents = [
     },
     render(tag, props, children, component, mdStyles) {
       return (
-        <RaisedButton
-          primary
+        <Button
+          variant="raised"
+          color="primary"
           key={props.key}
           label={children}
           href={props.href}
@@ -42,8 +43,9 @@ const mdComponents = [
         component.props.setLocation(decodeURIComponent(props.href));
       };
       return (
-        <RaisedButton
-          primary
+        <Button
+          variant="raised"
+          color="primary"
           key={props.key}
           label={children}
           style={mdStyles.raisedButton}
@@ -83,7 +85,8 @@ const mdComponents = [
         component.props.selectTab(new Tab({ getFile }));
       };
       return (
-        <RaisedButton
+        <Button
+          variant="raised"
           primary
           key={props.key}
           label={props.alt}

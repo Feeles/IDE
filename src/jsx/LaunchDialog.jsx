@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import RaisedButton from '@material-ui/core/RaisedButton';
+import Button from '@material-ui/core/Button';
 import brown from '@material-ui/core/colors/brown';
 
 import { personalDB, updateProject } from '../database/';
@@ -121,8 +121,9 @@ export default class LaunchDialog extends PureComponent {
         title={localization.launchDialog.title}
       >
         <div style={{ textAlign: 'center' }}>
-          <RaisedButton
-            primary
+          <Button
+            variant="raised"
+            color="primary"
             label={localization.launchDialog.startNew}
             style={styles.button}
             onClick={this.props.fallback}
