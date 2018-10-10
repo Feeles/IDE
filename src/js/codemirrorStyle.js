@@ -12,7 +12,7 @@ textarea {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   width: 100%;
   height: 100%;
-  transition: ${transitions.easeOut()};
+  transition: ${transitions.create()};
 }
 .CodeMirror-gutters {
   border-color: ${palette.primary1Color} !important;

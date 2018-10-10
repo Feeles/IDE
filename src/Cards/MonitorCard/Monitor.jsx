@@ -65,7 +65,7 @@ const getStyle = (props, context) => {
       alignItems: 'center',
       overflow: 'hidden',
       zIndex: 300,
-      transition: transitions.easeOut()
+      transition: transitions.create()
     },
     swap: {
       position: 'absolute',

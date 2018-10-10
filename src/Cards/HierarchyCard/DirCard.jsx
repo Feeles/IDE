@@ -39,11 +39,7 @@ const getStyles = (props, context) => {
           borderStyle,
           borderColor: palette.primary1Color,
           borderRadius: 2,
-          transition: transitions.easeOut(null, [
-            'margin',
-            'padding-bottom',
-            'border'
-          ])
+          transition: transitions.create(['margin', 'padding-bottom', 'border'])
         },
     closed: {
       color: palette.secondaryTextColor,

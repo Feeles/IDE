@@ -310,7 +310,7 @@ export default class SourceEditor extends PureComponent {
     };
     const end = {
       className: textMarker.className,
-      style: `opacity: 1; background-color: rgba(0,0,0,0.1); transition: ${transitions.easeOut()}`
+      style: `opacity: 1; background-color: rgba(0,0,0,0.1); transition: ${transitions.create()}`
     };
     textMarker.on('clear', () => {
       this.setState(prevState => ({

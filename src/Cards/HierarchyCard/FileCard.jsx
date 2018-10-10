@@ -25,7 +25,7 @@ const getStyles = (props, context) => {
     root: {
       marginTop: 4,
       marginRight: 8,
-      transition: transitions.easeOut()
+      transition: transitions.create()
     },
     card: {
       boxSizing: 'border-box',
@@ -38,7 +38,7 @@ const getStyles = (props, context) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       opacity: isDragging ? 0.5 : 1,
-      transition: transitions.easeOut()
+      transition: transitions.create()
     },
     dragHandle: {
       flex: '0 0 auto',

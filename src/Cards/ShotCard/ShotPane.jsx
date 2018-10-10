@@ -27,7 +27,7 @@ const getStyle = (props, context, state) => {
       height,
       transform: `translate(${shooting ? '-500px' : 0})`,
       opacity: shooting ? 0 : 1,
-      transition: transitions.easeOut()
+      transition: transitions.create()
     },
     menu: {
       position: 'relative',

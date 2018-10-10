@@ -379,7 +379,7 @@ class RootComponent extends Component {
           {`
           html, body {
             background-color: ${grey['300']};
-            transition: ${transitions.easeOut('4000ms')};
+            transition: ${transitions.create(['all'], { duration: 4000 })};
           }
         `}
         </style>

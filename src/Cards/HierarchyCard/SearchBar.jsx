@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import AutoComplete from '@material-ui/core/AutoComplete';
+// import AutoComplete from '@material-ui/core/AutoComplete';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import ActionSearch from '@material-ui/icons/Search';
@@ -122,7 +122,7 @@ export default class SearchBar extends PureComponent {
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
         <Paper zDepth={3} style={bar}>
           <ActionSearch style={icon} color={secondaryTextColor} />
-          <AutoComplete
+          {/* <AutoComplete
             id="search"
             searchText={query}
             dataSource={fileNames}
@@ -132,7 +132,7 @@ export default class SearchBar extends PureComponent {
             onFocus={() => this.setState({ focus: true })}
             onBlur={() => this.setState({ focus: false })}
             fullWidth
-          />
+          /> */}
           <IconButton disabled={!query} onClick={() => this.handleUpdate('')}>
             <NavigationClose color={secondaryTextColor} />
           </IconButton>

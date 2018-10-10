@@ -72,7 +72,7 @@ export default class AssetPane extends PureComponent {
         display: 'flex',
         flexDirection: 'column',
         zIndex: 10,
-        transition: transitions.easeOut(),
+        transition: transitions.create(),
         height: open ? '100%' : 0
       },
       scroller: {

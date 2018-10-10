@@ -4,7 +4,7 @@ import grey from '@material-ui/core/colors/grey';
 import {
   fade,
   emphasize,
-  convertColorToString,
+  recomposeColor,
   decomposeColor
 } from '@material-ui/core/styles/colorManipulator';
 
@@ -22,7 +22,7 @@ const themeColors = [
 ];
 
 export const defaultPalette = {
-  canvasColor: 'white',
+  canvasColor: '#ffffff',
   primary1Color: random(themeColors),
   accent1Color: random(themeColors),
   backgroundColor: grey['500']
@@ -93,7 +93,7 @@ function monochrome(color) {
   const [r, g, b] = color.values;
   const _ = r * 0.3 + g * 0.59 + b * 0.11;
   color = { type: 'rgb', values: [_, _, _] };
-  return convertColorToString(color);
+  return recomposeColor(color);
 }
 
 function random(colors) {

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
-import AutoComplete from '@material-ui/core/AutoComplete';
+// import AutoComplete from '@material-ui/core/AutoComplete';
 
 import { Confirm, Abort } from './Buttons';
 
@@ -179,7 +179,7 @@ export class SignItem extends PureComponent {
 
     return (
       <div style={{ marginBottom: 16 }}>
-        <AutoComplete
+        {/* <AutoComplete
           fullWidth
           searchText={this.label}
           floatingLabelText={localization.credit.whoMade(file.name)}
@@ -196,7 +196,7 @@ export class SignItem extends PureComponent {
           dataSource={this.props.completeUrls}
           onUpdateInput={this.handleUpdateUrl}
           onNewRequest={this.handleCompleteUrl}
-        />
+        /> */}
       </div>
     );
   }
