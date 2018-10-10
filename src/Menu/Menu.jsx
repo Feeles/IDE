@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
-import IconMenu from '@material-ui/core/IconMenu';
+import MuiMenu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -75,7 +75,8 @@ export default class Menu extends PureComponent {
 
   state = {
     overrideTitle: null,
-    open: false
+    open: false,
+    anchorEl: null
   };
 
   get filesForPublishing() {
@@ -115,6 +116,18 @@ export default class Menu extends PureComponent {
   componentDidMount() {
     this.props.globalEvent.on('message.menuTitle', this.handleSetTitle);
   }
+
+  handleLanguage = event => {
+    this.setState({
+      anchorEl: event.currentTarget
+    });
+  };
+
+  handleCloneMenu = () => {
+    this.setState({
+      anchorEl: null
+    });
+  };
 
   render() {
     const { localization, setLocalization } = this.props;
@@ -178,12 +191,15 @@ export default class Menu extends PureComponent {
             <FileDownload color={alternateTextColor} />
           </IconButton>
         ) : null}
-        <IconMenu
-          iconButtonElement={
-            <IconButton tooltip={localization.menu.language}>
-              <ActionLanguage color={alternateTextColor} />
-            </IconButton>
-          }
+        <IconButton
+          tooltip={localization.menu.language}
+          onTouchTap={this.handleLanguage}
+        >
+          <ActionLanguage color={alternateTextColor} />
+        </IconButton>
+        <MuiMenu
+          anchorEl={this.state.anchorEl}
+          open={!!this.state.anchorEl}
           anchorOrigin={{
             horizontal: 'right',
             vertical: 'top'
@@ -193,15 +209,17 @@ export default class Menu extends PureComponent {
             vertical: 'bottom'
           }}
           style={styles.button}
+          onClose={this.handleCloneMenu}
         >
           {acceptedLanguages.map(lang => (
             <MenuItem
               key={lang.accept[0]}
-              primaryText={lang.native}
               onClick={() => setLocalization(lang.accept[0])}
-            />
+            >
+              {lang.native}
+            </MenuItem>
           ))}
-        </IconMenu>
+        </MuiMenu>
       </AppBar>
     );
   }
