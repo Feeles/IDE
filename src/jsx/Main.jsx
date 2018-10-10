@@ -4,6 +4,7 @@ import EventEmitter from 'eventemitter2';
 import Snackbar from '@material-ui/core/Snackbar';
 import jsyaml from 'js-yaml';
 import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Drawer from '@material-ui/core/Drawer';
@@ -537,13 +538,13 @@ export default class Main extends Component {
           containerStyle={styles.sidebar}
         >
           {this.props.mini ? null : (
-            <AppBar
-              iconElementLeft={
+            <AppBar>
+              <Toolbar>
                 <IconButton onClick={this.toggleSidebar}>
                   <NavigationArrowBack />
                 </IconButton>
-              }
-            />
+              </Toolbar>
+            </AppBar>
           )}
           {icons.map(this.renderMenuItem)}
         </Drawer>

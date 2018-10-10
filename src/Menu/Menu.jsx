@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MuiMenu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -152,74 +153,75 @@ export default class Menu extends PureComponent {
           onClick={this.handleClone}
         />
       ));
-
     return (
       <AppBar
         title={this.state.overrideTitle || title}
         style={styles.root}
         titleStyle={{ flex: null }}
-        iconStyleLeft={styles.leftIcon}
-        iconElementLeft={
-          <IconButton onClick={this.props.toggleSidebar}>
+      >
+        <Toolbar>
+          <IconButton
+            style={styles.leftIcon}
+            onClick={this.props.toggleSidebar}
+          >
             <NavigationMenu />
           </IconButton>
-        }
-      >
-        <div style={{ flex: 1 }} />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={this.props.showAll}
-              onChange={this.props.toggleShowAll}
-              style={styles.toggle}
-            />
-          }
-          label={this.props.showAll ? '' : localization.menu.showAll}
-          style={styles.toggleLabel}
-        />
-        {/* {visits &&
+          <div style={{ flex: 1 }} />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={this.props.showAll}
+                onChange={this.props.toggleShowAll}
+                style={styles.toggle}
+              />
+            }
+            label={this.props.showAll ? '' : localization.menu.showAll}
+            style={styles.toggleLabel}
+          />
+          {/* {visits &&
           <div style={styles.visits}>
             {visits.getAttribute('x-feeles-visits')}
             PV
           </div>} */}
-        {this.props.showAll ? (
-          <IconButton
-            tooltip={localization.menu.clone}
-            onClick={this.handleClone}
-            style={styles.button}
-          >
-            <FileDownload />
-          </IconButton>
-        ) : null}
-        <IconButton
-          tooltip={localization.menu.language}
-          onTouchTap={this.handleLanguage}
-        >
-          <ActionLanguage />
-        </IconButton>
-        <MuiMenu
-          anchorEl={this.state.anchorEl}
-          open={!!this.state.anchorEl}
-          anchorOrigin={{
-            horizontal: 'right',
-            vertical: 'top'
-          }}
-          targetOrigin={{
-            horizontal: 'right',
-            vertical: 'bottom'
-          }}
-          style={styles.button}
-          onClose={this.handleCloneMenu}
-        >
-          {acceptedLanguages.map(lang => (
-            <MenuItem
-              key={lang.accept[0]}
-              onClick={() => setLocalization(lang.accept[0])}
+          {this.props.showAll ? (
+            <IconButton
+              tooltip={localization.menu.clone}
+              onClick={this.handleClone}
+              style={styles.button}
             >
-              {lang.native}
-            </MenuItem>
-          ))}
-        </MuiMenu>
+              <FileDownload />
+            </IconButton>
+          ) : null}
+          <IconButton
+            tooltip={localization.menu.language}
+            onTouchTap={this.handleLanguage}
+          >
+            <ActionLanguage />
+          </IconButton>
+          <MuiMenu
+            anchorEl={this.state.anchorEl}
+            open={!!this.state.anchorEl}
+            anchorOrigin={{
+              horizontal: 'right',
+              vertical: 'top'
+            }}
+            targetOrigin={{
+              horizontal: 'right',
+              vertical: 'bottom'
+            }}
+            style={styles.button}
+            onClose={this.handleCloneMenu}
+          >
+            {acceptedLanguages.map(lang => (
+              <MenuItem
+                key={lang.accept[0]}
+                onClick={() => setLocalization(lang.accept[0])}
+              >
+                {lang.native}
+              </MenuItem>
+            ))}
+          </MuiMenu>
+        </Toolbar>
       </AppBar>
     );
   }
