@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardText, CardActions } from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -162,7 +163,7 @@ export default class ReadmeCard extends PureComponent {
         {...this.props.cardPropsBag}
         fit
       >
-        <CardText style={styles.text}>
+        <CardContent style={styles.text}>
           <Readme
             file={selectedFile}
             selectTab={this.props.selectTab}
@@ -173,7 +174,7 @@ export default class ReadmeCard extends PureComponent {
             completes={this.state.completes}
             setLocation={this.props.setLocation}
           />
-        </CardText>
+        </CardContent>
         <CardActions style={styles.actions}>
           {this.renderDropDownMenu()}
           <EditFile

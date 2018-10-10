@@ -5,12 +5,10 @@ import Dialog from '@material-ui/core/Dialog';
 import { Tabs, Tab } from '@material-ui/core/Tabs';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {
-  Card,
-  CardHeader,
-  CardActions,
-  CardText
-} from '@material-ui/core/Card';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import ContentAddCircle from '@material-ui/icons/AddCircle';
 import ActionOpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import ActionDelete from '@material-ui/icons/Delete';
@@ -330,7 +328,6 @@ export class ProjectCard extends PureComponent {
     return (
       <Card key={project.id} style={styles.card}>
         <CardHeader
-          showExpandableButton
           title={
             <EditableLabel
               id="title"
@@ -344,7 +341,7 @@ export class ProjectCard extends PureComponent {
             this.props.showURL ? project.url : ''
           ].join(' ')}
         />
-        <CardText expandable>
+        <CardContent>
           <div>
             <span style={styles.label}>{localization.cloneDialog.created}</span>
             {new Date(project.created).toLocaleString()}
@@ -357,7 +354,7 @@ export class ProjectCard extends PureComponent {
             <span style={styles.label}>{localization.cloneDialog.size}</span>
             {`${(project.size / 1024 / 1024).toFixed(2)}MB`}
           </div>
-        </CardText>
+        </CardContent>
         <CardActions>
           <Button
             variant="flat"

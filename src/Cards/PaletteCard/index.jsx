@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardActions, CardText } from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import Popover from '@material-ui/core/Popover';
 import Paper from '@material-ui/core/Paper';
 import { convertColorToString } from '@material-ui/core/styles/colorManipulator';
@@ -181,9 +182,9 @@ export default class PaletteCard extends PureComponent {
             </Paper>
           </LayeredStyle>
         </CardActions>
-        <CardText expandable style={styles.container}>
+        <CardContent style={styles.container}>
           {Object.keys(palette).map(key => this.renderItem(key, styles))}
-        </CardText>
+        </CardContent>
         <Popover
           open={open}
           anchorEl={anchorEl}
