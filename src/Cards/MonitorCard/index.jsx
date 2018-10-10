@@ -163,9 +163,7 @@ export default class MonitorCard extends PureComponent {
         disabled={feelesrc.disableReloadButton}
         onClick={() => this.props.setLocation()}
       >
-        <NavigationRefresh
-          color={this.context.muiTheme.palette.primary1Color}
-        />
+        <NavigationRefresh color="primary" />
       </IconButton>,
       <IconButton
         key="fullscreen"
