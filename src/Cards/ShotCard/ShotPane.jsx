@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import beautify from 'js-beautify';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import AvStop from '@material-ui/core/svg-icons/av/stop';
+import AvStop from '@material-ui/core/icons/stop';
 import { red50, red500 } from '@material-ui/core/styles/colors';
-import ContentReply from '@material-ui/core/svg-icons/content/reply';
+import ContentReply from '@material-ui/core/icons/reply';
 
 import { SourceFile } from '../../File/';
 import Editor from '../EditorCard/Editor';

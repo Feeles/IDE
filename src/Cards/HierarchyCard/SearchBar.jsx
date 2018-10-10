@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import AutoComplete from '@material-ui/core/AutoComplete';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import ActionSearch from '@material-ui/core/svg-icons/action/search';
+import ActionSearch from '@material-ui/core/icons/search';
 import RaisedButton from '@material-ui/core/RaisedButton';
-import ActionDeleteForever from '@material-ui/core/svg-icons/action/delete-forever';
-import NavigationClose from '@material-ui/core/svg-icons/navigation/close';
+import ActionDeleteForever from '@material-ui/core/icons/delete-forever';
+import NavigationClose from '@material-ui/core/icons/close';
 
 import TrashBox from './TrashBox';
 import search, { getOptions } from './search';

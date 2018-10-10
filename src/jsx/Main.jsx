@@ -7,9 +7,9 @@ import AppBar from '@material-ui/core/AppBar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import Drawer from '@material-ui/core/Drawer';
-import NavigationArrowBack from '@material-ui/core/svg-icons/navigation/arrow-back';
-import ToggleCheckBox from '@material-ui/core/svg-icons/toggle/check-box';
-import ToggleCheckBoxOutlineBlank from '@material-ui/core/svg-icons/toggle/check-box-outline-blank';
+import NavigationArrowBack from '@material-ui/core/icons/arrow-back';
+import ToggleCheckBox from '@material-ui/core/icons/check-box';
+import ToggleCheckBoxOutlineBlank from '@material-ui/core/icons/check-box-outline-blank';
 
 const tryParseYAML = (text, defaultValue = {}) => {
   try {

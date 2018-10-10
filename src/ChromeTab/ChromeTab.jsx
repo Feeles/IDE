@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-import NavigationClose from '@material-ui/core/svg-icons/navigation/close';
-import EditorModeEdit from '@material-ui/core/svg-icons/editor/mode-edit';
+import NavigationClose from '@material-ui/core/icons/close';
+import EditorModeEdit from '@material-ui/core/icons/mode-edit';
 import { transparent, redA200 } from '@material-ui/core/styles/colors';
 import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 

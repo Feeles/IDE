@@ -7,9 +7,9 @@ import RaisedButton from '@material-ui/core/RaisedButton';
 import FlatButton from '@material-ui/core/FlatButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Card, CardHeader, CardActions, CardText } from '@material-ui/core/Card';
-import ContentAddCircle from '@material-ui/core/svg-icons/content/add-circle';
-import ActionOpenInBrowser from '@material-ui/core/svg-icons/action/open-in-browser';
-import ActionDelete from '@material-ui/core/svg-icons/action/delete';
+import ContentAddCircle from '@material-ui/core/icons/add-circle';
+import ActionOpenInBrowser from '@material-ui/core/icons/open-in-browser';
+import ActionDelete from '@material-ui/core/icons/delete';
 import { brown50, red400 } from '@material-ui/core/styles/colors';
 
 import {

@@ -5,12 +5,12 @@ import { CardMedia } from '@material-ui/core/Card';
 import IconButton from '@material-ui/core/IconButton';
 import IconMenu from '@material-ui/core/IconMenu';
 import MenuItem from '@material-ui/core/MenuItem';
-import NavigationRefresh from '@material-ui/core/svg-icons/navigation/refresh';
-import NavigationFullscreen from '@material-ui/core/svg-icons/navigation/fullscreen';
-import ActionSettings from '@material-ui/core/svg-icons/action/settings';
-import OpenInBrowser from '@material-ui/core/svg-icons/action/open-in-browser';
-import DeviceDevices from '@material-ui/core/svg-icons/device/devices';
-import ImagePhotoCamera from '@material-ui/core/svg-icons/image/photo-camera';
+import NavigationRefresh from '@material-ui/core/icons/refresh';
+import NavigationFullscreen from '@material-ui/core/icons/fullscreen';
+import ActionSettings from '@material-ui/core/icons/settings';
+import OpenInBrowser from '@material-ui/core/icons/open-in-browser';
+import DeviceDevices from '@material-ui/core/icons/devices';
+import ImagePhotoCamera from '@material-ui/core/icons/photo-camera';
 
 import Monitor from './Monitor';
 import ResolveProgress from './ResolveProgress';

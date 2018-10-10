@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import NavigationExpandLess from '@material-ui/core/svg-icons/navigation/expand-less';
+import NavigationExpandLess from '@material-ui/core/icons/expand-less';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 

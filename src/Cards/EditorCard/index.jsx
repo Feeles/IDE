@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-import AVPlayCircleOutline from '@material-ui/core/svg-icons/av/play-circle-outline';
+import AVPlayCircleOutline from '@material-ui/core/icons/play-circle-outline';
 
 import Card from '../CardWindow';
 import SourceEditor from './SourceEditor';

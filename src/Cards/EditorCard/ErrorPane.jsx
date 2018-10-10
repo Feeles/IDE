@@ -5,7 +5,7 @@ import FlatButton from '@material-ui/core/FlatButton';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import Paper from '@material-ui/core/Paper';
 import { red50, red500 } from '@material-ui/core/styles/colors';
-import ActionRestore from '@material-ui/core/svg-icons/action/restore';
+import ActionRestore from '@material-ui/core/icons/restore';
 
 export default class ErrorPane extends PureComponent {
   static propTypes = {
