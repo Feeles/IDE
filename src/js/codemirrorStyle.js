@@ -6,8 +6,8 @@ import {
   grey500,
   grey600,
   blueA700
-} from 'material-ui/styles/colors';
-import { fade } from 'material-ui/utils/colorManipulator';
+} from '@material-ui/core/styles/colors';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
 export default ({ palette, paper, transitions }) =>
   `

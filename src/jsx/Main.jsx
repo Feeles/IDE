@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from '@material-ui/core/Snackbar';
 import jsyaml from 'js-yaml';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import MenuItem from 'material-ui/MenuItem';
-import Drawer from 'material-ui/Drawer';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
-import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import Drawer from '@material-ui/core/Drawer';
+import NavigationArrowBack from '@material-ui/core/svg-icons/navigation/arrow-back';
+import ToggleCheckBox from '@material-ui/core/svg-icons/toggle/check-box';
+import ToggleCheckBoxOutlineBlank from '@material-ui/core/svg-icons/toggle/check-box-outline-blank';
 
 const tryParseYAML = (text, defaultValue = {}) => {
   try {

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fullWhite, fullBlack } from 'material-ui/styles/colors';
+import { fullWhite, fullBlack } from '@material-ui/core/styles/colors';
 
 import CreditBar from './CreditBar';
 

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardHeader } from 'material-ui/Card';
+import { CardHeader } from '@material-ui/core/Card';
 
 import { SourceFile } from '../../File/';
 import EditFile from '../EditFile';

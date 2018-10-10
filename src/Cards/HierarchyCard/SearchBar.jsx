@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import AutoComplete from 'material-ui/AutoComplete';
-import Paper from 'material-ui/Paper';
-import IconButton from 'material-ui/IconButton';
-import ActionSearch from 'material-ui/svg-icons/action/search';
-import RaisedButton from 'material-ui/RaisedButton';
-import ActionDeleteForever from 'material-ui/svg-icons/action/delete-forever';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import AutoComplete from '@material-ui/core/AutoComplete';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import ActionSearch from '@material-ui/core/svg-icons/action/search';
+import RaisedButton from '@material-ui/core/RaisedButton';
+import ActionDeleteForever from '@material-ui/core/svg-icons/action/delete-forever';
+import NavigationClose from '@material-ui/core/svg-icons/navigation/close';
 
 import TrashBox from './TrashBox';
 import search, { getOptions } from './search';

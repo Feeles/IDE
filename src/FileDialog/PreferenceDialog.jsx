@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import Table, { TableBody, TableRow, TableRowColumn } from 'material-ui/Table';
-import TextField from 'material-ui/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import Table, { TableBody, TableRow, TableRowColumn } from '@material-ui/core/Table';
+import TextField from '@material-ui/core/TextField';
 
 import { Confirm, Abort } from './Buttons';
 

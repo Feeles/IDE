@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from '@material-ui/core/FlatButton';
+import RaisedButton from '@material-ui/core/RaisedButton';
 
 const Confirm = props => {
   const style = Object.assign({ marginRight: 20 }, props.style);

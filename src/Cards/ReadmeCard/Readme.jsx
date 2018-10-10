@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import RaisedButton from 'material-ui/RaisedButton';
-import { emphasize } from 'material-ui/utils/colorManipulator';
-import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import RaisedButton from '@material-ui/core/RaisedButton';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import ActionOpenInNew from '@material-ui/core/svg-icons/action/open-in-new';
+import EditorModeEdit from '@material-ui/core/svg-icons/editor/mode-edit';
 
 import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 import MDReactComponent from '../../jsx/MDReactComponent';

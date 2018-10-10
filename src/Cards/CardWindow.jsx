@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'material-ui/Card';
+import { Card } from '@material-ui/core/Card';
 
 const HeaderHeight = 32;
 

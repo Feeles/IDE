@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
-import Popover from 'material-ui/Popover';
+import FlatButton from '@material-ui/core/FlatButton';
+import Popover from '@material-ui/core/Popover';
 
 import { SignDialog } from '../../FileDialog/';
 

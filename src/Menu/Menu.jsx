@@ -1,14 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import FlatButton from 'material-ui/FlatButton';
-import Toggle from 'material-ui/Toggle';
-import FileDownload from 'material-ui/svg-icons/file/file-download';
-import ActionLanguage from 'material-ui/svg-icons/action/language';
-import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import AppBar from '@material-ui/core/AppBar';
+import IconButton from '@material-ui/core/IconButton';
+import IconMenu from '@material-ui/core/IconMenu';
+import MenuItem from '@material-ui/core/MenuItem';
+import FlatButton from '@material-ui/core/FlatButton';
+import Toggle from '@material-ui/core/Toggle';
+import FileDownload from '@material-ui/core/svg-icons/file/file-download';
+import ActionLanguage from '@material-ui/core/svg-icons/action/language';
+import NavigationMenu from '@material-ui/core/svg-icons/navigation/menu';
 
 import { acceptedLanguages } from '../localization/';
 import CloneDialog from './CloneDialog';

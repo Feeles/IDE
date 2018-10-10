@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardMedia } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
-import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
-import ActionSettings from 'material-ui/svg-icons/action/settings';
-import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
-import DeviceDevices from 'material-ui/svg-icons/device/devices';
-import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
+import { CardMedia } from '@material-ui/core/Card';
+import IconButton from '@material-ui/core/IconButton';
+import IconMenu from '@material-ui/core/IconMenu';
+import MenuItem from '@material-ui/core/MenuItem';
+import NavigationRefresh from '@material-ui/core/svg-icons/navigation/refresh';
+import NavigationFullscreen from '@material-ui/core/svg-icons/navigation/fullscreen';
+import ActionSettings from '@material-ui/core/svg-icons/action/settings';
+import OpenInBrowser from '@material-ui/core/svg-icons/action/open-in-browser';
+import DeviceDevices from '@material-ui/core/svg-icons/device/devices';
+import ImagePhotoCamera from '@material-ui/core/svg-icons/image/photo-camera';
 
 import Monitor from './Monitor';
 import ResolveProgress from './ResolveProgress';

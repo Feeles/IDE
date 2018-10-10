@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
-import Popover from 'material-ui/Popover';
-import RaisedButton from 'material-ui/RaisedButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import { emphasize } from 'material-ui/utils/colorManipulator';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentReply from 'material-ui/svg-icons/content/reply';
-import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
+import Paper from '@material-ui/core/Paper';
+import Popover from '@material-ui/core/Popover';
+import RaisedButton from '@material-ui/core/RaisedButton';
+import FloatingActionButton from '@material-ui/core/FloatingActionButton';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import ContentAdd from '@material-ui/core/svg-icons/content/add';
+import ContentReply from '@material-ui/core/svg-icons/content/reply';
+import ActionOpenInNew from '@material-ui/core/svg-icons/action/open-in-new';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
 

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { emphasize, fade } from 'material-ui/utils/colorManipulator';
+import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 
 import DirCard from './DirCard';
 import getHierarchy from './getHierarchy';

@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
-import Paper from 'material-ui/Paper';
-import IconButton from 'material-ui/IconButton';
-import { fade } from 'material-ui/utils/colorManipulator';
-import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
-import ActionSettings from 'material-ui/svg-icons/action/settings';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import EditorDragHandle from '@material-ui/core/svg-icons/editor/drag-handle';
+import ActionSettings from '@material-ui/core/svg-icons/action/settings';
 import includes from 'lodash/includes';
 
 import Filename from './Filename';

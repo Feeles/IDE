@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import AlertError from 'material-ui/svg-icons/alert/error';
-import { redA400 } from 'material-ui/styles/colors';
+import Dialog from '@material-ui/core/Dialog';
+import AlertError from '@material-ui/core/svg-icons/alert/error';
+import { redA400 } from '@material-ui/core/styles/colors';
 
 import { Confirm, Abort } from './Buttons';
 

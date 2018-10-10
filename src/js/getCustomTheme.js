@@ -1,12 +1,12 @@
-import transitions from 'material-ui/styles/transitions';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { grey500, fullWhite } from 'material-ui/styles/colors';
+import transitions from '@material-ui/core/styles/transitions';
+import getMuiTheme from '@material-ui/core/styles/getMuiTheme';
+import { grey500, fullWhite } from '@material-ui/core/styles/colors';
 import {
   fade,
   emphasize,
   convertColorToString,
   decomposeColor
-} from 'material-ui/utils/colorManipulator';
+} from '@material-ui/core/styles/colorManipulator';
 
 // Twitter theme colors without 'ABB8C3' (Gray)
 const themeColors = [

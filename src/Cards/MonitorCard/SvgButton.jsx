@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fullWhite, transparent } from 'material-ui/styles/colors';
+import { fullWhite, transparent } from '@material-ui/core/styles/colors';
 
 export default class SvgButton extends PureComponent {
   static propTypes = {

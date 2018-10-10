@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
-import { transparent, redA200 } from 'material-ui/styles/colors';
-import { emphasize, fade } from 'material-ui/utils/colorManipulator';
+import IconButton from '@material-ui/core/IconButton';
+import NavigationClose from '@material-ui/core/svg-icons/navigation/close';
+import EditorModeEdit from '@material-ui/core/svg-icons/editor/mode-edit';
+import { transparent, redA200 } from '@material-ui/core/styles/colors';
+import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 
 const MaxTabWidth = 160;
 const MinTabWidth = 0;
@@ -21,7 +21,7 @@ const getStyles = (props, context, state) => {
     MaxTabWidth,
     Math.max(MinTabWidth, containerWidth / props.tabs.length)
   );
-  const blank = tabHeight / Math.tan(((90 - TabSkewX) / 180) * Math.PI);
+  const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
   const backgroundColor = fade(
     isSelected ? palette.canvasColor : emphasize(palette.canvasColor),
     1

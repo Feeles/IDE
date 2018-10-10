@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fullWhite, red500 } from 'material-ui/styles/colors';
+import { fullWhite, red500 } from '@material-ui/core/styles/colors';
 
 import SvgButton from './SvgButton';
 

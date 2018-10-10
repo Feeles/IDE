@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardText, CardActions } from 'material-ui/Card';
+import { CardText, CardActions } from '@material-ui/core/Card';
 
 import { SourceFile } from '../../File/';
 import EnvItem from './EnvItem';

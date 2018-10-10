@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import CircularProgress from 'material-ui/CircularProgress';
-import RaisedButton from 'material-ui/RaisedButton';
-import { brown50 } from 'material-ui/styles/colors';
+import Dialog from '@material-ui/core/Dialog';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import RaisedButton from '@material-ui/core/RaisedButton';
+import { brown50 } from '@material-ui/core/styles/colors';
 
 import { personalDB, updateProject } from '../database/';
 import { ProjectCard } from '../Menu/CloneDialog';

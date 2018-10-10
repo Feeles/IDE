@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardActions, CardText } from 'material-ui/Card';
-import Popover from 'material-ui/Popover';
-import Paper from 'material-ui/Paper';
-import { convertColorToString } from 'material-ui/utils/colorManipulator';
-import { transparent, fullWhite } from 'material-ui/styles/colors';
+import { CardActions, CardText } from '@material-ui/core/Card';
+import Popover from '@material-ui/core/Popover';
+import Paper from '@material-ui/core/Paper';
+import { convertColorToString } from '@material-ui/core/styles/colorManipulator';
+import { transparent, fullWhite } from '@material-ui/core/styles/colors';
 import { ChromePicker, TwitterPicker } from 'react-color';
 
 import LayeredStyle from './LayeredStyle';

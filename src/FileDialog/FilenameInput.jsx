@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import DropDownMenu from '@material-ui/core/DropDownMenu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const MimeTypes = {
   'text/javascript': '.js',

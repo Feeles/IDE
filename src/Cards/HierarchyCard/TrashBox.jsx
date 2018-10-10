@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
-import IconButton from 'material-ui/IconButton';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import { transparent } from 'material-ui/styles/colors';
+import IconButton from '@material-ui/core/IconButton';
+import ActionDelete from '@material-ui/core/svg-icons/action/delete';
+import NavigationArrowBack from '@material-ui/core/svg-icons/navigation/arrow-back';
+import { transparent } from '@material-ui/core/styles/colors';
 
 import DragTypes from '../../utils/dragTypes';
 

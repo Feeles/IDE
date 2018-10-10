@@ -5,9 +5,9 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import URLSearchParams from 'url-search-params';
 import { DragDropContext } from 'react-dnd';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { grey300, grey700 } from 'material-ui/styles/colors';
-import transitions from 'material-ui/styles/transitions';
+import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { grey300, grey700 } from '@material-ui/core/styles/colors';
+import transitions from '@material-ui/core/styles/transitions';
 
 import { readProject, findProject } from '../database/';
 import {
@@ -391,7 +391,7 @@ class RootComponent extends Component {
     const { rootElement } = this.props;
 
     return (
-      <MuiThemeProvider muiTheme={this.state.muiTheme}>
+      <V0MuiThemeProvider muiTheme={this.state.muiTheme}>
         {this.state.last > 0 ? (
           this.renderLoading()
         ) : this.state.cardProps ? (
@@ -415,7 +415,7 @@ class RootComponent extends Component {
             disableLocalSave={this.props.disableLocalSave}
           />
         ) : null}
-      </MuiThemeProvider>
+      </V0MuiThemeProvider>
     );
   }
 }
@@ -426,6 +426,6 @@ export default DragDropContext(dndBackend)(RootComponent);
 function indicator(val, last) {
   const length = 32;
   const sum = Math.max(1, val + last) + 0.00001;
-  const progress = Math.floor((val / sum) * length);
+  const progress = Math.floor(val / sum * length);
   return '='.repeat(progress) + '+' + '-'.repeat(length - 1 - progress);
 }

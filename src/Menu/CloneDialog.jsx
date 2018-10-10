@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Dialog from 'material-ui/Dialog';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import { Card, CardHeader, CardActions, CardText } from 'material-ui/Card';
-import ContentAddCircle from 'material-ui/svg-icons/content/add-circle';
-import ActionOpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
-import { brown50, red400 } from 'material-ui/styles/colors';
+import Dialog from '@material-ui/core/Dialog';
+import { Tabs, Tab } from '@material-ui/core/Tabs';
+import RaisedButton from '@material-ui/core/RaisedButton';
+import FlatButton from '@material-ui/core/FlatButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { Card, CardHeader, CardActions, CardText } from '@material-ui/core/Card';
+import ContentAddCircle from '@material-ui/core/svg-icons/content/add-circle';
+import ActionOpenInBrowser from '@material-ui/core/svg-icons/action/open-in-browser';
+import ActionDelete from '@material-ui/core/svg-icons/action/delete';
+import { brown50, red400 } from '@material-ui/core/styles/colors';
 
 import {
   personalDB,

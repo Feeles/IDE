@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
-import Checkbox from 'material-ui/Checkbox';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import EditableLabel from '../../jsx/EditableLabel';
 

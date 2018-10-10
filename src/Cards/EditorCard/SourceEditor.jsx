@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
-import LinearProgress from 'material-ui/LinearProgress';
-import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
-import ContentSave from 'material-ui/svg-icons/content/save';
+import FlatButton from '@material-ui/core/FlatButton';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import HardwareKeyboardBackspace from '@material-ui/core/svg-icons/hardware/keyboard-backspace';
+import ContentSave from '@material-ui/core/svg-icons/content/save';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import includes from 'lodash/includes';

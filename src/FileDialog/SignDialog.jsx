@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import AutoComplete from 'material-ui/AutoComplete';
+import Dialog from '@material-ui/core/Dialog';
+import AutoComplete from '@material-ui/core/AutoComplete';
 
 import { Confirm, Abort } from './Buttons';
 

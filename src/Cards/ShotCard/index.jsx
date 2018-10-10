@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Card from 'material-ui/Card';
+import Card from '@material-ui/core/Card';
 import CardWindow from '../CardWindow';
 import uniq from 'lodash/uniq';
 
