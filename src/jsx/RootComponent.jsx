@@ -20,6 +20,7 @@ import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
+import ErrorBoundary from './ErrorBoundary';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =
@@ -391,31 +392,33 @@ class RootComponent extends Component {
     const { rootElement } = this.props;
 
     return (
-      <V0MuiThemeProvider muiTheme={this.state.muiTheme}>
-        {this.state.last > 0 ? (
-          this.renderLoading()
-        ) : this.state.cardProps ? (
-          <Main
-            cardProps={this.state.cardProps}
-            setCardProps={this.setCardProps}
-            openSidebar={this.props.openSidebar}
-            mini={this.props.mini}
-            files={this.state.files}
-            rootElement={rootElement}
-            rootStyle={getComputedStyle(rootElement)}
-            project={this.state.project}
-            launchIDE={this.launchIDE}
-            localization={this.localization}
-            setLocalization={this.setLocalization}
-            muiTheme={this.state.muiTheme}
-            setMuiTheme={this.setMuiTheme}
-            onChange={this.props.onChange}
-            onMessage={this.props.onMessage}
-            onThumbnailChange={this.props.onThumbnailChange}
-            disableLocalSave={this.props.disableLocalSave}
-          />
-        ) : null}
-      </V0MuiThemeProvider>
+      <ErrorBoundary>
+        <V0MuiThemeProvider muiTheme={this.state.muiTheme}>
+          {this.state.last > 0 ? (
+            this.renderLoading()
+          ) : this.state.cardProps ? (
+            <Main
+              cardProps={this.state.cardProps}
+              setCardProps={this.setCardProps}
+              openSidebar={this.props.openSidebar}
+              mini={this.props.mini}
+              files={this.state.files}
+              rootElement={rootElement}
+              rootStyle={getComputedStyle(rootElement)}
+              project={this.state.project}
+              launchIDE={this.launchIDE}
+              localization={this.localization}
+              setLocalization={this.setLocalization}
+              muiTheme={this.state.muiTheme}
+              setMuiTheme={this.setMuiTheme}
+              onChange={this.props.onChange}
+              onMessage={this.props.onMessage}
+              onThumbnailChange={this.props.onThumbnailChange}
+              disableLocalSave={this.props.disableLocalSave}
+            />
+          ) : null}
+        </V0MuiThemeProvider>
+      </ErrorBoundary>
     );
   }
 }
