@@ -6,11 +6,17 @@ import { Tabs, Tab } from '@material-ui/core/Tabs';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import FlatButton from '@material-ui/core/FlatButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Card, CardHeader, CardActions, CardText } from '@material-ui/core/Card';
+import {
+  Card,
+  CardHeader,
+  CardActions,
+  CardText
+} from '@material-ui/core/Card';
 import ContentAddCircle from '@material-ui/core/icons/add-circle';
 import ActionOpenInBrowser from '@material-ui/core/icons/open-in-browser';
 import ActionDelete from '@material-ui/core/icons/delete';
-import { brown50, red400 } from '@material-ui/core/styles/colors';
+import brown from '@material-ui/core/colors/brown';
+import red from '@material-ui/core/colors/red';
 
 import {
   personalDB,
@@ -142,7 +148,7 @@ export default class CloneDialog extends PureComponent {
         paddingBottom: 16,
         height: '20rem',
         overflow: 'scroll',
-        backgroundColor: brown50
+        backgroundColor: brown['50']
       },
       card: {
         marginTop: 16
@@ -311,7 +317,7 @@ export class ProjectCard extends PureComponent {
         marginTop: 16
       },
       remove: {
-        color: red400
+        color: red['400']
       },
       label: {
         fontWeight: 600,
@@ -359,7 +365,7 @@ export class ProjectCard extends PureComponent {
           />
           <FlatButton
             label={localization.cloneDialog.remove}
-            icon={<ActionDelete color={red400} />}
+            icon={<ActionDelete color={red['400']} />}
             labelStyle={styles.remove}
             disabled={this.props.processing}
             onClick={this.handleRemove}

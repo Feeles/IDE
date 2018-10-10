@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import NavigationClose from '@material-ui/core/icons/close';
 import EditorModeEdit from '@material-ui/core/icons/mode-edit';
-import { transparent, redA200 } from '@material-ui/core/styles/colors';
+import red from '@material-ui/core/colors/red';
 import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 
 const MaxTabWidth = 160;
@@ -88,7 +88,7 @@ const getStyles = (props, context, state) => {
       margin: '0 -4px',
       transform: 'scale(0.55)',
       borderRadius: '50%',
-      backgroundColor: closerMouseOver ? redA200 : transparent
+      backgroundColor: closerMouseOver ? red['A200'] : 'transparent'
     }
   };
 };

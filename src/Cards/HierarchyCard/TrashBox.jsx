@@ -4,8 +4,6 @@ import { DropTarget } from 'react-dnd';
 import IconButton from '@material-ui/core/IconButton';
 import ActionDelete from '@material-ui/core/icons/delete';
 import NavigationArrowBack from '@material-ui/core/icons/arrow-back';
-import { transparent } from '@material-ui/core/styles/colors';
-
 import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, state, context) => {
@@ -17,8 +15,8 @@ const getStyles = (props, state, context) => {
       borderWidth: 0,
       borderTopWidth: isOver ? spacing.desktopGutterMini : 0,
       borderStyle: 'solid',
-      borderColor: transparent,
-      backgroundColor: isOver ? palette.disabledColor : transparent,
+      borderColor: 'transparent',
+      backgroundColor: isOver ? palette.disabledColor : 'transparent',
       borderRadius: 2
     }
   };

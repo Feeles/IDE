@@ -5,7 +5,6 @@ import { CardActions, CardText } from '@material-ui/core/Card';
 import Popover from '@material-ui/core/Popover';
 import Paper from '@material-ui/core/Paper';
 import { convertColorToString } from '@material-ui/core/styles/colorManipulator';
-import { transparent, fullWhite } from '@material-ui/core/styles/colors';
 import { ChromePicker, TwitterPicker } from 'react-color';
 
 import LayeredStyle from './LayeredStyle';
@@ -20,7 +19,7 @@ const getStyles = (props, context) => {
     html: {
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: fullWhite
+      backgroundColor: 'white'
     },
     body: {
       backgroundColor: bodyColor
@@ -51,7 +50,7 @@ const getStyles = (props, context) => {
       flex: '1 1 auto',
       marginLeft: spacing.desktopGutterMore,
       height: boxSize,
-      backgroundColor: transparent
+      backgroundColor: 'transparent'
     },
     container: {
       textAlign: 'center',

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import { DropTarget } from 'react-dnd';
 import HardwareComputer from '@material-ui/core/icons/computer';
-import { transparent } from '@material-ui/core/styles/colors';
 
 import DragTypes from '../../utils/dragTypes';
 
@@ -19,8 +18,8 @@ const getStyles = (props, context) => {
       borderWidth: 0,
       borderTopWidth: isOver ? spacing.desktopGutterMini : 0,
       borderStyle: 'solid',
-      borderColor: transparent,
-      backgroundColor: isOver ? palette.disabledColor : transparent,
+      borderColor: 'transparent',
+      backgroundColor: isOver ? palette.disabledColor : 'transparent',
       borderRadius: 2
     }
   };

@@ -1,12 +1,5 @@
-import {
-  grey100,
-  grey200,
-  grey300,
-  grey400,
-  grey500,
-  grey600,
-  blueA700
-} from '@material-ui/core/styles/colors';
+import grey from '@material-ui/core/colors/grey';
+import blue from '@material-ui/core/colors/blue';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 export default ({ palette, paper, transitions }) =>
@@ -98,27 +91,27 @@ a.Feeles-link {
   z-index: 3;
 }
 .cm-s-default .cm-property {
-  color: ${blueA700};
+  color: ${blue['A700']};
 }
 
 .cm-tab {
-  background-color: ${grey100};
+  background-color: ${grey['100']};
   opacity: 0.8;
 }
 .cm-tab + .cm-tab {
-  background-color: ${grey200};
+  background-color: ${grey['200']};
 }
 .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey300};
+  background-color: ${grey['300']};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey400};
+  background-color: ${grey['400']};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey500};
+  background-color: ${grey['500']};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey600};
+  background-color: ${grey['600']};
 }
 div.CodeMirror span.CodeMirror-matchingbracket {
   text-shadow: 0 0 4px #000, 0 -8px 10px #000, 0 8px 10px #000;

@@ -1,6 +1,6 @@
 import transitions from '@material-ui/core/styles/transitions';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { grey500, fullWhite } from '@material-ui/core/styles/colors';
+import grey from '@material-ui/core/colors/grey';
 import {
   fade,
   emphasize,
@@ -22,10 +22,10 @@ const themeColors = [
 ];
 
 export const defaultPalette = {
-  canvasColor: fullWhite,
+  canvasColor: 'white',
   primary1Color: random(themeColors),
   accent1Color: random(themeColors),
-  backgroundColor: grey500
+  backgroundColor: grey['500']
 };
 
 export default feelesrc => {

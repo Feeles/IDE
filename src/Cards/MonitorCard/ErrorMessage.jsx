@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fullWhite, red500 } from '@material-ui/core/styles/colors';
+import red from '@material-ui/core/colors/red';
 
 import SvgButton from './SvgButton';
 
@@ -43,7 +43,7 @@ export default class ErrorMessage extends PureComponent {
         top: 0,
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: red500,
+        backgroundColor: red['500'],
         zIndex: 3000
       },
       button: {
@@ -52,7 +52,7 @@ export default class ErrorMessage extends PureComponent {
       pre: {
         width: '100%',
         maxHeight: '8rem',
-        color: fullWhite,
+        color: 'white',
         overflow: 'scroll',
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
       }

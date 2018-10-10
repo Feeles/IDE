@@ -4,7 +4,7 @@ import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import FlatButton from '@material-ui/core/FlatButton';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import Paper from '@material-ui/core/Paper';
-import { red50, red500 } from '@material-ui/core/styles/colors';
+import red from '@material-ui/core/colors/red';
 import ActionRestore from '@material-ui/core/icons/restore';
 
 export default class ErrorPane extends PureComponent {
@@ -52,8 +52,8 @@ export default class ErrorPane extends PureComponent {
         flexDirection: 'column',
         alignItems: 'center',
         borderStyle: 'double',
-        borderColor: red500,
-        backgroundColor: red50,
+        borderColor: red['500'],
+        backgroundColor: red['50'],
         overflow: 'hidden'
       },
       heading: {
@@ -103,7 +103,7 @@ export default class ErrorPane extends PureComponent {
       },
       messageText: {
         margin: 8,
-        color: red500,
+        color: red['500'],
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
       }
     };

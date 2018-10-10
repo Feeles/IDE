@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fullWhite, fullBlack } from '@material-ui/core/styles/colors';
 
 import CreditBar from './CreditBar';
 
@@ -17,7 +16,7 @@ const getStyles = (props, context, state) => {
       justifyContent: 'center',
       boxSizing: 'border-box',
       overflow: 'hidden',
-      background: `linear-gradient(${fullWhite}, ${fullBlack})`,
+      background: `linear-gradient(white, black)`,
       width: '100%',
       height: '100%'
     }),

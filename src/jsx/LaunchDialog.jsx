@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import RaisedButton from '@material-ui/core/RaisedButton';
-import { brown50 } from '@material-ui/core/styles/colors';
+import brown from '@material-ui/core/colors/brown';
 
 import { personalDB, updateProject } from '../database/';
 import { ProjectCard } from '../Menu/CloneDialog';
@@ -98,7 +98,7 @@ export default class LaunchDialog extends PureComponent {
         paddingBottom: 16,
         height: '20rem',
         overflow: 'scroll',
-        backgroundColor: brown50,
+        backgroundColor: brown['50'],
         overflowX: 'auto',
         overflowY: 'scroll'
       },

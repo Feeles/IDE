@@ -4,7 +4,7 @@ import beautify from 'js-beautify';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AvStop from '@material-ui/core/icons/stop';
-import { red50, red500 } from '@material-ui/core/styles/colors';
+import red from '@material-ui/core/colors/red';
 import ContentReply from '@material-ui/core/icons/reply';
 
 import { SourceFile } from '../../File/';
@@ -52,8 +52,8 @@ const getStyle = (props, context, state) => {
       flex: '0 1 auto',
       margin: 0,
       padding: 8,
-      backgroundColor: red50,
-      color: red500,
+      backgroundColor: red['50'],
+      color: red['500'],
       fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
       overflow: 'scroll'
     },

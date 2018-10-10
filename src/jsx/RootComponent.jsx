@@ -6,7 +6,7 @@ import TouchBackend from 'react-dnd-touch-backend';
 import URLSearchParams from 'url-search-params';
 import { DragDropContext } from 'react-dnd';
 import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { grey300, grey700 } from '@material-ui/core/styles/colors';
+import grey from '@material-ui/core/colors/grey';
 import transitions from '@material-ui/core/styles/transitions';
 
 import { readProject, findProject } from '../database/';
@@ -334,7 +334,7 @@ class RootComponent extends Component {
         color: 'red'
       },
       count: {
-        color: grey700,
+        color: grey['700'],
         fontSize: '.5rem',
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
         wordBreak: 'break-all',
@@ -378,7 +378,7 @@ class RootComponent extends Component {
         <style>
           {`
           html, body {
-            background-color: ${grey300};
+            background-color: ${grey['300']};
             transition: ${transitions.easeOut('4000ms')};
           }
         `}
