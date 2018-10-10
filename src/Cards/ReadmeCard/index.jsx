@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import { CardText, CardActions } from '@material-ui/core/Card';
-import DropDownMenu from '@material-ui/core/DropDownMenu';
+import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 import Readme from './Readme';
@@ -82,9 +82,9 @@ export default class ReadmeCard extends PureComponent {
     }
   };
 
-  handleSelect = (event, index, value) => {
+  handleSelect = event => {
     this.setState({
-      selectedFile: this.resolveFile(value)
+      selectedFile: this.resolveFile(event.target.value)
     });
   };
 
@@ -121,7 +121,7 @@ export default class ReadmeCard extends PureComponent {
       <span key="index" style={styles.index}>
         {localization.readmeCard.index}
       </span>,
-      <DropDownMenu
+      <Select
         key="dropDown"
         value={selectedFile.key}
         style={styles.dropDown}
@@ -129,9 +129,11 @@ export default class ReadmeCard extends PureComponent {
         onChange={this.handleSelect}
       >
         {markdowns.map(file => (
-          <MenuItem key={file.key} value={file.key} primaryText={file.header} />
+          <MenuItem key={file.key} value={file.key}>
+            {file.header}
+          </MenuItem>
         ))}
-      </DropDownMenu>
+      </Select>
     ];
   }
 

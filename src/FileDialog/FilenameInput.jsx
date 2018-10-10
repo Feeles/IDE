@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
-import DropDownMenu from '@material-ui/core/DropDownMenu';
+import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const MimeTypes = {
@@ -52,8 +52,8 @@ export default class FilenameInput extends Component {
     this.setState({ name: event.target.value });
   };
 
-  handleTypeChange = (event, index, value) => {
-    this.setState({ type: value });
+  handleTypeChange = event => {
+    this.setState({ type: event.target.value });
   };
 
   componentDidMount() {
@@ -94,16 +94,18 @@ export default class FilenameInput extends Component {
             onChange={this.handleNameChange}
           />
         </TextField>
-        <DropDownMenu
+        <Select
           value={type}
           disabled={disabled}
           onChange={this.handleTypeChange}
           style={dropDownStyle}
         >
           {Object.keys(MimeTypes).map(type => (
-            <MenuItem key={type} value={type} primaryText={MimeTypes[type]} />
+            <MenuItem key={type} value={type}>
+              {MimeTypes[type]}
+            </MenuItem>
           ))}
-        </DropDownMenu>
+        </Select>
       </div>
     );
   }
