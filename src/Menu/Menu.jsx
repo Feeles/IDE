@@ -6,9 +6,9 @@ import IconMenu from '@material-ui/core/IconMenu';
 import MenuItem from '@material-ui/core/MenuItem';
 import FlatButton from '@material-ui/core/FlatButton';
 import Toggle from '@material-ui/core/Toggle';
-import FileDownload from '@material-ui/core/icons/file-download';
-import ActionLanguage from '@material-ui/core/icons/language';
-import NavigationMenu from '@material-ui/core/icons/menu';
+import FileDownload from '@material-ui/icons/CloudDownload';
+import ActionLanguage from '@material-ui/icons/Language';
+import NavigationMenu from '@material-ui/icons/Menu';
 
 import { acceptedLanguages } from '../localization/';
 import CloneDialog from './CloneDialog';

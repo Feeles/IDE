@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
-import ContentCreate from '@material-ui/core/icons/create';
+import ContentCreate from '@material-ui/icons/Create';
 
 const getStyles = (props, context) => {
   const { prepareStyles, palette } = context.muiTheme;

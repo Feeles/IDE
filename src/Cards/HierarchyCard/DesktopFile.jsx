@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import { DropTarget } from 'react-dnd';
-import HardwareComputer from '@material-ui/core/icons/computer';
+import HardwareComputer from '@material-ui/icons/Computer';
 
 import DragTypes from '../../utils/dragTypes';
 

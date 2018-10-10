@@ -1,14 +1,14 @@
 import React from 'react';
-import HardwareDesktopWindows from '@material-ui/core/icons/desktop-windows';
-import ContentReply from '@material-ui/core/icons/reply';
-import AvMusicVideo from '@material-ui/core/icons/music-video';
-import ContentCreate from '@material-ui/core/icons/create';
-import MapsMap from '@material-ui/core/icons/map';
-import ImagePalette from '@material-ui/core/icons/palette';
-import ActionTouchApp from '@material-ui/core/icons/touch-app';
-import FileFolderOpen from '@material-ui/core/icons/folder-open';
-import ActionSettingsApplications from '@material-ui/core/icons/settings-applications';
-import ActionCopyright from '@material-ui/core/icons/copyright';
+import HardwareDesktopWindows from '@material-ui/icons/DesktopWindows';
+import ContentReply from '@material-ui/icons/Reply';
+import AvMusicVideo from '@material-ui/icons/MusicVideo';
+import ContentCreate from '@material-ui/icons/Create';
+import MapsMap from '@material-ui/icons/Map';
+import ImagePalette from '@material-ui/icons/Palette';
+import ActionTouchApp from '@material-ui/icons/TouchApp';
+import FileFolderOpen from '@material-ui/icons/FolderOpen';
+import ActionSettingsApplications from '@material-ui/icons/SettingsApplications';
+import ActionCopyright from '@material-ui/icons/Copyright';
 
 export default [
   {

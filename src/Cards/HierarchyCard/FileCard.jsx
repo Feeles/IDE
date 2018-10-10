@@ -4,8 +4,8 @@ import { DragSource } from 'react-dnd';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import EditorDragHandle from '@material-ui/core/icons/drag-handle';
-import ActionSettings from '@material-ui/core/icons/settings';
+import EditorDragHandle from '@material-ui/icons/DragHandle';
+import ActionSettings from '@material-ui/icons/Settings';
 import includes from 'lodash/includes';
 
 import Filename from './Filename';

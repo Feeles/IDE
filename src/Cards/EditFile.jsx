@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import FlatButton from '@material-ui/core/FlatButton';
-import EditorModeEdit from '@material-ui/core/icons/mode-edit';
+import EditorModeEdit from '@material-ui/icons/Edit';
 
 import { Tab } from '../ChromeTab/';
 

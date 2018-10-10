@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import beautify from 'js-beautify';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import AvStop from '@material-ui/core/icons/stop';
+import AvStop from '@material-ui/icons/Stop';
 import red from '@material-ui/core/colors/red';
-import ContentReply from '@material-ui/core/icons/reply';
+import ContentReply from '@material-ui/icons/Reply';
 
 import { SourceFile } from '../../File/';
 import Editor from '../EditorCard/Editor';

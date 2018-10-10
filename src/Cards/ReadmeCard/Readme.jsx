@@ -3,8 +3,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import ActionOpenInNew from '@material-ui/core/icons/open-in-new';
-import EditorModeEdit from '@material-ui/core/icons/mode-edit';
+import ActionOpenInNew from '@material-ui/icons/OpenInNew';
+import EditorModeEdit from '@material-ui/icons/Edit';
 
 import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 import MDReactComponent from '../../jsx/MDReactComponent';

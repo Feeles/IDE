@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import IconButton from '@material-ui/core/IconButton';
-import ActionDelete from '@material-ui/core/icons/delete';
-import NavigationArrowBack from '@material-ui/core/icons/arrow-back';
+import ActionDelete from '@material-ui/icons/Delete';
+import NavigationArrowBack from '@material-ui/icons/ArrowBack';
 import DragTypes from '../../utils/dragTypes';
 
 const getStyles = (props, state, context) => {

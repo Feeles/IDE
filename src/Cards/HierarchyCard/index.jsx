@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import FloatingActionButton from '@material-ui/core/FloatingActionButton';
-import ContentAdd from '@material-ui/core/icons/add';
+import ContentAdd from '@material-ui/icons/Add';
 import includes from 'lodash/includes';
 
 import Card from '../CardWindow';

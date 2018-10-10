@@ -5,9 +5,9 @@ import Popover from '@material-ui/core/Popover';
 import RaisedButton from '@material-ui/core/RaisedButton';
 import FloatingActionButton from '@material-ui/core/FloatingActionButton';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import ContentAdd from '@material-ui/core/icons/add';
-import ContentReply from '@material-ui/core/icons/reply';
-import ActionOpenInNew from '@material-ui/core/icons/open-in-new';
+import ContentAdd from '@material-ui/icons/Add';
+import ContentReply from '@material-ui/icons/Reply';
+import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
 

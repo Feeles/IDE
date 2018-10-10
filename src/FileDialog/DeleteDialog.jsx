@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
-import AlertError from '@material-ui/core/icons/error';
+import AlertError from '@material-ui/icons/Error';
 import red from '@material-ui/core/colors/red';
 
 import { Confirm, Abort } from './Buttons';

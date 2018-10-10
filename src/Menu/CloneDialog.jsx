@@ -12,9 +12,9 @@ import {
   CardActions,
   CardText
 } from '@material-ui/core/Card';
-import ContentAddCircle from '@material-ui/core/icons/add-circle';
-import ActionOpenInBrowser from '@material-ui/core/icons/open-in-browser';
-import ActionDelete from '@material-ui/core/icons/delete';
+import ContentAddCircle from '@material-ui/icons/AddCircle';
+import ActionOpenInBrowser from '@material-ui/icons/OpenInBrowser';
+import ActionDelete from '@material-ui/icons/Delete';
 import brown from '@material-ui/core/colors/brown';
 import red from '@material-ui/core/colors/red';
 

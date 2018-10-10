@@ -5,9 +5,9 @@ import Popover from '@material-ui/core/Popover';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
-import AVPlayCircleOutline from '@material-ui/core/icons/play-circle-outline';
-import NavigationRefresh from '@material-ui/core/icons/refresh';
-import NavigationArrowDropDown from '@material-ui/core/icons/arrow-drop-down';
+import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
+import NavigationRefresh from '@material-ui/icons/Refresh';
+import NavigationArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 export default class PlayMenu extends PureComponent {
