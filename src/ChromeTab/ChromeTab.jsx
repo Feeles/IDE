@@ -154,7 +154,7 @@ export default class ChromeTabs extends PureComponent {
   render() {
     const { file, tab, handleSelect, handleClose, localization } = this.props;
     const {
-      palette: { secondaryTextColor, alternateTextColor },
+      palette: { secondaryTextColor },
       prepareStyles
     } = this.context.muiTheme;
     const { doc } = this.state;
@@ -209,7 +209,7 @@ export default class ChromeTabs extends PureComponent {
               onMouseLeave={handleRightMouseLeave}
             >
               {this.state.closerMouseOver ? (
-                <NavigationClose color={alternateTextColor} />
+                <NavigationClose />
               ) : this.state.hasChanged ? (
                 <EditorModeEdit color={secondaryTextColor} />
               ) : (

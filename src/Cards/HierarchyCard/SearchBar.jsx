@@ -100,10 +100,7 @@ export default class SearchBar extends PureComponent {
   render() {
     const { putFile, onOpen, deleteAll, localization } = this.props;
     const { showTrashes, query } = this.state;
-    const {
-      secondaryTextColor,
-      alternateTextColor
-    } = this.context.muiTheme.palette;
+    const { secondaryTextColor } = this.context.muiTheme.palette;
     const fileNames = this.props.files.map(f => f.moduleName).filter(s => s);
 
     const { root, bar, icon, empty } = getStyles(
@@ -142,7 +139,7 @@ export default class SearchBar extends PureComponent {
             variant="raised"
             color="secondary"
             label={localization.hierarchyCard.emptyTrashBox}
-            icon={<ActionDeleteForever color={alternateTextColor} />}
+            icon={<ActionDeleteForever />}
             style={empty}
             onClick={deleteAll}
           />

@@ -188,14 +188,14 @@ export default class Menu extends PureComponent {
             onClick={this.handleClone}
             style={styles.button}
           >
-            <FileDownload color={alternateTextColor} />
+            <FileDownload />
           </IconButton>
         ) : null}
         <IconButton
           tooltip={localization.menu.language}
           onTouchTap={this.handleLanguage}
         >
-          <ActionLanguage color={alternateTextColor} />
+          <ActionLanguage />
         </IconButton>
         <MuiMenu
           anchorEl={this.state.anchorEl}

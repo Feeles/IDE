@@ -143,7 +143,7 @@ export default class EditorCard extends PureComponent {
           style={styles.large}
           onClick={() => this.setLocation()}
         >
-          <AVPlayCircleOutline color={palette.alternateTextColor} />
+          <AVPlayCircleOutline />
         </IconButton>
       </div>
     );
