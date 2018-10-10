@@ -13,6 +13,7 @@ const version = require('./version');
 const port = process.env.PORT || 8081;
 
 const config = {
+  mode: process.env.NODE_ENV || 'development',
   entry: {
     index: './src/main'
   },
@@ -22,7 +23,7 @@ const config = {
     filename: '[name].js'
   },
   module: {
-    loaders: [
+    rules: [
       {
         enforce: 'pre',
         test: /\.jsx?$/,
@@ -50,15 +51,11 @@ const config = {
       CSS_PREFIX: JSON.stringify(cssPrefix),
       EXPORT_VAR_NAME: JSON.stringify(exportVarName)
     }),
-
     new webpack.LoaderOptionsPlugin({ minimize: false, debug: false }),
-
     new OpenBrowserPlugin({ url: `http://localhost:${port}` }),
-
     new HappyPack({
       loaders: ['babel-loader?cacheDirectory']
     }),
-
     // ---- ja ----
     new HtmlWebpackPlugin({
       inject: false,

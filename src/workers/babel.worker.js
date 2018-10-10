@@ -1,6 +1,6 @@
 // raw-loader!escape-loader
 
-import babelStandaloneJs from 'raw-loader!../lib/escape-loader!babel-standalone/babel.min';
+import babelStandaloneJs from 'raw-loader!../lib/escape-loader!@babel/standalone/babel.min';
 
 const prefix = `
 self.addEventListener("message", function (event) {
