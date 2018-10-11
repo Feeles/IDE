@@ -92,6 +92,7 @@
     "react-dom": "^16.5.2",
     "react-player": "^0.18.0",
     "react-popout": "^0.6.0",
+    "react-select": "^2.1.0",
     "react-transition-group": "^1.2.0",
     "redis": "^2.7.1",
     "regenerator-runtime": "^0.10.3",

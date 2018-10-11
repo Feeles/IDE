@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-// import AutoComplete from '@material-ui/core/AutoComplete';
+import AutoComplete from '../../jsx/IntegrationReactSelect';
 import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
 import ActionSearch from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import ActionDeleteForever from '@material-ui/icons/DeleteForever';
-import NavigationClose from '@material-ui/icons/Close';
 
 import TrashBox from './TrashBox';
 import search, { getOptions } from './search';
@@ -14,9 +12,8 @@ import DesktopFile from './DesktopFile';
 
 const SearchBarHeight = 40;
 
-const getStyles = (props, context, state) => {
+const getStyles = (props, context) => {
   const { palette, spacing, prepareStyles } = context.muiTheme;
-  const { focus } = state;
 
   return {
     root: prepareStyles({
@@ -35,12 +32,10 @@ const getStyles = (props, context, state) => {
       width: '100%',
       height: SearchBarHeight,
       paddingLeft: spacing.desktopGutterMini,
-      backgroundColor: palette.canvasColor,
-      opacity: focus ? 1 : 0.9
+      backgroundColor: palette.canvasColor
     },
     icon: {
-      marginTop: 4,
-      marginRight: focus ? 8 : 0
+      marginTop: 4
     },
     empty: {
       flex: '1 0 auto',
@@ -66,7 +61,6 @@ export default class SearchBar extends PureComponent {
   };
 
   state = {
-    focus: false,
     showTrashes: false,
     query: ''
   };
@@ -75,7 +69,14 @@ export default class SearchBar extends PureComponent {
     this.handleUpdate('');
   }
 
-  handleUpdate = query => {
+  handleUpdate = (value, context) => {
+    const query = typeof value === 'object' ? value.value : value;
+    if (!query && context) {
+      if (context.action !== 'input-change') {
+        // react-select は value="" でイベント発火することがある
+        return;
+      }
+    }
     const { filterRef } = this.props;
 
     const options = getOptions(query);
@@ -100,7 +101,13 @@ export default class SearchBar extends PureComponent {
   render() {
     const { putFile, onOpen, deleteAll, localization } = this.props;
     const { showTrashes, query } = this.state;
-    const fileNames = this.props.files.map(f => f.moduleName).filter(s => s);
+    const fileNames = this.props.files
+      .map(f => f.moduleName)
+      .filter(s => s)
+      .map(s => ({
+        value: s,
+        label: s
+      }));
 
     const { root, bar, icon, empty } = getStyles(
       this.props,
@@ -118,20 +125,12 @@ export default class SearchBar extends PureComponent {
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
         <Paper elevation={3} style={bar}>
           <ActionSearch style={icon} />
-          {/* <AutoComplete
-            id="search"
-            searchText={query}
-            dataSource={fileNames}
-            maxSearchResults={5}
-            onNewRequest={this.handleUpdate}
-            onUpdateInput={this.handleUpdate}
-            onFocus={() => this.setState({ focus: true })}
-            onBlur={() => this.setState({ focus: false })}
-            fullWidth
-          /> */}
-          <IconButton disabled={!query} onClick={() => this.handleUpdate('')}>
-            <NavigationClose />
-          </IconButton>
+          <AutoComplete
+            value={query}
+            suggestions={fileNames}
+            onChange={this.handleUpdate}
+            placeholder=""
+          />
         </Paper>
         {showTrashes ? (
           <Button
