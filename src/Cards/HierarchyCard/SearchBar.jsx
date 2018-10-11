@@ -116,7 +116,7 @@ export default class SearchBar extends PureComponent {
           onClick={this.handleTrashBoxTap}
         />
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
-        <Paper zDepth={3} style={bar}>
+        <Paper elevation={3} style={bar}>
           <ActionSearch style={icon} />
           {/* <AutoComplete
             id="search"

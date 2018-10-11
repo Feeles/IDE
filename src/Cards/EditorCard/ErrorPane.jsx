@@ -67,7 +67,7 @@ export default class ErrorPane extends PureComponent {
     };
 
     return (
-      <Paper key="error" zDepth={2} style={styles.error}>
+      <Paper key="error" elevation={2} style={styles.error}>
         <Button
           variant="text"
           color="primary"

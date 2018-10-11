@@ -110,7 +110,7 @@ class FileCard extends PureComponent {
     return connectDragPreview(
       <div style={root}>
         <Paper
-          zDepth={isSelected ? 2 : 0}
+          elevation={isSelected ? 2 : 0}
           onClick={() => handleFileSelect(file)}
           style={card}
         >
