@@ -581,7 +581,7 @@ export default class Main extends Component {
           open={this.state.notice !== null}
           message=""
           autoHideDuration={4000}
-          onRequestClose={() => this.setState({ notice: null })}
+          onClose={() => this.setState({ notice: null })}
           {...this.state.notice}
         />
       </div>

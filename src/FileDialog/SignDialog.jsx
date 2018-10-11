@@ -102,7 +102,7 @@ export default class SignDialog extends PureComponent {
         modal={false}
         open={true}
         // bodyStyle={{ overflow: 'scroll' }}
-        onRequestClose={this.cancel}
+        onClose={this.cancel}
       >
         {this.state.files.map(item => (
           <SignItem

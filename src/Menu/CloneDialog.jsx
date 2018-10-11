@@ -187,10 +187,9 @@ export default class CloneDialog extends PureComponent {
     return (
       <Dialog
         open
-        modal={this.state.processing}
         // bodyStyle={styles.body}
         actions={actions}
-        onRequestClose={onRequestClose}
+        onClose={onRequestClose}
       >
         <Tabs>
           <Tab label={localization.cloneDialog.saveTitle}>

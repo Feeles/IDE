@@ -73,7 +73,7 @@ export default class RenameDialog extends Component {
         actions={actions}
         modal={false}
         style={root}
-        onRequestClose={onRequestClose}
+        onClose={onRequestClose}
       >
         <Table selectable={false}>
           <TableBody displayRowCheckbox={false}>

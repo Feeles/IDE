@@ -65,7 +65,7 @@ export default class SaveDialog extends PureComponent {
         actions={actions}
         modal={false}
         open={true}
-        onRequestClose={onRequestClose}
+        onClose={onRequestClose}
       >
         {this.state.results.map((item, i) => (
           <div key={i} style={divStyle}>

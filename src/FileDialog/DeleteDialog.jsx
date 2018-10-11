@@ -51,7 +51,7 @@ export default class DeleteDialog extends Component {
         actions={actions}
         modal={false}
         open={true}
-        onRequestClose={onRequestClose}
+        onClose={onRequestClose}
         bodyStyle={style}
       >
         <AlertError style={iconStyle} />

@@ -125,7 +125,7 @@ export default class AssetButton extends PureComponent {
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           style={styles.popover}
-          onRequestClose={() => this.setState({ open: false })}
+          onClose={() => this.setState({ open: false })}
         >
           <div style={styles.box}>
             <span style={styles.headerLabel}>

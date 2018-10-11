@@ -153,7 +153,7 @@ export default class PlayMenu extends PureComponent {
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
           targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-          onRequestClose={this.handleRequestClose}
+          onClose={this.handleRequestClose}
         >
           <Menu
             value={this.state.href}

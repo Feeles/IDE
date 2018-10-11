@@ -196,7 +196,7 @@ export default class PaletteCard extends PureComponent {
             horizontal: 'left',
             vertical: 'bottom'
           }}
-          onRequestClose={this.closePopover}
+          onClose={this.closePopover}
         >
           {limited ? (
             <TwitterPicker

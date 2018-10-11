@@ -66,7 +66,7 @@ export default class AddDialog extends Component {
         actions={actions}
         modal={false}
         open={true}
-        onRequestClose={this.props.onRequestClose}
+        onClose={this.props.onRequestClose}
       >
         <TextField
           fullWidth
