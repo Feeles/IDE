@@ -8,7 +8,7 @@ import ImagePalette from '@material-ui/icons/Palette';
 // import ActionTouchApp from '@material-ui/icons/TouchApp';
 import FileFolderOpen from '@material-ui/icons/FolderOpen';
 import ActionSettingsApplications from '@material-ui/icons/SettingsApplications';
-import ActionCopyright from '@material-ui/icons/Copyright';
+// import ActionCopyright from '@material-ui/icons/Copyright';
 
 export default [
   {
@@ -46,9 +46,9 @@ export default [
   {
     name: 'CustomizeCard',
     icon: <ActionSettingsApplications />
-  },
-  {
-    name: 'CreditsCard',
-    icon: <ActionCopyright />
   }
+  // {
+  //   name: 'CreditsCard',
+  //   icon: <ActionCopyright />
+  // }
 ];

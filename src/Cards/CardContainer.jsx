@@ -7,7 +7,7 @@ import PaletteCard from './PaletteCard/';
 // import EnvCard from './EnvCard/';
 import ReadmeCard from './ReadmeCard/';
 import CustomizeCard from './CustomizeCard/';
-import CreditsCard from './CreditsCard/';
+// import CreditsCard from './CreditsCard/';
 import ShotCard from './ShotCard/';
 import EditorCard from './EditorCard/';
 import HierarchyCard from './HierarchyCard/';
@@ -167,11 +167,11 @@ export default class CardContainer extends PureComponent {
           {...commonProps}
           cardPropsBag={bag('CustomizeCard')}
         />
-        <CreditsCard
+        {/* <CreditsCard
           ref={ref => (this.cardRefs.CreditsCard = ref)}
           {...commonProps}
           cardPropsBag={bag('CreditsCard')}
-        />
+        /> */}
         <ShotCard
           ref={ref => (this.cardRefs.ShotCard = ref)}
           {...commonProps}
