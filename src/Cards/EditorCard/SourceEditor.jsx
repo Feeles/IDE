@@ -43,7 +43,6 @@ const getStyle = (props, state, context) => {
     barButtonLabel: {
       fontSize: '.5rem'
     },
-    progressColor: palette.primary1Color,
     progress: {
       borderRadius: 0
     }
@@ -456,10 +455,7 @@ export default class SourceEditor extends PureComponent {
           />
         </div>
         {this.state.loading ? (
-          <LinearProgress
-            color={styles.progressColor}
-            style={styles.progress}
-          />
+          <LinearProgress color="primary" style={styles.progress} />
         ) : null}
         <div style={styles.editorContainer}>
           <AssetPane

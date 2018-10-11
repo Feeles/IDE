@@ -98,10 +98,7 @@ class FileCard extends PureComponent {
       connectDragSource,
       connectDragPreview
     } = this.props;
-    const {
-      prepareStyles,
-      palette: { secondaryTextColor }
-    } = this.context.muiTheme;
+    const { prepareStyles } = this.context.muiTheme;
 
     const isSelected = selectedFile === file;
 
@@ -119,14 +116,14 @@ class FileCard extends PureComponent {
         >
           {connectDragSource(
             <div style={prepareStyles(dragHandle)}>
-              <EditorDragHandle color={secondaryTextColor} />
+              <EditorDragHandle />
             </div>
           )}
           <div style={prepareStyles(container)}>
             <Filename file={file} onChange={this.handleNameChange} />
           </div>
           <IconButton onClick={this.handleConfirmSettings}>
-            <ActionSettings color={secondaryTextColor} />
+            <ActionSettings />
           </IconButton>
         </Paper>
       </div>

@@ -84,10 +84,7 @@ export default class EditableLabel extends PureComponent {
 
     const labelText = value || defaultValue;
 
-    const {
-      prepareStyles,
-      palette: { secondaryTextColor }
-    } = this.context.muiTheme;
+    const { prepareStyles } = this.context.muiTheme;
 
     const { hint, label } = getStyles(this.props, this.context);
 
@@ -111,7 +108,7 @@ export default class EditableLabel extends PureComponent {
       </div>
     ) : (
       <div style={hint} onClick={this.handleTouch}>
-        <ContentCreate color={secondaryTextColor} />
+        <ContentCreate />
         {this.props.tapTwiceQuickly}
       </div>
     );

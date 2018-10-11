@@ -100,7 +100,6 @@ export default class SearchBar extends PureComponent {
   render() {
     const { putFile, onOpen, deleteAll, localization } = this.props;
     const { showTrashes, query } = this.state;
-    const { secondaryTextColor } = this.context.muiTheme.palette;
     const fileNames = this.props.files.map(f => f.moduleName).filter(s => s);
 
     const { root, bar, icon, empty } = getStyles(
@@ -118,7 +117,7 @@ export default class SearchBar extends PureComponent {
         />
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
         <Paper zDepth={3} style={bar}>
-          <ActionSearch style={icon} color={secondaryTextColor} />
+          <ActionSearch style={icon} />
           {/* <AutoComplete
             id="search"
             searchText={query}
@@ -131,7 +130,7 @@ export default class SearchBar extends PureComponent {
             fullWidth
           /> */}
           <IconButton disabled={!query} onClick={() => this.handleUpdate('')}>
-            <NavigationClose color={secondaryTextColor} />
+            <NavigationClose />
           </IconButton>
         </Paper>
         {showTrashes ? (

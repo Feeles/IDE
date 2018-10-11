@@ -44,7 +44,6 @@ class _DesktopFile extends PureComponent {
 
   render() {
     const { connectDropTarget } = this.props;
-    const { palette } = this.context.muiTheme;
 
     const { input, icon } = getStyles(this.props, this.context);
 
@@ -61,7 +60,7 @@ class _DesktopFile extends PureComponent {
           style={icon}
           onClick={() => this.input && this.input.click()}
         >
-          <HardwareComputer color={palette.secondaryTextColor} />
+          <HardwareComputer />
         </IconButton>
       </div>
     );

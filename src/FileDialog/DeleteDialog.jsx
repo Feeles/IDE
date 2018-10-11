@@ -32,7 +32,8 @@ export default class DeleteDialog extends Component {
 
     const iconStyle = {
       marginRight: 10,
-      marginBottom: -6
+      marginBottom: -6,
+      color: red['400']
     };
 
     const actions = [
@@ -53,7 +54,7 @@ export default class DeleteDialog extends Component {
         onRequestClose={onRequestClose}
         bodyStyle={style}
       >
-        <AlertError color={red['A400']} style={iconStyle} />
+        <AlertError style={iconStyle} />
         This operation can not be undone.
       </Dialog>
     );

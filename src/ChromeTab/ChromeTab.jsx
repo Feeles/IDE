@@ -211,9 +211,9 @@ export default class ChromeTabs extends PureComponent {
               {this.state.closerMouseOver ? (
                 <NavigationClose />
               ) : this.state.hasChanged ? (
-                <EditorModeEdit color={secondaryTextColor} />
+                <EditorModeEdit />
               ) : (
-                <NavigationClose color={secondaryTextColor} />
+                <NavigationClose />
               )}
             </IconButton>
           </div>

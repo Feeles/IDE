@@ -372,7 +372,7 @@ export class ProjectCard extends PureComponent {
             disabled={this.props.processing}
             onClick={this.handleRemove}
           >
-            <ActionDelete color={red['400']} />{' '}
+            <ActionDelete style={{ color: red['400'] }} />{' '}
             <span style={styles.remove}>{localization.cloneDialog.remove}</span>
           </Button>
         </CardActions>

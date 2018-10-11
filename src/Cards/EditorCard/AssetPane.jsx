@@ -117,7 +117,7 @@ export default class AssetPane extends PureComponent {
           {labels.map(label => this.renderEachLabel(label, styles))}
         </div>
         <div style={styles.close} onClick={this.props.handleClose}>
-          <NavigationExpandLess color="white" />
+          <NavigationExpandLess style={{ color: 'white' }} />
         </div>
       </div>
     );

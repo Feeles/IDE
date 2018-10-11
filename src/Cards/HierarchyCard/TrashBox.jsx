@@ -43,18 +43,13 @@ class _TrashBox extends PureComponent {
 
       connectDropTarget
     } = this.props;
-    const { palette } = this.context.muiTheme;
 
     const { icon } = getStyles(this.props, this.state, this.context);
 
     return connectDropTarget(
       <div>
         <IconButton style={icon} onClick={onClick}>
-          {showTrashes ? (
-            <NavigationArrowBack color={palette.secondaryTextColor} />
-          ) : (
-            <ActionDelete color={palette.secondaryTextColor} />
-          )}
+          {showTrashes ? <NavigationArrowBack /> : <ActionDelete />}
         </IconButton>
       </div>
     );

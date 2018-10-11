@@ -45,7 +45,7 @@ export default class ResolveProgress extends PureComponent {
       <CircularProgress
         size={this.props.size}
         thickness={Math.max(1, this.props.size / 8)}
-        color={palette.primary1Color}
+        color="primary"
       />
     );
   }
