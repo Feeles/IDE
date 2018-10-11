@@ -158,7 +158,7 @@ export default class CloneDialog extends PureComponent {
 
     const actions = [
       <Button
-        variant="flat"
+        variant="text"
         key="showAll"
         style={styles.button}
         onClick={() =>
@@ -170,7 +170,7 @@ export default class CloneDialog extends PureComponent {
         {localization.menu.showAllUrls}
       </Button>,
       <Button
-        variant="flat"
+        variant="text"
         key="cancel"
         style={styles.button}
         onClick={onRequestClose}
@@ -359,7 +359,7 @@ export class ProjectCard extends PureComponent {
         </CardContent>
         <CardActions>
           <Button
-            variant="flat"
+            variant="text"
             disabled={this.props.processing}
             onClick={this.handleLoad}
           >
@@ -367,7 +367,7 @@ export class ProjectCard extends PureComponent {
             {localization.cloneDialog.openOnThisTab}
           </Button>
           <Button
-            variant="flat"
+            variant="text"
             disabled={this.props.processing}
             onClick={this.handleRemove}
           >

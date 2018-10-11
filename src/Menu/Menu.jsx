@@ -141,7 +141,7 @@ export default class Menu extends PureComponent {
       (this.props.project.title ? (
         <div style={styles.projectName}>{this.props.project.title}</div>
       ) : (
-        <Button variant="flat" onClick={this.handleClone}>
+        <Button variant="text" onClick={this.handleClone}>
           <span
             style={{
               color: alternateTextColor

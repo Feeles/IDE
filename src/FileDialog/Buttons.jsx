@@ -19,7 +19,7 @@ Confirm.defaultProps = {
 
 const Abort = props => {
   const style = Object.assign({ marginRight: 20 }, props.style);
-  return <Button variant="flat" {...props} style={style} />;
+  return <Button variant="text" {...props} style={style} />;
 };
 
 Abort.propTypes = {

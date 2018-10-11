@@ -421,7 +421,7 @@ export default class SourceEditor extends PureComponent {
         </style>
         <div style={styles.menuBar}>
           <Button
-            variant="flat"
+            variant="text"
             disabled={!this.state.hasHistory}
             style={styles.barButton}
             onClick={this.handleUndo}
@@ -432,7 +432,7 @@ export default class SourceEditor extends PureComponent {
             </span>
           </Button>
           <Button
-            variant="flat"
+            variant="text"
             disabled={!this.state.hasChanged}
             style={styles.barButton}
             onClick={this.handleSaveAndRun}

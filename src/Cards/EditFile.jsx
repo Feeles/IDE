@@ -29,7 +29,7 @@ export default class EditFile extends PureComponent {
 
     return (
       <Button
-        variant="flat"
+        variant="text"
         disabled={!this.props.fileKey}
         onClick={this.handleEdit}
       >

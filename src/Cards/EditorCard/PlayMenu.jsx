@@ -132,7 +132,7 @@ export default class PlayMenu extends PureComponent {
     return (
       <div>
         <Button
-          variant="flat"
+          variant="text"
           color="primary"
           style={styles.button}
           onClick={() => this.props.setLocation()}
@@ -141,7 +141,7 @@ export default class PlayMenu extends PureComponent {
           {localization.editorCard.play}
         </Button>
         <Button
-          variant="flat"
+          variant="text"
           color="primary"
           style={styles.dropDown}
           onClick={this.handlePlay}
