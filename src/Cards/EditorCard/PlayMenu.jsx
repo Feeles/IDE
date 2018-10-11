@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
@@ -12,16 +13,14 @@ import NavigationRefresh from '@material-ui/icons/Refresh';
 import NavigationArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
+@withTheme()
 export default class PlayMenu extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     getFiles: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
     href: PropTypes.string.isRequired,
     localization: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -90,15 +89,15 @@ export default class PlayMenu extends PureComponent {
 
   render() {
     const { localization } = this.props;
-    const { palette, spacing } = this.context.muiTheme;
+    const { palette, spacing } = this.props.theme;
 
     const styles = {
       button: {
         padding: 0,
         paddingLeft: spacing.unit,
         lineHeight: 2,
-        color: palette.alternateTextColor,
-        backgroundColor: palette.primary1Color,
+        color: palette.primary.contrastText,
+        backgroundColor: palette.primary.main,
         borderRadius: 0
       },
       dropDown: {
@@ -106,12 +105,12 @@ export default class PlayMenu extends PureComponent {
         minWidth: 32,
         padding: 0,
         lineHeight: 2,
-        color: palette.alternateTextColor,
-        backgroundColor: palette.primary1Color,
+        color: palette.primary.contrastText,
+        backgroundColor: palette.primary.main,
         borderRadius: 0
       },
       current: {
-        backgroundColor: fade(palette.primary1Color, 0.1),
+        backgroundColor: fade(palette.primary.main, 0.1),
         marginTop: -8,
         marginBottom: -8
       },

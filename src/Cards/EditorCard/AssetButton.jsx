@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
@@ -10,8 +11,10 @@ import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
 
+@withTheme()
 export default class AssetButton extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     code: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     descriptionMoreURL: PropTypes.string,
@@ -24,10 +27,6 @@ export default class AssetButton extends PureComponent {
 
   static defaultProps = {
     description: ''
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -44,7 +43,7 @@ export default class AssetButton extends PureComponent {
 
   render() {
     const { localization } = this.props;
-    const { palette } = this.context.muiTheme;
+    const { palette } = this.props.theme;
 
     const styles = {
       root: {
@@ -56,7 +55,7 @@ export default class AssetButton extends PureComponent {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        border: `4px outset ${palette.primary1Color}`,
+        border: `4px outset ${palette.primary.main}`,
         cursor: 'pointer',
         backgroundSize: 'contain',
         backgroundPosition: '50% 50%',
@@ -90,7 +89,7 @@ export default class AssetButton extends PureComponent {
       code: {
         display: 'block',
         padding: '0 .5rem',
-        backgroundColor: emphasize(palette.canvasColor, 0.07),
+        backgroundColor: emphasize(palette.background.paper, 0.07),
         borderRadius: 2
       },
       pre: {

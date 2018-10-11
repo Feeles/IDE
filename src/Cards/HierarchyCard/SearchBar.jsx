@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import AutoComplete from '../../jsx/IntegrationReactSelect';
 import Paper from '@material-ui/core/Paper';
@@ -12,27 +13,27 @@ import DesktopFile from './DesktopFile';
 
 const SearchBarHeight = 40;
 
-const getStyles = (props, context) => {
-  const { palette, spacing, prepareStyles } = context.muiTheme;
+const getStyles = props => {
+  const { palette, spacing } = props.theme;
 
   return {
-    root: prepareStyles({
+    root: {
       display: 'flex',
       alignItems: 'center',
       boxSizing: 'border-box',
       width: '100%',
       height: SearchBarHeight,
       paddingRight: 16,
-      paddingLeft: spacing.desktopGutterMini,
+      paddingLeft: spacing.unit,
       zIndex: 100
-    }),
+    },
     bar: {
       display: 'flex',
       alignItems: 'center',
       width: '100%',
       height: SearchBarHeight,
-      paddingLeft: spacing.desktopGutterMini,
-      backgroundColor: palette.canvasColor
+      paddingLeft: spacing.unit,
+      backgroundColor: palette.background.paper
     },
     icon: {
       marginTop: 4
@@ -40,13 +41,15 @@ const getStyles = (props, context) => {
     empty: {
       flex: '1 0 auto',
       height: SearchBarHeight,
-      marginLeft: spacing.desktopGutterMini
+      marginLeft: spacing.unit
     }
   };
 };
 
+@withTheme()
 export default class SearchBar extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     filterRef: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
@@ -54,10 +57,6 @@ export default class SearchBar extends PureComponent {
     onOpen: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {

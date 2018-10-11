@@ -27,10 +27,6 @@ export default class HierarchyCard extends PureComponent {
     cardPropsBag: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     openedPaths: [''],
     tabbedFiles: [],

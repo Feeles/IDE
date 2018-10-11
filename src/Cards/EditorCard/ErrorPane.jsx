@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import Button from '@material-ui/core/Button';
@@ -6,8 +7,10 @@ import Paper from '@material-ui/core/Paper';
 import red from '@material-ui/core/colors/red';
 import ActionRestore from '@material-ui/icons/Restore';
 
+@withTheme()
 export default class ErrorPane extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     error: PropTypes.object,
     localization: PropTypes.object.isRequired,
     onRestore: PropTypes.func.isRequired,
@@ -17,10 +20,6 @@ export default class ErrorPane extends PureComponent {
   state = {
     show: false,
     expanded: false
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   componentDidUpdate(prevProps) {
@@ -124,12 +123,12 @@ export default class ErrorPane extends PureComponent {
 
   render() {
     const { show } = this.state;
-    const { palette } = this.context.muiTheme;
+    const { palette } = this.props.theme;
     const styles = {
       root: {
         borderTopStyle: show ? 'double' : 'none',
         borderTopWidth: 3,
-        borderTopColor: palette.primary1Color
+        borderTopColor: palette.primary.main
       },
       dialogRoot: {
         position: 'absolute',

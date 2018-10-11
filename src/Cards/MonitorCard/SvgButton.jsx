@@ -5,7 +5,7 @@ export default class SvgButton extends PureComponent {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
     style: PropTypes.object.isRequired,
-    children: PropTypes.object.isRequired
+    children: PropTypes.node.isRequired
   };
 
   static defaultProps = {

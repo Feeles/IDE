@@ -30,10 +30,6 @@ export default class RenameDialog extends Component {
     content: PropTypes.any
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     changed: false,
     name: this.props.content.name,

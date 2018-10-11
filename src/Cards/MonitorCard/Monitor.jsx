@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Popout from '../../jsx/ReactPopout';
 
@@ -47,8 +48,8 @@ const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const webkitSpeechGrammarList = window.webkitSpeechGrammarList;
 
-const getStyle = (props, context) => {
-  const { transitions } = context.muiTheme;
+const getStyle = props => {
+  const { transitions } = props.theme;
   const fullScreen = (yes, no) => (props.isFullScreen ? yes : no);
 
   return {
@@ -75,8 +76,10 @@ const getStyle = (props, context) => {
   };
 };
 
+@withTheme()
 export default class Monitor extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     isPopout: PropTypes.bool.isRequired,
     isFullScreen: PropTypes.bool.isRequired,
@@ -93,10 +96,6 @@ export default class Monitor extends PureComponent {
     frameWidth: PropTypes.number.isRequired,
     frameHeight: PropTypes.number.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {

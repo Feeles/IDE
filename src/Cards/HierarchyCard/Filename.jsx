@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 
 import { separate } from '../../File/';
 
-const getStyles = (props, context) => {
-  const { palette } = context.muiTheme;
+const getStyles = props => {
+  const { palette } = props.theme;
 
   return {
     root: {
@@ -14,13 +15,13 @@ const getStyles = (props, context) => {
       alignItems: 'baseline'
     },
     path: {
-      color: palette.secondaryTextColor
+      color: palette.text.secondary
     },
     plane: {
-      color: palette.textColor
+      color: palette.text.primary
     },
     ext: {
-      color: palette.secondaryTextColor,
+      color: palette.text.secondary,
       fontSize: '.8em',
       paddingLeft: 4
     },
@@ -32,14 +33,12 @@ const getStyles = (props, context) => {
   };
 };
 
+@withTheme()
 export default class Filename extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -78,15 +77,14 @@ export default class Filename extends PureComponent {
   render() {
     const { file } = this.props;
     const { isEditing } = this.state;
-    const { prepareStyles } = this.context.muiTheme;
 
     const styles = getStyles(this.props, this.context);
 
     const { path, plane, ext, name } = separate(file.name);
 
     return (
-      <div style={prepareStyles(styles.root)}>
-        <span style={prepareStyles(styles.path)}>{path}</span>
+      <div style={styles.root}>
+        <span style={styles.path}>{path}</span>
         {isEditing ? (
           <TextField
             id={name}
@@ -96,14 +94,11 @@ export default class Filename extends PureComponent {
             onClick={this.handleTextFieldTap}
           />
         ) : (
-          <span
-            onClick={this.handleDoubleTap}
-            style={prepareStyles(styles.plane)}
-          >
+          <span onClick={this.handleDoubleTap} style={styles.plane}>
             {plane}
           </span>
         )}
-        <span style={prepareStyles(styles.ext)}>{ext}</span>
+        <span style={styles.ext}>{ext}</span>
       </div>
     );
   }

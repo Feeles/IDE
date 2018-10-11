@@ -52,10 +52,6 @@ export default class MonitorCard extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     frameWidth: 300,
     frameHeight: 150,

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import beautify from 'js-beautify';
 import Button from '@material-ui/core/Button';
@@ -12,7 +13,7 @@ import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
-  const { palette, transitions } = context.muiTheme;
+  const { palette, transitions } = props.theme;
   const { shooting, height } = state;
 
   return {
@@ -45,7 +46,7 @@ const getStyle = (props, context, state) => {
         rotateY(${shooting ? 180 : 0}deg)`
     },
     label: {
-      color: palette.secondaryTextColor,
+      color: palette.text.secondary,
       fontSize: '.8rem'
     },
     error: {
@@ -63,8 +64,10 @@ const getStyle = (props, context, state) => {
   };
 };
 
+@withTheme()
 export default class ShotPane extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
@@ -75,10 +78,6 @@ export default class ShotPane extends PureComponent {
     completes: PropTypes.array,
     globalEvent: PropTypes.object.isRequired,
     handleSetLinkObjects: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {

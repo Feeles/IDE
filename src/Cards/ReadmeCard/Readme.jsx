@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
@@ -126,14 +127,14 @@ const mdComponents = [
   }
 ];
 
-const mdStyle = (props, state, context) => {
-  const { palette, spacing } = context.muiTheme;
+const mdStyle = props => {
+  const { palette, spacing } = props.theme;
 
   const tableBorder = `1px solid ${palette.disabledColor}`;
 
   return {
     blockquote: {
-      color: palette.secondaryTextColor,
+      color: palette.text.secondary,
       marginLeft: '1rem',
       paddingLeft: '1rem',
       borderLeft: `5px solid ${palette.disabledColor}`
@@ -147,18 +148,18 @@ const mdStyle = (props, state, context) => {
       borderSpacing: 0
     },
     th: {
-      padding: spacing.desktopGutterMini,
+      padding: spacing.unit,
       borderTop: tableBorder,
       borderRight: tableBorder,
       borderBottom: tableBorder
     },
     td: {
-      padding: spacing.desktopGutterMini,
+      padding: spacing.unit,
       borderRight: tableBorder,
       borderBottom: tableBorder
     },
     code: {
-      backgroundColor: emphasize(palette.canvasColor, 0.07),
+      backgroundColor: emphasize(palette.background.paper, 0.07),
       padding: '.2em',
       borderRadius: 2
     },
@@ -166,7 +167,7 @@ const mdStyle = (props, state, context) => {
       transform: 'scale(0.6)',
       verticalAlign: 'middle'
     },
-    iconColor: palette.alternateTextColor,
+    iconColor: palette.primary.contrastText,
     containedButton: {
       margin: 4
     },
@@ -176,8 +177,10 @@ const mdStyle = (props, state, context) => {
   };
 };
 
+@withTheme()
 export default class Readme extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
@@ -185,10 +188,6 @@ export default class Readme extends PureComponent {
     localization: PropTypes.object.isRequired,
     completes: PropTypes.array.isRequired,
     setLocation: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   render() {

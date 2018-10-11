@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,8 +16,8 @@ import NavigationMenu from '@material-ui/icons/Menu';
 import { acceptedLanguages } from '../localization/';
 import CloneDialog from './CloneDialog';
 
-const getStyles = (props, context) => {
-  const { palette } = context.muiTheme;
+const getStyles = props => {
+  const { palette } = props.theme;
 
   return {
     root: {
@@ -32,12 +33,12 @@ const getStyles = (props, context) => {
       zIndex: 2
     },
     projectName: {
-      color: palette.alternateTextColor,
+      color: palette.primary.contrastText,
       fontSize: '.8rem',
       fontWeight: 600
     },
     visits: {
-      color: palette.alternateTextColor,
+      color: palette.primary.contrastText,
       fontSize: '.8rem'
     },
     toggle: {
@@ -45,13 +46,15 @@ const getStyles = (props, context) => {
       filter: 'contrast(40%)'
     },
     toggleLabel: {
-      color: palette.alternateTextColor
+      color: palette.primary.contrastText
     }
   };
 };
 
+@withTheme()
 export default class Menu extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     cardProps: PropTypes.object.isRequired,
     setCardVisibility: PropTypes.func.isRequired,
     toggleSidebar: PropTypes.func.isRequired,
@@ -65,10 +68,6 @@ export default class Menu extends PureComponent {
     showAll: PropTypes.bool.isRequired,
     toggleShowAll: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -134,7 +133,7 @@ export default class Menu extends PureComponent {
 
     const {
       palette: { alternateTextColor }
-    } = this.context.muiTheme;
+    } = this.props.theme;
 
     const title =
       this.props.project &&

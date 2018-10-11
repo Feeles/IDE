@@ -5,7 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import URLSearchParams from 'url-search-params';
 import { DragDropContext } from 'react-dnd';
-import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import transitions from '@material-ui/core/styles/transitions';
 
@@ -393,7 +393,7 @@ class RootComponent extends Component {
 
     return (
       <ErrorBoundary>
-        <V0MuiThemeProvider muiTheme={this.state.muiTheme}>
+        <MuiThemeProvider theme={this.state.muiTheme}>
           {this.state.last > 0 ? (
             this.renderLoading()
           ) : this.state.cardProps ? (
@@ -416,8 +416,10 @@ class RootComponent extends Component {
               onThumbnailChange={this.props.onThumbnailChange}
               disableLocalSave={this.props.disableLocalSave}
             />
-          ) : null}
-        </V0MuiThemeProvider>
+          ) : (
+            <div />
+          )}
+        </MuiThemeProvider>
       </ErrorBoundary>
     );
   }

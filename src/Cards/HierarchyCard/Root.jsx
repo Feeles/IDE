@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 
 import DirCard from './DirCard';
 import getHierarchy from './getHierarchy';
 
-const getStyles = (props, context) => {
-  const { fontFamily, palette } = context.muiTheme;
+const getStyles = props => {
+  const { fontFamily, palette } = props.theme;
 
   return {
     root: {
@@ -16,13 +17,15 @@ const getStyles = (props, context) => {
       paddingBottom: 40,
       overflowX: 'hidden',
       overflowY: 'scroll',
-      backgroundColor: fade(emphasize(palette.canvasColor, 1), 0.07)
+      backgroundColor: fade(emphasize(palette.background.paper, 1), 0.07)
     }
   };
 };
 
+@withTheme()
 export default class Root extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     selectedFile: PropTypes.object,
     tabbedFiles: PropTypes.array.isRequired,
@@ -33,10 +36,6 @@ export default class Root extends PureComponent {
     handleNativeDrop: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   render() {
@@ -55,10 +54,9 @@ export default class Root extends PureComponent {
     };
 
     const { root } = getStyles(this.props, this.context);
-    const { prepareStyles } = this.context.muiTheme;
 
     return (
-      <div style={prepareStyles(root)}>
+      <div style={root}>
         <DirCard dir={getHierarchy(files)} {...transfer} isRoot />
       </div>
     );

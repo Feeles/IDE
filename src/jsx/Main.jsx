@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -42,11 +43,10 @@ import icons from './icons';
 const DOWNLOAD_ENABLED =
   typeof document.createElement('a').download === 'string';
 
-const getStyle = (props, state, context) => {
+const getStyle = (props, state) => {
   const shrinkLeft =
     parseInt(props.rootStyle.width, 10) - state.monitorWidth < 200;
   const shrinkRight = state.monitorWidth < 100;
-  const { palette } = context.muiTheme;
 
   return {
     shrinkLeft,
@@ -58,8 +58,7 @@ const getStyle = (props, state, context) => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      lineHeight: 1.15,
-      backgroundColor: palette.backgroundColor
+      lineHeight: 1.15
     },
     sidebar: {
       position: 'absolute'
@@ -67,8 +66,10 @@ const getStyle = (props, state, context) => {
   };
 };
 
+@withTheme()
 export default class Main extends Component {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     cardProps: PropTypes.object.isRequired,
     setCardProps: PropTypes.func.isRequired,
     openSidebar: PropTypes.bool.isRequired,
@@ -84,10 +85,6 @@ export default class Main extends Component {
     onMessage: PropTypes.func,
     onThumbnailChange: PropTypes.func,
     disableLocalSave: PropTypes.bool.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -573,7 +570,7 @@ export default class Main extends Component {
           setConfig={this.setConfig}
           globalEvent={this.state.globalEvent}
         />
-        <style>{codemirrorStyle(this.context.muiTheme)}</style>
+        <style>{codemirrorStyle(this.props.theme)}</style>
         {userStyle ? <style>{userStyle.text}</style> : null}
         <Snackbar
           open={this.state.notice !== null}

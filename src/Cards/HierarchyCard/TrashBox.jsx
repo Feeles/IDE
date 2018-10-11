@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import IconButton from '@material-ui/core/IconButton';
@@ -6,14 +7,14 @@ import ActionDelete from '@material-ui/icons/Delete';
 import NavigationArrowBack from '@material-ui/icons/ArrowBack';
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = (props, state, context) => {
+const getStyles = props => {
   const { isOver } = props;
-  const { palette, spacing } = context.muiTheme;
+  const { palette, spacing } = props.theme;
 
   return {
     icon: {
       borderWidth: 0,
-      borderTopWidth: isOver ? spacing.desktopGutterMini : 0,
+      borderTopWidth: isOver ? spacing.unit : 0,
       borderStyle: 'solid',
       borderColor: 'transparent',
       backgroundColor: isOver ? palette.disabledColor : 'transparent',
@@ -22,18 +23,16 @@ const getStyles = (props, state, context) => {
   };
 };
 
+@withTheme()
 class _TrashBox extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     showTrashes: PropTypes.bool.isRequired,
     putFile: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   render() {

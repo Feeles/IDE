@@ -2,7 +2,7 @@ import grey from '@material-ui/core/colors/grey';
 import blue from '@material-ui/core/colors/blue';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
-export default ({ palette, paper, transitions }) =>
+export default ({ palette, shadows, transitions }) =>
   `
 textarea {
   font-size: 16px !important; /* In smartphone, will not scale automatically */
@@ -15,7 +15,7 @@ textarea {
   transition: ${transitions.create()};
 }
 .CodeMirror-gutters {
-  border-color: ${palette.primary1Color} !important;
+  border-color: ${palette.primary.main} !important;
 }
 .CodeMirror-hints {
   z-index: 1000;
@@ -31,9 +31,9 @@ textarea {
   padding: 4px 0;
   border-radius: 2px;
   cursor: pointer;
-  color: ${palette.alternateTextColor};
-  background-color: ${fade(palette.primary1Color, 1)};
-  box-shadow: ${paper.zDepthShadows[1]};
+  color: ${palette.primary.contrastText};
+  background-color: ${fade(palette.primary.main, 1)};
+  box-shadow: ${shadows[1]};
 }
 .Feeles-asset .Feeles-asset-blank {
   display: inline-block;
@@ -49,7 +49,7 @@ textarea {
   transform: translateX(-20px);
   display: inline-block;
   border-radius: 2px;
-  box-shadow: ${paper.zDepthShadows[1]};
+  box-shadow: ${shadows[1]};
   height: 20px; /* TODO: Flexible font-size */
 }
 .Feeles-dropdown .Feeles-dropdown-button {
@@ -66,7 +66,7 @@ textarea {
 .Feeles-dropdown .Feeles-dropdown-label {
   display: inline-block;
   position: relative;
-  color: ${palette.alternateTextColor};
+  color: ${palette.primary.contrastText};
   z-index: 1;
   pointer-events: none;
 }
@@ -77,7 +77,7 @@ textarea {
   padding: 0px 2px 0px 4px;
   color: transparent;
   /* CSS hacking */
-  box-shadow: 0 0 0 100em ${palette.primary1Color};
+  box-shadow: 0 0 0 100em ${palette.primary.main};
   filter: drop-shadow(0 0 30px transparent);
 }
 div.CodeMirror.CodeMirror-focused .Feeles-asset,

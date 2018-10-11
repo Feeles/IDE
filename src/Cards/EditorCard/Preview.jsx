@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
+
 import PropTypes from 'prop-types';
 
 const getStyles = (props, context, state) => {
-  const { prepareStyles } = context.muiTheme;
   const { scale } = state;
 
   return {
-    root: prepareStyles({
+    root: {
       position: 'absolute',
       display: 'flex',
       flexDirection: 'row',
@@ -17,24 +18,21 @@ const getStyles = (props, context, state) => {
       background: `linear-gradient(white, black)`,
       width: '100%',
       height: '100%'
-    }),
-    img: prepareStyles({
+    },
+    img: {
       transform: `scale(${scale})`
-    })
+    }
   };
 };
-
+@withTheme()
 export default class Preview extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     getFiles: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {

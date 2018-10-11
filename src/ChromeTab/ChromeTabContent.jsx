@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-const getStyles = (props, context) => {
+const getStyles = props => {
   const { show } = props;
-  const { palette } = context.muiTheme;
+  const { palette } = props.theme;
 
   return {
     root: {
@@ -18,19 +19,17 @@ const getStyles = (props, context) => {
     },
     container: {
       flex: '1 1 auto',
-      borderTop: `1px solid ${palette.primary1Color}`
+      borderTop: `1px solid ${palette.primary.main}`
     }
   };
 };
 
+@withTheme()
 export default class ChromeTabContent extends Component {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     show: PropTypes.bool.isRequired,
     children: PropTypes.node.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   shouldComponentUpdate(nextProps) {
@@ -42,13 +41,12 @@ export default class ChromeTabContent extends Component {
 
   render() {
     const { children } = this.props;
-    const { prepareStyles } = this.context.muiTheme;
 
     const { root, container } = getStyles(this.props, this.context);
 
     return (
-      <div style={prepareStyles(root)}>
-        <div style={prepareStyles(container)}>{children}</div>
+      <div style={root}>
+        <div style={container}>{children}</div>
       </div>
     );
   }

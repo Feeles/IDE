@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
@@ -9,8 +10,8 @@ import ChromeTab, { Tab } from '../../ChromeTab/';
 
 const MAX_TAB = 5;
 
-const getStyles = (props, context) => {
-  const { palette } = context.muiTheme;
+const getStyles = props => {
+  const { palette } = props.theme;
 
   return {
     tabContainer: {
@@ -28,13 +29,15 @@ const getStyles = (props, context) => {
     tabContentContainer: {
       flex: 1,
       position: 'relative',
-      borderTop: `1px solid ${palette.primary1Color}`
+      borderTop: `1px solid ${palette.primary.main}`
     }
   };
 };
 
+@withTheme()
 export default class EditorCard extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
@@ -60,10 +63,6 @@ export default class EditorCard extends PureComponent {
   state = {
     // { [Tab.file.key]: Doc }
     currentDoc: {}
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   componentDidUpdate(prevProps) {
@@ -111,18 +110,18 @@ export default class EditorCard extends PureComponent {
   };
 
   renderBackground() {
-    const { palette } = this.context.muiTheme;
+    const { palette } = this.props.theme;
 
     const styles = {
       noFileBg: {
         flex: '1 1 auto',
-        backgroundColor: palette.primary1Color,
+        backgroundColor: palette.primary.main,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
       },
       logo: {
-        color: palette.secondaryTextColor
+        color: palette.text.secondary
       },
       largeIcon: {
         width: 40,

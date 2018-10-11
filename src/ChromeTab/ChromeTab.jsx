@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import NavigationClose from '@material-ui/icons/Close';
@@ -13,7 +14,7 @@ const TabSkewX = 24;
 
 const getStyles = (props, context, state) => {
   const { containerWidth, isSelected } = props;
-  const { palette, spacing, fontFamily } = context.muiTheme;
+  const { palette, spacing, fontFamily } = props.theme;
   const { closerMouseOver } = state;
 
   const tabHeight = TabHeight + (isSelected ? 1 : 0);
@@ -23,7 +24,7 @@ const getStyles = (props, context, state) => {
   );
   const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
   const backgroundColor = fade(
-    isSelected ? palette.canvasColor : emphasize(palette.canvasColor),
+    isSelected ? palette.background.paper : emphasize(palette.background.paper),
     1
   );
 
@@ -39,7 +40,7 @@ const getStyles = (props, context, state) => {
     borderBottomWidth: 0,
     borderLeftWidth: left ? 1 : 0,
     borderStyle: 'solid',
-    borderColor: palette.primary1Color,
+    borderColor: palette.primary.main,
     transform: `skewX(${(left ? -1 : 1) * TabSkewX}deg)`,
     backgroundColor,
     zIndex: left ? 1 : 2
@@ -73,7 +74,7 @@ const getStyles = (props, context, state) => {
     },
     label: {
       flex: '1 1 auto',
-      color: palette.textColor,
+      color: palette.text.primary,
       textDecoration: 'none',
       overflowX: 'hidden',
       whiteSpace: 'nowrap',
@@ -83,8 +84,8 @@ const getStyles = (props, context, state) => {
     rightButton: {
       flex: '0 0 auto',
       padding: 0,
-      width: spacing.iconSize,
-      height: spacing.iconSize,
+      width: spacing.unit * 3,
+      height: spacing.unit * 3,
       margin: '0 -4px',
       transform: 'scale(0.55)',
       borderRadius: '50%',
@@ -93,8 +94,10 @@ const getStyles = (props, context, state) => {
   };
 };
 
+@withTheme()
 export default class ChromeTabs extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     tab: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     tabs: PropTypes.array.isRequired,
@@ -104,10 +107,6 @@ export default class ChromeTabs extends PureComponent {
     containerWidth: PropTypes.number.isRequired,
     localization: PropTypes.object.isRequired,
     doc: PropTypes.object
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -153,7 +152,7 @@ export default class ChromeTabs extends PureComponent {
 
   render() {
     const { file, tab, handleSelect, handleClose, localization } = this.props;
-    const { prepareStyles } = this.context.muiTheme;
+
     const { doc } = this.state;
 
     const styles = getStyles(this.props, this.context, this.state);
@@ -185,18 +184,11 @@ export default class ChromeTabs extends PureComponent {
       : tab.label;
 
     return (
-      <div style={prepareStyles(styles.root)} ref={this.handleRef}>
-        <div style={prepareStyles(styles.left)} />
-        <div style={prepareStyles(styles.center)}>
-          <div
-            style={prepareStyles(styles.innerItem)}
-            onClick={() => handleSelect(tab)}
-          >
-            <a
-              href="#"
-              style={prepareStyles(styles.label)}
-              title={this.props.file.name}
-            >
+      <div style={styles.root} ref={this.handleRef}>
+        <div style={styles.left} />
+        <div style={styles.center}>
+          <div style={styles.innerItem} onClick={() => handleSelect(tab)}>
+            <a href="#" style={styles.label} title={this.props.file.name}>
               {label}
             </a>
             <IconButton
@@ -215,7 +207,7 @@ export default class ChromeTabs extends PureComponent {
             </IconButton>
           </div>
         </div>
-        <div style={prepareStyles(styles.right)} />
+        <div style={styles.right} />
       </div>
     );
   }

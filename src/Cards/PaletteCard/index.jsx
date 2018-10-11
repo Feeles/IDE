@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,8 +11,8 @@ import { ChromePicker, TwitterPicker } from 'react-color';
 
 import LayeredStyle from './LayeredStyle';
 
-const getStyles = (props, context) => {
-  const { palette, spacing } = context.muiTheme;
+const getStyles = props => {
+  const { palette, spacing } = props.theme;
 
   const bodyColor = getComputedStyle(document.body)['background-color'];
   const boxSize = 60;
@@ -26,30 +27,29 @@ const getStyles = (props, context) => {
       backgroundColor: bodyColor
     },
     overlay: {
-      padding: spacing.desktopGutterMore,
-      backgroundColor: palette.backgroundColor
+      padding: spacing.unit * 3
     },
     canvas: {
       display: 'flex',
       alignItems: 'center',
       height: boxSize + 32,
-      backgroundColor: palette.canvasColor
+      backgroundColor: palette.background.paper
     },
     primary: {
       flex: '1 1 auto',
-      marginLeft: spacing.desktopGutterMore,
+      marginLeft: spacing.unit * 3,
       height: boxSize,
-      backgroundColor: palette.primary1Color
+      backgroundColor: palette.primary.main
     },
     secondary: {
       flex: '1 1 auto',
-      marginLeft: spacing.desktopGutterMore,
+      marginLeft: spacing.unit * 3,
       height: boxSize * 0.8,
-      backgroundColor: palette.accent1Color
+      backgroundColor: palette.secondary.main
     },
     blank: {
       flex: '1 1 auto',
-      marginLeft: spacing.desktopGutterMore,
+      marginLeft: spacing.unit * 3,
       height: boxSize,
       backgroundColor: 'transparent'
     },
@@ -63,30 +63,28 @@ const getStyles = (props, context) => {
       alignItems: 'center',
       justifyContent: 'flex-end',
       maxWidth: 200,
-      margin: `${spacing.desktopGutterMini}px auto`
+      margin: `${spacing.unit}px auto`
     },
     label: {
-      color: palette.textColor
+      color: palette.text.primary
     },
     rect: {
       boxSizing: 'border-box',
-      marginLeft: spacing.desktopGutter,
+      marginLeft: spacing.unit * 3,
       padding: '.5rem',
-      border: `1px solid ${palette.textColor}`
+      border: `1px solid ${palette.text.primary}`
     }
   };
 };
 
+@withTheme()
 export default class PaletteCard extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     cardPropsBag: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired,
     getConfig: PropTypes.func.isRequired,
     setConfig: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -127,7 +125,7 @@ export default class PaletteCard extends PureComponent {
   };
 
   renderItem(key, styles) {
-    const { palette, prepareStyles } = this.context.muiTheme;
+    const { palette } = this.props.theme;
 
     const rectStyle = Object.assign({}, styles.rect, {
       backgroundColor: palette[key]
@@ -137,7 +135,7 @@ export default class PaletteCard extends PureComponent {
       <div key={key} style={styles.item}>
         <span style={styles.label}>{key}</span>
         <span
-          style={prepareStyles(rectStyle)}
+          style={rectStyle}
           onClick={event => this.handleRectClick(event, key)}
         />
       </div>
@@ -146,11 +144,9 @@ export default class PaletteCard extends PureComponent {
 
   render() {
     const { open, key, anchorEl, limited } = this.state;
-    const { palette, prepareStyles } = this.context.muiTheme;
+    const { palette } = this.props.theme;
 
     const styles = getStyles(this.props, this.context);
-    styles.item = prepareStyles(styles.item);
-    styles.label = prepareStyles(styles.label);
 
     return (
       <Card
@@ -159,11 +155,7 @@ export default class PaletteCard extends PureComponent {
       >
         <CardActions>
           <LayeredStyle
-            styles={[
-              prepareStyles(styles.html),
-              prepareStyles(styles.body),
-              prepareStyles(styles.overlay)
-            ]}
+            styles={[styles.html, styles.body, styles.overlay]}
             onClick={e => this.handleRectClick(e, 'backgroundColor')}
           >
             <Paper
@@ -178,7 +170,7 @@ export default class PaletteCard extends PureComponent {
                 style={styles.secondary}
                 onClick={e => this.handleRectClick(e, 'accent1Color', true)}
               />
-              <div style={prepareStyles(styles.blank)} />
+              <div style={styles.blank} />
             </Paper>
           </LayeredStyle>
         </CardActions>

@@ -11,10 +11,6 @@ export default class ResolveProgress extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     visible: false
   };
