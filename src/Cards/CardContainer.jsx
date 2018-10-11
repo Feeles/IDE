@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import MediaCard from './MediaCard/';
 import MonitorCard from './MonitorCard/';
 import PaletteCard from './PaletteCard/';
-import EnvCard from './EnvCard/';
+// import EnvCard from './EnvCard/';
 import ReadmeCard from './ReadmeCard/';
 import CustomizeCard from './CustomizeCard/';
 import CreditsCard from './CreditsCard/';
@@ -152,11 +152,11 @@ export default class CardContainer extends PureComponent {
           {...commonProps}
           cardPropsBag={bag('PaletteCard')}
         />
-        <EnvCard
+        {/* <EnvCard
           ref={ref => (this.cardRefs.EnvCard = ref)}
           {...commonProps}
           cardPropsBag={bag('EnvCard')}
-        />
+        /> */}
         <ReadmeCard
           ref={ref => (this.cardRefs.ReadmeCard = ref)}
           {...commonProps}

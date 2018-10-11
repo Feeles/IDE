@@ -35,10 +35,10 @@ export default [
     name: 'PaletteCard',
     icon: <ImagePalette />
   },
-  {
-    name: 'EnvCard',
-    icon: <ActionTouchApp />
-  },
+  // {
+  //   name: 'EnvCard',
+  //   icon: <ActionTouchApp />
+  // },
   {
     name: 'HierarchyCard',
     icon: <FileFolderOpen />
