@@ -97,11 +97,9 @@ export default class MonitorCard extends PureComponent {
   renderMenuItem([w, h]) {
     const value = w + by + h;
     return (
-      <MenuItem
-        key={value}
-        primaryText={value}
-        onClick={() => this.changeSize(w, h)}
-      />
+      <MenuItem key={value} onClick={() => this.changeSize(w, h)}>
+        {value}
+      </MenuItem>
     );
   }
 

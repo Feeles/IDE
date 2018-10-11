@@ -5,6 +5,8 @@ import Popover from '@material-ui/core/Popover';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Divider from '@material-ui/core/Divider';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 import NavigationRefresh from '@material-ui/icons/Refresh';
 import NavigationArrowDropDown from '@material-ui/icons/ArrowDropDown';
@@ -156,16 +158,22 @@ export default class PlayMenu extends PureComponent {
             onItemTouchTap={this.handleItemTouchTap}
           >
             {current && [
-              <MenuItem
-                key="current"
-                value={current.href}
-                innerDivStyle={styles.current}
-                leftIcon={<NavigationRefresh />}
-                primaryText={current.title}
-                secondaryText={
-                  <span style={styles.currentSecondaryText}>Ctrl + Space</span>
-                }
-              />,
+              <MenuItem key="current" value={current.href}>
+                <ListItemIcon>
+                  <NavigationRefresh />
+                </ListItemIcon>
+                <ListItemText
+                  style={styles.current}
+                  inset
+                  primary={current.title}
+                  secondary={
+                    <span style={styles.currentSecondaryText}>
+                      Ctrl + Space
+                    </span>
+                  }
+                />
+                {current.title}
+              </MenuItem>,
               <Divider key="divider" />
             ]}
             {this.state.entries.map(this.renderMenu)}

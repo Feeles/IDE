@@ -7,6 +7,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import Drawer from '@material-ui/core/Drawer';
 import NavigationArrowBack from '@material-ui/icons/ArrowBack';
 import ToggleCheckBox from '@material-ui/icons/CheckBox';
@@ -473,15 +475,16 @@ export default class Main extends Component {
     return (
       <MenuItem
         key={index}
-        primaryText={localized ? localized.title : item.name}
-        leftIcon={item.icon}
-        rightIcon={
-          visible ? <ToggleCheckBox /> : <ToggleCheckBoxOutlineBlank />
-        }
         onClick={() => {
           this.setCardVisibility(item.name, !visible);
         }}
-      />
+      >
+        <ListItemIcon>{item.icon}</ListItemIcon>
+        <ListItemText>{localized ? localized.title : item.name}</ListItemText>
+        <ListItemIcon>
+          {visible ? <ToggleCheckBox /> : <ToggleCheckBoxOutlineBlank />}
+        </ListItemIcon>
+      </MenuItem>
     );
   };
 
