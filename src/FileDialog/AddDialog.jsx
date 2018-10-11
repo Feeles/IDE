@@ -52,16 +52,12 @@ export default class AddDialog extends Component {
     const { localization } = this.props;
 
     const actions = [
-      <Abort
-        key="cancel"
-        label={localization.addDialog.cancel}
-        onClick={this.props.onRequestClose}
-      />,
-      <Confirm
-        key="add"
-        label={localization.addDialog.add}
-        onClick={this.handleAdd}
-      />
+      <Abort key="cancel" onClick={this.props.onRequestClose}>
+        {localization.addDialog.cancel}
+      </Abort>,
+      <Confirm key="add" onClick={this.handleAdd}>
+        {localization.addDialog.add}
+      </Confirm>
     ];
 
     return (

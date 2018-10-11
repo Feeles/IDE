@@ -22,14 +22,14 @@ const mdComponents = [
           variant="raised"
           color="primary"
           key={props.key}
-          label={children}
           href={props.href}
           labelPosition="before"
           target="_blank"
           style={mdStyles.raisedButton}
-          labelStyle={mdStyles.raisedButtonLabel}
-          icon={<ActionOpenInNew />}
-        />
+        >
+          <span style={mdStyles.raisedButtonLabel}>{children}</span>
+          <ActionOpenInNew />
+        </Button>
       );
     }
   },
@@ -47,11 +47,11 @@ const mdComponents = [
           variant="raised"
           color="primary"
           key={props.key}
-          label={children}
           style={mdStyles.raisedButton}
-          labelStyle={mdStyles.raisedButtonLabel}
           onClick={onClick}
-        />
+        >
+          <span style={mdStyles.raisedButtonLabel}>{children}</span>
+        </Button>
       );
     }
   },
@@ -87,14 +87,14 @@ const mdComponents = [
       return (
         <Button
           variant="raised"
-          primary
+          color="primary"
           key={props.key}
-          label={props.alt}
-          icon={<EditorModeEdit />}
           style={mdStyles.raisedButton}
-          labelStyle={mdStyles.raisedButtonLabel}
           onClick={onClick}
-        />
+        >
+          <EditorModeEdit />
+          <span style={mdStyles.raisedButtonLabel}>{props.alt}</span>
+        </Button>
       );
     }
   },

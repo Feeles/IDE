@@ -101,21 +101,20 @@ export default class CreditBar extends PureComponent {
         ) : (
           <Button
             color={file.sign ? 'default' : 'secondary'}
-            label={
-              file.sign ? file.sign.label : localization.credit.writeAuthorName
-            }
             style={styles.smallButton}
-            labelStyle={styles.smallLabel}
             onClick={this.handleSignDialog}
-          />
+          >
+            <span style={styles.smallLabel}>
+              {file.sign
+                ? file.sign.label
+                : localization.credit.writeAuthorName}
+            </span>
+          </Button>
         )}
         {file.credits.length > 0 ? (
-          <Button
-            label={localization.credit.credits}
-            style={styles.smallButton}
-            labelStyle={styles.smallLabel}
-            onClick={this.handleShowCredits}
-          />
+          <Button style={styles.smallButton} onClick={this.handleShowCredits}>
+            <span style={styles.smallLabel}>{localization.credit.credits}</span>
+          </Button>
         ) : null}
         <Popover
           open={this.state.open}

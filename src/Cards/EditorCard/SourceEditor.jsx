@@ -423,22 +423,26 @@ export default class SourceEditor extends PureComponent {
         <div style={styles.menuBar}>
           <Button
             variant="flat"
-            label={localization.editorCard.undo}
             disabled={!this.state.hasHistory}
             style={styles.barButton}
-            labelStyle={styles.barButtonLabel}
-            icon={<HardwareKeyboardBackspace />}
             onClick={this.handleUndo}
-          />
+          >
+            <HardwareKeyboardBackspace />
+            <span style={styles.barButtonLabel}>
+              {localization.editorCard.undo}
+            </span>
+          </Button>
           <Button
             variant="flat"
-            label={localization.editorCard.save}
             disabled={!this.state.hasChanged}
             style={styles.barButton}
-            labelStyle={styles.barButtonLabel}
-            icon={<ContentSave />}
             onClick={this.handleSaveAndRun}
-          />
+          >
+            <ContentSave />
+            <span style={styles.barButtonLabel}>
+              {localization.editorCard.save}
+            </span>
+          </Button>
           <div
             style={{
               flex: '1 1 auto'

@@ -138,11 +138,12 @@ export default class SearchBar extends PureComponent {
           <Button
             variant="raised"
             color="secondary"
-            label={localization.hierarchyCard.emptyTrashBox}
-            icon={<ActionDeleteForever />}
             style={empty}
             onClick={deleteAll}
-          />
+          >
+            <ActionDeleteForever />
+            {localization.hierarchyCard.emptyTrashBox}
+          </Button>
         ) : null}
       </div>
     );

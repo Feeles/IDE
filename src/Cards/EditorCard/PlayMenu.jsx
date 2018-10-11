@@ -90,18 +90,19 @@ export default class PlayMenu extends PureComponent {
 
   render() {
     const { localization } = this.props;
-    const { palette } = this.context.muiTheme;
+    const { palette, spacing } = this.context.muiTheme;
 
     const styles = {
       button: {
         padding: 0,
+        paddingLeft: spacing.unit,
         lineHeight: 2,
         color: palette.alternateTextColor,
         backgroundColor: palette.primary1Color,
         borderRadius: 0
       },
       dropDown: {
-        marginLeft: -16,
+        // marginLeft: -16,
         minWidth: 32,
         padding: 0,
         lineHeight: 2,
@@ -133,18 +134,20 @@ export default class PlayMenu extends PureComponent {
         <Button
           variant="flat"
           color="primary"
-          label={localization.editorCard.play}
           style={styles.button}
-          icon={<AVPlayCircleOutline />}
           onClick={() => this.props.setLocation()}
-        />
+        >
+          <AVPlayCircleOutline />
+          {localization.editorCard.play}
+        </Button>
         <Button
           variant="flat"
           color="primary"
           style={styles.dropDown}
-          icon={<NavigationArrowDropDown />}
           onClick={this.handlePlay}
-        />
+        >
+          <NavigationArrowDropDown />
+        </Button>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}

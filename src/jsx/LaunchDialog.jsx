@@ -124,10 +124,11 @@ export default class LaunchDialog extends PureComponent {
           <Button
             variant="raised"
             color="primary"
-            label={localization.launchDialog.startNew}
             style={styles.button}
             onClick={this.props.fallback}
-          />
+          >
+            {localization.launchDialog.startNew}
+          </Button>
           {localization.common.or}
         </div>
         <div style={styles.container}>

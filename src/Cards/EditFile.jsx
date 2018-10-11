@@ -31,10 +31,11 @@ export default class EditFile extends PureComponent {
       <Button
         variant="flat"
         disabled={!this.props.fileKey}
-        label={localization.common.editFile}
-        icon={<EditorModeEdit />}
         onClick={this.handleEdit}
-      />
+      >
+        <EditorModeEdit />
+        {localization.common.editFile}
+      </Button>
     );
   }
 }

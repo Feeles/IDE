@@ -212,23 +212,24 @@ export default class ShotPane extends PureComponent {
           <Button
             variant="raised"
             color="primary"
-            label={localization.shotCard.button}
-            icon={this.state.shooting ? <AvStop /> : <ContentReply />}
-            labelPosition="before"
             disabled={this.state.shooting}
             onClick={this.handleShot}
             style={styles.shoot}
-          />
+          >
+            {localization.shotCard.button}
+            {this.state.shooting ? <AvStop /> : <ContentReply />}
+          </Button>
           <span style={styles.label}>{localization.shotCard.shoot}</span>
           <div style={{ flex: 1 }} />
           <Button
             variant="raised"
             color="secondary"
-            label={localization.shotCard.restore}
             onClick={this.handleRestore}
             style={styles.restore}
             disabled={!this.state.canRestore}
-          />
+          >
+            {localization.shotCard.restore}
+          </Button>
         </div>
         <div style={styles.editor}>
           <Editor

@@ -141,14 +141,15 @@ export default class Menu extends PureComponent {
       (this.props.project.title ? (
         <div style={styles.projectName}>{this.props.project.title}</div>
       ) : (
-        <Button
-          variant="flat"
-          label={localization.cloneDialog.setTitle}
-          labelStyle={{
-            color: alternateTextColor
-          }}
-          onClick={this.handleClone}
-        />
+        <Button variant="flat" onClick={this.handleClone}>
+          <span
+            style={{
+              color: alternateTextColor
+            }}
+          >
+            {localization.cloneDialog.setTitle}
+          </span>
+        </Button>
       ));
     return (
       <AppBar style={styles.root} position="relative">

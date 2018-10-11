@@ -160,21 +160,23 @@ export default class CloneDialog extends PureComponent {
       <Button
         variant="flat"
         key="showAll"
-        label={localization.menu.showAllUrls}
         style={styles.button}
         onClick={() =>
           this.setState(prevState => {
             return { showAllUrls: !prevState.showAllUrls };
           })
         }
-      />,
+      >
+        {localization.menu.showAllUrls}
+      </Button>,
       <Button
         variant="flat"
         key="cancel"
-        label={localization.cloneDialog.cancel}
         style={styles.button}
         onClick={onRequestClose}
-      />
+      >
+        {localization.cloneDialog.cancel}
+      </Button>
     ];
 
     const url = location.origin + location.pathname;
@@ -221,13 +223,14 @@ export default class CloneDialog extends PureComponent {
                 <Button
                   variant="raised"
                   fullWidth
-                  key={'new_project'}
-                  label={localization.cloneDialog.saveInNew}
+                  key="new_project"
                   style={styles.card}
-                  icon={<ContentAddCircle />}
                   disabled={this.state.processing}
                   onClick={this.handleCreate}
-                />
+                >
+                  <ContentAddCircle />
+                  {localization.cloneDialog.saveInNew}
+                </Button>
               )}
             </div>
           </Tab>
@@ -358,19 +361,20 @@ export class ProjectCard extends PureComponent {
         <CardActions>
           <Button
             variant="flat"
-            label={localization.cloneDialog.openOnThisTab}
-            icon={<ActionOpenInBrowser />}
             disabled={this.props.processing}
             onClick={this.handleLoad}
-          />
+          >
+            <ActionOpenInBrowser />
+            {localization.cloneDialog.openOnThisTab}
+          </Button>
           <Button
             variant="flat"
-            label={localization.cloneDialog.remove}
-            icon={<ActionDelete color={red['400']} />}
-            labelStyle={styles.remove}
             disabled={this.props.processing}
             onClick={this.handleRemove}
-          />
+          >
+            <ActionDelete color={red['400']} />{' '}
+            <span style={styles.remove}>{localization.cloneDialog.remove}</span>
+          </Button>
         </CardActions>
       </Card>
     );

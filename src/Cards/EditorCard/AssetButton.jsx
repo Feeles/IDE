@@ -143,10 +143,11 @@ export default class AssetButton extends PureComponent {
             <Button
               variant="raised"
               color="primary"
-              label={localization.editorCard.insert}
-              icon={<ContentAdd />}
               onClick={this.handleInsert}
-            />
+            >
+              <ContentAdd />
+              {localization.editorCard.insert}
+            </Button>
           </div>
           <div style={styles.description}>{this.props.description}</div>
           <code style={styles.code}>
