@@ -6,7 +6,7 @@ import includes from 'lodash/includes';
 
 import Card from '../CardWindow';
 import { makeFromFile } from '../../File/';
-import { SignDialog, AddDialog } from '../../FileDialog/';
+import { AddDialog } from '../../FileDialog/';
 import { Tab } from '../../ChromeTab/';
 import Root from './Root';
 import SearchBar from './SearchBar';
@@ -49,15 +49,9 @@ export default class HierarchyCard extends PureComponent {
   }
 
   handleNativeDrop = (files, dir = null) => {
-    const { addFile, openFileDialog } = this.props;
+    const { addFile } = this.props;
 
     Promise.all(files.map(makeFromFile))
-      .then(files =>
-        openFileDialog(SignDialog, {
-          content: files,
-          getFiles: () => this.props.files
-        })
-      )
       .then(files => {
         files = files.map(file => (dir ? file.move(dir.path) : file));
         return Promise.all(files.map(addFile));

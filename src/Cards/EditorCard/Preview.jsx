@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import CreditBar from './CreditBar';
-
 const getStyles = (props, context, state) => {
   const { prepareStyles } = context.muiTheme;
   const { scale } = state;
@@ -72,23 +70,9 @@ export default class Preview extends PureComponent {
       <audio src={file.blobURL} controls />
     ) : null;
 
-    const creditStyle = {
-      position: 'absolute',
-      bottom: 0,
-      width: '100%'
-    };
-
     return (
       <div style={root} ref={ref => ref && (this.container = ref)}>
         {content}
-        <CreditBar
-          file={file}
-          openFileDialog={this.props.openFileDialog}
-          putFile={this.props.putFile}
-          localization={this.props.localization}
-          getFiles={this.props.getFiles}
-          style={creditStyle}
-        />
       </div>
     );
   }

@@ -8,7 +8,6 @@ import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import includes from 'lodash/includes';
 import Editor from './Editor';
-import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
 import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
@@ -485,13 +484,6 @@ export default class SourceEditor extends PureComponent {
           localization={localization}
           onRestore={this.handleRestore}
           canRestore={prevFiles.has(file)}
-        />
-        <CreditBar
-          file={file}
-          openFileDialog={this.props.openFileDialog}
-          putFile={this.props.putFile}
-          localization={localization}
-          getFiles={this.props.getFiles}
         />
       </div>
     );
