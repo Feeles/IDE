@@ -107,7 +107,6 @@ export default class ReadmeCard extends PureComponent {
     const styles = {
       index: {
         marginLeft: 16,
-        marginRight: -8,
         fontSize: '.5rem'
       },
       dropDown: {
@@ -148,9 +147,6 @@ export default class ReadmeCard extends PureComponent {
         paddingTop: 0,
         overflowX: 'hidden',
         overflowY: 'scroll'
-      },
-      actions: {
-        flex: 0
       }
     };
     return (
@@ -171,7 +167,7 @@ export default class ReadmeCard extends PureComponent {
             setLocation={this.props.setLocation}
           />
         </CardContent>
-        <CardActions style={styles.actions}>
+        <CardActions>
           {this.renderDropDownMenu()}
           <EditFile
             fileKey={selectedFile.key}
