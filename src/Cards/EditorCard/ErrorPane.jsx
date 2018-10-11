@@ -79,7 +79,7 @@ export default class ErrorPane extends PureComponent {
         <h2 style={styles.heading}>{localization.editorCard.error}</h2>
         <div style={styles.blank} />
         <Button
-          variant="raised"
+          variant="contained"
           color="primary"
           onClick={this.handleRestore}
           disabled={!canRestore}

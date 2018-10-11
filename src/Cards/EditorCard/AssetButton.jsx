@@ -141,7 +141,7 @@ export default class AssetButton extends PureComponent {
               ) : null}
             </span>
             <Button
-              variant="raised"
+              variant="contained"
               color="primary"
               onClick={this.handleInsert}
             >

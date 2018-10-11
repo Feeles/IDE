@@ -220,7 +220,7 @@ export default class CloneDialog extends PureComponent {
                 ]
               ) : (
                 <Button
-                  variant="raised"
+                  variant="contained"
                   fullWidth
                   key="new_project"
                   style={styles.card}

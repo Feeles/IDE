@@ -122,7 +122,7 @@ export default class LaunchDialog extends PureComponent {
       >
         <div style={{ textAlign: 'center' }}>
           <Button
-            variant="raised"
+            variant="contained"
             color="primary"
             style={styles.button}
             onClick={this.props.fallback}

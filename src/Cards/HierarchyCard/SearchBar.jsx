@@ -134,7 +134,7 @@ export default class SearchBar extends PureComponent {
         </Paper>
         {showTrashes ? (
           <Button
-            variant="raised"
+            variant="contained"
             color="secondary"
             style={empty}
             onClick={deleteAll}

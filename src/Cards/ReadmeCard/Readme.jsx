@@ -19,15 +19,15 @@ const mdComponents = [
     render(tag, props, children, component, mdStyles) {
       return (
         <Button
-          variant="raised"
+          variant="contained"
           color="primary"
           key={props.key}
           href={props.href}
           labelPosition="before"
           target="_blank"
-          style={mdStyles.raisedButton}
+          style={mdStyles.containedButton}
         >
-          <span style={mdStyles.raisedButtonLabel}>{children}</span>
+          <span style={mdStyles.containedButtonLabel}>{children}</span>
           <ActionOpenInNew />
         </Button>
       );
@@ -44,13 +44,13 @@ const mdComponents = [
       };
       return (
         <Button
-          variant="raised"
+          variant="contained"
           color="primary"
           key={props.key}
-          style={mdStyles.raisedButton}
+          style={mdStyles.containedButton}
           onClick={onClick}
         >
-          <span style={mdStyles.raisedButtonLabel}>{children}</span>
+          <span style={mdStyles.containedButtonLabel}>{children}</span>
         </Button>
       );
     }
@@ -86,14 +86,14 @@ const mdComponents = [
       };
       return (
         <Button
-          variant="raised"
+          variant="contained"
           color="primary"
           key={props.key}
-          style={mdStyles.raisedButton}
+          style={mdStyles.containedButton}
           onClick={onClick}
         >
           <EditorModeEdit />
-          <span style={mdStyles.raisedButtonLabel}>{props.alt}</span>
+          <span style={mdStyles.containedButtonLabel}>{props.alt}</span>
         </Button>
       );
     }
@@ -167,10 +167,10 @@ const mdStyle = (props, state, context) => {
       verticalAlign: 'middle'
     },
     iconColor: palette.alternateTextColor,
-    raisedButton: {
+    containedButton: {
       margin: 4
     },
-    raisedButtonLabel: {
+    containedButtonLabel: {
       textTransform: 'none'
     }
   };

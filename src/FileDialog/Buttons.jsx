@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 
 const Confirm = props => {
   const style = Object.assign({ marginRight: 20 }, props.style);
-  return <Button variant="raised" {...props} style={style} />;
+  return <Button variant="contained" {...props} style={style} />;
 };
 
 Confirm.propTypes = {

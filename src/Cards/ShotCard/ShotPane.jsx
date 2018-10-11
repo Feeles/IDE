@@ -210,7 +210,7 @@ export default class ShotPane extends PureComponent {
         {this.state.loading ? <LinearProgress /> : null}
         <div style={styles.menu}>
           <Button
-            variant="raised"
+            variant="contained"
             color="primary"
             disabled={this.state.shooting}
             onClick={this.handleShot}
@@ -222,7 +222,7 @@ export default class ShotPane extends PureComponent {
           <span style={styles.label}>{localization.shotCard.shoot}</span>
           <div style={{ flex: 1 }} />
           <Button
-            variant="raised"
+            variant="contained"
             color="secondary"
             onClick={this.handleRestore}
             style={styles.restore}
