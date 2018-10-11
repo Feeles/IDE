@@ -9,6 +9,7 @@ module.exports = {
     ecmaVersion: 6,
     sourceType: 'module',
     ecmaFeatures: {
+      legacyDecorators: true,
       modules: true
     }
   },
