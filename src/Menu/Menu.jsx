@@ -189,7 +189,7 @@ export default class Menu extends PureComponent {
           ) : null}
           <IconButton
             tooltip={localization.menu.language}
-            onTouchTap={this.handleLanguage}
+            onClick={this.handleLanguage}
           >
             <ActionLanguage />
           </IconButton>

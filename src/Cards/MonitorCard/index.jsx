@@ -177,7 +177,7 @@ export default class MonitorCard extends PureComponent {
           key="screenshot"
           tooltip="screenshot"
           disabled={this.state.processing}
-          onTouchTap={this.handleScreenShot}
+          onClick={this.handleScreenShot}
         >
           <ImagePhotoCamera />
         </IconButton>,
@@ -185,7 +185,7 @@ export default class MonitorCard extends PureComponent {
         <IconButton
           key="settings"
           tooltip="settings"
-          onTouchTap={this.handleSettings}
+          onClick={this.handleSettings}
         >
           <ActionSettings />
         </IconButton>
