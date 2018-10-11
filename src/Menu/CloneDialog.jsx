@@ -188,7 +188,7 @@ export default class CloneDialog extends PureComponent {
       <Dialog
         open
         modal={this.state.processing}
-        bodyStyle={styles.body}
+        // bodyStyle={styles.body}
         actions={actions}
         onRequestClose={onRequestClose}
       >

@@ -112,9 +112,6 @@ export default class ReadmeCard extends PureComponent {
       },
       dropDown: {
         verticalAlign: 'bottom'
-      },
-      underline: {
-        display: 'none'
       }
     };
 
@@ -126,7 +123,6 @@ export default class ReadmeCard extends PureComponent {
         key="dropDown"
         value={selectedFile.key}
         style={styles.dropDown}
-        underlineStyle={styles.underline}
         onChange={this.handleSelect}
       >
         {markdowns.map(file => (

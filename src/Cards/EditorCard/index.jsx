@@ -138,12 +138,8 @@ export default class EditorCard extends PureComponent {
     return (
       <div style={styles.noFileBg}>
         <h1 style={styles.logo}>Feeles</h1>
-        <IconButton
-          iconStyle={styles.largeIcon}
-          style={styles.large}
-          onClick={() => this.setLocation()}
-        >
-          <AVPlayCircleOutline />
+        <IconButton style={styles.large} onClick={() => this.setLocation()}>
+          <AVPlayCircleOutline style={styles.largeIcon} />
         </IconButton>
       </div>
     );

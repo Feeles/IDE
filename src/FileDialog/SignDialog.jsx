@@ -101,7 +101,7 @@ export default class SignDialog extends PureComponent {
         actions={actions}
         modal={false}
         open={true}
-        bodyStyle={{ overflow: 'scroll' }}
+        // bodyStyle={{ overflow: 'scroll' }}
         onRequestClose={this.cancel}
       >
         {this.state.files.map(item => (
