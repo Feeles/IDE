@@ -173,8 +173,6 @@ export class SignItem extends PureComponent {
   };
 
   render() {
-    const { file, localization } = this.props;
-
     return (
       <div style={{ marginBottom: 16 }}>
         {/* <AutoComplete

@@ -153,10 +153,7 @@ export default class ChromeTabs extends PureComponent {
 
   render() {
     const { file, tab, handleSelect, handleClose, localization } = this.props;
-    const {
-      palette: { secondaryTextColor },
-      prepareStyles
-    } = this.context.muiTheme;
+    const { prepareStyles } = this.context.muiTheme;
     const { doc } = this.state;
 
     const styles = getStyles(this.props, this.context, this.state);

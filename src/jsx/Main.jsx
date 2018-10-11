@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
 import Snackbar from '@material-ui/core/Snackbar';
 import jsyaml from 'js-yaml';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';

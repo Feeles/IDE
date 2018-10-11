@@ -39,7 +39,6 @@ export default class ResolveProgress extends PureComponent {
     if (!this.state.visible) {
       return null;
     }
-    const { palette } = this.context.muiTheme;
 
     return (
       <CircularProgress
