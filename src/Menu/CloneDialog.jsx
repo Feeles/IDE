@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import { Tabs, Tab } from '@material-ui/core/Tabs';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -156,109 +158,105 @@ export default class CloneDialog extends PureComponent {
       }
     };
 
-    const actions = [
-      <Button
-        variant="text"
-        key="showAll"
-        style={styles.button}
-        onClick={() =>
-          this.setState(prevState => {
-            return { showAllUrls: !prevState.showAllUrls };
-          })
-        }
-      >
-        {localization.menu.showAllUrls}
-      </Button>,
-      <Button
-        variant="text"
-        key="cancel"
-        style={styles.button}
-        onClick={onRequestClose}
-      >
-        {localization.cloneDialog.cancel}
-      </Button>
-    ];
-
     const url = location.origin + location.pathname;
     const projects = (this.state.projects || []).filter(
       project => this.state.showAllUrls || project.url === url
     );
 
     return (
-      <Dialog
-        open
-        // bodyStyle={styles.body}
-        actions={actions}
-        onClose={onRequestClose}
-      >
-        <Tabs>
-          <Tab label={localization.cloneDialog.saveTitle}>
-            <h1 style={styles.header}>{localization.cloneDialog.saveHeader}</h1>
-            <div style={styles.container}>
-              {this.hasSaved ? (
-                [
-                  <span key="">{localization.cloneDialog.autoSaved}</span>,
-                  <Card key="current" style={styles.card}>
-                    <CardHeader
-                      title={
-                        <EditableLabel
-                          id="title"
-                          openImmediately={!currentProject.title}
-                          defaultValue={currentProject.title}
-                          tapTwiceQuickly={localization.common.tapTwiceQuickly}
-                          hintText={localization.cloneDialog.setTitle}
-                          onEditEnd={text =>
-                            this.handleTitleChange(currentProject, text)
-                          }
-                        />
-                      }
-                      subtitle={new Date(
-                        currentProject.updated
-                      ).toLocaleString()}
-                    />
-                  </Card>
-                ]
-              ) : (
-                <Button
-                  variant="contained"
-                  fullWidth
-                  key="new_project"
-                  style={styles.card}
-                  disabled={this.state.processing}
-                  onClick={this.handleCreate}
-                >
-                  <ContentAddCircle />
-                  {localization.cloneDialog.saveInNew}
-                </Button>
-              )}
-            </div>
-          </Tab>
-          <Tab label={localization.cloneDialog.loadTitle}>
-            <h1 style={styles.header}>{localization.cloneDialog.loadHeader}</h1>
-            {!this.state.projects ? (
-              <div style={{ textAlign: 'center' }}>
-                <CircularProgress size={120} />
-              </div>
-            ) : (
+      <Dialog open onClose={onRequestClose}>
+        <DialogContent>
+          <Tabs>
+            <Tab label={localization.cloneDialog.saveTitle}>
+              <h1 style={styles.header}>
+                {localization.cloneDialog.saveHeader}
+              </h1>
               <div style={styles.container}>
-                {projects.map(item => (
-                  <ProjectCard
-                    key={item.id}
-                    project={item}
-                    showURL={this.state.showAllUrls}
-                    launchIDE={this.props.launchIDE}
-                    processing={this.state.processing}
-                    onProcessStart={this.handleProcessStart}
-                    onProcessEnd={this.handleProcessEnd}
-                    requestTitleChange={this.handleTitleChange}
-                    requestProjectSet={this.props.setProject}
-                    localization={localization}
-                  />
-                ))}
+                {this.hasSaved ? (
+                  [
+                    <span key="">{localization.cloneDialog.autoSaved}</span>,
+                    <Card key="current" style={styles.card}>
+                      <CardHeader
+                        title={
+                          <EditableLabel
+                            id="title"
+                            openImmediately={!currentProject.title}
+                            defaultValue={currentProject.title}
+                            tapTwiceQuickly={
+                              localization.common.tapTwiceQuickly
+                            }
+                            hintText={localization.cloneDialog.setTitle}
+                            onEditEnd={text =>
+                              this.handleTitleChange(currentProject, text)
+                            }
+                          />
+                        }
+                        subtitle={new Date(
+                          currentProject.updated
+                        ).toLocaleString()}
+                      />
+                    </Card>
+                  ]
+                ) : (
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    key="new_project"
+                    style={styles.card}
+                    disabled={this.state.processing}
+                    onClick={this.handleCreate}
+                  >
+                    <ContentAddCircle />
+                    {localization.cloneDialog.saveInNew}
+                  </Button>
+                )}
               </div>
-            )}
-          </Tab>
-        </Tabs>
+            </Tab>
+            <Tab label={localization.cloneDialog.loadTitle}>
+              <h1 style={styles.header}>
+                {localization.cloneDialog.loadHeader}
+              </h1>
+              {!this.state.projects ? (
+                <div style={{ textAlign: 'center' }}>
+                  <CircularProgress size={120} />
+                </div>
+              ) : (
+                <div style={styles.container}>
+                  {projects.map(item => (
+                    <ProjectCard
+                      key={item.id}
+                      project={item}
+                      showURL={this.state.showAllUrls}
+                      launchIDE={this.props.launchIDE}
+                      processing={this.state.processing}
+                      onProcessStart={this.handleProcessStart}
+                      onProcessEnd={this.handleProcessEnd}
+                      requestTitleChange={this.handleTitleChange}
+                      requestProjectSet={this.props.setProject}
+                      localization={localization}
+                    />
+                  ))}
+                </div>
+              )}
+            </Tab>
+          </Tabs>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="text"
+            style={styles.button}
+            onClick={() =>
+              this.setState(prevState => {
+                return { showAllUrls: !prevState.showAllUrls };
+              })
+            }
+          >
+            {localization.menu.showAllUrls}
+          </Button>,
+          <Button variant="text" style={styles.button} onClick={onRequestClose}>
+            {localization.cloneDialog.cancel}
+          </Button>
+        </DialogActions>
       </Dialog>
     );
   }

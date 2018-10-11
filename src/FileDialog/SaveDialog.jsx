@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 
 import { Abort } from './Buttons';
 
@@ -42,15 +45,6 @@ export default class SaveDialog extends PureComponent {
   render() {
     const { onRequestClose, localization } = this.props;
 
-    const actions = [
-      <Abort
-        key="cancel"
-        primary
-        onClick={onRequestClose}
-        label={localization.saveDialog.cancel}
-      />
-    ];
-
     const divStyle = {
       textAlign: 'center'
     };
@@ -60,26 +54,31 @@ export default class SaveDialog extends PureComponent {
     };
 
     return (
-      <Dialog
-        title={localization.saveDialog.title}
-        actions={actions}
-        modal={false}
-        open={true}
-        onClose={onRequestClose}
-      >
-        {this.state.results.map((item, i) => (
-          <div key={i} style={divStyle}>
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href={item.href}
-              style={linkStyle}
-            >
-              {item.name}
-            </a>
-            <p>{localization.saveDialog.description(item.name)}</p>
-          </div>
-        ))}
+      <Dialog open onClose={onRequestClose}>
+        <DialogTitle>{localization.saveDialog.title}</DialogTitle>
+        <DialogContent>
+          {this.state.results.map((item, i) => (
+            <div key={i} style={divStyle}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={item.href}
+                style={linkStyle}
+              >
+                {item.name}
+              </a>
+              <p>{localization.saveDialog.description(item.name)}</p>
+            </div>
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Abort
+            key="cancel"
+            primary
+            onClick={onRequestClose}
+            label={localization.saveDialog.cancel}
+          />
+        </DialogActions>
       </Dialog>
     );
   }

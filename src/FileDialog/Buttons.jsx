@@ -14,7 +14,7 @@ Confirm.propTypes = {
 };
 
 Confirm.defaultProps = {
-  primary: true
+  color: 'primary'
 };
 
 const Abort = props => {
@@ -28,7 +28,7 @@ Abort.propTypes = {
 };
 
 Abort.defaultProps = {
-  label: 'Cancel'
+  children: 'Cancel'
 };
 
 export { Confirm, Abort };

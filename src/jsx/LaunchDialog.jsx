@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import brown from '@material-ui/core/colors/brown';
@@ -115,12 +117,9 @@ export default class LaunchDialog extends PureComponent {
     };
 
     return (
-      <Dialog
-        modal
-        open={this.props.open}
-        title={localization.launchDialog.title}
-      >
-        <div style={{ textAlign: 'center' }}>
+      <Dialog open={this.props.open}>
+        <DialogTitle>{localization.launchDialog.title}</DialogTitle>
+        <DialogContent style={{ textAlign: 'center' }}>
           <Button
             variant="contained"
             color="primary"
@@ -130,19 +129,19 @@ export default class LaunchDialog extends PureComponent {
             {localization.launchDialog.startNew}
           </Button>
           {localization.common.or}
-        </div>
-        <div style={styles.container}>
-          {this.state.projects.map(item => (
-            <ProjectCard
-              key={item.id}
-              project={item}
-              launchIDE={this.props.launchIDE}
-              requestTitleChange={this.handleTitleChange}
-              onProcessEnd={() => this.refreshState()}
-              localization={localization}
-            />
-          ))}
-        </div>
+          <div style={styles.container}>
+            {this.state.projects.map(item => (
+              <ProjectCard
+                key={item.id}
+                project={item}
+                launchIDE={this.props.launchIDE}
+                requestTitleChange={this.handleTitleChange}
+                onProcessEnd={() => this.refreshState()}
+                localization={localization}
+              />
+            ))}
+          </div>
+        </DialogContent>
       </Dialog>
     );
   }

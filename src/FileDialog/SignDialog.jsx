@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 // import AutoComplete from '@material-ui/core/AutoComplete';
 
 import { Confirm, Abort } from './Buttons';
@@ -90,31 +93,26 @@ export default class SignDialog extends PureComponent {
   };
 
   render() {
-    const actions = [
-      <Abort key="cancel" onClick={this.cancel} />,
-      <Confirm key="ok" label="OK" onClick={this.handleSign} />
-    ];
-
     return (
-      <Dialog
-        title="Signature"
-        actions={actions}
-        modal={false}
-        open={true}
-        // bodyStyle={{ overflow: 'scroll' }}
-        onClose={this.cancel}
-      >
-        {this.state.files.map(item => (
-          <SignItem
-            key={item.key}
-            file={item}
-            completeLabels={this.state.completeLabels}
-            completeUrls={this.state.completeUrls}
-            localization={this.props.localization}
-            onUpdate={this.handleUpdate}
-            onComplete={this.handleComplete}
-          />
-        ))}
+      <Dialog open onClose={this.cancel}>
+        <DialogTitle>Signature</DialogTitle>
+        <DialogContent>
+          {this.state.files.map(item => (
+            <SignItem
+              key={item.key}
+              file={item}
+              completeLabels={this.state.completeLabels}
+              completeUrls={this.state.completeUrls}
+              localization={this.props.localization}
+              onUpdate={this.handleUpdate}
+              onComplete={this.handleComplete}
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Abort onClick={this.cancel}>Cancel</Abort>
+          <Confirm onClick={this.handleSign}>OK</Confirm>
+        </DialogActions>
       </Dialog>
     );
   }

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/meta';
@@ -51,30 +54,26 @@ export default class AddDialog extends Component {
   render() {
     const { localization } = this.props;
 
-    const actions = [
-      <Abort key="cancel" onClick={this.props.onRequestClose}>
-        {localization.addDialog.cancel}
-      </Abort>,
-      <Confirm key="add" onClick={this.handleAdd}>
-        {localization.addDialog.add}
-      </Confirm>
-    ];
-
     return (
-      <Dialog
-        title={localization.addDialog.title}
-        actions={actions}
-        modal={false}
-        open={true}
-        onClose={this.props.onRequestClose}
-      >
-        <TextField
-          fullWidth
-          value={this.state.name}
-          floatingLabelText={localization.addDialog.fileName}
-          hintText="main.js"
-          onChange={this.handleUpdateName}
-        />
+      <Dialog open onClose={this.props.onRequestClose}>
+        <DialogTitle>{localization.addDialog.title}</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            value={this.state.name}
+            floatingLabelText={localization.addDialog.fileName}
+            hintText="main.js"
+            onChange={this.handleUpdateName}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Abort onClick={this.props.onRequestClose}>
+            {localization.addDialog.cancel}
+          </Abort>
+          <Confirm onClick={this.handleAdd}>
+            {localization.addDialog.add}
+          </Confirm>
+        </DialogActions>
       </Dialog>
     );
   }
