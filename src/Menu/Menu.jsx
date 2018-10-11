@@ -20,15 +20,12 @@ const getStyles = (props, context) => {
 
   return {
     root: {
-      flex: '0 0 auto',
-      display: 'flex',
-      flexWrap: 'wrap',
-      alignItems: 'center',
       zIndex: null
     },
     leftIcon: {
       display: props.showAll ? 'block' : 'none',
-      marginTop: 0
+      marginTop: 0,
+      marginLeft: -14
     },
     button: {
       marginLeft: 20,
@@ -154,11 +151,7 @@ export default class Menu extends PureComponent {
         />
       ));
     return (
-      <AppBar
-        title={this.state.overrideTitle || title}
-        style={styles.root}
-        titleStyle={{ flex: null }}
-      >
+      <AppBar style={styles.root} position="relative">
         <Toolbar>
           <IconButton
             style={styles.leftIcon}
@@ -166,6 +159,7 @@ export default class Menu extends PureComponent {
           >
             <NavigationMenu />
           </IconButton>
+          {this.state.overrideTitle || title}
           <div style={{ flex: 1 }} />
           <FormControlLabel
             control={

@@ -538,7 +538,7 @@ export default class Main extends Component {
           containerStyle={styles.sidebar}
         >
           {this.props.mini ? null : (
-            <AppBar>
+            <AppBar position="relative">
               <Toolbar>
                 <IconButton onClick={this.toggleSidebar}>
                   <NavigationArrowBack />
