@@ -535,19 +535,16 @@ export default class Main extends Component {
           />
         )}
         <Drawer
+          variant="persistent"
           open={this.state.openSidebar}
-          docked={this.props.mini}
-          onRequestChange={this.toggleSidebar}
-          containerStyle={styles.sidebar}
+          onClose={this.toggleSidebar}
         >
           {this.props.mini ? null : (
-            <AppBar position="relative">
-              <Toolbar>
-                <IconButton onClick={this.toggleSidebar}>
-                  <NavigationArrowBack />
-                </IconButton>
-              </Toolbar>
-            </AppBar>
+            <div style={{ textAlign: 'right' }}>
+              <IconButton onClick={this.toggleSidebar}>
+                <NavigationArrowBack />
+              </IconButton>
+            </div>
           )}
           {icons.map(this.renderMenuItem)}
         </Drawer>
