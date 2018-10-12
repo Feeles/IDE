@@ -1,15 +1,8 @@
-import {
-  grey100,
-  grey200,
-  grey300,
-  grey400,
-  grey500,
-  grey600,
-  blueA700
-} from 'material-ui/styles/colors';
-import { fade } from 'material-ui/utils/colorManipulator';
+import grey from '@material-ui/core/colors/grey';
+import blue from '@material-ui/core/colors/blue';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
-export default ({ palette, paper, transitions }) =>
+export default ({ palette, shadows, transitions }) =>
   `
 textarea {
   font-size: 16px !important; /* In smartphone, will not scale automatically */
@@ -19,10 +12,10 @@ textarea {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
   width: 100%;
   height: 100%;
-  transition: ${transitions.easeOut()};
+  transition: ${transitions.create()};
 }
 .CodeMirror-gutters {
-  border-color: ${palette.primary1Color} !important;
+  border-color: ${palette.primary.main} !important;
 }
 .CodeMirror-hints {
   z-index: 1000;
@@ -38,9 +31,9 @@ textarea {
   padding: 4px 0;
   border-radius: 2px;
   cursor: pointer;
-  color: ${palette.alternateTextColor};
-  background-color: ${fade(palette.primary1Color, 1)};
-  box-shadow: ${paper.zDepthShadows[1]};
+  color: ${palette.primary.contrastText};
+  background-color: ${fade(palette.primary.main, 1)};
+  box-shadow: ${shadows[1]};
 }
 .Feeles-asset .Feeles-asset-blank {
   display: inline-block;
@@ -56,7 +49,7 @@ textarea {
   transform: translateX(-20px);
   display: inline-block;
   border-radius: 2px;
-  box-shadow: ${paper.zDepthShadows[1]};
+  box-shadow: ${shadows[1]};
   height: 20px; /* TODO: Flexible font-size */
 }
 .Feeles-dropdown .Feeles-dropdown-button {
@@ -73,7 +66,7 @@ textarea {
 .Feeles-dropdown .Feeles-dropdown-label {
   display: inline-block;
   position: relative;
-  color: ${palette.alternateTextColor};
+  color: ${palette.primary.contrastText};
   z-index: 1;
   pointer-events: none;
 }
@@ -84,7 +77,7 @@ textarea {
   padding: 0px 2px 0px 4px;
   color: transparent;
   /* CSS hacking */
-  box-shadow: 0 0 0 100em ${palette.primary1Color};
+  box-shadow: 0 0 0 100em ${palette.primary.main};
   filter: drop-shadow(0 0 30px transparent);
 }
 div.CodeMirror.CodeMirror-focused .Feeles-asset,
@@ -98,27 +91,27 @@ a.Feeles-link {
   z-index: 3;
 }
 .cm-s-default .cm-property {
-  color: ${blueA700};
+  color: ${blue['A700']};
 }
 
 .cm-tab {
-  background-color: ${grey100};
+  background-color: ${grey['100']};
   opacity: 0.8;
 }
 .cm-tab + .cm-tab {
-  background-color: ${grey200};
+  background-color: ${grey['200']};
 }
 .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey300};
+  background-color: ${grey['300']};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey400};
+  background-color: ${grey['400']};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey500};
+  background-color: ${grey['500']};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey600};
+  background-color: ${grey['600']};
 }
 div.CodeMirror span.CodeMirror-matchingbracket {
   text-shadow: 0 0 4px #000, 0 -8px 10px #000, 0 8px 10px #000;

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'material-ui/Card';
+import Card from '@material-ui/core/Card';
 
 const HeaderHeight = 32;
 
@@ -92,17 +92,15 @@ export default class CardWindow extends PureComponent {
 
     return (
       <div id={this.props.name} style={styles.root}>
-        <Card
-          {...this.cardProps}
-          style={styles.card}
-          containerStyle={styles.innerContainer}
-        >
-          <div style={styles.header}>
-            <span>{this.props.icon}</span>
-            <div style={styles.blank} />
-            {this.props.actions}
+        <Card {...this.cardProps} style={styles.card}>
+          <div style={styles.innerContainer}>
+            <div style={styles.header}>
+              <span>{this.props.icon}</span>
+              <div style={styles.blank} />
+              {this.props.actions}
+            </div>
+            {this.props.children}
           </div>
-          {this.props.children}
         </Card>
         {this.props.footer || null}
         <div id={`${this.props.name}-BottomAnchor`} />

@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import RaisedButton from 'material-ui/RaisedButton';
-import { emphasize } from 'material-ui/utils/colorManipulator';
-import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import Button from '@material-ui/core/Button';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import ActionOpenInNew from '@material-ui/icons/OpenInNew';
+import EditorModeEdit from '@material-ui/icons/Edit';
 
 import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 import MDReactComponent from '../../jsx/MDReactComponent';
@@ -18,17 +19,18 @@ const mdComponents = [
     },
     render(tag, props, children, component, mdStyles) {
       return (
-        <RaisedButton
-          primary
+        <Button
+          variant="contained"
+          color="primary"
           key={props.key}
-          label={children}
           href={props.href}
           labelPosition="before"
           target="_blank"
-          style={mdStyles.raisedButton}
-          labelStyle={mdStyles.raisedButtonLabel}
-          icon={<ActionOpenInNew />}
-        />
+          style={mdStyles.containedButton}
+        >
+          <span style={mdStyles.containedButtonLabel}>{children}</span>
+          <ActionOpenInNew />
+        </Button>
       );
     }
   },
@@ -42,14 +44,15 @@ const mdComponents = [
         component.props.setLocation(decodeURIComponent(props.href));
       };
       return (
-        <RaisedButton
-          primary
+        <Button
+          variant="contained"
+          color="primary"
           key={props.key}
-          label={children}
-          style={mdStyles.raisedButton}
-          labelStyle={mdStyles.raisedButtonLabel}
+          style={mdStyles.containedButton}
           onClick={onClick}
-        />
+        >
+          <span style={mdStyles.containedButtonLabel}>{children}</span>
+        </Button>
       );
     }
   },
@@ -83,15 +86,16 @@ const mdComponents = [
         component.props.selectTab(new Tab({ getFile }));
       };
       return (
-        <RaisedButton
-          primary
+        <Button
+          variant="contained"
+          color="primary"
           key={props.key}
-          label={props.alt}
-          icon={<EditorModeEdit />}
-          style={mdStyles.raisedButton}
-          labelStyle={mdStyles.raisedButtonLabel}
+          style={mdStyles.containedButton}
           onClick={onClick}
-        />
+        >
+          <EditorModeEdit />
+          <span style={mdStyles.containedButtonLabel}>{props.alt}</span>
+        </Button>
       );
     }
   },
@@ -123,14 +127,14 @@ const mdComponents = [
   }
 ];
 
-const mdStyle = (props, state, context) => {
-  const { palette, spacing } = context.muiTheme;
+const mdStyle = props => {
+  const { palette, spacing } = props.theme;
 
   const tableBorder = `1px solid ${palette.disabledColor}`;
 
   return {
     blockquote: {
-      color: palette.secondaryTextColor,
+      color: palette.text.secondary,
       marginLeft: '1rem',
       paddingLeft: '1rem',
       borderLeft: `5px solid ${palette.disabledColor}`
@@ -144,18 +148,18 @@ const mdStyle = (props, state, context) => {
       borderSpacing: 0
     },
     th: {
-      padding: spacing.desktopGutterMini,
+      padding: spacing.unit,
       borderTop: tableBorder,
       borderRight: tableBorder,
       borderBottom: tableBorder
     },
     td: {
-      padding: spacing.desktopGutterMini,
+      padding: spacing.unit,
       borderRight: tableBorder,
       borderBottom: tableBorder
     },
     code: {
-      backgroundColor: emphasize(palette.canvasColor, 0.07),
+      backgroundColor: emphasize(palette.background.paper, 0.07),
       padding: '.2em',
       borderRadius: 2
     },
@@ -163,18 +167,20 @@ const mdStyle = (props, state, context) => {
       transform: 'scale(0.6)',
       verticalAlign: 'middle'
     },
-    iconColor: palette.alternateTextColor,
-    raisedButton: {
+    iconColor: palette.primary.contrastText,
+    containedButton: {
       margin: 4
     },
-    raisedButtonLabel: {
+    containedButtonLabel: {
       textTransform: 'none'
     }
   };
 };
 
+@withTheme()
 export default class Readme extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
@@ -182,10 +188,6 @@ export default class Readme extends PureComponent {
     localization: PropTypes.object.isRequired,
     completes: PropTypes.array.isRequired,
     setLocation: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   render() {

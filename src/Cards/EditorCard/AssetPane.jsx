@@ -1,13 +1,16 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import NavigationExpandLess from 'material-ui/svg-icons/navigation/expand-less';
-import { fade } from 'material-ui/utils/colorManipulator';
-import { emphasize } from 'material-ui/utils/colorManipulator';
+import NavigationExpandLess from '@material-ui/icons/ExpandLess';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 import AssetButton from './AssetButton';
 
+@withTheme()
 export default class AssetPane extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
     open: PropTypes.bool.isRequired,
     scope: PropTypes.string,
@@ -16,10 +19,6 @@ export default class AssetPane extends PureComponent {
     handleAssetInsert: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -62,7 +61,7 @@ export default class AssetPane extends PureComponent {
 
   render() {
     const { scope, open } = this.props;
-    const { palette, transitions } = this.context.muiTheme;
+    const { palette, transitions } = this.props.theme;
 
     const styles = {
       root: {
@@ -72,7 +71,7 @@ export default class AssetPane extends PureComponent {
         display: 'flex',
         flexDirection: 'column',
         zIndex: 10,
-        transition: transitions.easeOut(),
+        transition: transitions.create(),
         height: open ? '100%' : 0
       },
       scroller: {
@@ -83,7 +82,7 @@ export default class AssetPane extends PureComponent {
         paddingBottom: 60,
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
-        backgroundColor: fade(emphasize(palette.canvasColor, 0.75), 0.55)
+        backgroundColor: fade(emphasize(palette.background.paper, 0.75), 0.55)
       },
       label: {
         flex: '0 0 100%',
@@ -100,7 +99,7 @@ export default class AssetPane extends PureComponent {
       close: {
         marginBottom: 10,
         textAlign: 'center',
-        backgroundColor: palette.primary1Color,
+        backgroundColor: palette.primary.main,
         borderTopRightRadius: 0,
         borderTopLeftRadius: 0,
         cursor: 'pointer',
@@ -117,7 +116,7 @@ export default class AssetPane extends PureComponent {
           {labels.map(label => this.renderEachLabel(label, styles))}
         </div>
         <div style={styles.close} onClick={this.props.handleClose}>
-          <NavigationExpandLess color="white" />
+          <NavigationExpandLess style={{ color: 'white' }} />
         </div>
       </div>
     );

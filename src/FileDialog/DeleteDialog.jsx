@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import AlertError from 'material-ui/svg-icons/alert/error';
-import { redA400 } from 'material-ui/styles/colors';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import AlertError from '@material-ui/icons/Error';
+import red from '@material-ui/core/colors/red';
 
 import { Confirm, Abort } from './Buttons';
 
@@ -32,29 +35,23 @@ export default class DeleteDialog extends Component {
 
     const iconStyle = {
       marginRight: 10,
-      marginBottom: -6
+      marginBottom: -6,
+      color: red['400']
     };
 
-    const actions = [
-      <Abort key="close" onClick={onRequestClose} />,
-      <Confirm key="delete" label="Delete" onClick={this.handleDelete} />
-    ];
-
     return (
-      <Dialog
-        title={
-          <h3>
-            Do you really want to delete <b>{content && content.name}</b>?
-          </h3>
-        }
-        actions={actions}
-        modal={false}
-        open={true}
-        onRequestClose={onRequestClose}
-        bodyStyle={style}
-      >
-        <AlertError color={redA400} style={iconStyle} />
-        This operation can not be undone.
+      <Dialog open onClose={onRequestClose}>
+        <DialogTitle>
+          Do you really want to delete <b>{content && content.name}</b>?
+        </DialogTitle>
+        <DialogContent style={style}>
+          <AlertError style={iconStyle} />
+          This operation can not be undone.
+        </DialogContent>
+        <DialogActions>
+          <Abort onClick={onRequestClose}>Cancel</Abort>,
+          <Confirm onClick={this.handleDelete}>Delete</Confirm>
+        </DialogActions>
       </Dialog>
     );
   }

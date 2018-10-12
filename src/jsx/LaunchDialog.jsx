@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import CircularProgress from 'material-ui/CircularProgress';
-import RaisedButton from 'material-ui/RaisedButton';
-import { brown50 } from 'material-ui/styles/colors';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import brown from '@material-ui/core/colors/brown';
 
 import { personalDB, updateProject } from '../database/';
 import { ProjectCard } from '../Menu/CloneDialog';
@@ -98,7 +100,7 @@ export default class LaunchDialog extends PureComponent {
         paddingBottom: 16,
         height: '20rem',
         overflow: 'scroll',
-        backgroundColor: brown50,
+        backgroundColor: brown['50'],
         overflowX: 'auto',
         overflowY: 'scroll'
       },
@@ -115,32 +117,31 @@ export default class LaunchDialog extends PureComponent {
     };
 
     return (
-      <Dialog
-        modal
-        open={this.props.open}
-        title={localization.launchDialog.title}
-      >
-        <div style={{ textAlign: 'center' }}>
-          <RaisedButton
-            primary
-            label={localization.launchDialog.startNew}
+      <Dialog open={this.props.open}>
+        <DialogTitle>{localization.launchDialog.title}</DialogTitle>
+        <DialogContent style={{ textAlign: 'center' }}>
+          <Button
+            variant="contained"
+            color="primary"
             style={styles.button}
             onClick={this.props.fallback}
-          />
+          >
+            {localization.launchDialog.startNew}
+          </Button>
           {localization.common.or}
-        </div>
-        <div style={styles.container}>
-          {this.state.projects.map(item => (
-            <ProjectCard
-              key={item.id}
-              project={item}
-              launchIDE={this.props.launchIDE}
-              requestTitleChange={this.handleTitleChange}
-              onProcessEnd={() => this.refreshState()}
-              localization={localization}
-            />
-          ))}
-        </div>
+          <div style={styles.container}>
+            {this.state.projects.map(item => (
+              <ProjectCard
+                key={item.id}
+                project={item}
+                launchIDE={this.props.launchIDE}
+                requestTitleChange={this.handleTitleChange}
+                onProcessEnd={() => this.refreshState()}
+                localization={localization}
+              />
+            ))}
+          </div>
+        </DialogContent>
       </Dialog>
     );
   }

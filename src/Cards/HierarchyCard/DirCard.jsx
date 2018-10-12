@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
 import { NativeTypes } from 'react-dnd-html5-backend';
@@ -7,10 +8,10 @@ import includes from 'lodash/includes';
 import FileCard from './FileCard';
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = (props, context) => {
+const getStyles = props => {
   const { isRoot, isDirOpened, isOver, dragSource } = props;
   const cd = props.dir;
-  const { palette, spacing, transitions } = context.muiTheme;
+  const { palette, spacing, transitions } = props.theme;
 
   const borderStyle =
     isOver && !includes(cd.files, dragSource) ? 'dashed' : 'solid';
@@ -33,38 +34,36 @@ const getStyles = (props, context) => {
           height: isDirOpened(cd, 'auto', 40),
           marginTop: 4,
           marginRight: 8,
-          paddingBottom: isDirOpened(cd, spacing.desktopGutterLess, 0),
-          paddingLeft: isDirOpened(cd, spacing.desktopGutterLess, 0),
+          paddingBottom: isDirOpened(cd, spacing.unit * 2, 0),
+          paddingLeft: isDirOpened(cd, spacing.unit * 2, 0),
           borderWidth,
           borderStyle,
-          borderColor: palette.primary1Color,
+          borderColor: palette.primary.main,
           borderRadius: 2,
-          transition: transitions.easeOut(null, [
-            'margin',
-            'padding-bottom',
-            'border'
-          ])
+          transition: transitions.create(['margin', 'padding-bottom', 'border'])
         },
     closed: {
-      color: palette.secondaryTextColor,
-      paddingLeft: spacing.desktopGutterLess,
+      color: palette.text.secondary,
+      paddingLeft: spacing.unit * 2,
       cursor: 'pointer'
     },
     closer: {
-      marginLeft: -spacing.desktopGutterLess,
-      backgroundColor: palette.primary1Color,
+      marginLeft: -spacing.unit * 2,
+      backgroundColor: palette.primary.main,
       cursor: 'pointer'
     },
     closerLabel: {
-      paddingLeft: spacing.desktopGutterLess,
+      paddingLeft: spacing.unit * 2,
       fontWeight: 'bold',
-      color: palette.alternateTextColor
+      color: palette.primary.contrastText
     }
   };
 };
 
+@withTheme()
 class _DirCard extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     dir: PropTypes.object.isRequired,
     selectedFile: PropTypes.object,
     tabbedFiles: PropTypes.array.isRequired,
@@ -82,10 +81,6 @@ class _DirCard extends PureComponent {
     dragSource: PropTypes.object
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   static defaultProps = {
     isRoot: false
   };
@@ -99,7 +94,6 @@ class _DirCard extends PureComponent {
       connectDropTarget
     } = this.props;
     const cd = this.props.dir;
-    const { prepareStyles } = this.context.muiTheme;
 
     const transfer = {
       selectedFile: this.props.selectedFile,
@@ -119,13 +113,13 @@ class _DirCard extends PureComponent {
     );
 
     const closerProps = {
-      style: prepareStyles(closer),
-      labelStyle: prepareStyles(closerLabel),
+      style: closer,
+      labelStyle: closerLabel,
       onClick: () => handleDirToggle(cd)
     };
 
     return connectDropTarget(
-      <div style={prepareStyles(root)}>
+      <div style={root}>
         {isDirOpened(
           cd,
           [].concat(
@@ -137,10 +131,7 @@ class _DirCard extends PureComponent {
               <FileCard key={file.key} file={file} {...transfer} />
             ))
           ),
-          <div
-            style={prepareStyles(closed)}
-            onClick={() => handleDirToggle(cd)}
-          >
+          <div style={closed} onClick={() => handleDirToggle(cd)}>
             {cd.path}
           </div>
         )}

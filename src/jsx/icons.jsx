@@ -1,14 +1,14 @@
 import React from 'react';
-import HardwareDesktopWindows from 'material-ui/svg-icons/hardware/desktop-windows';
-import ContentReply from 'material-ui/svg-icons/content/reply';
-import AvMusicVideo from 'material-ui/svg-icons/av/music-video';
-import ContentCreate from 'material-ui/svg-icons/content/create';
-import MapsMap from 'material-ui/svg-icons/maps/map';
-import ImagePalette from 'material-ui/svg-icons/image/palette';
-import ActionTouchApp from 'material-ui/svg-icons/action/touch-app';
-import FileFolderOpen from 'material-ui/svg-icons/file/folder-open';
-import ActionSettingsApplications from 'material-ui/svg-icons/action/settings-applications';
-import ActionCopyright from 'material-ui/svg-icons/action/copyright';
+import HardwareDesktopWindows from '@material-ui/icons/DesktopWindows';
+import ContentReply from '@material-ui/icons/Reply';
+import AvMusicVideo from '@material-ui/icons/MusicVideo';
+import ContentCreate from '@material-ui/icons/Create';
+import MapsMap from '@material-ui/icons/Map';
+import ImagePalette from '@material-ui/icons/Palette';
+// import ActionTouchApp from '@material-ui/icons/TouchApp';
+import FileFolderOpen from '@material-ui/icons/FolderOpen';
+import ActionSettingsApplications from '@material-ui/icons/SettingsApplications';
+// import ActionCopyright from '@material-ui/icons/Copyright';
 
 export default [
   {
@@ -35,10 +35,10 @@ export default [
     name: 'PaletteCard',
     icon: <ImagePalette />
   },
-  {
-    name: 'EnvCard',
-    icon: <ActionTouchApp />
-  },
+  // {
+  //   name: 'EnvCard',
+  //   icon: <ActionTouchApp />
+  // },
   {
     name: 'HierarchyCard',
     icon: <FileFolderOpen />
@@ -46,9 +46,9 @@ export default [
   {
     name: 'CustomizeCard',
     icon: <ActionSettingsApplications />
-  },
-  {
-    name: 'CreditsCard',
-    icon: <ActionCopyright />
   }
+  // {
+  //   name: 'CreditsCard',
+  //   icon: <ActionCopyright />
+  // }
 ];

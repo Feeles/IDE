@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import Button from '@material-ui/core/Button';
+import ContentAdd from '@material-ui/icons/Add';
 import includes from 'lodash/includes';
 
 import Card from '../CardWindow';
 import { makeFromFile } from '../../File/';
-import { SignDialog, AddDialog } from '../../FileDialog/';
+import { AddDialog } from '../../FileDialog/';
 import { Tab } from '../../ChromeTab/';
 import Root from './Root';
 import SearchBar from './SearchBar';
@@ -27,10 +27,6 @@ export default class HierarchyCard extends PureComponent {
     cardPropsBag: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     openedPaths: [''],
     tabbedFiles: [],
@@ -49,15 +45,9 @@ export default class HierarchyCard extends PureComponent {
   }
 
   handleNativeDrop = (files, dir = null) => {
-    const { addFile, openFileDialog } = this.props;
+    const { addFile } = this.props;
 
     Promise.all(files.map(makeFromFile))
-      .then(files =>
-        openFileDialog(SignDialog, {
-          content: files,
-          getFiles: () => this.props.files
-        })
-      )
       .then(files => {
         files = files.map(file => (dir ? file.move(dir.path) : file));
         return Promise.all(files.map(addFile));
@@ -166,13 +156,14 @@ export default class HierarchyCard extends PureComponent {
           localization={localization}
         />
         <Root files={files.filter(filter)} {...transfer} />
-        <FloatingActionButton
+        <Button
+          variant="fab"
           mini
           style={styles.button}
           onClick={this.handleAdd}
         >
           <ContentAdd />
-        </FloatingActionButton>
+        </Button>
       </Card>
     );
   }

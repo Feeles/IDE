@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import AutoComplete from 'material-ui/AutoComplete';
-import Paper from 'material-ui/Paper';
-import IconButton from 'material-ui/IconButton';
-import ActionSearch from 'material-ui/svg-icons/action/search';
-import RaisedButton from 'material-ui/RaisedButton';
-import ActionDeleteForever from 'material-ui/svg-icons/action/delete-forever';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import AutoComplete from '../../jsx/IntegrationReactSelect';
+import Paper from '@material-ui/core/Paper';
+import ActionSearch from '@material-ui/icons/Search';
+import Button from '@material-ui/core/Button';
+import ActionDeleteForever from '@material-ui/icons/DeleteForever';
 
 import TrashBox from './TrashBox';
 import search, { getOptions } from './search';
@@ -14,44 +13,43 @@ import DesktopFile from './DesktopFile';
 
 const SearchBarHeight = 40;
 
-const getStyles = (props, context, state) => {
-  const { palette, spacing, prepareStyles } = context.muiTheme;
-  const { focus } = state;
+const getStyles = props => {
+  const { palette, spacing } = props.theme;
 
   return {
-    root: prepareStyles({
+    root: {
       display: 'flex',
       alignItems: 'center',
       boxSizing: 'border-box',
       width: '100%',
       height: SearchBarHeight,
       paddingRight: 16,
-      paddingLeft: spacing.desktopGutterMini,
+      paddingLeft: spacing.unit,
       zIndex: 100
-    }),
+    },
     bar: {
       display: 'flex',
       alignItems: 'center',
       width: '100%',
       height: SearchBarHeight,
-      paddingLeft: spacing.desktopGutterMini,
-      backgroundColor: palette.canvasColor,
-      opacity: focus ? 1 : 0.9
+      paddingLeft: spacing.unit,
+      backgroundColor: palette.background.paper
     },
     icon: {
-      marginTop: 4,
-      marginRight: focus ? 8 : 0
+      marginTop: 4
     },
     empty: {
       flex: '1 0 auto',
       height: SearchBarHeight,
-      marginLeft: spacing.desktopGutterMini
+      marginLeft: spacing.unit
     }
   };
 };
 
+@withTheme()
 export default class SearchBar extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     filterRef: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
@@ -61,12 +59,7 @@ export default class SearchBar extends PureComponent {
     localization: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
-    focus: false,
     showTrashes: false,
     query: ''
   };
@@ -75,7 +68,14 @@ export default class SearchBar extends PureComponent {
     this.handleUpdate('');
   }
 
-  handleUpdate = query => {
+  handleUpdate = (value, context) => {
+    const query = typeof value === 'object' ? value.value : value;
+    if (!query && context) {
+      if (context.action !== 'input-change') {
+        // react-select は value="" でイベント発火することがある
+        return;
+      }
+    }
     const { filterRef } = this.props;
 
     const options = getOptions(query);
@@ -100,11 +100,13 @@ export default class SearchBar extends PureComponent {
   render() {
     const { putFile, onOpen, deleteAll, localization } = this.props;
     const { showTrashes, query } = this.state;
-    const {
-      secondaryTextColor,
-      alternateTextColor
-    } = this.context.muiTheme.palette;
-    const fileNames = this.props.files.map(f => f.moduleName).filter(s => s);
+    const fileNames = this.props.files
+      .map(f => f.moduleName)
+      .filter(s => s)
+      .map(s => ({
+        value: s,
+        label: s
+      }));
 
     const { root, bar, icon, empty } = getStyles(
       this.props,
@@ -120,31 +122,25 @@ export default class SearchBar extends PureComponent {
           onClick={this.handleTrashBoxTap}
         />
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
-        <Paper zDepth={3} style={bar}>
-          <ActionSearch style={icon} color={secondaryTextColor} />
+        <Paper elevation={3} style={bar}>
+          <ActionSearch style={icon} />
           <AutoComplete
-            id="search"
-            searchText={query}
-            dataSource={fileNames}
-            maxSearchResults={5}
-            onNewRequest={this.handleUpdate}
-            onUpdateInput={this.handleUpdate}
-            onFocus={() => this.setState({ focus: true })}
-            onBlur={() => this.setState({ focus: false })}
-            fullWidth
+            value={query}
+            suggestions={fileNames}
+            onChange={this.handleUpdate}
+            placeholder=""
           />
-          <IconButton disabled={!query} onClick={() => this.handleUpdate('')}>
-            <NavigationClose color={secondaryTextColor} />
-          </IconButton>
         </Paper>
         {showTrashes ? (
-          <RaisedButton
-            secondary
-            label={localization.hierarchyCard.emptyTrashBox}
-            icon={<ActionDeleteForever color={alternateTextColor} />}
+          <Button
+            variant="contained"
+            color="secondary"
             style={empty}
             onClick={deleteAll}
-          />
+          >
+            <ActionDeleteForever />
+            {localization.hierarchyCard.emptyTrashBox}
+          </Button>
         ) : null}
       </div>
     );

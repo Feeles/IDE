@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { fullWhite, transparent } from 'material-ui/styles/colors';
 
 export default class SvgButton extends PureComponent {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
     style: PropTypes.object.isRequired,
-    children: PropTypes.object.isRequired
+    children: PropTypes.node.isRequired
   };
 
   static defaultProps = {
@@ -20,7 +19,7 @@ export default class SvgButton extends PureComponent {
     };
 
     const style = {
-      backgroundColor: transparent,
+      backgroundColor: 'transparent',
       border: 'none',
       outline: 'none',
       cursor: 'pointer',
@@ -29,7 +28,7 @@ export default class SvgButton extends PureComponent {
 
     return (
       <button style={style} onClick={this.props.onClick}>
-        <svg fill={fullWhite} style={svgStyle} viewBox="0 0 24 24">
+        <svg fill="white" style={svgStyle} viewBox="0 0 24 24">
           <path d={this.props.children} />
         </svg>
       </button>

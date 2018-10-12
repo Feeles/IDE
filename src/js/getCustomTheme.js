@@ -1,102 +1,51 @@
-import transitions from 'material-ui/styles/transitions';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { grey500, fullWhite } from 'material-ui/styles/colors';
-import {
-  fade,
-  emphasize,
-  convertColorToString,
-  decomposeColor
-} from 'material-ui/utils/colorManipulator';
-
-// Twitter theme colors without 'ABB8C3' (Gray)
-const themeColors = [
-  '#FF6900',
-  '#FCB900',
-  '#7BDCB5',
-  '#00D084',
-  '#8ED1FC',
-  '#0693E3',
-  '#F78DA7',
-  '#EB144C',
-  '#9900EF'
-];
+import { createMuiTheme } from '@material-ui/core/styles';
+import red from '@material-ui/core/colors/red';
+import * as themeColors from './colors';
 
 export const defaultPalette = {
-  canvasColor: fullWhite,
-  primary1Color: random(themeColors),
-  accent1Color: random(themeColors),
-  backgroundColor: grey500
+  type: 'light',
+  primary: random(themeColors),
+  accent: random(themeColors),
+  error: red
 };
 
 export default feelesrc => {
   // Mui Theme (plain object)
-  const theme = getMuiTheme({
-    palette: getPalette(feelesrc.palette)
+
+  const theme = createMuiTheme({
+    // breakpoints: {},
+    // direction: "ltr",
+    // mixins: {},
+    palette: {
+      ...defaultPalette,
+      ...feelesrc.palette
+    },
+    // props: {},
+    // shadows: [],
+    // typography: {},
+    // shape: {},
+    // spacing: {},
+    transitions: {}
+    // zIndex: {},
   });
-  // 影の設定
-  overrideShadow(theme, feelesrc.enableShadow);
-  // トランジションの設定
-  overrideTransition(theme, feelesrc.enableTransition);
+
+  if (feelesrc.enableShadow === false) {
+    // 影の無効化
+    theme.shadows = Array.from({ length: 25 });
+  }
+  if (feelesrc.enableTransition === false) {
+    // トランジションの無効化
+    theme.transitions.easing.easeInOut = 'none';
+    theme.transitions.easing.easeOut = 'none';
+    theme.transitions.easing.easeIn = 'none';
+    theme.transitions.easing.sharp = 'none';
+  }
+
   return theme;
 };
 
-function getPalette(palette = {}) {
-  const { backgroundColor, canvasColor, primary1Color, accent1Color } = {
-    // random palette
-    ...defaultPalette,
-    // feelesrc::palette
-    ...palette
-  };
-
-  return {
-    primary1Color,
-    primary2Color: emphasize(primary1Color),
-    primary3Color: monochrome(primary1Color),
-    accent1Color,
-    accent2Color: monochrome(accent1Color),
-    accent3Color: emphasize(monochrome(accent1Color)),
-    textColor: fade(emphasize(canvasColor, 1), 1),
-    secondaryTextColor: fade(emphasize(canvasColor, 1), 0.54),
-    alternateTextColor: fade(emphasize(emphasize(canvasColor, 1), 1), 1),
-    canvasColor,
-    borderColor: fade(accent1Color, 0.4),
-    disabledColor: fade(emphasize(canvasColor, 1), 0.3),
-    pickerHeaderColor: primary1Color,
-    clockCircleColor: fade(emphasize(canvasColor, 1), 0.07),
-    shadowColor: fade(emphasize(canvasColor, 1), 1),
-    backgroundColor,
-    ...palette
-  };
-}
-
-function overrideShadow(theme, enableShadow = true) {
-  if (!enableShadow) {
-    // box-shadow: none
-    theme.paper.zDepthShadows = theme.paper.zDepthShadows.map(() => 'none');
-    theme.chip.shadow = 'none';
-  }
-}
-
-function overrideTransition(theme, enableTransition = true) {
-  if (enableTransition) {
-    theme.transitions = transitions;
-  } else {
-    theme.transitions = {
-      easeOut: () => 'none',
-      create: () => 'none'
-    };
-  }
-}
-
-function monochrome(color) {
-  color = decomposeColor(color);
-  const [r, g, b] = color.values;
-  const _ = r * 0.3 + g * 0.59 + b * 0.11;
-  color = { type: 'rgb', values: [_, _, _] };
-  return convertColorToString(color);
-}
-
 function random(colors) {
-  const index = (Math.random() * colors.length) >> 0;
-  return colors[index];
+  const index = (Math.random() * Object.keys(colors).length) >> 0;
+  const key = Object.keys(colors)[index];
+  return colors[key];
 }

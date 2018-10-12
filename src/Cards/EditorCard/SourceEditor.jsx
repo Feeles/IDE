@@ -1,21 +1,21 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
-import LinearProgress from 'material-ui/LinearProgress';
-import HardwareKeyboardBackspace from 'material-ui/svg-icons/hardware/keyboard-backspace';
-import ContentSave from 'material-ui/svg-icons/content/save';
+import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
+import ContentSave from '@material-ui/icons/Save';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import includes from 'lodash/includes';
 import Editor from './Editor';
-import CreditBar from './CreditBar';
 import PlayMenu from './PlayMenu';
 import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
 import zenkakuToHankaku from './zenkakuToHankaku';
 
-const getStyle = (props, state, context) => {
-  const { palette } = context.muiTheme;
+const getStyle = props => {
+  const { palette } = props.theme;
 
   return {
     root: {
@@ -32,8 +32,8 @@ const getStyle = (props, state, context) => {
     },
     menuBar: {
       display: 'flex',
-      backgroundColor: palette.canvasColor,
-      borderBottom: `1px solid ${palette.primary1Color}`,
+      backgroundColor: palette.background.paper,
+      borderBottom: `1px solid ${palette.primary.main}`,
       zIndex: 3
     },
     barButton: {
@@ -43,7 +43,6 @@ const getStyle = (props, state, context) => {
     barButtonLabel: {
       fontSize: '.5rem'
     },
-    progressColor: palette.primary1Color,
     progress: {
       borderRadius: 0
     }
@@ -53,8 +52,10 @@ const getStyle = (props, state, context) => {
 // file -> prevFile を参照する
 const prevFiles = new WeakMap();
 
+@withTheme()
 export default class SourceEditor extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
@@ -71,10 +72,6 @@ export default class SourceEditor extends PureComponent {
     closeSelectedTab: PropTypes.func.isRequired,
     selectTabFromFile: PropTypes.func.isRequired,
     onDocChanged: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -302,7 +299,7 @@ export default class SourceEditor extends PureComponent {
   };
 
   emphasizeTextMarker = async textMarker => {
-    const { transitions } = this.context.muiTheme;
+    const { transitions } = this.props.theme;
 
     const begin = {
       className: textMarker.className,
@@ -310,7 +307,7 @@ export default class SourceEditor extends PureComponent {
     };
     const end = {
       className: textMarker.className,
-      style: `opacity: 1; background-color: rgba(0,0,0,0.1); transition: ${transitions.easeOut()}`
+      style: `opacity: 1; background-color: rgba(0,0,0,0.1); transition: ${transitions.create()}`
     };
     textMarker.on('clear', () => {
       this.setState(prevState => ({
@@ -421,22 +418,28 @@ export default class SourceEditor extends PureComponent {
           )}
         </style>
         <div style={styles.menuBar}>
-          <FlatButton
-            label={localization.editorCard.undo}
+          <Button
+            variant="text"
             disabled={!this.state.hasHistory}
             style={styles.barButton}
-            labelStyle={styles.barButtonLabel}
-            icon={<HardwareKeyboardBackspace />}
             onClick={this.handleUndo}
-          />
-          <FlatButton
-            label={localization.editorCard.save}
+          >
+            <HardwareKeyboardBackspace />
+            <span style={styles.barButtonLabel}>
+              {localization.editorCard.undo}
+            </span>
+          </Button>
+          <Button
+            variant="text"
             disabled={!this.state.hasChanged}
             style={styles.barButton}
-            labelStyle={styles.barButtonLabel}
-            icon={<ContentSave />}
             onClick={this.handleSaveAndRun}
-          />
+          >
+            <ContentSave />
+            <span style={styles.barButtonLabel}>
+              {localization.editorCard.save}
+            </span>
+          </Button>
           <div
             style={{
               flex: '1 1 auto'
@@ -450,10 +453,7 @@ export default class SourceEditor extends PureComponent {
           />
         </div>
         {this.state.loading ? (
-          <LinearProgress
-            color={styles.progressColor}
-            style={styles.progress}
-          />
+          <LinearProgress color="primary" style={styles.progress} />
         ) : null}
         <div style={styles.editorContainer}>
           <AssetPane
@@ -483,13 +483,6 @@ export default class SourceEditor extends PureComponent {
           localization={localization}
           onRestore={this.handleRestore}
           canRestore={prevFiles.has(file)}
-        />
-        <CreditBar
-          file={file}
-          openFileDialog={this.props.openFileDialog}
-          putFile={this.props.putFile}
-          localization={localization}
-          getFiles={this.props.getFiles}
         />
       </div>
     );

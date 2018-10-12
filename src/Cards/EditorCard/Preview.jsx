@@ -1,15 +1,13 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { fullWhite, fullBlack } from 'material-ui/styles/colors';
+import { withTheme } from '@material-ui/core/styles';
 
-import CreditBar from './CreditBar';
+import PropTypes from 'prop-types';
 
 const getStyles = (props, context, state) => {
-  const { prepareStyles } = context.muiTheme;
   const { scale } = state;
 
   return {
-    root: prepareStyles({
+    root: {
       position: 'absolute',
       display: 'flex',
       flexDirection: 'row',
@@ -17,27 +15,24 @@ const getStyles = (props, context, state) => {
       justifyContent: 'center',
       boxSizing: 'border-box',
       overflow: 'hidden',
-      background: `linear-gradient(${fullWhite}, ${fullBlack})`,
+      background: `linear-gradient(white, black)`,
       width: '100%',
       height: '100%'
-    }),
-    img: prepareStyles({
+    },
+    img: {
       transform: `scale(${scale})`
-    })
+    }
   };
 };
-
+@withTheme()
 export default class Preview extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     getFiles: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -73,23 +68,9 @@ export default class Preview extends PureComponent {
       <audio src={file.blobURL} controls />
     ) : null;
 
-    const creditStyle = {
-      position: 'absolute',
-      bottom: 0,
-      width: '100%'
-    };
-
     return (
       <div style={root} ref={ref => ref && (this.container = ref)}>
         {content}
-        <CreditBar
-          file={file}
-          openFileDialog={this.props.openFileDialog}
-          putFile={this.props.putFile}
-          localization={this.props.localization}
-          getFiles={this.props.getFiles}
-          style={creditStyle}
-        />
       </div>
     );
   }

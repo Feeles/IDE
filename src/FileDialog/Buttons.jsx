@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from '@material-ui/core/Button';
 
 const Confirm = props => {
   const style = Object.assign({ marginRight: 20 }, props.style);
-  return <RaisedButton {...props} style={style} />;
+  return <Button variant="contained" {...props} style={style} />;
 };
 
 Confirm.propTypes = {
@@ -15,12 +14,12 @@ Confirm.propTypes = {
 };
 
 Confirm.defaultProps = {
-  primary: true
+  color: 'primary'
 };
 
 const Abort = props => {
   const style = Object.assign({ marginRight: 20 }, props.style);
-  return <FlatButton {...props} style={style} />;
+  return <Button variant="text" {...props} style={style} />;
 };
 
 Abort.propTypes = {
@@ -29,7 +28,7 @@ Abort.propTypes = {
 };
 
 Abort.defaultProps = {
-  label: 'Cancel'
+  children: 'Cancel'
 };
 
 export { Confirm, Abort };

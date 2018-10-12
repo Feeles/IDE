@@ -1,18 +1,19 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import beautify from 'js-beautify';
-import RaisedButton from 'material-ui/RaisedButton';
-import LinearProgress from 'material-ui/LinearProgress';
-import AvStop from 'material-ui/svg-icons/av/stop';
-import { red50, red500 } from 'material-ui/styles/colors';
-import ContentReply from 'material-ui/svg-icons/content/reply';
+import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import AvStop from '@material-ui/icons/Stop';
+import red from '@material-ui/core/colors/red';
+import ContentReply from '@material-ui/icons/Reply';
 
 import { SourceFile } from '../../File/';
 import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
 const getStyle = (props, context, state) => {
-  const { palette, transitions } = context.muiTheme;
+  const { palette, transitions } = props.theme;
   const { shooting, height } = state;
 
   return {
@@ -27,7 +28,7 @@ const getStyle = (props, context, state) => {
       height,
       transform: `translate(${shooting ? '-500px' : 0})`,
       opacity: shooting ? 0 : 1,
-      transition: transitions.easeOut()
+      transition: transitions.create()
     },
     menu: {
       position: 'relative',
@@ -45,15 +46,15 @@ const getStyle = (props, context, state) => {
         rotateY(${shooting ? 180 : 0}deg)`
     },
     label: {
-      color: palette.secondaryTextColor,
+      color: palette.text.secondary,
       fontSize: '.8rem'
     },
     error: {
       flex: '0 1 auto',
       margin: 0,
       padding: 8,
-      backgroundColor: red50,
-      color: red500,
+      backgroundColor: red['50'],
+      color: red['500'],
       fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
       overflow: 'scroll'
     },
@@ -63,8 +64,10 @@ const getStyle = (props, context, state) => {
   };
 };
 
+@withTheme()
 export default class ShotPane extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
@@ -75,10 +78,6 @@ export default class ShotPane extends PureComponent {
     completes: PropTypes.array,
     globalEvent: PropTypes.object.isRequired,
     handleSetLinkObjects: PropTypes.func.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -209,24 +208,27 @@ export default class ShotPane extends PureComponent {
         ) : null}
         {this.state.loading ? <LinearProgress /> : null}
         <div style={styles.menu}>
-          <RaisedButton
-            primary
-            label={localization.shotCard.button}
-            icon={this.state.shooting ? <AvStop /> : <ContentReply />}
-            labelPosition="before"
+          <Button
+            variant="contained"
+            color="primary"
             disabled={this.state.shooting}
             onClick={this.handleShot}
             style={styles.shoot}
-          />
+          >
+            {localization.shotCard.button}
+            {this.state.shooting ? <AvStop /> : <ContentReply />}
+          </Button>
           <span style={styles.label}>{localization.shotCard.shoot}</span>
           <div style={{ flex: 1 }} />
-          <RaisedButton
-            secondary
-            label={localization.shotCard.restore}
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={this.handleRestore}
             style={styles.restore}
             disabled={!this.state.canRestore}
-          />
+          >
+            {localization.shotCard.restore}
+          </Button>
         </div>
         <div style={styles.editor}>
           <Editor

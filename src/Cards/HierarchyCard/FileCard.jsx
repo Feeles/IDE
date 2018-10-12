@@ -1,36 +1,37 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
-import Paper from 'material-ui/Paper';
-import IconButton from 'material-ui/IconButton';
-import { fade } from 'material-ui/utils/colorManipulator';
-import EditorDragHandle from 'material-ui/svg-icons/editor/drag-handle';
-import ActionSettings from 'material-ui/svg-icons/action/settings';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import { fade } from '@material-ui/core/styles/colorManipulator';
+import EditorDragHandle from '@material-ui/icons/DragHandle';
+import ActionSettings from '@material-ui/icons/Settings';
 import includes from 'lodash/includes';
 
 import Filename from './Filename';
 import { PreferenceDialog } from '../../FileDialog/';
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = (props, context) => {
+const getStyles = props => {
   const { file, selectedFile, tabbedFiles, isDragging } = props;
-  const { palette, spacing, transitions } = context.muiTheme;
+  const { palette, spacing, transitions } = props.theme;
 
   const isSelected = selectedFile === file;
   const backgroundColor = includes(tabbedFiles, file)
-    ? fade(palette.canvasColor, 1)
+    ? fade(palette.background.paper, 1)
     : palette.disabledColor;
 
   return {
     root: {
       marginTop: 4,
       marginRight: 8,
-      transition: transitions.easeOut()
+      transition: transitions.create()
     },
     card: {
       boxSizing: 'border-box',
       height: 40,
-      paddingLeft: spacing.desktopGutterLess,
+      paddingLeft: spacing.unit * 2,
       borderTopRightRadius: isSelected ? 0 : 2,
       borderBottomRightRadius: isSelected ? 0 : 2,
       backgroundColor,
@@ -38,13 +39,13 @@ const getStyles = (props, context) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       opacity: isDragging ? 0.5 : 1,
-      transition: transitions.easeOut()
+      transition: transitions.create()
     },
     dragHandle: {
       flex: '0 0 auto',
-      width: spacing.iconSize,
-      height: spacing.iconSize,
-      marginRight: spacing.desktopGutterMini,
+      width: spacing.unit * 3,
+      height: spacing.unit * 3,
+      marginRight: spacing.unit,
       cursor: 'move'
     },
     container: {
@@ -56,8 +57,10 @@ const getStyles = (props, context) => {
   };
 };
 
+@withTheme()
 class FileCard extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     selectedFile: PropTypes.object,
     tabbedFiles: PropTypes.array.isRequired,
@@ -68,10 +71,6 @@ class FileCard extends PureComponent {
     connectDragSource: PropTypes.func.isRequired,
     connectDragPreview: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   handleConfirmSettings = async event => {
@@ -98,10 +97,6 @@ class FileCard extends PureComponent {
       connectDragSource,
       connectDragPreview
     } = this.props;
-    const {
-      prepareStyles,
-      palette: { secondaryTextColor }
-    } = this.context.muiTheme;
 
     const isSelected = selectedFile === file;
 
@@ -113,20 +108,20 @@ class FileCard extends PureComponent {
     return connectDragPreview(
       <div style={root}>
         <Paper
-          zDepth={isSelected ? 2 : 0}
+          elevation={isSelected ? 2 : 0}
           onClick={() => handleFileSelect(file)}
           style={card}
         >
           {connectDragSource(
-            <div style={prepareStyles(dragHandle)}>
-              <EditorDragHandle color={secondaryTextColor} />
+            <div style={dragHandle}>
+              <EditorDragHandle />
             </div>
           )}
-          <div style={prepareStyles(container)}>
+          <div style={container}>
             <Filename file={file} onChange={this.handleNameChange} />
           </div>
           <IconButton onClick={this.handleConfirmSettings}>
-            <ActionSettings color={secondaryTextColor} />
+            <ActionSettings />
           </IconButton>
         </Paper>
       </div>

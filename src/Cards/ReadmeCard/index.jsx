@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardText, CardActions } from 'material-ui/Card';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import Readme from './Readme';
 import EditFile from '../EditFile';
@@ -82,9 +83,9 @@ export default class ReadmeCard extends PureComponent {
     }
   };
 
-  handleSelect = (event, index, value) => {
+  handleSelect = event => {
     this.setState({
-      selectedFile: this.resolveFile(value)
+      selectedFile: this.resolveFile(event.target.value)
     });
   };
 
@@ -106,14 +107,10 @@ export default class ReadmeCard extends PureComponent {
     const styles = {
       index: {
         marginLeft: 16,
-        marginRight: -8,
         fontSize: '.5rem'
       },
       dropDown: {
         verticalAlign: 'bottom'
-      },
-      underline: {
-        display: 'none'
       }
     };
 
@@ -121,17 +118,18 @@ export default class ReadmeCard extends PureComponent {
       <span key="index" style={styles.index}>
         {localization.readmeCard.index}
       </span>,
-      <DropDownMenu
+      <Select
         key="dropDown"
         value={selectedFile.key}
         style={styles.dropDown}
-        underlineStyle={styles.underline}
         onChange={this.handleSelect}
       >
         {markdowns.map(file => (
-          <MenuItem key={file.key} value={file.key} primaryText={file.header} />
+          <MenuItem key={file.key} value={file.key}>
+            {file.header}
+          </MenuItem>
         ))}
-      </DropDownMenu>
+      </Select>
     ];
   }
 
@@ -149,9 +147,6 @@ export default class ReadmeCard extends PureComponent {
         paddingTop: 0,
         overflowX: 'hidden',
         overflowY: 'scroll'
-      },
-      actions: {
-        flex: 0
       }
     };
     return (
@@ -160,7 +155,7 @@ export default class ReadmeCard extends PureComponent {
         {...this.props.cardPropsBag}
         fit
       >
-        <CardText style={styles.text}>
+        <CardContent style={styles.text}>
           <Readme
             file={selectedFile}
             selectTab={this.props.selectTab}
@@ -171,8 +166,8 @@ export default class ReadmeCard extends PureComponent {
             completes={this.state.completes}
             setLocation={this.props.setLocation}
           />
-        </CardText>
-        <CardActions style={styles.actions}>
+        </CardContent>
+        <CardActions>
           {this.renderDropDownMenu()}
           <EditFile
             fileKey={selectedFile.key}

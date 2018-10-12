@@ -1,44 +1,44 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import FlatButton from 'material-ui/FlatButton';
-import Toggle from 'material-ui/Toggle';
-import FileDownload from 'material-ui/svg-icons/file/file-download';
-import ActionLanguage from 'material-ui/svg-icons/action/language';
-import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import MuiMenu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import FileDownload from '@material-ui/icons/CloudDownload';
+import ActionLanguage from '@material-ui/icons/Language';
+import NavigationMenu from '@material-ui/icons/Menu';
 
 import { acceptedLanguages } from '../localization/';
 import CloneDialog from './CloneDialog';
 
-const getStyles = (props, context) => {
-  const { palette } = context.muiTheme;
+const getStyles = props => {
+  const { palette } = props.theme;
 
   return {
     root: {
-      flex: '0 0 auto',
-      display: 'flex',
-      flexWrap: 'wrap',
-      alignItems: 'center',
       zIndex: null
     },
     leftIcon: {
       display: props.showAll ? 'block' : 'none',
-      marginTop: 0
+      marginTop: 0,
+      marginLeft: -14
     },
     button: {
       marginLeft: 20,
       zIndex: 2
     },
     projectName: {
-      color: palette.alternateTextColor,
+      color: palette.primary.contrastText,
       fontSize: '.8rem',
       fontWeight: 600
     },
     visits: {
-      color: palette.alternateTextColor,
+      color: palette.primary.contrastText,
       fontSize: '.8rem'
     },
     toggle: {
@@ -46,13 +46,15 @@ const getStyles = (props, context) => {
       filter: 'contrast(40%)'
     },
     toggleLabel: {
-      color: palette.alternateTextColor
+      color: palette.primary.contrastText
     }
   };
 };
 
+@withTheme()
 export default class Menu extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     cardProps: PropTypes.object.isRequired,
     setCardVisibility: PropTypes.func.isRequired,
     toggleSidebar: PropTypes.func.isRequired,
@@ -68,13 +70,10 @@ export default class Menu extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     overrideTitle: null,
-    open: false
+    open: false,
+    anchorEl: null
   };
 
   get filesForPublishing() {
@@ -115,6 +114,18 @@ export default class Menu extends PureComponent {
     this.props.globalEvent.on('message.menuTitle', this.handleSetTitle);
   }
 
+  handleLanguage = event => {
+    this.setState({
+      anchorEl: event.currentTarget
+    });
+  };
+
+  handleCloneMenu = () => {
+    this.setState({
+      anchorEl: null
+    });
+  };
+
   render() {
     const { localization, setLocalization } = this.props;
 
@@ -122,80 +133,89 @@ export default class Menu extends PureComponent {
 
     const {
       palette: { alternateTextColor }
-    } = this.context.muiTheme;
+    } = this.props.theme;
 
     const title =
       this.props.project &&
       (this.props.project.title ? (
         <div style={styles.projectName}>{this.props.project.title}</div>
       ) : (
-        <FlatButton
-          label={localization.cloneDialog.setTitle}
-          labelStyle={{
-            color: alternateTextColor
-          }}
-          onClick={this.handleClone}
-        />
+        <Button variant="text" onClick={this.handleClone}>
+          <span
+            style={{
+              color: alternateTextColor
+            }}
+          >
+            {localization.cloneDialog.setTitle}
+          </span>
+        </Button>
       ));
-
     return (
-      <AppBar
-        title={this.state.overrideTitle || title}
-        style={styles.root}
-        titleStyle={{ flex: null }}
-        iconStyleLeft={styles.leftIcon}
-        iconElementLeft={
-          <IconButton onClick={this.props.toggleSidebar}>
+      <AppBar style={styles.root} position="relative">
+        <Toolbar>
+          <IconButton
+            style={styles.leftIcon}
+            onClick={this.props.toggleSidebar}
+          >
             <NavigationMenu />
           </IconButton>
-        }
-      >
-        <div style={{ flex: 1 }} />
-        <Toggle
-          label={this.props.showAll ? '' : localization.menu.showAll}
-          toggled={this.props.showAll}
-          onToggle={this.props.toggleShowAll}
-          style={styles.toggle}
-          labelStyle={styles.toggleLabel}
-        />
-        {/* {visits &&
+          {this.state.overrideTitle || title}
+          <div style={{ flex: 1 }} />
+          <FormControlLabel
+            control={
+              <Switch
+                checked={this.props.showAll}
+                onChange={this.props.toggleShowAll}
+                style={styles.toggle}
+              />
+            }
+            label={this.props.showAll ? '' : localization.menu.showAll}
+            style={styles.toggleLabel}
+          />
+          {/* {visits &&
           <div style={styles.visits}>
             {visits.getAttribute('x-feeles-visits')}
             PV
           </div>} */}
-        {this.props.showAll ? (
-          <IconButton
-            tooltip={localization.menu.clone}
-            onClick={this.handleClone}
-            style={styles.button}
-          >
-            <FileDownload color={alternateTextColor} />
-          </IconButton>
-        ) : null}
-        <IconMenu
-          iconButtonElement={
-            <IconButton tooltip={localization.menu.language}>
-              <ActionLanguage color={alternateTextColor} />
+          {this.props.showAll ? (
+            <IconButton
+              tooltip={localization.menu.clone}
+              onClick={this.handleClone}
+              style={styles.button}
+            >
+              <FileDownload />
             </IconButton>
-          }
-          anchorOrigin={{
-            horizontal: 'right',
-            vertical: 'top'
-          }}
-          targetOrigin={{
-            horizontal: 'right',
-            vertical: 'bottom'
-          }}
-          style={styles.button}
-        >
-          {acceptedLanguages.map(lang => (
-            <MenuItem
-              key={lang.accept[0]}
-              primaryText={lang.native}
-              onClick={() => setLocalization(lang.accept[0])}
-            />
-          ))}
-        </IconMenu>
+          ) : null}
+          <IconButton
+            tooltip={localization.menu.language}
+            onClick={this.handleLanguage}
+          >
+            <ActionLanguage />
+          </IconButton>
+          <MuiMenu
+            anchorEl={this.state.anchorEl}
+            open={!!this.state.anchorEl}
+            anchorOrigin={{
+              horizontal: 'right',
+              vertical: 'top'
+            }}
+            targetOrigin={{
+              horizontal: 'right',
+              vertical: 'bottom'
+            }}
+            style={styles.button}
+            onClose={this.handleCloneMenu}
+          >
+            {acceptedLanguages.map(lang => (
+              <MenuItem
+                key={lang.accept[0]}
+                onClick={() => setLocalization(lang.accept[0])}
+              >
+                {lang.native}
+              </MenuItem>
+            ))}
+          </MuiMenu>
+        </Toolbar>
       </AppBar>
     );
   }

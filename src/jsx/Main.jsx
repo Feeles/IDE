@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import EventEmitter from 'eventemitter2';
-import Snackbar from 'material-ui/Snackbar';
+import Snackbar from '@material-ui/core/Snackbar';
 import jsyaml from 'js-yaml';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import MenuItem from 'material-ui/MenuItem';
-import Drawer from 'material-ui/Drawer';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
-import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+import IconButton from '@material-ui/core/IconButton';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Drawer from '@material-ui/core/Drawer';
+import NavigationArrowBack from '@material-ui/icons/ArrowBack';
+import ToggleCheckBox from '@material-ui/icons/CheckBox';
+import ToggleCheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
 
 const tryParseYAML = (text, defaultValue = {}) => {
   try {
@@ -41,11 +43,10 @@ import icons from './icons';
 const DOWNLOAD_ENABLED =
   typeof document.createElement('a').download === 'string';
 
-const getStyle = (props, state, context) => {
+const getStyle = (props, state) => {
   const shrinkLeft =
     parseInt(props.rootStyle.width, 10) - state.monitorWidth < 200;
   const shrinkRight = state.monitorWidth < 100;
-  const { palette } = context.muiTheme;
 
   return {
     shrinkLeft,
@@ -57,8 +58,7 @@ const getStyle = (props, state, context) => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      lineHeight: 1.15,
-      backgroundColor: palette.backgroundColor
+      lineHeight: 1.15
     },
     sidebar: {
       position: 'absolute'
@@ -66,8 +66,10 @@ const getStyle = (props, state, context) => {
   };
 };
 
+@withTheme()
 export default class Main extends Component {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     cardProps: PropTypes.object.isRequired,
     setCardProps: PropTypes.func.isRequired,
     openSidebar: PropTypes.bool.isRequired,
@@ -83,10 +85,6 @@ export default class Main extends Component {
     onMessage: PropTypes.func,
     onThumbnailChange: PropTypes.func,
     disableLocalSave: PropTypes.bool.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -472,15 +470,16 @@ export default class Main extends Component {
     return (
       <MenuItem
         key={index}
-        primaryText={localized ? localized.title : item.name}
-        leftIcon={item.icon}
-        rightIcon={
-          visible ? <ToggleCheckBox /> : <ToggleCheckBoxOutlineBlank />
-        }
         onClick={() => {
           this.setCardVisibility(item.name, !visible);
         }}
-      />
+      >
+        <ListItemIcon>{item.icon}</ListItemIcon>
+        <ListItemText>{localized ? localized.title : item.name}</ListItemText>
+        <ListItemIcon>
+          {visible ? <ToggleCheckBox /> : <ToggleCheckBoxOutlineBlank />}
+        </ListItemIcon>
+      </MenuItem>
     );
   };
 
@@ -531,19 +530,16 @@ export default class Main extends Component {
           />
         )}
         <Drawer
+          variant="persistent"
           open={this.state.openSidebar}
-          docked={this.props.mini}
-          onRequestChange={this.toggleSidebar}
-          containerStyle={styles.sidebar}
+          onClose={this.toggleSidebar}
         >
           {this.props.mini ? null : (
-            <AppBar
-              iconElementLeft={
-                <IconButton onClick={this.toggleSidebar}>
-                  <NavigationArrowBack />
-                </IconButton>
-              }
-            />
+            <div style={{ textAlign: 'right' }}>
+              <IconButton onClick={this.toggleSidebar}>
+                <NavigationArrowBack />
+              </IconButton>
+            </div>
           )}
           {icons.map(this.renderMenuItem)}
         </Drawer>
@@ -574,13 +570,13 @@ export default class Main extends Component {
           setConfig={this.setConfig}
           globalEvent={this.state.globalEvent}
         />
-        <style>{codemirrorStyle(this.context.muiTheme)}</style>
+        <style>{codemirrorStyle(this.props.theme)}</style>
         {userStyle ? <style>{userStyle.text}</style> : null}
         <Snackbar
           open={this.state.notice !== null}
           message=""
           autoHideDuration={4000}
-          onRequestClose={() => this.setState({ notice: null })}
+          onClose={() => this.setState({ notice: null })}
           {...this.state.notice}
         />
       </div>

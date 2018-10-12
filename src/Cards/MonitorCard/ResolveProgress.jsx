@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import CircularProgress from 'material-ui/CircularProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Timeout [ms] 間 resolve がなければ、次の resolve まで hide
 const Timeout = 1000;
@@ -9,10 +9,6 @@ export default class ResolveProgress extends PureComponent {
   static propTypes = {
     size: PropTypes.number.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -39,13 +35,12 @@ export default class ResolveProgress extends PureComponent {
     if (!this.state.visible) {
       return null;
     }
-    const { palette } = this.context.muiTheme;
 
     return (
       <CircularProgress
         size={this.props.size}
         thickness={Math.max(1, this.props.size / 8)}
-        color={palette.primary1Color}
+        color="primary"
       />
     );
   }

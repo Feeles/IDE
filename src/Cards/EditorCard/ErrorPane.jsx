@@ -1,14 +1,16 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import Paper from 'material-ui/Paper';
-import { red50, red500 } from 'material-ui/styles/colors';
-import ActionRestore from 'material-ui/svg-icons/action/restore';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import red from '@material-ui/core/colors/red';
+import ActionRestore from '@material-ui/icons/Restore';
 
+@withTheme()
 export default class ErrorPane extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     error: PropTypes.object,
     localization: PropTypes.object.isRequired,
     onRestore: PropTypes.func.isRequired,
@@ -18,10 +20,6 @@ export default class ErrorPane extends PureComponent {
   state = {
     show: false,
     expanded: false
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   componentDidUpdate(prevProps) {
@@ -52,8 +50,8 @@ export default class ErrorPane extends PureComponent {
         flexDirection: 'column',
         alignItems: 'center',
         borderStyle: 'double',
-        borderColor: red500,
-        backgroundColor: red50,
+        borderColor: red['500'],
+        backgroundColor: red['50'],
         overflow: 'hidden'
       },
       heading: {
@@ -68,22 +66,26 @@ export default class ErrorPane extends PureComponent {
     };
 
     return (
-      <Paper key="error" zDepth={2} style={styles.error}>
-        <FlatButton
-          primary
-          label={localization.common.close}
+      <Paper key="error" elevation={2} style={styles.error}>
+        <Button
+          variant="text"
+          color="primary"
           style={styles.close}
           onClick={this.handleClose}
-        />
+        >
+          {localization.common.close}
+        </Button>
         <h2 style={styles.heading}>{localization.editorCard.error}</h2>
         <div style={styles.blank} />
-        <RaisedButton
-          primary
-          icon={<ActionRestore />}
-          label={localization.editorCard.restore}
+        <Button
+          variant="contained"
+          color="primary"
           onClick={this.handleRestore}
           disabled={!canRestore}
-        />
+        >
+          <ActionRestore />
+          {localization.editorCard.restore}
+        </Button>
         <div style={styles.blank} />
       </Paper>
     );
@@ -103,7 +105,7 @@ export default class ErrorPane extends PureComponent {
       },
       messageText: {
         margin: 8,
-        color: red500,
+        color: red['500'],
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
       }
     };
@@ -121,12 +123,12 @@ export default class ErrorPane extends PureComponent {
 
   render() {
     const { show } = this.state;
-    const { palette } = this.context.muiTheme;
+    const { palette } = this.props.theme;
     const styles = {
       root: {
         borderTopStyle: show ? 'double' : 'none',
         borderTopWidth: 3,
-        borderTopColor: palette.primary1Color
+        borderTopColor: palette.primary.main
       },
       dialogRoot: {
         position: 'absolute',

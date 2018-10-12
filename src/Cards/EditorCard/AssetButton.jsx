@@ -1,18 +1,20 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import Paper from 'material-ui/Paper';
-import Popover from 'material-ui/Popover';
-import RaisedButton from 'material-ui/RaisedButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import { emphasize } from 'material-ui/utils/colorManipulator';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentReply from 'material-ui/svg-icons/content/reply';
-import ActionOpenInNew from 'material-ui/svg-icons/action/open-in-new';
+import Paper from '@material-ui/core/Paper';
+import Popover from '@material-ui/core/Popover';
+import Button from '@material-ui/core/Button';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import ContentAdd from '@material-ui/icons/Add';
+import ContentReply from '@material-ui/icons/Reply';
+import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
 
+@withTheme()
 export default class AssetButton extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     code: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     descriptionMoreURL: PropTypes.string,
@@ -25,10 +27,6 @@ export default class AssetButton extends PureComponent {
 
   static defaultProps = {
     description: ''
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -45,7 +43,7 @@ export default class AssetButton extends PureComponent {
 
   render() {
     const { localization } = this.props;
-    const { palette } = this.context.muiTheme;
+    const { palette } = this.props.theme;
 
     const styles = {
       root: {
@@ -57,7 +55,7 @@ export default class AssetButton extends PureComponent {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        border: `4px outset ${palette.primary1Color}`,
+        border: `4px outset ${palette.primary.main}`,
         cursor: 'pointer',
         backgroundSize: 'contain',
         backgroundPosition: '50% 50%',
@@ -91,7 +89,7 @@ export default class AssetButton extends PureComponent {
       code: {
         display: 'block',
         padding: '0 .5rem',
-        backgroundColor: emphasize(palette.canvasColor, 0.07),
+        backgroundColor: emphasize(palette.background.paper, 0.07),
         borderRadius: 2
       },
       pre: {
@@ -126,7 +124,7 @@ export default class AssetButton extends PureComponent {
           open={this.state.open}
           anchorEl={this.state.anchorEl}
           style={styles.popover}
-          onRequestClose={() => this.setState({ open: false })}
+          onClose={() => this.setState({ open: false })}
         >
           <div style={styles.box}>
             <span style={styles.headerLabel}>
@@ -141,25 +139,28 @@ export default class AssetButton extends PureComponent {
                 </a>
               ) : null}
             </span>
-            <RaisedButton
-              primary
-              label={localization.editorCard.insert}
-              icon={<ContentAdd />}
+            <Button
+              variant="contained"
+              color="primary"
               onClick={this.handleInsert}
-            />
+            >
+              <ContentAdd />
+              {localization.editorCard.insert}
+            </Button>
           </div>
           <div style={styles.description}>{this.props.description}</div>
           <code style={styles.code}>
             <pre style={styles.pre}>{this.props.code}</pre>
           </code>
         </Popover>
-        <FloatingActionButton
+        <Button
+          variant="fab"
           mini
           style={styles.button}
           onClick={this.handleInsert}
         >
           <ContentReply style={styles.icon} />
-        </FloatingActionButton>
+        </Button>
       </Paper>
     );
   }

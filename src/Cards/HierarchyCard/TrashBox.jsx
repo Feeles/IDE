@@ -1,41 +1,38 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { DropTarget } from 'react-dnd';
-import IconButton from 'material-ui/IconButton';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
-import NavigationArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
-import { transparent } from 'material-ui/styles/colors';
-
+import IconButton from '@material-ui/core/IconButton';
+import ActionDelete from '@material-ui/icons/Delete';
+import NavigationArrowBack from '@material-ui/icons/ArrowBack';
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = (props, state, context) => {
+const getStyles = props => {
   const { isOver } = props;
-  const { palette, spacing } = context.muiTheme;
+  const { palette, spacing } = props.theme;
 
   return {
     icon: {
       borderWidth: 0,
-      borderTopWidth: isOver ? spacing.desktopGutterMini : 0,
+      borderTopWidth: isOver ? spacing.unit : 0,
       borderStyle: 'solid',
-      borderColor: transparent,
-      backgroundColor: isOver ? palette.disabledColor : transparent,
+      borderColor: 'transparent',
+      backgroundColor: isOver ? palette.disabledColor : 'transparent',
       borderRadius: 2
     }
   };
 };
 
+@withTheme()
 class _TrashBox extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     showTrashes: PropTypes.bool.isRequired,
     putFile: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   render() {
@@ -45,18 +42,13 @@ class _TrashBox extends PureComponent {
 
       connectDropTarget
     } = this.props;
-    const { palette } = this.context.muiTheme;
 
     const { icon } = getStyles(this.props, this.state, this.context);
 
     return connectDropTarget(
       <div>
         <IconButton style={icon} onClick={onClick}>
-          {showTrashes ? (
-            <NavigationArrowBack color={palette.secondaryTextColor} />
-          ) : (
-            <ActionDelete color={palette.secondaryTextColor} />
-          )}
+          {showTrashes ? <NavigationArrowBack /> : <ActionDelete />}
         </IconButton>
       </div>
     );

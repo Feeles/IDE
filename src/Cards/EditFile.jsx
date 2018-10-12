@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import FlatButton from 'material-ui/FlatButton';
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import Button from '@material-ui/core/Button';
+import EditorModeEdit from '@material-ui/icons/Edit';
 
 import { Tab } from '../ChromeTab/';
 
@@ -28,12 +28,14 @@ export default class EditFile extends PureComponent {
     const { localization } = this.props;
 
     return (
-      <FlatButton
+      <Button
+        variant="text"
         disabled={!this.props.fileKey}
-        label={localization.common.editFile}
-        icon={<EditorModeEdit />}
         onClick={this.handleEdit}
-      />
+      >
+        <EditorModeEdit />
+        {localization.common.editFile}
+      </Button>
     );
   }
 }

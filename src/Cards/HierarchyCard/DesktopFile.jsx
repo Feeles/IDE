@@ -1,42 +1,40 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import IconButton from 'material-ui/IconButton';
+import IconButton from '@material-ui/core/IconButton';
 import { DropTarget } from 'react-dnd';
-import HardwareComputer from 'material-ui/svg-icons/hardware/computer';
-import { transparent } from 'material-ui/styles/colors';
+import HardwareComputer from '@material-ui/icons/Computer';
 
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = (props, context) => {
+const getStyles = props => {
   const { isOver } = props;
-  const { palette, spacing, prepareStyles } = context.muiTheme;
+  const { palette, spacing } = props.theme;
 
   return {
-    input: prepareStyles({
+    input: {
       display: 'none'
-    }),
+    },
     icon: {
       borderWidth: 0,
-      borderTopWidth: isOver ? spacing.desktopGutterMini : 0,
+      borderTopWidth: isOver ? spacing.unit : 0,
       borderStyle: 'solid',
-      borderColor: transparent,
-      backgroundColor: isOver ? palette.disabledColor : transparent,
+      borderColor: 'transparent',
+      backgroundColor: isOver ? palette.disabledColor : 'transparent',
       borderRadius: 2
     }
   };
 };
 
+@withTheme()
 class _DesktopFile extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     onOpen: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
 
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   handleChange = event => {
@@ -45,7 +43,6 @@ class _DesktopFile extends PureComponent {
 
   render() {
     const { connectDropTarget } = this.props;
-    const { palette } = this.context.muiTheme;
 
     const { input, icon } = getStyles(this.props, this.context);
 
@@ -62,7 +59,7 @@ class _DesktopFile extends PureComponent {
           style={icon}
           onClick={() => this.input && this.input.click()}
         >
-          <HardwareComputer color={palette.secondaryTextColor} />
+          <HardwareComputer />
         </IconButton>
       </div>
     );

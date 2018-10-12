@@ -5,9 +5,9 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
 import URLSearchParams from 'url-search-params';
 import { DragDropContext } from 'react-dnd';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { grey300, grey700 } from 'material-ui/styles/colors';
-import transitions from 'material-ui/styles/transitions';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import grey from '@material-ui/core/colors/grey';
+import transitions from '@material-ui/core/styles/transitions';
 
 import { readProject, findProject } from '../database/';
 import {
@@ -20,6 +20,7 @@ import getLocalization from '../localization/';
 import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
+import ErrorBoundary from './ErrorBoundary';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =
@@ -334,7 +335,7 @@ class RootComponent extends Component {
         color: 'red'
       },
       count: {
-        color: grey700,
+        color: grey['700'],
         fontSize: '.5rem',
         fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
         wordBreak: 'break-all',
@@ -378,8 +379,8 @@ class RootComponent extends Component {
         <style>
           {`
           html, body {
-            background-color: ${grey300};
-            transition: ${transitions.easeOut('4000ms')};
+            background-color: ${grey['300']};
+            transition: ${transitions.create(['all'], { duration: 4000 })};
           }
         `}
         </style>
@@ -391,31 +392,35 @@ class RootComponent extends Component {
     const { rootElement } = this.props;
 
     return (
-      <MuiThemeProvider muiTheme={this.state.muiTheme}>
-        {this.state.last > 0 ? (
-          this.renderLoading()
-        ) : this.state.cardProps ? (
-          <Main
-            cardProps={this.state.cardProps}
-            setCardProps={this.setCardProps}
-            openSidebar={this.props.openSidebar}
-            mini={this.props.mini}
-            files={this.state.files}
-            rootElement={rootElement}
-            rootStyle={getComputedStyle(rootElement)}
-            project={this.state.project}
-            launchIDE={this.launchIDE}
-            localization={this.localization}
-            setLocalization={this.setLocalization}
-            muiTheme={this.state.muiTheme}
-            setMuiTheme={this.setMuiTheme}
-            onChange={this.props.onChange}
-            onMessage={this.props.onMessage}
-            onThumbnailChange={this.props.onThumbnailChange}
-            disableLocalSave={this.props.disableLocalSave}
-          />
-        ) : null}
-      </MuiThemeProvider>
+      <ErrorBoundary>
+        <MuiThemeProvider theme={this.state.muiTheme}>
+          {this.state.last > 0 ? (
+            this.renderLoading()
+          ) : this.state.cardProps ? (
+            <Main
+              cardProps={this.state.cardProps}
+              setCardProps={this.setCardProps}
+              openSidebar={this.props.openSidebar}
+              mini={this.props.mini}
+              files={this.state.files}
+              rootElement={rootElement}
+              rootStyle={getComputedStyle(rootElement)}
+              project={this.state.project}
+              launchIDE={this.launchIDE}
+              localization={this.localization}
+              setLocalization={this.setLocalization}
+              muiTheme={this.state.muiTheme}
+              setMuiTheme={this.setMuiTheme}
+              onChange={this.props.onChange}
+              onMessage={this.props.onMessage}
+              onThumbnailChange={this.props.onThumbnailChange}
+              disableLocalSave={this.props.disableLocalSave}
+            />
+          ) : (
+            <div />
+          )}
+        </MuiThemeProvider>
+      </ErrorBoundary>
     );
   }
 }
@@ -426,6 +431,6 @@ export default DragDropContext(dndBackend)(RootComponent);
 function indicator(val, last) {
   const length = 32;
   const sum = Math.max(1, val + last) + 0.00001;
-  const progress = Math.floor((val / sum) * length);
+  const progress = Math.floor(val / sum * length);
   return '='.repeat(progress) + '+' + '-'.repeat(length - 1 - progress);
 }

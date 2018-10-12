@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardText, CardActions } from 'material-ui/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 
 import { SourceFile } from '../../File/';
 import EnvItem from './EnvItem';
@@ -66,7 +67,7 @@ export default class EnvCard extends PureComponent {
         icon={this.props.localization.envCard.title}
         {...this.props.cardPropsBag}
       >
-        <CardText>
+        <CardContent>
           {Object.keys(this.state.env).map(key => (
             <EnvItem
               key={key}
@@ -76,7 +77,7 @@ export default class EnvCard extends PureComponent {
               updateEnv={this.handleUpdateEnv}
             />
           ))}
-        </CardText>
+        </CardContent>
         <CardActions>
           <EditFile
             fileKey={this.state.fileKey}

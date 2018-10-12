@@ -1,16 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
-import { CardMedia } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import NavigationRefresh from 'material-ui/svg-icons/navigation/refresh';
-import NavigationFullscreen from 'material-ui/svg-icons/navigation/fullscreen';
-import ActionSettings from 'material-ui/svg-icons/action/settings';
-import OpenInBrowser from 'material-ui/svg-icons/action/open-in-browser';
-import DeviceDevices from 'material-ui/svg-icons/device/devices';
-import ImagePhotoCamera from 'material-ui/svg-icons/image/photo-camera';
+import CardMedia from '@material-ui/core/CardMedia';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import NavigationRefresh from '@material-ui/icons/Refresh';
+import NavigationFullscreen from '@material-ui/icons/Fullscreen';
+import ActionSettings from '@material-ui/icons/Settings';
+import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
+import DeviceDevices from '@material-ui/icons/Devices';
+import ImagePhotoCamera from '@material-ui/icons/PhotoCamera';
 
 import Monitor from './Monitor';
 import ResolveProgress from './ResolveProgress';
@@ -52,15 +52,12 @@ export default class MonitorCard extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
-  };
-
   state = {
     frameWidth: 300,
     frameHeight: 150,
     processing: false,
-    statusLabel: null
+    statusLabel: null,
+    anchorEl: null
   };
 
   componentDidMount() {
@@ -77,7 +74,7 @@ export default class MonitorCard extends PureComponent {
   }
 
   get height() {
-    return ((this.state.frameHeight / this.state.frameWidth) * 100) >> 0;
+    return (this.state.frameHeight / this.state.frameWidth * 100) >> 0;
   }
 
   setStatusLabel = ({ data }) => {
@@ -96,11 +93,9 @@ export default class MonitorCard extends PureComponent {
   renderMenuItem([w, h]) {
     const value = w + by + h;
     return (
-      <MenuItem
-        key={value}
-        primaryText={value}
-        onClick={() => this.changeSize(w, h)}
-      />
+      <MenuItem key={value} onClick={() => this.changeSize(w, h)}>
+        {value}
+      </MenuItem>
     );
   }
 
@@ -116,6 +111,16 @@ export default class MonitorCard extends PureComponent {
     await this.props.globalEvent.emitAsync('postMessage', request);
     // capture がおわったら, processing state を元に戻す
     this.setState({ processing: false });
+  };
+
+  handleSettings = event => {
+    this.setState({
+      anchorEl: event.currentTarget
+    });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
   };
 
   render() {
@@ -152,9 +157,7 @@ export default class MonitorCard extends PureComponent {
         disabled={feelesrc.disableReloadButton}
         onClick={() => this.props.setLocation()}
       >
-        <NavigationRefresh
-          color={this.context.muiTheme.palette.primary1Color}
-        />
+        <NavigationRefresh color="primary" />
       </IconButton>,
       <IconButton
         key="fullscreen"
@@ -168,30 +171,20 @@ export default class MonitorCard extends PureComponent {
       actions.push(
         <IconButton
           key="screenshot"
+          tooltip="screenshot"
           disabled={this.state.processing}
           onClick={this.handleScreenShot}
         >
           <ImagePhotoCamera />
         </IconButton>,
-        <IconMenu
+
+        <IconButton
           key="settings"
-          iconButtonElement={
-            <IconButton>
-              <ActionSettings />
-            </IconButton>
-          }
+          tooltip="settings"
+          onClick={this.handleSettings}
         >
-          <MenuItem
-            primaryText={sizeValue}
-            leftIcon={<DeviceDevices />}
-            menuItems={frameSizes.map(this.renderMenuItem, this)}
-          />
-          <MenuItem
-            primaryText={localization.monitorCard.popout}
-            leftIcon={<OpenInBrowser />}
-            onClick={() => this.props.togglePopout()}
-          />
-        </IconMenu>
+          <ActionSettings />
+        </IconButton>
       );
     }
 
@@ -224,6 +217,24 @@ export default class MonitorCard extends PureComponent {
             />
           </div>
         </CardMedia>
+        <Menu
+          anchorEl={this.state.anchorEl}
+          open={!!this.state.anchorEl}
+          onClose={this.handleClose}
+        >
+          <MenuItem
+            leftIcon={<DeviceDevices />}
+            menuItems={frameSizes.map(this.renderMenuItem, this)}
+          >
+            {sizeValue}
+          </MenuItem>
+          <MenuItem
+            leftIcon={<OpenInBrowser />}
+            onClick={() => this.props.togglePopout()}
+          >
+            {localization.monitorCard.popout}
+          </MenuItem>
+        </Menu>
       </Card>
     );
   }

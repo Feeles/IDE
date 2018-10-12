@@ -1,27 +1,30 @@
 import React, { PureComponent } from 'react';
+import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
-import ContentCreate from 'material-ui/svg-icons/content/create';
+import TextField from '@material-ui/core/TextField';
+import ContentCreate from '@material-ui/icons/Create';
 
-const getStyles = (props, context) => {
-  const { prepareStyles, palette } = context.muiTheme;
+const getStyles = props => {
+  const { palette } = props.theme;
 
   return {
-    hint: prepareStyles({
-      color: palette.secondaryTextColor,
+    hint: {
+      color: palette.text.secondary,
       fontStyle: 'italic',
       fontSize: '.8em',
-      borderBottom: `1px dashed ${palette.secondaryTextColor}`
-    }),
+      borderBottom: `1px dashed ${palette.text.secondary}`
+    },
     label: {
       fontSize: 16
     }
   };
 };
 
+@withTheme()
 export default class EditableLabel extends PureComponent {
   static propTypes = Object.assign(
     {
+      theme: PropTypes.object.isRequired,
       openImmediately: PropTypes.bool.isRequired,
       tapTwiceQuickly: PropTypes.string.isRequired,
       onEditEnd: PropTypes.func
@@ -32,10 +35,6 @@ export default class EditableLabel extends PureComponent {
   static defaultProps = {
     openImmediately: false,
     tapTwiceQuickly: 'Tap twice quickly'
-  };
-
-  static contextTypes = {
-    muiTheme: PropTypes.object.isRequired
   };
 
   state = {
@@ -84,14 +83,9 @@ export default class EditableLabel extends PureComponent {
 
     const labelText = value || defaultValue;
 
-    const {
-      prepareStyles,
-      palette: { secondaryTextColor }
-    } = this.context.muiTheme;
-
     const { hint, label } = getStyles(this.props, this.context);
 
-    const style = prepareStyles(Object.assign({}, label, this.props.style));
+    const style = Object.assign({}, label, this.props.style);
 
     const props = Object.assign({}, this.props);
     delete props.onEditEnd;
@@ -111,7 +105,7 @@ export default class EditableLabel extends PureComponent {
       </div>
     ) : (
       <div style={hint} onClick={this.handleTouch}>
-        <ContentCreate color={secondaryTextColor} />
+        <ContentCreate />
         {this.props.tapTwiceQuickly}
       </div>
     );
