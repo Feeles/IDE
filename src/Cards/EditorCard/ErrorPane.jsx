@@ -1,11 +1,44 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import red from '@material-ui/core/colors/red';
 import ActionRestore from '@material-ui/icons/Restore';
+
+const cn = {
+  root: style({
+    borderTopWidth: 3
+  }),
+  dialogRoot: style({
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    zIndex: 100
+  }),
+  error: style({
+    margin: 16,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderStyle: 'double',
+    borderColor: red['500'],
+    backgroundColor: red['50'],
+    overflow: 'hidden'
+  }),
+  heading: style({
+    color: 'rgba(255, 0, 0, .5)'
+  }),
+  close: style({
+    alignSelf: 'flex-end'
+  }),
+  blank: style({
+    flex: '0 0 1rem'
+  })
+};
 
 @withTheme()
 export default class ErrorPane extends PureComponent {
@@ -43,40 +76,18 @@ export default class ErrorPane extends PureComponent {
   renderAsDialog() {
     const { localization, canRestore } = this.props;
 
-    const styles = {
-      error: {
-        margin: 16,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        borderStyle: 'double',
-        borderColor: red['500'],
-        backgroundColor: red['50'],
-        overflow: 'hidden'
-      },
-      heading: {
-        color: 'rgba(255, 0, 0, .5)'
-      },
-      close: {
-        alignSelf: 'flex-end'
-      },
-      blank: {
-        flex: '0 0 1rem'
-      }
-    };
-
     return (
-      <Paper key="error" elevation={2} style={styles.error}>
+      <Paper key="error" elevation={2} className={cn.error}>
         <Button
           variant="text"
           color="primary"
-          style={styles.close}
+          className={cn.close}
           onClick={this.handleClose}
         >
           {localization.common.close}
         </Button>
-        <h2 style={styles.heading}>{localization.editorCard.error}</h2>
-        <div style={styles.blank} />
+        <h2 className={cn.heading}>{localization.editorCard.error}</h2>
+        <div className={cn.blank} />
         <Button
           variant="contained"
           color="primary"
@@ -86,14 +97,14 @@ export default class ErrorPane extends PureComponent {
           <ActionRestore />
           {localization.editorCard.restore}
         </Button>
-        <div style={styles.blank} />
+        <div className={cn.blank} />
       </Paper>
     );
   }
 
   renderAsDock() {
     const { expanded } = this.state;
-    const styles = {
+    const cn = {
       message: {
         position: 'relative',
         maxHeight: this.props.error ? (expanded ? 1000 : 48) : 0,
@@ -111,10 +122,10 @@ export default class ErrorPane extends PureComponent {
     };
     return (
       <div
-        style={styles.message}
+        className={cn.message}
         onClick={() => this.setState({ expanded: !expanded })}
       >
-        <pre style={styles.messageText}>
+        <pre className={cn.messageText}>
           {this.props.error && this.props.error.message}
         </pre>
       </div>
@@ -124,23 +135,15 @@ export default class ErrorPane extends PureComponent {
   render() {
     const { show } = this.state;
     const { palette } = this.props.theme;
-    const styles = {
-      root: {
-        borderTopStyle: show ? 'double' : 'none',
-        borderTopWidth: 3,
-        borderTopColor: palette.primary.main
-      },
-      dialogRoot: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        zIndex: 100
-      }
-    };
 
     return (
-      <div style={styles.root}>
+      <div
+        className={cn.root}
+        style={{
+          borderTopStyle: show ? 'double' : 'none',
+          borderTopColor: palette.primary.main
+        }}
+      >
         {this.renderAsDock()}
         <CSSTransitionGroup
           transitionName={{
@@ -151,7 +154,7 @@ export default class ErrorPane extends PureComponent {
           }}
           transitionEnterTimeout={1000}
           transitionLeaveTimeout={500}
-          style={styles.dialogRoot}
+          className={cn.dialogRoot}
         >
           {show ? this.renderAsDialog() : null}
         </CSSTransitionGroup>

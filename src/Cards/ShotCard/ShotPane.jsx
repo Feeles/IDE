@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import beautify from 'js-beautify';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -12,56 +13,44 @@ import { SourceFile } from '../../File/';
 import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
-const getStyle = (props, context, state) => {
-  const { palette, transitions } = props.theme;
-  const { shooting, height } = state;
-
-  return {
-    root: {
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    editor: {
-      position: 'relative',
-      boxSizing: 'border-box',
-      width: '100%',
-      height,
-      transform: `translate(${shooting ? '-500px' : 0})`,
-      opacity: shooting ? 0 : 1,
-      transition: transitions.create()
-    },
-    menu: {
-      position: 'relative',
-      display: 'flex',
-      flexDirection: 'row-reverse',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      height: '2.25em',
-      marginBottom: '0.25em'
-    },
-    shoot: {
-      marginRight: 9,
-      marginBottom: 4,
-      transform: `
-        rotateY(${shooting ? 180 : 0}deg)`
-    },
-    label: {
-      color: palette.text.secondary,
-      fontSize: '.8rem'
-    },
-    error: {
-      flex: '0 1 auto',
-      margin: 0,
-      padding: 8,
-      backgroundColor: red['50'],
-      color: red['500'],
-      fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
-      overflow: 'scroll'
-    },
-    restore: {
-      margin: 4
-    }
-  };
+const cn = {
+  root: style({
+    display: 'flex',
+    flexDirection: 'column'
+  }),
+  editor: style({
+    position: 'relative',
+    boxSizing: 'border-box',
+    width: '100%'
+  }),
+  menu: style({
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    height: '2.25em',
+    marginBottom: '0.25em'
+  }),
+  shoot: style({
+    marginRight: 9,
+    marginBottom: 4
+  }),
+  label: style({
+    fontSize: '.8rem'
+  }),
+  error: style({
+    flex: '0 1 auto',
+    margin: 0,
+    padding: 8,
+    backgroundColor: red['50'],
+    color: red['500'],
+    fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
+    overflow: 'scroll'
+  }),
+  restore: style({
+    margin: 4
+  })
 };
 
 @withTheme()
@@ -193,7 +182,10 @@ export default class ShotPane extends PureComponent {
 
   render() {
     const { localization, getConfig, loadConfig } = this.props;
-    const styles = getStyle(this.props, this.context, this.state);
+
+    const { palette, transitions } = this.props.theme;
+    const { shooting, height } = this.state;
+
     // TODO: Enter で実行か Shift-Enter で実行か
     const { sendCodeOnEnter } = loadConfig('feelesrc');
     const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter';
@@ -204,33 +196,52 @@ export default class ShotPane extends PureComponent {
     return (
       <div>
         {this.state.error ? (
-          <pre style={styles.error}>{this.state.error.message}</pre>
+          <pre className={cn.error}>{this.state.error.message}</pre>
         ) : null}
         {this.state.loading ? <LinearProgress /> : null}
-        <div style={styles.menu}>
+        <div className={cn.menu}>
           <Button
             variant="contained"
             color="primary"
             disabled={this.state.shooting}
             onClick={this.handleShot}
-            style={styles.shoot}
+            className={cn.shoot}
+            style={{
+              transform: `
+              rotateY(${shooting ? 180 : 0}deg)`
+            }}
           >
             {localization.shotCard.button}
             {this.state.shooting ? <AvStop /> : <ContentReply />}
           </Button>
-          <span style={styles.label}>{localization.shotCard.shoot}</span>
+          <span
+            className={cn.label}
+            style={{
+              color: palette.text.secondary
+            }}
+          >
+            {localization.shotCard.shoot}
+          </span>
           <div style={{ flex: 1 }} />
           <Button
             variant="contained"
             color="secondary"
             onClick={this.handleRestore}
-            style={styles.restore}
+            className={cn.restore}
             disabled={!this.state.canRestore}
           >
             {localization.shotCard.restore}
           </Button>
         </div>
-        <div style={styles.editor}>
+        <div
+          className={cn.editor}
+          style={{
+            height,
+            transform: `translate(${shooting ? '-500px' : 0})`,
+            opacity: shooting ? 0 : 1,
+            transition: transitions.create()
+          }}
+        >
           <Editor
             isSelected
             isCared

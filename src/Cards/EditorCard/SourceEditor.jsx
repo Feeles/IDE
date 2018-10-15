@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
@@ -14,39 +15,33 @@ import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
 import zenkakuToHankaku from './zenkakuToHankaku';
 
-const getStyle = props => {
-  const { palette } = props.theme;
-
-  return {
-    root: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch'
-    },
-    editorContainer: {
-      flex: '1 1 auto',
-      position: 'relative'
-    },
-    menuBar: {
-      display: 'flex',
-      backgroundColor: palette.background.paper,
-      borderBottom: `1px solid ${palette.primary.main}`,
-      zIndex: 3
-    },
-    barButton: {
-      padding: 0,
-      lineHeight: 2
-    },
-    barButtonLabel: {
-      fontSize: '.5rem'
-    },
-    progress: {
-      borderRadius: 0
-    }
-  };
+const cn = {
+  root: style({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch'
+  }),
+  editorContainer: style({
+    flex: '1 1 auto',
+    position: 'relative'
+  }),
+  menuBar: style({
+    display: 'flex',
+    zIndex: 3
+  }),
+  barButton: style({
+    padding: 0,
+    lineHeight: 2
+  }),
+  barButtonLabel: style({
+    fontSize: '.5rem'
+  }),
+  progress: style({
+    borderRadius: 0
+  })
 };
 
 // file -> prevFile を参照する
@@ -385,10 +380,12 @@ export default class SourceEditor extends PureComponent {
   }
 
   render() {
-    const { file, localization } = this.props;
+    const {
+      file,
+      localization,
+      theme: { palette }
+    } = this.props;
     const { showHint } = this.state;
-
-    const styles = getStyle(this.props, this.state, this.context);
 
     // const snippets = this.props.getConfig('snippets')(file);
 
@@ -411,32 +408,38 @@ export default class SourceEditor extends PureComponent {
     };
 
     return (
-      <div style={styles.root}>
+      <div className={cn.root}>
         <style>
           {this.state.classNameStyles.map(
             item => `.${item.className} { ${item.style} } `
           )}
         </style>
-        <div style={styles.menuBar}>
+        <div
+          className={cn.menuBar}
+          style={{
+            backgroundColor: palette.background.paper,
+            borderBottom: `1px solid ${palette.primary.main}`
+          }}
+        >
           <Button
             variant="text"
             disabled={!this.state.hasHistory}
-            style={styles.barButton}
+            className={cn.barButton}
             onClick={this.handleUndo}
           >
             <HardwareKeyboardBackspace />
-            <span style={styles.barButtonLabel}>
+            <span className={cn.barButtonLabel}>
               {localization.editorCard.undo}
             </span>
           </Button>
           <Button
             variant="text"
             disabled={!this.state.hasChanged}
-            style={styles.barButton}
+            className={cn.barButton}
             onClick={this.handleSaveAndRun}
           >
             <ContentSave />
-            <span style={styles.barButtonLabel}>
+            <span className={cn.barButtonLabel}>
               {localization.editorCard.save}
             </span>
           </Button>
@@ -453,9 +456,9 @@ export default class SourceEditor extends PureComponent {
           />
         </div>
         {this.state.loading ? (
-          <LinearProgress color="primary" style={styles.progress} />
+          <LinearProgress color="primary" className={cn.progress} />
         ) : null}
-        <div style={styles.editorContainer}>
+        <div className={cn.editorContainer}>
           <AssetPane
             fileView={this.props.fileView}
             open={!!this.state.assetScope}

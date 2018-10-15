@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Card from '../CardWindow';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -9,6 +10,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Readme from './Readme';
 import EditFile from '../EditFile';
 import shallowEqual from '../../utils/shallowEqual';
+
+const cn = {
+  text: style({
+    flex: 1,
+    paddingTop: 0,
+    overflowX: 'hidden',
+    overflowY: 'scroll'
+  })
+};
 
 export default class ReadmeCard extends PureComponent {
   static propTypes = {
@@ -115,13 +125,13 @@ export default class ReadmeCard extends PureComponent {
     };
 
     return [
-      <span key="index" style={styles.index}>
+      <span key="index" className={styles.index}>
         {localization.readmeCard.index}
       </span>,
       <Select
         key="dropDown"
         value={selectedFile.key}
-        style={styles.dropDown}
+        className={styles.dropDown}
         onChange={this.handleSelect}
       >
         {markdowns.map(file => (
@@ -141,21 +151,13 @@ export default class ReadmeCard extends PureComponent {
       return null;
     }
 
-    const styles = {
-      text: {
-        flex: 1,
-        paddingTop: 0,
-        overflowX: 'hidden',
-        overflowY: 'scroll'
-      }
-    };
     return (
       <Card
         icon={this.props.localization.readmeCard.title}
         {...this.props.cardPropsBag}
         fit
       >
-        <CardContent style={styles.text}>
+        <CardContent className={cn.text}>
           <Readme
             file={selectedFile}
             selectTab={this.props.selectTab}

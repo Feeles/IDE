@@ -2,28 +2,23 @@ import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 
-const getStyles = (props, context, state) => {
-  const { scale } = state;
-
-  return {
-    root: {
-      position: 'absolute',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxSizing: 'border-box',
-      overflow: 'hidden',
-      background: `linear-gradient(white, black)`,
-      width: '100%',
-      height: '100%'
-    },
-    img: {
-      transform: `scale(${scale})`
-    }
-  };
+const cn = {
+  root: style({
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxSizing: 'border-box',
+    overflow: 'hidden',
+    background: `linear-gradient(white, black)`,
+    width: '100%',
+    height: '100%'
+  })
 };
+
 @withTheme()
 export default class Preview extends PureComponent {
   static propTypes = {
@@ -59,17 +54,22 @@ export default class Preview extends PureComponent {
 
   render() {
     const { file } = this.props;
-
-    const { root, img } = getStyles(this.props, this.context, this.state);
+    const { scale } = this.state;
 
     const content = file.is('image') ? (
-      <img src={file.blobURL} alt={file.name} style={img} />
+      <img
+        src={file.blobURL}
+        alt={file.name}
+        style={{
+          transform: `scale(${scale})`
+        }}
+      />
     ) : file.is('audio') ? (
       <audio src={file.blobURL} controls />
     ) : null;
 
     return (
-      <div style={root} ref={ref => ref && (this.container = ref)}>
+      <div className={cn.root} ref={ref => ref && (this.container = ref)}>
         {content}
       </div>
     );

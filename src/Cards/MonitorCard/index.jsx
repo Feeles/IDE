@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import { style, classes } from 'typestyle';
+import { percent } from 'csx';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -28,6 +30,26 @@ const frameSizes = [
 ];
 
 const by = 'x';
+const getContainerStyle = (frameWidth, frameHeight) => ({
+  paddingTop: percent(frameHeight / frameWidth * 100)
+});
+
+const cn = {
+  flexible: style({
+    position: 'relative',
+    width: '100%'
+  }),
+  popout: style({
+    height: 8
+  }),
+  parent: style({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0
+  })
+};
 
 export default class MonitorCard extends PureComponent {
   static propTypes = {
@@ -55,6 +77,7 @@ export default class MonitorCard extends PureComponent {
   state = {
     frameWidth: 300,
     frameHeight: 150,
+    containerStyle: getContainerStyle(300, 150),
     processing: false,
     statusLabel: null,
     anchorEl: null
@@ -65,16 +88,12 @@ export default class MonitorCard extends PureComponent {
       const { frame } = this.props.cardProps.MonitorCard;
       if (frame && Array.isArray(frame.size)) {
         const [frameWidth, frameHeight] = frame.size;
-        this.setState({ frameWidth, frameHeight });
+        this.changeSize(frameWidth, frameHeight);
       }
     } catch (e) {
       // continue regardless of error
     }
     this.props.globalEvent.on('message.statusLabel', this.setStatusLabel);
-  }
-
-  get height() {
-    return (this.state.frameHeight / this.state.frameWidth * 100) >> 0;
   }
 
   setStatusLabel = ({ data }) => {
@@ -87,7 +106,11 @@ export default class MonitorCard extends PureComponent {
   };
 
   changeSize(frameWidth, frameHeight) {
-    this.setState({ frameWidth, frameHeight });
+    this.setState({
+      frameWidth,
+      frameHeight,
+      containerStyle: getContainerStyle(frameWidth, frameHeight)
+    });
   }
 
   renderMenuItem([w, h]) {
@@ -124,25 +147,6 @@ export default class MonitorCard extends PureComponent {
   };
 
   render() {
-    const styles = {
-      flexible: {
-        position: 'relative',
-        width: '100%'
-      },
-      parent: {
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        top: 0,
-        left: 0
-      }
-    };
-    if (this.props.isPopout) {
-      styles.flexible.height = 8;
-    } else {
-      styles.flexible.paddingTop = this.height + '%';
-    }
-
     const sizeValue = this.state.frameWidth + by + this.state.frameHeight;
     const { localization, showAll, loadConfig } = this.props;
     const feelesrc = loadConfig('feelesrc');
@@ -194,8 +198,11 @@ export default class MonitorCard extends PureComponent {
         {...this.props.cardPropsBag}
         actions={actions}
       >
-        <CardMedia style={styles.flexible}>
-          <div style={styles.parent}>
+        <CardMedia
+          className={classes(cn.flexible, this.props.isPopout && cn.popout)}
+          style={this.props.isPopout ? undefined : this.state.containerStyle}
+        >
+          <div className={cn.parent}>
             <Monitor
               files={this.props.files}
               isPopout={this.props.isPopout}

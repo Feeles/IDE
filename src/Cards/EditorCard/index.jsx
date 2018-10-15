@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import IconButton from '@material-ui/core/IconButton';
 import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
@@ -9,29 +10,41 @@ import SourceEditor from './SourceEditor';
 import ChromeTab, { Tab } from '../../ChromeTab/';
 
 const MAX_TAB = 5;
+const tabContainerPaddingRight = 7;
+const tabContainerPaddingLeft = 80;
 
-const getStyles = props => {
-  const { palette } = props.theme;
-
-  return {
-    tabContainer: {
-      position: 'absolute',
-      top: 0,
-      width: 'calc(100% - 48px)',
-      boxSizing: 'border-box',
-      display: 'flex',
-      alignItems: 'flex-end',
-      height: 32,
-      paddingRight: 7,
-      paddingLeft: 80,
-      zIndex: 10
-    },
-    tabContentContainer: {
-      flex: 1,
-      position: 'relative',
-      borderTop: `1px solid ${palette.primary.main}`
-    }
-  };
+const cn = {
+  tabContainer: style({
+    position: 'absolute',
+    top: 0,
+    width: 'calc(100% - 48px)',
+    boxSizing: 'border-box',
+    display: 'flex',
+    alignItems: 'flex-end',
+    height: 32,
+    paddingRight: tabContainerPaddingRight,
+    paddingLeft: tabContainerPaddingLeft,
+    zIndex: 10
+  }),
+  tabContentContainer: style({
+    flex: 1,
+    position: 'relative'
+  }),
+  noFileBg: style({
+    flex: '1 1 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }),
+  largeIcon: style({
+    width: 40,
+    height: 40
+  }),
+  large: style({
+    width: 80,
+    height: 80,
+    padding: 20
+  })
 };
 
 @withTheme()
@@ -112,33 +125,25 @@ export default class EditorCard extends PureComponent {
   renderBackground() {
     const { palette } = this.props.theme;
 
-    const styles = {
-      noFileBg: {
-        flex: '1 1 auto',
-        backgroundColor: palette.primary.main,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      },
-      logo: {
-        color: palette.text.secondary
-      },
-      largeIcon: {
-        width: 40,
-        height: 40
-      },
-      large: {
-        width: 80,
-        height: 80,
-        padding: 20
-      }
-    };
-
     return (
-      <div style={styles.noFileBg}>
-        <h1 style={styles.logo}>Feeles</h1>
-        <IconButton style={styles.large} onClick={() => this.setLocation()}>
-          <AVPlayCircleOutline style={styles.largeIcon} />
+      <div
+        className={cn.noFileBg}
+        style={{
+          backgroundColor: palette.primary.main
+        }}
+      >
+        <h1
+          style={{
+            color: palette.text.secondary
+          }}
+        >
+          Feeles
+        </h1>
+        <IconButton
+          className={cn.large}
+          onClick={() => this.setLocation()}
+        >
+          <AVPlayCircleOutline className={cn.largeIcon} />
         </IconButton>
       </div>
     );
@@ -187,15 +192,15 @@ export default class EditorCard extends PureComponent {
       findFile,
       getConfig,
       reboot,
-      cardPropsBag
+      cardPropsBag,
+      theme: { palette }
     } = this.props;
-    const styles = getStyles(this.props, this.context);
 
     const tabs = [];
     const containerWidth = this.tabContainer
       ? this.tabContainer.getBoundingClientRect().width -
-        styles.tabContainer.paddingLeft -
-        styles.tabContainer.paddingRight
+        tabContainerPaddingLeft -
+        tabContainerPaddingRight
       : 0;
     for (const tab of this.props.tabs) {
       if (tabs.length < MAX_TAB) {
@@ -226,10 +231,16 @@ export default class EditorCard extends PureComponent {
         fit
         width={640}
       >
-        <div style={styles.tabContainer} ref={ref => (this.tabContainer = ref)}>
+        <div
+          className={cn.tabContainer}
+          ref={ref => (this.tabContainer = ref)}
+        >
           {tabs}
         </div>
-        <div style={styles.tabContentContainer}>
+        <div
+          className={cn.tabContentContainer}
+          style={{ borderTop: `1px solid ${palette.primary.main}` }}
+        >
           <SourceEditor
             fileView={this.props.fileView}
             file={selectedTab.file}

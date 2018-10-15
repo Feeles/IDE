@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Popout from '../../jsx/ReactPopout';
 
 import { SourceFile, makeFromFile } from '../../File/';
@@ -48,32 +49,20 @@ const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const webkitSpeechGrammarList = window.webkitSpeechGrammarList;
 
-const getStyle = props => {
-  const { transitions } = props.theme;
-  const fullScreen = (yes, no) => (props.isFullScreen ? yes : no);
-
-  return {
-    root: {
-      position: fullScreen('fixed', 'relative'),
-      width: '100%',
-      height: '100%',
-      left: 0,
-      top: 0,
-      boxSizing: 'border-box',
-      opacity: 1,
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      overflow: 'hidden',
-      zIndex: 300,
-      transition: transitions.create()
-    },
-    swap: {
-      position: 'absolute',
-      right: 0,
-      zIndex: 2
-    }
-  };
+const cn = {
+  root: style({
+    width: '100%',
+    height: '100%',
+    left: 0,
+    top: 0,
+    boxSizing: 'border-box',
+    opacity: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    zIndex: 300
+  })
 };
 
 @withTheme()
@@ -538,7 +527,11 @@ export default class Monitor extends PureComponent {
 
   render() {
     const { error } = this.state;
-    const { isPopout, reboot } = this.props;
+    const {
+      isPopout,
+      reboot,
+      theme: { transitions }
+    } = this.props;
 
     const popout =
       isPopout && !reboot ? (
@@ -565,10 +558,17 @@ export default class Monitor extends PureComponent {
         </Popout>
       ) : null;
 
-    const styles = getStyle(this.props, this.context, this.state);
+    const fullScreen = (yes, no) => (this.props.isFullScreen ? yes : no);
 
     return (
-      <div style={styles.root} onClick={this.handleTouch}>
+      <div
+        className={cn.root}
+        style={{
+          position: fullScreen('fixed', 'relative'),
+          transition: transitions.create()
+        }}
+        onClick={this.handleTouch}
+      >
         {popout}
         <Screen
           animation

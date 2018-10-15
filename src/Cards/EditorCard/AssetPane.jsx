@@ -1,11 +1,51 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import NavigationExpandLess from '@material-ui/icons/ExpandLess';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 import AssetButton from './AssetButton';
+
+const cn = {
+  root: style({
+    position: 'absolute',
+    width: '100%',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    zIndex: 10
+  }),
+  scroller: style({
+    flex: 1,
+    overflowX: 'auto',
+    overflowY: 'scroll',
+    boxSizing: 'border-box',
+    paddingBottom: 60,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0
+  }),
+  label: style({
+    flex: '0 0 100%',
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 16,
+    fontWeight: 600
+  }),
+  wrapper: style({
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  }),
+  close: style({
+    marginBottom: 10,
+    textAlign: 'center',
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    cursor: 'pointer'
+  })
+};
 
 @withTheme()
 export default class AssetPane extends PureComponent {
@@ -39,13 +79,13 @@ export default class AssetPane extends PureComponent {
     }
   }
 
-  renderEachLabel(label, styles) {
+  renderEachLabel(label) {
     const items = this.state.assets[label];
     if (!items) return null;
 
     return (
-      <div key={label} style={{ ...styles.wrapper }}>
-        <div style={{ ...styles.label }}>{label}</div>
+      <div key={label} style={{ ...cn.wrapper }}>
+        <div style={{ ...cn.label }}>{label}</div>
         {items.map((item, i) => (
           <AssetButton
             {...item}
@@ -63,59 +103,36 @@ export default class AssetPane extends PureComponent {
     const { scope, open } = this.props;
     const { palette, transitions } = this.props.theme;
 
-    const styles = {
-      root: {
-        position: 'absolute',
-        width: '100%',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 10,
-        transition: transitions.create(),
-        height: open ? '100%' : 0
-      },
-      scroller: {
-        flex: 1,
-        overflowX: 'auto',
-        overflowY: 'scroll',
-        boxSizing: 'border-box',
-        paddingBottom: 60,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-        backgroundColor: fade(emphasize(palette.background.paper, 0.75), 0.55)
-      },
-      label: {
-        flex: '0 0 100%',
-        color: 'white',
-        textAlign: 'center',
-        marginTop: 16,
-        fontWeight: 600
-      },
-      wrapper: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center'
-      },
-      close: {
-        marginBottom: 10,
-        textAlign: 'center',
-        backgroundColor: palette.primary.main,
-        borderTopRightRadius: 0,
-        borderTopLeftRadius: 0,
-        cursor: 'pointer',
-        height: open ? null : 0
-      }
-    };
-
     // e.g. scope === 'モンスター アイテム'
     const labels = scope ? scope.trim().split(' ') : [];
 
     return (
-      <div style={styles.root}>
-        <div style={styles.scroller}>
-          {labels.map(label => this.renderEachLabel(label, styles))}
+      <div
+        className={cn.root}
+        style={{
+          height: open ? '100%' : 0,
+          transition: transitions.create()
+        }}
+      >
+        <div
+          className={cn.scroller}
+          style={{
+            backgroundColor: fade(
+              emphasize(palette.background.paper, 0.75),
+              0.55
+            )
+          }}
+        >
+          {labels.map(label => this.renderEachLabel(label))}
         </div>
-        <div style={styles.close} onClick={this.props.handleClose}>
+        <div
+          className={cn.close}
+          style={{
+            backgroundColor: palette.primary.main,
+            height: open ? null : 0
+          }}
+          onClick={this.props.handleClose}
+        >
           <NavigationExpandLess style={{ color: 'white' }} />
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 
 import MediaCard from './MediaCard/';
 import MonitorCard from './MonitorCard/';
@@ -12,6 +13,24 @@ import ShotCard from './ShotCard/';
 import EditorCard from './EditorCard/';
 import HierarchyCard from './HierarchyCard/';
 import * as MonitorTypes from '../utils/MonitorTypes';
+
+const cn = {
+  container: style({
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexWrap: 'wrap',
+    justfiyContent: 'space-between',
+    alignItems: 'stretch',
+    overflowX: 'hidden',
+    overflowY: 'scroll',
+    paddingLeft: 16,
+    boxSizing: 'border-box',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundSize: 'contain'
+  })
+};
 
 export default class CardContainer extends PureComponent {
   static propTypes = {
@@ -77,25 +96,6 @@ export default class CardContainer extends PureComponent {
       this.props.findFile('feeles/background.png') ||
       this.props.findFile('feeles/background.jpg');
 
-    const styles = {
-      container: {
-        flex: 1,
-        position: 'relative',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justfiyContent: 'space-between',
-        alignItems: 'stretch',
-        overflowX: 'hidden',
-        overflowY: 'scroll',
-        paddingLeft: 16,
-        boxSizing: 'border-box',
-        backgroundImage: bg && `url(${bg.blobURL})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-        backgroundSize: 'contain'
-      }
-    };
-
     const bag = name => ({
       name,
       visible: this.props.cardProps[name].visible,
@@ -136,7 +136,12 @@ export default class CardContainer extends PureComponent {
     };
 
     return (
-      <div style={styles.container}>
+      <div
+        className={cn.container}
+        style={{
+          backgroundImage: bg && `url(${bg.blobURL})`
+        }}
+      >
         <MediaCard
           ref={ref => (this.cardRefs.MediaCard = ref)}
           {...commonProps}

@@ -1,27 +1,20 @@
 import React, { Component } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 
-const getStyles = props => {
-  const { show } = props;
-  const { palette } = props.theme;
-
-  return {
-    root: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      opacity: show ? 1 : 0,
-      backgroundColor: 'transparent',
-      zIndex: show ? 11 : 10,
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    container: {
-      flex: '1 1 auto',
-      borderTop: `1px solid ${palette.primary.main}`
-    }
-  };
+const cn = {
+  root: style({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'transparent',
+    display: 'flex',
+    flexDirection: 'column'
+  }),
+  container: style({
+    flex: '1 1 auto'
+  })
 };
 
 @withTheme()
@@ -41,12 +34,25 @@ export default class ChromeTabContent extends Component {
 
   render() {
     const { children } = this.props;
-
-    const { root, container } = getStyles(this.props, this.context);
+    const { show } = this.props;
+    const { palette } = this.props.theme;
 
     return (
-      <div style={root}>
-        <div style={container}>{children}</div>
+      <div
+        className={cn.root}
+        style={{
+          opacity: show ? 1 : 0,
+          zIndex: show ? 11 : 10
+        }}
+      >
+        <div
+          className={cn.container}
+          style={{
+            borderTop: `1px solid ${palette.primary.main}`
+          }}
+        >
+          {children}
+        </div>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import moment from 'moment';
 import HTML5Backend from 'react-dnd-html5-backend';
 import TouchBackend from 'react-dnd-touch-backend';
@@ -21,6 +22,7 @@ import getCustomTheme from '../js/getCustomTheme';
 import Main from './Main';
 import LaunchDialog from './LaunchDialog';
 import ErrorBoundary from './ErrorBoundary';
+import MaterialUIJssProvider from './MaterialUIJssProvider';
 
 import fetchPonyfill from 'fetch-ponyfill';
 const fetch =
@@ -351,11 +353,11 @@ class RootComponent extends Component {
     );
 
     return (
-      <div style={styles.root}>
-        <h1 style={styles.header}>
+      <div className={styles.root}>
+        <h1 className={styles.header}>
           {title ? title.getAttribute('content') : document.title || '❤️'}
         </h1>
-        {errorText && <span style={styles.errorText}>{errorText}</span>}
+        {errorText && <span className={styles.errorText}>{errorText}</span>}
         {retryCount > 0 ? (
           <div>
             {Math.pow(2, retryCount)}
@@ -363,12 +365,12 @@ class RootComponent extends Component {
           </div>
         ) : null}
         {author && (
-          <h2 style={styles.header}>{author.getAttribute('content')}</h2>
+          <h2 className={styles.header}>{author.getAttribute('content')}</h2>
         )}
         {last < Infinity ? (
-          <span style={styles.count}>{indicator(files.length, last)}</span>
+          <span className={styles.count}>{indicator(files.length, last)}</span>
         ) : null}
-        <span style={styles.header}>Made with Feeles</span>
+        <span className={styles.header}>Made with Feeles</span>
         <LaunchDialog
           open={this.state.openDialog}
           localization={this.localization}
@@ -393,33 +395,35 @@ class RootComponent extends Component {
 
     return (
       <ErrorBoundary>
-        <MuiThemeProvider theme={this.state.muiTheme}>
-          {this.state.last > 0 ? (
-            this.renderLoading()
-          ) : this.state.cardProps ? (
-            <Main
-              cardProps={this.state.cardProps}
-              setCardProps={this.setCardProps}
-              openSidebar={this.props.openSidebar}
-              mini={this.props.mini}
-              files={this.state.files}
-              rootElement={rootElement}
-              rootStyle={getComputedStyle(rootElement)}
-              project={this.state.project}
-              launchIDE={this.launchIDE}
-              localization={this.localization}
-              setLocalization={this.setLocalization}
-              muiTheme={this.state.muiTheme}
-              setMuiTheme={this.setMuiTheme}
-              onChange={this.props.onChange}
-              onMessage={this.props.onMessage}
-              onThumbnailChange={this.props.onThumbnailChange}
-              disableLocalSave={this.props.disableLocalSave}
-            />
-          ) : (
-            <div />
-          )}
-        </MuiThemeProvider>
+        <MaterialUIJssProvider>
+          <MuiThemeProvider theme={this.state.muiTheme}>
+            {this.state.last > 0 ? (
+              this.renderLoading()
+            ) : this.state.cardProps ? (
+              <Main
+                cardProps={this.state.cardProps}
+                setCardProps={this.setCardProps}
+                openSidebar={this.props.openSidebar}
+                mini={this.props.mini}
+                files={this.state.files}
+                rootElement={rootElement}
+                rootStyle={getComputedStyle(rootElement)}
+                project={this.state.project}
+                launchIDE={this.launchIDE}
+                localization={this.localization}
+                setLocalization={this.setLocalization}
+                muiTheme={this.state.muiTheme}
+                setMuiTheme={this.setMuiTheme}
+                onChange={this.props.onChange}
+                onMessage={this.props.onMessage}
+                onThumbnailChange={this.props.onThumbnailChange}
+                disableLocalSave={this.props.disableLocalSave}
+              />
+            ) : (
+              <div />
+            )}
+          </MuiThemeProvider>
+        </MaterialUIJssProvider>
       </ErrorBoundary>
     );
   }

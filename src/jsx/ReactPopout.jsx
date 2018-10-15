@@ -11,7 +11,7 @@ Copyright (c) 2015 Jake Ginnivan
 
 import React        from 'react';
 import ReactDOM     from 'react-dom';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';import { style } from 'typestyle';
 
 const _CONTAINER_ID = Symbol('container_id');
 

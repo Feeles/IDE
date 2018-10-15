@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import EventEmitter from 'eventemitter2';
 import Snackbar from '@material-ui/core/Snackbar';
 import jsyaml from 'js-yaml';
@@ -43,27 +44,15 @@ import icons from './icons';
 const DOWNLOAD_ENABLED =
   typeof document.createElement('a').download === 'string';
 
-const getStyle = (props, state) => {
-  const shrinkLeft =
-    parseInt(props.rootStyle.width, 10) - state.monitorWidth < 200;
-  const shrinkRight = state.monitorWidth < 100;
-
-  return {
-    shrinkLeft,
-    shrinkRight,
-
-    root: {
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      lineHeight: 1.15
-    },
-    sidebar: {
-      position: 'absolute'
-    }
-  };
+const cn = {
+  root: style({
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    lineHeight: 1.15
+  })
 };
 
 @withTheme()
@@ -493,7 +482,6 @@ export default class Main extends Component {
     }
 
     const { localization, mini } = this.props;
-    const styles = getStyle(this.props, this.state, this.context);
 
     const commonProps = {
       fileView: this.state.fileView,
@@ -511,7 +499,7 @@ export default class Main extends Component {
     const userStyle = this.findFile('feeles/codemirror.css');
 
     return (
-      <div style={styles.root}>
+      <div className={cn.root}>
         {mini ? null : (
           <Menu
             {...commonProps}

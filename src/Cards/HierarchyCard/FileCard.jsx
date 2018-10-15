@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import { DragSource } from 'react-dnd';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,48 +14,28 @@ import Filename from './Filename';
 import { PreferenceDialog } from '../../FileDialog/';
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = props => {
-  const { file, selectedFile, tabbedFiles, isDragging } = props;
-  const { palette, spacing, transitions } = props.theme;
-
-  const isSelected = selectedFile === file;
-  const backgroundColor = includes(tabbedFiles, file)
-    ? fade(palette.background.paper, 1)
-    : palette.disabledColor;
-
-  return {
-    root: {
-      marginTop: 4,
-      marginRight: 8,
-      transition: transitions.create()
-    },
-    card: {
-      boxSizing: 'border-box',
-      height: 40,
-      paddingLeft: spacing.unit * 2,
-      borderTopRightRadius: isSelected ? 0 : 2,
-      borderBottomRightRadius: isSelected ? 0 : 2,
-      backgroundColor,
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      opacity: isDragging ? 0.5 : 1,
-      transition: transitions.create()
-    },
-    dragHandle: {
-      flex: '0 0 auto',
-      width: spacing.unit * 3,
-      height: spacing.unit * 3,
-      marginRight: spacing.unit,
-      cursor: 'move'
-    },
-    container: {
-      flex: '1 1 auto',
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    }
-  };
+const cn = {
+  root: style({
+    marginTop: 4,
+    marginRight: 8
+  }),
+  card: style({
+    boxSizing: 'border-box',
+    height: 40,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }),
+  dragHandle: style({
+    flex: '0 0 auto',
+    cursor: 'move'
+  }),
+  container: style({
+    flex: '1 1 auto',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  })
 };
 
 @withTheme()
@@ -95,29 +76,52 @@ class FileCard extends PureComponent {
       selectedFile,
       handleFileSelect,
       connectDragSource,
-      connectDragPreview
+      connectDragPreview,
+      tabbedFiles,
+      isDragging
     } = this.props;
 
     const isSelected = selectedFile === file;
 
-    const { root, card, dragHandle, container } = getStyles(
-      this.props,
-      this.context
-    );
+    const { palette, spacing, transitions } = this.props.theme;
+
+    const backgroundColor = includes(tabbedFiles, file)
+      ? fade(palette.background.paper, 1)
+      : palette.disabledColor;
 
     return connectDragPreview(
-      <div style={root}>
+      <div
+        className={cn.root}
+        style={{
+          transition: transitions.create()
+        }}
+      >
         <Paper
           elevation={isSelected ? 2 : 0}
           onClick={() => handleFileSelect(file)}
-          style={card}
+          className={cn.card}
+          style={{
+            paddingLeft: spacing.unit * 2,
+            borderTopRightRadius: isSelected ? 0 : 2,
+            borderBottomRightRadius: isSelected ? 0 : 2,
+            backgroundColor,
+            opacity: isDragging ? 0.5 : 1,
+            transition: transitions.create()
+          }}
         >
           {connectDragSource(
-            <div style={dragHandle}>
+            <div
+              className={cn.dragHandle}
+              style={{
+                width: spacing.unit * 3,
+                height: spacing.unit * 3,
+                marginRight: spacing.unit
+              }}
+            >
               <EditorDragHandle />
             </div>
           )}
-          <div style={container}>
+          <div className={cn.container}>
             <Filename file={file} onChange={this.handleNameChange} />
           </div>
           <IconButton onClick={this.handleConfirmSettings}>

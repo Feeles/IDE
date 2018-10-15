@@ -1,36 +1,26 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import TextField from '@material-ui/core/TextField';
 
 import { separate } from '../../File/';
 
-const getStyles = props => {
-  const { palette } = props.theme;
-
-  return {
-    root: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'baseline'
-    },
-    path: {
-      color: palette.text.secondary
-    },
-    plane: {
-      color: palette.text.primary
-    },
-    ext: {
-      color: palette.text.secondary,
-      fontSize: '.8em',
-      paddingLeft: 4
-    },
-    textField: {
-      width: 'auto',
-      flex: '0 1 auto',
-      height: 40
-    }
-  };
+const cn = {
+  root: style({
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'baseline'
+  }),
+  ext: style({
+    fontSize: '.8em',
+    paddingLeft: 4
+  }),
+  textField: style({
+    width: 'auto',
+    flex: '0 1 auto',
+    height: 40
+  })
 };
 
 @withTheme()
@@ -77,28 +67,45 @@ export default class Filename extends PureComponent {
   render() {
     const { file } = this.props;
     const { isEditing } = this.state;
-
-    const styles = getStyles(this.props, this.context);
+    const { palette } = this.props.theme;
 
     const { path, plane, ext, name } = separate(file.name);
 
     return (
-      <div style={styles.root}>
-        <span style={styles.path}>{path}</span>
+      <div className={cn.root}>
+        <span
+          style={{
+            color: palette.text.secondary
+          }}
+        >
+          {path}
+        </span>
         {isEditing ? (
           <TextField
             id={name}
             defaultValue={plane}
             ref={this.handleInput}
-            style={styles.textField}
+            className={cn.textField}
             onClick={this.handleTextFieldTap}
           />
         ) : (
-          <span onClick={this.handleDoubleTap} style={styles.plane}>
+          <span
+            onClick={this.handleDoubleTap}
+            style={{
+              color: palette.text.primary
+            }}
+          >
             {plane}
           </span>
         )}
-        <span style={styles.ext}>{ext}</span>
+        <span
+          className={cn.ext}
+          style={{
+            color: palette.text.secondary
+          }}
+        >
+          {ext}
+        </span>
       </div>
     );
   }

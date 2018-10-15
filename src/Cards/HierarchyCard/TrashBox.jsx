@@ -1,26 +1,20 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import { DropTarget } from 'react-dnd';
 import IconButton from '@material-ui/core/IconButton';
 import ActionDelete from '@material-ui/icons/Delete';
 import NavigationArrowBack from '@material-ui/icons/ArrowBack';
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = props => {
-  const { isOver } = props;
-  const { palette, spacing } = props.theme;
-
-  return {
-    icon: {
-      borderWidth: 0,
-      borderTopWidth: isOver ? spacing.unit : 0,
-      borderStyle: 'solid',
-      borderColor: 'transparent',
-      backgroundColor: isOver ? palette.disabledColor : 'transparent',
-      borderRadius: 2
-    }
-  };
+const cn = {
+  icon: style({
+    borderWidth: 0,
+    borderStyle: 'solid',
+    borderColor: 'transparent',
+    borderRadius: 2
+  })
 };
 
 @withTheme()
@@ -43,11 +37,19 @@ class _TrashBox extends PureComponent {
       connectDropTarget
     } = this.props;
 
-    const { icon } = getStyles(this.props, this.state, this.context);
+    const { isOver } = this.props;
+    const { palette, spacing } = this.props.theme;
 
     return connectDropTarget(
       <div>
-        <IconButton style={icon} onClick={onClick}>
+        <IconButton
+          className={cn.icon}
+          onClick={onClick}
+          style={{
+            borderTopWidth: isOver ? spacing.unit : 0,
+            backgroundColor: isOver ? palette.disabledColor : 'transparent'
+          }}
+        >
           {showTrashes ? <NavigationArrowBack /> : <ActionDelete />}
         </IconButton>
       </div>

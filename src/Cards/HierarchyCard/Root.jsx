@@ -1,25 +1,20 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
 
 import DirCard from './DirCard';
 import getHierarchy from './getHierarchy';
 
-const getStyles = props => {
-  const { fontFamily, palette } = props.theme;
-
-  return {
-    root: {
-      boxSizing: 'border-box',
-      width: '100%',
-      fontFamily,
-      paddingBottom: 40,
-      overflowX: 'hidden',
-      overflowY: 'scroll',
-      backgroundColor: fade(emphasize(palette.background.paper, 1), 0.07)
-    }
-  };
+const cn = {
+  root: style({
+    boxSizing: 'border-box',
+    width: '100%',
+    paddingBottom: 40,
+    overflowX: 'hidden',
+    overflowY: 'scroll'
+  })
 };
 
 @withTheme()
@@ -40,6 +35,7 @@ export default class Root extends PureComponent {
 
   render() {
     const { files } = this.props;
+    const { fontFamily, palette } = this.props.theme;
 
     const transfer = {
       selectedFile: this.props.selectedFile,
@@ -53,10 +49,14 @@ export default class Root extends PureComponent {
       putFile: this.props.putFile
     };
 
-    const { root } = getStyles(this.props, this.context);
-
     return (
-      <div style={root}>
+      <div
+        className={cn.root}
+        style={{
+          fontFamily,
+          backgroundColor: fade(emphasize(palette.background.paper, 1), 0.07)
+        }}
+      >
         <DirCard dir={getHierarchy(files)} {...transfer} isRoot />
       </div>
     );

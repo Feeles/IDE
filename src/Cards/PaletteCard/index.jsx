@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Card from '../CardWindow';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,70 +12,32 @@ import { ChromePicker, TwitterPicker } from 'react-color';
 
 import LayeredStyle from './LayeredStyle';
 
-const getStyles = props => {
-  const { palette, spacing } = props.theme;
-
-  const bodyColor = getComputedStyle(document.body)['background-color'];
-  const boxSize = 60;
-
-  return {
-    html: {
-      display: 'flex',
-      flexDirection: 'column',
-      backgroundColor: 'white'
-    },
-    body: {
-      backgroundColor: bodyColor
-    },
-    overlay: {
-      padding: spacing.unit * 3
-    },
-    canvas: {
-      display: 'flex',
-      alignItems: 'center',
-      height: boxSize + 32,
-      backgroundColor: palette.background.paper
-    },
-    primary: {
-      flex: '1 1 auto',
-      marginLeft: spacing.unit * 3,
-      height: boxSize,
-      backgroundColor: palette.primary.main
-    },
-    secondary: {
-      flex: '1 1 auto',
-      marginLeft: spacing.unit * 3,
-      height: boxSize * 0.8,
-      backgroundColor: palette.secondary.main
-    },
-    blank: {
-      flex: '1 1 auto',
-      marginLeft: spacing.unit * 3,
-      height: boxSize,
-      backgroundColor: 'transparent'
-    },
-    container: {
-      textAlign: 'center',
-      overflow: 'hidden'
-    },
-    item: {
-      flex: '0 0 auto',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      maxWidth: 200,
-      margin: `${spacing.unit}px auto`
-    },
-    label: {
-      color: palette.text.primary
-    },
-    rect: {
-      boxSizing: 'border-box',
-      marginLeft: spacing.unit * 3,
-      padding: '.5rem',
-      border: `1px solid ${palette.text.primary}`
-    }
-  };
+const cn = {
+  canvas: style({
+    display: 'flex',
+    alignItems: 'center'
+  }),
+  primary: style({
+    flex: '1 1 auto'
+  }),
+  secondary: style({
+    flex: '1 1 auto'
+  }),
+  blank: style({
+    flex: '1 1 auto',
+    backgroundColor: 'transparent'
+  }),
+  container: style({
+    textAlign: 'center',
+    overflow: 'hidden'
+  }),
+  item: style({
+    flex: '0 0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    maxWidth: 200
+  })
 };
 
 @withTheme()
@@ -124,16 +87,36 @@ export default class PaletteCard extends PureComponent {
     this.setState({ open: false });
   };
 
-  renderItem(key, styles) {
-    const { palette } = this.props.theme;
+  renderItem(key) {
+    const { palette, spacing } = this.props.theme;
 
-    const rectStyle = Object.assign({}, styles.rect, {
-      backgroundColor: palette[key]
-    });
+    const rectStyle = Object.assign(
+      {
+        marginLeft: spacing.unit * 3,
+        border: `1px solid ${palette.text.primary}`,
+
+        boxSizing: 'border-box',
+        padding: '.5rem'
+      },
+      {
+        backgroundColor: palette[key]
+      }
+    );
 
     return (
-      <div key={key} style={styles.item}>
-        <span style={styles.label}>{key}</span>
+      <div
+        key={key}
+        style={{
+          margin: `${spacing.unit}px auto`
+        }}
+      >
+        <span
+          style={{
+            color: palette.text.primary
+          }}
+        >
+          {key}
+        </span>
         <span
           style={rectStyle}
           onClick={event => this.handleRectClick(event, key)}
@@ -144,9 +127,10 @@ export default class PaletteCard extends PureComponent {
 
   render() {
     const { open, key, anchorEl, limited } = this.state;
-    const { palette } = this.props.theme;
+    const { palette, spacing } = this.props.theme;
 
-    const styles = getStyles(this.props, this.context);
+    const bodyColor = getComputedStyle(document.body)['background-color'];
+    const boxSize = 60;
 
     return (
       <Card
@@ -155,27 +139,59 @@ export default class PaletteCard extends PureComponent {
       >
         <CardActions>
           <LayeredStyle
-            styles={[styles.html, styles.body, styles.overlay]}
+            styles={[
+              {
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'white'
+              },
+              {
+                backgroundColor: bodyColor
+              },
+              {
+                padding: spacing.unit * 3
+              }
+            ]}
             onClick={e => this.handleRectClick(e, 'backgroundColor')}
           >
             <Paper
-              style={styles.canvas}
+              className={cn.canvas}
+              style={{
+                height: boxSize + 32,
+                backgroundColor: palette.background.paper
+              }}
               onClick={e => this.handleRectClick(e, 'canvasColor')}
             >
               <Paper
-                style={styles.primary}
+                className={cn.primary}
+                style={{
+                  marginLeft: spacing.unit * 3,
+                  height: boxSize,
+                  backgroundColor: palette.primary.main
+                }}
                 onClick={e => this.handleRectClick(e, 'primary1Color', true)}
               />
               <Paper
-                style={styles.secondary}
+                className={cn.secondary}
+                style={{
+                  marginLeft: spacing.unit * 3,
+                  height: boxSize * 0.8,
+                  backgroundColor: palette.secondary.main
+                }}
                 onClick={e => this.handleRectClick(e, 'accent1Color', true)}
               />
-              <div style={styles.blank} />
+              <div
+                className={cn.blank}
+                style={{
+                  marginLeft: spacing.unit * 3,
+                  height: boxSize
+                }}
+              />
             </Paper>
           </LayeredStyle>
         </CardActions>
-        <CardContent style={styles.container}>
-          {Object.keys(palette).map(key => this.renderItem(key, styles))}
+        <CardContent className={cn.container}>
+          {Object.keys(palette).map(key => this.renderItem(key))}
         </CardContent>
         <Popover
           open={open}

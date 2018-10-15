@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import Menu from '@material-ui/core/Menu';
@@ -12,6 +13,49 @@ import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 import NavigationRefresh from '@material-ui/icons/Refresh';
 import NavigationArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+
+const cn = {
+  currentSecondaryText: style({
+    marginLeft: 8,
+    fontSize: '.8rem',
+    opacity: 0.6
+  }),
+  menu: style({
+    maxHeight: 300
+  }),
+  href: style({
+    marginLeft: 8,
+    fontSize: '.8rem',
+    opacity: 0.6
+  })
+};
+const getCn = props => ({
+  button: style({
+    borderRadius: 0,
+    boxShadow: 'none',
+    padding: 0,
+    lineHeight: 2,
+    paddingLeft: props.theme.spacing.unit,
+    color: props.theme.palette.primary.contrastText,
+    backgroundColor: props.theme.palette.primary.main
+  }),
+  dropDown: style({
+    // marginLeft: -16,
+
+    minWidth: 32,
+    padding: 0,
+    lineHeight: 2,
+    borderRadius: 0,
+    boxShadow: 'none',
+    color: props.theme.palette.primary.contrastText,
+    backgroundColor: props.theme.palette.primary.main
+  }),
+  current: style({
+    marginTop: -8,
+    marginBottom: -8,
+    backgroundColor: fade(props.theme.palette.primary.main, 0.1)
+  })
+});
 
 @withTheme()
 export default class PlayMenu extends PureComponent {
@@ -73,56 +117,17 @@ export default class PlayMenu extends PureComponent {
   };
 
   renderMenu = entry => {
-    const hrefStyle = {
-      marginLeft: 8,
-      fontSize: '.8rem',
-      opacity: 0.6
-    };
-
     return (
       <MenuItem key={entry.href} value={entry.href}>
         <span>{entry.title}</span>
-        <span style={hrefStyle}>{entry.href}</span>
+        <span style={cn.href}>{entry.href}</span>
       </MenuItem>
     );
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { localization } = this.props;
-    const { palette, spacing } = this.props.theme;
-
-    const styles = {
-      button: {
-        padding: 0,
-        paddingLeft: spacing.unit,
-        lineHeight: 2,
-        color: palette.primary.contrastText,
-        backgroundColor: palette.primary.main,
-        borderRadius: 0
-      },
-      dropDown: {
-        // marginLeft: -16,
-        minWidth: 32,
-        padding: 0,
-        lineHeight: 2,
-        color: palette.primary.contrastText,
-        backgroundColor: palette.primary.main,
-        borderRadius: 0
-      },
-      current: {
-        backgroundColor: fade(palette.primary.main, 0.1),
-        marginTop: -8,
-        marginBottom: -8
-      },
-      currentSecondaryText: {
-        marginLeft: 8,
-        fontSize: '.8rem',
-        opacity: 0.6
-      },
-      menu: {
-        maxHeight: 300
-      }
-    };
 
     const current = this.state.entries.find(
       item => item.href === this.props.href
@@ -131,18 +136,18 @@ export default class PlayMenu extends PureComponent {
     return (
       <div>
         <Button
-          variant="text"
+          variant="contained"
           color="primary"
-          style={styles.button}
+          className={dcn.button}
           onClick={() => this.props.setLocation()}
         >
           <AVPlayCircleOutline />
           {localization.editorCard.play}
         </Button>
         <Button
-          variant="text"
+          variant="contained"
           color="primary"
-          style={styles.dropDown}
+          className={dcn.dropDown}
           onClick={this.handlePlay}
         >
           <NavigationArrowDropDown />
@@ -156,7 +161,7 @@ export default class PlayMenu extends PureComponent {
         >
           <Menu
             value={this.state.href}
-            style={styles.menu}
+            className={cn.menu}
             onItemTouchTap={this.handleItemTouchTap}
           >
             {current && [
@@ -165,11 +170,11 @@ export default class PlayMenu extends PureComponent {
                   <NavigationRefresh />
                 </ListItemIcon>
                 <ListItemText
-                  style={styles.current}
+                  className={dcn.current}
                   inset
                   primary={current.title}
                   secondary={
-                    <span style={styles.currentSecondaryText}>
+                    <span className={cn.currentSecondaryText}>
                       Ctrl + Space
                     </span>
                   }

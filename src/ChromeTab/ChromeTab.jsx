@@ -12,88 +12,6 @@ const MinTabWidth = 0;
 const TabHeight = 32;
 const TabSkewX = 24;
 
-const getStyles = (props, context, state) => {
-  const { containerWidth, isSelected } = props;
-  const { palette, spacing, fontFamily } = props.theme;
-  const { closerMouseOver } = state;
-
-  const tabHeight = TabHeight + (isSelected ? 1 : 0);
-  const tabWidth = Math.min(
-    MaxTabWidth,
-    Math.max(MinTabWidth, containerWidth / props.tabs.length)
-  );
-  const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
-  const backgroundColor = fade(
-    isSelected ? palette.background.paper : emphasize(palette.background.paper),
-    1
-  );
-
-  const blade = left => ({
-    position: 'absolute',
-    boxSizing: 'border-box',
-    width: tabWidth - blank,
-    height: tabHeight,
-    left: left ? 0 : 'auto',
-    right: left ? 'auto' : 0,
-    borderTopWidth: left ? 0 : 1,
-    borderRightWidth: left ? 0 : 1,
-    borderBottomWidth: 0,
-    borderLeftWidth: left ? 1 : 0,
-    borderStyle: 'solid',
-    borderColor: palette.primary.main,
-    transform: `skewX(${(left ? -1 : 1) * TabSkewX}deg)`,
-    backgroundColor,
-    zIndex: left ? 1 : 2
-  });
-
-  return {
-    root: {
-      flex: '1 1 auto',
-      position: 'relative',
-      boxSizing: 'border-box',
-      maxWidth: MaxTabWidth,
-      height: tabHeight,
-      marginBottom: isSelected ? -1 : 0,
-      zIndex: isSelected ? 2 : 1,
-      fontFamily
-    },
-    left: blade(true),
-    center: {
-      position: 'absolute',
-      width: tabWidth - blank,
-      height: tabHeight,
-      paddingLeft: blank / 2,
-      paddingRight: blank / 2,
-      zIndex: 3
-    },
-    right: blade(false),
-    innerItem: {
-      display: 'flex',
-      alignItems: 'center',
-      height: tabHeight
-    },
-    label: {
-      flex: '1 1 auto',
-      color: palette.text.primary,
-      textDecoration: 'none',
-      overflowX: 'hidden',
-      whiteSpace: 'nowrap',
-      fontSize: '.8em',
-      cursor: 'default'
-    },
-    rightButton: {
-      flex: '0 0 auto',
-      padding: 0,
-      width: spacing.unit * 3,
-      height: spacing.unit * 3,
-      margin: '0 -4px',
-      transform: 'scale(0.55)',
-      borderRadius: '50%',
-      backgroundColor: closerMouseOver ? red['A200'] : 'transparent'
-    }
-  };
-};
-
 @withTheme()
 export default class ChromeTabs extends PureComponent {
   static propTypes = {
@@ -155,7 +73,87 @@ export default class ChromeTabs extends PureComponent {
 
     const { doc } = this.state;
 
-    const styles = getStyles(this.props, this.context, this.state);
+    const { containerWidth, isSelected } = this.props;
+    const { palette, spacing, fontFamily } = this.props.theme;
+    const { closerMouseOver } = this.state;
+
+    const tabHeight = TabHeight + (isSelected ? 1 : 0);
+    const tabWidth = Math.min(
+      MaxTabWidth,
+      Math.max(MinTabWidth, containerWidth / this.props.tabs.length)
+    );
+    const blank = tabHeight / Math.tan(((90 - TabSkewX) / 180) * Math.PI);
+    const backgroundColor = fade(
+      isSelected
+        ? palette.background.paper
+        : emphasize(palette.background.paper),
+      1
+    );
+
+    const blade = left => ({
+      position: 'absolute',
+      boxSizing: 'border-box',
+      width: tabWidth - blank,
+      height: tabHeight,
+      left: left ? 0 : 'auto',
+      right: left ? 'auto' : 0,
+      borderTopWidth: left ? 0 : 1,
+      borderRightWidth: left ? 0 : 1,
+      borderBottomWidth: 0,
+      borderLeftWidth: left ? 1 : 0,
+      borderStyle: 'solid',
+      borderColor: palette.primary.main,
+      transform: `skewX(${(left ? -1 : 1) * TabSkewX}deg)`,
+      backgroundColor,
+      zIndex: left ? 1 : 2
+    });
+
+    const styles = {
+      root: {
+        flex: '1 1 auto',
+        position: 'relative',
+        boxSizing: 'border-box',
+        maxWidth: MaxTabWidth,
+        height: tabHeight,
+        marginBottom: isSelected ? -1 : 0,
+        zIndex: isSelected ? 2 : 1,
+        fontFamily
+      },
+      left: blade(true),
+      center: {
+        position: 'absolute',
+        width: tabWidth - blank,
+        height: tabHeight,
+        paddingLeft: blank / 2,
+        paddingRight: blank / 2,
+        zIndex: 3
+      },
+      right: blade(false),
+      innerItem: {
+        display: 'flex',
+        alignItems: 'center',
+        height: tabHeight
+      },
+      label: {
+        flex: '1 1 auto',
+        color: palette.text.primary,
+        textDecoration: 'none',
+        overflowX: 'hidden',
+        whiteSpace: 'nowrap',
+        fontSize: '.8em',
+        cursor: 'default'
+      },
+      rightButton: {
+        flex: '0 0 auto',
+        padding: 0,
+        width: spacing.unit * 3,
+        height: spacing.unit * 3,
+        margin: '0 -4px',
+        transform: 'scale(0.55)',
+        borderRadius: '50%',
+        backgroundColor: closerMouseOver ? red['A200'] : 'transparent'
+      }
+    };
 
     const handleRightTouchTap = e => {
       e.stopPropagation();
