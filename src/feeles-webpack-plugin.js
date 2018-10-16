@@ -52,7 +52,7 @@ module.exports = class FeelesWebpackPlugin {
       {
         paths: ['mount'],
         output: 'index.json',
-        ignore: /[]/,
+        ignore: /[]/, // eslint-disable-line
         debug: false
       },
       params
