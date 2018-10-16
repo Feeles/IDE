@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
+import Button from '@material-ui/core/Button';
 import NavigationExpandLess from '@material-ui/icons/ExpandLess';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
@@ -20,6 +21,11 @@ const cn = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'
+  }),
+  closeButton: style({
+    position: 'absolute',
+    bottom: 8,
+    right: 8
   })
 };
 const getCn = props => ({
@@ -45,18 +51,6 @@ const getCn = props => ({
       emphasize(props.theme.palette.background.paper, 0.75),
       0.55
     )
-  }),
-  close: style({
-    marginBottom: 10,
-    textAlign: 'center',
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
-    cursor: 'pointer',
-    backgroundColor: props.theme.palette.primary.main,
-    height: props.open ? null : 0
-  }),
-  expandLess: style({
-    color: props.theme.palette.primary.contrastText
   })
 });
 
@@ -124,9 +118,15 @@ export default class AssetPane extends PureComponent {
         <div className={dcn.scroller}>
           {labels.map(label => this.renderEachLabel(label))}
         </div>
-        <div className={dcn.close} onClick={this.props.handleClose}>
-          <NavigationExpandLess className={dcn.expandLess} />
-        </div>
+        <Button
+          color="primary"
+          variant="fab"
+          aria-label="Close"
+          className={cn.closeButton}
+          onClick={this.props.handleClose}
+        >
+          <NavigationExpandLess />
+        </Button>
       </div>
     );
   }
