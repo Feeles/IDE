@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -15,6 +16,12 @@ const MimeTypes = {
 };
 
 const getUniqueId = (i => () => ++i)(0);
+
+const cn = {
+  dropDown: style({
+    height: 43
+  })
+};
 
 export default class FilenameInput extends Component {
   static propTypes = {
@@ -77,10 +84,6 @@ export default class FilenameInput extends Component {
 
     const style = this.props.style;
 
-    const dropDownStyle = {
-      height: 43
-    };
-
     return (
       <div style={style}>
         <TextField
@@ -98,7 +101,7 @@ export default class FilenameInput extends Component {
           value={type}
           disabled={disabled}
           onChange={this.handleTypeChange}
-          style={dropDownStyle}
+          className={cn.dropDown}
         >
           {Object.keys(MimeTypes).map(type => (
             <MenuItem key={type} value={type}>

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { style } from 'typestyle';
 import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -6,6 +7,12 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { SourceFile } from '../../File/';
 import EditFile from '../EditFile';
 import resolveOrigin from '../../utils/resolveOrigin';
+
+const classes = {
+  block: style({
+    whiteSpace: 'inherit'
+  })
+};
 
 export default class CustomizeCard extends PureComponent {
   static propTypes = {
@@ -60,14 +67,8 @@ export default class CustomizeCard extends PureComponent {
       </a>
     ];
 
-    const styles = {
-      block: {
-        whiteSpace: 'inherit'
-      }
-    };
-
     return (
-      <CardHeader style={styles.block} title={title} subtitle={subtitle}>
+      <CardHeader className={classes.block} title={title} subtitle={subtitle}>
         <EditFile
           fileKey={fileKey}
           findFile={this.props.findFile}

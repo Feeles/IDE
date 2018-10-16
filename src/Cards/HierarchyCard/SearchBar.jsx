@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import AutoComplete from '../../jsx/IntegrationReactSelect';
 import Paper from '@material-ui/core/Paper';
 import ActionSearch from '@material-ui/icons/Search';
@@ -13,38 +14,36 @@ import DesktopFile from './DesktopFile';
 
 const SearchBarHeight = 40;
 
-const getStyles = props => {
-  const { palette, spacing } = props.theme;
-
-  return {
-    root: {
-      display: 'flex',
-      alignItems: 'center',
-      boxSizing: 'border-box',
-      width: '100%',
-      height: SearchBarHeight,
-      paddingRight: 16,
-      paddingLeft: spacing.unit,
-      zIndex: 100
-    },
-    bar: {
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      height: SearchBarHeight,
-      paddingLeft: spacing.unit,
-      backgroundColor: palette.background.paper
-    },
-    icon: {
-      marginTop: 4
-    },
-    empty: {
-      flex: '1 0 auto',
-      height: SearchBarHeight,
-      marginLeft: spacing.unit
-    }
-  };
+const cn = {
+  icon: style({
+    marginTop: 4
+  })
 };
+const getCn = props => ({
+  root: style({
+    display: 'flex',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    width: '100%',
+    height: SearchBarHeight,
+    paddingRight: 16,
+    paddingLeft: props.theme.spacing.unit,
+    zIndex: 100
+  }),
+  bar: style({
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    height: SearchBarHeight,
+    paddingLeft: props.theme.spacing.unit,
+    backgroundColor: props.theme.palette.background.paper
+  }),
+  empty: style({
+    flex: '1 0 auto',
+    height: SearchBarHeight,
+    marginLeft: props.theme.spacing.unit
+  })
+});
 
 @withTheme()
 export default class SearchBar extends PureComponent {
@@ -98,6 +97,7 @@ export default class SearchBar extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { putFile, onOpen, deleteAll, localization } = this.props;
     const { showTrashes, query } = this.state;
     const fileNames = this.props.files
@@ -108,22 +108,16 @@ export default class SearchBar extends PureComponent {
         label: s
       }));
 
-    const { root, bar, icon, empty } = getStyles(
-      this.props,
-      this.context,
-      this.state
-    );
-
     return (
-      <div style={root}>
+      <div className={dcn.root}>
         <TrashBox
           showTrashes={showTrashes}
           putFile={putFile}
           onClick={this.handleTrashBoxTap}
         />
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
-        <Paper elevation={3} style={bar}>
-          <ActionSearch style={icon} />
+        <Paper elevation={3} className={dcn.bar}>
+          <ActionSearch className={cn.icon} />
           <AutoComplete
             value={query}
             suggestions={fileNames}
@@ -135,7 +129,7 @@ export default class SearchBar extends PureComponent {
           <Button
             variant="contained"
             color="secondary"
-            style={empty}
+            className={dcn.empty}
             onClick={deleteAll}
           >
             <ActionDeleteForever />

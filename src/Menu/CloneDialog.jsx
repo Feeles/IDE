@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import moment from 'moment';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -24,6 +25,42 @@ import {
   deleteProject
 } from '../database/';
 import EditableLabel from '../jsx/EditableLabel';
+
+const cn = {
+  body: style({
+    padding: 0
+  }),
+  button: style({
+    marginLeft: 16
+  }),
+  header: style({
+    marginLeft: 24
+  }),
+  radio: style({
+    marginBottom: 16
+  }),
+  group: style({
+    padding: 24
+  }),
+  center: style({
+    textAlign: 'center'
+  }),
+  container: style({
+    margin: 16,
+    padding: 8,
+    paddingBottom: 16,
+    height: '20rem',
+    overflow: 'scroll',
+    backgroundColor: brown['50']
+  }),
+  card: style({
+    marginTop: 16
+  }),
+  label: style({
+    fontWeight: 600,
+    marginRight: '1rem'
+  })
+};
 
 export default class CloneDialog extends PureComponent {
   static propTypes = {
@@ -122,42 +159,6 @@ export default class CloneDialog extends PureComponent {
     const { onRequestClose, localization } = this.props;
     const { currentProject } = this.state;
 
-    const styles = {
-      body: {
-        padding: 0
-      },
-      button: {
-        marginLeft: 16
-      },
-      header: {
-        marginLeft: 24
-      },
-      radio: {
-        marginBottom: 16
-      },
-      group: {
-        padding: 24
-      },
-      center: {
-        textAlign: 'center'
-      },
-      container: {
-        margin: 16,
-        padding: 8,
-        paddingBottom: 16,
-        height: '20rem',
-        overflow: 'scroll',
-        backgroundColor: brown['50']
-      },
-      card: {
-        marginTop: 16
-      },
-      label: {
-        fontWeight: 600,
-        marginRight: '1rem'
-      }
-    };
-
     const url = location.origin + location.pathname;
     const projects = (this.state.projects || []).filter(
       project => this.state.showAllUrls || project.url === url
@@ -168,14 +169,14 @@ export default class CloneDialog extends PureComponent {
         <DialogContent>
           <Tabs>
             <Tab label={localization.cloneDialog.saveTitle}>
-              <h1 style={styles.header}>
+              <h1 className={cn.header}>
                 {localization.cloneDialog.saveHeader}
               </h1>
-              <div style={styles.container}>
+              <div className={cn.container}>
                 {this.hasSaved ? (
                   [
                     <span key="">{localization.cloneDialog.autoSaved}</span>,
-                    <Card key="current" style={styles.card}>
+                    <Card key="current" className={cn.card}>
                       <CardHeader
                         title={
                           <EditableLabel
@@ -202,7 +203,7 @@ export default class CloneDialog extends PureComponent {
                     variant="contained"
                     fullWidth
                     key="new_project"
-                    style={styles.card}
+                    className={cn.card}
                     disabled={this.state.processing}
                     onClick={this.handleCreate}
                   >
@@ -213,7 +214,7 @@ export default class CloneDialog extends PureComponent {
               </div>
             </Tab>
             <Tab label={localization.cloneDialog.loadTitle}>
-              <h1 style={styles.header}>
+              <h1 className={cn.header}>
                 {localization.cloneDialog.loadHeader}
               </h1>
               {!this.state.projects ? (
@@ -221,7 +222,7 @@ export default class CloneDialog extends PureComponent {
                   <CircularProgress size={120} />
                 </div>
               ) : (
-                <div style={styles.container}>
+                <div className={cn.container}>
                   {projects.map(item => (
                     <ProjectCard
                       key={item.id}
@@ -244,7 +245,7 @@ export default class CloneDialog extends PureComponent {
         <DialogActions>
           <Button
             variant="text"
-            style={styles.button}
+            className={cn.button}
             onClick={() =>
               this.setState(prevState => {
                 return { showAllUrls: !prevState.showAllUrls };
@@ -252,8 +253,13 @@ export default class CloneDialog extends PureComponent {
             }
           >
             {localization.menu.showAllUrls}
-          </Button>,
-          <Button variant="text" style={styles.button} onClick={onRequestClose}>
+          </Button>
+          ,
+          <Button
+            variant="text"
+            className={cn.button}
+            onClick={onRequestClose}
+          >
             {localization.cloneDialog.cancel}
           </Button>
         </DialogActions>
@@ -326,7 +332,7 @@ export class ProjectCard extends PureComponent {
     };
 
     return (
-      <Card key={project.id} style={styles.card}>
+      <Card key={project.id} className={styles.card}>
         <CardHeader
           title={
             <EditableLabel
@@ -343,15 +349,21 @@ export class ProjectCard extends PureComponent {
         />
         <CardContent>
           <div>
-            <span style={styles.label}>{localization.cloneDialog.created}</span>
+            <span className={styles.label}>
+              {localization.cloneDialog.created}
+            </span>
             {new Date(project.created).toLocaleString()}
           </div>
           <div>
-            <span style={styles.label}>{localization.cloneDialog.updated}</span>
+            <span className={styles.label}>
+              {localization.cloneDialog.updated}
+            </span>
             {new Date(project.updated).toLocaleString()}
           </div>
           <div>
-            <span style={styles.label}>{localization.cloneDialog.size}</span>
+            <span className={styles.label}>
+              {localization.cloneDialog.size}
+            </span>
             {`${(project.size / 1024 / 1024).toFixed(2)}MB`}
           </div>
         </CardContent>
@@ -370,7 +382,9 @@ export class ProjectCard extends PureComponent {
             onClick={this.handleRemove}
           >
             <ActionDelete style={{ color: red['400'] }} />{' '}
-            <span style={styles.remove}>{localization.cloneDialog.remove}</span>
+            <span className={styles.remove}>
+              {localization.cloneDialog.remove}
+            </span>
           </Button>
         </CardActions>
       </Card>

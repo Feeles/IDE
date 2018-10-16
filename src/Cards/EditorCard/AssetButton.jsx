@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
+import { url } from 'csx';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
@@ -10,6 +12,68 @@ import ContentReply from '@material-ui/icons/Reply';
 import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
+
+const cn = {
+  popover: style({
+    padding: 8,
+    maxWidth: 500
+  }),
+  box: style({
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    marginBottom: 4
+  }),
+  label: style({
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    fontSize: 10,
+    fontWeight: 600
+  }),
+  headerLabel: style({
+    fontSize: 18,
+    fontWeight: 600
+  }),
+  description: style({
+    marginTop: 8,
+    fontSize: '.7rem'
+  }),
+  code: style({
+    display: 'block',
+    padding: '0 .5rem',
+    borderRadius: 2
+  }),
+  pre: style({
+    fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
+  }),
+  button: style({
+    position: 'absolute',
+    right: -34,
+    bottom: -4,
+    cursor: 'pointer'
+  }),
+  icon: style({
+    transform: 'rotateX(180deg) rotateZ(180deg)'
+  })
+};
+const getCn = props => ({
+  root: style({
+    position: 'relative',
+    width: 80,
+    height: 80,
+    margin: '8px 30px 0px 8px',
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    backgroundSize: 'contain',
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    border: `4px outset ${props.theme.palette.primary.main}`
+  })
+});
 
 @withTheme()
 export default class AssetButton extends PureComponent {
@@ -30,7 +94,8 @@ export default class AssetButton extends PureComponent {
   };
 
   state = {
-    open: false
+    open: false,
+    backgroundStyle: {}
   };
 
   handleOpen = event => {
@@ -41,93 +106,56 @@ export default class AssetButton extends PureComponent {
     this.props.onClick(this.props);
   };
 
-  render() {
-    const { localization } = this.props;
-    const { palette } = this.props.theme;
-
-    const styles = {
-      root: {
-        position: 'relative',
-        width: 80,
-        height: 80,
-        margin: '8px 30px 0px 8px',
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        border: `4px outset ${palette.primary.main}`,
-        cursor: 'pointer',
-        backgroundSize: 'contain',
-        backgroundPosition: '50% 50%',
-        backgroundRepeat: 'no-repeat'
-      },
-      popover: {
-        padding: 8,
-        maxWidth: 500
-      },
-      box: {
-        display: 'flex',
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-        marginBottom: 4
-      },
-      label: {
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        fontSize: 10,
-        fontWeight: 600
-      },
-      headerLabel: {
-        fontSize: 18,
-        fontWeight: 600
-      },
-      description: {
-        marginTop: 8,
-        fontSize: '.7rem'
-      },
-      code: {
-        display: 'block',
-        padding: '0 .5rem',
-        backgroundColor: emphasize(palette.background.paper, 0.07),
-        borderRadius: 2
-      },
-      pre: {
-        fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
-      },
-      button: {
-        position: 'absolute',
-        right: -34,
-        bottom: -4,
-        cursor: 'pointer'
-      },
-      icon: {
-        transform: 'rotateX(180deg) rotateZ(180deg)'
-      }
-    };
+  updateImage() {
+    let backgroundImage = '';
 
     if (this.props.image) {
       if (protocols.some(p => this.props.image.indexOf(p) === 0)) {
-        styles.root.backgroundImage = `url(${this.props.image})`;
+        backgroundImage = url(this.props.image);
       } else {
         const file = this.props.findFile(this.props.image);
         if (file) {
-          styles.root.backgroundImage = `url(${file.blobURL})`;
+          backgroundImage = url(file.blobURL);
         }
       }
     }
+    if (backgroundImage !== this.state.backgroundStyle.backgroundImage) {
+      this.setState({
+        backgroundStyle: { backgroundImage }
+      });
+    }
+  }
+
+  componentDidMount() {
+    this.updateImage();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.image !== this.props.image) {
+      this.updateImage();
+    }
+  }
+
+  render() {
+    const dcn = getCn(this.props);
+    const { localization } = this.props;
+    const { palette } = this.props.theme;
 
     return (
-      <Paper style={styles.root} onClick={this.handleOpen}>
-        <span style={styles.label}>{this.props.label}</span>
+      <Paper
+        className={dcn.root}
+        style={this.state.backgroundStyle}
+        onClick={this.handleOpen}
+      >
+        <span className={cn.label}>{this.props.label}</span>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          style={styles.popover}
+          className={cn.popover}
           onClose={() => this.setState({ open: false })}
         >
-          <div style={styles.box}>
-            <span style={styles.headerLabel}>
+          <div className={cn.box}>
+            <span className={cn.headerLabel}>
               {this.props.label}
               {this.props.descriptionMoreURL ? (
                 <a
@@ -148,18 +176,23 @@ export default class AssetButton extends PureComponent {
               {localization.editorCard.insert}
             </Button>
           </div>
-          <div style={styles.description}>{this.props.description}</div>
-          <code style={styles.code}>
-            <pre style={styles.pre}>{this.props.code}</pre>
+          <div className={cn.description}>{this.props.description}</div>
+          <code
+            className={cn.code}
+            style={{
+              backgroundColor: emphasize(palette.background.paper, 0.07)
+            }}
+          >
+            <pre className={cn.pre}>{this.props.code}</pre>
           </code>
         </Popover>
         <Button
           variant="fab"
           mini
-          style={styles.button}
+          className={cn.button}
           onClick={this.handleInsert}
         >
-          <ContentReply style={styles.icon} />
+          <ContentReply className={cn.icon} />
         </Button>
       </Paper>
     );

@@ -1,30 +1,30 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import IconButton from '@material-ui/core/IconButton';
 import { DropTarget } from 'react-dnd';
 import HardwareComputer from '@material-ui/icons/Computer';
 
 import DragTypes from '../../utils/dragTypes';
 
-const getStyles = props => {
-  const { isOver } = props;
-  const { palette, spacing } = props.theme;
-
-  return {
-    input: {
-      display: 'none'
-    },
-    icon: {
-      borderWidth: 0,
-      borderTopWidth: isOver ? spacing.unit : 0,
-      borderStyle: 'solid',
-      borderColor: 'transparent',
-      backgroundColor: isOver ? palette.disabledColor : 'transparent',
-      borderRadius: 2
-    }
-  };
+const cn = {
+  input: style({
+    display: 'none'
+  })
 };
+const getCn = props => ({
+  icon: style({
+    borderWidth: 0,
+    borderStyle: 'solid',
+    borderColor: 'transparent',
+    borderRadius: 2,
+    borderTopWidth: props.isOver ? props.theme.spacing.unit : 0,
+    backgroundColor: props.isOver
+      ? props.theme.palette.disabledColor
+      : 'transparent'
+  })
+});
 
 @withTheme()
 class _DesktopFile extends PureComponent {
@@ -42,21 +42,20 @@ class _DesktopFile extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { connectDropTarget } = this.props;
-
-    const { input, icon } = getStyles(this.props, this.context);
 
     return connectDropTarget(
       <div>
         <input
           multiple
           type="file"
-          style={input}
+          className={cn.input}
           ref={ref => ref && (this.input = ref)}
           onChange={this.handleChange}
         />
         <IconButton
-          style={icon}
+          className={dcn.icon}
           onClick={() => this.input && this.input.click()}
         >
           <HardwareComputer />

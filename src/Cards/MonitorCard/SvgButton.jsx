@@ -1,5 +1,15 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
+
+const cn = {
+  root: style({
+    backgroundColor: 'transparent',
+    border: 'none',
+    outline: 'none',
+    cursor: 'pointer'
+  })
+};
 
 export default class SvgButton extends PureComponent {
   static propTypes = {
@@ -18,16 +28,12 @@ export default class SvgButton extends PureComponent {
       height: 24
     };
 
-    const style = {
-      backgroundColor: 'transparent',
-      border: 'none',
-      outline: 'none',
-      cursor: 'pointer',
-      ...this.props.style
-    };
-
     return (
-      <button style={style} onClick={this.props.onClick}>
+      <button
+        style={this.props.style}
+        className={cn.root}
+        onClick={this.props.onClick}
+      >
         <svg fill="white" style={svgStyle} viewBox="0 0 24 24">
           <path d={this.props.children} />
         </svg>

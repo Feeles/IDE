@@ -1,8 +1,56 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { style, classes } from 'typestyle';
 import Card from '@material-ui/core/Card';
 
 const HeaderHeight = 32;
+
+const cn = {
+  header: style({
+    flex: 0,
+    display: 'flex',
+    alignItems: 'center',
+    minHeight: HeaderHeight,
+    paddingLeft: 8,
+    width: '100%',
+    boxSizing: 'border-box',
+    overflowX: 'auto',
+    overflowY: 'hidden'
+  }),
+  blank: style({
+    flex: '1 1 auto'
+  }),
+  flex: style({
+    display: 'flex'
+  }),
+  max: style({
+    maxHeight: '100%'
+  })
+};
+const getCn = props => ({
+  root: style({
+    position: 'relative',
+    width: 0,
+    order: props.order,
+    boxSizing: 'border-box',
+    maxWidth: '100%',
+    maxHeight: '100%',
+    height: '100%',
+    direction: 'ltr',
+    flex: '0 0 auto',
+    flexBasis: props.visible ? '50%' : 0,
+    padding: props.visible ? '16px 20px 16px 0' : 0,
+    overflow: props.visible ? 'initial' : 'hidden'
+  }),
+  card: style({
+    flex: 1
+  }),
+  innerContainer: style({
+    position: 'relative',
+    width: '100%',
+    flexDirection: 'column'
+  })
+});
 
 export default class CardWindow extends PureComponent {
   static propTypes = {
@@ -38,65 +86,22 @@ export default class CardWindow extends PureComponent {
   }
 
   render() {
-    const { visible, fit, order } = this.props;
-
-    const fitWrap = fit
-      ? {
-          display: 'flex'
-        }
-      : {
-          maxHeight: '100%'
-        };
-
-    const styles = {
-      root: {
-        position: 'relative',
-        width: 0,
-        order,
-        boxSizing: 'border-box',
-        maxWidth: '100%',
-        maxHeight: '100%',
-        height: '100%',
-        direction: 'ltr',
-        flex: '0 0 auto',
-        flexBasis: visible ? '50%' : 0,
-        padding: visible ? '16px 20px 16px 0' : 0,
-        overflow: visible ? 'initial' : 'hidden',
-        ...fitWrap
-      },
-      card: {
-        flex: 1,
-        ...fitWrap
-      },
-      innerContainer: {
-        position: 'relative',
-        width: '100%',
-        flexDirection: 'column',
-        ...fitWrap
-      },
-      header: {
-        flex: 0,
-        display: 'flex',
-        alignItems: 'center',
-        minHeight: HeaderHeight,
-        paddingLeft: 8,
-        width: '100%',
-        boxSizing: 'border-box',
-        overflowX: 'auto',
-        overflowY: 'hidden'
-      },
-      blank: {
-        flex: '1 1 auto'
-      }
-    };
+    const dcn = getCn(this.props);
+    const { fit } = this.props;
 
     return (
-      <div id={this.props.name} style={styles.root}>
-        <Card {...this.cardProps} style={styles.card}>
-          <div style={styles.innerContainer}>
-            <div style={styles.header}>
+      <div
+        id={this.props.name}
+        className={classes(dcn.root, fit ? cn.flex : cn.max)}
+      >
+        <Card
+          {...this.cardProps}
+          className={classes(dcn.card, fit ? cn.flex : cn.max)}
+        >
+          <div className={classes(dcn.innerContainer, fit ? cn.flex : cn.max)}>
+            <div className={cn.header}>
               <span>{this.props.icon}</span>
-              <div style={styles.blank} />
+              <div className={cn.blank} />
               {this.props.actions}
             </div>
             {this.props.children}

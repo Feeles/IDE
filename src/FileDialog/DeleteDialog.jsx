@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -8,6 +9,17 @@ import AlertError from '@material-ui/icons/Error';
 import red from '@material-ui/core/colors/red';
 
 import { Confirm, Abort } from './Buttons';
+
+const cn = {
+  root: style({
+    textAlign: 'center'
+  }),
+  icon: style({
+    marginRight: 10,
+    marginBottom: -6,
+    color: red['400']
+  })
+};
 
 export default class DeleteDialog extends Component {
   static propTypes = {
@@ -29,23 +41,13 @@ export default class DeleteDialog extends Component {
   render() {
     const { onRequestClose, content } = this.props;
 
-    const style = {
-      textAlign: 'center'
-    };
-
-    const iconStyle = {
-      marginRight: 10,
-      marginBottom: -6,
-      color: red['400']
-    };
-
     return (
       <Dialog open onClose={onRequestClose}>
         <DialogTitle>
           Do you really want to delete <b>{content && content.name}</b>?
         </DialogTitle>
-        <DialogContent style={style}>
-          <AlertError style={iconStyle} />
+        <DialogContent style={cn.root}>
+          <AlertError style={cn.icon} />
           This operation can not be undone.
         </DialogContent>
         <DialogActions>

@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
+import { style } from 'typestyle';
+import Button from '@material-ui/core/Button';
 import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
 import Card from '../CardWindow';
@@ -9,30 +10,46 @@ import SourceEditor from './SourceEditor';
 import ChromeTab, { Tab } from '../../ChromeTab/';
 
 const MAX_TAB = 5;
+const tabContainerPaddingRight = 7;
+const tabContainerPaddingLeft = 80;
 
-const getStyles = props => {
-  const { palette } = props.theme;
-
-  return {
-    tabContainer: {
-      position: 'absolute',
-      top: 0,
-      width: 'calc(100% - 48px)',
-      boxSizing: 'border-box',
-      display: 'flex',
-      alignItems: 'flex-end',
-      height: 32,
-      paddingRight: 7,
-      paddingLeft: 80,
-      zIndex: 10
-    },
-    tabContentContainer: {
-      flex: 1,
-      position: 'relative',
-      borderTop: `1px solid ${palette.primary.main}`
-    }
-  };
+const cn = {
+  tabContainer: style({
+    position: 'absolute',
+    top: 0,
+    width: 'calc(100% - 48px)',
+    boxSizing: 'border-box',
+    display: 'flex',
+    alignItems: 'flex-end',
+    height: 32,
+    paddingRight: tabContainerPaddingRight,
+    paddingLeft: tabContainerPaddingLeft,
+    zIndex: 10
+  }),
+  largeIcon: style({
+    width: 40,
+    height: 40
+  }),
+  large: style({
+    width: 80,
+    height: 80,
+    padding: 20
+  })
 };
+const getCn = props => ({
+  tabContentContainer: style({
+    flex: 1,
+    position: 'relative',
+    borderTop: `1px solid ${props.theme.palette.primary.main}`
+  }),
+  noFileBg: style({
+    flex: '1 1 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: props.theme.palette.primary.main
+  })
+});
 
 @withTheme()
 export default class EditorCard extends PureComponent {
@@ -109,37 +126,16 @@ export default class EditorCard extends PureComponent {
     }
   };
 
-  renderBackground() {
-    const { palette } = this.props.theme;
-
-    const styles = {
-      noFileBg: {
-        flex: '1 1 auto',
-        backgroundColor: palette.primary.main,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      },
-      logo: {
-        color: palette.text.secondary
-      },
-      largeIcon: {
-        width: 40,
-        height: 40
-      },
-      large: {
-        width: 80,
-        height: 80,
-        padding: 20
-      }
-    };
-
+  renderBackground(className) {
     return (
-      <div style={styles.noFileBg}>
-        <h1 style={styles.logo}>Feeles</h1>
-        <IconButton style={styles.large} onClick={() => this.setLocation()}>
-          <AVPlayCircleOutline style={styles.largeIcon} />
-        </IconButton>
+      <div className={className}>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={() => this.setLocation()}
+        >
+          Feeles<AVPlayCircleOutline className={cn.largeIcon} />
+        </Button>
       </div>
     );
   }
@@ -167,6 +163,7 @@ export default class EditorCard extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     if (!this.props.tabs.length) {
       return (
         <Card
@@ -174,7 +171,7 @@ export default class EditorCard extends PureComponent {
           {...this.props.cardPropsBag}
           fit
         >
-          {this.renderBackground()}
+          {this.renderBackground(dcn.noFileBg)}
         </Card>
       );
     }
@@ -189,13 +186,12 @@ export default class EditorCard extends PureComponent {
       reboot,
       cardPropsBag
     } = this.props;
-    const styles = getStyles(this.props, this.context);
 
     const tabs = [];
     const containerWidth = this.tabContainer
       ? this.tabContainer.getBoundingClientRect().width -
-        styles.tabContainer.paddingLeft -
-        styles.tabContainer.paddingRight
+        tabContainerPaddingLeft -
+        tabContainerPaddingRight
       : 0;
     for (const tab of this.props.tabs) {
       if (tabs.length < MAX_TAB) {
@@ -226,10 +222,10 @@ export default class EditorCard extends PureComponent {
         fit
         width={640}
       >
-        <div style={styles.tabContainer} ref={ref => (this.tabContainer = ref)}>
+        <div className={cn.tabContainer} ref={ref => (this.tabContainer = ref)}>
           {tabs}
         </div>
-        <div style={styles.tabContentContainer}>
+        <div className={dcn.tabContentContainer}>
           <SourceEditor
             fileView={this.props.fileView}
             file={selectedTab.file}

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { style } from 'typestyle';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import ContentAdd from '@material-ui/icons/Add';
@@ -10,6 +11,13 @@ import { AddDialog } from '../../FileDialog/';
 import { Tab } from '../../ChromeTab/';
 import Root from './Root';
 import SearchBar from './SearchBar';
+
+const cn = {
+  button: style({
+    margin: 16,
+    alignSelf: 'flex-end'
+  })
+};
 
 export default class HierarchyCard extends PureComponent {
   static propTypes = {
@@ -132,13 +140,6 @@ export default class HierarchyCard extends PureComponent {
       handleNativeDrop: this.handleNativeDrop
     };
 
-    const styles = {
-      button: {
-        margin: 16,
-        alignSelf: 'flex-end'
-      }
-    };
-
     return (
       <Card
         icon={this.props.localization.hierarchyCard.title}
@@ -159,7 +160,7 @@ export default class HierarchyCard extends PureComponent {
         <Button
           variant="fab"
           mini
-          style={styles.button}
+          className={cn.button}
           onClick={this.handleAdd}
         >
           <ContentAdd />

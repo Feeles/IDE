@@ -1,11 +1,58 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
+import Button from '@material-ui/core/Button';
 import NavigationExpandLess from '@material-ui/icons/ExpandLess';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
 import AssetButton from './AssetButton';
+
+const cn = {
+  label: style({
+    flex: '0 0 100%',
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 16,
+    fontWeight: 600
+  }),
+  wrapper: style({
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  }),
+  closeButton: style({
+    position: 'absolute',
+    bottom: 8,
+    right: 8
+  })
+};
+const getCn = props => ({
+  root: style({
+    position: 'absolute',
+    width: '100%',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    zIndex: 10,
+    height: props.open ? '100%' : 0,
+    transition: props.theme.transitions.create()
+  }),
+  scroller: style({
+    flex: 1,
+    overflowX: 'auto',
+    overflowY: 'scroll',
+    boxSizing: 'border-box',
+    paddingBottom: 60,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    backgroundColor: fade(
+      emphasize(props.theme.palette.background.paper, 0.75),
+      0.55
+    )
+  })
+});
 
 @withTheme()
 export default class AssetPane extends PureComponent {
@@ -39,13 +86,13 @@ export default class AssetPane extends PureComponent {
     }
   }
 
-  renderEachLabel(label, styles) {
+  renderEachLabel(label) {
     const items = this.state.assets[label];
     if (!items) return null;
 
     return (
-      <div key={label} style={{ ...styles.wrapper }}>
-        <div style={{ ...styles.label }}>{label}</div>
+      <div key={label} className={cn.wrapper}>
+        <div className={cn.label}>{label}</div>
         {items.map((item, i) => (
           <AssetButton
             {...item}
@@ -60,64 +107,26 @@ export default class AssetPane extends PureComponent {
   }
 
   render() {
-    const { scope, open } = this.props;
-    const { palette, transitions } = this.props.theme;
-
-    const styles = {
-      root: {
-        position: 'absolute',
-        width: '100%',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        zIndex: 10,
-        transition: transitions.create(),
-        height: open ? '100%' : 0
-      },
-      scroller: {
-        flex: 1,
-        overflowX: 'auto',
-        overflowY: 'scroll',
-        boxSizing: 'border-box',
-        paddingBottom: 60,
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-        backgroundColor: fade(emphasize(palette.background.paper, 0.75), 0.55)
-      },
-      label: {
-        flex: '0 0 100%',
-        color: 'white',
-        textAlign: 'center',
-        marginTop: 16,
-        fontWeight: 600
-      },
-      wrapper: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'center'
-      },
-      close: {
-        marginBottom: 10,
-        textAlign: 'center',
-        backgroundColor: palette.primary.main,
-        borderTopRightRadius: 0,
-        borderTopLeftRadius: 0,
-        cursor: 'pointer',
-        height: open ? null : 0
-      }
-    };
+    const dcn = getCn(this.props);
+    const { scope } = this.props;
 
     // e.g. scope === 'モンスター アイテム'
     const labels = scope ? scope.trim().split(' ') : [];
 
     return (
-      <div style={styles.root}>
-        <div style={styles.scroller}>
-          {labels.map(label => this.renderEachLabel(label, styles))}
+      <div className={dcn.root}>
+        <div className={dcn.scroller}>
+          {labels.map(label => this.renderEachLabel(label))}
         </div>
-        <div style={styles.close} onClick={this.props.handleClose}>
-          <NavigationExpandLess style={{ color: 'white' }} />
-        </div>
+        <Button
+          color="primary"
+          variant="fab"
+          aria-label="Close"
+          className={cn.closeButton}
+          onClick={this.props.handleClose}
+        >
+          <NavigationExpandLess />
+        </Button>
       </div>
     );
   }

@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style, classes } from 'typestyle';
 
-const getStyles = props => {
-  const { show } = props;
-  const { palette } = props.theme;
-
-  return {
-    root: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      opacity: show ? 1 : 0,
-      backgroundColor: 'transparent',
-      zIndex: show ? 11 : 10,
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    container: {
-      flex: '1 1 auto',
-      borderTop: `1px solid ${palette.primary.main}`
-    }
-  };
+const cn = {
+  root: style({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'transparent',
+    display: 'flex',
+    flexDirection: 'column'
+  }),
+  showing: style({
+    opacity: 1,
+    zIndex: 11
+  }),
+  hidden: style({
+    opacity: 0,
+    zIndex: 10
+  })
 };
+
+const getCn = props => ({
+  container: style({
+    flex: '1 1 auto',
+    borderTop: `1px solid ${props.theme.palette.primary.main}`
+  })
+});
 
 @withTheme()
 export default class ChromeTabContent extends Component {
@@ -40,13 +45,13 @@ export default class ChromeTabContent extends Component {
   }
 
   render() {
+    const dcn = getCn(this.props);
     const { children } = this.props;
-
-    const { root, container } = getStyles(this.props, this.context);
+    const { show } = this.props;
 
     return (
-      <div style={root}>
-        <div style={container}>{children}</div>
+      <div className={classes(cn.root, show ? cn.showing : cn.hidden)}>
+        <div className={dcn.container}>{children}</div>
       </div>
     );
   }

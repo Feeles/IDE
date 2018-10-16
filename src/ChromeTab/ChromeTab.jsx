@@ -6,91 +6,94 @@ import NavigationClose from '@material-ui/icons/Close';
 import EditorModeEdit from '@material-ui/icons/Edit';
 import red from '@material-ui/core/colors/red';
 import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
+import { style } from 'typestyle';
+import { skew, deg } from 'csx';
 
 const MaxTabWidth = 160;
 const MinTabWidth = 0;
 const TabHeight = 32;
 const TabSkewX = 24;
 
-const getStyles = (props, context, state) => {
-  const { containerWidth, isSelected } = props;
-  const { palette, spacing, fontFamily } = props.theme;
-  const { closerMouseOver } = state;
-
-  const tabHeight = TabHeight + (isSelected ? 1 : 0);
+const getCn = props => {
+  const tabHeight = TabHeight + (props.isSelected ? 1 : 0);
   const tabWidth = Math.min(
     MaxTabWidth,
-    Math.max(MinTabWidth, containerWidth / props.tabs.length)
+    Math.max(MinTabWidth, props.containerWidth / props.tabs.length)
   );
   const blank = tabHeight / Math.tan((90 - TabSkewX) / 180 * Math.PI);
   const backgroundColor = fade(
-    isSelected ? palette.background.paper : emphasize(palette.background.paper),
+    props.isSelected
+      ? props.theme.palette.background.paper
+      : emphasize(props.theme.palette.background.paper),
     1
   );
 
-  const blade = left => ({
-    position: 'absolute',
-    boxSizing: 'border-box',
-    width: tabWidth - blank,
-    height: tabHeight,
-    left: left ? 0 : 'auto',
-    right: left ? 'auto' : 0,
-    borderTopWidth: left ? 0 : 1,
-    borderRightWidth: left ? 0 : 1,
-    borderBottomWidth: 0,
-    borderLeftWidth: left ? 1 : 0,
-    borderStyle: 'solid',
-    borderColor: palette.primary.main,
-    transform: `skewX(${(left ? -1 : 1) * TabSkewX}deg)`,
-    backgroundColor,
-    zIndex: left ? 1 : 2
-  });
+  const blade = left =>
+    style({
+      position: 'absolute',
+      boxSizing: 'border-box',
+      width: tabWidth - blank,
+      height: tabHeight,
+      left: left ? 0 : 'auto',
+      right: left ? 'auto' : 0,
+      borderTopWidth: left ? 0 : 1,
+      borderRightWidth: left ? 0 : 1,
+      borderBottomWidth: 0,
+      borderLeftWidth: left ? 1 : 0,
+      borderStyle: 'solid',
+      borderColor: props.theme.palette.primary.main,
+      transform: skew(deg((left ? -1 : 1) * TabSkewX)),
+      backgroundColor,
+      zIndex: left ? 1 : 2
+    });
 
   return {
-    root: {
+    root: style({
       flex: '1 1 auto',
       position: 'relative',
       boxSizing: 'border-box',
       maxWidth: MaxTabWidth,
       height: tabHeight,
-      marginBottom: isSelected ? -1 : 0,
-      zIndex: isSelected ? 2 : 1,
-      fontFamily
-    },
+      marginBottom: props.isSelected ? -1 : 0,
+      zIndex: props.isSelected ? 2 : 1,
+      fontFamily: props.theme.fontFamily
+    }),
     left: blade(true),
-    center: {
+    center: style({
       position: 'absolute',
       width: tabWidth - blank,
       height: tabHeight,
       paddingLeft: blank / 2,
       paddingRight: blank / 2,
       zIndex: 3
-    },
+    }),
     right: blade(false),
-    innerItem: {
+    innerItem: style({
       display: 'flex',
       alignItems: 'center',
       height: tabHeight
-    },
-    label: {
+    }),
+    label: style({
       flex: '1 1 auto',
-      color: palette.text.primary,
+      color: props.theme.palette.text.primary,
       textDecoration: 'none',
       overflowX: 'hidden',
       whiteSpace: 'nowrap',
       fontSize: '.8em',
       cursor: 'default'
-    },
-    rightButton: {
+    }),
+    rightButton: style({
       flex: '0 0 auto',
       padding: 0,
-      width: spacing.unit * 3,
-      height: spacing.unit * 3,
+      width: props.theme.spacing.unit * 3,
+      height: props.theme.spacing.unit * 3,
       margin: '0 -4px',
       transform: 'scale(0.55)',
       borderRadius: '50%',
-      backgroundColor: closerMouseOver ? red['A200'] : 'transparent'
-    }
+      '&:hover': {
+        backgroundColor: red['A200']
+      }
+    })
   };
 };
 
@@ -151,11 +154,10 @@ export default class ChromeTabs extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { file, tab, handleSelect, handleClose, localization } = this.props;
 
     const { doc } = this.state;
-
-    const styles = getStyles(this.props, this.context, this.state);
 
     const handleRightTouchTap = e => {
       e.stopPropagation();
@@ -184,15 +186,15 @@ export default class ChromeTabs extends PureComponent {
       : tab.label;
 
     return (
-      <div style={styles.root} ref={this.handleRef}>
-        <div style={styles.left} />
-        <div style={styles.center}>
-          <div style={styles.innerItem} onClick={() => handleSelect(tab)}>
-            <a href="#" style={styles.label} title={this.props.file.name}>
+      <div className={dcn.root} ref={this.handleRef}>
+        <div className={dcn.left} />
+        <div className={dcn.center}>
+          <div className={dcn.innerItem} onClick={() => handleSelect(tab)}>
+            <a href="#" className={dcn.label} title={this.props.file.name}>
               {label}
             </a>
             <IconButton
-              style={styles.rightButton}
+              className={dcn.rightButton}
               onClick={handleRightTouchTap}
               onMouseEnter={handleRightMouseEnter}
               onMouseLeave={handleRightMouseLeave}
@@ -207,7 +209,7 @@ export default class ChromeTabs extends PureComponent {
             </IconButton>
           </div>
         </div>
-        <div style={styles.right} />
+        <div className={dcn.right} />
       </div>
     );
   }

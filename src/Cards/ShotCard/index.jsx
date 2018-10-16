@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Card from '@material-ui/core/Card';
 import CardWindow from '../CardWindow';
 import uniq from 'lodash/uniq';
@@ -17,48 +18,46 @@ const scrapbox = {
     )}/icon`
 };
 
-const getStyle = () => {
-  return {
-    hintFlexbox: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      margin: '1em 0'
-    },
-    hintHeading: {
-      fontSize: '1.5em',
-      fontWeight: 600,
-      marginRight: '1em'
-    },
-    cardLink: {
-      textDecoration: 'none'
-    },
-    cardFlexbox: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'stretch',
-      overflow: 'hidden'
-    },
-    card: {
-      width: '10em',
-      height: '10em',
-      marginRight: '1em',
-      wordBreak: 'break-all',
-      padding: '1em'
-    },
-    cardTitle: {
-      margin: 0,
-      overflow: 'hidden',
-      display: '-webkit-box',
-      WebkitLineClamp: 3,
-      WebkitBoxOrient: 'vertical',
-      textOverflow: 'ellipsis'
-    },
-    cardIcon: {
-      width: '100%'
-    }
-  };
+const cn = {
+  hintFlexbox: style({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: '1em 0'
+  }),
+  hintHeading: style({
+    fontSize: '1.5em',
+    fontWeight: 600,
+    marginRight: '1em'
+  }),
+  cardLink: style({
+    textDecoration: 'none'
+  }),
+  cardFlexbox: style({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    overflow: 'hidden'
+  }),
+  card: style({
+    width: '10em',
+    height: '10em',
+    marginRight: '1em',
+    wordBreak: 'break-all',
+    padding: '1em'
+  }),
+  cardTitle: style({
+    margin: 0,
+    overflow: 'hidden',
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
+    textOverflow: 'ellipsis'
+  }),
+  cardIcon: style({
+    width: '100%'
+  })
 };
 
 export default class ShotCard extends PureComponent {
@@ -115,17 +114,16 @@ export default class ShotCard extends PureComponent {
   };
 
   renderFooter(titles) {
-    const styles = getStyle();
     return titles.length > 0 ? (
       <div>
-        <div style={styles.hintFlexbox}>
-          <div style={styles.hintHeading}>💡 ヒント</div>
+        <div className={cn.hintFlexbox}>
+          <div className={cn.hintHeading}>💡 ヒント</div>
           <div>
             <a href="http://scrapbox.io">Scrapbox</a> にとびます
             (実験段階の機能)
           </div>
         </div>
-        <div style={styles.cardFlexbox}>
+        <div className={cn.cardFlexbox}>
           {titles
             .map(title => (
               <a
@@ -133,14 +131,14 @@ export default class ShotCard extends PureComponent {
                 href={scrapbox.url(title)}
                 rel="noopener noreferrer"
                 target="_blank"
-                style={styles.cardLink}
+                className={cn.cardLink}
               >
-                <Card style={styles.card}>
-                  <div style={styles.cardTitle}>{title}</div>
+                <Card className={cn.card}>
+                  <div className={cn.cardTitle}>{title}</div>
                   <img
                     src={scrapbox.icon(title)}
                     alt={`ページが存在しないか、アイコンが設定されていません`}
-                    style={styles.cardIcon}
+                    className={cn.cardIcon}
                   />
                 </Card>
               </a>

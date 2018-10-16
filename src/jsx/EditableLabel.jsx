@@ -1,24 +1,23 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import TextField from '@material-ui/core/TextField';
 import ContentCreate from '@material-ui/icons/Create';
 
-const getStyles = props => {
-  const { palette } = props.theme;
-
-  return {
-    hint: {
-      color: palette.text.secondary,
-      fontStyle: 'italic',
-      fontSize: '.8em',
-      borderBottom: `1px dashed ${palette.text.secondary}`
-    },
-    label: {
-      fontSize: 16
-    }
-  };
+const cn = {
+  hint: style({
+    fontStyle: 'italic',
+    fontSize: '.8em'
+  })
 };
+const getCn = props => ({
+  label: style({
+    fontSize: 16,
+    color: props.theme.palette.text.secondary,
+    borderBottom: `1px dashed ${props.theme.palette.text.secondary}`
+  })
+});
 
 @withTheme()
 export default class EditableLabel extends PureComponent {
@@ -78,14 +77,11 @@ export default class EditableLabel extends PureComponent {
   }
 
   render() {
+    const dcn = getCn(this.props);
     const { isEditing } = this.state;
     const { value, defaultValue } = this.props;
 
     const labelText = value || defaultValue;
-
-    const { hint, label } = getStyles(this.props, this.context);
-
-    const style = Object.assign({}, label, this.props.style);
 
     const props = Object.assign({}, this.props);
     delete props.onEditEnd;
@@ -100,11 +96,15 @@ export default class EditableLabel extends PureComponent {
         onKeyPress={this.handleKeyPress}
       />
     ) : labelText ? (
-      <div style={style} onClick={this.handleTouch}>
+      <div
+        className={dcn.label}
+        style={this.props.style}
+        onClick={this.handleTouch}
+      >
         {labelText}
       </div>
     ) : (
-      <div style={hint} onClick={this.handleTouch}>
+      <div className={cn.hint} onClick={this.handleTouch}>
         <ContentCreate />
         {this.props.tapTwiceQuickly}
       </div>

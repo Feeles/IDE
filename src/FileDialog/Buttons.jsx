@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
 
+const cn = {
+  root: style({
+    marginRight: 20
+  })
+};
+
 const Confirm = props => {
-  const style = Object.assign({ marginRight: 20 }, props.style);
-  return <Button variant="contained" {...props} style={style} />;
+  return <Button variant="contained" className={cn.root} {...props} />;
 };
 
 Confirm.propTypes = {
@@ -18,8 +24,7 @@ Confirm.defaultProps = {
 };
 
 const Abort = props => {
-  const style = Object.assign({ marginRight: 20 }, props.style);
-  return <Button variant="text" {...props} style={style} />;
+  return <Button variant="text" className={cn.root} {...props} />;
 };
 
 Abort.propTypes = {

@@ -1,8 +1,11 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style, classes } from 'typestyle';
+import { deg, rotateY, translateX } from 'csx';
 import beautify from 'js-beautify';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AvStop from '@material-ui/icons/Stop';
 import red from '@material-ui/core/colors/red';
@@ -12,57 +15,58 @@ import { SourceFile } from '../../File/';
 import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
 
-const getStyle = (props, context, state) => {
-  const { palette, transitions } = props.theme;
-  const { shooting, height } = state;
-
-  return {
-    root: {
-      display: 'flex',
-      flexDirection: 'column'
-    },
-    editor: {
-      position: 'relative',
-      boxSizing: 'border-box',
-      width: '100%',
-      height,
-      transform: `translate(${shooting ? '-500px' : 0})`,
-      opacity: shooting ? 0 : 1,
-      transition: transitions.create()
-    },
-    menu: {
-      position: 'relative',
-      display: 'flex',
-      flexDirection: 'row-reverse',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-      height: '2.25em',
-      marginBottom: '0.25em'
-    },
-    shoot: {
-      marginRight: 9,
-      marginBottom: 4,
-      transform: `
-        rotateY(${shooting ? 180 : 0}deg)`
-    },
-    label: {
-      color: palette.text.secondary,
-      fontSize: '.8rem'
-    },
-    error: {
-      flex: '0 1 auto',
-      margin: 0,
-      padding: 8,
-      backgroundColor: red['50'],
-      color: red['500'],
-      fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
-      overflow: 'scroll'
-    },
-    restore: {
-      margin: 4
-    }
-  };
+const cn = {
+  root: style({
+    display: 'flex',
+    flexDirection: 'column'
+  }),
+  menu: style({
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    height: '2.25em',
+    marginBottom: '0.25em'
+  }),
+  shoot: style({
+    marginRight: 9,
+    marginBottom: 4,
+    transform: rotateY(deg(0))
+  }),
+  shooting: style({
+    transform: rotateY(deg(180))
+  }),
+  label: style({
+    fontSize: '.8rem'
+  }),
+  error: style({
+    flex: '0 1 auto',
+    margin: 0,
+    padding: 8,
+    backgroundColor: red['50'],
+    color: red['500'],
+    fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace',
+    overflow: 'scroll'
+  }),
+  restore: style({
+    margin: 4
+  }),
+  blank: style({
+    flex: 1
+  })
 };
+const getCn = (props, state) => ({
+  editor: style({
+    position: 'relative',
+    boxSizing: 'border-box',
+    width: '100%',
+    height: state.height,
+    transform: translateX(state.shooting ? -500 : 0),
+    opacity: state.shooting ? 0 : 1,
+    transition: props.theme.transitions.create()
+  })
+});
 
 @withTheme()
 export default class ShotPane extends PureComponent {
@@ -192,8 +196,11 @@ export default class ShotPane extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props, this.state);
     const { localization, getConfig, loadConfig } = this.props;
-    const styles = getStyle(this.props, this.context, this.state);
+
+    const { shooting } = this.state;
+
     // TODO: Enter で実行か Shift-Enter で実行か
     const { sendCodeOnEnter } = loadConfig('feelesrc');
     const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter';
@@ -204,33 +211,35 @@ export default class ShotPane extends PureComponent {
     return (
       <div>
         {this.state.error ? (
-          <pre style={styles.error}>{this.state.error.message}</pre>
+          <pre className={cn.error}>{this.state.error.message}</pre>
         ) : null}
         {this.state.loading ? <LinearProgress /> : null}
-        <div style={styles.menu}>
+        <div className={cn.menu}>
           <Button
             variant="contained"
             color="primary"
             disabled={this.state.shooting}
             onClick={this.handleShot}
-            style={styles.shoot}
+            className={classes(cn.shoot, shooting && cn.shooting)}
           >
             {localization.shotCard.button}
             {this.state.shooting ? <AvStop /> : <ContentReply />}
           </Button>
-          <span style={styles.label}>{localization.shotCard.shoot}</span>
-          <div style={{ flex: 1 }} />
+          <Typography className={cn.label} color="secondary">
+            {localization.shotCard.shoot}
+          </Typography>
+          <div className={cn.blank} />
           <Button
             variant="contained"
             color="secondary"
             onClick={this.handleRestore}
-            style={styles.restore}
+            className={cn.restore}
             disabled={!this.state.canRestore}
           >
             {localization.shotCard.restore}
           </Button>
         </div>
-        <div style={styles.editor}>
+        <div className={dcn.editor}>
           <Editor
             isSelected
             isCared

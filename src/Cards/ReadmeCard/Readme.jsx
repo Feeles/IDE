@@ -2,7 +2,9 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 import EditorModeEdit from '@material-ui/icons/Edit';
@@ -11,13 +13,65 @@ import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 import MDReactComponent from '../../jsx/MDReactComponent';
 import { Tab } from '../../ChromeTab/';
 
+const cn = {
+  blockquote: style({
+    marginLeft: '1rem',
+    paddingLeft: '1rem',
+    borderLeftWidth: 5,
+    borderLeftStyle: 'solid'
+  }),
+  img: style({
+    maxWidth: '100%'
+  }),
+  table: style({
+    margin: '1rem 0',
+    borderLeftWidth: 1,
+    borderLeftStyle: 'solid',
+    borderSpacing: 0
+  }),
+  containedButton: style({
+    margin: 4
+  }),
+  containedButtonLabel: style({
+    textTransform: 'none'
+  })
+};
+const getCn = props => ({
+  root: style({
+    boxSizing: 'border-box',
+    overflow: 'scroll',
+    borderColor: props.theme.palette.divider
+  }),
+  th: style({
+    padding: props.theme.spacing.unit,
+    borderTopWidth: 1,
+    borderTopStyle: 'solid',
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomStyle: 'solid'
+  }),
+  td: style({
+    padding: props.theme.spacing.unit,
+    borderRightWidth: 1,
+    borderRightStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomStyle: 'solid'
+  }),
+  code: style({
+    backgroundColor: emphasize(props.theme.palette.background.paper, 0.07),
+    padding: '.2em',
+    borderRadius: 2
+  })
+});
+
 const mdComponents = [
   {
     // 外部リンク
     validate(tag, props) {
       return tag === 'a' && isValidURL(props.href);
     },
-    render(tag, props, children, component, mdStyles) {
+    render(tag, props, children) {
       return (
         <Button
           variant="contained"
@@ -26,9 +80,9 @@ const mdComponents = [
           href={props.href}
           labelPosition="before"
           target="_blank"
-          style={mdStyles.containedButton}
+          className={cn.containedButton}
         >
-          <span style={mdStyles.containedButtonLabel}>{children}</span>
+          <span className={cn.containedButtonLabel}>{children}</span>
           <ActionOpenInNew />
         </Button>
       );
@@ -39,7 +93,7 @@ const mdComponents = [
     validate(tag) {
       return tag === 'a';
     },
-    render(tag, props, children, component, mdStyles) {
+    render(tag, props, children, component) {
       const onClick = () => {
         component.props.setLocation(decodeURIComponent(props.href));
       };
@@ -48,10 +102,10 @@ const mdComponents = [
           variant="contained"
           color="primary"
           key={props.key}
-          style={mdStyles.containedButton}
+          className={cn.containedButton}
           onClick={onClick}
         >
-          <span style={mdStyles.containedButtonLabel}>{children}</span>
+          <span className={cn.containedButtonLabel}>{children}</span>
         </Button>
       );
     }
@@ -61,8 +115,8 @@ const mdComponents = [
     validate(tag, props) {
       return tag === 'img' && isValidURL(props.src);
     },
-    render(tag, props, children, component, mdStyles) {
-      return <img {...props} style={mdStyles.img} />;
+    render(tag, props) {
+      return <img {...props} className={cn.img} />;
     }
   },
   {
@@ -70,13 +124,13 @@ const mdComponents = [
     validate(tag) {
       return tag === 'img';
     },
-    render(tag, props, children, component, mdStyles) {
+    render(tag, props, children, component) {
       const file = component.props.findFile(decodeURIComponent(props.src));
       if (!file) {
         return <span {...props}>{props.alt}</span>;
       }
       if (file.is('blob')) {
-        return <img {...props} style={mdStyles.img} src={file.blobURL} />;
+        return <img {...props} className={cn.img} src={file.blobURL} />;
       }
 
       // Edit file
@@ -90,11 +144,11 @@ const mdComponents = [
           variant="contained"
           color="primary"
           key={props.key}
-          style={mdStyles.containedButton}
+          className={cn.containedButton}
           onClick={onClick}
         >
           <EditorModeEdit />
-          <span style={mdStyles.containedButtonLabel}>{props.alt}</span>
+          <span className={cn.containedButtonLabel}>{props.alt}</span>
         </Button>
       );
     }
@@ -124,58 +178,19 @@ const mdComponents = [
         </div>
       );
     }
+  },
+  {
+    // 引用
+    validate(tag) {
+      return tag === 'blockquote';
+    },
+    render(tag, props, children) {
+      <Typography className={cn.blockquote} color="textSecondary">
+        {children}
+      </Typography>;
+    }
   }
 ];
-
-const mdStyle = props => {
-  const { palette, spacing } = props.theme;
-
-  const tableBorder = `1px solid ${palette.disabledColor}`;
-
-  return {
-    blockquote: {
-      color: palette.text.secondary,
-      marginLeft: '1rem',
-      paddingLeft: '1rem',
-      borderLeft: `5px solid ${palette.disabledColor}`
-    },
-    img: {
-      maxWidth: '100%'
-    },
-    table: {
-      margin: '1rem 0',
-      borderLeft: tableBorder,
-      borderSpacing: 0
-    },
-    th: {
-      padding: spacing.unit,
-      borderTop: tableBorder,
-      borderRight: tableBorder,
-      borderBottom: tableBorder
-    },
-    td: {
-      padding: spacing.unit,
-      borderRight: tableBorder,
-      borderBottom: tableBorder
-    },
-    code: {
-      backgroundColor: emphasize(palette.background.paper, 0.07),
-      padding: '.2em',
-      borderRadius: 2
-    },
-    iconStyle: {
-      transform: 'scale(0.6)',
-      verticalAlign: 'middle'
-    },
-    iconColor: palette.primary.contrastText,
-    containedButton: {
-      margin: 4
-    },
-    containedButtonLabel: {
-      textTransform: 'none'
-    }
-  };
-};
 
 @withTheme()
 export default class Readme extends PureComponent {
@@ -191,16 +206,18 @@ export default class Readme extends PureComponent {
   };
 
   render() {
-    const mdStyles = mdStyle(this.props, this.state, this.context);
-
+    const dcn = getCn(this.props);
     const onIterate = (tag, props, children) => {
       for (const { validate, render } of mdComponents) {
         if (validate(tag, props)) {
-          return render(tag, props, children, this, mdStyles);
+          return render(tag, props, children, this);
         }
       }
-      if (tag in mdStyles) {
-        props = { ...props, style: mdStyles[tag] };
+      if (tag in cn) {
+        props = { ...props, className: cn[tag] };
+      }
+      if (tag in dcn) {
+        props = { ...props, className: dcn[tag] };
       }
       if (children.length < 1) {
         children = null;
@@ -212,17 +229,10 @@ export default class Readme extends PureComponent {
       return React.createElement(tag, props, children);
     };
 
-    const styles = {
-      root: {
-        boxSizing: 'border-box',
-        overflow: 'scroll'
-      }
-    };
-
     return (
       <MDReactComponent
         text={this.props.file.text}
-        style={styles.root}
+        className={dcn.root}
         onIterate={onIterate}
       />
     );

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { style } from 'typestyle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,6 +10,22 @@ import brown from '@material-ui/core/colors/brown';
 
 import { personalDB, updateProject } from '../database/';
 import { ProjectCard } from '../Menu/CloneDialog';
+
+const cn = {
+  container: style({
+    margin: 16,
+    padding: 8,
+    paddingBottom: 16,
+    height: '20rem',
+    overflow: 'scroll',
+    backgroundColor: brown['50'],
+    overflowX: 'auto',
+    overflowY: 'scroll'
+  }),
+  button: style({
+    marginLeft: 8
+  })
+};
 
 export default class LaunchDialog extends PureComponent {
   static propTypes = {
@@ -93,29 +110,6 @@ export default class LaunchDialog extends PureComponent {
 
     const { localization } = this.props;
 
-    const styles = {
-      container: {
-        margin: 16,
-        padding: 8,
-        paddingBottom: 16,
-        height: '20rem',
-        overflow: 'scroll',
-        backgroundColor: brown['50'],
-        overflowX: 'auto',
-        overflowY: 'scroll'
-      },
-      button: {
-        marginLeft: 8
-      },
-      card: {
-        marginTop: 16
-      },
-      label: {
-        fontWeight: 600,
-        marginRight: '1rem'
-      }
-    };
-
     return (
       <Dialog open={this.props.open}>
         <DialogTitle>{localization.launchDialog.title}</DialogTitle>
@@ -123,13 +117,13 @@ export default class LaunchDialog extends PureComponent {
           <Button
             variant="contained"
             color="primary"
-            style={styles.button}
+            className={cn.button}
             onClick={this.props.fallback}
           >
             {localization.launchDialog.startNew}
           </Button>
           {localization.common.or}
-          <div style={styles.container}>
+          <div className={cn.container}>
             {this.state.projects.map(item => (
               <ProjectCard
                 key={item.id}

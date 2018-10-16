@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { style, classes } from 'typestyle';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,40 +17,36 @@ import NavigationMenu from '@material-ui/icons/Menu';
 import { acceptedLanguages } from '../localization/';
 import CloneDialog from './CloneDialog';
 
-const getStyles = props => {
-  const { palette } = props.theme;
-
-  return {
-    root: {
-      zIndex: null
-    },
-    leftIcon: {
-      display: props.showAll ? 'block' : 'none',
-      marginTop: 0,
-      marginLeft: -14
-    },
-    button: {
-      marginLeft: 20,
-      zIndex: 2
-    },
-    projectName: {
-      color: palette.primary.contrastText,
-      fontSize: '.8rem',
-      fontWeight: 600
-    },
-    visits: {
-      color: palette.primary.contrastText,
-      fontSize: '.8rem'
-    },
-    toggle: {
-      width: 'initial',
-      filter: 'contrast(40%)'
-    },
-    toggleLabel: {
-      color: palette.primary.contrastText
-    }
-  };
+const cn = {
+  root: style({
+    zIndex: null
+  }),
+  button: style({
+    marginLeft: 20,
+    zIndex: 2
+  }),
+  projectName: style({
+    fontSize: '.8rem',
+    fontWeight: 600
+  }),
+  toggle: style({
+    filter: 'contrast(40%)'
+  }),
+  blank: style({
+    flex: 1
+  })
 };
+
+const getCn = props => ({
+  leftIcon: style({
+    marginTop: 0,
+    marginLeft: -14,
+    display: props.showAll ? 'block' : 'none'
+  }),
+  contrastColor: style({
+    color: props.theme.palette.primary.contrastText
+  })
+});
 
 @withTheme()
 export default class Menu extends PureComponent {
@@ -127,61 +124,49 @@ export default class Menu extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { localization, setLocalization } = this.props;
-
-    const styles = getStyles(this.props, this.context);
-
-    const {
-      palette: { alternateTextColor }
-    } = this.props.theme;
 
     const title =
       this.props.project &&
       (this.props.project.title ? (
-        <div style={styles.projectName}>{this.props.project.title}</div>
+        <div className={classes(cn.projectName, dcn.contrastColor)}>
+          {this.props.project.title}
+        </div>
       ) : (
         <Button variant="text" onClick={this.handleClone}>
-          <span
-            style={{
-              color: alternateTextColor
-            }}
-          >
+          <span className={dcn.contrastColor}>
             {localization.cloneDialog.setTitle}
           </span>
         </Button>
       ));
     return (
-      <AppBar style={styles.root} position="relative">
+      <AppBar className={cn.root} position="relative">
         <Toolbar>
           <IconButton
-            style={styles.leftIcon}
+            className={dcn.leftIcon}
             onClick={this.props.toggleSidebar}
           >
             <NavigationMenu />
           </IconButton>
           {this.state.overrideTitle || title}
-          <div style={{ flex: 1 }} />
+          <div className={cn.blank} />
           <FormControlLabel
             control={
               <Switch
                 checked={this.props.showAll}
                 onChange={this.props.toggleShowAll}
-                style={styles.toggle}
+                className={cn.toggle}
               />
             }
             label={this.props.showAll ? '' : localization.menu.showAll}
-            style={styles.toggleLabel}
+            className={dcn.contrastColor}
           />
-          {/* {visits &&
-          <div style={styles.visits}>
-            {visits.getAttribute('x-feeles-visits')}
-            PV
-          </div>} */}
           {this.props.showAll ? (
             <IconButton
               tooltip={localization.menu.clone}
               onClick={this.handleClone}
-              style={styles.button}
+              className={cn.button}
             >
               <FileDownload />
             </IconButton>
@@ -203,7 +188,7 @@ export default class Menu extends PureComponent {
               horizontal: 'right',
               vertical: 'bottom'
             }}
-            style={styles.button}
+            className={cn.button}
             onClose={this.handleCloneMenu}
           >
             {acceptedLanguages.map(lang => (
