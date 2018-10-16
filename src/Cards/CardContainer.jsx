@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
+import { url } from 'csx';
 
 import MediaCard from './MediaCard/';
 import MonitorCard from './MonitorCard/';
@@ -62,8 +63,16 @@ export default class CardContainer extends PureComponent {
     globalEvent: PropTypes.object.isRequired
   };
 
+  state = {
+    backgroundStyle: {}
+  };
+
   // Card Element の参照を保持するオブジェクト
   cardRefs = {};
+
+  componentDidMount() {
+    this.updateBackgroundStyle();
+  }
 
   componentDidUpdate(prevProps) {
     // visible が false から true にかわったらスクロールする
@@ -75,6 +84,23 @@ export default class CardContainer extends PureComponent {
           this.scrollToCard(name);
         }
       }
+    }
+    // 背景画像
+    if (prevProps.files !== this.props.files) {
+      this.updateBackgroundStyle();
+    }
+  }
+
+  updateBackgroundStyle() {
+    const bg =
+      this.props.findFile('feeles/background.png') ||
+      this.props.findFile('feeles/background.jpg');
+    const backgroundImage = bg ? url(bg.blobURL) : '';
+    const { backgroundStyle } = this.state;
+    if (backgroundStyle.backgroundImage !== backgroundImage) {
+      this.setState({
+        backgroundStyle: { backgroundImage }
+      });
     }
   }
 
@@ -91,11 +117,6 @@ export default class CardContainer extends PureComponent {
   };
 
   render() {
-    // (暫定) 背景画像
-    const bg =
-      this.props.findFile('feeles/background.png') ||
-      this.props.findFile('feeles/background.jpg');
-
     const bag = name => ({
       name,
       visible: this.props.cardProps[name].visible,
@@ -136,12 +157,7 @@ export default class CardContainer extends PureComponent {
     };
 
     return (
-      <div
-        className={cn.container}
-        style={{
-          backgroundImage: bg && `url(${bg.blobURL})`
-        }}
-      >
+      <div className={cn.container} style={this.state.backgroundStyle}>
         <MediaCard
           ref={ref => (this.cardRefs.MediaCard = ref)}
           {...commonProps}

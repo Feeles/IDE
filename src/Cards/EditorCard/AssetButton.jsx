@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
+import { url } from 'csx';
 import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
@@ -13,20 +14,6 @@ import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
 
 const cn = {
-  root: style({
-    position: 'relative',
-    width: 80,
-    height: 80,
-    margin: '8px 30px 0px 8px',
-    textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    backgroundSize: 'contain',
-    backgroundPosition: '50% 50%',
-    backgroundRepeat: 'no-repeat'
-  }),
   popover: style({
     padding: 8,
     maxWidth: 500
@@ -70,6 +57,23 @@ const cn = {
     transform: 'rotateX(180deg) rotateZ(180deg)'
   })
 };
+const getCn = props => ({
+  root: style({
+    position: 'relative',
+    width: 80,
+    height: 80,
+    margin: '8px 30px 0px 8px',
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    backgroundSize: 'contain',
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    border: `4px outset ${props.theme.palette.primary.main}`
+  })
+});
 
 @withTheme()
 export default class AssetButton extends PureComponent {
@@ -90,7 +94,8 @@ export default class AssetButton extends PureComponent {
   };
 
   state = {
-    open: false
+    open: false,
+    backgroundStyle: {}
   };
 
   handleOpen = event => {
@@ -101,30 +106,45 @@ export default class AssetButton extends PureComponent {
     this.props.onClick(this.props);
   };
 
-  render() {
-    const { localization } = this.props;
-    const { palette } = this.props.theme;
-
+  updateImage() {
     let backgroundImage = '';
 
     if (this.props.image) {
       if (protocols.some(p => this.props.image.indexOf(p) === 0)) {
-        backgroundImage = `url(${this.props.image})`;
+        backgroundImage = url(this.props.image);
       } else {
         const file = this.props.findFile(this.props.image);
         if (file) {
-          backgroundImage = `url(${file.blobURL})`;
+          backgroundImage = url(file.blobURL);
         }
       }
     }
+    if (backgroundImage !== this.state.backgroundStyle.backgroundImage) {
+      this.setState({
+        backgroundStyle: { backgroundImage }
+      });
+    }
+  }
+
+  componentDidMount() {
+    this.updateImage();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.image !== this.props.image) {
+      this.updateImage();
+    }
+  }
+
+  render() {
+    const dcn = getCn(this.props);
+    const { localization } = this.props;
+    const { palette } = this.props.theme;
 
     return (
       <Paper
-        className={cn.root}
-        style={{
-          border: `4px outset ${palette.primary.main}`,
-          backgroundImage
-        }}
+        className={dcn.root}
+        style={this.state.backgroundStyle}
         onClick={this.handleOpen}
       >
         <span className={cn.label}>{this.props.label}</span>
