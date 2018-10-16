@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
+import { scale } from 'csx';
 
 const cn = {
   root: style({
@@ -19,10 +18,8 @@ const cn = {
   })
 };
 
-@withTheme()
 export default class Preview extends PureComponent {
   static propTypes = {
-    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired,
     openFileDialog: PropTypes.func.isRequired,
@@ -31,7 +28,7 @@ export default class Preview extends PureComponent {
   };
 
   state = {
-    scale: 1
+    imageStyle: {}
   };
 
   componentDidMount() {
@@ -42,11 +39,11 @@ export default class Preview extends PureComponent {
         const ratio = size =>
           Math.max(size.height, 1) / Math.max(size.width, 1);
         const screenRect = this.container.getBoundingClientRect();
-        const scale =
+        const val =
           ratio(screenRect) > ratio(image)
             ? screenRect.width / image.width
             : screenRect.height / image.height;
-        this.setState({ scale: scale * 0.9 });
+        this.setState({ imageStyle: { transform: scale(val * 0.9) } });
       };
       image.src = file.blobURL;
     }
@@ -54,16 +51,10 @@ export default class Preview extends PureComponent {
 
   render() {
     const { file } = this.props;
-    const { scale } = this.state;
+    const { imageStyle } = this.state;
 
     const content = file.is('image') ? (
-      <img
-        src={file.blobURL}
-        alt={file.name}
-        style={{
-          transform: `scale(${scale})`
-        }}
-      />
+      <img src={file.blobURL} alt={file.name} style={imageStyle} />
     ) : file.is('audio') ? (
       <audio src={file.blobURL} controls />
     ) : null;

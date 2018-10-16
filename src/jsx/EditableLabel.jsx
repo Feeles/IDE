@@ -9,11 +9,15 @@ const cn = {
   hint: style({
     fontStyle: 'italic',
     fontSize: '.8em'
-  }),
-  label: style({
-    fontSize: 16
   })
 };
+const getCn = props => ({
+  label: style({
+    fontSize: 16,
+    color: props.theme.palette.text.secondary,
+    borderBottom: `1px dashed ${props.theme.palette.text.secondary}`
+  })
+});
 
 @withTheme()
 export default class EditableLabel extends PureComponent {
@@ -73,9 +77,9 @@ export default class EditableLabel extends PureComponent {
   }
 
   render() {
+    const dcn = getCn(this.props);
     const { isEditing } = this.state;
     const { value, defaultValue } = this.props;
-    const { palette } = this.props.theme;
 
     const labelText = value || defaultValue;
 
@@ -93,12 +97,8 @@ export default class EditableLabel extends PureComponent {
       />
     ) : labelText ? (
       <div
-        className={cn.label}
-        style={{
-          color: palette.text.secondary,
-          borderBottom: `1px dashed ${palette.text.secondary}`,
-          ...this.props.style
-        }}
+        className={dcn.label}
+        style={this.props.style}
         onClick={this.handleTouch}
       >
         {labelText}

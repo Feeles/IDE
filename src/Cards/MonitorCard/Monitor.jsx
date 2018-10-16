@@ -49,7 +49,7 @@ const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const webkitSpeechGrammarList = window.webkitSpeechGrammarList;
 
-const cn = {
+const getCn = props => ({
   root: style({
     width: '100%',
     height: '100%',
@@ -61,9 +61,11 @@ const cn = {
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    zIndex: 300
+    zIndex: 300,
+    position: props.isFullScreen ? 'fixed' : 'relative',
+    transition: props.theme.transitions.create()
   })
-};
+});
 
 @withTheme()
 export default class Monitor extends PureComponent {
@@ -526,12 +528,9 @@ export default class Monitor extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { error } = this.state;
-    const {
-      isPopout,
-      reboot,
-      theme: { transitions }
-    } = this.props;
+    const { isPopout, reboot } = this.props;
 
     const popout =
       isPopout && !reboot ? (
@@ -558,17 +557,8 @@ export default class Monitor extends PureComponent {
         </Popout>
       ) : null;
 
-    const fullScreen = (yes, no) => (this.props.isFullScreen ? yes : no);
-
     return (
-      <div
-        className={cn.root}
-        style={{
-          position: fullScreen('fixed', 'relative'),
-          transition: transitions.create()
-        }}
-        onClick={this.handleTouch}
-      >
+      <div className={dcn.root} onClick={this.handleTouch}>
         {popout}
         <Screen
           animation

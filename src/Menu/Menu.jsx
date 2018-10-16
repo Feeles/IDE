@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,10 +21,6 @@ const cn = {
   root: style({
     zIndex: null
   }),
-  leftIcon: style({
-    marginTop: 0,
-    marginLeft: -14
-  }),
   button: style({
     marginLeft: 20,
     zIndex: 2
@@ -35,8 +31,22 @@ const cn = {
   }),
   toggle: style({
     filter: 'contrast(40%)'
+  }),
+  blank: style({
+    flex: 1
   })
 };
+
+const getCn = props => ({
+  leftIcon: style({
+    marginTop: 0,
+    marginLeft: -14,
+    display: props.showAll ? 'block' : 'none'
+  }),
+  contrastColor: style({
+    color: props.theme.palette.primary.contrastText
+  })
+});
 
 @withTheme()
 export default class Menu extends PureComponent {
@@ -114,31 +124,18 @@ export default class Menu extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { localization, setLocalization } = this.props;
-    const { palette } = this.props.theme;
-
-    const {
-      palette: { alternateTextColor }
-    } = this.props.theme;
 
     const title =
       this.props.project &&
       (this.props.project.title ? (
-        <div
-          className={cn.projectName}
-          style={{
-            color: palette.primary.contrastText
-          }}
-        >
+        <div className={classes(cn.projectName, dcn.contrastColor)}>
           {this.props.project.title}
         </div>
       ) : (
         <Button variant="text" onClick={this.handleClone}>
-          <span
-            style={{
-              color: alternateTextColor
-            }}
-          >
+          <span className={dcn.contrastColor}>
             {localization.cloneDialog.setTitle}
           </span>
         </Button>
@@ -147,16 +144,13 @@ export default class Menu extends PureComponent {
       <AppBar className={cn.root} position="relative">
         <Toolbar>
           <IconButton
-            className={cn.leftIcon}
-            style={{
-              display: this.props.showAll ? 'block' : 'none'
-            }}
+            className={dcn.leftIcon}
             onClick={this.props.toggleSidebar}
           >
             <NavigationMenu />
           </IconButton>
           {this.state.overrideTitle || title}
-          <div style={{ flex: 1 }} />
+          <div className={cn.blank} />
           <FormControlLabel
             control={
               <Switch
@@ -166,9 +160,7 @@ export default class Menu extends PureComponent {
               />
             }
             label={this.props.showAll ? '' : localization.menu.showAll}
-            style={{
-              color: palette.primary.contrastText
-            }}
+            className={dcn.contrastColor}
           />
           {this.props.showAll ? (
             <IconButton

@@ -11,14 +11,20 @@ import DragTypes from '../../utils/dragTypes';
 const cn = {
   input: style({
     display: 'none'
-  }),
+  })
+};
+const getCn = props => ({
   icon: style({
     borderWidth: 0,
     borderStyle: 'solid',
     borderColor: 'transparent',
-    borderRadius: 2
+    borderRadius: 2,
+    borderTopWidth: props.isOver ? props.theme.spacing.unit : 0,
+    backgroundColor: props.isOver
+      ? props.theme.palette.disabledColor
+      : 'transparent'
   })
-};
+});
 
 @withTheme()
 class _DesktopFile extends PureComponent {
@@ -36,10 +42,8 @@ class _DesktopFile extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { connectDropTarget } = this.props;
-
-    const { isOver } = this.props;
-    const { palette, spacing } = this.props.theme;
 
     return connectDropTarget(
       <div>
@@ -51,11 +55,7 @@ class _DesktopFile extends PureComponent {
           onChange={this.handleChange}
         />
         <IconButton
-          className={cn.icon}
-          style={{
-            borderTopWidth: isOver ? spacing.unit : 0,
-            backgroundColor: isOver ? palette.disabledColor : 'transparent'
-          }}
+          className={dcn.icon}
           onClick={() => this.input && this.input.click()}
         >
           <HardwareComputer />

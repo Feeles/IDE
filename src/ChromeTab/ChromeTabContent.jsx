@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
 
 const cn = {
   root: style({
@@ -12,10 +12,22 @@ const cn = {
     display: 'flex',
     flexDirection: 'column'
   }),
-  container: style({
-    flex: '1 1 auto'
+  showing: style({
+    opacity: 1,
+    zIndex: 11
+  }),
+  hidden: style({
+    opacity: 0,
+    zIndex: 10
   })
 };
+
+const getCn = props => ({
+  container: style({
+    flex: '1 1 auto',
+    borderTop: `1px solid ${props.theme.palette.primary.main}`
+  })
+});
 
 @withTheme()
 export default class ChromeTabContent extends Component {
@@ -33,26 +45,13 @@ export default class ChromeTabContent extends Component {
   }
 
   render() {
+    const dcn = getCn(this.props);
     const { children } = this.props;
     const { show } = this.props;
-    const { palette } = this.props.theme;
 
     return (
-      <div
-        className={cn.root}
-        style={{
-          opacity: show ? 1 : 0,
-          zIndex: show ? 11 : 10
-        }}
-      >
-        <div
-          className={cn.container}
-          style={{
-            borderTop: `1px solid ${palette.primary.main}`
-          }}
-        >
-          {children}
-        </div>
+      <div className={classes(cn.root, show ? cn.showing : cn.hidden)}>
+        <div className={dcn.container}>{children}</div>
       </div>
     );
   }

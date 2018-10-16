@@ -16,7 +16,9 @@ const cn = {
     paddingRight: 0,
     paddingBottom: 80,
     paddingLeft: 16
-  }),
+  })
+};
+const getCn = props => ({
   dir: style({
     display: 'flex',
     flexDirection: 'column',
@@ -26,18 +28,41 @@ const cn = {
     marginTop: 4,
     marginRight: 8,
     borderWidth: 4,
-    borderRadius: 2
+    borderRadius: 2,
+    height: props.isDirOpened(props.dir, 'auto', 40),
+    paddingBottom: props.isDirOpened(
+      props.dir,
+      props.theme.spacing.unit * 2,
+      0
+    ),
+    paddingLeft: props.isDirOpened(props.dir, props.theme.spacing.unit * 2, 0),
+    borderStyle:
+      props.isOver && !includes(props.dir.files, props.dragSource)
+        ? 'dashed'
+        : 'solid',
+    borderColor: props.theme.palette.primary.main,
+    transition: props.theme.transitions.create([
+      'margin',
+      'padding-bottom',
+      'border'
+    ])
   }),
   closed: style({
-    cursor: 'pointer'
+    cursor: 'pointer',
+    color: props.theme.palette.text.secondary,
+    paddingLeft: props.theme.spacing.unit * 2
   }),
   closer: style({
-    cursor: 'pointer'
+    cursor: 'pointer',
+    marginLeft: -props.theme.spacing.unit * 2,
+    backgroundColor: props.theme.palette.primary.main
   }),
   closerLabel: style({
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    paddingLeft: props.theme.spacing.unit * 2,
+    color: props.theme.palette.primary.contrastText
   })
-};
+});
 
 const spec = {
   drop(props, monitor) {
@@ -92,6 +117,7 @@ export default class DirCard extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const {
       isRoot,
       isDirOpened,
@@ -120,28 +146,17 @@ export default class DirCard extends PureComponent {
       dragSource: dragSource
     };
 
-    const { palette, spacing, transitions } = this.props.theme;
-
-    const borderStyle =
-      isOver && !includes(cd.files, dragSource) ? 'dashed' : 'solid';
-
     return connectDropTarget(
-      <div
-        className={isRoot ? cn.root : cn.dir}
-        style={{
-          height: isDirOpened(cd, 'auto', 40),
-          paddingBottom: isDirOpened(cd, spacing.unit * 2, 0),
-          paddingLeft: isDirOpened(cd, spacing.unit * 2, 0),
-          borderStyle,
-          borderColor: palette.primary.main,
-          transition: transitions.create(['margin', 'padding-bottom', 'border'])
-        }}
-      >
+      <div className={isRoot ? cn.root : dcn.dir}>
         {isDirOpened(
           cd,
           [].concat(
             isRoot ? null : (
-              <DirCloser key="closer" onClick={() => handleDirToggle(cd)} />
+              <DirCloser
+                key="closer"
+                classes={dcn}
+                onClick={() => handleDirToggle(cd)}
+              />
             ),
             cd.dirs.map(dir => (
               <DirCard key={dir.path} dir={dir} {...transfer} />
@@ -150,14 +165,7 @@ export default class DirCard extends PureComponent {
               <FileCard key={file.key} file={file} {...transfer} />
             ))
           ),
-          <div
-            className={cn.closed}
-            style={{
-              color: palette.text.secondary,
-              paddingLeft: spacing.unit * 2
-            }}
-            onClick={() => handleDirToggle(cd)}
-          >
+          <div className={dcn.closed} onClick={() => handleDirToggle(cd)}>
             {cd.path}
           </div>
         )}
@@ -168,27 +176,13 @@ export default class DirCard extends PureComponent {
 
 export const DirCloser = withTheme()(props => {
   return (
-    <div
-      className={cn.closer}
-      style={{
-        marginLeft: -props.theme.spacing.unit * 2,
-        backgroundColor: props.theme.palette.primary.main
-      }}
-      onClick={props.onClick}
-    >
-      <span
-        className={cn.closerLabel}
-        style={{
-          paddingLeft: props.theme.spacing.unit * 2,
-          color: props.theme.palette.primary.contrastText
-        }}
-      >
-        ../
-      </span>
+    <div className={props.classes.closer} onClick={props.onClick}>
+      <span className={props.classes.closerLabel}>../</span>
     </div>
   );
 });
 
 DirCloser.propTypes = {
+  classes: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired
 };

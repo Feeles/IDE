@@ -15,21 +15,6 @@ import { PreferenceDialog } from '../../FileDialog/';
 import DragTypes from '../../utils/dragTypes';
 
 const cn = {
-  root: style({
-    marginTop: 4,
-    marginRight: 8
-  }),
-  card: style({
-    boxSizing: 'border-box',
-    height: 40,
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }),
-  dragHandle: style({
-    flex: '0 0 auto',
-    cursor: 'move'
-  }),
   container: style({
     flex: '1 1 auto',
     display: 'flex',
@@ -37,6 +22,35 @@ const cn = {
     alignItems: 'center'
   })
 };
+const getCn = props => ({
+  root: style({
+    marginTop: 4,
+    marginRight: 8,
+    transition: props.theme.transitions.create()
+  }),
+  card: style({
+    boxSizing: 'border-box',
+    height: 40,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: props.theme.spacing.unit * 2,
+    borderTopRightRadius: props.isSelected ? 0 : 2,
+    borderBottomRightRadius: props.isSelected ? 0 : 2,
+    backgroundColor: includes(props.tabbedFiles, props.file)
+      ? fade(props.theme.palette.background.paper, 1)
+      : props.theme.palette.disabledColor,
+    opacity: props.isDragging ? 0.5 : 1,
+    transition: props.theme.transitions.create()
+  }),
+  dragHandle: style({
+    flex: '0 0 auto',
+    cursor: 'move',
+    width: props.theme.spacing.unit * 3,
+    height: props.theme.spacing.unit * 3,
+    marginRight: props.theme.spacing.unit
+  })
+});
 
 @withTheme()
 class FileCard extends PureComponent {
@@ -71,53 +85,26 @@ class FileCard extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const {
       file,
       selectedFile,
       handleFileSelect,
       connectDragSource,
-      connectDragPreview,
-      tabbedFiles,
-      isDragging
+      connectDragPreview
     } = this.props;
 
     const isSelected = selectedFile === file;
 
-    const { palette, spacing, transitions } = this.props.theme;
-
-    const backgroundColor = includes(tabbedFiles, file)
-      ? fade(palette.background.paper, 1)
-      : palette.disabledColor;
-
     return connectDragPreview(
-      <div
-        className={cn.root}
-        style={{
-          transition: transitions.create()
-        }}
-      >
+      <div className={dcn.root}>
         <Paper
           elevation={isSelected ? 2 : 0}
           onClick={() => handleFileSelect(file)}
-          className={cn.card}
-          style={{
-            paddingLeft: spacing.unit * 2,
-            borderTopRightRadius: isSelected ? 0 : 2,
-            borderBottomRightRadius: isSelected ? 0 : 2,
-            backgroundColor,
-            opacity: isDragging ? 0.5 : 1,
-            transition: transitions.create()
-          }}
+          className={dcn.card}
         >
           {connectDragSource(
-            <div
-              className={cn.dragHandle}
-              style={{
-                width: spacing.unit * 3,
-                height: spacing.unit * 3,
-                marginRight: spacing.unit
-              }}
-            >
+            <div className={dcn.dragHandle}>
               <EditorDragHandle />
             </div>
           )}

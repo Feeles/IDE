@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
+import { deg, rotateY, translateX } from 'csx';
 import beautify from 'js-beautify';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AvStop from '@material-ui/icons/Stop';
 import red from '@material-ui/core/colors/red';
@@ -18,11 +20,6 @@ const cn = {
     display: 'flex',
     flexDirection: 'column'
   }),
-  editor: style({
-    position: 'relative',
-    boxSizing: 'border-box',
-    width: '100%'
-  }),
   menu: style({
     position: 'relative',
     display: 'flex',
@@ -34,7 +31,11 @@ const cn = {
   }),
   shoot: style({
     marginRight: 9,
-    marginBottom: 4
+    marginBottom: 4,
+    transform: rotateY(deg(0))
+  }),
+  shooting: style({
+    transform: rotateY(deg(180))
   }),
   label: style({
     fontSize: '.8rem'
@@ -50,8 +51,22 @@ const cn = {
   }),
   restore: style({
     margin: 4
+  }),
+  blank: style({
+    flex: 1
   })
 };
+const getCn = (props, state) => ({
+  editor: style({
+    position: 'relative',
+    boxSizing: 'border-box',
+    width: '100%',
+    height: state.height,
+    transform: translateX(state.shooting ? -500 : 0),
+    opacity: state.shooting ? 0 : 1,
+    transition: props.theme.transitions.create()
+  })
+});
 
 @withTheme()
 export default class ShotPane extends PureComponent {
@@ -181,10 +196,10 @@ export default class ShotPane extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props, this.state);
     const { localization, getConfig, loadConfig } = this.props;
 
-    const { palette, transitions } = this.props.theme;
-    const { shooting, height } = this.state;
+    const { shooting } = this.state;
 
     // TODO: Enter で実行か Shift-Enter で実行か
     const { sendCodeOnEnter } = loadConfig('feelesrc');
@@ -205,24 +220,15 @@ export default class ShotPane extends PureComponent {
             color="primary"
             disabled={this.state.shooting}
             onClick={this.handleShot}
-            className={cn.shoot}
-            style={{
-              transform: `
-              rotateY(${shooting ? 180 : 0}deg)`
-            }}
+            className={classes(cn.shoot, shooting && cn.shooting)}
           >
             {localization.shotCard.button}
             {this.state.shooting ? <AvStop /> : <ContentReply />}
           </Button>
-          <span
-            className={cn.label}
-            style={{
-              color: palette.text.secondary
-            }}
-          >
+          <Typography className={cn.label} color="secondary">
             {localization.shotCard.shoot}
-          </span>
-          <div style={{ flex: 1 }} />
+          </Typography>
+          <div className={cn.blank} />
           <Button
             variant="contained"
             color="secondary"
@@ -233,15 +239,7 @@ export default class ShotPane extends PureComponent {
             {localization.shotCard.restore}
           </Button>
         </div>
-        <div
-          className={cn.editor}
-          style={{
-            height,
-            transform: `translate(${shooting ? '-500px' : 0})`,
-            opacity: shooting ? 0 : 1,
-            transition: transitions.create()
-          }}
-        >
+        <div className={dcn.editor}>
           <Editor
             isSelected
             isCared

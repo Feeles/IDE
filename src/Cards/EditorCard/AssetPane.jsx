@@ -9,23 +9,6 @@ import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import AssetButton from './AssetButton';
 
 const cn = {
-  root: style({
-    position: 'absolute',
-    width: '100%',
-    overflow: 'hidden',
-    display: 'flex',
-    flexDirection: 'column',
-    zIndex: 10
-  }),
-  scroller: style({
-    flex: 1,
-    overflowX: 'auto',
-    overflowY: 'scroll',
-    boxSizing: 'border-box',
-    paddingBottom: 60,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0
-  }),
   label: style({
     flex: '0 0 100%',
     color: 'white',
@@ -37,15 +20,45 @@ const cn = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'
+  })
+};
+const getCn = props => ({
+  root: style({
+    position: 'absolute',
+    width: '100%',
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    zIndex: 10,
+    height: props.open ? '100%' : 0,
+    transition: props.theme.transitions.create()
+  }),
+  scroller: style({
+    flex: 1,
+    overflowX: 'auto',
+    overflowY: 'scroll',
+    boxSizing: 'border-box',
+    paddingBottom: 60,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    backgroundColor: fade(
+      emphasize(props.theme.palette.background.paper, 0.75),
+      0.55
+    )
   }),
   close: style({
     marginBottom: 10,
     textAlign: 'center',
     borderTopRightRadius: 0,
     borderTopLeftRadius: 0,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    backgroundColor: props.theme.palette.primary.main,
+    height: props.open ? null : 0
+  }),
+  expandLess: style({
+    color: props.theme.palette.primary.contrastText
   })
-};
+});
 
 @withTheme()
 export default class AssetPane extends PureComponent {
@@ -84,8 +97,8 @@ export default class AssetPane extends PureComponent {
     if (!items) return null;
 
     return (
-      <div key={label} style={{ ...cn.wrapper }}>
-        <div style={{ ...cn.label }}>{label}</div>
+      <div key={label} className={cn.wrapper}>
+        <div className={cn.label}>{label}</div>
         {items.map((item, i) => (
           <AssetButton
             {...item}
@@ -100,40 +113,19 @@ export default class AssetPane extends PureComponent {
   }
 
   render() {
-    const { scope, open } = this.props;
-    const { palette, transitions } = this.props.theme;
+    const dcn = getCn(this.props);
+    const { scope } = this.props;
 
     // e.g. scope === 'モンスター アイテム'
     const labels = scope ? scope.trim().split(' ') : [];
 
     return (
-      <div
-        className={cn.root}
-        style={{
-          height: open ? '100%' : 0,
-          transition: transitions.create()
-        }}
-      >
-        <div
-          className={cn.scroller}
-          style={{
-            backgroundColor: fade(
-              emphasize(palette.background.paper, 0.75),
-              0.55
-            )
-          }}
-        >
+      <div className={dcn.root}>
+        <div className={dcn.scroller}>
           {labels.map(label => this.renderEachLabel(label))}
         </div>
-        <div
-          className={cn.close}
-          style={{
-            backgroundColor: palette.primary.main,
-            height: open ? null : 0
-          }}
-          onClick={this.props.handleClose}
-        >
-          <NavigationExpandLess style={{ color: 'white' }} />
+        <div className={dcn.close} onClick={this.props.handleClose}>
+          <NavigationExpandLess className={dcn.expandLess} />
         </div>
       </div>
     );

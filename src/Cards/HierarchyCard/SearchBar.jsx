@@ -15,6 +15,11 @@ import DesktopFile from './DesktopFile';
 const SearchBarHeight = 40;
 
 const cn = {
+  icon: style({
+    marginTop: 4
+  })
+};
+const getCn = props => ({
   root: style({
     display: 'flex',
     alignItems: 'center',
@@ -22,22 +27,23 @@ const cn = {
     width: '100%',
     height: SearchBarHeight,
     paddingRight: 16,
+    paddingLeft: props.theme.spacing.unit,
     zIndex: 100
   }),
   bar: style({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-    height: SearchBarHeight
-  }),
-  icon: style({
-    marginTop: 4
+    height: SearchBarHeight,
+    paddingLeft: props.theme.spacing.unit,
+    backgroundColor: props.theme.palette.background.paper
   }),
   empty: style({
     flex: '1 0 auto',
-    height: SearchBarHeight
+    height: SearchBarHeight,
+    marginLeft: props.theme.spacing.unit
   })
-};
+});
 
 @withTheme()
 export default class SearchBar extends PureComponent {
@@ -91,6 +97,7 @@ export default class SearchBar extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const { putFile, onOpen, deleteAll, localization } = this.props;
     const { showTrashes, query } = this.state;
     const fileNames = this.props.files
@@ -100,29 +107,16 @@ export default class SearchBar extends PureComponent {
         value: s,
         label: s
       }));
-    const { palette, spacing } = this.props.theme;
 
     return (
-      <div
-        className={cn.root}
-        style={{
-          paddingLeft: spacing.unit
-        }}
-      >
+      <div className={dcn.root}>
         <TrashBox
           showTrashes={showTrashes}
           putFile={putFile}
           onClick={this.handleTrashBoxTap}
         />
         <DesktopFile onOpen={onOpen} saveAs={this.props.saveAs} />
-        <Paper
-          elevation={3}
-          className={cn.bar}
-          style={{
-            paddingLeft: spacing.unit,
-            backgroundColor: palette.background.paper
-          }}
-        >
+        <Paper elevation={3} className={dcn.bar}>
           <ActionSearch className={cn.icon} />
           <AutoComplete
             value={query}
@@ -135,10 +129,7 @@ export default class SearchBar extends PureComponent {
           <Button
             variant="contained"
             color="secondary"
-            className={cn.empty}
-            style={{
-              marginLeft: spacing.unit
-            }}
+            className={dcn.empty}
             onClick={deleteAll}
           >
             <ActionDeleteForever />

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
-import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
 import Card from '../CardWindow';
@@ -26,16 +26,6 @@ const cn = {
     paddingLeft: tabContainerPaddingLeft,
     zIndex: 10
   }),
-  tabContentContainer: style({
-    flex: 1,
-    position: 'relative'
-  }),
-  noFileBg: style({
-    flex: '1 1 auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  }),
   largeIcon: style({
     width: 40,
     height: 40
@@ -46,6 +36,20 @@ const cn = {
     padding: 20
   })
 };
+const getCn = props => ({
+  tabContentContainer: style({
+    flex: 1,
+    position: 'relative',
+    borderTop: `1px solid ${props.theme.palette.primary.main}`
+  }),
+  noFileBg: style({
+    flex: '1 1 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: props.theme.palette.primary.main
+  })
+});
 
 @withTheme()
 export default class EditorCard extends PureComponent {
@@ -122,29 +126,16 @@ export default class EditorCard extends PureComponent {
     }
   };
 
-  renderBackground() {
-    const { palette } = this.props.theme;
-
+  renderBackground(className) {
     return (
-      <div
-        className={cn.noFileBg}
-        style={{
-          backgroundColor: palette.primary.main
-        }}
-      >
-        <h1
-          style={{
-            color: palette.text.secondary
-          }}
-        >
-          Feeles
-        </h1>
-        <IconButton
-          className={cn.large}
+      <div className={className}>
+        <Button
+          variant="contained"
+          size="large"
           onClick={() => this.setLocation()}
         >
-          <AVPlayCircleOutline className={cn.largeIcon} />
-        </IconButton>
+          Feeles<AVPlayCircleOutline className={cn.largeIcon} />
+        </Button>
       </div>
     );
   }
@@ -172,6 +163,7 @@ export default class EditorCard extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     if (!this.props.tabs.length) {
       return (
         <Card
@@ -179,7 +171,7 @@ export default class EditorCard extends PureComponent {
           {...this.props.cardPropsBag}
           fit
         >
-          {this.renderBackground()}
+          {this.renderBackground(dcn.noFileBg)}
         </Card>
       );
     }
@@ -192,8 +184,7 @@ export default class EditorCard extends PureComponent {
       findFile,
       getConfig,
       reboot,
-      cardPropsBag,
-      theme: { palette }
+      cardPropsBag
     } = this.props;
 
     const tabs = [];
@@ -231,16 +222,10 @@ export default class EditorCard extends PureComponent {
         fit
         width={640}
       >
-        <div
-          className={cn.tabContainer}
-          ref={ref => (this.tabContainer = ref)}
-        >
+        <div className={cn.tabContainer} ref={ref => (this.tabContainer = ref)}>
           {tabs}
         </div>
-        <div
-          className={cn.tabContentContainer}
-          style={{ borderTop: `1px solid ${palette.primary.main}` }}
-        >
+        <div className={dcn.tabContentContainer}>
           <SourceEditor
             fileView={this.props.fileView}
             file={selectedTab.file}

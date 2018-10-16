@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 import { separate } from '../../File/';
 
@@ -12,10 +12,6 @@ const cn = {
     justifyContent: 'flex-start',
     alignItems: 'baseline'
   }),
-  ext: style({
-    fontSize: '.8em',
-    paddingLeft: 4
-  }),
   textField: style({
     width: 'auto',
     flex: '0 1 auto',
@@ -23,10 +19,8 @@ const cn = {
   })
 };
 
-@withTheme()
 export default class Filename extends PureComponent {
   static propTypes = {
-    theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired
   };
@@ -67,19 +61,12 @@ export default class Filename extends PureComponent {
   render() {
     const { file } = this.props;
     const { isEditing } = this.state;
-    const { palette } = this.props.theme;
 
     const { path, plane, ext, name } = separate(file.name);
 
     return (
       <div className={cn.root}>
-        <span
-          style={{
-            color: palette.text.secondary
-          }}
-        >
-          {path}
-        </span>
+        <Typography color="textSecondary">{path}</Typography>
         {isEditing ? (
           <TextField
             id={name}
@@ -89,23 +76,13 @@ export default class Filename extends PureComponent {
             onClick={this.handleTextFieldTap}
           />
         ) : (
-          <span
-            onClick={this.handleDoubleTap}
-            style={{
-              color: palette.text.primary
-            }}
-          >
+          <Typography color="textPrimary" onClick={this.handleDoubleTap}>
             {plane}
-          </span>
+          </Typography>
         )}
-        <span
-          className={cn.ext}
-          style={{
-            color: palette.text.secondary
-          }}
-        >
+        <Typography color="textSecondary" variant="caption">
           {ext}
-        </span>
+        </Typography>
       </div>
     );
   }

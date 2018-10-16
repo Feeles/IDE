@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
 import { DropTarget } from 'react-dnd';
 import IconButton from '@material-ui/core/IconButton';
 import ActionDelete from '@material-ui/icons/Delete';
@@ -16,6 +16,12 @@ const cn = {
     borderRadius: 2
   })
 };
+const getCn = props => ({
+  iconDragOver: style({
+    borderTopWidth: props.theme.spacing.unit,
+    backgroundColor: props.theme.palette.disabledColor
+  })
+});
 
 @withTheme()
 class _TrashBox extends PureComponent {
@@ -38,17 +44,12 @@ class _TrashBox extends PureComponent {
     } = this.props;
 
     const { isOver } = this.props;
-    const { palette, spacing } = this.props.theme;
 
     return connectDropTarget(
       <div>
         <IconButton
-          className={cn.icon}
+          className={classes(cn.icon, isOver && getCn(this.props).iconDragOver)}
           onClick={onClick}
-          style={{
-            borderTopWidth: isOver ? spacing.unit : 0,
-            backgroundColor: isOver ? palette.disabledColor : 'transparent'
-          }}
         >
           {showTrashes ? <NavigationArrowBack /> : <ActionDelete />}
         </IconButton>

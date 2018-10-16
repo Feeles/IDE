@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import Card from '../CardWindow';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Popover from '@material-ui/core/Popover';
 import Paper from '@material-ui/core/Paper';
 import { convertColorToString } from '@material-ui/core/styles/colorManipulator';
@@ -12,33 +11,34 @@ import { ChromePicker, TwitterPicker } from 'react-color';
 
 import LayeredStyle from './LayeredStyle';
 
-const cn = {
+const boxSize = 60;
+
+const getCn = props => ({
   canvas: style({
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: boxSize + 32,
+    backgroundColor: props.theme.palette.background.paper
   }),
   primary: style({
-    flex: '1 1 auto'
+    flex: '1 1 auto',
+    marginLeft: props.theme.spacing.unit * 3,
+    height: boxSize,
+    backgroundColor: props.theme.palette.primary.main
   }),
   secondary: style({
-    flex: '1 1 auto'
+    flex: '1 1 auto',
+    marginLeft: props.theme.spacing.unit * 3,
+    height: boxSize * 0.8,
+    backgroundColor: props.theme.palette.secondary.main
   }),
   blank: style({
     flex: '1 1 auto',
-    backgroundColor: 'transparent'
-  }),
-  container: style({
-    textAlign: 'center',
-    overflow: 'hidden'
-  }),
-  item: style({
-    flex: '0 0 auto',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    maxWidth: 200
+    backgroundColor: 'transparent',
+    marginLeft: props.theme.spacing.unit * 3,
+    height: boxSize
   })
-};
+});
 
 @withTheme()
 export default class PaletteCard extends PureComponent {
@@ -87,50 +87,12 @@ export default class PaletteCard extends PureComponent {
     this.setState({ open: false });
   };
 
-  renderItem(key) {
-    const { palette, spacing } = this.props.theme;
-
-    const rectStyle = Object.assign(
-      {
-        marginLeft: spacing.unit * 3,
-        border: `1px solid ${palette.text.primary}`,
-
-        boxSizing: 'border-box',
-        padding: '.5rem'
-      },
-      {
-        backgroundColor: palette[key]
-      }
-    );
-
-    return (
-      <div
-        key={key}
-        style={{
-          margin: `${spacing.unit}px auto`
-        }}
-      >
-        <span
-          style={{
-            color: palette.text.primary
-          }}
-        >
-          {key}
-        </span>
-        <span
-          style={rectStyle}
-          onClick={event => this.handleRectClick(event, key)}
-        />
-      </div>
-    );
-  }
-
   render() {
+    const dcn = getCn(this.props);
     const { open, key, anchorEl, limited } = this.state;
     const { palette, spacing } = this.props.theme;
 
     const bodyColor = getComputedStyle(document.body)['background-color'];
-    const boxSize = 60;
 
     return (
       <Card
@@ -155,44 +117,21 @@ export default class PaletteCard extends PureComponent {
             onClick={e => this.handleRectClick(e, 'backgroundColor')}
           >
             <Paper
-              className={cn.canvas}
-              style={{
-                height: boxSize + 32,
-                backgroundColor: palette.background.paper
-              }}
+              className={dcn.canvas}
               onClick={e => this.handleRectClick(e, 'canvasColor')}
             >
               <Paper
-                className={cn.primary}
-                style={{
-                  marginLeft: spacing.unit * 3,
-                  height: boxSize,
-                  backgroundColor: palette.primary.main
-                }}
+                className={dcn.primary}
                 onClick={e => this.handleRectClick(e, 'primary1Color', true)}
               />
               <Paper
-                className={cn.secondary}
-                style={{
-                  marginLeft: spacing.unit * 3,
-                  height: boxSize * 0.8,
-                  backgroundColor: palette.secondary.main
-                }}
+                className={dcn.secondary}
                 onClick={e => this.handleRectClick(e, 'accent1Color', true)}
               />
-              <div
-                className={cn.blank}
-                style={{
-                  marginLeft: spacing.unit * 3,
-                  height: boxSize
-                }}
-              />
+              <div className={dcn.blank} />
             </Paper>
           </LayeredStyle>
         </CardActions>
-        <CardContent className={cn.container}>
-          {Object.keys(palette).map(key => this.renderItem(key))}
-        </CardContent>
         <Popover
           open={open}
           anchorEl={anchorEl}

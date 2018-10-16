@@ -52,6 +52,9 @@ const cn = {
     display: 'flex',
     flexDirection: 'column',
     lineHeight: 1.15
+  }),
+  alignRight: style({
+    textAlign: 'right'
   })
 };
 
@@ -523,7 +526,7 @@ export default class Main extends Component {
           onClose={this.toggleSidebar}
         >
           {this.props.mini ? null : (
-            <div style={{ textAlign: 'right' }}>
+            <div className={cn.alignRight}>
               <IconButton onClick={this.toggleSidebar}>
                 <NavigationArrowBack />
               </IconButton>

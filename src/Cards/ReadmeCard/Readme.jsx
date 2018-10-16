@@ -4,7 +4,8 @@ import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
-// import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import Typography from '@material-ui/core/Typography';
+import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import ActionOpenInNew from '@material-ui/icons/OpenInNew';
 import EditorModeEdit from '@material-ui/icons/Edit';
 
@@ -13,10 +14,6 @@ import MDReactComponent from '../../jsx/MDReactComponent';
 import { Tab } from '../../ChromeTab/';
 
 const cn = {
-  root: style({
-    boxSizing: 'border-box',
-    overflow: 'scroll'
-  }),
   blockquote: style({
     marginLeft: '1rem',
     paddingLeft: '1rem',
@@ -32,8 +29,21 @@ const cn = {
     borderLeftStyle: 'solid',
     borderSpacing: 0
   }),
+  containedButton: style({
+    margin: 4
+  }),
+  containedButtonLabel: style({
+    textTransform: 'none'
+  })
+};
+const getCn = props => ({
+  root: style({
+    boxSizing: 'border-box',
+    overflow: 'scroll',
+    borderColor: props.theme.palette.divider
+  }),
   th: style({
-    // padding: spacing.unit,
+    padding: props.theme.spacing.unit,
     borderTopWidth: 1,
     borderTopStyle: 'solid',
     borderRightWidth: 1,
@@ -42,24 +52,18 @@ const cn = {
     borderBottomStyle: 'solid'
   }),
   td: style({
-    // padding: spacing.unit,
+    padding: props.theme.spacing.unit,
     borderRightWidth: 1,
     borderRightStyle: 'solid',
     borderBottomWidth: 1,
     borderBottomStyle: 'solid'
   }),
   code: style({
-    // backgroundColor: emphasize(palette.background.paper, 0.07),
+    backgroundColor: emphasize(props.theme.palette.background.paper, 0.07),
     padding: '.2em',
     borderRadius: 2
-  }),
-  containedButton: style({
-    margin: 4
-  }),
-  containedButtonLabel: style({
-    textTransform: 'none'
   })
-};
+});
 
 const mdComponents = [
   {
@@ -181,14 +185,9 @@ const mdComponents = [
       return tag === 'blockquote';
     },
     render(tag, props, children) {
-      <div
-        className={cn.blockquote}
-        style={{
-          color: props.theme.palette.text.secondary
-        }}
-      >
+      <Typography className={cn.blockquote} color="textSecondary">
         {children}
-      </div>;
+      </Typography>;
     }
   }
 ];
@@ -207,6 +206,7 @@ export default class Readme extends PureComponent {
   };
 
   render() {
+    const dcn = getCn(this.props);
     const onIterate = (tag, props, children) => {
       for (const { validate, render } of mdComponents) {
         if (validate(tag, props)) {
@@ -215,6 +215,9 @@ export default class Readme extends PureComponent {
       }
       if (tag in cn) {
         props = { ...props, className: cn[tag] };
+      }
+      if (tag in dcn) {
+        props = { ...props, className: dcn[tag] };
       }
       if (children.length < 1) {
         children = null;
@@ -229,11 +232,8 @@ export default class Readme extends PureComponent {
     return (
       <MDReactComponent
         text={this.props.file.text}
-        className={cn.root}
+        className={dcn.root}
         onIterate={onIterate}
-        style={{
-          borderColor: this.props.theme.palette.divider
-        }}
       />
     );
   }

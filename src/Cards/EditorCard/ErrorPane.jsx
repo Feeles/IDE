@@ -9,9 +9,6 @@ import red from '@material-ui/core/colors/red';
 import ActionRestore from '@material-ui/icons/Restore';
 
 const cn = {
-  root: style({
-    borderTopWidth: 3
-  }),
   dialogRoot: style({
     position: 'absolute',
     top: 0,
@@ -37,8 +34,30 @@ const cn = {
   }),
   blank: style({
     flex: '0 0 1rem'
+  }),
+
+  messageText: style({
+    margin: 8,
+    color: red['500'],
+    fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
   })
 };
+const getCn = (props, state) => ({
+  root: style({
+    borderTopWidth: 3,
+    borderTopStyle: state.show ? 'double' : 'none',
+    borderTopColor: props.theme.palette.primary.main
+  }),
+  message: style({
+    position: 'relative',
+    maxHeight: props.error ? (state.expanded ? 1000 : 48) : 0,
+    width: '100%',
+    boxSizing: 'border-box',
+    paddingLeft: 8,
+    overflow: 'scroll',
+    cursor: 'pointer'
+  })
+});
 
 @withTheme()
 export default class ErrorPane extends PureComponent {
@@ -102,27 +121,11 @@ export default class ErrorPane extends PureComponent {
     );
   }
 
-  renderAsDock() {
+  renderAsDock(className) {
     const { expanded } = this.state;
-    const cn = {
-      message: {
-        position: 'relative',
-        maxHeight: this.props.error ? (expanded ? 1000 : 48) : 0,
-        width: '100%',
-        boxSizing: 'border-box',
-        paddingLeft: 8,
-        overflow: 'scroll',
-        cursor: 'pointer'
-      },
-      messageText: {
-        margin: 8,
-        color: red['500'],
-        fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
-      }
-    };
     return (
       <div
-        className={cn.message}
+        className={className}
         onClick={() => this.setState({ expanded: !expanded })}
       >
         <pre className={cn.messageText}>
@@ -133,18 +136,12 @@ export default class ErrorPane extends PureComponent {
   }
 
   render() {
+    const dcn = getCn(this.props, this.state);
     const { show } = this.state;
-    const { palette } = this.props.theme;
 
     return (
-      <div
-        className={cn.root}
-        style={{
-          borderTopStyle: show ? 'double' : 'none',
-          borderTopColor: palette.primary.main
-        }}
-      >
-        {this.renderAsDock()}
+      <div className={dcn.root}>
+        {this.renderAsDock(dcn.message)}
         <CSSTransitionGroup
           transitionName={{
             enter: 'zoomInUp',

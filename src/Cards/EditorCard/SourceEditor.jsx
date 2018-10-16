@@ -28,10 +28,6 @@ const cn = {
     flex: '1 1 auto',
     position: 'relative'
   }),
-  menuBar: style({
-    display: 'flex',
-    zIndex: 3
-  }),
   barButton: style({
     padding: 0,
     lineHeight: 2
@@ -41,8 +37,19 @@ const cn = {
   }),
   progress: style({
     borderRadius: 0
+  }),
+  blank: style({
+    flex: '1 1 auto'
   })
 };
+const getCn = props => ({
+  menuBar: style({
+    display: 'flex',
+    zIndex: 3,
+    backgroundColor: props.theme.palette.background.paper,
+    borderBottom: `1px solid ${props.theme.palette.primary.main}`
+  })
+});
 
 // file -> prevFile を参照する
 const prevFiles = new WeakMap();
@@ -380,11 +387,8 @@ export default class SourceEditor extends PureComponent {
   }
 
   render() {
-    const {
-      file,
-      localization,
-      theme: { palette }
-    } = this.props;
+    const dcn = getCn(this.props);
+    const { file, localization } = this.props;
     const { showHint } = this.state;
 
     // const snippets = this.props.getConfig('snippets')(file);
@@ -414,13 +418,7 @@ export default class SourceEditor extends PureComponent {
             item => `.${item.className} { ${item.style} } `
           )}
         </style>
-        <div
-          className={cn.menuBar}
-          style={{
-            backgroundColor: palette.background.paper,
-            borderBottom: `1px solid ${palette.primary.main}`
-          }}
-        >
+        <div className={dcn.menuBar}>
           <Button
             variant="text"
             disabled={!this.state.hasHistory}
@@ -443,11 +441,7 @@ export default class SourceEditor extends PureComponent {
               {localization.editorCard.save}
             </span>
           </Button>
-          <div
-            style={{
-              flex: '1 1 auto'
-            }}
-          />
+          <div className={cn.blank} />
           <PlayMenu
             getFiles={this.props.getFiles}
             setLocation={this.setLocation}
