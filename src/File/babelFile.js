@@ -20,12 +20,12 @@ worker.addEventListener('message', event => {
   if (error) {
     // Got a Babel Error!
     const { loc, message } = error;
-    const babelError = new Error(message, file.name, loc.line);
+    const babelError = new Error(message, file.name, loc && loc.line);
     reject(babelError);
   } else {
     resolve(
       file.set({
-        text: code
+        text: code || file.text // Babel option の ignore に入っている場合は code が null で返される
       })
     );
   }

@@ -6,11 +6,11 @@ const prefix = `
 self.addEventListener("message", function (event) {
   try {
     // Transpile the code
-    var code = Babel.transform(event.data.code, event.data.options).code;
+    var result = Babel.transform(event.data.code, event.data.options);
     // Send result
     self.postMessage({
       id: event.data.id,
-      code: code
+      code: result && result.code
     });
   } catch (error) {
     // Throw babel error with processing
