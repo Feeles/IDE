@@ -3,12 +3,12 @@ import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import ContentCreate from '@material-ui/icons/Create';
 
 const cn = {
   hint: style({
-    fontStyle: 'italic',
-    fontSize: '.8em'
+    fontStyle: 'italic'
   })
 };
 const getCn = props => ({
@@ -104,10 +104,14 @@ export default class EditableLabel extends PureComponent {
         {labelText}
       </div>
     ) : (
-      <div className={cn.hint} onClick={this.handleTouch}>
+      <Typography
+        variant="caption"
+        className={cn.hint}
+        onClick={this.handleTouch}
+      >
         <ContentCreate />
         {this.props.tapTwiceQuickly}
-      </div>
+      </Typography>
     );
   }
 }

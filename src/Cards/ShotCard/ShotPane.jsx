@@ -225,7 +225,7 @@ export default class ShotPane extends PureComponent {
             {localization.shotCard.button}
             {this.state.shooting ? <AvStop /> : <ContentReply />}
           </Button>
-          <Typography className={cn.label} color="secondary">
+          <Typography className={cn.label} color="textSecondary">
             {localization.shotCard.shoot}
           </Typography>
           <div className={cn.blank} />
