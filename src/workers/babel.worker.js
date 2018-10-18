@@ -16,7 +16,16 @@ self.addEventListener("message", function (event) {
     // Throw babel error with processing
     self.postMessage({
       id: event.data.id,
-      error: { message: error.message, loc: error.loc }
+      error: {
+        code: error.code + '',
+        message: error.message + '',
+        stack: error.stack + '',
+        loc: error.loc && {
+          line: error.loc.line,
+          column: error.loc.column
+        },
+        missingPlugin: error.missingPlugin
+      }
     });
     // Show useful error info into console
     console.warn(error);
