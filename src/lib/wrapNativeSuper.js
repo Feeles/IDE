@@ -4,7 +4,6 @@
  * それだと他のグローバルな Map がある場合にうまく動かないことがある
  */
 /* eslint-disable */
-var Map = window.Map; // この行を追加する
 
 var getPrototypeOf = require('./getPrototypeOf');
 
@@ -15,7 +14,7 @@ var isNativeFunction = require('./isNativeFunction');
 var construct = require('./construct');
 
 function _wrapNativeSuper(Class) {
-  var _cache = typeof Map === 'function' ? new Map() : undefined;
+  //   var _cache = typeof Map === 'function' ? new Map() : undefined;
 
   module.exports = _wrapNativeSuper = function _wrapNativeSuper(Class) {
     if (Class === null || !isNativeFunction(Class)) return Class;
@@ -24,11 +23,11 @@ function _wrapNativeSuper(Class) {
       throw new TypeError('Super expression must either be null or a function');
     }
 
-    if (typeof _cache !== 'undefined') {
-      if (_cache.has(Class)) return _cache.get(Class);
+    // if (typeof _cache !== 'undefined') {
+    //   if (_cache.has(Class)) return _cache.get(Class);
 
-      _cache.set(Class, Wrapper);
-    }
+    //   _cache.set(Class, Wrapper);
+    // }
 
     function Wrapper() {
       return construct(Class, arguments, getPrototypeOf(this).constructor);
