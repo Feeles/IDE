@@ -1,12 +1,29 @@
 // raw-loader!escape-loader
 
 import babelStandaloneJs from 'raw-loader!../lib/escape-loader!@babel/standalone/babel.min';
+import babelEnvStandaloneJs from 'raw-loader!@babel/preset-env-standalone/babel-preset-env.min.js';
+
+const babelConfig = {
+  presets: [
+    [
+      'env',
+      {
+        targets: {
+          ie: 11
+        },
+        useBuiltIns: false
+      }
+    ]
+  ]
+};
 
 const prefix = `
 self.addEventListener("message", function (event) {
   try {
     // Transpile the code
-    var result = Babel.transform(event.data.code, event.data.options);
+    var result = Babel.transform(event.data.code, ${JSON.stringify(
+      babelConfig
+    )});
     // Send result
     self.postMessage({
       id: event.data.id,
@@ -25,7 +42,7 @@ self.addEventListener("message", function (event) {
 `;
 
 const url = URL.createObjectURL(
-  new Blob([prefix, babelStandaloneJs], {
+  new Blob([prefix, babelStandaloneJs, babelEnvStandaloneJs], {
     type: 'text/javascript'
   })
 );
