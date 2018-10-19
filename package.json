@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env-standalone": "^7.0.0",
     "@babel/runtime": "^7.1.2",
     "@babel/standalone": "^7.1.0",
     "@material-ui/codemod": "^1.1.0",

@@ -41,7 +41,7 @@ jspm_packages
 .version.js
 .version
 dist
-lib
+/lib
 umd
 
 *.rdb
