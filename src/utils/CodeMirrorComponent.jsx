@@ -60,7 +60,7 @@ export default class CodeMirrorComponent extends PureComponent {
 
   componentDidMount() {
     // initialize CodeMirror
-    this.codeMirror = CodeMirror.fromTextArea(this.ref, this.props);
+    this.codeMirror = CodeMirror.fromTextArea(this.ref, this.options);
     const { id } = this.props;
 
     const doc = this.codeMirror.getDoc();
