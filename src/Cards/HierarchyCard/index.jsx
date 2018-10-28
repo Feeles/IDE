@@ -6,6 +6,7 @@ import ContentAdd from '@material-ui/icons/Add';
 import includes from 'lodash/includes';
 
 import Card from '../CardWindow';
+import CardFloatingBar from '../CardFloatingBar';
 import { makeFromFile } from '../../File/';
 import { AddDialog } from '../../FileDialog/';
 import { Tab } from '../../ChromeTab/';
@@ -141,11 +142,10 @@ export default class HierarchyCard extends PureComponent {
     };
 
     return (
-      <Card
-        icon={this.props.localization.hierarchyCard.title}
-        {...this.props.cardPropsBag}
-        fit
-      >
+      <Card {...this.props.cardPropsBag} fit>
+        <CardFloatingBar>
+          {this.props.localization.hierarchyCard.title}
+        </CardFloatingBar>
         <SearchBar
           files={files}
           filterRef={filter => this.setState({ filter })}

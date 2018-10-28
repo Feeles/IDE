@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
 import Card from '../CardWindow';
+import CardFloatingBar from '../CardFloatingBar';
 import SourceEditor from './SourceEditor';
 import ChromeTab, { Tab } from '../../ChromeTab/';
 
@@ -134,7 +135,8 @@ export default class EditorCard extends PureComponent {
           size="large"
           onClick={() => this.setLocation()}
         >
-          Feeles<AVPlayCircleOutline className={cn.largeIcon} />
+          Feeles
+          <AVPlayCircleOutline className={cn.largeIcon} />
         </Button>
       </div>
     );
@@ -166,11 +168,7 @@ export default class EditorCard extends PureComponent {
     const dcn = getCn(this.props);
     if (!this.props.tabs.length) {
       return (
-        <Card
-          icon={this.props.localization.editorCard.title}
-          {...this.props.cardPropsBag}
-          fit
-        >
+        <Card {...this.props.cardPropsBag} fit>
           {this.renderBackground(dcn.noFileBg)}
         </Card>
       );
@@ -216,12 +214,10 @@ export default class EditorCard extends PureComponent {
     const selectedTab = this.props.tabs.find(item => item.isSelected);
 
     return (
-      <Card
-        icon={this.props.localization.editorCard.title}
-        {...cardPropsBag}
-        fit
-        width={640}
-      >
+      <Card {...cardPropsBag} fit width={640}>
+        <CardFloatingBar>
+          {this.props.localization.editorCard.title}
+        </CardFloatingBar>
         <div className={cn.tabContainer} ref={ref => (this.tabContainer = ref)}>
           {tabs}
         </div>

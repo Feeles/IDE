@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Card from '../CardWindow';
 import CardHeader from '@material-ui/core/CardHeader';
 
+import CardFloatingBar from '../CardFloatingBar';
 import { SourceFile } from '../../File/';
 import EditFile from '../EditFile';
 import resolveOrigin from '../../utils/resolveOrigin';
@@ -83,10 +84,10 @@ export default class CustomizeCard extends PureComponent {
     const { localization } = this.props;
 
     return (
-      <Card
-        icon={this.props.localization.customizeCard.title}
-        {...this.props.cardPropsBag}
-      >
+      <Card {...this.props.cardPropsBag}>
+        <CardFloatingBar>
+          {this.props.localization.customizeCard.title}
+        </CardFloatingBar>
         {this.renderBlock(
           localization.customizeCard.style,
           'http://codemirror.net/doc/manual.html#styling',

@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import { convertColorToString } from '@material-ui/core/styles/colorManipulator';
 import { ChromePicker, TwitterPicker } from 'react-color';
 
+import CardFloatingBar from '../CardFloatingBar';
 import LayeredStyle from './LayeredStyle';
 
 const boxSize = 60;
@@ -95,10 +96,10 @@ export default class PaletteCard extends PureComponent {
     const bodyColor = getComputedStyle(document.body)['background-color'];
 
     return (
-      <Card
-        icon={this.props.localization.paletteCard.title}
-        {...this.props.cardPropsBag}
-      >
+      <Card {...this.props.cardPropsBag}>
+        <CardFloatingBar>
+          {this.props.localization.paletteCard.title}
+        </CardFloatingBar>
         <CardActions>
           <LayeredStyle
             styles={[

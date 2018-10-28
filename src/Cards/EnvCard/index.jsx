@@ -4,6 +4,7 @@ import Card from '../CardWindow';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 
+import CardFloatingBar from '../CardFloatingBar';
 import { SourceFile } from '../../File/';
 import EnvItem from './EnvItem';
 import EditFile from '../EditFile';
@@ -63,10 +64,10 @@ export default class EnvCard extends PureComponent {
     const { localization } = this.props;
 
     return (
-      <Card
-        icon={this.props.localization.envCard.title}
-        {...this.props.cardPropsBag}
-      >
+      <Card {...this.props.cardPropsBag}>
+        <CardFloatingBar>
+          {this.props.localization.envCard.title}
+        </CardFloatingBar>
         <CardContent>
           {Object.keys(this.state.env).map(key => (
             <EnvItem

@@ -14,6 +14,7 @@ import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
 import DeviceDevices from '@material-ui/icons/Devices';
 import ImagePhotoCamera from '@material-ui/icons/PhotoCamera';
 
+import CardFloatingBar from '../CardFloatingBar';
 import Monitor from './Monitor';
 import ResolveProgress from './ResolveProgress';
 
@@ -31,7 +32,7 @@ const frameSizes = [
 
 const by = 'x';
 const getContainerStyle = (frameWidth, frameHeight) => ({
-  paddingTop: percent(frameHeight / frameWidth * 100)
+  paddingTop: percent((frameHeight / frameWidth) * 100)
 });
 
 const cn = {
@@ -48,6 +49,9 @@ const cn = {
     height: '100%',
     top: 0,
     left: 0
+  }),
+  blank: style({
+    flex: 1
   })
 };
 
@@ -151,53 +155,43 @@ export default class MonitorCard extends PureComponent {
     const { localization, showAll, loadConfig } = this.props;
     const feelesrc = loadConfig('feelesrc');
 
-    const actions = [
-      <span key="status">{this.state.statusLabel}</span>,
-      <IconButton key="progress" disabled>
-        <ResolveProgress size={24} globalEvent={this.props.globalEvent} />
-      </IconButton>,
-      <IconButton
-        key="refresh"
-        disabled={feelesrc.disableReloadButton}
-        onClick={() => this.props.setLocation()}
-      >
-        <NavigationRefresh color="primary" />
-      </IconButton>,
-      <IconButton
-        key="fullscreen"
-        disabled={feelesrc.disableFullScreenButton}
-        onClick={() => this.props.toggleFullScreen()}
-      >
-        <NavigationFullscreen />
-      </IconButton>
-    ];
-    if (showAll) {
-      actions.push(
-        <IconButton
-          key="screenshot"
-          tooltip="screenshot"
-          disabled={this.state.processing}
-          onClick={this.handleScreenShot}
-        >
-          <ImagePhotoCamera />
-        </IconButton>,
-
-        <IconButton
-          key="settings"
-          tooltip="settings"
-          onClick={this.handleSettings}
-        >
-          <ActionSettings />
-        </IconButton>
-      );
-    }
-
     return (
-      <Card
-        icon={this.props.localization.monitorCard.title}
-        {...this.props.cardPropsBag}
-        actions={actions}
-      >
+      <Card {...this.props.cardPropsBag}>
+        <CardFloatingBar>
+          <span>{this.props.localization.monitorCard.title}</span>
+          <div className={cn.blank} />
+          <span>{this.state.statusLabel}</span>
+          <IconButton disabled>
+            <ResolveProgress size={24} globalEvent={this.props.globalEvent} />
+          </IconButton>
+          <IconButton
+            color="primary"
+            disabled={feelesrc.disableReloadButton}
+            onClick={() => this.props.setLocation()}
+          >
+            <NavigationRefresh />
+          </IconButton>
+          <IconButton
+            disabled={feelesrc.disableFullScreenButton}
+            onClick={() => this.props.toggleFullScreen()}
+          >
+            <NavigationFullscreen />
+          </IconButton>
+          {showAll ? (
+            <IconButton
+              tooltip="screenshot"
+              disabled={this.state.processing}
+              onClick={this.handleScreenShot}
+            >
+              <ImagePhotoCamera />
+            </IconButton>
+          ) : null}
+          {showAll ? (
+            <IconButton tooltip="settings" onClick={this.handleSettings}>
+              <ActionSettings />
+            </IconButton>
+          ) : null}
+        </CardFloatingBar>
         <CardMedia
           className={classes(cn.flexible, this.props.isPopout && cn.popout)}
           style={this.props.isPopout ? undefined : this.state.containerStyle}

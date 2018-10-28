@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Card from '../CardWindow';
 import ReactPlayer from 'react-player';
+
+import Card from '../CardWindow';
+import CardFloatingBar from '../CardFloatingBar';
 
 const defaultPlayerState = {
   // https://github.com/CookPete/react-player#props
@@ -64,10 +66,10 @@ export default class MediaCard extends PureComponent {
     };
 
     return (
-      <Card
-        icon={this.props.localization.mediaCard.title}
-        {...this.props.cardPropsBag}
-      >
+      <Card {...this.props.cardPropsBag}>
+        <CardFloatingBar>
+          {this.props.localization.mediaCard.title}
+        </CardFloatingBar>
         {this.state.playerState.url ? (
           <ReactPlayer {...playerState} />
         ) : (

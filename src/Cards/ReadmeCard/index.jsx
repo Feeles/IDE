@@ -7,6 +7,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import CardFloatingBar from '../CardFloatingBar';
 import Readme from './Readme';
 import EditFile from '../EditFile';
 import shallowEqual from '../../utils/shallowEqual';
@@ -152,11 +153,10 @@ export default class ReadmeCard extends PureComponent {
     }
 
     return (
-      <Card
-        icon={this.props.localization.readmeCard.title}
-        {...this.props.cardPropsBag}
-        fit
-      >
+      <Card {...this.props.cardPropsBag} fit>
+        <CardFloatingBar>
+          {this.props.localization.readmeCard.title}
+        </CardFloatingBar>
         <CardContent className={cn.text}>
           <Readme
             file={selectedFile}
