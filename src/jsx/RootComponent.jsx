@@ -435,6 +435,6 @@ export default DragDropContext(dndBackend)(RootComponent);
 function indicator(val, last) {
   const length = 32;
   const sum = Math.max(1, val + last) + 0.00001;
-  const progress = Math.floor(val / sum * length);
+  const progress = Math.floor((val / sum) * length);
   return '='.repeat(progress) + '+' + '-'.repeat(length - 1 - progress);
 }

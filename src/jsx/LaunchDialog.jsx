@@ -10,6 +10,7 @@ import brown from '@material-ui/core/colors/brown';
 
 import { personalDB, updateProject } from '../database/';
 import { ProjectCard } from '../Menu/CloneDialog';
+import { Typography } from '@material-ui/core';
 
 const cn = {
   container: style({
@@ -20,10 +21,16 @@ const cn = {
     overflow: 'scroll',
     backgroundColor: brown['50'],
     overflowX: 'auto',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    textAlign: 'left'
   }),
   button: style({
-    marginLeft: 8
+    marginLeft: 8,
+    marginBottom: 24,
+    fontSize: 'x-large'
+  }),
+  alignCenter: style({
+    textAlign: 'center'
   })
 };
 
@@ -113,7 +120,7 @@ export default class LaunchDialog extends PureComponent {
     return (
       <Dialog open={this.props.open}>
         <DialogTitle>{localization.launchDialog.title}</DialogTitle>
-        <DialogContent style={{ textAlign: 'center' }}>
+        <DialogContent className={cn.alignCenter}>
           <Button
             variant="contained"
             color="primary"
@@ -122,7 +129,9 @@ export default class LaunchDialog extends PureComponent {
           >
             {localization.launchDialog.startNew}
           </Button>
-          {localization.common.or}
+          <Typography variant="subheading">
+            {localization.launchDialog.description}
+          </Typography>
           <div className={cn.container}>
             {this.state.projects.map(item => (
               <ProjectCard

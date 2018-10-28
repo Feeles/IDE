@@ -19,8 +19,8 @@ export default {
     loadHeader: 'ブラウザからデータを読み込む',
     overwriteSave: '上書きして保存',
     saveInNew: '新しいスロットに保存',
-    remove: '削除',
-    openOnThisTab: 'このタブで開く',
+    remove: 'このデータを削除する',
+    openOnThisTab: 'このデータをロードする',
     openInNewTab: '新しいタブで開く',
     created: '作成日時',
     updated: '更新日時',
@@ -54,9 +54,11 @@ export default {
     change: '変更'
   },
   launchDialog: {
-    title: 'プロジェクトが見つかりました',
+    title: '準備が完了しました',
+    description:
+      '途中のデータが残っています。続きから始めたい場合は、「このデータをロードする」をクリックしてください',
     openProject: 'このプロジェクトを開く',
-    startNew: 'あたらしく始める'
+    startNew: '今すぐスタート'
   },
   addDialog: {
     title: 'ファイルを追加する',
@@ -86,7 +88,7 @@ export default {
   },
   common: {
     close: 'とじる',
-    tapTwiceQuickly: 'すばやく２回クリック',
+    tapTwiceQuickly: 'すばやく２回クリックすると変更できます',
     cannotBeUndone: 'この操作は取り消せません',
     editFile: '書きかえる',
     conflict: '同じ名前のファイルがすでに存在します。上書きしますか？',

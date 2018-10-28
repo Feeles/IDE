@@ -60,9 +60,11 @@ export default {
     cancel: 'Cancel'
   },
   launchDialog: {
-    title: 'Projects are found',
+    title: 'Preparation is complete',
+    description:
+      'Some saved data are found. If you want to load it, please click "Load this data"',
     openProject: 'Open this project',
-    startNew: 'Start new'
+    startNew: 'Start'
   },
   readmeCard: {
     title: 'Getting Started',
@@ -86,7 +88,7 @@ export default {
   },
   common: {
     close: 'Close',
-    tapTwiceQuickly: 'Tap twice quickly',
+    tapTwiceQuickly: 'Tap twice quickly to edit',
     cannotBeUndone: 'This operation can not be undone',
     editFile: 'Edit File',
     conflict:
