@@ -14,6 +14,7 @@ import PlayMenu from './PlayMenu';
 import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
 import zenkakuToHankaku from './zenkakuToHankaku';
+import foldAsset from './foldAsset';
 
 const cn = {
   root: style({
@@ -406,10 +407,13 @@ export default class SourceEditor extends PureComponent {
       }
     };
     const foldOptions = {
-      widget: ' 📦 ',
+      widget: ' ... ',
       minFoldSize: 1,
       scanUp: false
     };
+    if (file.is('javascript')) {
+      foldOptions.rangeFinder = foldAsset;
+    }
 
     return (
       <div className={cn.root}>
