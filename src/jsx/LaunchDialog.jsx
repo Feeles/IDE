@@ -24,7 +24,9 @@ const cn = {
     overflowY: 'scroll'
   }),
   button: style({
-    marginLeft: 8
+    marginLeft: 8,
+    marginBottom: 24,
+    fontSize: 'x-large'
   })
 };
 
