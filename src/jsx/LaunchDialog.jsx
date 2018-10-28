@@ -10,6 +10,7 @@ import brown from '@material-ui/core/colors/brown';
 
 import { personalDB, updateProject } from '../database/';
 import { ProjectCard } from '../Menu/CloneDialog';
+import { Typography } from '@material-ui/core';
 
 const cn = {
   container: style({
@@ -122,7 +123,9 @@ export default class LaunchDialog extends PureComponent {
           >
             {localization.launchDialog.startNew}
           </Button>
-          {localization.common.or}
+          <Typography variant="subheading">
+            {localization.launchDialog.description}
+          </Typography>
           <div className={cn.container}>
             {this.state.projects.map(item => (
               <ProjectCard
