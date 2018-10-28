@@ -27,6 +27,7 @@ const getCn = props => ({
     overflow: props.visible ? 'initial' : 'hidden'
   }),
   card: style({
+    display: 'flex',
     flex: 1,
     flexDirection: 'column',
     position: 'relative',

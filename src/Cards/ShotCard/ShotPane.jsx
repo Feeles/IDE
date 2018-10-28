@@ -54,6 +54,7 @@ const getCn = (props, state) => ({
     boxSizing: 'border-box',
     width: '100%',
     height: state.height,
+    minHeight: 100,
     transform: translateX(state.shooting ? -500 : 0),
     opacity: state.shooting ? 0 : 1,
     transition: props.theme.transitions.create()
@@ -201,7 +202,7 @@ export default class ShotPane extends PureComponent {
     };
 
     return (
-      <div>
+      <>
         {this.state.error ? (
           <pre className={cn.error}>{this.state.error.message}</pre>
         ) : null}
@@ -248,7 +249,7 @@ export default class ShotPane extends PureComponent {
             handleSetLinkObjects={this.props.handleSetLinkObjects}
           />
         </div>
-      </div>
+      </>
     );
   }
 }
