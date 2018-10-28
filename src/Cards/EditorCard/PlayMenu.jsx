@@ -57,18 +57,27 @@ export default class PlayMenu extends PureComponent {
     open: false,
     anchorEl: null,
     // [...{ title, href(name) }]
-    entries: []
+    entries: [],
+    hasMultiEntry: false
   };
+
+  componentDidMount() {
+    this.handleUpdate();
+  }
+
+  componentDidUpdate() {
+    this.handleUpdate();
+  }
+
+  handleUpdate() {
+    const files = this.props.getFiles().filter(file => file.is('html'));
+    this.setState({
+      hasMultiEntry: files.length > 1
+    });
+  }
 
   handlePlay = event => {
     const files = this.props.getFiles().filter(file => file.is('html'));
-
-    if (files.length <= 1) {
-      // 表示すべきリストがない
-      this.props.setLocation();
-      return;
-    }
-
     const parser = new DOMParser();
     const entries = files
       .map(file => {
@@ -129,14 +138,16 @@ export default class PlayMenu extends PureComponent {
           <AVPlayCircleOutline />
           {localization.editorCard.play}
         </Button>
-        <Button
-          variant="text"
-          color="primary"
-          className={dcn.dropDown}
-          onClick={this.handlePlay}
-        >
-          <NavigationArrowDropDown />
-        </Button>
+        {this.state.hasMultiEntry ? (
+          <Button
+            variant="text"
+            color="primary"
+            className={dcn.dropDown}
+            onClick={this.handlePlay}
+          >
+            <NavigationArrowDropDown />
+          </Button>
+        ) : null}
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
