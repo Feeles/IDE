@@ -21,12 +21,16 @@ const cn = {
     overflow: 'scroll',
     backgroundColor: brown['50'],
     overflowX: 'auto',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
+    textAlign: 'left'
   }),
   button: style({
     marginLeft: 8,
     marginBottom: 24,
     fontSize: 'x-large'
+  }),
+  alignCenter: style({
+    textAlign: 'center'
   })
 };
 
@@ -116,7 +120,7 @@ export default class LaunchDialog extends PureComponent {
     return (
       <Dialog open={this.props.open}>
         <DialogTitle>{localization.launchDialog.title}</DialogTitle>
-        <DialogContent style={{ textAlign: 'center' }}>
+        <DialogContent className={cn.alignCenter}>
           <Button
             variant="contained"
             color="primary"
