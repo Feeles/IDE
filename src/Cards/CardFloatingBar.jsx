@@ -1,34 +1,30 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
+import withTheme from '@material-ui/core/styles/withTheme';
 
-const HeaderHeight = 32;
-
-export const cn = {
+const getCn = props => ({
   root: style({
-    flex: 0,
     display: 'flex',
     alignItems: 'center',
-    minHeight: HeaderHeight,
-    paddingLeft: 8,
+    padding: props.theme.spacing.unit,
     width: '100%',
     boxSizing: 'border-box',
-    overflowX: 'auto',
-    overflowY: 'hidden'
-  }),
-  blank: style({
-    flex: 1
+    zIndex: 1000,
+    position: ['-webkit-sticky', 'sticky'],
+    top: 0,
+    backgroundColor: props.theme.palette.background.paper
   })
-};
+});
 
+@withTheme()
 export default class CardFloatingBas extends PureComponent {
   static propTypes = {
     children: PropTypes.node
   };
 
-  static defaultProps = {};
-
   render() {
-    return <div className={cn.root}>{this.props.children}</div>;
+    const dcn = getCn(this.props);
+    return <div className={dcn.root}>{this.props.children}</div>;
   }
 }

@@ -11,6 +11,7 @@ import AvStop from '@material-ui/icons/Stop';
 import red from '@material-ui/core/colors/red';
 import ContentReply from '@material-ui/icons/Reply';
 
+import CardFloatingBar from '../CardFloatingBar';
 import { SourceFile } from '../../File/';
 import Editor from '../EditorCard/Editor';
 import excessiveCare from './excessiveCare';
@@ -19,15 +20,6 @@ const cn = {
   root: style({
     display: 'flex',
     flexDirection: 'column'
-  }),
-  menu: style({
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    height: '2.25em',
-    marginBottom: '0.25em'
   }),
   shoot: style({
     marginRight: 9,
@@ -214,7 +206,21 @@ export default class ShotPane extends PureComponent {
           <pre className={cn.error}>{this.state.error.message}</pre>
         ) : null}
         {this.state.loading ? <LinearProgress /> : null}
-        <div className={cn.menu}>
+        <CardFloatingBar>
+          <span>{localization.shotCard.title}</span>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={this.handleRestore}
+            className={cn.restore}
+            disabled={!this.state.canRestore}
+          >
+            {localization.shotCard.restore}
+          </Button>
+          <div className={cn.blank} />
+          <Typography className={cn.label} color="textSecondary">
+            {localization.shotCard.shoot}
+          </Typography>
           <Button
             variant="contained"
             color="primary"
@@ -225,20 +231,7 @@ export default class ShotPane extends PureComponent {
             {localization.shotCard.button}
             {this.state.shooting ? <AvStop /> : <ContentReply />}
           </Button>
-          <Typography className={cn.label} color="textSecondary">
-            {localization.shotCard.shoot}
-          </Typography>
-          <div className={cn.blank} />
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={this.handleRestore}
-            className={cn.restore}
-            disabled={!this.state.canRestore}
-          >
-            {localization.shotCard.restore}
-          </Button>
-        </div>
+        </CardFloatingBar>
         <div className={dcn.editor}>
           <Editor
             isSelected

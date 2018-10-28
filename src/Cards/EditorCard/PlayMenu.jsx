@@ -30,25 +30,11 @@ const cn = {
   })
 };
 const getCn = props => ({
-  button: style({
-    borderRadius: 0,
-    boxShadow: 'none',
-    padding: 0,
-    lineHeight: 2,
-    paddingLeft: props.theme.spacing.unit,
-    color: props.theme.palette.primary.contrastText,
-    backgroundColor: props.theme.palette.primary.main
-  }),
   dropDown: style({
-    // marginLeft: -16,
-
-    minWidth: 32,
-    padding: 0,
-    lineHeight: 2,
-    borderRadius: 0,
-    boxShadow: 'none',
-    color: props.theme.palette.primary.contrastText,
-    backgroundColor: props.theme.palette.primary.main
+    marginLeft: props.theme.spacing.unit,
+    minWidth: 0,
+    paddingLeft: 0,
+    paddingRight: 0
   }),
   current: style({
     marginTop: -8,
@@ -138,14 +124,13 @@ export default class PlayMenu extends PureComponent {
         <Button
           variant="contained"
           color="primary"
-          className={dcn.button}
           onClick={() => this.props.setLocation()}
         >
           <AVPlayCircleOutline />
           {localization.editorCard.play}
         </Button>
         <Button
-          variant="contained"
+          variant="text"
           color="primary"
           className={dcn.dropDown}
           onClick={this.handlePlay}
@@ -170,7 +155,6 @@ export default class PlayMenu extends PureComponent {
                   <NavigationRefresh />
                 </ListItemIcon>
                 <ListItemText
-                  className={dcn.current}
                   inset
                   primary={current.title}
                   secondary={

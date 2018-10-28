@@ -5,7 +5,6 @@ import Card from '@material-ui/core/Card';
 import CardWindow from '../CardWindow';
 import uniq from 'lodash/uniq';
 
-import CardFloatingBar from '../CardFloatingBar';
 import ShotPane from './ShotPane';
 import shallowEqual from '../../utils/shallowEqual';
 
@@ -155,9 +154,6 @@ export default class ShotCard extends PureComponent {
 
     return (
       <CardWindow {...this.props.cardPropsBag} footer={this.state.footer}>
-        <CardFloatingBar>
-          {this.props.localization.shotCard.title}
-        </CardFloatingBar>
         {visible ? (
           <ShotPane
             fileView={this.props.fileView}

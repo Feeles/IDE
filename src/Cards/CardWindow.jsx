@@ -29,7 +29,8 @@ const getCn = props => ({
   card: style({
     flex: 1,
     flexDirection: 'column',
-    position: 'relative'
+    position: 'relative',
+    overflow: 'visible' // position: sticky のために必要
   })
 });
 

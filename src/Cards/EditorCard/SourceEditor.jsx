@@ -1,20 +1,19 @@
 import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
-import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
-import ContentSave from '@material-ui/icons/Save';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import includes from 'lodash/includes';
+
 import Editor from './Editor';
-import PlayMenu from './PlayMenu';
+import MenuBar from './MenuBar';
 import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
 import zenkakuToHankaku from './zenkakuToHankaku';
 import foldAsset from './foldAsset';
+import FileTabs from './FileTabs';
+import { withTheme } from '@material-ui/core';
 
 const cn = {
   root: style({
@@ -43,14 +42,6 @@ const cn = {
     flex: '1 1 auto'
   })
 };
-const getCn = props => ({
-  menuBar: style({
-    display: 'flex',
-    zIndex: 3,
-    backgroundColor: props.theme.palette.background.paper,
-    borderBottom: `1px solid ${props.theme.palette.primary.main}`
-  })
-});
 
 // file -> prevFile を参照する
 const prevFiles = new WeakMap();
@@ -58,7 +49,6 @@ const prevFiles = new WeakMap();
 @withTheme()
 export default class SourceEditor extends PureComponent {
   static propTypes = {
-    theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
@@ -74,7 +64,9 @@ export default class SourceEditor extends PureComponent {
     putFile: PropTypes.func.isRequired,
     closeSelectedTab: PropTypes.func.isRequired,
     selectTabFromFile: PropTypes.func.isRequired,
-    onDocChanged: PropTypes.func.isRequired
+    selectTab: PropTypes.func.isRequired,
+    closeTab: PropTypes.func.isRequired,
+    tabs: PropTypes.array.isRequired
   };
 
   state = {
@@ -88,7 +80,10 @@ export default class SourceEditor extends PureComponent {
     assetLineNumber: 0,
     assetScope: null,
     appendToHead: true,
-    classNameStyles: []
+    classNameStyles: [],
+
+    // { [Tab.file.key]: Doc }
+    currentDoc: {}
   };
 
   _widgets = new Map();
@@ -270,8 +265,6 @@ export default class SourceEditor extends PureComponent {
     return this.props.setLocation(href);
   };
 
-  handleSaveAndRun = () => this.setLocation();
-
   handleAssetInsert = ({ code }) => {
     const { assetLineNumber } = this.state;
     const pos = new Pos(assetLineNumber, 0);
@@ -387,8 +380,15 @@ export default class SourceEditor extends PureComponent {
     this.codemirror.scrollTo(left, top);
   }
 
+  handleDocChanged = next => {
+    if (next) {
+      this.setState({ currentDoc: { [next.id]: next.doc } });
+    } else {
+      this.setState({ currentDoc: {} });
+    }
+  };
+
   render() {
-    const dcn = getCn(this.props);
     const { file, localization } = this.props;
     const { showHint } = this.state;
 
@@ -422,37 +422,20 @@ export default class SourceEditor extends PureComponent {
             item => `.${item.className} { ${item.style} } `
           )}
         </style>
-        <div className={dcn.menuBar}>
-          <Button
-            variant="text"
-            disabled={!this.state.hasHistory}
-            className={cn.barButton}
-            onClick={this.handleUndo}
-          >
-            <HardwareKeyboardBackspace />
-            <span className={cn.barButtonLabel}>
-              {localization.editorCard.undo}
-            </span>
-          </Button>
-          <Button
-            variant="text"
-            disabled={!this.state.hasChanged}
-            className={cn.barButton}
-            onClick={this.handleSaveAndRun}
-          >
-            <ContentSave />
-            <span className={cn.barButtonLabel}>
-              {localization.editorCard.save}
-            </span>
-          </Button>
-          <div className={cn.blank} />
-          <PlayMenu
-            getFiles={this.props.getFiles}
-            setLocation={this.setLocation}
-            href={this.props.href}
-            localization={this.props.localization}
-          />
-        </div>
+        <MenuBar
+          localization={localization}
+          getFiles={this.props.getFiles}
+          href={this.props.href}
+          handleUndo={this.handleUndo}
+          setLocation={this.setLocation}
+        />
+        <FileTabs
+          localization={this.props.localization}
+          selectTab={this.props.selectTab}
+          closeTab={this.props.closeTab}
+          currentDoc={this.state.currentDoc}
+          tabs={this.props.tabs}
+        />
         {this.state.loading ? (
           <LinearProgress color="primary" className={cn.progress} />
         ) : null}
@@ -465,14 +448,14 @@ export default class SourceEditor extends PureComponent {
             findFile={this.props.findFile}
             handleClose={this.handleAssetClose}
             handleAssetInsert={this.handleAssetInsert}
-            localization={this.props.localization}
+            localization={localization}
           />
           <Editor
             {...this.props}
             showHint={showHint}
             snippets={this.state.snippets}
             codemirrorRef={ref => (this.codemirror = ref)}
-            onDocChanged={this.props.onDocChanged}
+            onDocChanged={this.handleDocChanged}
             extraKeys={extraKeys}
             foldOptions={foldOptions}
             loadConfig={this.props.loadConfig}

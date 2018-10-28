@@ -6,27 +6,10 @@ import Button from '@material-ui/core/Button';
 import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
 import Card from '../CardWindow';
-import CardFloatingBar from '../CardFloatingBar';
 import SourceEditor from './SourceEditor';
-import ChromeTab, { Tab } from '../../ChromeTab/';
-
-const MAX_TAB = 5;
-const tabContainerPaddingRight = 7;
-const tabContainerPaddingLeft = 80;
+import { Tab } from '../../ChromeTab/';
 
 const cn = {
-  tabContainer: style({
-    position: 'absolute',
-    top: 0,
-    width: 'calc(100% - 48px)',
-    boxSizing: 'border-box',
-    display: 'flex',
-    alignItems: 'flex-end',
-    height: 32,
-    paddingRight: tabContainerPaddingRight,
-    paddingLeft: tabContainerPaddingLeft,
-    zIndex: 10
-  }),
   largeIcon: style({
     width: 40,
     height: 40
@@ -38,11 +21,6 @@ const cn = {
   })
 };
 const getCn = props => ({
-  tabContentContainer: style({
-    flex: 1,
-    position: 'relative',
-    borderTop: `1px solid ${props.theme.palette.primary.main}`
-  }),
   noFileBg: style({
     flex: '1 1 auto',
     display: 'flex',
@@ -76,11 +54,6 @@ export default class EditorCard extends PureComponent {
     cardProps: PropTypes.object.isRequired,
     setCardVisibility: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
-
-  state = {
-    // { [Tab.file.key]: Doc }
-    currentDoc: {}
   };
 
   componentDidUpdate(prevProps) {
@@ -156,14 +129,6 @@ export default class EditorCard extends PureComponent {
       .forEach(item => this.props.selectTab(item));
   };
 
-  handleDocChanged = next => {
-    if (next) {
-      this.setState({ currentDoc: { [next.id]: next.doc } });
-    } else {
-      this.setState({ currentDoc: {} });
-    }
-  };
-
   render() {
     const dcn = getCn(this.props);
     if (!this.props.tabs.length) {
@@ -176,7 +141,6 @@ export default class EditorCard extends PureComponent {
 
     const {
       putFile,
-      selectTab,
       openFileDialog,
       localization,
       findFile,
@@ -185,62 +149,30 @@ export default class EditorCard extends PureComponent {
       cardPropsBag
     } = this.props;
 
-    const tabs = [];
-    const containerWidth = this.tabContainer
-      ? this.tabContainer.getBoundingClientRect().width -
-        tabContainerPaddingLeft -
-        tabContainerPaddingRight
-      : 0;
-    for (const tab of this.props.tabs) {
-      if (tabs.length < MAX_TAB) {
-        // current tab でなければ undefined
-        const doc = this.state.currentDoc[tab.file.key];
-        tabs.push(
-          <ChromeTab
-            key={tab.key}
-            tab={tab}
-            file={tab.file}
-            tabs={tabs}
-            isSelected={tab.isSelected}
-            localization={localization}
-            handleSelect={selectTab}
-            handleClose={this.props.closeTab}
-            containerWidth={containerWidth}
-            doc={doc}
-          />
-        );
-      }
-    }
     const selectedTab = this.props.tabs.find(item => item.isSelected);
 
     return (
       <Card {...cardPropsBag} fit width={640}>
-        <CardFloatingBar>
-          {this.props.localization.editorCard.title}
-        </CardFloatingBar>
-        <div className={cn.tabContainer} ref={ref => (this.tabContainer = ref)}>
-          {tabs}
-        </div>
-        <div className={dcn.tabContentContainer}>
-          <SourceEditor
-            fileView={this.props.fileView}
-            file={selectedTab.file}
-            files={this.props.files}
-            getFiles={this.getFiles}
-            closeSelectedTab={this.handleCloseSelectedTab}
-            selectTabFromFile={this.handleSelectTabFromFile}
-            setLocation={this.setLocation}
-            href={this.props.href}
-            getConfig={getConfig}
-            loadConfig={this.props.loadConfig}
-            findFile={findFile}
-            localization={localization}
-            reboot={reboot}
-            openFileDialog={openFileDialog}
-            putFile={putFile}
-            onDocChanged={this.handleDocChanged}
-          />
-        </div>
+        <SourceEditor
+          fileView={this.props.fileView}
+          file={selectedTab.file}
+          files={this.props.files}
+          getFiles={this.getFiles}
+          closeSelectedTab={this.handleCloseSelectedTab}
+          selectTabFromFile={this.handleSelectTabFromFile}
+          setLocation={this.setLocation}
+          href={this.props.href}
+          getConfig={getConfig}
+          loadConfig={this.props.loadConfig}
+          findFile={findFile}
+          localization={localization}
+          reboot={reboot}
+          openFileDialog={openFileDialog}
+          putFile={putFile}
+          selectTab={this.props.selectTab}
+          closeTab={this.props.closeTab}
+          tabs={this.props.tabs}
+        />
       </Card>
     );
   }
