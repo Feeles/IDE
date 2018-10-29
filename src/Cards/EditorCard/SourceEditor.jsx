@@ -428,6 +428,8 @@ export default class SourceEditor extends PureComponent {
           href={this.props.href}
           handleUndo={this.handleUndo}
           setLocation={this.setLocation}
+          hasHistory={this.state.hasHistory}
+          hasChanged={this.state.hasChanged}
         />
         <FileTabs
           localization={this.props.localization}

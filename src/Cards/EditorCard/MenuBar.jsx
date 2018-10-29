@@ -20,7 +20,9 @@ export default class MenuBar extends React.Component {
     getFiles: PropTypes.func.isRequired,
     href: PropTypes.string.isRequired,
     handleUndo: PropTypes.func.isRequired,
-    setLocation: PropTypes.func.isRequired
+    setLocation: PropTypes.func.isRequired,
+    hasChanged: PropTypes.bool.isRequired,
+    hasHistory: PropTypes.bool.isRequired
   };
 
   state = {};
@@ -33,7 +35,7 @@ export default class MenuBar extends React.Component {
         {this.props.localization.editorCard.title}
         <Button
           variant="text"
-          disabled={!this.state.hasHistory}
+          disabled={!this.props.hasHistory}
           onClick={this.props.handleUndo}
         >
           <HardwareKeyboardBackspace />
@@ -41,7 +43,7 @@ export default class MenuBar extends React.Component {
         </Button>
         <Button
           variant="text"
-          disabled={!this.state.hasChanged}
+          disabled={!this.props.hasChanged}
           onClick={this.handleSaveAndRun}
         >
           <ContentSave />
