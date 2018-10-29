@@ -14,7 +14,7 @@ const cn = {
     top: 0,
     left: 0,
     width: '100%',
-    zIndex: 100
+    zIndex: 1001
   }),
   error: style({
     margin: 16,
