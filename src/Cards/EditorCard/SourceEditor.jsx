@@ -231,20 +231,19 @@ export default class SourceEditor extends PureComponent {
   handleIndexReplacement = (cm, change) => {
     if (!includes(['asset', 'paste'], change.origin)) return;
 
-    for (const keyword of ['item', 'map']) {
-      // すでに使われている item{N} のような変数を探す.
+    for (const keyword of ['const item', 'const map']) {
+      // すでに使われている const item{N} のような変数を探す.
       // 戻り値は Array<Number>
       // e.g. From "const item1 = 'hello';", into [1]
       const usedIndexes = searchItemIndexes(cm.getValue('\n'), keyword);
       if (usedIndexes.length < 1) continue;
-
       const sourceText = change.text.join('\n');
       if (usedIndexes.some(i => includes(sourceText, keyword + i))) {
         // もし名前が競合していたら…
         const max = Math.max.apply(null, usedIndexes);
         const regExp = new RegExp(`${keyword}(\\d+)`, 'g');
         const text = sourceText.replace(regExp, (match, n) => {
-          // item{n} => item{n+max}
+          // const item{n} => const item{n+max}
           n = n >> 0;
           return keyword + (n + max);
         });
@@ -482,10 +481,7 @@ function wait(millisec) {
 }
 
 function searchItemIndexes(text, keyword, limit = 1000) {
-  const regExp = new RegExp(
-    String.raw`(const|let|var)\s${keyword}(\d+)\s`,
-    'g'
-  );
+  const regExp = new RegExp(String.raw`${keyword}(\d+)\s`, 'g');
   text = beautify(text);
 
   const indexes = [];
@@ -494,7 +490,7 @@ function searchItemIndexes(text, keyword, limit = 1000) {
     (result = regExp.exec(text)) && i < limit;
     i++
   ) {
-    indexes.push(+result[2]);
+    indexes.push(+result[1]);
   }
   return indexes;
 }
