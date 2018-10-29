@@ -512,9 +512,7 @@ export default class Main extends Component {
             openFileDialog={this.openFileDialog}
             saveAs={this.saveAs}
             project={this.state.project}
-            setProject={this.setProject}
             setCardVisibility={this.setCardVisibility}
-            launchIDE={this.props.launchIDE}
             showAll={this.state.showAll}
             toggleShowAll={this.toggleShowAll}
             globalEvent={this.state.globalEvent}

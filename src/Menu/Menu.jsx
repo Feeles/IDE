@@ -10,12 +10,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import FileDownload from '@material-ui/icons/CloudDownload';
 import ActionLanguage from '@material-ui/icons/Language';
 import NavigationMenu from '@material-ui/icons/Menu';
 
 import { acceptedLanguages } from '../localization/';
-import CloneDialog from './CloneDialog';
 
 const cn = {
   root: style({
@@ -59,8 +57,6 @@ export default class Menu extends PureComponent {
     localization: PropTypes.object.isRequired,
     setLocalization: PropTypes.func.isRequired,
     project: PropTypes.object,
-    setProject: PropTypes.func.isRequired,
-    launchIDE: PropTypes.func.isRequired,
     showAll: PropTypes.bool.isRequired,
     toggleShowAll: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
@@ -93,15 +89,6 @@ export default class Menu extends PureComponent {
     return withoutI18n.concat(intoRoot);
   }
 
-  handleClone = () => {
-    this.props.openFileDialog(CloneDialog, {
-      files: this.props.files,
-      project: this.props.project,
-      setProject: this.props.setProject,
-      launchIDE: this.props.launchIDE
-    });
-  };
-
   handleSetTitle = event => {
     this.setState({ overrideTitle: event.data.value });
   };
@@ -116,7 +103,7 @@ export default class Menu extends PureComponent {
     });
   };
 
-  handleCloneMenu = () => {
+  handleCloseMenu = () => {
     this.setState({
       anchorEl: null
     });
@@ -161,15 +148,6 @@ export default class Menu extends PureComponent {
             label={this.props.showAll ? '' : localization.menu.showAll}
             className={dcn.contrastColor}
           />
-          {this.props.showAll ? (
-            <IconButton
-              tooltip={localization.menu.clone}
-              onClick={this.handleClone}
-              className={cn.button}
-            >
-              <FileDownload />
-            </IconButton>
-          ) : null}
           <IconButton
             tooltip={localization.menu.language}
             onClick={this.handleLanguage}
@@ -179,7 +157,7 @@ export default class Menu extends PureComponent {
           <MuiMenu
             anchorEl={this.state.anchorEl}
             open={!!this.state.anchorEl}
-            onClose={this.handleCloneMenu}
+            onClose={this.handleCloseMenu}
           >
             {acceptedLanguages.map(lang => (
               <MenuItem
