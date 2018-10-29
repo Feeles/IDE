@@ -22,8 +22,7 @@ const cn = {
     zIndex: null
   }),
   button: style({
-    marginLeft: 20,
-    zIndex: 2
+    marginLeft: 20
   }),
   projectName: style({
     fontSize: '.8rem',
@@ -180,15 +179,6 @@ export default class Menu extends PureComponent {
           <MuiMenu
             anchorEl={this.state.anchorEl}
             open={!!this.state.anchorEl}
-            anchorOrigin={{
-              horizontal: 'right',
-              vertical: 'top'
-            }}
-            targetOrigin={{
-              horizontal: 'right',
-              vertical: 'bottom'
-            }}
-            className={cn.button}
             onClose={this.handleCloneMenu}
           >
             {acceptedLanguages.map(lang => (
