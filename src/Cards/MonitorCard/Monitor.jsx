@@ -161,6 +161,12 @@ export default class Monitor extends PureComponent {
     if (prevProps.isPopout && !this.props.isPopout) {
       this.popoutClosed = true; // Use delay
     }
+    if (!prevProps.isFullScreen && this.props.isFullScreen) {
+      // フルスクリーン時にフォーカスを iframe に与える
+      if (this.iframe) {
+        this.iframe.contentWindow.focus();
+      }
+    }
   }
 
   componentWillUnmount() {
