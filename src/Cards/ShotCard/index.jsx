@@ -6,7 +6,7 @@ import CardWindow from '../CardWindow';
 import uniq from 'lodash/uniq';
 
 import ShotPane from './ShotPane';
-import shallowEqual from '../../utils/shallowEqual';
+import Snippet from '../../File/Snippet';
 
 const scrapbox = {
   url: title => `https://scrapbox.io/hackforplay/${encodeURIComponent(title)}`,
@@ -90,7 +90,10 @@ export default class ShotCard extends PureComponent {
     if (value) {
       // feeles.openCode()
       const file = this.props.findFile(value);
-      this.setState({ file });
+      this.setState({
+        file,
+        completes: this.props.getConfig('snippets')(file)
+      });
       this.props.setCardVisibility('ShotCard', true);
     } else {
       // feeles.closeCode()
@@ -100,10 +103,25 @@ export default class ShotCard extends PureComponent {
 
   handleComplete = event => {
     const { value } = event.data;
-    // feeles.exports
-    if (!shallowEqual(value, this.state.completes)) {
-      this.setState({ completes: value });
-    }
+    if (!Array.isArray(value)) return;
+
+    const snippets = value.map(
+      item =>
+        new Snippet({
+          name: '',
+          fileKey: '',
+          ...(item || {})
+        })
+    );
+
+    const completes = this.state.file
+      ? this.props
+          .getConfig('snippets')()
+          .concat(snippets)
+      : snippets;
+    this.setState({
+      completes
+    });
   };
 
   handleSetLinkObjects = (linkObjects = []) => {

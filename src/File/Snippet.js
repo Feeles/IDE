@@ -1,4 +1,4 @@
-import { Pos } from 'codemirror';
+import { Pos, countColumn } from 'codemirror';
 
 import { separate } from '../File/';
 
@@ -10,7 +10,13 @@ export default class Snippet {
   }
 
   get text() {
-    return this.props.body.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+    if (!this.props.body && typeof this.props.text === 'string') {
+      return this.props.text;
+    } else if (Array.isArray(this.props.body)) {
+      return this.props.body.map(text => text.replace(/\\t/g, '\t')).join('\n');
+    } else {
+      return this.props.body.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
+    }
   }
 
   get prefix() {
@@ -46,20 +52,24 @@ export default class Snippet {
     return element;
   }
 
-  hint(instance, self, data) {
+  hint(cm, self, data) {
     const from = self.asset ? new Pos(self.from.line + 1, 0) : self.from;
     const to = self.asset ? from : self.to;
     const text = self.asset ? data.text + '\n' : data.text;
+    const prefix = cm.getLine(from.line);
 
-    instance.replaceRange(text, from, to, 'complete');
+    cm.replaceRange(text, from, to, 'complete');
 
-    const length = text.split('\n').length + (self.asset ? -1 : 0);
-    Array.from({ length }).forEach((v, i) =>
-      instance.indentLine(i + from.line)
-    );
+    // 挿入位置のタブに合わせるインデント
+    const indent = countColumn(prefix, null, 4);
+    const end = from.line + text.split('\n').length + (self.asset ? -1 : 0);
+    for (let line = from.line + 1; line < end; line++) {
+      const pos = new Pos(line, 0);
+      cm.replaceRange('\t'.repeat(indent / 4), pos, pos, '+input');
+    }
 
     const endLine = from.line + length - 1;
-    const endCh = instance.getLine(endLine).length;
+    const endCh = cm.getLine(endLine).length;
 
     return {
       from,
