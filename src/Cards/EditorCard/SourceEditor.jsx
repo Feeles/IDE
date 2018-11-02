@@ -14,6 +14,7 @@ import zenkakuToHankaku from './zenkakuToHankaku';
 import foldAsset from './foldAsset';
 import FileTabs from './FileTabs';
 import { withTheme } from '@material-ui/core';
+import replaceExistConsts from '../../utils/replaceExistConsts';
 
 const cn = {
   root: style({
@@ -231,24 +232,11 @@ export default class SourceEditor extends PureComponent {
   handleIndexReplacement = (cm, change) => {
     if (!includes(['asset', 'paste'], change.origin)) return;
 
-    for (const keyword of ['const item', 'const map']) {
-      // すでに使われている const item{N} のような変数を探す.
-      // 戻り値は Array<Number>
-      // e.g. From "const item1 = 'hello';", into [1]
-      const usedIndexes = searchItemIndexes(cm.getValue('\n'), keyword);
-      if (usedIndexes.length < 1) continue;
-      const sourceText = change.text.join('\n');
-      if (usedIndexes.some(i => includes(sourceText, keyword + i))) {
-        // もし名前が競合していたら…
-        const max = Math.max.apply(null, usedIndexes);
-        const regExp = new RegExp(`${keyword}(\\d+)`, 'g');
-        const text = sourceText.replace(regExp, (match, n) => {
-          // const item{n} => const item{n+max}
-          n = n >> 0;
-          return keyword + (n + max);
-        });
-        change.update(change.from, change.to, text.split('\n'));
-      }
+    const code = cm.getValue('\n');
+    const sourceText = change.text.join('\n');
+    const replacedText = replaceExistConsts(code, sourceText);
+    if (sourceText !== replacedText) {
+      change.update(change.from, change.to, replacedText.split('\n'));
     }
   };
 
@@ -478,19 +466,4 @@ function wait(millisec) {
   return new Promise(resolve => {
     setTimeout(resolve, millisec);
   });
-}
-
-function searchItemIndexes(text, keyword, limit = 1000) {
-  const regExp = new RegExp(String.raw`${keyword}(\d+)\s`, 'g');
-  text = beautify(text);
-
-  const indexes = [];
-  for (
-    let i = 0, result = null;
-    (result = regExp.exec(text)) && i < limit;
-    i++
-  ) {
-    indexes.push(+result[1]);
-  }
-  return indexes;
 }

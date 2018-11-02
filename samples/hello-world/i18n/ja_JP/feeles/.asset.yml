@@ -2,3 +2,13 @@
   - label: ログ
     code: |
       console.log(('▼ ドロップダウン', 'ほげ'));
+  - label: item
+    description: const item から始まる変数は自動的にインクリメントされる
+    code: |
+      // 変数
+      const item1 = 1;
+      item1.toString();
+      function item1Func() {
+        const item2 = 1;
+        item2.toString();
+      }
