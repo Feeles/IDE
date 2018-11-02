@@ -86,7 +86,7 @@ if (process.env.NODE_ENV !== 'production') {
   // for Development:
   config.devtool = 'eval';
 } else {
-  config.devtool = 'source-map';
+  config.devtool = 'cheap-module-source-map';
   config.plugins.push(
     // https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b
     new webpack.optimize.ModuleConcatenationPlugin()
