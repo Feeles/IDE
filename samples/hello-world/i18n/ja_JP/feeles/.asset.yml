@@ -8,3 +8,7 @@
       // 変数
       const item1 = 1;
       item1.toString();
+      function item1Func() {
+        const item2 = 1;
+        item2.toString();
+      }
