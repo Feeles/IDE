@@ -15,6 +15,7 @@ import foldAsset from './foldAsset';
 import FileTabs from './FileTabs';
 import { withTheme } from '@material-ui/core';
 import replaceExistConsts from '../../utils/replaceExistConsts';
+import preserveTrailingSpaceBeautify from '../../utils/preserveTrailingSpaceBeautify';
 
 const cn = {
   root: style({
@@ -353,7 +354,9 @@ export default class SourceEditor extends PureComponent {
     }
 
     if (file.is('javascript') || file.is('json')) {
-      setValueWithoutHistory(beautify(prevValue, configs.js || {}));
+      setValueWithoutHistory(
+        preserveTrailingSpaceBeautify(prevValue, configs.js || {})
+      );
     } else if (file.is('html')) {
       setValueWithoutHistory(beautify.html(prevValue, configs.html || {}));
     } else if (file.is('css')) {
