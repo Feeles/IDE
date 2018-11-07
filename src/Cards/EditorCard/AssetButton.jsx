@@ -142,16 +142,26 @@ export default class AssetButton extends PureComponent {
     const { palette } = this.props.theme;
 
     return (
-      <Paper
-        className={dcn.root}
-        style={this.state.backgroundStyle}
-        onClick={this.handleOpen}
-      >
-        <span className={cn.label}>{this.props.label}</span>
+      <>
+        <Paper
+          className={dcn.root}
+          style={this.state.backgroundStyle}
+          onClick={this.handleOpen}
+        >
+          <span className={cn.label}>{this.props.label}</span>
+          <Button
+            variant="fab"
+            mini
+            className={cn.button}
+            onClick={this.handleInsert}
+          >
+            <ContentReply className={cn.icon} />
+          </Button>
+        </Paper>
         <Popover
           open={this.state.open}
           anchorEl={this.state.anchorEl}
-          className={cn.popover}
+          classes={{ paper: cn.popover }}
           onClose={() => this.setState({ open: false })}
         >
           <div className={cn.box}>
@@ -186,15 +196,7 @@ export default class AssetButton extends PureComponent {
             <pre className={cn.pre}>{this.props.code}</pre>
           </code>
         </Popover>
-        <Button
-          variant="fab"
-          mini
-          className={cn.button}
-          onClick={this.handleInsert}
-        >
-          <ContentReply className={cn.icon} />
-        </Button>
-      </Paper>
+      </>
     );
   }
 }
