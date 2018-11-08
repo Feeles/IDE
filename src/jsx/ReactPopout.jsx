@@ -81,7 +81,7 @@ export default class PopoutWindow extends React.Component {
           ownerWindow  = this.props.window || window,
           openedWindow = {
             update(newComponent){
-              ReactDOM.render(newComponent, container);
+              container && ReactDOM.render(newComponent, container);
             },
             close(){
               popoutWindow && popoutWindow.close();
