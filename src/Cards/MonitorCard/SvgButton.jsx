@@ -1,15 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-
-const cn = {
-  root: style({
-    backgroundColor: 'transparent',
-    border: 'none',
-    outline: 'none',
-    cursor: 'pointer'
-  })
-};
 
 export default class SvgButton extends PureComponent {
   static propTypes = {
@@ -23,18 +13,24 @@ export default class SvgButton extends PureComponent {
   };
 
   render() {
-    const svgStyle = {
-      width: 24,
-      height: 24
+    // この SvgButton フェイクは Popup の中で使われることもあるため, CSS の class が使えない
+    const styles = {
+      root: {
+        backgroundColor: 'transparent',
+        border: 'none',
+        outline: 'none',
+        cursor: 'pointer',
+        ...this.props.style
+      },
+      svg: {
+        width: 24,
+        height: 24
+      }
     };
 
     return (
-      <button
-        style={this.props.style}
-        className={cn.root}
-        onClick={this.props.onClick}
-      >
-        <svg fill="white" style={svgStyle} viewBox="0 0 24 24">
+      <button style={styles.root} onClick={this.props.onClick}>
+        <svg fill="white" style={styles.svg} viewBox="0 0 24 24">
           <path d={this.props.children} />
         </svg>
       </button>

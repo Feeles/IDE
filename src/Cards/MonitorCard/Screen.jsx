@@ -1,43 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
 import { SrcDocEnabled } from './setSrcDoc';
 import ErrorMessage from './ErrorMessage';
 import SvgButton from './SvgButton';
 
 const Padding = 1;
 const ScaleChangeMin = 0.02;
-
-const cn = {
-  root: style({
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    left: 0,
-    top: 0,
-    background: 'linear-gradient(rgba(0,0,0,0.8), rgba(128,128,128,0.8))',
-    boxSizing: 'border-box',
-    overflow: 'hidden',
-    zIndex: 10
-  }),
-  parent: style({
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }),
-  frame: style({
-    border: '0 none',
-    flex: '0 0 auto'
-  }),
-  button: style({
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    zIndex: 1
-  })
-};
 
 export default class Screen extends PureComponent {
   static propTypes = {
@@ -125,33 +93,59 @@ export default class Screen extends PureComponent {
       ? 'allow-scripts allow-modals allow-popups'
       : 'allow-scripts allow-modals allow-popups allow-same-origin';
 
+    // Screen は Popout されることもあるので, CSS の class は使えない
+    const styles = {
+      root: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        left: 0,
+        top: 0,
+        background: 'linear-gradient(rgba(0,0,0,0.8), rgba(128,128,128,0.8))',
+        boxSizing: 'border-box',
+        overflow: 'hidden',
+        zIndex: 10,
+        display: display ? 'block' : 'none',
+        paddingTop: isFullScreen ? 64 : 0 // フルスクリーン中、余白がなくならないように
+      },
+      parent: {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      frame: {
+        border: '0 none',
+        flex: '0 0 auto',
+        opacity: loading ? 0 : 1,
+        transition: loading
+          ? 'none'
+          : 'opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
+      },
+      button: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        zIndex: 1
+      }
+    };
+
     return (
-      <div
-        className={cn.root}
-        style={{
-          display: display ? 'block' : 'none',
-          paddingTop: isFullScreen ? 64 : 0 // フルスクリーン中、余白がなくならないように
-        }}
-      >
+      <div style={styles.root}>
         <ErrorMessage error={this.props.error} />
         {this.props.handleReload ? (
-          <SvgButton className={cn.button} onClick={this.props.handleReload}>
+          <SvgButton style={styles.button} onClick={this.props.handleReload}>
             {
               'M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z'
             }
           </SvgButton>
         ) : null}
-        <div className={cn.parent}>
+        <div style={styles.parent}>
           {this.props.reboot ? null : (
             <iframe
               sandbox={sandbox}
-              className={cn.frame}
-              style={{
-                opacity: loading ? 0 : 1,
-                transition: loading
-                  ? 'none'
-                  : 'opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
-              }}
+              style={styles.frame}
               ref={this.handleFrame}
               width={this.props.width}
               height={this.props.height}
