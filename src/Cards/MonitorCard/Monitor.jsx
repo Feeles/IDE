@@ -185,13 +185,15 @@ export default class Monitor extends PureComponent {
   async start() {
     const _prevent = this.prevent;
 
-    this.prevent = _prevent.then(() => this.startProcess()).catch(error => {
-      if (error) {
-        this.setState({ error });
-      } else if (this.props.isPopout) {
-        this.start();
-      }
-    });
+    this.prevent = _prevent
+      .then(() => this.startProcess())
+      .catch(error => {
+        if (error) {
+          this.setState({ error });
+        } else if (this.props.isPopout) {
+          this.start();
+        }
+      });
 
     await _prevent;
 
