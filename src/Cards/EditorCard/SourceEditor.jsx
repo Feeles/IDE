@@ -5,6 +5,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import includes from 'lodash/includes';
+import Slide from '@material-ui/core/Slide';
 
 import Editor from './Editor';
 import MenuBar from './MenuBar';
@@ -306,8 +307,8 @@ export default class SourceEditor extends PureComponent {
     }));
     await wait(500);
     this.setState(prevState => ({
-      classNameStyles: prevState.classNameStyles.map(
-        item => (item === begin ? end : item)
+      classNameStyles: prevState.classNameStyles.map(item =>
+        item === begin ? end : item
       )
     }));
   };
@@ -432,16 +433,6 @@ export default class SourceEditor extends PureComponent {
           <LinearProgress color="primary" className={cn.progress} />
         ) : null}
         <div className={cn.editorContainer}>
-          <AssetPane
-            fileView={this.props.fileView}
-            open={!!this.state.assetScope}
-            scope={this.state.assetScope}
-            loadConfig={this.props.loadConfig}
-            findFile={this.props.findFile}
-            handleClose={this.handleAssetClose}
-            handleAssetInsert={this.handleAssetInsert}
-            localization={localization}
-          />
           <Editor
             {...this.props}
             showHint={showHint}
@@ -460,6 +451,17 @@ export default class SourceEditor extends PureComponent {
           onRestore={this.handleRestore}
           canRestore={prevFiles.has(file)}
         />
+        <Slide direction="up" in={!!this.state.assetScope} hideBackdrop>
+          <AssetPane
+            fileView={this.props.fileView}
+            scope={this.state.assetScope}
+            loadConfig={this.props.loadConfig}
+            findFile={this.props.findFile}
+            handleClose={this.handleAssetClose}
+            handleAssetInsert={this.handleAssetInsert}
+            localization={localization}
+          />
+        </Slide>
       </div>
     );
   }

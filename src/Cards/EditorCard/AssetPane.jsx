@@ -22,31 +22,27 @@ const cn = {
     flexWrap: 'wrap',
     justifyContent: 'center'
   }),
-  closeButton: style({
-    position: 'absolute',
-    marginTop: -36,
-    marginLeft: 8
+  closer: style({
+    width: '100%'
   })
 };
 const getCn = props => ({
   root: style({
-    position: 'absolute',
+    position: 'fixed',
     width: '100%',
-    overflow: 'hidden',
+    maxHeight: '50vh',
     display: 'flex',
     flexDirection: 'column',
-    zIndex: 10,
-    height: props.open ? '100%' : 0,
+    zIndex: 2900,
     bottom: 0,
-    transition: props.theme.transitions.create()
+    left: 0
   }),
   scroller: style({
     flex: 1,
     overflowX: 'auto',
     overflowY: 'scroll',
     boxSizing: 'border-box',
-    paddingTop: 8,
-    marginTop: '50%',
+    paddingBottom: 24,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     backgroundColor: fade(
@@ -61,7 +57,6 @@ export default class AssetPane extends PureComponent {
   static propTypes = {
     theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
-    open: PropTypes.bool.isRequired,
     scope: PropTypes.string,
     loadConfig: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
@@ -117,16 +112,16 @@ export default class AssetPane extends PureComponent {
 
     return (
       <div className={dcn.root}>
+        <Button
+          variant="contained"
+          aria-label="Close"
+          className={cn.closer}
+          onClick={this.props.handleClose}
+        >
+          <ExpandMore />
+          とじる
+        </Button>
         <div className={dcn.scroller}>
-          <Button
-            color="primary"
-            variant="fab"
-            aria-label="Close"
-            className={cn.closeButton}
-            onClick={this.props.handleClose}
-          >
-            <ExpandMore />
-          </Button>
           {labels.map(label => this.renderEachLabel(label))}
         </div>
       </div>
