@@ -43,6 +43,9 @@ const cn = {
   popout: style({
     height: 8
   }),
+  fullScreen: style({
+    zIndex: 2000 // フルスクリーン時, CardFloatingBar より手前に来るように
+  }),
   parent: style({
     position: 'absolute',
     width: '100%',
@@ -193,7 +196,11 @@ export default class MonitorCard extends PureComponent {
           ) : null}
         </CardFloatingBar>
         <CardMedia
-          className={classes(cn.flexible, this.props.isPopout && cn.popout)}
+          className={classes(
+            cn.flexible,
+            this.props.isPopout && cn.popout,
+            this.props.isFullScreen && cn.fullScreen
+          )}
           style={this.props.isPopout ? undefined : this.state.containerStyle}
         >
           <div className={cn.parent}>
