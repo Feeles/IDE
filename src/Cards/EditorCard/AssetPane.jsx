@@ -3,7 +3,7 @@ import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
-import NavigationExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
@@ -24,8 +24,8 @@ const cn = {
   }),
   closeButton: style({
     position: 'absolute',
-    bottom: 8,
-    right: 8
+    marginTop: -36,
+    marginLeft: 8
   })
 };
 const getCn = props => ({
@@ -37,6 +37,7 @@ const getCn = props => ({
     flexDirection: 'column',
     zIndex: 10,
     height: props.open ? '100%' : 0,
+    bottom: 0,
     transition: props.theme.transitions.create()
   }),
   scroller: style({
@@ -44,7 +45,8 @@ const getCn = props => ({
     overflowX: 'auto',
     overflowY: 'scroll',
     boxSizing: 'border-box',
-    paddingBottom: 60,
+    paddingTop: 8,
+    marginTop: '50%',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     backgroundColor: fade(
@@ -116,17 +118,17 @@ export default class AssetPane extends PureComponent {
     return (
       <div className={dcn.root}>
         <div className={dcn.scroller}>
+          <Button
+            color="primary"
+            variant="fab"
+            aria-label="Close"
+            className={cn.closeButton}
+            onClick={this.props.handleClose}
+          >
+            <ExpandMore />
+          </Button>
           {labels.map(label => this.renderEachLabel(label))}
         </div>
-        <Button
-          color="primary"
-          variant="fab"
-          aria-label="Close"
-          className={cn.closeButton}
-          onClick={this.props.handleClose}
-        >
-          <NavigationExpandLess />
-        </Button>
       </div>
     );
   }
