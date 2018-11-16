@@ -18,7 +18,7 @@ const getCn = props => ({
 });
 
 @withTheme()
-export default class CardFloatingBas extends PureComponent {
+export default class CardFloatingBar extends PureComponent {
   static propTypes = {
     children: PropTypes.node
   };
