@@ -32,12 +32,15 @@ textarea {
   border-radius: 2px;
   cursor: pointer;
   color: ${palette.primary.contrastText};
-  background-color: ${fade(palette.primary.main, 1)};
-  box-shadow: ${shadows[1]};
+  background-color: ${palette.primary.main};
+  box-shadow: ${shadows[2]};
+}
+.Feeles-asset .Feeles-asset-button:hover {
+  background-color: ${palette.primary.dark};
 }
 .Feeles-asset .Feeles-asset-blank {
   display: inline-block;
-  transform: scaleY(0);
+  visibility: hidden;
 }
 .Feeles-dropdown {
   transform: translateY(-20px);
