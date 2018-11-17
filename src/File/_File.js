@@ -38,8 +38,8 @@ export default class _File {
     return this._separate.path;
   }
 
-  get plane() {
-    return this._separate.plane;
+  get plain() {
+    return this._separate.plain;
   }
 
   get ext() {
@@ -63,7 +63,7 @@ export default class _File {
         .replace(/^[#-]*\s*/, '') // 行頭の # - を削除
         .replace(/[*~_[\]()`]/g, ''); // * ~ _ [] () `` を削除
     }
-    return this.plane + this.ext;
+    return this.plain + this.ext;
   }
 
   get credits() {
@@ -163,8 +163,8 @@ export default class _File {
       newPath += '/';
     }
 
-    const { plane, ext } = this;
-    const name = newPath + plane + ext;
+    const { plain, ext } = this;
+    const name = newPath + plain + ext;
 
     return this.set({
       name

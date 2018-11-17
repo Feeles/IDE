@@ -12,18 +12,18 @@ export default function separate(fullpath) {
   const path = fullpath.substr(0, pathLength);
   const filename = fullpath.substr(pathLength);
 
-  const planeLength = includes(filename, '.')
+  const plainLength = includes(filename, '.')
     ? filename.lastIndexOf('.')
     : filename.length;
-  const plane = filename.substr(0, planeLength);
-  const ext = filename.substr(planeLength);
+  const plain = filename.substr(0, plainLength);
+  const ext = filename.substr(plainLength);
 
-  const name = path + plane + ext;
-  const moduleName = path + plane;
+  const name = path + plain + ext;
+  const moduleName = path + plain;
 
   return {
     path,
-    plane,
+    plain,
     ext,
     name,
     moduleName
