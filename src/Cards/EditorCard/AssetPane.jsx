@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
 import Button from '@material-ui/core/Button';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { fade } from '@material-ui/core/styles/colorManipulator';
@@ -28,14 +28,8 @@ const cn = {
 };
 const getCn = props => ({
   root: style({
-    position: 'fixed',
-    width: '100%',
-    maxHeight: '50vh',
     display: 'flex',
-    flexDirection: 'column',
-    zIndex: 2900,
-    bottom: 0,
-    left: 0
+    flexDirection: 'column'
   }),
   scroller: style({
     flex: 1,
@@ -111,7 +105,7 @@ export default class AssetPane extends PureComponent {
     const labels = scope ? scope.trim().split(' ') : [];
 
     return (
-      <div className={dcn.root}>
+      <div className={classes(dcn.root, this.props.className)}>
         <Button
           variant="contained"
           aria-label="Close"

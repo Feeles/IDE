@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import includes from 'lodash/includes';
-import Slide from '@material-ui/core/Slide';
 
 import Editor from './Editor';
 import MenuBar from './MenuBar';
@@ -42,6 +41,20 @@ const cn = {
   }),
   blank: style({
     flex: '1 1 auto'
+  }),
+  assetPane: style({
+    position: 'fixed',
+    width: '100%',
+    height: '50vh',
+    zIndex: 2900,
+    left: 0,
+    transition: 'top 300ms'
+  }),
+  assetPaneIn: style({
+    top: '50vh'
+  }),
+  assetPaneOut: style({
+    top: '100vh'
   })
 };
 
@@ -444,17 +457,19 @@ export default class SourceEditor extends PureComponent {
           onRestore={this.handleRestore}
           canRestore={prevFiles.has(file)}
         />
-        <Slide direction="up" in={!!this.state.assetScope} hideBackdrop>
-          <AssetPane
-            fileView={this.props.fileView}
-            scope={this.state.assetScope}
-            loadConfig={this.props.loadConfig}
-            findFile={this.props.findFile}
-            handleClose={this.handleAssetClose}
-            handleAssetInsert={this.handleAssetInsert}
-            localization={localization}
-          />
-        </Slide>
+        <AssetPane
+          className={classes(
+            cn.assetPane,
+            this.state.assetScope ? cn.assetPaneIn : cn.assetPaneOut
+          )}
+          fileView={this.props.fileView}
+          scope={this.state.assetScope}
+          loadConfig={this.props.loadConfig}
+          findFile={this.props.findFile}
+          handleClose={this.handleAssetClose}
+          handleAssetInsert={this.handleAssetInsert}
+          localization={localization}
+        />
       </div>
     );
   }
