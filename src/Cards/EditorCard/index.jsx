@@ -71,12 +71,16 @@ export default class EditorCard extends PureComponent {
     try {
       const { init } = this.props.cardProps.EditorCard;
       if (init) {
-        if (Array.isArray(init.tabs)) {
-          this.setState({
-            tabs: init.tabs.map(seed => new Tab(seed))
-          });
-        }
-        this.openFile(init.filePath || init.fileName); // 後方互換性
+        new Promise(resolve => {
+          if (Array.isArray(init.tabs)) {
+            const tabs = init.tabs.map(seed => new Tab(seed));
+            this.setState({ tabs }, resolve);
+          } else {
+            resolve();
+          }
+        }).then(() => {
+          this.openFile(init.filePath || init.fileName); // 後方互換性
+        });
       }
     } catch (e) {
       // continue regardless of error
@@ -89,7 +93,17 @@ export default class EditorCard extends PureComponent {
     const file = this.props.findFile(filePath); // file type を知るために探す
     if (file.is('text')) {
       // テキストの場合は EditorCard で open
-      this.setState({ filePath });
+
+      // 開こうとしているファイルを tabs の先頭に追加
+      const existTab = this.state.tabs.find(tab => tab.filePath === filePath);
+      const excludes = this.state.tabs.filter(tab => tab.filePath !== filePath);
+      const tabs = existTab
+        ? [existTab].concat(excludes) // 既に tabs にあれば使う
+        : [new Tab({ filePath, label: file.plain + file.ext })].concat(
+            excludes
+          ); // なければ手元の情報で Tab を作る
+      this.setState({ filePath, tabs });
+
       this.props.setCardVisibility('EditorCard', true);
       // タブの選択が変化したら EditorCard にスクロールする
       this.props.scrollToCard('EditorCard');
