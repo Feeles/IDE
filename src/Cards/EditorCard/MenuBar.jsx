@@ -106,6 +106,7 @@ export default class MenuBar extends React.Component {
           setLocation={this.props.setLocation}
           href={this.props.href}
           localization={this.props.localization}
+          hasChanged={this.props.hasChanged}
         />
       </CardFloatingBar>
     );

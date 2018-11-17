@@ -50,7 +50,8 @@ export default class PlayMenu extends PureComponent {
     getFiles: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
     href: PropTypes.string.isRequired,
-    localization: PropTypes.object.isRequired
+    localization: PropTypes.object.isRequired,
+    hasChanged: PropTypes.bool.isRequired
   };
 
   state = {
@@ -132,7 +133,7 @@ export default class PlayMenu extends PureComponent {
       <div>
         <Button
           variant="contained"
-          color="primary"
+          color={this.props.hasChanged ? 'primary' : 'default'}
           onClick={() => this.props.setLocation()}
         >
           <AVPlayCircleOutline />
