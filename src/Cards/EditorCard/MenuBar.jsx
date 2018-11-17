@@ -56,6 +56,11 @@ export default class MenuBar extends React.Component {
   render() {
     const { anchorEl } = this.state;
 
+    // 現在選択中のタブの情報を filePath (ファイル名) から調べる. tabs の中にはない(nullになる)こともある
+    const selected = this.props.tabs.find(
+      tab => tab.filePath === this.props.filePath
+    );
+
     return (
       <CardFloatingBar>
         {this.props.localization.editorCard.title}
@@ -73,7 +78,7 @@ export default class MenuBar extends React.Component {
           onClick={this.handleClickListItem}
         >
           <Description />
-          {this.props.filePath}
+          {selected ? selected.label : this.props.filePath}
         </Button>
         <Menu
           id="file-select-menu"

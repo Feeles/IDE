@@ -29,6 +29,13 @@ const getCn = props => ({
   })
 });
 
+export class Tab {
+  constructor({ label, filePath }) {
+    this.label = label;
+    this.filePath = filePath;
+  }
+}
+
 @withTheme()
 export default class EditorCard extends PureComponent {
   static propTypes = {
@@ -66,7 +73,7 @@ export default class EditorCard extends PureComponent {
       if (init) {
         if (Array.isArray(init.tabs)) {
           this.setState({
-            tabs: init.tabs
+            tabs: init.tabs.map(seed => new Tab(seed))
           });
         }
         this.openFile(init.filePath || init.fileName); // 後方互換性
