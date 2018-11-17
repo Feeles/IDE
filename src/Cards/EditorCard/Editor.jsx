@@ -66,7 +66,6 @@ export default class Editor extends Component {
     foldOptions: PropTypes.object,
     lineNumbers: PropTypes.bool.isRequired,
     findFile: PropTypes.func.isRequired,
-    onDocChanged: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
     fileView: PropTypes.object.isRequired,
     handleSetLinkObjects: PropTypes.func
@@ -79,8 +78,7 @@ export default class Editor extends Component {
     showHint: true,
     extraKeys: {},
     lineNumbers: true,
-    foldOptions: {},
-    onDocChanged: () => {}
+    foldOptions: {}
   };
 
   state = {
@@ -369,7 +367,6 @@ export default class Editor extends Component {
       <CodeMirrorComponent
         id={file.key}
         value={file.text}
-        onDocChanged={this.props.onDocChanged}
         mode={mode}
         lineNumbers={lineNumbers}
         keyMap="sublime"

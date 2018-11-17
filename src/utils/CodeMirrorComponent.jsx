@@ -7,7 +7,6 @@ import includes from 'lodash/includes';
 export default class CodeMirrorComponent extends PureComponent {
   static propTypes = {
     id: PropTypes.string.isRequired,
-    onDocChanged: PropTypes.func.isRequired,
     // CodeMirror options
     value: PropTypes.string.isRequired,
     mode: PropTypes.string,
@@ -35,8 +34,7 @@ export default class CodeMirrorComponent extends PureComponent {
     dragDrop: false,
     extraKeys: {},
     readOnly: false,
-    foldGutter: false,
-    onDocChanged: () => {}
+    foldGutter: false
   };
 
   state = {
@@ -67,15 +65,9 @@ export default class CodeMirrorComponent extends PureComponent {
     doc.setValue(this.props.value); // set default value
     doc.clearHistory();
     this.state.docs.set(id, doc);
-    this.props.onDocChanged({ id, doc }, null);
   }
 
   componentWillUnmount() {
-    const { id } = this.props;
-    const doc = this.state.docs.get(id);
-    if (doc) {
-      this.props.onDocChanged(null, { id, doc });
-    }
     this.state.docs.clear();
     this.codeMirror.toTextArea();
     this.codeMirror = null; // GC??
@@ -84,8 +76,6 @@ export default class CodeMirrorComponent extends PureComponent {
   componentDidUpdate(prevProps) {
     // タブ, value の更新
     if (prevProps.id !== this.props.id) {
-      // 前回のタブ
-      const prev = this.state.docs.get(prevProps.id) || null;
       // 次のタブ (or undefined)
       let doc = this.state.docs.get(this.props.id);
       if (!doc) {
@@ -98,10 +88,6 @@ export default class CodeMirrorComponent extends PureComponent {
       }
       // 現在のタブと入れ替え
       this.codeMirror.swapDoc(doc);
-      prevProps.onDocChanged(
-        { id: this.props.id, doc },
-        { id: prevProps.id, doc: prev }
-      );
     } else {
       // 同じタブ(ファイル)
       this.setValueIfDifferent(this.props.value); // value の更新

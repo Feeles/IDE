@@ -95,9 +95,6 @@ export default class SourceEditor extends PureComponent {
     assetScope: null,
     appendToHead: true,
     classNameStyles: [],
-
-    // { [Tab.file.key]: Doc }
-    currentDoc: {}
   };
 
   _widgets = new Map();
@@ -382,14 +379,6 @@ export default class SourceEditor extends PureComponent {
     this.codemirror.scrollTo(left, top);
   }
 
-  handleDocChanged = next => {
-    if (next) {
-      this.setState({ currentDoc: { [next.id]: next.doc } });
-    } else {
-      this.setState({ currentDoc: {} });
-    }
-  };
-
   render() {
     const { file, localization } = this.props;
     const { showHint } = this.state;
@@ -444,7 +433,6 @@ export default class SourceEditor extends PureComponent {
             showHint={showHint}
             snippets={this.state.snippets}
             codemirrorRef={ref => (this.codemirror = ref)}
-            onDocChanged={this.handleDocChanged}
             extraKeys={extraKeys}
             foldOptions={foldOptions}
             loadConfig={this.props.loadConfig}
