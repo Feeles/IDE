@@ -30,16 +30,19 @@ export default class MenuBar extends React.Component {
     setLocation: PropTypes.func.isRequired,
     hasChanged: PropTypes.bool.isRequired,
     hasHistory: PropTypes.bool.isRequired,
-    selectTab: PropTypes.func.isRequired,
-    tabs: PropTypes.array.isRequired
+    tabs: PropTypes.array.isRequired,
+    filePath: PropTypes.string.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   handleClickListItem = event => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleMenuItemClick = (event, index) => {
-    this.props.selectTab(this.props.tabs[index]);
+  handleMenuItemClick = filePath => {
+    this.props.globalEvent.emit('message.editor', {
+      data: { value: filePath }
+    });
     this.setState({ anchorEl: null });
   };
 
@@ -53,7 +56,6 @@ export default class MenuBar extends React.Component {
 
   render() {
     const { anchorEl } = this.state;
-    const selected = this.props.tabs.find(tab => tab.isSelected);
 
     return (
       <CardFloatingBar>
@@ -72,7 +74,7 @@ export default class MenuBar extends React.Component {
           onClick={this.handleClickListItem}
         >
           <Description />
-          {selected.label}
+          {this.props.filePath}
         </Button>
         <Menu
           id="file-select-menu"
@@ -82,11 +84,11 @@ export default class MenuBar extends React.Component {
         >
           {this.props.tabs.map((tab, index) => (
             <MenuItem
-              key={tab.key}
-              selected={tab.isSelected}
-              onClick={event => this.handleMenuItemClick(event, index)}
+              key={index}
+              selected={tab.filePath === this.props.filePath}
+              onClick={() => this.handleMenuItemClick(tab.filePath)}
             >
-              <ListItemText primary={tab.label} secondary={tab.file.name} />
+              <ListItemText primary={tab.label} secondary={tab.filePath} />
             </MenuItem>
           ))}
         </Menu>
