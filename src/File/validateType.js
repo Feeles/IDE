@@ -34,7 +34,7 @@ const metas = [
   ['blob', [mimes.get('image'), mimes.get('audio')]],
   ['config', [mimes.get('json')]],
   ['*', [/.*/]],
-  ['.text.plane', [mimes.get('text')]],
+  ['.text.plain', [mimes.get('text')]],
   ['.text.html.basic', [mimes.get('html')]],
   ['.source.js', [mimes.get('javascript')]],
   ['.source.gfm', [mimes.get('markdown')]]

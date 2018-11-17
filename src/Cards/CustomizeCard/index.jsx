@@ -18,47 +18,27 @@ const classes = {
 export default class CustomizeCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
-    files: PropTypes.array.isRequired,
-    getConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
-    addFile: PropTypes.func.isRequired
-  };
-
-  state = {
-    cssFileKey: ''
+    addFile: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   componentDidMount() {
-    (async () => {
-      const cssFileKey = await this.addFileIfNotExist(
-        'feeles/codemirror.css',
-        () => {
-          return new SourceFile({
-            type: 'text/css',
-            name: 'feeles/codemirror.css',
-            text: ''
-          });
-        }
-      );
-
-      this.setState({ cssFileKey });
-    })();
-  }
-
-  async addFileIfNotExist(name, getFile) {
     const file = this.props.findFile(name);
 
     if (!file) {
-      const nextFile = await this.props.addFile(getFile());
-      return nextFile.key;
+      this.props.addFile(
+        new SourceFile({
+          type: 'text/css',
+          name: 'feeles/codemirror.css',
+          text: ''
+        })
+      );
     }
-
-    return file.key;
   }
 
-  renderBlock(title, href, fileKey) {
+  renderBlock(title, href) {
     const { localization } = this.props;
 
     const subtitle = [
@@ -71,9 +51,8 @@ export default class CustomizeCard extends PureComponent {
     return (
       <CardHeader className={classes.block} title={title} subtitle={subtitle}>
         <EditFile
-          fileKey={fileKey}
-          findFile={this.props.findFile}
-          selectTab={this.props.selectTab}
+          filePath="feeles/codemirror.css"
+          globalEvent={this.props.globalEvent}
           localization={localization}
         />
       </CardHeader>
@@ -90,8 +69,7 @@ export default class CustomizeCard extends PureComponent {
         </CardFloatingBar>
         {this.renderBlock(
           localization.customizeCard.style,
-          'http://codemirror.net/doc/manual.html#styling',
-          this.state.cssFileKey
+          'http://codemirror.net/doc/manual.html#styling'
         )}
       </Card>
     );

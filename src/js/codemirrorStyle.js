@@ -1,6 +1,5 @@
 import grey from '@material-ui/core/colors/grey';
 import blue from '@material-ui/core/colors/blue';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 
 export default ({ palette, shadows, transitions }) =>
   `

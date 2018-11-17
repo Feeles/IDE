@@ -9,7 +9,6 @@ import Card from '../CardWindow';
 import CardFloatingBar from '../CardFloatingBar';
 import { makeFromFile } from '../../File/';
 import { AddDialog } from '../../FileDialog/';
-import { Tab } from '../../ChromeTab/';
 import Root from './Root';
 import SearchBar from './SearchBar';
 
@@ -23,35 +22,21 @@ const cn = {
 export default class HierarchyCard extends PureComponent {
   static propTypes = {
     files: PropTypes.array.isRequired,
-    tabs: PropTypes.array.isRequired,
     addFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     deleteFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
-    closeTab: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
-    cardPropsBag: PropTypes.object.isRequired
+    cardPropsBag: PropTypes.object.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
     openedPaths: [''],
-    tabbedFiles: [],
     filter: () => false
   };
-
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.files !== this.props.files ||
-      prevProps.tabs !== this.props.tabs
-    ) {
-      this.setState({
-        tabbedFiles: this.props.tabs.map(tab => tab.file)
-      });
-    }
-  }
 
   handleNativeDrop = (files, dir = null) => {
     const { addFile } = this.props;
@@ -83,27 +68,11 @@ export default class HierarchyCard extends PureComponent {
   };
 
   handleFileSelect = file => {
-    const { selectTab, closeTab, tabs, findFile } = this.props;
-    if (file.is('text')) {
-      // SourceFile
-      const getFile = () => findFile(({ key }) => key === file.key);
-      const tab = new Tab({ getFile });
-
-      const selected = tabs.find(tab => tab.isSelected);
-
-      if (selected && selected.is(tab)) {
-        closeTab(selected);
-      } else {
-        selectTab(tab);
+    this.props.globalEvent.emit('message.editor', {
+      data: {
+        value: file.name
       }
-    } else {
-      // BinaryFile
-      try {
-        window.open(file.blobURL, file.blobURL);
-      } catch (e) {
-        // continue regardless of error
-      }
-    }
+    });
   };
 
   isDirOpened = (dir, passed, failed) => {
@@ -126,12 +95,7 @@ export default class HierarchyCard extends PureComponent {
     const { files, putFile, openFileDialog, localization } = this.props;
     const { filter } = this.state;
 
-    const tabs = this.props.tabs.filter(tab => !tab.props.component);
-    const selected = tabs.find(tab => tab.isSelected);
-
     const transfer = {
-      selectedFile: selected && selected.file,
-      tabbedFiles: this.state.tabbedFiles,
       openFileDialog,
       putFile,
       isDirOpened: this.isDirOpened,

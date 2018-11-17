@@ -24,7 +24,14 @@
         "visible": true,
         "order": 4,
         "init": {
-            "fileName": "main.js"
+            "filePath": "main.js",
+            "tabs": [{
+                "label": "JavaScript",
+                "filePath": "main.js"
+            }, {
+                "label": "HTML",
+                "filePath": "index.html"
+            }]
         }
     },
     "ReadmeCard": {

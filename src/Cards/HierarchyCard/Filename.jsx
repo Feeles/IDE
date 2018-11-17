@@ -62,7 +62,7 @@ export default class Filename extends PureComponent {
     const { file } = this.props;
     const { isEditing } = this.state;
 
-    const { path, plane, ext, name } = separate(file.name);
+    const { path, plain, ext, name } = separate(file.name);
 
     return (
       <div className={cn.root}>
@@ -70,14 +70,14 @@ export default class Filename extends PureComponent {
         {isEditing ? (
           <TextField
             id={name}
-            defaultValue={plane}
+            defaultValue={plain}
             ref={this.handleInput}
             className={cn.textField}
             onClick={this.handleTextFieldTap}
           />
         ) : (
           <Typography color="textPrimary" onClick={this.handleDoubleTap}>
-            {plane}
+            {plain}
           </Typography>
         )}
         <Typography color="textSecondary" variant="caption">

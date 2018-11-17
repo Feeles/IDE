@@ -26,7 +26,6 @@ export default class ReadmeCard extends PureComponent {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -160,21 +159,20 @@ export default class ReadmeCard extends PureComponent {
         <CardContent className={cn.text}>
           <Readme
             file={selectedFile}
-            selectTab={this.props.selectTab}
             findFile={this.props.findFile}
             addFile={this.props.addFile}
             getConfig={this.props.getConfig}
             localization={this.props.localization}
             completes={this.state.completes}
             setLocation={this.props.setLocation}
+            globalEvent={this.props.globalEvent}
           />
         </CardContent>
         <CardActions>
           {this.renderDropDownMenu()}
           <EditFile
-            fileKey={selectedFile.key}
-            findFile={this.props.findFile}
-            selectTab={this.props.selectTab}
+            filePath={selectedFile.name}
+            globalEvent={this.props.globalEvent}
             localization={localization}
           />
         </CardActions>

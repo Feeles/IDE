@@ -39,8 +39,8 @@ export default class Snippet {
     return this.props.rightLabelHTML || this.props.rightLabel || '';
   }
 
-  get plane() {
-    return this._separate.plane;
+  get plain() {
+    return this._separate.plain;
   }
 
   get fileKey() {

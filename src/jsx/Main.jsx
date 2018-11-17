@@ -87,8 +87,6 @@ export default class Main extends Component {
     reboot: false,
     href: 'index.html',
 
-    tabs: [],
-
     project: this.props.project,
     notice: null,
     // Advanced Mode
@@ -313,44 +311,6 @@ export default class Main extends Component {
     return Object.assign({}, ...values);
   };
 
-  selectTab = tab =>
-    new Promise(resolve => {
-      const tabs = this.state.tabs.map(item => {
-        if (item.isSelected) return item.select(false);
-        return item;
-      });
-
-      const found = tabs.find(item => item.is(tab));
-      if (found) {
-        const replace = found.select(true);
-        this.setState(
-          {
-            tabs: tabs.map(item => (item === found ? replace : item))
-          },
-          () => resolve(replace)
-        );
-      } else {
-        if (!tab.isSelected) tab = tab.select(true);
-        this.setState(
-          {
-            tabs: tabs.concat(tab)
-          },
-          () => resolve(tab)
-        );
-      }
-
-      this.setCardVisibility('EditorCard', true);
-    });
-
-  closeTab = tab =>
-    new Promise(resolve => {
-      const tabs = this.state.tabs.filter(item => item.key !== tab.key);
-      if (tab.isSelected && tabs.length > 0) {
-        tabs[0] = tabs[0].select(true);
-      }
-      this.setState({ tabs }, () => resolve());
-    });
-
   saveAs = (...files) => {
     if (DOWNLOAD_ENABLED) {
       files.forEach(file => {
@@ -536,9 +496,6 @@ export default class Main extends Component {
           {...commonProps}
           cardProps={this.props.cardProps}
           setCardVisibility={this.setCardVisibility}
-          tabs={this.state.tabs}
-          selectTab={this.selectTab}
-          closeTab={this.closeTab}
           setLocation={this.setLocation}
           openFileDialog={this.openFileDialog}
           reboot={this.state.reboot}

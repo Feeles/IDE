@@ -64,8 +64,9 @@ const prevFiles = new WeakMap();
 @withTheme()
 export default class SourceEditor extends PureComponent {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     fileView: PropTypes.object.isRequired,
-    file: PropTypes.object.isRequired,
+    filePath: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     getFiles: PropTypes.func.isRequired,
     setLocation: PropTypes.func.isRequired,
@@ -77,87 +78,105 @@ export default class SourceEditor extends PureComponent {
     localization: PropTypes.object.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
-    closeSelectedTab: PropTypes.func.isRequired,
-    selectTabFromFile: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
-    tabs: PropTypes.array.isRequired
+    tabs: PropTypes.array.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
-    showHint: !this.props.file.is('json'),
+    file: null,
+
+    showHint: false,
     hasHistory: false,
     hasChanged: false,
     loading: false,
     snippets: [],
 
-    assetFileName: null,
     assetLineNumber: 0,
     assetScope: null,
     appendToHead: true,
-    classNameStyles: [],
-
-    // { [Tab.file.key]: Doc }
-    currentDoc: {}
+    classNameStyles: []
   };
 
   _widgets = new Map();
 
   componentDidUpdate(prevProps) {
-    if (prevProps.fileView !== this.props.fileView) {
+    if (prevProps.fileView !== this.props.fileView && this.state.file) {
       this.setState({
-        snippets: this.props.getConfig('snippets')(this.props.file)
+        snippets: this.props.getConfig('snippets')(this.state.file)
       });
+    }
+
+    if (this.props.filePath && this.props.filePath !== prevProps.filePath) {
+      this.handleUpdateFile();
     }
   }
 
   componentDidMount() {
-    this.setState({
-      snippets: this.props.getConfig('snippets')(this.props.file)
-    });
-    if (this.codemirror) {
-      this.codemirror.on('beforeChange', zenkakuToHankaku);
-      this.codemirror.on('beforeChange', this.handleIndexReplacement);
-      this.codemirror.on('change', this.handleIndentLine);
-      const onChange = cm => {
-        this.setState({
-          hasHistory: cm.historySize().undo > 0,
-          hasChanged: cm.getValue('\n') !== this.props.file.text
-        });
-      };
-      this.codemirror.on('change', onChange);
-      this.codemirror.on('swapDoc', onChange);
-      this.codemirror.on('change', this.handleUpdateWidget);
-      this.codemirror.on('swapDoc', this.handleUpdateWidget);
-      this.codemirror.on('update', this.handleRenderWidget);
-
-      this.handleUpdateWidget(this.codemirror);
-      this.handleRenderWidget(this.codemirror);
+    if (this.props.filePath) {
+      this.handleUpdateFile();
     }
   }
 
+  handleCodemirror = codemirror => {
+    this.codemirror = codemirror;
+    this.codemirror.on('beforeChange', zenkakuToHankaku);
+    this.codemirror.on('beforeChange', this.handleIndexReplacement);
+    this.codemirror.on('change', this.handleIndentLine);
+    const onChange = cm => {
+      this.setState({
+        hasHistory: cm.historySize().undo > 0,
+        hasChanged: cm.getValue('\n') !== this.state.file.text
+      });
+    };
+    this.codemirror.on('change', onChange);
+    this.codemirror.on('swapDoc', onChange);
+    this.codemirror.on('change', this.handleUpdateWidget);
+    this.codemirror.on('swapDoc', this.handleUpdateWidget);
+    this.codemirror.on('update', this.handleRenderWidget);
+
+    this.handleUpdateWidget(this.codemirror);
+    this.handleRenderWidget(this.codemirror);
+  };
+
+  handleUpdateFile() {
+    const { filePath, findFile } = this.props;
+    const file = findFile(filePath);
+
+    if (file && file !== this.state.file) {
+      this.setFile(file);
+    }
+  }
+
+  setFile(file) {
+    this.setState({
+      file,
+      showHint: !file.is('json'),
+      snippets: this.props.getConfig('snippets')(file)
+    });
+  }
+
   handleSave = async () => {
-    if (!this.codemirror) return;
+    const { file } = this.state;
+    if (!this.codemirror || !file) return;
 
     this.beautify(this.codemirror); // Auto beautify
     const text = this.codemirror.getValue();
-    if (text === this.props.file.text) {
+    if (text === file.text) {
       // No change
       return;
     }
 
     this.setState({ hasChanged: false, loading: true });
 
-    const prevFile = this.props.file;
-    const file = await this.props.putFile(
-      this.props.file,
-      this.props.file.set({ text })
-    );
-    prevFiles.set(file, prevFile);
+    const nextFile = await this.props.putFile(file, file.set({ text }));
+    file.set(nextFile, file);
 
     // Like a watching
     const babelrc = this.props.getConfig('babelrc');
-    file.babel(babelrc, e => {
-      this.props.selectTabFromFile(file);
+    nextFile.babel(babelrc, e => {
+      this.props.globalEvent.emit('message.editor', {
+        data: { value: file.name }
+      }); // もう一度ファイルを開かせる
       // あらたな Babel Error が発生したときを検知して,
       // ダイアログを表示させる (エラーの詳細は file.error を参照する)
       this.forceUpdate(); // 再描画
@@ -255,7 +274,6 @@ export default class SourceEditor extends PureComponent {
 
   handleAssetClose = () => {
     this.setState({
-      assetFileName: null,
       assetScope: null
     });
   };
@@ -336,7 +354,7 @@ export default class SourceEditor extends PureComponent {
 
   handleRestore = () => {
     // 保存する前の状態に戻す
-    const prevFile = prevFiles.get(this.props.file);
+    const prevFile = prevFiles.get(this.state.file);
     if (prevFile) {
       this.setValue(prevFile.text);
       this.setLocation();
@@ -344,7 +362,8 @@ export default class SourceEditor extends PureComponent {
   };
 
   beautify = () => {
-    const { file, fileView } = this.props;
+    const { fileView } = this.props;
+    const { file } = this.state;
     const prevValue = this.codemirror.getValue();
     const setValueWithoutHistory = replacement => {
       // undo => beautify => setValue することで history を 1 つに
@@ -382,17 +401,13 @@ export default class SourceEditor extends PureComponent {
     this.codemirror.scrollTo(left, top);
   }
 
-  handleDocChanged = next => {
-    if (next) {
-      this.setState({ currentDoc: { [next.id]: next.doc } });
-    } else {
-      this.setState({ currentDoc: {} });
-    }
-  };
-
   render() {
-    const { file, localization } = this.props;
-    const { showHint } = this.state;
+    const { localization } = this.props;
+    const { file, showHint } = this.state;
+
+    if (!file) {
+      return null;
+    }
 
     // const snippets = this.props.getConfig('snippets')(file);
 
@@ -432,23 +447,26 @@ export default class SourceEditor extends PureComponent {
           setLocation={this.setLocation}
           hasHistory={this.state.hasHistory}
           hasChanged={this.state.hasChanged}
-          selectTab={this.props.selectTab}
+          filePath={this.props.filePath}
           tabs={this.props.tabs}
+          globalEvent={this.props.globalEvent}
         />
         {this.state.loading ? (
           <LinearProgress color="primary" className={cn.progress} />
         ) : null}
         <div className={cn.editorContainer}>
           <Editor
-            {...this.props}
-            showHint={showHint}
-            snippets={this.state.snippets}
-            codemirrorRef={ref => (this.codemirror = ref)}
-            onDocChanged={this.handleDocChanged}
-            extraKeys={extraKeys}
-            foldOptions={foldOptions}
+            file={file}
+            getFiles={this.props.getFiles}
+            getConfig={this.props.getConfig}
+            findFile={this.props.findFile}
             loadConfig={this.props.loadConfig}
             fileView={this.props.fileView}
+            showHint={showHint}
+            snippets={this.state.snippets}
+            codemirrorRef={this.handleCodemirror}
+            extraKeys={extraKeys}
+            foldOptions={foldOptions}
           />
         </div>
         <ErrorPane
