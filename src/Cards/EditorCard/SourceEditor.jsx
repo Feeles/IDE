@@ -13,7 +13,6 @@ import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
 import zenkakuToHankaku from './zenkakuToHankaku';
 import foldAsset from './foldAsset';
-import FileTabs from './FileTabs';
 import { withTheme } from '@material-ui/core';
 import replaceExistConsts from '../../utils/replaceExistConsts';
 import preserveTrailingSpaceBeautify from '../../utils/preserveTrailingSpaceBeautify';
@@ -68,7 +67,6 @@ export default class SourceEditor extends PureComponent {
     closeSelectedTab: PropTypes.func.isRequired,
     selectTabFromFile: PropTypes.func.isRequired,
     selectTab: PropTypes.func.isRequired,
-    closeTab: PropTypes.func.isRequired,
     tabs: PropTypes.array.isRequired
   };
 
@@ -421,12 +419,7 @@ export default class SourceEditor extends PureComponent {
           setLocation={this.setLocation}
           hasHistory={this.state.hasHistory}
           hasChanged={this.state.hasChanged}
-        />
-        <FileTabs
-          localization={this.props.localization}
           selectTab={this.props.selectTab}
-          closeTab={this.props.closeTab}
-          currentDoc={this.state.currentDoc}
           tabs={this.props.tabs}
         />
         {this.state.loading ? (
