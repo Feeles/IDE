@@ -5,10 +5,8 @@ import { style } from 'typestyle';
 import { DragSource } from 'react-dnd';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import { fade } from '@material-ui/core/styles/colorManipulator';
 import EditorDragHandle from '@material-ui/icons/DragHandle';
 import ActionSettings from '@material-ui/icons/Settings';
-import includes from 'lodash/includes';
 
 import Filename from './Filename';
 import { PreferenceDialog } from '../../FileDialog/';

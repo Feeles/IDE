@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
 import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
-import ContentSave from '@material-ui/icons/Save';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';

@@ -22,7 +22,6 @@ const cn = {
 export default class HierarchyCard extends PureComponent {
   static propTypes = {
     files: PropTypes.array.isRequired,
-    tabs: PropTypes.array.isRequired,
     addFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     deleteFile: PropTypes.func.isRequired,
