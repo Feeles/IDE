@@ -99,7 +99,6 @@ export default {
   editorCard: {
     title: 'Editor',
     undo: 'Undo',
-    save: 'Save',
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
     insert: 'Insert',

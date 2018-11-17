@@ -51,8 +51,6 @@ export default class MenuBar extends React.Component {
     anchorEl: null
   };
 
-  handleSaveAndRun = () => this.props.setLocation();
-
   render() {
     const { anchorEl } = this.state;
     const selected = this.props.tabs.find(tab => tab.isSelected);
@@ -67,14 +65,6 @@ export default class MenuBar extends React.Component {
         >
           <HardwareKeyboardBackspace />
           {this.props.localization.editorCard.undo}
-        </Button>
-        <Button
-          variant="text"
-          disabled={!this.props.hasChanged}
-          onClick={this.handleSaveAndRun}
-        >
-          <ContentSave />
-          {this.props.localization.editorCard.save}
         </Button>
         <Button
           variant="text"
