@@ -17,8 +17,8 @@ export default class EnvCard extends PureComponent {
     setConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
-    addFile: PropTypes.func.isRequired
+    addFile: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -81,10 +81,9 @@ export default class EnvCard extends PureComponent {
         </CardContent>
         <CardActions>
           <EditFile
-            fileKey={this.state.fileKey}
-            findFile={this.props.findFile}
-            selectTab={this.props.selectTab}
+            filePath=".env"
             localization={localization}
+            globalEvent={this.props.globalEvent}
           />
         </CardActions>
       </Card>

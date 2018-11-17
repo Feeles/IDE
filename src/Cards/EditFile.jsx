@@ -3,24 +3,22 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import EditorModeEdit from '@material-ui/icons/Edit';
 
-import { Tab } from '../ChromeTab/';
-
 export default class EditFile extends PureComponent {
   static propTypes = {
-    fileKey: PropTypes.string.isRequired,
-    findFile: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired
+    filePath: PropTypes.string.isRequired,
+    localization: PropTypes.object.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   handleEdit = () => {
-    const { fileKey, localization } = this.props;
-    const getFile = () => this.props.findFile(item => item.key === fileKey);
-    const item = getFile();
+    const { filePath, localization } = this.props;
 
-    if (item && confirm(localization.common.wantToOpen(item.name))) {
-      const tab = new Tab({ getFile });
-      this.props.selectTab(tab);
+    if (confirm(localization.common.wantToOpen(filePath))) {
+      this.props.globalEvent.emit('message.editor', {
+        data: {
+          value: filePath
+        }
+      });
     }
   };
 
@@ -28,11 +26,7 @@ export default class EditFile extends PureComponent {
     const { localization } = this.props;
 
     return (
-      <Button
-        variant="text"
-        disabled={!this.props.fileKey}
-        onClick={this.handleEdit}
-      >
+      <Button variant="text" onClick={this.handleEdit}>
         <EditorModeEdit />
         {localization.common.editFile}
       </Button>

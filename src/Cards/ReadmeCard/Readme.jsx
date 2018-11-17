@@ -11,7 +11,6 @@ import EditorModeEdit from '@material-ui/icons/Edit';
 
 import CodeMirrorComponent from '../../utils/CodeMirrorComponent';
 import MDReactComponent from '../../jsx/MDReactComponent';
-import { Tab } from '../../ChromeTab/';
 
 const cn = {
   blockquote: style({
@@ -135,9 +134,11 @@ const mdComponents = [
 
       // Edit file
       const onClick = () => {
-        const getFile = () =>
-          component.props.findFile(item => item.key === file.key);
-        component.props.selectTab(new Tab({ getFile }));
+        component.props.globalEvent.emit('message.editor', {
+          data: {
+            value: file.name
+          }
+        });
       };
       return (
         <Button
@@ -198,11 +199,11 @@ export default class Readme extends PureComponent {
     theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
     findFile: PropTypes.func.isRequired,
-    selectTab: PropTypes.func.isRequired,
     getConfig: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     completes: PropTypes.array.isRequired,
-    setLocation: PropTypes.func.isRequired
+    setLocation: PropTypes.func.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   render() {

@@ -37,9 +37,6 @@ const getCn = props => ({
     paddingLeft: props.theme.spacing.unit * 2,
     borderTopRightRadius: props.isSelected ? 0 : 2,
     borderBottomRightRadius: props.isSelected ? 0 : 2,
-    backgroundColor: includes(props.tabbedFiles, props.file)
-      ? fade(props.theme.palette.background.paper, 1)
-      : props.theme.palette.disabledColor,
     opacity: props.isDragging ? 0.5 : 1,
     transition: props.theme.transitions.create()
   }),
@@ -57,8 +54,6 @@ class FileCard extends PureComponent {
   static propTypes = {
     theme: PropTypes.object.isRequired,
     file: PropTypes.object.isRequired,
-    selectedFile: PropTypes.object,
-    tabbedFiles: PropTypes.array.isRequired,
     handleFileSelect: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
@@ -88,21 +83,14 @@ class FileCard extends PureComponent {
     const dcn = getCn(this.props);
     const {
       file,
-      selectedFile,
       handleFileSelect,
       connectDragSource,
       connectDragPreview
     } = this.props;
 
-    const isSelected = selectedFile === file;
-
     return connectDragPreview(
       <div className={dcn.root}>
-        <Paper
-          elevation={isSelected ? 2 : 0}
-          onClick={() => handleFileSelect(file)}
-          className={dcn.card}
-        >
+        <Paper onClick={() => handleFileSelect(file)} className={dcn.card}>
           {connectDragSource(
             <div className={dcn.dragHandle}>
               <EditorDragHandle />
