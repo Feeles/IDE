@@ -7,9 +7,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Description from '@material-ui/icons/Description';
+import Layers from '@material-ui/icons/Layers';
+import LayersClear from '@material-ui/icons/LayersClear';
 
 import PlayMenu from './PlayMenu';
 import CardFloatingBar from '../CardFloatingBar';
+import { IconButton, withTheme } from '@material-ui/core';
 
 const cn = {
   blank: style({
@@ -20,8 +23,16 @@ const cn = {
   })
 };
 
+const getCn = props => ({
+  icon: style({
+    color: props.theme.typography.button.color
+  })
+});
+
+@withTheme()
 export default class MenuBar extends React.Component {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired,
     getFiles: PropTypes.func.isRequired,
     href: PropTypes.string.isRequired,
@@ -31,6 +42,8 @@ export default class MenuBar extends React.Component {
     hasHistory: PropTypes.bool.isRequired,
     tabs: PropTypes.array.isRequired,
     filePath: PropTypes.string.isRequired,
+    showLineWidget: PropTypes.bool.isRequired,
+    setShowLineWidget: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
@@ -49,12 +62,18 @@ export default class MenuBar extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  toggleLineWidget = () => {
+    const { showLineWidget } = this.props;
+    this.props.setShowLineWidget(!showLineWidget);
+  };
+
   state = {
     anchorEl: null
   };
 
   render() {
     const { anchorEl } = this.state;
+    const dcn = getCn(this.props);
 
     // 現在選択中のタブの情報を filePath (ファイル名) から調べる. tabs の中にはない(nullになる)こともある
     const selected = this.props.tabs.find(
@@ -80,6 +99,13 @@ export default class MenuBar extends React.Component {
           <Description />
           {selected ? selected.label : this.props.filePath}
         </Button>
+        <IconButton onClick={this.toggleLineWidget}>
+          {this.props.showLineWidget ? (
+            <Layers className={dcn.icon} />
+          ) : (
+            <LayersClear />
+          )}
+        </IconButton>
         <Menu
           id="file-select-menu"
           anchorEl={anchorEl}

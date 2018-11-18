@@ -93,6 +93,7 @@ export default class SourceEditor extends PureComponent {
     hasChanged: false,
     loading: false,
     snippets: [],
+    showLineWidget: true,
 
     assetLineNumber: 0,
     assetScope: null,
@@ -409,6 +410,12 @@ export default class SourceEditor extends PureComponent {
     this.codemirror.scrollTo(left, top);
   }
 
+  setShowLineWidget = showLineWidget => {
+    this.setState({
+      showLineWidget
+    });
+  };
+
   render() {
     const { localization } = this.props;
     const { file, showHint } = this.state;
@@ -457,6 +464,8 @@ export default class SourceEditor extends PureComponent {
           hasChanged={this.state.hasChanged}
           filePath={this.props.filePath}
           tabs={this.props.tabs}
+          showLineWidget={this.state.showLineWidget}
+          setShowLineWidget={this.setShowLineWidget}
           globalEvent={this.props.globalEvent}
         />
         {this.state.loading ? (
@@ -498,6 +507,7 @@ export default class SourceEditor extends PureComponent {
         />
         {this.codemirror && (
           <LineWidget
+            show={this.state.showLineWidget}
             codemirror={this.codemirror}
             localization={localization}
           />

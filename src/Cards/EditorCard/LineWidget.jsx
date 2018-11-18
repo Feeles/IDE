@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { style } from 'typestyle';
 import { withTheme, Button, IconButton } from '@material-ui/core';
-import Close from '@material-ui/icons/Close';
+import Done from '@material-ui/icons/Done';
 import Backspace from '@material-ui/icons/Backspace';
 import { Pos } from 'codemirror';
 
@@ -33,12 +33,12 @@ const getCn = props => ({
 @withTheme()
 export default class LineWidget extends React.Component {
   static propTypes = {
+    show: PropTypes.bool.isRequired,
     codemirror: PropTypes.object.isRequired,
     localization: PropTypes.object.isRequired
   };
 
   state = {
-    enabled: true,
     line: -1,
     widget: null,
     notDeletable: false
@@ -51,7 +51,18 @@ export default class LineWidget extends React.Component {
     codemirror.on('blur', this.handleBlur);
   }
 
+  componentDidUpdate(prevProps) {
+    const { line } = this.state;
+    if (!prevProps.show && this.props.show && line > -1) {
+      this.setLineWidget(this.props.codemirror, line);
+    }
+    if (prevProps.show && !this.props.show && line > -1) {
+      this.props.codemirror.removeLineClass(line, 'wrap', cn.background); // 背景色を戻す
+    }
+  }
+
   setLineWidget(cm, line) {
+    if (!this.props.show) return;
     if (this.state.line > -1) {
       cm.removeLineClass(this.state.line, 'wrap', cn.background); // 背景色を戻す
     }
@@ -83,16 +94,14 @@ export default class LineWidget extends React.Component {
     }
   };
 
-  handleRemoveLineWidget = () => {
-    if (this.state.line >= 0) {
-      this.props.codemirror.removeLineClass(
-        this.state.line,
-        'wrap',
-        cn.background
-      ); // 背景色を戻す
+  handleDone = () => {
+    // 現在の LineWidget を消す
+    const { line, widget } = this.state;
+    if (line > -1) {
+      this.props.codemirror.removeLineClass(line, 'wrap', cn.background); // 背景色を戻す
     }
-    if (this.state.widget) {
-      this.state.widget.clear();
+    if (widget) {
+      widget.clear();
     }
     this.setState({
       widget: null,
@@ -114,21 +123,15 @@ export default class LineWidget extends React.Component {
     this.setLineWidget(cm, line); // 次の行(消したのでlineは同じ)に移動
   };
 
-  handleDisable = () => {
-    this.setState({
-      enabled: false
-    });
-  };
-
   handleBlur = cm => {
     // 背景色だけが残らないようにする
-    if (!this.state.enabled && this.state.line > -1) {
+    if (!this.props.show && this.state.line > -1) {
       cm.removeLineClass(this.state.line, 'wrap', cn.background); // 背景色を戻す
     }
   };
 
   render() {
-    if (!this.state.enabled) return null;
+    if (!this.props.show) return null;
     if (!this.state.widget) return null;
     const { node } = this.state.widget;
     if (!node) return null;
@@ -149,8 +152,8 @@ export default class LineWidget extends React.Component {
           {this.props.localization.editorCard.deleteLine}
         </Button>
         <div className={cn.blank} />
-        <IconButton onClick={this.handleDisable}>
-          <Close fontSize="small" />
+        <IconButton onClick={this.handleDone}>
+          <Done fontSize="small" />
         </IconButton>
       </>,
       node
