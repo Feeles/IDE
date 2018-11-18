@@ -1,5 +1,7 @@
-import grey from '@material-ui/core/colors/grey';
 import blue from '@material-ui/core/colors/blue';
+import { px, rgb } from 'csx';
+
+export const fontSize = 20;
 
 export default ({ palette, shadows, transitions }) =>
   `
@@ -42,21 +44,21 @@ textarea {
   visibility: hidden;
 }
 .Feeles-dropdown {
-  transform: translateY(-20px);
+  transform: translateY(${px(-fontSize)});
   height: 0;
   white-space: pre;
   z-index: 3;
 }
 .Feeles-dropdown .Feeles-dropdown-shadow {
-  transform: translateX(-20px);
+  transform: translateX(${px(-fontSize)});
   display: inline-block;
   border-radius: 2px;
   box-shadow: ${shadows[1]};
-  height: 20px; /* TODO: Flexible font-size */
+  height: ${px(fontSize)}; /* TODO: Flexible font-size */
 }
 .Feeles-dropdown .Feeles-dropdown-button {
   display: inline-block;
-  padding: 2px 10px 2px 20px;
+  padding: 2px 10px 2px ${px(fontSize)};
   border-radius: 2px;
   overflow: hidden;
   cursor: pointer;
@@ -97,23 +99,23 @@ a.Feeles-link {
 }
 
 .cm-tab {
-  background-color: ${grey['100']};
+  background-color: ${rgb(0, 0, 0).fade(0.1)};
   opacity: 0.8;
 }
 .cm-tab + .cm-tab {
-  background-color: ${grey['200']};
+  background-color: ${rgb(0, 0, 0).fade(0.2)};
 }
 .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey['300']};
+  background-color: ${rgb(0, 0, 0).fade(0.3)};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey['400']};
+  background-color: ${rgb(0, 0, 0).fade(0.4)};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey['500']};
+  background-color: ${rgb(0, 0, 0).fade(0.5)};
 }
 .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab + .cm-tab {
-  background-color: ${grey['600']};
+  background-color: ${rgb(0, 0, 0).fade(0.6)};
 }
 div.CodeMirror span.CodeMirror-matchingbracket {
   text-shadow: 0 0 4px #000, 0 -8px 10px #000, 0 8px 10px #000;
@@ -122,5 +124,5 @@ div.CodeMirror.CodeMirror-focused pre>span>span.cm-comment {
   opacity: 0.5;
 }
 div.CodeMirror pre {
-  line-height: 20px;
+  line-height: ${px(fontSize)};
 }`;
