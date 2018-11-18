@@ -6,6 +6,7 @@ import { withTheme, Button, IconButton } from '@material-ui/core';
 import Done from '@material-ui/icons/Done';
 import Backspace from '@material-ui/icons/Backspace';
 import { Pos } from 'codemirror';
+import includes from 'lodash/includes';
 
 import isNotDeletableLine from './isNotDeletableLine';
 
@@ -86,6 +87,8 @@ export default class LineWidget extends React.Component {
   }
 
   handleLineWidget = cm => {
+    if (includes(cm.getSelection(), '\n')) return; // 複数行選択されている場合は omit
+
     // Delete line button
     const cursor = cm.getCursor();
     if (this.state.line !== cursor.line) {
