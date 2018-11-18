@@ -104,6 +104,7 @@ export default {
     insert: 'Insert',
     error: '😇💭 Oops, a little typo...',
     restore: 'Restore before mistake',
+    deleteLine: 'Delete a line',
     clickHere: '⭐️ Click here'
   },
   envCard: {

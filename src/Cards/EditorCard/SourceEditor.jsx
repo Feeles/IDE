@@ -6,6 +6,7 @@ import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
 import includes from 'lodash/includes';
 
+import LineWidget from './LineWidget';
 import Editor from './Editor';
 import MenuBar from './MenuBar';
 import AssetPane from './AssetPane';
@@ -136,6 +137,7 @@ export default class SourceEditor extends PureComponent {
 
     this.handleUpdateWidget(this.codemirror);
     this.handleRenderWidget(this.codemirror);
+    this.forceUpdate();
   };
 
   handleUpdateFile() {
@@ -492,6 +494,12 @@ export default class SourceEditor extends PureComponent {
           handleAssetInsert={this.handleAssetInsert}
           localization={localization}
         />
+        {this.codemirror && (
+          <LineWidget
+            codemirror={this.codemirror}
+            localization={localization}
+          />
+        )}
       </div>
     );
   }

@@ -103,6 +103,7 @@ export default {
     insert: '中に入れる',
     error: '😇💭 あっ、ちょっと 入力ミスが...',
     restore: 'ミスがおこる まえにもどす',
+    deleteLine: '１行消す',
     clickHere: '⭐️ まずは ここをクリック'
   },
   envCard: {
