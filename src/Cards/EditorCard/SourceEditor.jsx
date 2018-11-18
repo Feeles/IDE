@@ -257,7 +257,11 @@ export default class SourceEditor extends PureComponent {
     }
     // render new widgets
     for (const [i, element] of this._widgets.entries()) {
-      cm.addWidget(new Pos(i, 0), element);
+      // fold されていないかを確認
+      const lineHandle = cm.getLineHandle(i);
+      if (lineHandle.height > 0) {
+        cm.addWidget(new Pos(i, 0), element);
+      }
     }
   };
 
