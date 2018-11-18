@@ -17,6 +17,8 @@ import { withTheme } from '@material-ui/core';
 import replaceExistConsts from '../../utils/replaceExistConsts';
 import preserveTrailingSpaceBeautify from '../../utils/preserveTrailingSpaceBeautify';
 
+import { assetRegExp } from '../../utils/keywords';
+
 const cn = {
   root: style({
     position: 'absolute',
@@ -204,7 +206,7 @@ export default class SourceEditor extends PureComponent {
 
   updateWidget = (cm, line, text) => {
     // Syntax: /*+ モンスター アイテム */
-    const asset = /^(.*)(\/\*)(\+[^*]+)(\*\/)/.exec(text);
+    const asset = assetRegExp.exec(text);
     if (asset) {
       const [, _prefix, _left, _label, _right] = asset.map(t =>
         t.replace(/\t/g, '    ')

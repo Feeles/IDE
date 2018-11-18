@@ -1,8 +1,8 @@
 import CodeMirror from 'codemirror';
 
-const prefix = '// ';
-const startWord = prefix + 'ここから';
-const endWord = prefix + 'ここまで';
+import { codeFolds } from '../../utils/keywords';
+
+const { prefix, startWord, endWord } = codeFolds;
 
 /**
  * 「// ここから〇〇」〜「// ここまで〇〇」を fold する
