@@ -1,3 +1,4 @@
 src/jsx/ReactPopout.jsx
 src/jsx/MDReactComponent.jsx
 /lib
+src/lib/require.js

@@ -16,10 +16,10 @@
   var Headers = fetchPolyfill.Headers;
   // polyfill
   if (!self.fetch) {
-    self.fetch = fetchPolyfill.fetch;
-    self.Request = fetchPolyfill.Request;
-    self.Response = fetchPolyfill.Response;
-    self.Headers = fetchPolyfill.Headers;
+    self.fetch = fetch;
+    self.Request = Request;
+    self.Response = Response;
+    self.Headers = Headers;
   }
 
   /**
@@ -345,7 +345,7 @@
           }
           context.completeLoad(moduleName);
         })
-        .catch(function(error) {
+        .catch(function() {
           console.error(moduleName + ' is not found');
           define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
           context.completeLoad(moduleName);
