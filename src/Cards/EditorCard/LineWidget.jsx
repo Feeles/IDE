@@ -7,6 +7,8 @@ import Close from '@material-ui/icons/Close';
 import Backspace from '@material-ui/icons/Backspace';
 import { Pos } from 'codemirror';
 
+import isNotDeletableLine from './isNotDeletableLine';
+
 const cn = {
   background: style({
     backgroundColor: 'rgba(0, 0, 0, 0.04)'
@@ -38,7 +40,8 @@ export default class LineWidget extends React.Component {
   state = {
     enabled: true,
     line: -1,
-    widget: null
+    widget: null,
+    notDeletable: false
   };
 
   componentDidMount() {
@@ -63,7 +66,12 @@ export default class LineWidget extends React.Component {
       noHScroll: true,
       above: this.state.line > -1 ? line > this.state.line : false
     });
-    this.setState({ widget, line });
+
+    this.setState({
+      widget,
+      line,
+      notDeletable: isNotDeletableLine(cm.getLine(line)) // 削除できるかどうか
+    });
   }
 
   handleLineWidget = cm => {
@@ -135,6 +143,7 @@ export default class LineWidget extends React.Component {
           size="small"
           className={dcn.button}
           onClick={this.handleLineDeleteClick}
+          disabled={this.state.notDeletable}
         >
           <Backspace fontSize="small" />
           {this.props.localization.editorCard.deleteLine}
