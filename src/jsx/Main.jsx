@@ -55,7 +55,12 @@ const cn = {
   }),
   alignRight: style({
     textAlign: 'right'
-  })
+  }),
+  drawer: {
+    paper: style({
+      position: 'absolute'
+    })
+  }
 };
 
 @withTheme()
@@ -482,6 +487,7 @@ export default class Main extends Component {
           variant="persistent"
           open={this.state.openSidebar}
           onClose={this.toggleSidebar}
+          classes={cn.drawer}
         >
           {this.props.mini ? null : (
             <div className={cn.alignRight}>
