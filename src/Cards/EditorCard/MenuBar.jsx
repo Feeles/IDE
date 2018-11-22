@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import Button from '@material-ui/core/Button';
 import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
-import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Description from '@material-ui/icons/Description';
 import Layers from '@material-ui/icons/Layers';
 import LayersClear from '@material-ui/icons/LayersClear';
+import Typography from '@material-ui/core/Typography';
 
 import PlayMenu from './PlayMenu';
 import CardFloatingBar from '../CardFloatingBar';
@@ -20,6 +20,10 @@ const cn = {
   }),
   fileNameButton: style({
     textTransform: 'inherit'
+  }),
+  menuItem: style({
+    paddingTop: 4,
+    paddingBottom: 4
   })
 };
 
@@ -116,9 +120,11 @@ export default class MenuBar extends React.Component {
             <MenuItem
               key={index}
               selected={tab.filePath === this.props.filePath}
+              className={cn.menuItem}
               onClick={() => this.handleMenuItemClick(tab.filePath)}
             >
-              <ListItemText primary={tab.label} secondary={tab.filePath} />
+              <Description />
+              <Typography variant="body2">{tab.label}</Typography>
             </MenuItem>
           ))}
         </Menu>
