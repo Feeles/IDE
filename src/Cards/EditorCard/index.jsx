@@ -30,9 +30,10 @@ const getCn = props => ({
 });
 
 export class Tab {
-  constructor({ label, filePath }) {
+  constructor({ label, filePath, iconUrl }) {
     this.label = label;
     this.filePath = filePath;
+    this.iconUrl = iconUrl;
   }
 }
 

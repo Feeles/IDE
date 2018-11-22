@@ -30,7 +30,8 @@
                 "filePath": "main.js"
             }, {
                 "label": "HTML",
-                "filePath": "index.html"
+                "filePath": "index.html",
+                "iconUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAtElEQVR4AezSAQbDQBBG4bebqB44ACQUSgpgAasIsCBAoWebokKNX0cAIe8An5kxHKGzs5EHqjsjOxowjCeZ3xIFwxj2MUajc1DFBBUw65dx1BJQgulRZUcFzGtjJNU0pZgL/+oEJZi3ZyS1OkowV+Kg1xRM8TwaYsI1xxcSq81sSaoPmCYYQblndOWAcVQjBw+pGUEtJHwpZhRVPUONGUUVkoNKyAjqhuqzfqDM4AejYBQAAIiqhXbHMw6KAAAAAElFTkSuQmCC"
             }]
         }
     },

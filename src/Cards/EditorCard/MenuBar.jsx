@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
 import Button from '@material-ui/core/Button';
 import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -8,6 +8,7 @@ import Menu from '@material-ui/core/Menu';
 import Description from '@material-ui/icons/Description';
 import Layers from '@material-ui/icons/Layers';
 import LayersClear from '@material-ui/icons/LayersClear';
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import Typography from '@material-ui/core/Typography';
 
 import PlayMenu from './PlayMenu';
@@ -21,9 +22,16 @@ const cn = {
   fileNameButton: style({
     textTransform: 'inherit'
   }),
+  fileSelectMenu: style({
+    width: 200
+  }),
   menuItem: style({
     paddingTop: 4,
     paddingBottom: 4
+  }),
+  icon: style({
+    width: 24,
+    height: 24
   })
 };
 
@@ -75,6 +83,14 @@ export default class MenuBar extends React.Component {
     anchorEl: null
   };
 
+  renderIcon(tab) {
+    return tab.iconUrl ? (
+      <img src={tab.iconUrl} alt="" className={cn.icon} />
+    ) : (
+      <Description />
+    );
+  }
+
   render() {
     const { anchorEl } = this.state;
     const dcn = getCn(this.props);
@@ -97,11 +113,13 @@ export default class MenuBar extends React.Component {
         </Button>
         <Button
           variant="text"
-          className={cn.fileNameButton}
+          className={classes(cn.fileNameButton, cn.fileSelectMenu)}
           onClick={this.handleClickListItem}
         >
-          <Description />
+          {this.renderIcon(selected)}
           {selected ? selected.label : this.props.filePath}
+          <div className={cn.blank} />
+          <ArrowDropDown />
         </Button>
         <IconButton onClick={this.toggleLineWidget}>
           {this.props.showLineWidget ? (
@@ -114,16 +132,17 @@ export default class MenuBar extends React.Component {
           id="file-select-menu"
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
+          className={cn.fileSelectMenu}
           onClose={this.handleClose}
         >
           {this.props.tabs.map((tab, index) => (
             <MenuItem
               key={index}
               selected={tab.filePath === this.props.filePath}
-              className={cn.menuItem}
+              className={classes(cn.menuItem, cn.fileSelectMenu)}
               onClick={() => this.handleMenuItemClick(tab.filePath)}
             >
-              <Description />
+              {this.renderIcon(tab)}
               <Typography variant="body2">{tab.label}</Typography>
             </MenuItem>
           ))}
