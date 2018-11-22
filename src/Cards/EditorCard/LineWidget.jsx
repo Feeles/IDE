@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { style } from 'typestyle';
-import { withTheme, Button, IconButton } from '@material-ui/core';
-import Done from '@material-ui/icons/Done';
+import { withTheme, Button } from '@material-ui/core';
 import Backspace from '@material-ui/icons/Backspace';
 import { Pos } from 'codemirror';
 import includes from 'lodash/includes';
@@ -145,7 +144,7 @@ export default class LineWidget extends React.Component {
       <>
         <div className={cn.blank} />
         <Button
-          variant="outlined"
+          variant="text"
           size="small"
           className={dcn.button}
           onClick={this.handleLineDeleteClick}
@@ -154,10 +153,6 @@ export default class LineWidget extends React.Component {
           <Backspace fontSize="small" />
           {this.props.localization.editorCard.deleteLine}
         </Button>
-        <div className={cn.blank} />
-        <IconButton onClick={this.handleDone}>
-          <Done fontSize="small" />
-        </IconButton>
       </>,
       node
     );
