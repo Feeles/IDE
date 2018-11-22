@@ -30,10 +30,26 @@ const getCn = props => ({
 });
 
 export class Tab {
-  constructor({ label, filePath, iconUrl }) {
+  constructor({ label, filePath, iconUrl, tabs }) {
     this.label = label;
-    this.filePath = filePath;
     this.iconUrl = iconUrl;
+    if (filePath) {
+      this.filePath = filePath;
+    } else if (tabs) {
+      this.tabs = tabs.map(props => new Tab(props));
+    }
+  }
+
+  static find(tabs, filePath) {
+    for (const tab of tabs) {
+      if (tab.filePath === filePath) return tab;
+    }
+    for (const tab of tabs) {
+      if (Array.isArray(tab.tabs)) {
+        const found = Tab.find(tab.tabs, filePath);
+        if (found) return found;
+      }
+    }
   }
 }
 
@@ -95,14 +111,13 @@ export default class EditorCard extends PureComponent {
     if (file.is('text')) {
       // テキストの場合は EditorCard で open
 
-      // 開こうとしているファイルを tabs の先頭に追加
-      const existTab = this.state.tabs.find(tab => tab.filePath === filePath);
-      const excludes = this.state.tabs.filter(tab => tab.filePath !== filePath);
-      const tabs = existTab
-        ? [existTab].concat(excludes) // 既に tabs にあれば使う
-        : [new Tab({ filePath, label: file.plain + file.ext })].concat(
-            excludes
-          ); // なければ手元の情報で Tab を作る
+      let tabs = this.state.tabs;
+      const existTab = Tab.find(tabs, filePath);
+      if (!existTab) {
+        // 開こうとしているファイルを tabs の先頭に追加
+        const tab = new Tab({ filePath, label: file.plain + file.ext });
+        tabs = [tab].concat(tabs);
+      }
       this.setState({ filePath, tabs });
 
       this.props.setCardVisibility('EditorCard', true);

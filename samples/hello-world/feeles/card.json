@@ -32,6 +32,13 @@
                 "label": "HTML",
                 "filePath": "index.html",
                 "iconUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAQAAABLCVATAAAAtElEQVR4AezSAQbDQBBG4bebqB44ACQUSgpgAasIsCBAoWebokKNX0cAIe8An5kxHKGzs5EHqjsjOxowjCeZ3xIFwxj2MUajc1DFBBUw65dx1BJQgulRZUcFzGtjJNU0pZgL/+oEJZi3ZyS1OkowV+Kg1xRM8TwaYsI1xxcSq81sSaoPmCYYQblndOWAcVQjBw+pGUEtJHwpZhRVPUONGUUVkoNKyAjqhuqzfqDM4AejYBQAAIiqhXbHMw6KAAAAAElFTkSuQmCC"
+            }, {
+                "label": "Settings",
+                "iconUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAA+ElEQVR4AcXSgUZDYRgG4IcFIqAAFASyDVB1B2mVbmitLMNQiACqqq4hEdQ1tIIKTFtdwWDN/D5+6Riw5+Xg/c53nHP8pqKikVI1kX3DlAMTuY6FWwW2XVjHln4s/KhhzaVdcrO641s+DOX5HF+7ZmVahorTQlgyyIYdp6N0sm5gSVjUEyNtJTDjWLR6lgXmPabBs6DkLbX35uWspFFdQDO1ZX+U06gpoJHaipx4JS9KgqfUPlgQWM4++iStlLRF68ti0W89G+X1/98qPasoRzJz+nEQ8rznRyPYc24VO77j5r5NbLhRU+AuFq5M5DAW6iZS1UipmIJfHpnJV+vLyskAAAAASUVORK5CYII=",
+                "tabs": [{
+                    "label": "Asset",
+                    "filePath": "feeles/.asset.yml"
+                }]
             }]
         }
     },
