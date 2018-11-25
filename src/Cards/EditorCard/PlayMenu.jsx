@@ -48,7 +48,7 @@ export default class PlayMenu extends PureComponent {
   static propTypes = {
     theme: PropTypes.object.isRequired,
     getFiles: PropTypes.func.isRequired,
-    setLocation: PropTypes.func.isRequired,
+    runApp: PropTypes.func.isRequired,
     href: PropTypes.string.isRequired,
     localization: PropTypes.object.isRequired,
     hasChanged: PropTypes.bool.isRequired
@@ -100,7 +100,7 @@ export default class PlayMenu extends PureComponent {
   };
 
   handleItemTouchTap = (event, menuItem) => {
-    this.props.setLocation(menuItem.props.value);
+    this.props.runApp(menuItem.props.value);
     this.setState({
       open: false
     });
@@ -134,7 +134,7 @@ export default class PlayMenu extends PureComponent {
         <Button
           variant="contained"
           color={this.props.hasChanged ? 'primary' : 'default'}
-          onClick={() => this.props.setLocation()}
+          onClick={() => this.props.runApp()}
         >
           <AVPlayCircleOutline />
           {localization.editorCard.play}

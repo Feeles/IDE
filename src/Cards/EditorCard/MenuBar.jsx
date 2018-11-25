@@ -31,7 +31,7 @@ export default class MenuBar extends React.Component {
     getFiles: PropTypes.func.isRequired,
     href: PropTypes.string.isRequired,
     handleUndo: PropTypes.func.isRequired,
-    setLocation: PropTypes.func.isRequired,
+    runApp: PropTypes.func.isRequired,
     hasChanged: PropTypes.bool.isRequired,
     hasHistory: PropTypes.bool.isRequired,
     tabs: PropTypes.array.isRequired,
@@ -76,7 +76,7 @@ export default class MenuBar extends React.Component {
         <div className={cn.blank} />
         <PlayMenu
           getFiles={this.props.getFiles}
-          setLocation={this.props.setLocation}
+          runApp={this.props.runApp}
           href={this.props.href}
           localization={this.props.localization}
           hasChanged={this.props.hasChanged}

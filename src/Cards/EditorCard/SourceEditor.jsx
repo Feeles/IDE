@@ -160,7 +160,7 @@ export default class SourceEditor extends PureComponent {
     });
   }
 
-  handleSave = async () => {
+  runApp = async href => {
     const { file } = this.state;
     if (!this.codemirror || !file) return;
 
@@ -179,6 +179,7 @@ export default class SourceEditor extends PureComponent {
     // Like a watching
     const babelrc = this.props.getConfig('babelrc');
     nextFile.babel(babelrc, e => {
+      this.props.setLocation(href);
       this.props.globalEvent.emit('message.editor', {
         data: { value: file.name }
       }); // もう一度ファイルを開かせる
@@ -287,11 +288,6 @@ export default class SourceEditor extends PureComponent {
     });
   };
 
-  setLocation = async href => {
-    await this.handleSave();
-    return this.props.setLocation(href);
-  };
-
   handleAssetInsert = ({ code }) => {
     const { assetLineNumber } = this.state;
     const pos = new Pos(assetLineNumber, 0);
@@ -318,7 +314,7 @@ export default class SourceEditor extends PureComponent {
     // Pane をとじる
     this.handleAssetClose();
     // 実行 (UIが固まらないように時間をおいている)
-    setTimeout(this.setLocation, 1000);
+    setTimeout(this.runApp, 1000);
   };
 
   emphasizeTextMarker = async textMarker => {
@@ -366,7 +362,7 @@ export default class SourceEditor extends PureComponent {
     const prevFile = prevFiles.get(this.state.file);
     if (prevFile) {
       this.setValue(prevFile.text);
-      this.setLocation();
+      this.runApp();
     }
   };
 
@@ -430,7 +426,7 @@ export default class SourceEditor extends PureComponent {
       'Ctrl-Enter': () => {
         // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
         // それをやり過ごしてから実行する
-        window.setTimeout(this.handleSaveAndRun, 10);
+        window.setTimeout(this.runApp, 10);
       },
       'Ctrl-Alt-B': () => {
         // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
@@ -459,7 +455,7 @@ export default class SourceEditor extends PureComponent {
           getFiles={this.props.getFiles}
           href={this.props.href}
           handleUndo={this.handleUndo}
-          setLocation={this.setLocation}
+          runApp={this.runApp}
           hasHistory={this.state.hasHistory}
           hasChanged={this.state.hasChanged}
           filePath={this.props.filePath}
