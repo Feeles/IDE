@@ -40,6 +40,7 @@ export default class LineWidget extends React.Component {
 
   state = {
     line: -1,
+    above: false,
     widget: null,
     notDeletable: false
   };
@@ -73,14 +74,21 @@ export default class LineWidget extends React.Component {
     }
     const parent = document.createElement('div');
     parent.classList.add(cn.parent);
+    const above =
+      this.state.line > -1
+        ? line === this.state.line
+          ? this.state.above
+          : line > this.state.line
+        : false;
     const widget = cm.addLineWidget(line, parent, {
       noHScroll: true,
-      above: this.state.line > -1 ? line > this.state.line : false
+      above
     });
 
     this.setState({
       widget,
       line,
+      above,
       notDeletable: isNotDeletableLine(cm.getLine(line)) // 削除できるかどうか
     });
   }
@@ -90,6 +98,12 @@ export default class LineWidget extends React.Component {
 
     // Delete line button
     const cursor = cm.getCursor();
+    if (!cursor.line && !cursor.ch && cursor.sticky === null) {
+      // runApp した時に0行目に line widget が移るのを防ぐ
+      // setValue すると LineWidget が消えるみたいなので作り直す
+      this.setLineWidget(cm, this.state.line);
+      return;
+    }
     if (this.state.line !== cursor.line) {
       // 行が変わっていたら LineWidget も作り直す必要がある
       this.setLineWidget(cm, cursor.line);
