@@ -87,6 +87,7 @@ export default class SourceEditor extends PureComponent {
 
   state = {
     file: null,
+    babelError: null,
 
     showHint: false,
     hasHistory: false,
@@ -171,23 +172,26 @@ export default class SourceEditor extends PureComponent {
       return;
     }
 
-    this.setState({ hasChanged: false, loading: true });
-
-    const nextFile = await this.props.putFile(file, file.set({ text }));
-    file.set(nextFile, file);
+    this.setState({ hasChanged: false, loading: true, babelError: null });
 
     // Like a watching
-    const babelrc = this.props.getConfig('babelrc');
-    nextFile.babel(babelrc, e => {
+    try {
+      const nextFile = await this.props.putFile(file, file.set({ text }));
+      await nextFile.babel();
+
+      file.set(nextFile, file);
+      // 再読み込み
       this.props.setLocation(href);
+    } catch (error) {
       this.props.globalEvent.emit('message.editor', {
         data: { value: file.name }
       }); // もう一度ファイルを開かせる
-      // あらたな Babel Error が発生したときを検知して,
-      // ダイアログを表示させる (エラーの詳細は file.error を参照する)
-      this.forceUpdate(); // 再描画
-      console.info(e);
-    });
+
+      this.setState({
+        babelError: error
+      });
+      console.info(error);
+    }
 
     this.setState({ loading: false });
   };
@@ -483,7 +487,7 @@ export default class SourceEditor extends PureComponent {
           />
         </div>
         <ErrorPane
-          error={file.error}
+          error={this.state.babelError}
           localization={localization}
           onRestore={this.handleRestore}
           canRestore={prevFiles.has(file)}

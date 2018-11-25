@@ -31,7 +31,7 @@ worker.addEventListener('message', event => {
   }
 });
 
-const babelFile = ((count = 0) => (file, babelrc) => {
+const babelFile = ((count = 0) => file => {
   return new Promise((resolve, reject) => {
     if (file.isScript && file.text.length < 100000) {
       const id = 'unique in babelFile.js:babelFile--' + count++;
@@ -46,7 +46,6 @@ const babelFile = ((count = 0) => (file, babelrc) => {
         id,
         code: file.text,
         options: {
-          ...babelrc,
           filename: file.name
         }
       });

@@ -118,7 +118,7 @@ export default class _File {
   }
 
   get error() {
-    return this.constructor._babelError.get(this);
+    throw 'file.error is unsupported';
   }
 
   get lastModified() {
@@ -130,21 +130,10 @@ export default class _File {
   }
 
   static _babelCache = new WeakMap();
-  static _babelConfig = null;
-  static _babelError = new WeakMap();
-  babel(config, onError = () => {}) {
-    const { _babelCache, _babelConfig, _babelError } = this.constructor;
-    if (_babelConfig === config) {
-      if (_babelCache.has(this)) return _babelCache.get(this);
-      if (_babelError.has(this)) throw _babelError.get(this);
-    } else {
-      this.constructor._babelConfig = config;
-    }
-
-    const promise = babelFile(this, config).catch(err => {
-      _babelError.set(this, err);
-      onError(err);
-    });
+  async babel() {
+    const { _babelCache } = this.constructor;
+    if (_babelCache.has(this)) return _babelCache.get(this);
+    const promise = babelFile(this);
     _babelCache.set(this, promise);
     return promise;
   }

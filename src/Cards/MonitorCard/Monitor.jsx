@@ -295,12 +295,11 @@ export default class Monitor extends PureComponent {
       this.props.findFile(`${data.value}.js`) ||
       this.props.findFile(data.value);
     if (file) {
-      const babelrc = this.props.getConfig('babelrc');
-      const result = await file.babel(babelrc, e => {
-        reply({ error: e });
-      });
-      if (result) {
+      try {
+        const result = await file.babel();
         reply({ value: result.text });
+      } catch (error) {
+        reply({ error });
       }
     } else if (data.value.indexOf('http') === 0) {
       try {
