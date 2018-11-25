@@ -176,10 +176,10 @@ export default class SourceEditor extends PureComponent {
 
     // Like a watching
     try {
-      const nextFile = await this.props.putFile(file, file.set({ text }));
+      const nextFile = file.set({ text });
       await nextFile.babel();
+      await this.props.putFile(file, nextFile);
 
-      file.set(nextFile, file);
       // 再読み込み
       this.props.setLocation(href);
     } catch (error) {
