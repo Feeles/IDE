@@ -61,9 +61,6 @@ const cn = {
   })
 };
 
-// file -> prevFile を参照する
-const prevFiles = new WeakMap();
-
 @withTheme()
 export default class SourceEditor extends PureComponent {
   static propTypes = {
@@ -167,12 +164,8 @@ export default class SourceEditor extends PureComponent {
 
     this.beautify(this.codemirror); // Auto beautify
     const text = this.codemirror.getValue();
-    if (text === file.text) {
-      // No change
-      return;
-    }
 
-    this.setState({ hasChanged: false, loading: true, babelError: null });
+    this.setState({ loading: true, babelError: null });
 
     // Like a watching
     try {
@@ -362,12 +355,28 @@ export default class SourceEditor extends PureComponent {
   };
 
   handleRestore = () => {
-    // 保存する前の状態に戻す
-    const prevFile = prevFiles.get(this.state.file);
-    if (prevFile) {
-      this.setValue(prevFile.text);
-      this.runApp();
+    const { file } = this.state;
+    const cm = this.codemirror;
+    if (!file || !cm) return;
+    const { left, top } = cm.getScrollInfo();
+    this.codemirror.scrollTo(left, top);
+
+    // 変更を加える前の状態(前回保存したところ)に戻す
+    while (cm.historySize().undo > 0) {
+      cm.undo(); // ひとつ前に戻す
+      if (cm.getValue() === file.text) {
+        // 前回の保存内容と同じになった
+        break;
+      }
     }
+
+    if (cm.getValue() !== file.text) {
+      // 履歴を遡っても同じにはならなかった(履歴が混在している)
+      cm.clearHistory();
+      cm.setValue(file.text);
+    }
+    this.codemirror.scrollTo(left, top);
+    this.runApp();
   };
 
   beautify = () => {
@@ -490,7 +499,7 @@ export default class SourceEditor extends PureComponent {
           error={this.state.babelError}
           localization={localization}
           onRestore={this.handleRestore}
-          canRestore={prevFiles.has(file)}
+          canRestore={this.state.hasHistory}
         />
         <AssetPane
           className={classes(
