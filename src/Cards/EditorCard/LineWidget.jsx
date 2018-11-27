@@ -60,7 +60,7 @@ export default class LineWidget extends React.Component {
       this.setLineWidget(this.props.codemirror, line);
     }
     if (prevProps.show && !this.props.show && line > -1) {
-      this.props.codemirror.removeLineClass(line, 'wrap', cn.background); // 背景色を戻す
+      this.handleDone();
     }
   }
 
