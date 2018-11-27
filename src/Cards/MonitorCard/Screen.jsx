@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { SrcDocEnabled } from './setSrcDoc';
 import ErrorMessage from './ErrorMessage';
-import SvgButton from './SvgButton';
 
 const Padding = 1;
 const ScaleChangeMin = 0.02;
@@ -13,7 +12,9 @@ export default class Screen extends PureComponent {
     animation: PropTypes.bool.isRequired,
     display: PropTypes.bool.isRequired,
     frameRef: PropTypes.func.isRequired,
-    handleReload: PropTypes.func,
+    setLocation: PropTypes.func,
+    toggleFullScreen: PropTypes.func,
+
     error: PropTypes.object,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
@@ -85,8 +86,13 @@ export default class Screen extends PureComponent {
     }
   };
 
+  handleClickReload = event => {
+    this.props.setLocation();
+    event.stopPropagation();
+  };
+
   render() {
-    const { display, isFullScreen } = this.props;
+    const { display } = this.props;
     const { loading } = this.state;
 
     const sandbox = SrcDocEnabled
@@ -105,10 +111,12 @@ export default class Screen extends PureComponent {
         boxSizing: 'border-box',
         overflow: 'hidden',
         zIndex: 10,
-        display: display ? 'block' : 'none',
-        paddingTop: isFullScreen ? 64 : 0 // フルスクリーン中、余白がなくならないように
+        display: display ? 'flex' : 'none',
+        flexDirection: 'column',
+        alignItems: 'stretch'
       },
       parent: {
+        flex: 1,
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -124,23 +132,15 @@ export default class Screen extends PureComponent {
           : 'opacity 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms'
       },
       button: {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        zIndex: 1
+        cursor: 'pointer',
+        height: '10vh'
       }
     };
 
     return (
       <div style={styles.root}>
         <ErrorMessage error={this.props.error} />
-        {this.props.handleReload ? (
-          <SvgButton style={styles.button} onClick={this.props.handleReload}>
-            {
-              'M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z'
-            }
-          </SvgButton>
-        ) : null}
+
         <div style={styles.parent}>
           {this.props.reboot ? null : (
             <iframe
@@ -151,6 +151,23 @@ export default class Screen extends PureComponent {
               height={this.props.height}
             />
           )}
+        </div>
+        <div style={{ flex: 0 }}>
+          {this.props.setLocation ? (
+            <svg
+              fill="white"
+              style={styles.button}
+              viewBox="0 0 24 24"
+              onClick={this.handleClickReload}
+            >
+              <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+            </svg>
+          ) : null}
+          {this.props.toggleFullScreen ? (
+            <svg fill="white" style={styles.button} viewBox="0 0 24 24">
+              <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+            </svg>
+          ) : null}
         </div>
       </div>
     );

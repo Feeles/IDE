@@ -537,7 +537,16 @@ export default class Monitor extends PureComponent {
   render() {
     const dcn = getCn(this.props);
     const { error } = this.state;
-    const { isPopout, reboot } = this.props;
+    const { isPopout, reboot, isFullScreen } = this.props;
+    const extraProps = {};
+    if (isPopout || isFullScreen) {
+      // バーがないのでリロードボタンを出す
+      extraProps.setLocation = this.props.setLocation;
+    }
+    if (isFullScreen) {
+      // フルスクリーン中に解除する
+      extraProps.toggleFullScreen = this.props.toggleFullScreen;
+    }
 
     const popout =
       isPopout && !reboot ? (
@@ -555,11 +564,11 @@ export default class Monitor extends PureComponent {
           <Screen
             display
             frameRef={this.handleFrame}
-            handleReload={() => this.props.setLocation()}
             reboot={reboot}
             error={error}
             width={this.props.frameWidth}
             height={this.props.frameHeight}
+            {...extraProps}
           />
         </Popout>
       ) : null;
@@ -576,6 +585,7 @@ export default class Monitor extends PureComponent {
           width={this.props.frameWidth}
           height={this.props.frameHeight}
           isFullScreen={this.props.isFullScreen}
+          {...extraProps}
         />
       </div>
     );
