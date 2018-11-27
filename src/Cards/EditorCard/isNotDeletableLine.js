@@ -8,6 +8,7 @@ import { assetRegExp, codeFolds } from '../../utils/keywords';
  * @returns {Boolean} 削除できないとき true
  */
 export default function isNotDeletableLine(text) {
+  if (text === undefined) return true; // bugfix
   for (const brackets of ['()', '[]', '{}']) {
     const [start, end] = brackets;
     if (text.split(start).length !== text.split(end).length) {

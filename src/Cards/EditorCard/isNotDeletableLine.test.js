@@ -9,6 +9,7 @@ const ok = [
 ];
 
 const ng = [
+  undefined,
   'import "preload";',
   'item.breath({',
   '/*+ アセット */',
