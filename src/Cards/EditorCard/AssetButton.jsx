@@ -150,7 +150,7 @@ export default class AssetButton extends PureComponent {
         >
           <span className={cn.label}>{this.props.label}</span>
           <Button
-            variant="fab"
+            variant="contained"
             mini
             className={cn.button}
             onClick={this.handleInsert}

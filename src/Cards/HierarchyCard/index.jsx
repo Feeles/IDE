@@ -122,7 +122,7 @@ export default class HierarchyCard extends PureComponent {
         />
         <Root files={files.filter(filter)} {...transfer} />
         <Button
-          variant="fab"
+          variant="contained"
           mini
           className={cn.button}
           onClick={this.handleAdd}
