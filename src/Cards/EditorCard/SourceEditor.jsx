@@ -96,7 +96,6 @@ export default class SourceEditor extends PureComponent {
   handleCodemirror = codemirror => {
     this.codemirror = codemirror;
     this.codemirror.on('beforeChange', zenkakuToHankaku);
-    this.codemirror.on('change', this.handleIndentLine);
     const onChange = cm => {
       this.setState({
         hasHistory: cm.historySize().undo > 0,

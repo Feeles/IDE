@@ -92,6 +92,7 @@ export default class AssetPane extends PureComponent {
     cm.on('swapDoc', this.handleUpdateWidget);
     cm.on('update', this.handleRenderWidget);
     cm.on('beforeChange', this.handleIndexReplacement);
+    cm.on('change', this.handleIndentLine);
 
     this.handleUpdateWidget(cm);
     this.handleRenderWidget(cm);
