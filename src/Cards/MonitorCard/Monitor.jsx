@@ -521,12 +521,6 @@ export default class Monitor extends PureComponent {
     }
   };
 
-  handleTouch = () => {
-    if (this.props.isFullScreen) {
-      this.props.toggleFullScreen();
-    }
-  };
-
   handleHashChanged = () => {
     if (/^#\//.test(location.hash)) {
       const href = location.hash.substr(2);
@@ -574,7 +568,7 @@ export default class Monitor extends PureComponent {
       ) : null;
 
     return (
-      <div className={dcn.root} onClick={this.handleTouch}>
+      <div className={dcn.root}>
         {popout}
         <Screen
           animation
