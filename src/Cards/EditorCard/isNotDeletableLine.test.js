@@ -10,6 +10,7 @@ const ok = [
 
 const ng = [
   undefined,
+  `window.player = new Player(('▼ スキン', Skin.ナイト)); // プレイヤーをつくる`,
   'import "preload";',
   'item.breath({',
   '/*+ アセット */',

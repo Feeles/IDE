@@ -1,6 +1,8 @@
 import includes from 'lodash/includes';
 import { assetRegExp, codeFolds } from '../../utils/keywords';
 
+const keywords = ['var ', 'let ', 'const ', 'import ', 'export ', 'new '];
+
 /**
  * その text だけを削除したときにコードの健全性が保たれうるかどうか
  * コード全体をパースするのではなく, あくまで行だけを見たときの推測
@@ -18,7 +20,7 @@ export default function isNotDeletableLine(text) {
   if (text.split('`').length - (1 % 2) === 1) {
     return true; // テンプレートリテラルの途中なので削除できない
   }
-  for (const declare of ['var ', 'let ', 'const ', 'import ', 'export ']) {
+  for (const declare of keywords) {
     if (includes(text, declare)) {
       return true; // 変数宣言等が含まれるので削除できない
     }
