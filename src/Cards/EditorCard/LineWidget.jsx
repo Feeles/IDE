@@ -9,6 +9,8 @@ import includes from 'lodash/includes';
 
 import isNotDeletableLine from './isNotDeletableLine';
 
+const dummyNode = document.createElement('div');
+
 const cn = {
   background: style({
     backgroundColor: 'rgba(0, 0, 0, 0.04)'
@@ -148,9 +150,7 @@ export default class LineWidget extends React.Component {
 
   render() {
     if (!this.props.show) return null;
-    if (!this.state.widget) return null;
-    const { node } = this.state.widget;
-    if (!node) return null;
+    const node = this.state.widget ? this.state.widget.node : dummyNode;
 
     const dcn = getCn(this.props, this.state);
 
