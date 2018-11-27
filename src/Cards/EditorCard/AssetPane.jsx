@@ -13,23 +13,12 @@ import { assetRegExp } from '../../utils/keywords';
 import replaceExistConsts from '../../utils/replaceExistConsts';
 import AssetButton from './AssetButton';
 
-//classes(, assetCodeInserted && assetCodeInsertedCn)
 const cn = {
   in: style({
     top: '50vh'
   }),
   out: style({
     top: '100vh'
-  }),
-  assetCode: style({
-    opacity: 1,
-    transition: 'opacity 300ms'
-    // $nest: {
-    //   [`.${assetCodeInsertedCn} &`]: {
-    //     backgroundColor: 'rgba(0,0,0,1)',
-    //     opacity: 0
-    //   }
-    // }
   }),
   label: style({
     flex: '0 0 100%',
@@ -89,8 +78,7 @@ export default class AssetPane extends PureComponent {
   state = {
     assets: {},
     assetLineNumber: 0,
-    scope: null, // "モンスター" など
-    assetCodeInserted: false
+    scope: null // "モンスター" など
   };
 
   _widgets = new Map();
@@ -124,22 +112,6 @@ export default class AssetPane extends PureComponent {
     const end = new Pos(pos.line + code.split('\n').length, 0);
     code += '\n';
     cm.replaceRange(code, pos, pos, 'asset');
-    // トランジション（フェードイン）
-
-    this.setState(
-      {
-        assetCodeInserted: true
-      },
-      () => {
-        const fadeInMarker = cm.markText(pos, end, {
-          className: cn.assetCode,
-          clearOnEnter: true
-        });
-        fadeInMarker.on('clear', () => console.log('cleared'));
-        console.log(fadeInMarker);
-        console.log(document.querySelector(`.${cn.assetCode}`));
-      }
-    );
     // スクロール
     cm.scrollIntoView(
       {
@@ -154,37 +126,7 @@ export default class AssetPane extends PureComponent {
     // Pane をとじる
     this.handleClose();
     // 実行 (UIが固まらないように時間をおいている)
-    setTimeout(this.props.runApp, 1000);
-  };
-
-  emphasizeTextMarker = async textMarker => {
-    const { transitions } = this.props.theme;
-
-    const begin = {
-      className: textMarker.className,
-      style: 'opacity: 0; background-color: rgba(0,0,0,1)'
-    };
-    const end = {
-      className: textMarker.className,
-      style: `opacity: 1; background-color: rgba(0,0,0,0.1); transition: ${transitions.create()}`
-    };
-    textMarker.on('clear', () => {
-      this.setState(prevState => ({
-        classNameStyles: prevState.classNameStyles.filter(
-          item => begin !== item && end !== item
-        )
-      }));
-    });
-
-    this.setState(prevState => ({
-      classNameStyles: prevState.classNameStyles.concat(begin)
-    }));
-    await wait(500);
-    this.setState(prevState => ({
-      classNameStyles: prevState.classNameStyles.map(item =>
-        item === begin ? end : item
-      )
-    }));
+    this.props.runApp();
   };
 
   handleUpdateWidget = cm => {
@@ -322,10 +264,4 @@ export default class AssetPane extends PureComponent {
       </div>
     );
   }
-}
-
-function wait(millisec) {
-  return new Promise(resolve => {
-    setTimeout(resolve, millisec);
-  });
 }
