@@ -105,6 +105,8 @@ export default {
     error: '😇💭 Oops, a little typo...',
     restore: 'Restore before mistake',
     deleteLine: 'Delete a line',
+    copyLine: 'Copy a line',
+    pasteLine: 'Paste',
     clickHere: '⭐️ Click here'
   },
   envCard: {

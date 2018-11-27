@@ -6,6 +6,8 @@ import { withTheme, Button } from '@material-ui/core';
 import Backspace from '@material-ui/icons/Backspace';
 import { Pos } from 'codemirror';
 import includes from 'lodash/includes';
+import Chip from '@material-ui/core/Chip';
+import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight';
 
 import isNotDeletableLine from './isNotDeletableLine';
 
@@ -26,9 +28,22 @@ const cn = {
   })
 };
 
-const getCn = props => ({
+const getCn = (props, state) => ({
   button: style({
     margin: props.theme.spacing.unit
+  }),
+  copy: style({
+    transform: `rotateX(${state.above ? 180 : 0}deg)` // copy してくる方向
+  }),
+  paste: style({
+    transform: `rotateZ(90deg) rotateY(${state.above ? 180 : 0}deg)` // paste する方向
+  }),
+  clipboard: style({
+    transition: props.theme.transitions.create(),
+    backgroundColor: state.clipboard ? null : 'transparent',
+    color: state.clipboard
+      ? props.theme.palette.text.primary
+      : props.theme.palette.text.disabled
   })
 });
 
@@ -37,6 +52,7 @@ export default class LineWidget extends React.Component {
   static propTypes = {
     show: PropTypes.bool.isRequired,
     codemirror: PropTypes.object.isRequired,
+    runApp: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
   };
 
@@ -44,7 +60,9 @@ export default class LineWidget extends React.Component {
     line: -1,
     above: false,
     widget: null,
-    notDeletable: false
+    notDeletable: false,
+    text: '',
+    clipboard: null
   };
 
   componentDidMount() {
@@ -91,6 +109,7 @@ export default class LineWidget extends React.Component {
       widget,
       line,
       above,
+      text: widget.line.text,
       notDeletable: isNotDeletableLine(cm.getLine(line)) // 削除できるかどうか
     });
   }
@@ -148,14 +167,73 @@ export default class LineWidget extends React.Component {
     }
   };
 
+  handleLineCopyClick = () => {
+    const cm = this.props.codemirror;
+    const { line } = this.state;
+
+    const text = cm.getLine(line);
+    this.setState({
+      clipboard: text
+    });
+    cm.focus();
+  };
+
+  handleLinePasteClick = () => {
+    const cm = this.props.codemirror;
+    const { line, above, clipboard } = this.state;
+    if (!clipboard) return;
+
+    const pos = new Pos(above ? line : line + 1, 0);
+    cm.replaceRange(clipboard + '\n', pos, pos);
+    this.setState({
+      clipboard: null
+    });
+    this.props.runApp();
+  };
+
+  clearClipboard = () => {
+    this.setState({ clipboard: null });
+  };
+
   render() {
+    const { widget, clipboard, text } = this.state;
     if (!this.props.show) return null;
-    const node = this.state.widget ? this.state.widget.node : dummyNode;
+    const node = widget ? widget.node : dummyNode;
 
     const dcn = getCn(this.props, this.state);
+    const chipText = clipboard || text;
 
     return ReactDOM.createPortal(
       <>
+        {!clipboard ? (
+          <Button
+            variant="text"
+            size="small"
+            className={dcn.button}
+            onClick={this.handleLineCopyClick}
+            disabled={!text || this.state.notDeletable}
+          >
+            <SubdirectoryArrowRight className={dcn.copy} fontSize="small" />
+            {this.props.localization.editorCard.copyLine}
+          </Button>
+        ) : (
+          <Button
+            variant="text"
+            size="small"
+            className={dcn.button}
+            onClick={this.handleLinePasteClick}
+          >
+            <SubdirectoryArrowRight className={dcn.paste} fontSize="small" />
+            {this.props.localization.editorCard.pasteLine}
+          </Button>
+        )}
+        {chipText && (
+          <Chip
+            label={chipText}
+            className={dcn.clipboard}
+            onDelete={clipboard ? this.clearClipboard : undefined}
+          />
+        )}
         <div className={cn.blank} />
         <Button
           variant="text"

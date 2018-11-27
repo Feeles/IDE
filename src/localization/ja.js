@@ -104,6 +104,8 @@ export default {
     error: '😇💭 あっ、ちょっと 入力ミスが...',
     restore: 'ミスがおこる まえにもどす',
     deleteLine: '１行消す',
+    copyLine: '１行コピー',
+    pasteLine: '貼り付ける',
     clickHere: '⭐️ まずは ここをクリック'
   },
   envCard: {

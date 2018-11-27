@@ -325,6 +325,7 @@ export default class SourceEditor extends PureComponent {
           <LineWidget
             show={this.state.showLineWidget}
             codemirror={this.codemirror}
+            runApp={this.runApp}
             localization={localization}
           />
         )}
