@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { style, classes } from 'typestyle';
+import { style } from 'typestyle';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { Pos } from 'codemirror';
 import beautify from 'js-beautify';
-import includes from 'lodash/includes';
 
 import LineWidget from './LineWidget';
 import Editor from './Editor';
@@ -14,10 +12,7 @@ import ErrorPane from './ErrorPane';
 import zenkakuToHankaku from './zenkakuToHankaku';
 import foldAsset from './foldAsset';
 import { withTheme } from '@material-ui/core';
-import replaceExistConsts from '../../utils/replaceExistConsts';
 import preserveTrailingSpaceBeautify from '../../utils/preserveTrailingSpaceBeautify';
-
-import { assetRegExp } from '../../utils/keywords';
 
 const cn = {
   root: style({
@@ -44,25 +39,8 @@ const cn = {
   }),
   blank: style({
     flex: '1 1 auto'
-  }),
-  assetPaneIn: style({
-    top: '50vh'
-  }),
-  assetPaneOut: style({
-    top: '100vh'
   })
 };
-
-const getCn = props => ({
-  assetPane: style({
-    position: 'fixed',
-    width: '100%',
-    height: '50vh',
-    zIndex: props.theme.zIndex.modal - 1,
-    left: 0,
-    transition: props.theme.transitions.create('top')
-  })
-});
 
 @withTheme()
 export default class SourceEditor extends PureComponent {
@@ -94,15 +72,8 @@ export default class SourceEditor extends PureComponent {
     hasChanged: false,
     loading: false,
     snippets: [],
-    showLineWidget: true,
-
-    assetLineNumber: 0,
-    assetScope: null,
-    appendToHead: true,
-    classNameStyles: []
+    showLineWidget: true
   };
-
-  _widgets = new Map();
 
   componentDidUpdate(prevProps) {
     if (prevProps.fileView !== this.props.fileView && this.state.file) {
@@ -125,7 +96,6 @@ export default class SourceEditor extends PureComponent {
   handleCodemirror = codemirror => {
     this.codemirror = codemirror;
     this.codemirror.on('beforeChange', zenkakuToHankaku);
-    this.codemirror.on('beforeChange', this.handleIndexReplacement);
     this.codemirror.on('change', this.handleIndentLine);
     const onChange = cm => {
       this.setState({
@@ -135,12 +105,6 @@ export default class SourceEditor extends PureComponent {
     };
     this.codemirror.on('change', onChange);
     this.codemirror.on('swapDoc', onChange);
-    this.codemirror.on('change', this.handleUpdateWidget);
-    this.codemirror.on('swapDoc', this.handleUpdateWidget);
-    this.codemirror.on('update', this.handleRenderWidget);
-
-    this.handleUpdateWidget(this.codemirror);
-    this.handleRenderWidget(this.codemirror);
     this.forceUpdate();
   };
 
@@ -196,54 +160,6 @@ export default class SourceEditor extends PureComponent {
     this.codemirror.undo();
   };
 
-  handleUpdateWidget = cm => {
-    this._widgets.clear();
-    for (const [line, text] of cm
-      .getValue('\n')
-      .split('\n')
-      .entries()) {
-      this.updateWidget(cm, line, text);
-    }
-  };
-
-  updateWidget = (cm, line, text) => {
-    // Syntax: /*+ モンスター アイテム */
-    const asset = assetRegExp.exec(text);
-    if (asset) {
-      const [, _prefix, _left, _label, _right] = asset.map(t =>
-        t.replace(/\t/g, '    ')
-      );
-      const prefix = document.createElement('span');
-      prefix.textContent = _prefix;
-      prefix.classList.add('Feeles-asset-blank');
-      const left = document.createElement('span');
-      left.textContent = _left;
-      left.classList.add('Feeles-asset-blank');
-      const label = document.createElement('span');
-      label.textContent = _label;
-      const right = document.createElement('span');
-      right.textContent = _right;
-      right.classList.add('Feeles-asset-blank');
-      const button = document.createElement('span');
-      button.classList.add('Feeles-asset-button');
-      button.onclick = () => {
-        this.setState({
-          assetScope: _label.substr(1).trim(),
-          assetLineNumber: line,
-          appendToHead: false
-        });
-      };
-      button.appendChild(left);
-      button.appendChild(label);
-      button.appendChild(right);
-      const parent = document.createElement('div');
-      parent.classList.add('Feeles-widget', 'Feeles-asset');
-      parent.appendChild(prefix);
-      parent.appendChild(button);
-      this._widgets.set(line, parent);
-    }
-  };
-
   handleValueClick = event => {
     // Put cursor into editor
     if (this.codemirror) {
@@ -251,109 +167,6 @@ export default class SourceEditor extends PureComponent {
       const pos = this.codemirror.coordsChar(locate);
       this.codemirror.focus();
       this.codemirror.setCursor(pos);
-    }
-  };
-
-  handleRenderWidget = cm => {
-    // remove old widgets
-    for (const widget of [...document.querySelectorAll('.Feeles-asset')]) {
-      if (widget.parentNode) {
-        widget.parentNode.removeChild(widget);
-      }
-    }
-    // render new widgets
-    for (const [i, element] of this._widgets.entries()) {
-      // fold されていないかを確認
-      const lineHandle = cm.getLineHandle(i);
-      if (lineHandle.height > 0) {
-        cm.addWidget(new Pos(i, 0), element);
-      }
-    }
-  };
-
-  handleIndexReplacement = (cm, change) => {
-    if (!includes(['asset', 'paste'], change.origin)) return;
-
-    const code = cm.getValue('\n');
-    const sourceText = change.text.join('\n');
-    const replacedText = replaceExistConsts(code, sourceText);
-    if (sourceText !== replacedText) {
-      change.update(change.from, change.to, replacedText.split('\n'));
-    }
-  };
-
-  handleAssetClose = () => {
-    this.setState({
-      assetScope: null
-    });
-  };
-
-  handleAssetInsert = ({ code }) => {
-    const { assetLineNumber } = this.state;
-    const pos = new Pos(assetLineNumber, 0);
-    const end = new Pos(pos.line + code.split('\n').length, 0);
-    code = this.state.appendToHead ? '\n' + code : code + '\n';
-    this.codemirror.replaceRange(code, pos, pos, 'asset');
-    // トランジション（フェードイン）
-    const fadeInMarker = this.codemirror.markText(pos, end, {
-      className: `emphasize-${Date.now()}`,
-      clearOnEnter: true
-    });
-    this.emphasizeTextMarker(fadeInMarker);
-    // スクロール
-    this.codemirror.scrollIntoView(
-      {
-        from: pos,
-        to: end
-      },
-      10
-    );
-    // カーソル (挿入直後に undo したときスクロールが上に戻るのを防ぐ)
-    this.codemirror.focus();
-    this.codemirror.setCursor(end);
-    // Pane をとじる
-    this.handleAssetClose();
-    // 実行 (UIが固まらないように時間をおいている)
-    setTimeout(this.runApp, 1000);
-  };
-
-  emphasizeTextMarker = async textMarker => {
-    const { transitions } = this.props.theme;
-
-    const begin = {
-      className: textMarker.className,
-      style: 'opacity: 0; background-color: rgba(0,0,0,1)'
-    };
-    const end = {
-      className: textMarker.className,
-      style: `opacity: 1; background-color: rgba(0,0,0,0.1); transition: ${transitions.create()}`
-    };
-    textMarker.on('clear', () => {
-      this.setState(prevState => ({
-        classNameStyles: prevState.classNameStyles.filter(
-          item => begin !== item && end !== item
-        )
-      }));
-    });
-
-    this.setState(prevState => ({
-      classNameStyles: prevState.classNameStyles.concat(begin)
-    }));
-    await wait(500);
-    this.setState(prevState => ({
-      classNameStyles: prevState.classNameStyles.map(item =>
-        item === begin ? end : item
-      )
-    }));
-  };
-
-  handleIndentLine = (cm, change) => {
-    if (!includes(['asset', 'paste'], change.origin)) return;
-    const { from } = change;
-    const to = new Pos(from.line + change.text.length, 0);
-    // インデント
-    for (let line = from.line; line < to.line; line++) {
-      cm.indentLine(line);
     }
   };
 
@@ -436,8 +249,6 @@ export default class SourceEditor extends PureComponent {
       return null;
     }
 
-    const dcn = getCn(this.props);
-
     // const snippets = this.props.getConfig('snippets')(file);
 
     const extraKeys = {
@@ -463,11 +274,6 @@ export default class SourceEditor extends PureComponent {
 
     return (
       <div className={cn.root}>
-        <style>
-          {this.state.classNameStyles.map(
-            item => `.${item.className} { ${item.style} } `
-          )}
-        </style>
         <MenuBar
           localization={localization}
           getFiles={this.props.getFiles}
@@ -506,19 +312,16 @@ export default class SourceEditor extends PureComponent {
           onRestore={this.handleRestore}
           canRestore={this.state.hasHistory}
         />
-        <AssetPane
-          className={classes(
-            dcn.assetPane,
-            this.state.assetScope ? cn.assetPaneIn : cn.assetPaneOut
-          )}
-          fileView={this.props.fileView}
-          scope={this.state.assetScope}
-          loadConfig={this.props.loadConfig}
-          findFile={this.props.findFile}
-          handleClose={this.handleAssetClose}
-          handleAssetInsert={this.handleAssetInsert}
-          localization={localization}
-        />
+        {this.codemirror && (
+          <AssetPane
+            codemirror={this.codemirror}
+            fileView={this.props.fileView}
+            loadConfig={this.props.loadConfig}
+            findFile={this.props.findFile}
+            runApp={this.runApp}
+            localization={localization}
+          />
+        )}
         {this.codemirror && (
           <LineWidget
             show={this.state.showLineWidget}
@@ -529,10 +332,4 @@ export default class SourceEditor extends PureComponent {
       </div>
     );
   }
-}
-
-function wait(millisec) {
-  return new Promise(resolve => {
-    setTimeout(resolve, millisec);
-  });
 }
