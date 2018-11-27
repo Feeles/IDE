@@ -125,4 +125,9 @@ div.CodeMirror.CodeMirror-focused pre>span>span.cm-comment {
 }
 div.CodeMirror pre {
   line-height: ${px(fontSize)};
-}`;
+}
+
+div.CodeMirror-cursor {
+  border-left-width: 2px;
+}
+`;
