@@ -45,14 +45,6 @@ const cn = {
   blank: style({
     flex: '1 1 auto'
   }),
-  assetPane: style({
-    position: 'fixed',
-    width: '100%',
-    height: '50vh',
-    zIndex: 2900,
-    left: 0,
-    transition: 'top 300ms'
-  }),
   assetPaneIn: style({
     top: '50vh'
   }),
@@ -60,6 +52,17 @@ const cn = {
     top: '100vh'
   })
 };
+
+const getCn = props => ({
+  assetPane: style({
+    position: 'fixed',
+    width: '100%',
+    height: '50vh',
+    zIndex: props.theme.zIndex.modal - 1,
+    left: 0,
+    transition: props.theme.transitions.create('top')
+  })
+});
 
 @withTheme()
 export default class SourceEditor extends PureComponent {
@@ -433,6 +436,8 @@ export default class SourceEditor extends PureComponent {
       return null;
     }
 
+    const dcn = getCn(this.props);
+
     // const snippets = this.props.getConfig('snippets')(file);
 
     const extraKeys = {
@@ -503,7 +508,7 @@ export default class SourceEditor extends PureComponent {
         />
         <AssetPane
           className={classes(
-            cn.assetPane,
+            dcn.assetPane,
             this.state.assetScope ? cn.assetPaneIn : cn.assetPaneOut
           )}
           fileView={this.props.fileView}
