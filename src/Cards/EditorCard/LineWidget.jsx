@@ -84,14 +84,16 @@ export default class LineWidget extends React.Component {
 
   setLineWidget(cm, line) {
     if (!this.props.show) return;
+    // 前回の Widget を消す
     if (this.state.line > -1) {
       cm.removeLineClass(this.state.line, 'wrap', cn.background); // 背景色を戻す
     }
-    cm.addLineClass(line, 'wrap', cn.background); // 背景色をつける
-
     if (this.state.widget) {
       this.state.widget.clear();
     }
+    if (line === -1) return; // カーソルが定まっていない
+    // Widget を作って出す
+    cm.addLineClass(line, 'wrap', cn.background); // 背景色をつける
     const parent = document.createElement('div');
     parent.classList.add(cn.parent);
     const above =
