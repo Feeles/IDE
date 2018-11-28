@@ -16,5 +16,5 @@
     description: 他のファイルをインポートする
     filePath: sub/message.js
     code: |
-      import message from './sub/message';
+      import message from 'sub/message';
       console.log(message);

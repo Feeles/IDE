@@ -60,6 +60,8 @@ export default class SourceEditor extends PureComponent {
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     tabs: PropTypes.array.isRequired,
+    label: PropTypes.string.isRequired,
+    filePathToBack: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
@@ -285,6 +287,8 @@ export default class SourceEditor extends PureComponent {
           tabs={this.props.tabs}
           showLineWidget={this.state.showLineWidget}
           setShowLineWidget={this.setShowLineWidget}
+          label={this.props.label}
+          filePathToBack={this.props.filePathToBack}
           globalEvent={this.props.globalEvent}
         />
         {this.state.loading ? (

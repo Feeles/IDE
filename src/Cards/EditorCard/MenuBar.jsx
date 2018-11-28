@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
 import Layers from '@material-ui/icons/Layers';
 import LayersClear from '@material-ui/icons/LayersClear';
+import Check from '@material-ui/icons/Check';
 
 import PlayMenu from './PlayMenu';
 import CardFloatingBar from '../CardFloatingBar';
@@ -38,12 +39,21 @@ export default class MenuBar extends React.Component {
     filePath: PropTypes.string.isRequired,
     showLineWidget: PropTypes.bool.isRequired,
     setShowLineWidget: PropTypes.func.isRequired,
+    label: PropTypes.string.isRequired,
+    filePathToBack: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired
   };
 
   toggleLineWidget = () => {
     const { showLineWidget } = this.props;
     this.props.setShowLineWidget(!showLineWidget);
+  };
+
+  handleBack = () => {
+    this.props.runApp();
+    this.props.globalEvent.emit('message.editor', {
+      data: { value: this.props.filePathToBack }
+    });
   };
 
   render() {
@@ -73,6 +83,13 @@ export default class MenuBar extends React.Component {
             <LayersClear />
           )}
         </IconButton>
+        <div className={cn.blank} />
+        {this.props.filePathToBack ? (
+          <Button variant="contained" color="primary" onClick={this.handleBack}>
+            <Check />
+            {this.props.localization.editorCard.stopEditing(this.props.label)}
+          </Button>
+        ) : null}
         <div className={cn.blank} />
         <PlayMenu
           getFiles={this.props.getFiles}

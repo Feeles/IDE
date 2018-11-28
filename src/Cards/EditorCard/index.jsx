@@ -78,7 +78,9 @@ export default class EditorCard extends PureComponent {
 
   state = {
     filePath: '', // 現在開いているファイルの名前. 空文字の場合は何も開いていない
-    tabs: [] // プルダウンメニューの中で表示するファイルのリスト
+    tabs: [], // プルダウンメニューの中で表示するファイルのリスト
+    label: '', // このファイルの呼び名（タブから取得する）
+    filePathToBack: '' // 「〇〇の改造を終わる」ボタンを表示して、このファイルに移動する
   };
 
   componentDidMount() {
@@ -104,7 +106,7 @@ export default class EditorCard extends PureComponent {
     }
   }
 
-  openFile = filePath => {
+  openFile = (filePath, options = {}) => {
     if (!filePath || filePath === this.state.filePath) return;
 
     const file = this.props.findFile(filePath); // file type を知るために探す
@@ -119,7 +121,16 @@ export default class EditorCard extends PureComponent {
         const tab = new Tab({ filePath, label: file.plain + file.ext });
         tabs = [tab].concat(tabs);
       }
-      this.setState({ filePath, tabs });
+      this.setState({
+        filePath,
+        tabs,
+        label: options.label
+          ? options.label + ''
+          : existTab
+          ? existTab.label
+          : file.plain,
+        filePathToBack: options.showBackButton ? this.state.filePath : ''
+      });
 
       this.props.setCardVisibility('EditorCard', true);
       // タブの選択が変化したら EditorCard にスクロールする
@@ -140,10 +151,10 @@ export default class EditorCard extends PureComponent {
   };
 
   handleEditor = event => {
-    const { value } = event.data;
+    const { value, options } = event.data;
     if (value) {
       // feeles.openEditor()
-      this.openFile(value);
+      this.openFile(value, options);
     } else {
       // feeles.closeEditor()
       this.props.setCardVisibility('EditorCard', false);
@@ -206,6 +217,8 @@ export default class EditorCard extends PureComponent {
           openFileDialog={openFileDialog}
           putFile={putFile}
           tabs={this.state.tabs}
+          label={this.state.label}
+          filePathToBack={this.state.filePathToBack}
           globalEvent={this.props.globalEvent}
         />
       </Card>

@@ -102,6 +102,7 @@ export default {
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
     insert: 'ステージに出す',
     edit: name => `${name}を改造する`,
+    stopEditing: name => `${name}の改造をおわる`,
     error: '😇💭 あっ、ちょっと 入力ミスが...',
     restore: 'ミスがおこる まえにもどす',
     deleteLine: '１行消す',

@@ -103,6 +103,7 @@ export default {
     notice: 'This tab has not saved. Are you sure?',
     insert: 'Insert into stage',
     edit: name => `Hack ${name}`,
+    stopEditing: name => `Close ${name}`,
     error: '😇💭 Oops, a little typo...',
     restore: 'Restore before mistake',
     deleteLine: 'Delete a line',

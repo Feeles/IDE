@@ -218,11 +218,15 @@ export default class AssetPane extends PureComponent {
     });
   };
 
-  openFile = ({ filePath }) => {
+  openFile = ({ filePath, label }) => {
     if (!filePath) return;
     this.props.globalEvent.emit('message.editor', {
       data: {
-        value: filePath
+        value: filePath,
+        options: {
+          showBackButton: true, // アセットのコードを閉じて以前のファイルに戻るボタンを表示する
+          label // ↑そのボタンを、この名前で「${label}の改造をおわる」と表示
+        }
       }
     });
     this.handleClose(); // Pane をとじる
