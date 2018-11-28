@@ -30,9 +30,6 @@ const cn = {
   }),
   containedButton: style({
     margin: 4
-  }),
-  containedButtonLabel: style({
-    textTransform: 'none'
   })
 };
 const getCn = props => ({
@@ -81,7 +78,7 @@ const mdComponents = [
           target="_blank"
           className={cn.containedButton}
         >
-          <span className={cn.containedButtonLabel}>{children}</span>
+          <span>{children}</span>
           <ActionOpenInNew />
         </Button>
       );

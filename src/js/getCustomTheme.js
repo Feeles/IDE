@@ -13,7 +13,13 @@ export default feelesrc => {
   // Mui Theme (plain object)
 
   const theme = createMuiTheme({
-    useNextVariants: true,
+    typography: {
+      useNextVariants: true,
+      button: {
+        textTransform: 'none'
+      }
+    },
+
     // breakpoints: {},
     // direction: "ltr",
     // mixins: {},

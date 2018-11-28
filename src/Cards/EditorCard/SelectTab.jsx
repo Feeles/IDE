@@ -16,8 +16,7 @@ const cn = {
     flex: '1 1 auto'
   }),
   fileNameButton: style({
-    width: 200,
-    textTransform: 'inherit'
+    width: 200
   }),
   menuSize: {
     paper: style({
