@@ -157,11 +157,12 @@ export default class AssetPane extends PureComponent {
       right.classList.add('Feeles-asset-blank');
       const button = document.createElement('span');
       button.classList.add('Feeles-asset-button');
-      button.onclick = () => {
+      button.onclick = event => {
         this.setState({
           scope: _label.substr(1).trim(),
           assetLineNumber: line
         });
+        event.stopPropagation();
       };
       button.appendChild(left);
       button.appendChild(label);
