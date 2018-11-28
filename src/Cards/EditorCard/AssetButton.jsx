@@ -1,77 +1,73 @@
 import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import PropTypes from 'prop-types';
-import { style } from 'typestyle';
+import { style, classes } from 'typestyle';
 import { url } from 'csx';
-import Paper from '@material-ui/core/Paper';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
-import ContentAdd from '@material-ui/icons/Add';
-import ContentReply from '@material-ui/icons/Reply';
-import ActionOpenInNew from '@material-ui/icons/OpenInNew';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Typography from '@material-ui/core/Typography';
+import Add from '@material-ui/icons/Add';
+import OpenInNew from '@material-ui/icons/OpenInNew';
+import Description from '@material-ui/icons/Description';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
 
 const cn = {
-  popover: style({
-    padding: 8,
-    maxWidth: 500
+  mainButton: style({
+    width: 80,
+    height: 80,
+    backgroundSize: 'contain',
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat'
   }),
-  box: style({
+  actions: style({
     display: 'flex',
-    alignItems: 'baseline',
     justifyContent: 'space-between',
-    marginBottom: 4
+    marginTop: 2
   }),
+  iconButton: style({
+    flex: 1,
+    minWidth: 36
+  }),
+  popoverClasses: {
+    paper: style({
+      padding: 8,
+      maxWidth: 500
+    })
+  },
   label: style({
+    position: 'absolute',
+    bottom: 0,
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     fontSize: 10,
     fontWeight: 600
   }),
-  headerLabel: style({
-    fontSize: 18,
-    fontWeight: 600
-  }),
-  description: style({
-    marginTop: 8,
-    fontSize: '.7rem'
-  }),
-  code: style({
-    display: 'block',
-    padding: '0 .5rem',
-    borderRadius: 2
-  }),
-  pre: style({
-    fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
-  }),
-  button: style({
-    position: 'absolute',
-    right: -34,
-    bottom: -4,
-    cursor: 'pointer'
-  }),
-  icon: style({
-    transform: 'rotateX(180deg) rotateZ(180deg)'
+  blank: style({
+    display: 'inline-flex',
+    width: 8
   })
 };
-const getCn = props => ({
+const getCn = ({ theme }) => ({
   root: style({
     position: 'relative',
-    width: 80,
-    height: 80,
-    margin: '8px 30px 0px 8px',
-    textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    backgroundSize: 'contain',
-    backgroundPosition: '50% 50%',
-    backgroundRepeat: 'no-repeat',
-    border: `4px outset ${props.theme.palette.primary.main}`
+    margin: '8px 30px 0px 8px'
+  }),
+  button: style({
+    color: theme.palette.getContrastText(theme.palette.text.primary),
+    transition: theme.transitions.create('background-color'),
+    backgroundColor: fade(theme.palette.grey[600], 0.6),
+    $nest: {
+      '&:hover': {
+        backgroundColor: theme.palette.grey[600]
+      },
+      '&:disabled': {
+        color: theme.palette.text.disabled
+      }
+    }
   })
 });
 
@@ -84,9 +80,12 @@ export default class AssetButton extends PureComponent {
     descriptionMoreURL: PropTypes.string,
     label: PropTypes.string,
     image: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
+    filePath: PropTypes.string,
+    insertAsset: PropTypes.func.isRequired,
+    openFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired
+    localization: PropTypes.object.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   static defaultProps = {
@@ -94,16 +93,16 @@ export default class AssetButton extends PureComponent {
   };
 
   state = {
-    open: false,
+    anchorEl: null,
     backgroundStyle: {}
   };
 
   handleOpen = event => {
-    this.setState({ open: true, anchorEl: event.currentTarget });
+    this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleInsert = () => {
-    this.props.onClick(this.props);
+  handleClose = () => {
+    this.setState({ anchorEl: null });
   };
 
   updateImage() {
@@ -139,62 +138,78 @@ export default class AssetButton extends PureComponent {
   render() {
     const dcn = getCn(this.props);
     const { localization } = this.props;
-    const { palette } = this.props.theme;
+
+    const disableOpenFile = !this.props.filePath;
 
     return (
       <>
-        <Paper
-          className={dcn.root}
-          style={this.state.backgroundStyle}
-          onClick={this.handleOpen}
-        >
-          <span className={cn.label}>{this.props.label}</span>
-          <Button
-            variant="contained"
-            mini
-            className={cn.button}
-            onClick={this.handleInsert}
+        <div className={dcn.root}>
+          <ButtonBase
+            focusRipple
+            className={classes(dcn.button, cn.mainButton)}
+            style={this.state.backgroundStyle}
+            onClick={this.handleOpen}
           >
-            <ContentReply className={cn.icon} />
-          </Button>
-        </Paper>
+            <span className={cn.label}>{this.props.label}</span>
+          </ButtonBase>
+          <div className={cn.actions}>
+            <ButtonBase
+              focusRipple
+              className={classes(dcn.button, cn.iconButton)}
+              onClick={this.props.insertAsset}
+            >
+              <Add />
+            </ButtonBase>
+            <ButtonBase
+              focusRipple
+              disabled={disableOpenFile}
+              className={classes(dcn.button, cn.iconButton)}
+              onClick={this.props.openFile}
+            >
+              <Description />
+            </ButtonBase>
+          </div>
+        </div>
         <Popover
-          open={this.state.open}
+          open={Boolean(this.state.anchorEl)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           anchorEl={this.state.anchorEl}
-          classes={{ paper: cn.popover }}
-          onClose={() => this.setState({ open: false })}
+          classes={cn.popoverClasses}
+          onClose={this.handleClose}
         >
-          <div className={cn.box}>
-            <span className={cn.headerLabel}>
-              {this.props.label}
-              {this.props.descriptionMoreURL ? (
-                <a
-                  href={this.props.descriptionMoreURL}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <ActionOpenInNew />
-                </a>
-              ) : null}
-            </span>
+          <Typography variant="h5">{this.props.label}</Typography>
+          <Typography variant="body1" gutterBottom>
+            {this.props.description}
+          </Typography>
+          {this.props.descriptionMoreURL ? (
+            <a
+              href={this.props.descriptionMoreURL}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <OpenInNew />
+            </a>
+          ) : null}
+          <div>
             <Button
               variant="contained"
               color="primary"
-              onClick={this.handleInsert}
+              onClick={this.props.insertAsset}
             >
-              <ContentAdd />
+              <Add />
               {localization.editorCard.insert}
             </Button>
+            <span className={cn.blank} />
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled={disableOpenFile}
+              onClick={this.props.openFile}
+            >
+              <Description />
+              {localization.editorCard.edit(this.props.label)}
+            </Button>
           </div>
-          <div className={cn.description}>{this.props.description}</div>
-          <code
-            className={cn.code}
-            style={{
-              backgroundColor: emphasize(palette.background.paper, 0.07)
-            }}
-          >
-            <pre className={cn.pre}>{this.props.code}</pre>
-          </code>
         </Popover>
       </>
     );

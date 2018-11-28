@@ -5,7 +5,6 @@ import { style, classes } from 'typestyle';
 import Button from '@material-ui/core/Button';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { fade } from '@material-ui/core/styles/colorManipulator';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
 import { Pos } from 'codemirror';
 import includes from 'lodash/includes';
 
@@ -55,10 +54,7 @@ const getCn = props => ({
     paddingBottom: 24,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    backgroundColor: fade(
-      emphasize(props.theme.palette.background.paper, 0.75),
-      0.55
-    )
+    backgroundColor: fade(props.theme.palette.text.primary, 0.75)
   })
 });
 
@@ -72,7 +68,8 @@ export default class AssetPane extends PureComponent {
     loadConfig: PropTypes.func.isRequired,
     runApp: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
-    localization: PropTypes.object.isRequired
+    localization: PropTypes.object.isRequired,
+    globalEvent: PropTypes.object.isRequired
   };
 
   state = {
@@ -221,6 +218,16 @@ export default class AssetPane extends PureComponent {
     });
   };
 
+  openFile = ({ filePath }) => {
+    if (!filePath) return;
+    this.props.globalEvent.emit('message.editor', {
+      data: {
+        value: filePath
+      }
+    });
+    this.handleClose(); // Pane をとじる
+  };
+
   renderEachLabel(label) {
     const items = this.state.assets[label];
     if (!items) return null;
@@ -232,9 +239,11 @@ export default class AssetPane extends PureComponent {
           <AssetButton
             {...item}
             key={i}
-            onClick={this.insertAsset}
+            insertAsset={() => this.insertAsset(item)}
+            openFile={() => this.openFile(item)}
             findFile={this.props.findFile}
             localization={this.props.localization}
+            globalEvent={this.props.globalEvent}
           />
         ))}
       </div>

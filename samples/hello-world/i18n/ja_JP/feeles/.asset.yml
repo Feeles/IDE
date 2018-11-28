@@ -12,3 +12,9 @@
         const item2 = 1;
         item2.toString();
       }
+  - label: import
+    description: 他のファイルをインポートする
+    filePath: sub/message.js
+    code: |
+      import message from './sub/message';
+      console.log(message);

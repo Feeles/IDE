@@ -319,6 +319,7 @@ export default class SourceEditor extends PureComponent {
             findFile={this.props.findFile}
             runApp={this.runApp}
             localization={localization}
+            globalEvent={this.props.globalEvent}
           />
         )}
         {this.codemirror && (
