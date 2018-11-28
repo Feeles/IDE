@@ -15,9 +15,6 @@ const cn = {
   blank: style({
     flex: '1 1 auto'
   }),
-  fileNameButton: style({
-    width: 200
-  }),
   menuSize: {
     paper: style({
       width: 200
@@ -79,14 +76,8 @@ export default class SelectTab extends React.Component {
 
     return (
       <>
-        <Button
-          variant="text"
-          className={cn.fileNameButton}
-          onClick={this.handleClick}
-        >
+        <Button variant="text" onClick={this.handleClick}>
           {selected ? <Icon iconUrl={selected.iconUrl} /> : null}
-          {selected ? selected.label : this.props.filePath}
-          <div className={cn.blank} />
           <ArrowDropDown />
         </Button>
         <Menu
