@@ -70,12 +70,14 @@ export default class MenuBar extends React.Component {
           <HardwareKeyboardBackspace />
           {this.props.localization.editorCard.undo}
         </Button>
-        <SelectTab
-          filePath={this.props.filePath}
-          tabs={this.props.tabs}
-          globalEvent={this.props.globalEvent}
-          localization={this.props.localization}
-        />
+        {!this.props.filePathToBack ? (
+          <SelectTab
+            filePath={this.props.filePath}
+            tabs={this.props.tabs}
+            globalEvent={this.props.globalEvent}
+            localization={this.props.localization}
+          />
+        ) : null}
         <IconButton onClick={this.toggleLineWidget}>
           {this.props.showLineWidget ? (
             <Layers className={dcn.icon} />
