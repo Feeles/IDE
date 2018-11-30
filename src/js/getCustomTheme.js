@@ -16,7 +16,8 @@ export default feelesrc => {
     typography: {
       useNextVariants: true,
       button: {
-        textTransform: 'none'
+        textTransform: 'none',
+        wordBreak: 'keep-all'
       }
     },
 
