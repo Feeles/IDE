@@ -6,7 +6,7 @@ import withTheme from '@material-ui/core/styles/withTheme';
 const getCn = props => ({
   root: style({
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'stretch',
     padding: props.theme.spacing.unit,
     width: '100%',
     boxSizing: 'border-box',

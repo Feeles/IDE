@@ -130,7 +130,7 @@ export default class PlayMenu extends PureComponent {
     );
 
     return (
-      <div>
+      <>
         <Button
           variant="contained"
           color={this.props.hasChanged ? 'primary' : 'default'}
@@ -182,7 +182,7 @@ export default class PlayMenu extends PureComponent {
             {this.state.entries.map(this.renderMenu)}
           </Menu>
         </Popover>
-      </div>
+      </>
     );
   }
 }

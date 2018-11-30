@@ -80,9 +80,9 @@ export default class MenuBar extends React.Component {
         ) : null}
         <IconButton onClick={this.toggleLineWidget}>
           {this.props.showLineWidget ? (
-            <Layers className={dcn.icon} />
+            <Layers className={dcn.icon} fontSize="small" />
           ) : (
-            <LayersClear />
+            <LayersClear fontSize="small" />
           )}
         </IconButton>
         <div className={cn.blank} />
