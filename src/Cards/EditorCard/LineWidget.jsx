@@ -6,8 +6,9 @@ import { withTheme, Button } from '@material-ui/core';
 import Backspace from '@material-ui/icons/Backspace';
 import { Pos } from 'codemirror';
 import includes from 'lodash/includes';
-import Chip from '@material-ui/core/Chip';
+import Cancel from '@material-ui/icons/Cancel';
 import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 
 import isNotDeletableLine from './isNotDeletableLine';
 
@@ -28,24 +29,53 @@ const cn = {
   })
 };
 
-const getCn = (props, state) => ({
-  button: style({
-    margin: props.theme.spacing.unit
-  }),
-  copy: style({
-    transform: `rotateX(${state.above ? 180 : 0}deg)` // copy してくる方向
-  }),
-  paste: style({
-    transform: `rotateZ(90deg) rotateY(${state.above ? 180 : 0}deg)` // paste する方向
-  }),
-  clipboard: style({
-    transition: props.theme.transitions.create(),
-    backgroundColor: state.clipboard ? null : 'transparent',
-    color: state.clipboard
-      ? props.theme.palette.text.primary
-      : props.theme.palette.text.disabled
-  })
-});
+const getCn = ({ theme }, state) => {
+  const backgroundColor =
+    theme.palette.type === 'light'
+      ? theme.palette.grey[300]
+      : theme.palette.grey[700];
+  const deleteIconColor = fade(theme.palette.text.primary, 0.26);
+  return {
+    button: style({
+      margin: theme.spacing.unit,
+      flexShrink: 0
+    }),
+    copy: style({
+      transform: `rotateX(${state.above ? 180 : 0}deg)` // copy してくる方向
+    }),
+    paste: style({
+      transform: `rotateZ(90deg) rotateY(${state.above ? 180 : 0}deg)` // paste する方向
+    }),
+    clipboard: style({
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      height: 20,
+      padding: 4,
+      paddingBottom: 0, // buggy
+      borderRadius: 14,
+      fontSize: 10,
+      flexGrow: 0,
+      flexShrink: 1,
+      transition: theme.transitions.create(['background-color', 'color']),
+      backgroundColor: state.clipboard ? backgroundColor : 'transparent',
+      color: state.clipboard
+        ? theme.palette.text.primary
+        : theme.palette.text.disabled
+    }),
+    cancel: style({
+      fontSize: 16,
+      color: deleteIconColor,
+      verticalAlign: 'middle',
+      cursor: 'pointer',
+      $nest: {
+        '&:hover': {
+          color: fade(deleteIconColor, 0.4)
+        }
+      }
+    })
+  };
+};
 
 @withTheme()
 export default class LineWidget extends React.Component {
@@ -230,11 +260,12 @@ export default class LineWidget extends React.Component {
           </Button>
         )}
         {chipText && (
-          <Chip
-            label={chipText}
-            className={dcn.clipboard}
-            onDelete={clipboard ? this.clearClipboard : undefined}
-          />
+          <div className={dcn.clipboard}>
+            {clipboard ? (
+              <Cancel className={dcn.cancel} onClick={this.clearClipboard} />
+            ) : null}
+            {chipText}
+          </div>
         )}
         <div className={cn.blank} />
         <Button
