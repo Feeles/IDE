@@ -41,33 +41,32 @@ export default {
     setTitle: 'タイトルをつけてください'
   },
   saveDialog: {
-    title:
-      'あなたのブラウザはHTML5に対応しないので、手動でダウンロードする必要があります',
+    title: '',
     description: filename =>
       `上のリンクを右クリックして、「別名でダウンロード」をクリックし、「${filename}」という名前をつけて保存して下さい`,
     cancel: 'キャンセル'
   },
   aboutDialog: {
-    title: 'この Feeles について',
+    title: '',
     coreVersion: 'Feelse のバージョン',
     changeVersion: 'バージョンを変更',
     change: '変更'
   },
   launchDialog: {
-    title: '準備が完了しました',
+    title: '',
     description:
       '途中のデータが残っています。続きから始めたい場合は、「このデータをロードする」をクリックしてください',
     openProject: 'このプロジェクトを開く',
     startNew: '今すぐスタート'
   },
   addDialog: {
-    title: 'ファイルを追加する',
+    title: '',
     fileName: 'ファイル名',
     add: '作成',
     cancel: 'キャンセル'
   },
   readmeCard: {
-    title: 'トリセツ',
+    title: '',
     index: '目次'
   },
   shotCard: {
@@ -77,7 +76,7 @@ export default {
     restore: '元にもどす'
   },
   hierarchyCard: {
-    title: 'フォルダ',
+    title: '',
     emptyTrashBox: '空にする'
   },
   credit: {
@@ -96,7 +95,7 @@ export default {
     wantToOpen: name => `${name} をひらきますか?`
   },
   editorCard: {
-    title: 'エディタ',
+    title: '',
     undo: 'もどす',
     play: 'プレイ',
     notice: 'このタブはまだセーブされていません。本当によろしいですか？',
@@ -111,26 +110,26 @@ export default {
     clickHere: '⭐️ まずは ここをクリック'
   },
   envCard: {
-    title: 'スイッチ',
+    title: '',
     remove: '削除'
   },
   paletteCard: {
-    title: 'カラー'
+    title: ''
   },
   monitorCard: {
-    title: 'ゲーム',
+    title: '',
     popout: 'ポップアウト'
   },
   customizeCard: {
-    title: 'カスタマイズ',
+    title: '',
     detail: 'くわしくはこちら',
     editor: 'タブや行の折り返しなど',
     style: '文字の色や背景色など'
   },
   creditsCard: {
-    title: 'クレジット'
+    title: ''
   },
   mediaCard: {
-    title: 'メディア'
+    title: ''
   }
 };

@@ -48,36 +48,36 @@ export default {
     cancel: 'Cancel'
   },
   aboutDialog: {
-    title: 'About Feeles',
+    title: '',
     coreVersion: 'Core Version',
     changeVersion: 'Change Version',
     change: 'Change'
   },
   addDialog: {
-    title: 'Add new file',
+    title: '',
     fileName: 'File name',
     add: 'Add',
     cancel: 'Cancel'
   },
   launchDialog: {
-    title: 'Preparation is complete',
+    title: '',
     description:
       'Some saved data are found. If you want to load it, please click "Load this data"',
     openProject: 'Open this project',
     startNew: 'Start'
   },
   readmeCard: {
-    title: 'Getting Started',
+    title: '',
     index: 'Index'
   },
   shotCard: {
-    title: 'Quick Run',
+    title: '',
     shoot: 'After rewriting,',
     button: 'send the code',
     restore: 'Restore'
   },
   hierarchyCard: {
-    title: 'Folders',
+    title: '',
     emptyTrashBox: 'Empty trash'
   },
   credit: {
@@ -97,7 +97,7 @@ export default {
     wantToOpen: name => `Do you want to open ${name}?`
   },
   editorCard: {
-    title: 'Editor',
+    title: '',
     undo: 'Undo',
     play: 'Play',
     notice: 'This tab has not saved. Are you sure?',
@@ -112,26 +112,26 @@ export default {
     clickHere: '⭐️ Click here'
   },
   envCard: {
-    title: 'Parameters',
+    title: '',
     remove: 'Remove'
   },
   paletteCard: {
-    title: 'Colors'
+    title: ''
   },
   monitorCard: {
-    title: 'Screen',
+    title: '',
     popout: 'Popout Screen'
   },
   customizeCard: {
-    title: 'Customize',
+    title: '',
     detail: 'Click here for details',
     editor: 'Tabs and line wrapping ...etc',
     style: 'Color of text and background ...etc'
   },
   creditsCard: {
-    title: 'Credits'
+    title: ''
   },
   mediaCard: {
-    title: 'Media'
+    title: ''
   }
 };
