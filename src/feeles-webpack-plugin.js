@@ -30,7 +30,9 @@ class MountFile {
     // Convert unicode
     const mountName = unorm.nfc(this.mountName);
     const absolutePath = path.resolve(this.mountDir, mountName);
-    const composed = await readFile(absolutePath, 'base64');
+    const text = await readFile(absolutePath, 'utf8');
+    const replaced = replaceEnvironmentVars(text);
+    const composed = new Buffer(replaced).toString('base64');
 
     return {
       name: toPOSIX(mountName),
@@ -184,3 +186,20 @@ module.exports = class FeelesWebpackPlugin {
     return this.priorityOrders.get(a) < this.priorityOrders.get(b) ? a : b;
   }
 };
+
+/**
+ * Feeles で使える環境変数. これらの文字を "文字列としてリプレイス" する (import のロード先にも使える)
+ * process.env.__FEELES_COMMON_REGISTER__: @hackforplay/common の register.js
+ * process.env.__FEELES_COMMON_INDEX__: @hackforplay/common の index.js
+ * process.env.__FEELES_NODE_ENV__: process.env.NODE_ENV
+ */
+const environmentVars = (vars => () =>
+  (vars =
+    vars || Object.keys(process.env).filter(s => s.startsWith('__FEELES_'))))();
+
+function replaceEnvironmentVars(text = '') {
+  for (const key of environmentVars()) {
+    text = text.split(key).join(process.env[key]);
+  }
+  return text;
+}
