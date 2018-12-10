@@ -129,6 +129,16 @@
     });
   };
 
+  feeles.fetchText = function(name) {
+    return requestPostMessage('fetchText', name, function(event) {
+      if (event.data.error) {
+        event.reject('Error in feeles.fetchText in ' + name);
+      } else {
+        event.resolve(event.data.value);
+      }
+    });
+  };
+
   feeles.resolve = function(name) {
     return requestPostMessage('resolve', name, function(event) {
       if (event.data.error) {

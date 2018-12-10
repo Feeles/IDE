@@ -134,6 +134,7 @@ export default class Monitor extends PureComponent {
     on('message.fetch', this.handleFetch);
     on('message.resolve', this.handleResolve);
     on('message.fetchDataURL', this.handleFetchDataURL);
+    on('message.fetchText', this.handleFetchText);
     on('message.saveAs', this.handleSaveAs);
     on('message.reload', this.handleReload);
     on('message.replace', this.handleReplace);
@@ -333,6 +334,29 @@ export default class Monitor extends PureComponent {
         reply({ error: e });
       }
     } else {
+      reply({ error: true });
+    }
+  };
+
+  handleFetchText = async ({ data, reply }) => {
+    if (data.value.indexOf('http') === 0) {
+      try {
+        const response = await fetch(data.value);
+        if (response.ok) {
+          const text = await response.text();
+          reply({ value: text });
+        } else {
+          reply({ error: true });
+        }
+      } catch (e) {
+        reply({ error: e });
+      }
+    } else {
+      const file = this.props.findFile(data.value);
+      if (file) {
+        reply({ value: file.text });
+        return;
+      }
       reply({ error: true });
     }
   };
