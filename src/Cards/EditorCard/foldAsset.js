@@ -10,6 +10,7 @@ const { prefix, startWord, endWord } = codeFolds;
  * @param {CodeMirror.Pos} start
  */
 export default function foldAsset(cm, start) {
+  if (!cm || !start) return;
   const result = {};
   const text = cm.getLine(start.line);
   const startIndex = text.indexOf(startWord);
