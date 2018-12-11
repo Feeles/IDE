@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { style } from 'typestyle';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import beautify from 'js-beautify';
+import { Pos } from 'codemirror';
 
 import LineWidget from './LineWidget';
 import Editor from './Editor';
@@ -106,7 +107,16 @@ export default class SourceEditor extends PureComponent {
     };
     this.codemirror.on('change', onChange);
     this.codemirror.on('swapDoc', onChange);
+    this.codemirror.on('swapDoc', this.foldAll);
+    this.foldAll(codemirror);
     this.forceUpdate();
+  };
+
+  foldAll = cm => {
+    const opt = { rangeFinder: foldAsset };
+    for (let line = cm.lineCount() - 1; line >= 0; line--) {
+      cm.foldCode(new Pos(line, 0), opt, 'fold');
+    }
   };
 
   handleUpdateFile() {
