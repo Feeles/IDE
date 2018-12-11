@@ -16,22 +16,13 @@ export default function convertAsset(definitionFileTexts = []) {
   const configs = definitionFileTexts.map(tryParseYAML);
   const scopeNames = flatten(configs.map(def => Object.keys(def)));
   const scopes = scopeNames.map(name => ({
-    name: {
-      en: name,
-      ja: name
-    },
+    name,
     defaultActiveCategory: -1
   }));
   const nullable = value => (value ? value + '' : null);
   const converter = (scope = '') => config => ({
-    name: {
-      en: nullable(config.label),
-      ja: nullable(config.label)
-    },
-    description: {
-      en: nullable(config.description),
-      ja: nullable(config.description)
-    },
+    name: nullable(config.label),
+    description: nullable(config.description),
     category: -1,
     iconUrl: nullable(config.image),
     insertCode: nullable(config.code),

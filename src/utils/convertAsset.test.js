@@ -14,10 +14,7 @@ test('convertAsset', t => {
     categories: [],
     scopes: [
       {
-        name: {
-          en: 'アセット',
-          ja: 'アセット'
-        },
+        name: 'アセット',
         defaultActiveCategory: -1
       }
     ],
@@ -36,28 +33,16 @@ const base = {
 
 const ログ = {
   ...base,
-  name: {
-    ja: 'ログ',
-    en: 'ログ'
-  },
-  description: {
-    ja: null,
-    en: null
-  },
+  name: 'ログ',
+  description: null,
   insertCode: `console.log(('▼ ドロップダウン', 'ほげ'));\n`,
   filePath: null
 };
 
 const item = {
   ...base,
-  name: {
-    ja: 'item',
-    en: 'item'
-  },
-  description: {
-    ja: 'const item から始まる変数は自動的にインクリメントされる',
-    en: 'const item から始まる変数は自動的にインクリメントされる'
-  },
+  name: 'item',
+  description: 'const item から始まる変数は自動的にインクリメントされる',
   insertCode: `// 変数
 const item1 = 1;
 item1.toString();
@@ -71,14 +56,8 @@ function item1Func() {
 
 const _import = {
   ...base,
-  name: {
-    ja: 'import',
-    en: 'import'
-  },
-  description: {
-    ja: '他のファイルをインポートする',
-    en: '他のファイルをインポートする'
-  },
+  name: 'import',
+  description: '他のファイルをインポートする',
   insertCode: `import message from 'sub/message';
 console.log(message);
 `,
