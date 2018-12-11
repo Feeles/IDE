@@ -23,7 +23,12 @@ h4p.unmount = (...args) => ReactDOM.unmountComponentAtNode(...args);
 const launch = document.querySelector('script[x-feeles-launch]');
 if (launch) {
   const [type, arg] = launch.getAttribute('x-feeles-launch').split(',');
-  h4p({ [type]: arg });
+  const params = { [type]: arg };
+  if (process.env.NODE_ENV === 'development') {
+    params.asset = require('../assets/beta-1.json');
+    console.log(params.asset);
+  }
+  h4p(params);
 }
 
 // export
