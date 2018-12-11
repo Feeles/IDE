@@ -73,7 +73,8 @@ export default class EditorCard extends PureComponent {
     scrollToCard: PropTypes.func.isRequired,
     cardProps: PropTypes.object.isRequired,
     setCardVisibility: PropTypes.func.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    asset: PropTypes.object
   };
 
   state = {
@@ -220,6 +221,7 @@ export default class EditorCard extends PureComponent {
           label={this.state.label}
           filePathToBack={this.state.filePathToBack}
           globalEvent={this.props.globalEvent}
+          asset={this.props.asset}
         />
       </Card>
     );

@@ -69,7 +69,8 @@ export default class AssetPane extends PureComponent {
     runApp: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    asset: PropTypes.object.isRequired
   };
 
   state = {
@@ -258,6 +259,10 @@ export default class AssetPane extends PureComponent {
   render() {
     const dcn = getCn(this.props);
     const { scope } = this.state;
+
+    if (this.props.asset) {
+      debugger;
+    }
 
     // e.g. scope === 'モンスター アイテム'
     const labels = scope ? scope.trim().split(' ') : [];

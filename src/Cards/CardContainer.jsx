@@ -57,7 +57,8 @@ export default class CardContainer extends PureComponent {
     togglePopout: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    asset: PropTypes.object
   };
 
   state = {
@@ -147,7 +148,8 @@ export default class CardContainer extends PureComponent {
       cardProps: this.props.cardProps,
       reboot: this.props.reboot,
       saveAs: this.props.saveAs,
-      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen
+      isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
+      asset: this.props.asset
     };
 
     return (

@@ -66,7 +66,9 @@ class RootComponent extends Component {
     // Handle screenshot image change
     onThumbnailChange: PropTypes.func,
     // For using external DB
-    disableLocalSave: PropTypes.bool
+    disableLocalSave: PropTypes.bool,
+    // Asset definition as a module
+    asset: PropTypes.object
   };
 
   static defaultProps = {
@@ -418,6 +420,7 @@ class RootComponent extends Component {
                 onMessage={this.props.onMessage}
                 onThumbnailChange={this.props.onThumbnailChange}
                 disableLocalSave={this.props.disableLocalSave}
+                asset={this.props.asset}
               />
             ) : (
               <div />

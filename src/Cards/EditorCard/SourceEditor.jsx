@@ -63,7 +63,8 @@ export default class SourceEditor extends PureComponent {
     tabs: PropTypes.array.isRequired,
     label: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    asset: PropTypes.object
   };
 
   state = {
@@ -325,7 +326,7 @@ export default class SourceEditor extends PureComponent {
           onRestore={this.handleRestore}
           canRestore={this.state.hasHistory}
         />
-        {this.codemirror && (
+        {this.codemirror && this.props.asset && (
           <AssetPane
             codemirror={this.codemirror}
             fileView={this.props.fileView}
@@ -334,6 +335,7 @@ export default class SourceEditor extends PureComponent {
             runApp={this.runApp}
             localization={localization}
             globalEvent={this.props.globalEvent}
+            asset={this.props.asset}
           />
         )}
         {this.codemirror && (

@@ -13,6 +13,7 @@ import Drawer from '@material-ui/core/Drawer';
 import NavigationArrowBack from '@material-ui/icons/ArrowBack';
 import ToggleCheckBox from '@material-ui/icons/CheckBox';
 import ToggleCheckBoxOutlineBlank from '@material-ui/icons/CheckBoxOutlineBlank';
+import convertAsset from '../utils/convertAsset';
 
 const tryParseYAML = (text, defaultValue = {}) => {
   try {
@@ -81,7 +82,8 @@ export default class Main extends Component {
     onChange: PropTypes.func,
     onMessage: PropTypes.func,
     onThumbnailChange: PropTypes.func,
-    disableLocalSave: PropTypes.bool.isRequired
+    disableLocalSave: PropTypes.bool.isRequired,
+    asset: PropTypes.object
   };
 
   state = {
@@ -97,7 +99,9 @@ export default class Main extends Component {
     // Advanced Mode
     showAll: false,
     // card =(emit)=> globalEvent =(on)=> card
-    globalEvent: new EventEmitter({ wildcard: true })
+    globalEvent: new EventEmitter({ wildcard: true }),
+    // Asset definition exactly using
+    asset: null
   };
 
   get rootWidth() {
@@ -118,6 +122,8 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
+    this.updateAssetDefinition();
+
     // 定期的にスクリーンショットを撮る
     if (this.props.onThumbnailChange) {
       const { globalEvent } = this.state;
@@ -440,6 +446,28 @@ export default class Main extends Component {
     );
   };
 
+  /**
+   * 現行: アセット定義を setState する
+   * 互換: 旧アセット定義を変換して使用する
+   */
+  updateAssetDefinition() {
+    const { asset } = this.props;
+    if (asset) {
+      if (asset !== this.state.asset) {
+        this.setState({ asset });
+      }
+      return;
+    }
+    // 互換モード
+    const configs = this.state.fileView
+      .getFilesByExtention('asset.yml')
+      .map(file => file.text + '');
+    const compatibleAsset = convertAsset(configs);
+    this.setState({
+      asset: compatibleAsset
+    });
+  }
+
   render() {
     if (this.componentWillMountCompat) {
       // render よりも先に呼ばれるライフサイクルメソッドがないので,
@@ -514,6 +542,7 @@ export default class Main extends Component {
           deleteFile={this.deleteFile}
           ref={this.handleContainerRef}
           globalEvent={this.state.globalEvent}
+          asset={this.state.asset}
         />
         <FileDialog
           ref={this.handleFileDialog}
