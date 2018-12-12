@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style, classes } from 'typestyle';
-import Button from '@material-ui/core/Button';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
+import Close from '@material-ui/icons/Close';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { Pos } from 'codemirror';
 import { includes, intersection, forEach } from 'lodash';
@@ -12,9 +12,11 @@ import { assetRegExp } from '../../utils/keywords';
 import replaceExistConsts from '../../utils/replaceExistConsts';
 import AssetButton from './AssetButton';
 
+const paneHeight = 80; // %
+
 const cn = {
   in: style({
-    top: '50vh'
+    top: `${100 - paneHeight}vh`
   }),
   out: style({
     top: '100vh'
@@ -30,16 +32,15 @@ const cn = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'
-  }),
-  closer: style({
-    width: '100%'
   })
 };
 const getCn = ({ theme }) => ({
   root: style({
     position: 'fixed',
     width: '100%',
-    height: '50vh',
+    height: `${paneHeight}vh`,
+    padding: theme.spacing.unit,
+    boxSizing: 'border-box',
     zIndex: theme.zIndex.modal - 1,
     left: 0,
     transition: theme.transitions.create('top'),
@@ -66,6 +67,12 @@ const getCn = ({ theme }) => ({
     color: theme.palette.getContrastText(theme.palette.primary.main),
     backgroundColor: theme.palette.primary.main,
     borderRadius: theme.shape.borderRadius
+  }),
+  closer: style({
+    position: 'absolute',
+    top: theme.spacing.unit,
+    right: theme.spacing.unit,
+    color: theme.palette.common.white
   })
 });
 
@@ -265,21 +272,19 @@ export default class AssetPane extends PureComponent {
 
     return (
       <div className={classes(dcn.root, show ? cn.in : cn.out)}>
-        <Button
-          variant="contained"
-          aria-label="Close"
-          className={cn.closer}
-          onClick={this.handleClose}
-        >
-          <ExpandMore />
-          とじる
-        </Button>
         <div className={dcn.scopeWrapper}>
           <span className={dcn.scope}>
             {'+ ' + showingScopes.map(scope => scope.name).join(' ')}
           </span>
           <span>{localization.editorCard.selectedScope}</span>
         </div>
+        <IconButton
+          aria-label="Close"
+          className={dcn.closer}
+          onClick={this.handleClose}
+        >
+          <Close fontSize="large" />
+        </IconButton>
         <div className={dcn.scroller}>
           <div className={cn.wrapper}>
             {showingButtons.map((b, i) => (
