@@ -3,7 +3,6 @@ import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style, classes } from 'typestyle';
 import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { Pos } from 'codemirror';
@@ -160,15 +159,21 @@ export default class AssetPane extends PureComponent {
       button.classList.add('Feeles-asset-button');
       button.onclick = event => {
         const scopeIndexes = [];
+        let activeCategoryIndex = -1;
         // バーに書かれた文字列の中に scope.name があれば選択
         forEach(asset.scopes, (scope, index) => {
           if (includes(_label, scope.name)) {
             scopeIndexes.push(index);
+            // 先頭のスコープで, 初期表示カテゴリを決める
+            if (activeCategoryIndex < 0) {
+              activeCategoryIndex = scope.defaultActiveCategory;
+            }
           }
         });
         this.setState({
           show: true,
           scopeIndexes,
+          activeCategoryIndex,
           assetLineNumber: line
         });
         event.stopPropagation();
@@ -245,6 +250,7 @@ export default class AssetPane extends PureComponent {
   render() {
     const dcn = getCn(this.props);
     const {
+      localization,
       asset: { scopes, buttons }
     } = this.props;
     const { show, activeCategoryIndex, scopeIndexes } = this.state;
@@ -272,7 +278,7 @@ export default class AssetPane extends PureComponent {
           <span className={dcn.scope}>
             {'+ ' + showingScopes.map(scope => scope.name).join(' ')}
           </span>
-          <span>{`に 入れるもの`}</span>
+          <span>{localization.editorCard.selectedScope}</span>
         </div>
         <div className={dcn.scroller}>
           <div className={cn.wrapper}>
@@ -285,7 +291,8 @@ export default class AssetPane extends PureComponent {
                 insertCode={b.insertCode}
                 moduleCode={b.moduleCode}
                 filePath={b.filePath}
-                insertAsset={() => this.insertAsset(b)}
+                variations={b.variations}
+                insertAsset={this.insertAsset}
                 openFile={() => this.openFile(b)}
                 findFile={this.props.findFile}
                 localization={this.props.localization}

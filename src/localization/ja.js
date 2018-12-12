@@ -107,7 +107,8 @@ export default {
     deleteLine: '１行消す',
     copyLine: '１行コピー',
     pasteLine: '貼り付ける',
-    clickHere: '⭐️ まずは ここをクリック'
+    clickHere: '⭐️ まずは ここをクリック',
+    selectedScope: 'に 入れるもの'
   },
   envCard: {
     title: '',

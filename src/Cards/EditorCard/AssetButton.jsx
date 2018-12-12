@@ -12,6 +12,7 @@ import Add from '@material-ui/icons/Add';
 import Description from '@material-ui/icons/Description';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
+const iconSize = 48;
 
 const cn = {
   mainButton: style({
@@ -48,6 +49,11 @@ const cn = {
   blank: style({
     display: 'inline-flex',
     width: 8
+  }),
+  variationWrapper: style({
+    display: 'flex',
+    flexWrap: 'nowrap',
+    justifyContent: 'flex-start'
   })
 };
 const getCn = ({ theme }) => ({
@@ -67,6 +73,32 @@ const getCn = ({ theme }) => ({
         color: theme.palette.text.disabled
       }
     }
+  }),
+  variation: style({
+    maxWidth: iconSize,
+    height: iconSize,
+    boxSizing: 'content-box',
+    borderStyle: 'solid',
+    borderWidth: 2,
+    borderColor: 'transparent',
+    borderRadius: theme.shape.borderRadius,
+    marginRight: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+    cursor: 'pointer',
+    backgroundColor: theme.palette.grey[200],
+    $nest: {
+      '&:hover': {
+        backgroundColor: theme.palette.grey[400]
+      },
+      '&>img': {
+        maxWidth: iconSize,
+        height: iconSize
+      }
+    }
+  }),
+  selected: style({
+    borderColor: '#4A90E2',
+    backgroundColor: theme.palette.grey[400]
   })
 });
 
@@ -79,6 +111,7 @@ export default class AssetButton extends PureComponent {
     insertCode: PropTypes.string,
     moduleCode: PropTypes.string,
     filePath: PropTypes.string,
+    variations: PropTypes.array,
 
     theme: PropTypes.object.isRequired,
     insertAsset: PropTypes.func.isRequired,
@@ -95,8 +128,32 @@ export default class AssetButton extends PureComponent {
 
   state = {
     anchorEl: null,
-    backgroundStyle: {}
+    backgroundStyle: {},
+    selectedIndex: 0 // 選択中の variation
   };
+
+  get selected() {
+    const {
+      name,
+      description,
+      iconUrl,
+      insertCode,
+      moduleCode,
+      filePath,
+      variations
+    } = this.props;
+
+    return variations
+      ? variations[this.state.selectedIndex]
+      : {
+          name,
+          description,
+          iconUrl,
+          insertCode,
+          moduleCode,
+          filePath
+        };
+  }
 
   handleOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -108,12 +165,13 @@ export default class AssetButton extends PureComponent {
 
   updateImage() {
     let backgroundImage = '';
+    const { iconUrl } = this.selected;
 
-    if (this.props.iconUrl) {
-      if (protocols.some(p => this.props.iconUrl.indexOf(p) === 0)) {
-        backgroundImage = url(this.props.iconUrl);
+    if (iconUrl) {
+      if (protocols.some(p => iconUrl.indexOf(p) === 0)) {
+        backgroundImage = url(iconUrl);
       } else {
-        const file = this.props.findFile(this.props.iconUrl);
+        const file = this.props.findFile(iconUrl);
         if (file) {
           backgroundImage = url(file.blobURL);
         }
@@ -130,17 +188,26 @@ export default class AssetButton extends PureComponent {
     this.updateImage();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.iconUrl !== this.props.iconUrl) {
+      this.updateImage();
+    } else if (prevState.selectedIndex !== this.state.selectedIndex) {
       this.updateImage();
     }
   }
 
+  handleInsertAsset = () => {
+    this.handleClose();
+    this.props.insertAsset(this.selected);
+  };
+
   render() {
     const dcn = getCn(this.props);
-    const { localization } = this.props;
+    const { localization, variations } = this.props;
+    const { selectedIndex } = this.state;
+    const selected = this.selected;
 
-    const disableOpenFile = !this.props.filePath;
+    const disableOpenFile = !selected.filePath;
 
     return (
       <>
@@ -151,13 +218,13 @@ export default class AssetButton extends PureComponent {
             style={this.state.backgroundStyle}
             onClick={this.handleOpen}
           >
-            <span className={cn.label}>{this.props.name}</span>
+            <span className={cn.label}>{selected.name}</span>
           </ButtonBase>
           <div className={cn.actions}>
             <ButtonBase
               focusRipple
               className={classes(dcn.button, cn.iconButton)}
-              onClick={this.props.insertAsset}
+              onClick={this.handleInsertAsset}
             >
               <Add />
             </ButtonBase>
@@ -178,15 +245,31 @@ export default class AssetButton extends PureComponent {
           classes={cn.popoverClasses}
           onClose={this.handleClose}
         >
-          <Typography variant="h5">{this.props.name}</Typography>
+          <Typography variant="h5">{selected.name}</Typography>
           <Typography variant="body1" gutterBottom>
-            {this.props.description}
+            {selected.description}
           </Typography>
+          {variations && (
+            <div className={cn.variationWrapper}>
+              {variations.map((child, i) => (
+                <div
+                  key={i}
+                  className={classes(
+                    dcn.variation,
+                    selectedIndex === i && dcn.selected
+                  )}
+                  onClick={() => this.setState({ selectedIndex: i })}
+                >
+                  <img src={child.iconUrl} alt={child.name} />
+                </div>
+              ))}
+            </div>
+          )}
           <div>
             <Button
               variant="contained"
               color="primary"
-              onClick={this.props.insertAsset}
+              onClick={this.handleInsertAsset}
             >
               <Add />
               {localization.editorCard.insert}
@@ -199,7 +282,7 @@ export default class AssetButton extends PureComponent {
               onClick={this.props.openFile}
             >
               <Description />
-              {localization.editorCard.edit(this.props.name)}
+              {localization.editorCard.edit(selected.name)}
             </Button>
           </div>
         </Popover>

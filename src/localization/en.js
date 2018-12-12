@@ -109,7 +109,8 @@ export default {
     deleteLine: 'Delete a line',
     copyLine: 'Copy a line',
     pasteLine: 'Paste',
-    clickHere: '⭐️ Click here'
+    clickHere: '⭐️ Click here',
+    selectedScope: ', these can be used'
   },
   envCard: {
     title: '',
