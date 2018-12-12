@@ -44,6 +44,7 @@ export default function convertAsset(definitionFileTexts = []) {
     version: '',
     categories: [],
     scopes: scopes,
+    module: {},
     buttons
   };
 }

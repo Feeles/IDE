@@ -12,6 +12,7 @@ test('convertAsset', t => {
   t.deepEqual(convertAsset([assetYml]), {
     buttons: [ログ, item, _import],
     categories: [],
+    module: {},
     scopes: [
       {
         name: 'アセット',
