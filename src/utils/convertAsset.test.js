@@ -28,7 +28,8 @@ const base = {
   category: -1, // カテゴリーのインデックスを指定する
   iconUrl: null, // アセットのアイコンの URL
   production: true, // www.hackforplay.xyz に表示する場合は true. earlybird だけなら false
-  plan: 'free' // 'free' にする
+  plan: 'free', // 'free' にする
+  variations: null // 色違いなどひとまとめにするアセットの情報. このアセット本体も含む配列
 };
 
 const ログ = {

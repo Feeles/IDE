@@ -28,6 +28,7 @@ export default function convertAsset(definitionFileTexts = []) {
     insertCode: nullable(config.code),
     moduleCode: null,
     plan: 'free',
+    variations: null,
     production: true,
     scopes: [scopeNames.indexOf(scope)],
     filePath: nullable(config.filePath) // 既にあるファイルのパス
