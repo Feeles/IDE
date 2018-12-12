@@ -3,10 +3,11 @@ import { withTheme } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { style, classes } from 'typestyle';
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { Pos } from 'codemirror';
-import includes from 'lodash/includes';
+import { includes, intersection, forEach } from 'lodash';
 
 import { assetRegExp } from '../../utils/keywords';
 import replaceExistConsts from '../../utils/replaceExistConsts';
@@ -35,16 +36,17 @@ const cn = {
     width: '100%'
   })
 };
-const getCn = props => ({
+const getCn = ({ theme }) => ({
   root: style({
     position: 'fixed',
     width: '100%',
     height: '50vh',
-    zIndex: props.theme.zIndex.modal - 1,
+    zIndex: theme.zIndex.modal - 1,
     left: 0,
-    transition: props.theme.transitions.create('top'),
+    transition: theme.transitions.create('top'),
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: fade(theme.palette.text.primary, 0.75)
   }),
   scroller: style({
     flex: 1,
@@ -53,8 +55,18 @@ const getCn = props => ({
     boxSizing: 'border-box',
     paddingBottom: 24,
     borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    backgroundColor: fade(props.theme.palette.text.primary, 0.75)
+    borderTopRightRadius: 0
+  }),
+  scopeWrapper: style({
+    color: theme.palette.common.white,
+    padding: theme.spacing.unit
+  }),
+  scope: style({
+    padding: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    color: theme.palette.getContrastText(theme.palette.primary.main),
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: theme.shape.borderRadius
   })
 });
 
@@ -63,9 +75,6 @@ export default class AssetPane extends PureComponent {
   static propTypes = {
     codemirror: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
-    fileView: PropTypes.object.isRequired,
-    scope: PropTypes.string,
-    loadConfig: PropTypes.func.isRequired,
     runApp: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
@@ -74,17 +83,15 @@ export default class AssetPane extends PureComponent {
   };
 
   state = {
-    assets: {},
+    show: false,
     assetLineNumber: 0,
-    scope: null // "モンスター" など
+    activeCategoryIndex: -1,
+    scopeIndexes: []
   };
 
   _widgets = new Map();
 
   componentDidMount() {
-    this.setState({
-      assets: this.props.loadConfig('asset')
-    });
     const cm = this.props.codemirror;
     cm.on('change', this.handleUpdateWidget);
     cm.on('swapDoc', this.handleUpdateWidget);
@@ -96,21 +103,13 @@ export default class AssetPane extends PureComponent {
     this.handleRenderWidget(cm);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.fileView !== this.props.fileView) {
-      this.setState({
-        assets: this.props.loadConfig('asset')
-      });
-    }
-  }
-
-  insertAsset = ({ code }) => {
+  insertAsset = ({ insertCode }) => {
     const cm = this.props.codemirror;
     const { assetLineNumber } = this.state;
     const pos = new Pos(assetLineNumber, 0);
-    const end = new Pos(pos.line + code.split('\n').length, 0);
-    code += '\n';
-    cm.replaceRange(code, pos, pos, 'asset');
+    const end = new Pos(pos.line + insertCode.split('\n').length, 0);
+    insertCode += '\n';
+    cm.replaceRange(insertCode, pos, pos, 'asset');
     // スクロール
     cm.scrollIntoView(
       {
@@ -139,10 +138,11 @@ export default class AssetPane extends PureComponent {
   };
 
   updateWidget = (cm, line, text) => {
+    const { asset } = this.props;
     // Syntax: /*+ モンスター アイテム */
-    const asset = assetRegExp.exec(text);
-    if (asset) {
-      const [, _prefix, _left, _label, _right] = asset.map(t =>
+    const tokens = assetRegExp.exec(text);
+    if (tokens) {
+      const [, _prefix, _left, _label, _right] = tokens.map(t =>
         t.replace(/\t/g, '    ')
       );
       const prefix = document.createElement('span');
@@ -159,8 +159,16 @@ export default class AssetPane extends PureComponent {
       const button = document.createElement('span');
       button.classList.add('Feeles-asset-button');
       button.onclick = event => {
+        const scopeIndexes = [];
+        // バーに書かれた文字列の中に scope.name があれば選択
+        forEach(asset.scopes, (scope, index) => {
+          if (includes(_label, scope.name)) {
+            scopeIndexes.push(index);
+          }
+        });
         this.setState({
-          scope: _label.substr(1).trim(),
+          show: true,
+          scopeIndexes,
           assetLineNumber: line
         });
         event.stopPropagation();
@@ -216,7 +224,7 @@ export default class AssetPane extends PureComponent {
 
   handleClose = () => {
     this.setState({
-      scope: null
+      show: false
     });
   };
 
@@ -234,41 +242,23 @@ export default class AssetPane extends PureComponent {
     this.handleClose(); // Pane をとじる
   };
 
-  renderEachLabel(label) {
-    const items = this.state.assets[label];
-    if (!items) return null;
-
-    return (
-      <div key={label} className={cn.wrapper}>
-        <div className={cn.label}>{label}</div>
-        {items.map((item, i) => (
-          <AssetButton
-            {...item}
-            key={i}
-            insertAsset={() => this.insertAsset(item)}
-            openFile={() => this.openFile(item)}
-            findFile={this.props.findFile}
-            localization={this.props.localization}
-            globalEvent={this.props.globalEvent}
-          />
-        ))}
-      </div>
-    );
-  }
-
   render() {
     const dcn = getCn(this.props);
-    const { scope } = this.state;
+    const {
+      asset: { scopes, buttons }
+    } = this.props;
+    const { show, activeCategoryIndex, scopeIndexes } = this.state;
 
-    if (this.props.asset) {
-      debugger;
-    }
+    const showingScopes = scopes.filter((_, i) => includes(scopeIndexes, i));
 
-    // e.g. scope === 'モンスター アイテム'
-    const labels = scope ? scope.trim().split(' ') : [];
+    const showingButtons = buttons
+      .filter(
+        b => b.scopes === null || intersection(b.scopes, scopeIndexes).length
+      )
+      .filter(b => b.category === activeCategoryIndex);
 
     return (
-      <div className={classes(dcn.root, scope ? cn.in : cn.out)}>
+      <div className={classes(dcn.root, show ? cn.in : cn.out)}>
         <Button
           variant="contained"
           aria-label="Close"
@@ -278,8 +268,31 @@ export default class AssetPane extends PureComponent {
           <ExpandMore />
           とじる
         </Button>
+        <div className={dcn.scopeWrapper}>
+          <span className={dcn.scope}>
+            {'+ ' + showingScopes.map(scope => scope.name).join(' ')}
+          </span>
+          <span>{`に 入れるもの`}</span>
+        </div>
         <div className={dcn.scroller}>
-          {labels.map(label => this.renderEachLabel(label))}
+          <div className={cn.wrapper}>
+            {showingButtons.map((b, i) => (
+              <AssetButton
+                key={i}
+                name={b.name}
+                description={b.description}
+                iconUrl={b.iconUrl}
+                insertCode={b.insertCode}
+                moduleCode={b.moduleCode}
+                filePath={b.filePath}
+                insertAsset={() => this.insertAsset(b)}
+                openFile={() => this.openFile(b)}
+                findFile={this.props.findFile}
+                localization={this.props.localization}
+                globalEvent={this.props.globalEvent}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );

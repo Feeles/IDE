@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Add from '@material-ui/icons/Add';
-import OpenInNew from '@material-ui/icons/OpenInNew';
 import Description from '@material-ui/icons/Description';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
@@ -74,13 +73,14 @@ const getCn = ({ theme }) => ({
 @withTheme()
 export default class AssetButton extends PureComponent {
   static propTypes = {
-    theme: PropTypes.object.isRequired,
-    code: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    descriptionMoreURL: PropTypes.string,
-    label: PropTypes.string,
-    image: PropTypes.string,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    iconUrl: PropTypes.string,
+    insertCode: PropTypes.string,
+    moduleCode: PropTypes.string,
     filePath: PropTypes.string,
+
+    theme: PropTypes.object.isRequired,
     insertAsset: PropTypes.func.isRequired,
     openFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
@@ -89,6 +89,7 @@ export default class AssetButton extends PureComponent {
   };
 
   static defaultProps = {
+    name: '',
     description: ''
   };
 
@@ -108,11 +109,11 @@ export default class AssetButton extends PureComponent {
   updateImage() {
     let backgroundImage = '';
 
-    if (this.props.image) {
-      if (protocols.some(p => this.props.image.indexOf(p) === 0)) {
-        backgroundImage = url(this.props.image);
+    if (this.props.iconUrl) {
+      if (protocols.some(p => this.props.iconUrl.indexOf(p) === 0)) {
+        backgroundImage = url(this.props.iconUrl);
       } else {
-        const file = this.props.findFile(this.props.image);
+        const file = this.props.findFile(this.props.iconUrl);
         if (file) {
           backgroundImage = url(file.blobURL);
         }
@@ -130,7 +131,7 @@ export default class AssetButton extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.image !== this.props.image) {
+    if (prevProps.iconUrl !== this.props.iconUrl) {
       this.updateImage();
     }
   }
@@ -150,7 +151,7 @@ export default class AssetButton extends PureComponent {
             style={this.state.backgroundStyle}
             onClick={this.handleOpen}
           >
-            <span className={cn.label}>{this.props.label}</span>
+            <span className={cn.label}>{this.props.name}</span>
           </ButtonBase>
           <div className={cn.actions}>
             <ButtonBase
@@ -177,19 +178,10 @@ export default class AssetButton extends PureComponent {
           classes={cn.popoverClasses}
           onClose={this.handleClose}
         >
-          <Typography variant="h5">{this.props.label}</Typography>
+          <Typography variant="h5">{this.props.name}</Typography>
           <Typography variant="body1" gutterBottom>
             {this.props.description}
           </Typography>
-          {this.props.descriptionMoreURL ? (
-            <a
-              href={this.props.descriptionMoreURL}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <OpenInNew />
-            </a>
-          ) : null}
           <div>
             <Button
               variant="contained"
@@ -207,7 +199,7 @@ export default class AssetButton extends PureComponent {
               onClick={this.props.openFile}
             >
               <Description />
-              {localization.editorCard.edit(this.props.label)}
+              {localization.editorCard.edit(this.props.name)}
             </Button>
           </div>
         </Popover>
