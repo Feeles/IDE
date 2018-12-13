@@ -216,8 +216,11 @@ export default class AssetButton extends PureComponent {
   };
 
   handleOpenFile = () => {
-    const { name } = this.props;
-    this.props.openFile({ name, filePath: this.filePathToOpen });
+    this.handleClose();
+    this.props.openFile({
+      name: this.selected.name,
+      filePath: this.filePathToOpen
+    });
   };
 
   render() {
@@ -298,7 +301,7 @@ export default class AssetButton extends PureComponent {
               variant="outlined"
               color="primary"
               disabled={disableOpenFile}
-              onClick={this.props.openFile}
+              onClick={this.handleOpenFile}
             >
               <Description />
               {localization.editorCard.edit(selected.name)}
