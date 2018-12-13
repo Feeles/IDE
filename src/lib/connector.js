@@ -203,6 +203,9 @@
   feeles.runCode = function() {
     return requestPostMessage('runCode', null);
   };
+  feeles.install = function(name) {
+    return requestPostMessage('install', name);
+  };
 
   var SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;

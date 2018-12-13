@@ -119,11 +119,11 @@ export default class AssetPane extends PureComponent {
 
     this.handleUpdateWidget(cm);
     this.handleRenderWidget(cm);
-    this.props.globalEvent.on('message.install', this.handleInstall);
+    this.props.globalEvent.on('message.install', this.handleInstallMessage);
   }
 
   componentWillUnmount() {
-    this.props.globalEvent.off('message.install', this.handleInstall);
+    this.props.globalEvent.off('message.install', this.handleInstallMessage);
   }
 
   componentDidUpdate(prevProps) {
@@ -345,6 +345,24 @@ export default class AssetPane extends PureComponent {
       case 'runApp':
         this.props.runApp();
         break;
+    }
+  };
+
+  handleInstallMessage = event => {
+    const {
+      data: { value: name }
+    } = event;
+    const { asset } = this.props;
+    // module が存在するなら先に install
+    const mod = asset.module[name];
+    if (mod) {
+      // インストール後に runApp
+      this.installModule(name, {
+        type: 'runApp'
+      });
+    } else {
+      // TODO: どうするか考える
+      alert(`Failed to autoload ${name} because not found`);
     }
   };
 
