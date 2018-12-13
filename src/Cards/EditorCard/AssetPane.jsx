@@ -361,8 +361,7 @@ export default class AssetPane extends PureComponent {
         type: 'runApp'
       });
     } else {
-      // TODO: どうするか考える
-      alert(`Failed to autoload ${name} because not found`);
+      // そもそもアセットの名前を間違えているかも知れない
     }
   };
 
