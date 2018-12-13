@@ -392,8 +392,8 @@ export default class AssetPane extends PureComponent {
         payload: { filePath, label: name }
       });
     } else {
-      // TODO: どうするか考える
-      alert(`Failed to open ${name} because not found`);
+      // 開けるかどうか試す
+      this.openFile({ filePath, label: name });
     }
   };
 
