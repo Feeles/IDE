@@ -1,4 +1,4 @@
-import './preload';
+import 'autoload';
 
 if (window) {
 	if (!window) {

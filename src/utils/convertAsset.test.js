@@ -6,7 +6,7 @@ import convertAsset from './convertAsset';
 test('convertAsset', t => {
   const assetPath = path.resolve(
     __dirname,
-    '../../samples/hello-world/i18n/ja_JP/feeles/.asset.yml'
+    '../../samples/hello-world/feeles/.asset.yml'
   );
   const assetYml = fs.readFileSync(assetPath, { encoding: 'utf8' });
   t.deepEqual(convertAsset([assetYml]), {
