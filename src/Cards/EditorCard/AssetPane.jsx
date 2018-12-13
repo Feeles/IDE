@@ -11,8 +11,11 @@ import { includes, intersection, forEach } from 'lodash';
 import { assetRegExp } from '../../utils/keywords';
 import replaceExistConsts from '../../utils/replaceExistConsts';
 import AssetButton from './AssetButton';
+import SourceFile from '../../File/SourceFile';
 
 const paneHeight = 80; // %
+const moduleDir = 'modules';
+const autoloadFile = 'autoload.js';
 
 const cn = {
   in: style({
@@ -82,7 +85,9 @@ export default class AssetPane extends PureComponent {
     codemirror: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
     runApp: PropTypes.func.isRequired,
+    files: PropTypes.array.isRequired,
     findFile: PropTypes.func.isRequired,
+    putFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object.isRequired
@@ -92,7 +97,14 @@ export default class AssetPane extends PureComponent {
     show: false,
     assetLineNumber: 0,
     activeCategoryIndex: -1,
-    scopeIndexes: []
+    scopeIndexes: [],
+    // オートインストール
+    installingFileName: null, // インストール中のモジュール名
+    callback: {
+      // インストール後の挙動
+      type: '', // insertAsset | openFile | runApp
+      payload: null // callback に必要な payload
+    }
   };
 
   _widgets = new Map();
@@ -107,6 +119,29 @@ export default class AssetPane extends PureComponent {
 
     this.handleUpdateWidget(cm);
     this.handleRenderWidget(cm);
+    this.props.globalEvent.on('message.install', this.handleInstall);
+  }
+
+  componentWillUnmount() {
+    this.props.globalEvent.off('message.install', this.handleInstall);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { files } = this.props;
+    const { installingFileName, callback } = this.state;
+    // オートインストールの完了待ち
+    if (installingFileName && prevProps.files !== this.props.files) {
+      if (files.some(file => file.name === installingFileName)) {
+        // 発見したので待ち状態を初期化してコールバックを実行
+        this.setState(
+          {
+            installingFileName: null,
+            callback: { type: '', payload: null }
+          },
+          () => this.executeCallback(callback)
+        );
+      }
+    }
   }
 
   insertAsset = ({ insertCode }) => {
@@ -254,6 +289,80 @@ export default class AssetPane extends PureComponent {
     this.handleClose(); // Pane をとじる
   };
 
+  /**
+   * アセットに含まれるモジュールをプロジェクトにコピーする
+   */
+  installModule = (moduleName, callback) => {
+    if (this.state.installingFileName) return; // すでに別のモジュールをインストール中
+    const { asset, files } = this.props;
+    const localModuleName = `${moduleDir}/${moduleName}`;
+    const localFilePath = `${localModuleName}.js`;
+    const existFile = files.find(file => file.name === localFilePath);
+    if (existFile) {
+      // すでにインストールされている
+      this.executeCallback(callback);
+      return;
+    }
+    const mod = asset.module[moduleName];
+    if (!mod) return alert(`${moduleName} is not exist in module`); // TODO: 例外処理
+
+    // まずコールバックを設定してからファイルをコピー
+    this.setState({ installingFileName: localFilePath, callback }, () => {
+      this.props.putFile(
+        new SourceFile({
+          type: 'text/javascript',
+          name: localFilePath,
+          text: mod.code
+        })
+      );
+    });
+
+    // autoload.js の更新
+    const autoload = files.find(file => file.name === autoloadFile);
+    if (autoload) {
+      let text = autoload.text;
+      if (text && text.substr(-1) !== '\n') text += '\n';
+      text += `import '${localModuleName}';\n`;
+      this.props.putFile(
+        autoload,
+        new SourceFile({
+          type: autoload.type,
+          name: autoload.name,
+          text
+        })
+      );
+    }
+  };
+
+  executeCallback = ({ type, payload }) => {
+    switch (type) {
+      case 'insertAsset':
+        this.insertAsset(payload);
+        break;
+      case 'openFile':
+        this.openFile(payload);
+        break;
+      case 'runApp':
+        this.props.runApp();
+        break;
+    }
+  };
+
+  handleInsertAsset = ({ name, insertCode }) => {
+    const { asset } = this.props;
+    // module が存在するなら先に install
+    const mod = asset.module[name];
+    if (mod) {
+      // インストール後に insertAsset
+      this.installModule(name, {
+        type: 'insertAsset',
+        payload: { insertCode }
+      });
+    } else {
+      this.insertAsset({ insertCode });
+    }
+  };
+
   render() {
     const dcn = getCn(this.props);
     const {
@@ -297,7 +406,7 @@ export default class AssetPane extends PureComponent {
                 moduleCode={b.moduleCode}
                 filePath={b.filePath}
                 variations={b.variations}
-                insertAsset={this.insertAsset}
+                insertAsset={this.handleInsertAsset}
                 openFile={() => this.openFile(b)}
                 findFile={this.props.findFile}
                 localization={this.props.localization}
