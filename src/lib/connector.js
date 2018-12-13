@@ -350,6 +350,12 @@
             // すでに AMD になっている
             eval(text);
           } else {
+            // Unicode エスケープ文字がある場合, Babel が \u を \\u にしてしまうので, ここで直す
+            text = text.replace(/\\u(\w{4})/g, (match, hex) => {
+              // e.g. hex === '7D2B'
+              const charCode = parseInt(hex, 16);
+              return String.fromCharCode(charCode);
+            });
             // JavaScript を AMD にして define
             define(moduleName, new Function('require, exports, module', text));
           }
