@@ -167,6 +167,9 @@ export default class FileView {
    * @param {SourceFile|BinalyFile} nextFile 追加するファイル
    */
   async putFile(prevFile, nextFile) {
+    if (nextFile === undefined) {
+      return this.addFile(prevFile);
+    }
     console.time('putFile 1');
     const remove = this.inspection(nextFile);
     console.timeEnd('putFile 1');
