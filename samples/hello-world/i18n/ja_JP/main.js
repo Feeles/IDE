@@ -11,7 +11,18 @@ if (window) {
 const いろ = ('▼ サンプル', '');
 document.body.style.backgroundColor = いろ;
 
-/*+ アセット */
+/*+ ゲームがはじまったとき */
 
 // Syntax: // [で囲むと[リンク]になります. [同じ行にいくつでも作れます]
 // Syntax: // `[これ]`はリンクにはなりません. `[これ]はなります
+
+
+const title = 'タイトル';
+
+/* global feeles */
+feeles.connected.then(({ port }) => {
+  port.postMessage({
+    query: 'menuTitle',
+    value: title
+  });
+});
