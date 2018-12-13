@@ -14,7 +14,7 @@ import AssetButton from './AssetButton';
 import SourceFile from '../../File/SourceFile';
 
 const paneHeight = 80; // %
-const moduleDir = 'modules';
+export const moduleDir = 'modules';
 const autoloadFile = 'autoload.js';
 
 const cn = {
@@ -381,6 +381,22 @@ export default class AssetPane extends PureComponent {
     }
   };
 
+  handleOpenFile = ({ name, filePath }) => {
+    const { asset } = this.props;
+    // module が存在するなら先に install
+    const mod = asset.module[name];
+    if (mod) {
+      // インストール後に openFile
+      this.installModule(name, {
+        type: 'openFile',
+        payload: { filePath, label: name }
+      });
+    } else {
+      // TODO: どうするか考える
+      alert(`Failed to open ${name} because not found`);
+    }
+  };
+
   render() {
     const dcn = getCn(this.props);
     const {
@@ -425,10 +441,11 @@ export default class AssetPane extends PureComponent {
                 filePath={b.filePath}
                 variations={b.variations}
                 insertAsset={this.handleInsertAsset}
-                openFile={() => this.openFile(b)}
+                openFile={this.handleOpenFile}
                 findFile={this.props.findFile}
                 localization={this.props.localization}
                 globalEvent={this.props.globalEvent}
+                asset={this.props.asset}
               />
             ))}
           </div>

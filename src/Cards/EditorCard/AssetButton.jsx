@@ -10,6 +10,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import Add from '@material-ui/icons/Add';
 import Description from '@material-ui/icons/Description';
+import { moduleDir } from './AssetPane';
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
 const iconSize = 48;
@@ -118,7 +119,8 @@ export default class AssetButton extends PureComponent {
     openFile: PropTypes.func.isRequired,
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    asset: PropTypes.object.isRequired
   };
 
   static defaultProps = {
@@ -153,6 +155,18 @@ export default class AssetButton extends PureComponent {
           moduleCode,
           filePath
         };
+  }
+
+  get filePathToOpen() {
+    // 最初から存在するファイルにアクセス => filePath
+    // 追加してからアクセス => asset.module[name]
+    const selected = this.selected;
+    return (
+      selected.filePath ||
+      (this.props.asset.module[selected.name]
+        ? `${moduleDir}/${selected.name}.js`
+        : null)
+    );
   }
 
   handleOpen = event => {
@@ -201,13 +215,18 @@ export default class AssetButton extends PureComponent {
     this.props.insertAsset(this.selected);
   };
 
+  handleOpenFile = () => {
+    const { name } = this.props;
+    this.props.openFile({ name, filePath: this.filePathToOpen });
+  };
+
   render() {
     const dcn = getCn(this.props);
     const { localization, variations } = this.props;
     const { selectedIndex } = this.state;
     const selected = this.selected;
 
-    const disableOpenFile = !selected.filePath;
+    const disableOpenFile = !this.filePathToOpen;
 
     return (
       <>
@@ -232,7 +251,7 @@ export default class AssetButton extends PureComponent {
               focusRipple
               disabled={disableOpenFile}
               className={classes(dcn.button, cn.iconButton)}
-              onClick={this.props.openFile}
+              onClick={this.handleOpenFile}
             >
               <Description />
             </ButtonBase>
