@@ -99,7 +99,8 @@ export default class SourceEditor extends PureComponent {
 
   handleCodemirror = codemirror => {
     this.codemirror = codemirror;
-    this.codemirror.on('beforeChange', zenkakuToHankaku);
+    // アセットの入力で全角文字を使うので, この仕様は消している
+    // this.codemirror.on('beforeChange', zenkakuToHankaku);
     const onChange = cm => {
       this.setState({
         hasHistory: cm.historySize().undo > 0,
@@ -171,7 +172,6 @@ export default class SourceEditor extends PureComponent {
   handleUndo = () => {
     this.codemirror.undo();
   };
-
 
   handleRestore = () => {
     const { file } = this.state;
