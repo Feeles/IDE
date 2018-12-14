@@ -245,6 +245,7 @@ export default class AssetButton extends PureComponent {
           <div className={cn.actions}>
             <ButtonBase
               focusRipple
+              disabled={!selected.insertCode}
               className={classes(dcn.button, cn.iconButton)}
               onClick={this.handleInsertAsset}
             >
@@ -291,6 +292,7 @@ export default class AssetButton extends PureComponent {
             <Button
               variant="contained"
               color="primary"
+              disabled={!selected.insertCode}
               onClick={this.handleInsertAsset}
             >
               <Add />
