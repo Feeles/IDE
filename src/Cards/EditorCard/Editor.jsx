@@ -110,9 +110,7 @@ export default class Editor extends Component {
       }
     }
     this.setState({
-      dropdownConfig: this.props.loadConfig('dropdown'),
-      dropdowns: [],
-      dropdownLineWidgets: []
+      dropdownConfig: this.props.loadConfig('dropdown')
     });
   }
 
@@ -140,6 +138,11 @@ export default class Editor extends Component {
       });
       this.handleUpdateDropdown(cm, []);
       this.handleUpdateLink(cm, []);
+      cm.on('unfold', cm => {
+        this.clearAllWidgets();
+        this.handleUpdateDropdown(cm, []);
+        this.handleUpdateLink(cm, []);
+      });
     }
   };
 
@@ -244,10 +247,12 @@ export default class Editor extends Component {
     button.addEventListener(
       'click',
       () => {
+        const { dropdownConfig } = this.state;
+        if (!dropdownConfig) return;
         const line = cm.doc.getLineNumber(widget.line);
         // Open dropdown menu
         const listName = _label.substr(1).trim();
-        const list = this.state.dropdownConfig[listName];
+        const list = dropdownConfig[listName];
         if (list) {
           const hint = {
             from: { line, ch },
