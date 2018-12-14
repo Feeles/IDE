@@ -16,6 +16,7 @@ import SourceFile from '../../File/SourceFile';
 const paneHeight = 80; // %
 export const moduleDir = 'modules';
 const autoloadFile = 'autoload.js';
+const iconSize = 48;
 
 const cn = {
   in: style({
@@ -62,7 +63,10 @@ const getCn = ({ theme }) => ({
   }),
   scopeWrapper: style({
     color: theme.palette.common.white,
-    padding: theme.spacing.unit
+    paddingLeft: theme.spacing.unit * 10,
+    paddingRight: theme.spacing.unit * 10,
+    paddingBottom: theme.spacing.unit * 4,
+    fontWeight: 600
   }),
   scope: style({
     padding: theme.spacing.unit,
@@ -76,6 +80,35 @@ const getCn = ({ theme }) => ({
     top: theme.spacing.unit,
     right: theme.spacing.unit,
     color: theme.palette.common.white
+  }),
+  categoryWrapper: style({
+    display: 'flex',
+    flexWrap: 'nowrap',
+    paddingLeft: theme.spacing.unit * 10,
+    paddingRight: theme.spacing.unit * 10,
+    paddingBottom: theme.spacing.unit * 4,
+    paddingTop: theme.spacing.unit * 4
+  }),
+  category: style({
+    flex: 1,
+    fontWeight: 600,
+    cursor: 'pointer',
+    color: theme.palette.grey[600],
+    borderBottom: `4px solid ${theme.palette.grey[600]}`,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    $nest: {
+      '&>img': {
+        maxWidth: iconSize,
+        height: iconSize
+      }
+    }
+  }),
+  active: style({
+    color: theme.palette.common.white,
+    borderBottomColor: theme.palette.common.white
   })
 });
 
@@ -400,7 +433,7 @@ export default class AssetPane extends PureComponent {
     const dcn = getCn(this.props);
     const {
       localization,
-      asset: { scopes, buttons }
+      asset: { scopes, categories, buttons }
     } = this.props;
     const { show, activeCategoryIndex, scopeIndexes } = this.state;
 
@@ -414,6 +447,23 @@ export default class AssetPane extends PureComponent {
 
     return (
       <div className={classes(dcn.root, show ? cn.in : cn.out)}>
+        {categories.length ? (
+          <div className={dcn.categoryWrapper}>
+            {categories.map((cat, i) => (
+              <div
+                key={i}
+                className={classes(
+                  dcn.category,
+                  i === activeCategoryIndex && dcn.active
+                )}
+                onClick={() => this.setState({ activeCategoryIndex: i })}
+              >
+                <span>{cat.name}</span>
+                <img src={cat.iconUrl} alt="" />
+              </div>
+            ))}
+          </div>
+        ) : null}
         <div className={dcn.scopeWrapper}>
           <span className={dcn.scope}>
             {'+ ' + showingScopes.map(scope => scope.name).join(' ')}
