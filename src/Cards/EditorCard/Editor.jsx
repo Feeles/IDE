@@ -242,7 +242,9 @@ export default class Editor extends Component {
     const { left } = cm.charCoords(pos, 'local');
     parent.style.transform = `translate(${left}px, -1.3rem)`;
     // ウィジェット追加
-    const widget = cm.addLineWidget(line, parent);
+    const widget = cm.addLineWidget(line, parent, {
+      insertAt: 0
+    });
     // クリックイベント追加
     button.addEventListener(
       'click',
