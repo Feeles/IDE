@@ -481,7 +481,7 @@ export default class AssetPane extends PureComponent {
           <div className={cn.wrapper}>
             {showingButtons.map((b, i) => (
               <AssetButton
-                key={i}
+                key={`${activeCategoryIndex}-${i}`} // 別ページでインスタンスを使い回すことはできない
                 name={b.name}
                 description={b.description}
                 iconUrl={b.iconUrl}

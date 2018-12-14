@@ -160,6 +160,13 @@ export default class AssetButton extends PureComponent {
   get filePathToOpen() {
     // 最初から存在するファイルにアクセス => filePath
     // 追加してからアクセス => asset.module[name]
+    const { filePath, asset, name } = this.props;
+    return filePath || (asset.module[name] ? `${moduleDir}/${name}.js` : null);
+  }
+
+  get filePathToOpenSelected() {
+    // 最初から存在するファイルにアクセス => filePath
+    // 追加してからアクセス => asset.module[name]
     const selected = this.selected;
     return (
       selected.filePath ||
@@ -179,7 +186,7 @@ export default class AssetButton extends PureComponent {
 
   updateImage() {
     let backgroundImage = '';
-    const { iconUrl } = this.selected;
+    const { iconUrl } = this.props;
 
     if (iconUrl) {
       if (protocols.some(p => iconUrl.indexOf(p) === 0)) {
@@ -202,15 +209,19 @@ export default class AssetButton extends PureComponent {
     this.updateImage();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.iconUrl !== this.props.iconUrl) {
-      this.updateImage();
-    } else if (prevState.selectedIndex !== this.state.selectedIndex) {
       this.updateImage();
     }
   }
 
   handleInsertAsset = () => {
+    const { insertCode } = this.props;
+    this.handleClose();
+    this.props.insertAsset({ insertCode });
+  };
+
+  handleInsertAssetSelected = () => {
     this.handleClose();
     this.props.insertAsset(this.selected);
   };
@@ -218,8 +229,16 @@ export default class AssetButton extends PureComponent {
   handleOpenFile = () => {
     this.handleClose();
     this.props.openFile({
-      name: this.selected.name,
+      name: this.props.name,
       filePath: this.filePathToOpen
+    });
+  };
+
+  handleOpenFileSelected = () => {
+    this.handleClose();
+    this.props.openFile({
+      name: this.selected.name,
+      filePath: this.filePathToOpenSelected
     });
   };
 
@@ -227,9 +246,7 @@ export default class AssetButton extends PureComponent {
     const dcn = getCn(this.props);
     const { localization, variations } = this.props;
     const { selectedIndex } = this.state;
-    const selected = this.selected;
-
-    const disableOpenFile = !this.filePathToOpen;
+    const selected = this.selected; // Popover の中は選択中のバリエーションに切り替わる
 
     return (
       <>
@@ -240,12 +257,12 @@ export default class AssetButton extends PureComponent {
             style={this.state.backgroundStyle}
             onClick={this.handleOpen}
           >
-            <span className={cn.label}>{selected.name}</span>
+            <span className={cn.label}>{this.props.name}</span>
           </ButtonBase>
           <div className={cn.actions}>
             <ButtonBase
               focusRipple
-              disabled={!selected.insertCode}
+              disabled={!this.props.insertCode}
               className={classes(dcn.button, cn.iconButton)}
               onClick={this.handleInsertAsset}
             >
@@ -253,7 +270,7 @@ export default class AssetButton extends PureComponent {
             </ButtonBase>
             <ButtonBase
               focusRipple
-              disabled={disableOpenFile}
+              disabled={!this.filePathToOpen}
               className={classes(dcn.button, cn.iconButton)}
               onClick={this.handleOpenFile}
             >
@@ -293,7 +310,7 @@ export default class AssetButton extends PureComponent {
               variant="contained"
               color="primary"
               disabled={!selected.insertCode}
-              onClick={this.handleInsertAsset}
+              onClick={this.handleInsertAssetSelected}
             >
               <Add />
               {localization.editorCard.insert}
@@ -302,8 +319,8 @@ export default class AssetButton extends PureComponent {
             <Button
               variant="outlined"
               color="primary"
-              disabled={disableOpenFile}
-              onClick={this.handleOpenFile}
+              disabled={!this.filePathToOpenSelected}
+              onClick={this.handleOpenFileSelected}
             >
               <Description />
               {localization.editorCard.edit(selected.name)}
