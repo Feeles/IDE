@@ -172,15 +172,6 @@ export default class SourceEditor extends PureComponent {
     this.codemirror.undo();
   };
 
-  handleValueClick = event => {
-    // Put cursor into editor
-    if (this.codemirror) {
-      const locate = { left: event.x, top: event.y };
-      const pos = this.codemirror.coordsChar(locate);
-      this.codemirror.focus();
-      this.codemirror.setCursor(pos);
-    }
-  };
 
   handleRestore = () => {
     const { file } = this.state;
