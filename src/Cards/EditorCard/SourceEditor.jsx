@@ -10,7 +10,7 @@ import Editor from './Editor';
 import MenuBar from './MenuBar';
 import AssetPane from './AssetPane';
 import ErrorPane from './ErrorPane';
-import zenkakuToHankaku from './zenkakuToHankaku';
+// import zenkakuToHankaku from './zenkakuToHankaku';
 import foldAsset from './foldAsset';
 import { withTheme } from '@material-ui/core';
 import preserveTrailingSpaceBeautify from '../../utils/preserveTrailingSpaceBeautify';
