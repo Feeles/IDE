@@ -26,6 +26,7 @@ module.exports = {
     'no-useless-escape': 'warn',
     'no-unused-vars': 'warn',
 
-    'react/jsx-key': 'warn'
+    'react/jsx-key': 'warn',
+    'react/prop-types': 'off' // state のプロパティにエラーを吐いてしまう(バグ？)
   }
 };
