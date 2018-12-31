@@ -349,7 +349,10 @@
       feeles
         .resolve(moduleName)
         .then(function(text) {
-          if (text.indexOf('define(function') === 0) {
+          if (
+            text.indexOf('define(function') === 0 || // AMD
+            text.indexOf('(function(root, factory)') === 0 // UMD
+          ) {
             // すでに AMD になっている
             eval(text);
           } else {
