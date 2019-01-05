@@ -180,9 +180,10 @@ export default class AssetPane extends PureComponent {
   insertAsset = ({ insertCode }) => {
     const cm = this.props.codemirror
     const { assetLineNumber } = this.state
-    const pos = new Pos(assetLineNumber, 0)
+    // バーが常に上に来るよう, 下に挿入
+    const pos = new Pos(assetLineNumber + 1, 0)
     const end = new Pos(pos.line + insertCode.split('\n').length, 0)
-    insertCode += '\n'
+    insertCode = '\n' + insertCode
     cm.replaceRange(insertCode, pos, pos, 'asset')
     // スクロール
     cm.scrollIntoView(
@@ -194,7 +195,7 @@ export default class AssetPane extends PureComponent {
     )
     // カーソル (挿入直後に undo したときスクロールが上に戻るのを防ぐ)
     cm.focus()
-    cm.setCursor(end)
+    cm.setCursor(new Pos(end.line - 1, 0))
     // Pane をとじる
     this.handleClose()
     // 実行 (UIが固まらないように時間をおいている)
