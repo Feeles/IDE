@@ -8,9 +8,6 @@ module.exports = {
   // If true, puts the `>` of a multi-line jsx element at the end of the last line instead of being alone on the next line
   jsxBracketSameLine: false,
 
-  // Override the parser. You shouldn't have to change this setting.
-  parser: 'babylon',
-
   // Fit code within this line limit
   printWidth: 80,
 
