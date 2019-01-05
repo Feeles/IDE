@@ -183,9 +183,11 @@ const mdComponents = [
       return tag === 'blockquote'
     },
     render(tag, props, children) {
-      ;<Typography className={cn.blockquote} color="textSecondary">
-        {children}
-      </Typography>
+      return (
+        <Typography className={cn.blockquote} color="textSecondary">
+          {children}
+        </Typography>
+      )
     }
   }
 ]
