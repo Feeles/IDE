@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import ReactPlayer from 'react-player';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import ReactPlayer from 'react-player'
 
-import Card from '../CardWindow';
-import CardFloatingBar from '../CardFloatingBar';
+import Card from '../CardWindow'
+import CardFloatingBar from '../CardFloatingBar'
 
 const defaultPlayerState = {
   // https://github.com/CookPete/react-player#props
@@ -15,7 +15,7 @@ const defaultPlayerState = {
     clientId: 'iFAPeKCVCOTKeA0nNJCHuVHif2gEBKbl',
     showArtwork: true
   }
-};
+}
 
 export default class MediaCard extends PureComponent {
   static propTypes = {
@@ -23,19 +23,19 @@ export default class MediaCard extends PureComponent {
     setCardVisibility: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     playerState: {}
-  };
+  }
 
   componentDidMount() {
-    const { globalEvent } = this.props;
-    globalEvent.on('message.media', this.handleMedia);
+    const { globalEvent } = this.props
+    globalEvent.on('message.media', this.handleMedia)
   }
 
   componentDidUpdate(prevProps) {
-    const { visible } = prevProps.cardPropsBag;
+    const { visible } = prevProps.cardPropsBag
     if (visible && !this.props.cardPropsBag.visible) {
       // カードが close されたとき動画を止める
       this.setState({
@@ -43,27 +43,27 @@ export default class MediaCard extends PureComponent {
           ...this.state.playerState,
           playing: false
         }
-      });
+      })
     }
   }
 
   handleMedia = event => {
-    const { value } = event.data;
+    const { value } = event.data
     if (value) {
       // feeles.openMedia()
-      this.setState({ playerState: value });
-      this.props.setCardVisibility('MediaCard', true);
+      this.setState({ playerState: value })
+      this.props.setCardVisibility('MediaCard', true)
     } else {
       // feeles.closeMedia()
-      this.props.setCardVisibility('MediaCard', false);
+      this.props.setCardVisibility('MediaCard', false)
     }
-  };
+  }
 
   render() {
     const playerState = {
       ...defaultPlayerState,
       ...this.state.playerState
-    };
+    }
 
     return (
       <Card {...this.props.cardPropsBag}>
@@ -76,6 +76,6 @@ export default class MediaCard extends PureComponent {
           <div>URL not given</div>
         )}
       </Card>
-    );
+    )
   }
 }

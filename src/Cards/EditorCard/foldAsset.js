@@ -1,8 +1,8 @@
-import CodeMirror from 'codemirror';
+import CodeMirror from 'codemirror'
 
-import { codeFolds } from '../../utils/keywords';
+import { codeFolds } from '../../utils/keywords'
 
-const { prefix, startWord, endWord } = codeFolds;
+const { prefix, startWord, endWord } = codeFolds
 
 /**
  * 「// ここから〇〇」〜「// ここまで〇〇」を fold する
@@ -10,29 +10,29 @@ const { prefix, startWord, endWord } = codeFolds;
  * @param {CodeMirror.Pos} start
  */
 export default function foldAsset(cm, start) {
-  if (!cm || !start) return;
-  const result = {};
-  const text = cm.getLine(start.line);
-  const startIndex = text.indexOf(startWord);
-  if (startIndex < 0) return;
+  if (!cm || !start) return
+  const result = {}
+  const text = cm.getLine(start.line)
+  const startIndex = text.indexOf(startWord)
+  if (startIndex < 0) return
 
   // startWord が見つかった
-  result.from = CodeMirror.Pos(start.line, startIndex + startWord.length);
-  const keyword = text.substr(startIndex + startWord.length);
+  result.from = CodeMirror.Pos(start.line, startIndex + startWord.length)
+  const keyword = text.substr(startIndex + startWord.length)
 
   // 今度は endWord を探す
-  const lastLine = cm.lastLine();
+  const lastLine = cm.lastLine()
   for (let line = start.line + 1; line < lastLine; line++) {
-    const text = cm.getLine(line);
-    const endIndex = text.indexOf(endWord + keyword);
+    const text = cm.getLine(line)
+    const endIndex = text.indexOf(endWord + keyword)
     if (endIndex >= 0) {
       // endWord も見つかった
-      result.to = CodeMirror.Pos(line, endIndex + prefix.length);
-      break;
+      result.to = CodeMirror.Pos(line, endIndex + prefix.length)
+      break
     }
   }
 
   if (result.from && result.to) {
-    return result;
+    return result
   }
 }

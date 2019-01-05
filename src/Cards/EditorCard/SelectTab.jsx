@@ -1,15 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import MenuItem from '@material-ui/core/MenuItem';
-import Description from '@material-ui/icons/Description';
-import Typography from '@material-ui/core/Typography';
-import ArrowRight from '@material-ui/icons/ArrowRight';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
+import MenuItem from '@material-ui/core/MenuItem'
+import Description from '@material-ui/icons/Description'
+import Typography from '@material-ui/core/Typography'
+import ArrowRight from '@material-ui/icons/ArrowRight'
 
-import { Tab } from './';
+import { Tab } from './'
 
 const cn = {
   blank: style({
@@ -29,17 +29,17 @@ const cn = {
     height: 24,
     marginRight: 4
   })
-};
+}
 
 const Icon = props =>
   props.iconUrl ? (
     <img src={props.iconUrl} alt="" className={cn.icon} />
   ) : (
     <Description />
-  );
+  )
 Icon.propTypes = {
   iconUrl: PropTypes.string
-};
+}
 
 export default class SelectTab extends React.Component {
   static propTypes = {
@@ -47,32 +47,32 @@ export default class SelectTab extends React.Component {
     tabs: PropTypes.array.isRequired,
     filePath: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     anchorEl: null
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.filePath !== this.props.filePath) {
       // ファイルが選択されたので Popout は閉じる
-      this.handleClose();
+      this.handleClose()
     }
   }
 
   handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    this.setState({ anchorEl: event.currentTarget })
+  }
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+    this.setState({ anchorEl: null })
+  }
 
   render() {
-    const { anchorEl } = this.state;
+    const { anchorEl } = this.state
 
     // 現在選択中のタブの情報を filePath (ファイル名) から調べる. tabs の中にはない(nullになる)こともある
-    const selected = Tab.find(this.props.tabs, this.props.filePath);
+    const selected = Tab.find(this.props.tabs, this.props.filePath)
 
     return (
       <>
@@ -95,7 +95,7 @@ export default class SelectTab extends React.Component {
           />
         </Menu>
       </>
-    );
+    )
   }
 }
 
@@ -105,36 +105,36 @@ class NestedMenus extends React.Component {
     localization: PropTypes.object.isRequired,
     filePath: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     anchorEl: null,
     selectedIndex: -1
-  };
+  }
 
   handleMenuItemClick = filePath => {
     this.props.globalEvent.emit('message.editor', {
       data: { value: filePath }
-    });
-    this.handleClose();
-  };
+    })
+    this.handleClose()
+  }
 
   handleOpen = (event, index) => {
     this.setState({
       anchorEl: event.currentTarget,
       selectedIndex: index
-    });
-  };
+    })
+  }
 
   handleClose = () => {
     this.setState({
       anchorEl: null,
       selectedIndex: -1
-    });
-  };
+    })
+  }
 
   render() {
-    const { anchorEl } = this.state;
+    const { anchorEl } = this.state
 
     return (
       <>
@@ -183,6 +183,6 @@ class NestedMenus extends React.Component {
           ) : null
         )}
       </>
-    );
+    )
   }
 }

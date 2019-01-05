@@ -1,30 +1,30 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import moment from 'moment';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import { Tabs, Tab } from '@material-ui/core/Tabs';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import ContentAddCircle from '@material-ui/icons/AddCircle';
-import ActionOpenInBrowser from '@material-ui/icons/OpenInBrowser';
-import ActionDelete from '@material-ui/icons/Delete';
-import brown from '@material-ui/core/colors/brown';
-import red from '@material-ui/core/colors/red';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import moment from 'moment'
+import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogActions from '@material-ui/core/DialogActions'
+import { Tabs, Tab } from '@material-ui/core/Tabs'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import ContentAddCircle from '@material-ui/icons/AddCircle'
+import ActionOpenInBrowser from '@material-ui/icons/OpenInBrowser'
+import ActionDelete from '@material-ui/icons/Delete'
+import brown from '@material-ui/core/colors/brown'
+import red from '@material-ui/core/colors/red'
 
 import {
   personalDB,
   createProject,
   updateProject,
   deleteProject
-} from '../database/';
-import EditableLabel from '../jsx/EditableLabel';
+} from '../database/'
+import EditableLabel from '../jsx/EditableLabel'
 
 const cn = {
   body: style({
@@ -60,7 +60,7 @@ const cn = {
     fontWeight: 600,
     marginRight: '1rem'
   })
-};
+}
 
 export default class CloneDialog extends PureComponent {
   static propTypes = {
@@ -71,7 +71,7 @@ export default class CloneDialog extends PureComponent {
     project: PropTypes.object,
     setProject: PropTypes.func.isRequired,
     launchIDE: PropTypes.func.isRequired
-  };
+  }
 
   state = {
     error: null,
@@ -80,19 +80,19 @@ export default class CloneDialog extends PureComponent {
     currentProject: this.props.project,
     // Default show projects same url (origin + pathname)
     showAllUrls: false
-  };
+  }
 
   get hasSaved() {
-    return !!this.state.currentProject;
+    return !!this.state.currentProject
   }
 
   componentDidMount() {
-    this.refreshState();
+    this.refreshState()
   }
 
   async refreshState(nextProject) {
-    const projects = await personalDB.projects.toArray();
-    projects.sort((a, b) => b.updated - a.updated);
+    const projects = await personalDB.projects.toArray()
+    projects.sort((a, b) => b.updated - a.updated)
     this.setState({
       projects,
       currentProject:
@@ -100,69 +100,69 @@ export default class CloneDialog extends PureComponent {
         (this.hasSaved
           ? projects.find(item => item.id === this.state.currentProject.id)
           : null)
-    });
+    })
   }
 
   handleCreate = async () => {
     if (this.hasSaved) {
-      return;
+      return
     }
-    this.setState({ processing: true });
+    this.setState({ processing: true })
 
     try {
       const project = await createProject(
         this.props.files.map(item => item.serialize())
-      );
-      await this.props.setProject(project);
-      await this.refreshState(project);
+      )
+      await this.props.setProject(project)
+      await this.refreshState(project)
     } catch (e) {
-      console.log(e);
+      console.log(e)
       if (typeof e === 'string' && e in this.props.localization.cloneDialog) {
-        alert(this.props.localization.cloneDialog[e]);
+        alert(this.props.localization.cloneDialog[e])
       }
     }
-    this.setState({ processing: false });
-  };
+    this.setState({ processing: false })
+  }
 
   handleTitleChange = async (project, title) => {
-    const { localization } = this.props;
+    const { localization } = this.props
 
-    this.setState({ processing: true });
+    this.setState({ processing: true })
     try {
-      const nextProject = await updateProject(project.id, { title });
+      const nextProject = await updateProject(project.id, { title })
 
       if (this.hasSaved && this.state.currentProject.id === project.id) {
         // Reset current project
-        await this.props.setProject(nextProject);
-        await this.refreshState(nextProject);
+        await this.props.setProject(nextProject)
+        await this.refreshState(nextProject)
       } else {
-        await this.refreshState();
+        await this.refreshState()
       }
     } catch (e) {
       if (typeof e === 'string') {
-        alert(localization.cloneDialog[e]);
+        alert(localization.cloneDialog[e])
       }
     }
-    this.setState({ processing: false });
-  };
+    this.setState({ processing: false })
+  }
 
   handleProcessStart = () => {
-    this.setState({ processing: true });
-  };
+    this.setState({ processing: true })
+  }
 
   handleProcessEnd = () => {
-    this.setState({ processing: false });
-    this.refreshState();
-  };
+    this.setState({ processing: false })
+    this.refreshState()
+  }
 
   render() {
-    const { onRequestClose, localization } = this.props;
-    const { currentProject } = this.state;
+    const { onRequestClose, localization } = this.props
+    const { currentProject } = this.state
 
-    const url = location.origin + location.pathname;
+    const url = location.origin + location.pathname
     const projects = (this.state.projects || []).filter(
       project => this.state.showAllUrls || project.url === url
-    );
+    )
 
     return (
       <Dialog open onClose={onRequestClose}>
@@ -248,23 +248,19 @@ export default class CloneDialog extends PureComponent {
             className={cn.button}
             onClick={() =>
               this.setState(prevState => {
-                return { showAllUrls: !prevState.showAllUrls };
+                return { showAllUrls: !prevState.showAllUrls }
               })
             }
           >
             {localization.menu.showAllUrls}
           </Button>
           ,
-          <Button
-            variant="text"
-            className={cn.button}
-            onClick={onRequestClose}
-          >
+          <Button variant="text" className={cn.button} onClick={onRequestClose}>
             {localization.cloneDialog.cancel}
           </Button>
         </DialogActions>
       </Dialog>
-    );
+    )
   }
 }
 
@@ -279,7 +275,7 @@ export class ProjectCard extends PureComponent {
     requestProjectSet: PropTypes.func.isRequired,
     requestTitleChange: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
-  };
+  }
 
   static defaultProps = {
     showURL: false,
@@ -288,32 +284,32 @@ export class ProjectCard extends PureComponent {
     onProcessEnd: () => {},
     requestProjectSet: () => {},
     requestTitleChange: () => {}
-  };
+  }
 
   handleLoad = () => {
-    return this.props.launchIDE(this.props.project);
-  };
+    return this.props.launchIDE(this.props.project)
+  }
 
   handleRemove = async () => {
-    const { project, localization } = this.props;
+    const { project, localization } = this.props
 
     if (!confirm(localization.common.cannotBeUndone)) {
-      return;
+      return
     }
 
-    this.props.onProcessStart();
+    this.props.onProcessStart()
     try {
       // Delete project and all included files
-      await deleteProject(project.id);
-      await this.props.requestProjectSet(null);
+      await deleteProject(project.id)
+      await this.props.requestProjectSet(null)
     } catch (e) {
-      alert(localization.cloneDialog.failedToRemove);
+      alert(localization.cloneDialog.failedToRemove)
     }
-    this.props.onProcessEnd();
-  };
+    this.props.onProcessEnd()
+  }
 
   render() {
-    const { localization, project } = this.props;
+    const { localization, project } = this.props
 
     const styles = {
       button: {
@@ -329,7 +325,7 @@ export class ProjectCard extends PureComponent {
         fontWeight: 600,
         marginRight: '1rem'
       }
-    };
+    }
 
     return (
       <Card key={project.id} className={styles.card}>
@@ -388,6 +384,6 @@ export class ProjectCard extends PureComponent {
           </Button>
         </CardActions>
       </Card>
-    );
+    )
   }
 }

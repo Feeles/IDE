@@ -11,6 +11,6 @@ export {
   deleteFile,
   /* Users */
   getPrimaryUser
-} from './personalDB';
+} from './personalDB'
 
-export { default as FileView } from './FileView';
+export { default as FileView } from './FileView'

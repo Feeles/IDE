@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import { url } from 'csx';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import { url } from 'csx'
 
-import MediaCard from './MediaCard/';
-import MonitorCard from './MonitorCard/';
-import PaletteCard from './PaletteCard/';
+import MediaCard from './MediaCard/'
+import MonitorCard from './MonitorCard/'
+import PaletteCard from './PaletteCard/'
 // import EnvCard from './EnvCard/';
-import ReadmeCard from './ReadmeCard/';
-import CustomizeCard from './CustomizeCard/';
+import ReadmeCard from './ReadmeCard/'
+import CustomizeCard from './CustomizeCard/'
 // import CreditsCard from './CreditsCard/';
-import ShotCard from './ShotCard/';
-import EditorCard from './EditorCard/';
-import HierarchyCard from './HierarchyCard/';
-import * as MonitorTypes from '../utils/MonitorTypes';
+import ShotCard from './ShotCard/'
+import EditorCard from './EditorCard/'
+import HierarchyCard from './HierarchyCard/'
+import * as MonitorTypes from '../utils/MonitorTypes'
 
 const cn = {
   container: style({
@@ -31,7 +31,7 @@ const cn = {
     backgroundPosition: 'center',
     backgroundSize: 'contain'
   })
-};
+}
 
 export default class CardContainer extends PureComponent {
   static propTypes = {
@@ -59,60 +59,60 @@ export default class CardContainer extends PureComponent {
     showNotice: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object
-  };
+  }
 
   state = {
     backgroundStyle: {}
-  };
+  }
 
   // Card Element の参照を保持するオブジェクト
-  cardRefs = {};
+  cardRefs = {}
 
   componentDidMount() {
-    this.updateBackgroundStyle();
+    this.updateBackgroundStyle()
   }
 
   componentDidUpdate(prevProps) {
     // visible が false から true にかわったらスクロールする
     if (prevProps.cardProps !== this.props.cardProps) {
       for (const name of Object.keys(this.props.cardProps)) {
-        const prev = prevProps.cardProps[name];
-        const { visible } = this.props.cardProps[name];
+        const prev = prevProps.cardProps[name]
+        const { visible } = this.props.cardProps[name]
         if ((!prev || !prev.visible) && visible) {
-          this.scrollToCard(name);
+          this.scrollToCard(name)
         }
       }
     }
     // 背景画像
     if (prevProps.files !== this.props.files) {
-      this.updateBackgroundStyle();
+      this.updateBackgroundStyle()
     }
   }
 
   updateBackgroundStyle() {
     const bg =
       this.props.findFile('feeles/background.png') ||
-      this.props.findFile('feeles/background.jpg');
-    const backgroundImage = bg ? url(bg.blobURL) : '';
-    const { backgroundStyle } = this.state;
+      this.props.findFile('feeles/background.jpg')
+    const backgroundImage = bg ? url(bg.blobURL) : ''
+    const { backgroundStyle } = this.state
     if (backgroundStyle.backgroundImage !== backgroundImage) {
       this.setState({
         backgroundStyle: { backgroundImage }
-      });
+      })
     }
   }
 
   scrollToCard = name => {
     // そのカードにスクロールする
-    const scrollTarget = document.getElementById(name);
+    const scrollTarget = document.getElementById(name)
     if (scrollTarget) {
       scrollTarget.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
         inline: 'nearest'
-      });
+      })
     }
-  };
+  }
 
   render() {
     const bag = name => ({
@@ -121,7 +121,7 @@ export default class CardContainer extends PureComponent {
       order: this.props.cardProps[name].order,
       cardProps: this.props.cardProps,
       showAll: this.props.showAll
-    });
+    })
 
     const commonProps = {
       fileView: this.props.fileView,
@@ -150,7 +150,7 @@ export default class CardContainer extends PureComponent {
       saveAs: this.props.saveAs,
       isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
       asset: this.props.asset
-    };
+    }
 
     return (
       <div className={cn.container} style={this.state.backgroundStyle}>
@@ -205,6 +205,6 @@ export default class CardContainer extends PureComponent {
           cardPropsBag={bag('HierarchyCard')}
         />
       </div>
-    );
+    )
   }
 }

@@ -7,12 +7,12 @@ export function parse(text) {
       .replace(/\n/g, '\\n')
       .replace(/\t/g, '\\t')
       .replace(/'/g, `'`)
-      .replace(/"/g, '\\"');
+      .replace(/"/g, '\\"')
 
   text = text
     .split('`')
     .map((seg, i) => (i % 2 === 1 ? escapeTL(seg) : seg))
-    .join('"');
+    .join('"')
 
-  return JSON.parse(text);
+  return JSON.parse(text)
 }

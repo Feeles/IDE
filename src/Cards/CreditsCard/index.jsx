@@ -1,27 +1,27 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import Card from '../CardWindow';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import Card from '../CardWindow'
 
-import CardFloatingBar from '../CardFloatingBar';
-import shallowEqual from '../../utils/shallowEqual';
-import uniqueBy from '../../utils/uniqueBy';
+import CardFloatingBar from '../CardFloatingBar'
+import shallowEqual from '../../utils/shallowEqual'
+import uniqueBy from '../../utils/uniqueBy'
 
 export default class CreditsCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
     files: PropTypes.array.isRequired,
     localization: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     credits: this.getCredits()
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.files !== this.props.files) {
-      const next = this.getCredits();
+      const next = this.getCredits()
       if (!shallowEqual(this.state.credits, next)) {
-        this.setState({ credits: next });
+        this.setState({ credits: next })
       }
     }
   }
@@ -29,9 +29,9 @@ export default class CreditsCard extends PureComponent {
   getCredits() {
     const credits = this.props.files
       .reduce((p, c) => p.concat(c.credits), [])
-      .sort((a, b) => a.timestamp > b.timestamp);
+      .sort((a, b) => a.timestamp > b.timestamp)
 
-    return uniqueBy(credits, 'label');
+    return uniqueBy(credits, 'label')
   }
 
   renderCredit(credit) {
@@ -45,7 +45,7 @@ export default class CreditsCard extends PureComponent {
           <span>{credit.label}</span>
         )}
       </div>
-    );
+    )
   }
 
   render() {
@@ -56,6 +56,6 @@ export default class CreditsCard extends PureComponent {
         </CardFloatingBar>
         {this.state.credits.map(this.renderCredit)}
       </Card>
-    );
+    )
   }
 }

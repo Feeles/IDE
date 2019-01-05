@@ -1,16 +1,16 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
-import brown from '@material-ui/core/colors/brown';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import Button from '@material-ui/core/Button'
+import brown from '@material-ui/core/colors/brown'
 
-import { personalDB, updateProject } from '../database/';
-import { ProjectCard } from '../Menu/CloneDialog';
-import { Typography } from '@material-ui/core';
+import { personalDB, updateProject } from '../database/'
+import { ProjectCard } from '../Menu/CloneDialog'
+import { Typography } from '@material-ui/core'
 
 const cn = {
   container: style({
@@ -32,7 +32,7 @@ const cn = {
   alignCenter: style({
     textAlign: 'center'
   })
-};
+}
 
 export default class LaunchDialog extends PureComponent {
   static propTypes = {
@@ -41,81 +41,81 @@ export default class LaunchDialog extends PureComponent {
     launchIDE: PropTypes.func.isRequired,
     fallback: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func.isRequired
-  };
+  }
 
   static defaultProps = {
     fallback: () => {}
-  };
+  }
 
   state = {
     projects: null
-  };
+  }
 
   componentDidMount() {
     if (this.props.open) {
-      this.refreshState();
+      this.refreshState()
     }
   }
 
   componentDidUpdate(prevProps) {
     if (!prevProps.open && this.props.open) {
-      this.refreshState();
+      this.refreshState()
     }
   }
 
   async refreshState() {
-    const url = location.origin + location.pathname;
+    const url = location.origin + location.pathname
     const projects = await personalDB.projects
       .filter(item => item.url === url)
-      .toArray();
+      .toArray()
 
     if (!projects.length) {
-      this.props.fallback();
-      this.props.onRequestClose();
+      this.props.fallback()
+      this.props.onRequestClose()
     } else {
-      projects.sort((a, b) => b.updated - a.updated);
+      projects.sort((a, b) => b.updated - a.updated)
       await new Promise(resolve => {
-        this.setState({ projects }, resolve);
-      });
+        this.setState({ projects }, resolve)
+      })
     }
   }
 
   async launchIDE(project) {
     try {
-      await this.props.launchIDE(project);
-      this.props.onRequestClose();
+      await this.props.launchIDE(project)
+      this.props.onRequestClose()
     } catch (e) {
-      alert(e.message || e);
+      alert(e.message || e)
     }
   }
 
   handleTitleChange = async (project, title) => {
-    const { localization } = this.props;
+    const { localization } = this.props
 
     try {
-      await updateProject(project.id, { title });
-      await this.refreshState();
+      await updateProject(project.id, { title })
+      await this.refreshState()
     } catch (e) {
       if (typeof e === 'string') {
-        alert(localization.cloneDialog[e]);
+        alert(localization.cloneDialog[e])
       }
     }
-  };
+  }
 
   renderLoading() {
     return (
       <Dialog modal open={this.props.open} style={{ textAlign: 'center' }}>
         <CircularProgress size={120} />
       </Dialog>
-    );
+    )
   }
 
   render() {
     if (!this.state.projects) {
-      return this.renderLoading();
+      return this.renderLoading()
     }
 
-    const { localization } = this.props;
+    const { localization } = this.props
 
     return (
       <Dialog open={this.props.open}>
@@ -146,6 +146,6 @@ export default class LaunchDialog extends PureComponent {
           </div>
         </DialogContent>
       </Dialog>
-    );
+    )
   }
 }

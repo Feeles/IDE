@@ -1,161 +1,161 @@
-import CodeMirror, { Pos } from 'codemirror';
-import 'codemirror/addon/hint/anyword-hint';
+import CodeMirror, { Pos } from 'codemirror'
+import 'codemirror/addon/hint/anyword-hint'
 
-const anywordHint = CodeMirror.hint.anyword;
+const anywordHint = CodeMirror.hint.anyword
 
 CodeMirror.hint.javascript = (instance, options) => {
-  const { cursor, token, empty } = getTokenInfo(instance);
+  const { cursor, token, empty } = getTokenInfo(instance)
 
   if (!/[\w.'"`]$/.test(token.string)) {
-    return empty;
+    return empty
   }
 
-  const result = anywordHint(instance, options) || empty;
+  const result = anywordHint(instance, options) || empty
 
   result.list = options.snippets
     .filter(snippet => startWith(snippet.prefix || snippet, token.string))
-    .concat(result.list);
+    .concat(result.list)
 
   if (token.type === 'string') {
-    const start = { line: cursor.line, ch: token.start + 1 };
+    const start = { line: cursor.line, ch: token.start + 1 }
     const prefix = instance
       .getLine(cursor.line)
-      .substr(start.ch, cursor.ch - start.ch);
+      .substr(start.ch, cursor.ch - start.ch)
 
     result.list = getCompleteNames(options.files, start, prefix).concat(
       result.list
-    );
+    )
   }
 
-  result.list = uniquify(result.list);
-  return result;
-};
+  result.list = uniquify(result.list)
+  return result
+}
 
-const htmlHint = CodeMirror.hint.html;
+const htmlHint = CodeMirror.hint.html
 
 CodeMirror.hint.html = (instance, options) => {
-  const { cursor, token, empty } = getTokenInfo(instance);
+  const { cursor, token, empty } = getTokenInfo(instance)
 
   if (token.type === null) {
-    return empty;
+    return empty
   }
   if (token.type === 'tag bracket' && token.string === '>') {
-    return empty;
+    return empty
   }
 
-  const result = htmlHint(instance, options) || empty;
+  const result = htmlHint(instance, options) || empty
 
   if (token.type === 'string') {
-    const start = { line: cursor.line, ch: token.start + 1 };
+    const start = { line: cursor.line, ch: token.start + 1 }
     const prefix = instance
       .getLine(cursor.line)
-      .substr(start.ch, cursor.ch - start.ch);
+      .substr(start.ch, cursor.ch - start.ch)
 
     result.list = getCompleteNames(options.files, start, prefix).concat(
       result.list
-    );
+    )
   }
 
-  result.list = uniquify(result.list);
-  return result;
-};
+  result.list = uniquify(result.list)
+  return result
+}
 
-const cssHint = CodeMirror.hint.css;
+const cssHint = CodeMirror.hint.css
 
 CodeMirror.hint.css = (instance, options) => {
-  const { cursor, token, empty } = getTokenInfo(instance);
+  const { cursor, token, empty } = getTokenInfo(instance)
 
   if (token.type === null) {
-    return empty;
+    return empty
   }
 
-  const result = cssHint(instance, options) || empty;
+  const result = cssHint(instance, options) || empty
 
   if (token.type === 'string') {
-    const start = new Pos(cursor.line, token.start);
+    const start = new Pos(cursor.line, token.start)
     result.list = getCompleteNames(options.files, start, token.string).concat(
       result.list
-    );
+    )
   }
 
-  result.list = uniquify(result.list);
-  return result;
-};
+  result.list = uniquify(result.list)
+  return result
+}
 
 CodeMirror.hint.markdown = (instance, options) => {
-  const { cursor, token, from, to, empty } = getTokenInfo(instance);
+  const { cursor, token, from, to, empty } = getTokenInfo(instance)
 
   if (token.type === 'string url') {
     const start = {
       line: cursor.line,
       ch: token.string[0] === '(' ? token.start + 1 : token.start
-    };
+    }
     const prefix = instance
       .getLine(cursor.line)
-      .substr(start.ch, cursor.ch - start.ch);
+      .substr(start.ch, cursor.ch - start.ch)
     return {
       list: getCompleteNames(options.files, start, prefix),
       from,
       to
-    };
+    }
   }
 
   if (!/[A-Za-z.'"`([]$/.test(token.string)) {
-    return empty;
+    return empty
   }
 
-  const result = empty;
+  const result = empty
 
   result.list = options.snippets
     .filter(snippet => startWith(snippet.prefix, token.string))
-    .concat(result.list);
+    .concat(result.list)
 
-  result.list = uniquify(result.list);
-  return result;
-};
+  result.list = uniquify(result.list)
+  return result
+}
 
 CodeMirror.hint.glsl = (instance, options) => {
-  const { token, empty } = getTokenInfo(instance);
+  const { token, empty } = getTokenInfo(instance)
 
   if (token.type === null) {
-    return empty;
+    return empty
   }
 
-  return CodeMirror.hint.anyword(instance, options);
-};
+  return CodeMirror.hint.anyword(instance, options)
+}
 
 function getCompleteNames(files, from, prefix = '') {
   return files
     .filter(file => startWith(file.name, prefix))
-    .map(file => ({ text: file.name, from }));
+    .map(file => ({ text: file.name, from }))
 }
 
 function startWith(text, needle) {
-  return text.toLowerCase().indexOf(needle.toLowerCase()) === 0;
+  return text.toLowerCase().indexOf(needle.toLowerCase()) === 0
 }
 
 function getTokenInfo(instance) {
-  const cursor = instance.getCursor();
-  const token = instance.getTokenAt(cursor);
-  const from = { line: cursor.line, ch: token.start };
-  const to = { line: cursor.line, ch: cursor.ch };
-  const empty = { list: [], from, to };
+  const cursor = instance.getCursor()
+  const token = instance.getTokenAt(cursor)
+  const from = { line: cursor.line, ch: token.start }
+  const to = { line: cursor.line, ch: cursor.ch }
+  const empty = { list: [], from, to }
 
-  return { cursor, token, from, to, empty };
+  return { cursor, token, from, to, empty }
 }
 
 // 同じ文字列または text に同じ文字列が入っているオブジェクトを排除する
 function uniquify(array) {
-  const result = [];
-  const textArray = array.map(
-    item => (typeof item.text === 'string' ? item.text : item)
-  );
+  const result = []
+  const textArray = array.map(item =>
+    typeof item.text === 'string' ? item.text : item
+  )
   for (const [index, text] of textArray.entries()) {
     // indexOf で配列内の最初に出てくるインデックスを取得
     // index と一致するなら配列内の最初の要素, 条件に合うものだけ push すればユニークになる
     if (index === textArray.indexOf(text)) {
-      result.push(array[index]);
+      result.push(array[index])
     }
   }
-  return result;
+  return result
 }

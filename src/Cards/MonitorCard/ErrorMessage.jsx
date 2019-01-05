@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import red from '@material-ui/core/colors/red';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import red from '@material-ui/core/colors/red'
 
 const cn = {
   root: style({
@@ -20,38 +20,38 @@ const cn = {
     overflow: 'scroll',
     fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
   })
-};
+}
 
 export default class ErrorMessage extends PureComponent {
   static propTypes = {
     error: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     error: null
-  };
+  }
 
   state = {
     open: false
-  };
+  }
 
   get message() {
-    return this.props.error ? this.props.error.message : '';
+    return this.props.error ? this.props.error.message : ''
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.error !== this.props.error) {
       this.setState({
         open: this.props.error !== null
-      });
+      })
     }
   }
 
   handleClose = () => {
     this.setState({
       open: false
-    });
-  };
+    })
+  }
 
   render() {
     return this.state.open ? (
@@ -70,6 +70,6 @@ export default class ErrorMessage extends PureComponent {
         </div>
         <pre className={cn.pre}>{this.message}</pre>
       </div>
-    ) : null;
+    ) : null
   }
 }

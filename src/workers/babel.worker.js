@@ -1,7 +1,7 @@
 // raw-loader!escape-loader
 
-import babelStandaloneJs from 'raw-loader!../lib/escape-loader!@babel/standalone/babel.min';
-import babelEnvStandaloneJs from 'raw-loader!@babel/preset-env-standalone/babel-preset-env.min.js';
+import babelStandaloneJs from 'raw-loader!../lib/escape-loader!@babel/standalone/babel.min'
+import babelEnvStandaloneJs from 'raw-loader!@babel/preset-env-standalone/babel-preset-env.min.js'
 
 const babelConfig = {
   presets: [
@@ -26,7 +26,7 @@ const babelConfig = {
       }
     ]
   ]
-};
+}
 
 const prefix = `
 self.addEventListener("message", function (event) {
@@ -59,14 +59,14 @@ self.addEventListener("message", function (event) {
     console.warn(error);
   }
 });
-`;
+`
 
 const url = URL.createObjectURL(
   new Blob([prefix, babelStandaloneJs, babelEnvStandaloneJs], {
     type: 'text/javascript'
   })
-);
+)
 
 export default function BabelWorker() {
-  return new Worker(url);
+  return new Worker(url)
 }

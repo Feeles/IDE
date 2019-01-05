@@ -1,7 +1,7 @@
-import blue from '@material-ui/core/colors/blue';
-import { px, rgb } from 'csx';
+import blue from '@material-ui/core/colors/blue'
+import { px, rgb } from 'csx'
 
-export const fontSize = 20;
+export const fontSize = 20
 
 export default ({ palette, shadows, transitions }) =>
   `
@@ -130,4 +130,4 @@ div.CodeMirror pre {
 div.CodeMirror-cursor {
   border-left-width: 2px;
 }
-`;
+`

@@ -1,19 +1,19 @@
-import { BinaryFile, SourceFile, validateType } from './';
+import { BinaryFile, SourceFile, validateType } from './'
 
 export default async script => {
-  await 1; // Be asynchronus.
+  await 1 // Be asynchronus.
 
-  const name = script.getAttribute('name');
-  const type = script.getAttribute('data-type');
+  const name = script.getAttribute('name')
+  const type = script.getAttribute('data-type')
   const options = {
     isTrashed: script.hasAttribute('is-trashed')
-  };
+  }
   const credits = script.hasAttribute('data-credits')
     ? JSON.parse(script.getAttribute('data-credits'))
-    : [];
-  const lastModified = +script.getAttribute('data-last-modified') || 0;
+    : []
+  const lastModified = +script.getAttribute('data-last-modified') || 0
 
-  const composed = script.textContent;
+  const composed = script.textContent
 
   if (validateType('blob', type)) {
     return new BinaryFile({
@@ -23,7 +23,7 @@ export default async script => {
       credits,
       lastModified,
       composed
-    });
+    })
   } else {
     return new SourceFile({
       type,
@@ -32,6 +32,6 @@ export default async script => {
       credits,
       lastModified,
       composed
-    });
+    })
   }
-};
+}

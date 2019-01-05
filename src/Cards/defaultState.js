@@ -52,4 +52,4 @@ export default {
     visible: false,
     order: 11
   }
-};
+}

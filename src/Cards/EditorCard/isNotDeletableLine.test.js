@@ -1,12 +1,12 @@
-import test from 'ava';
-import isNotDeletableLine from './isNotDeletableLine';
+import test from 'ava'
+import isNotDeletableLine from './isNotDeletableLine'
 
 const ok = [
   '',
   'await item1.walk();',
   'player.forward = [1, 0];',
   'feeles.openCode("code.js");'
-];
+]
 
 const ng = [
   undefined,
@@ -24,13 +24,13 @@ const ng = [
   '}',
   '/*',
   '*/'
-];
+]
 
 test('isNotDeletableLine', t => {
   for (const item of ok) {
-    t.false(isNotDeletableLine(item));
+    t.false(isNotDeletableLine(item))
   }
   for (const item of ng) {
-    t.true(isNotDeletableLine(item));
+    t.true(isNotDeletableLine(item))
   }
-});
+})

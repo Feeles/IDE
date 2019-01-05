@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
 
-import { separate } from '../../File/';
+import { separate } from '../../File/'
 
 const cn = {
   root: style({
@@ -17,52 +17,52 @@ const cn = {
     flex: '0 1 auto',
     height: 40
   })
-};
+}
 
 export default class Filename extends PureComponent {
   static propTypes = {
     file: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired
-  };
+  }
 
   state = {
     isEditing: false
-  };
+  }
 
   handleInput = ref => {
-    const { file, onChange } = this.props;
+    const { file, onChange } = this.props
 
-    if (!ref) return;
+    if (!ref) return
     ref.input.onchange = ({ target }) => {
-      onChange(file, target.value);
-      this.setState({ isEditing: false });
-    };
+      onChange(file, target.value)
+      this.setState({ isEditing: false })
+    }
     ref.input.onblur = () => {
-      this.setState({ isEditing: false });
-    };
-  };
+      this.setState({ isEditing: false })
+    }
+  }
 
-  touchFlag = false;
+  touchFlag = false
   handleDoubleTap = event => {
-    event.stopPropagation();
+    event.stopPropagation()
 
     if (this.touchFlag) {
-      this.setState({ isEditing: true });
-      return;
+      this.setState({ isEditing: true })
+      return
     }
-    this.touchFlag = true;
-    setTimeout(() => (this.touchFlag = false), 200);
-  };
+    this.touchFlag = true
+    setTimeout(() => (this.touchFlag = false), 200)
+  }
 
   handleTextFieldTap = event => {
-    event.stopPropagation();
-  };
+    event.stopPropagation()
+  }
 
   render() {
-    const { file } = this.props;
-    const { isEditing } = this.state;
+    const { file } = this.props
+    const { isEditing } = this.state
 
-    const { path, plain, ext, name } = separate(file.name);
+    const { path, plain, ext, name } = separate(file.name)
 
     return (
       <div className={cn.root}>
@@ -84,6 +84,6 @@ export default class Filename extends PureComponent {
           {ext}
         </Typography>
       </div>
-    );
+    )
   }
 }

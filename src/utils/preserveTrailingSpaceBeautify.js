@@ -1,4 +1,4 @@
-import beautify from 'js-beautify';
+import beautify from 'js-beautify'
 
 /**
  *
@@ -16,16 +16,16 @@ export default function preserveTrailingSpaceBeautify(
       source,
       options,
       uniqueLineEnd + 'MrhbRewZAi'
-    ); // ユニークになるまで...
+    ) // ユニークになるまで...
   }
 
-  source = source.replace(/^([ \t]+)$/gm, '$1' + uniqueLineEnd); // 行をトリムされないようにする
+  source = source.replace(/^([ \t]+)$/gm, '$1' + uniqueLineEnd) // 行をトリムされないようにする
   if (source.endsWith(uniqueLineEnd)) {
     // ファイル末尾のインデントは trim する
-    source = source.substr(0, source.length - uniqueLineEnd.length);
+    source = source.substr(0, source.length - uniqueLineEnd.length)
   }
-  source = beautify(source, options);
-  source = source.split(uniqueLineEnd + '\n').join('\n'); // 元に戻す
+  source = beautify(source, options)
+  source = source.split(uniqueLineEnd + '\n').join('\n') // 元に戻す
 
-  return source;
+  return source
 }

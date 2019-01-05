@@ -1,14 +1,14 @@
-import test from 'ava';
-import fs from 'fs';
-import path from 'path';
-import convertAsset from './convertAsset';
+import test from 'ava'
+import fs from 'fs'
+import path from 'path'
+import convertAsset from './convertAsset'
 
 test('convertAsset', t => {
   const assetPath = path.resolve(
     __dirname,
     '../../samples/hello-world/feeles/.asset.yml'
-  );
-  const assetYml = fs.readFileSync(assetPath, { encoding: 'utf8' });
+  )
+  const assetYml = fs.readFileSync(assetPath, { encoding: 'utf8' })
   t.deepEqual(convertAsset([assetYml]), {
     buttons: [ログ, item, _import],
     categories: [],
@@ -20,8 +20,8 @@ test('convertAsset', t => {
       }
     ],
     version: ''
-  });
-});
+  })
+})
 
 const base = {
   scopes: [0], // スコープのインデックスを配列で指定する. null の場合は常に表示
@@ -31,7 +31,7 @@ const base = {
   production: true, // www.hackforplay.xyz に表示する場合は true. earlybird だけなら false
   plan: 'free', // 'free' にする
   variations: null // 色違いなどひとまとめにするアセットの情報. このアセット本体も含む配列
-};
+}
 
 const ログ = {
   ...base,
@@ -39,7 +39,7 @@ const ログ = {
   description: null,
   insertCode: `console.log(('▼ ドロップダウン', 'ほげ'));\n`,
   filePath: null
-};
+}
 
 const item = {
   ...base,
@@ -54,7 +54,7 @@ function item1Func() {
 }
 `,
   filePath: null
-};
+}
 
 const _import = {
   ...base,
@@ -64,4 +64,4 @@ const _import = {
 console.log(message);
 `,
   filePath: 'sub/message.js'
-};
+}

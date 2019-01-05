@@ -1,5 +1,5 @@
-import { defaultPalette } from '../js/getCustomTheme';
-import Snippet from './Snippet';
+import { defaultPalette } from '../js/getCustomTheme'
+import Snippet from './Snippet'
 
 export default new Map([
   [
@@ -42,7 +42,7 @@ export default new Map([
       defaultName: 'snippets/snippet.json',
       bundle: files => {
         const snippets = files.reduce((p, file) => {
-          const { name, json } = file;
+          const { name, json } = file
           Object.keys(json).forEach(scope => {
             p[scope] = (p[scope] || []).concat(
               Object.keys(json[scope]).map(
@@ -57,17 +57,17 @@ export default new Map([
                     )
                   )
               )
-            );
-          });
-          return p;
-        }, Object.create(null));
-        const scopes = Object.keys(snippets);
+            )
+          })
+          return p
+        }, Object.create(null))
+        const scopes = Object.keys(snippets)
         return file =>
           scopes
             .filter(scope => file.is(scope))
             .map(scope => snippets[scope])
-            .reduce((p, c) => p.concat(c), []);
+            .reduce((p, c) => p.concat(c), [])
       }
     }
   ]
-]);
+])

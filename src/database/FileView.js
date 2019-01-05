@@ -1,5 +1,5 @@
-import includes from 'lodash/includes';
-import { putFile, deleteFile } from './';
+import includes from 'lodash/includes'
+import { putFile, deleteFile } from './'
 
 /**
  * ファイルの状態を In Memory & IndexedDB で保有するストア
@@ -9,35 +9,35 @@ import { putFile, deleteFile } from './';
  */
 export default class FileView {
   constructor(files) {
-    this.files = files;
-    this._changed = true; // files 変更フラグ
+    this.files = files
+    this._changed = true // files 変更フラグ
   }
 
   install(component) {
-    this.component = component;
+    this.component = component
     /* 
 	互換性保持のため, つねに最新のステートを参照するAPIをのこす
     いずれ this.state.fileView を直接 propergate させたい
 	*/
-    component.addFile = this.addFile.bind(this);
-    component.putFile = this.putFile.bind(this);
-    component.deleteFile = this.deleteFile.bind(this);
-    component.findFile = this.findFile.bind(this);
+    component.addFile = this.addFile.bind(this)
+    component.putFile = this.putFile.bind(this)
+    component.deleteFile = this.deleteFile.bind(this)
+    component.findFile = this.findFile.bind(this)
   }
 
   uninstall() {
-    this.component = null;
+    this.component = null
   }
 
   setState({ files }) {
-    this._changed = true; // Index するフラグ
-    if (!files) throw 'Cannot set other than files';
-    if (!this.component) throw 'Component is not been set';
-    const fileView = new FileView(files);
-    fileView.install(this.component);
+    this._changed = true // Index するフラグ
+    if (!files) throw 'Cannot set other than files'
+    if (!this.component) throw 'Component is not been set'
+    const fileView = new FileView(files)
+    fileView.install(this.component)
     return this.component.setStatePromise({
       fileView
-    });
+    })
   }
 
   /**
@@ -46,8 +46,8 @@ export default class FileView {
    * @return {SourceFile|BinalyFile|null} ファイルまたは null
    */
   getFileByFullPath(path) {
-    this.updateIndex();
-    return this.pathToFileMap.get(path);
+    this.updateIndex()
+    return this.pathToFileMap.get(path)
   }
 
   /**
@@ -56,8 +56,8 @@ export default class FileView {
    * @return {Array<SourceFile|BinalyFile>} ファイルの配列
    */
   getFilesByExtention(ext) {
-    this.updateIndex();
-    return this.extToFilesMap.get(ext) || [];
+    this.updateIndex()
+    return this.extToFilesMap.get(ext) || []
   }
 
   /**
@@ -66,52 +66,52 @@ export default class FileView {
    */
   updateIndex() {
     // files が変更されていればあらたにインデックス
-    if (!this._changed) return;
-    this._changed = false;
+    if (!this._changed) return
+    this._changed = false
 
-    this.pathToFileMap = new Map();
-    this.extToFilesMap = new Map();
+    this.pathToFileMap = new Map()
+    this.extToFilesMap = new Map()
 
     const append = (name, file) => {
       // name => File
-      this.pathToFileMap.set(name, file);
+      this.pathToFileMap.set(name, file)
       // extention => File
-      const [, ...extArray] = name.split('.');
-      if (!extArray.length) return;
-      const ext = extArray.join('.');
+      const [, ...extArray] = name.split('.')
+      if (!extArray.length) return
+      const ext = extArray.join('.')
       if (this.extToFilesMap.has(ext)) {
-        const files = this.extToFilesMap.get(ext);
-        this.extToFilesMap.set(ext, files.concat(file));
+        const files = this.extToFilesMap.get(ext)
+        this.extToFilesMap.set(ext, files.concat(file))
       } else {
-        this.extToFilesMap.set(ext, [file]);
+        this.extToFilesMap.set(ext, [file])
       }
-    };
+    }
 
     // i18n 以外
-    const i18n = [];
+    const i18n = []
     for (const file of this.files) {
       if (!file.name.startsWith('i18n/')) {
-        append(file.name, file);
+        append(file.name, file)
       } else {
-        i18n.push(file);
+        i18n.push(file)
       }
     }
     // i18n/{ll_CC} を追加
-    const { ll_CC } = this.component.props.localization;
+    const { ll_CC } = this.component.props.localization
     for (const file of i18n) {
-      const [, locale, ...virtualPath] = file.name.split('/');
+      const [, locale, ...virtualPath] = file.name.split('/')
       if (locale === ll_CC) {
-        append(virtualPath.join('/'), file);
+        append(virtualPath.join('/'), file)
       }
     }
   }
 
   forceUpdate() {
-    const fileView = new FileView(this.files);
-    fileView.install(this.component);
+    const fileView = new FileView(this.files)
+    fileView.install(this.component)
     return this.component.setStatePromise({
       fileView
-    });
+    })
   }
 
   /**
@@ -121,9 +121,9 @@ export default class FileView {
    */
   findFile(name, multiple = false) {
     if (typeof name === 'string') {
-      name = name.replace(/^(\.\/|\/)*/, '');
+      name = name.replace(/^(\.\/|\/)*/, '')
     }
-    const i18nName = `i18n/${this.component.props.localization.ll_CC}/${name}`;
+    const i18nName = `i18n/${this.component.props.localization.ll_CC}/${name}`
     const pred =
       typeof name === 'function'
         ? name
@@ -134,9 +134,9 @@ export default class FileView {
               file.moduleName === i18nName ||
               // 通常のファイルパス解決
               file.name === name ||
-              file.moduleName === name);
+              file.moduleName === name)
 
-    return multiple ? this.files.filter(pred) : this.files.find(pred) || null;
+    return multiple ? this.files.filter(pred) : this.files.find(pred) || null
   }
 
   /**
@@ -144,21 +144,21 @@ export default class FileView {
    * @param {SourceFile|BinalyFile} file 追加するファイル
    */
   async addFile(file) {
-    const remove = this.inspection(file);
+    const remove = this.inspection(file)
     if (file === remove) {
-      return file;
+      return file
     }
-    const files = this.files.concat(file).filter(item => item !== remove);
+    const files = this.files.concat(file).filter(item => item !== remove)
 
     await this.setState({
       files
-    });
-    await this.component.resetConfig(file.name);
+    })
+    await this.component.resetConfig(file.name)
 
     if (this.component.state.project) {
-      await putFile(this.component.state.project.id, file.serialize());
+      await putFile(this.component.state.project.id, file.serialize())
     }
-    return file;
+    return file
   }
 
   /**
@@ -168,33 +168,33 @@ export default class FileView {
    */
   async putFile(prevFile, nextFile) {
     if (nextFile === undefined) {
-      return this.addFile(prevFile);
+      return this.addFile(prevFile)
     }
-    console.time('putFile 1');
-    const remove = this.inspection(nextFile);
-    console.timeEnd('putFile 1');
+    console.time('putFile 1')
+    const remove = this.inspection(nextFile)
+    console.timeEnd('putFile 1')
     if (remove === nextFile) {
-      return prevFile;
+      return prevFile
     }
     const files = this.files
       .filter(item => item !== remove && item.key !== prevFile.key)
-      .concat(nextFile);
-    console.time('putFile 2');
+      .concat(nextFile)
+    console.time('putFile 2')
 
     await this.setState({
       files
-    });
-    console.timeEnd('putFile 2');
-    console.time('putFile 3');
-    this.component.resetConfig(prevFile.name);
-    console.timeEnd('putFile 3');
+    })
+    console.timeEnd('putFile 2')
+    console.time('putFile 3')
+    this.component.resetConfig(prevFile.name)
+    console.timeEnd('putFile 3')
 
     if (this.component.state.project) {
-      console.time('putFile 4');
-      await putFile(this.component.state.project.id, nextFile.serialize());
-      console.timeEnd('putFile 4');
+      console.time('putFile 4')
+      await putFile(this.component.state.project.id, nextFile.serialize())
+      console.timeEnd('putFile 4')
     }
-    return nextFile;
+    return nextFile
   }
 
   /**
@@ -202,15 +202,15 @@ export default class FileView {
    * @param {Array<SourceFile|BinalyFile>} targets 削除するファイル
    */
   async deleteFile(...targets) {
-    const keys = targets.map(item => item.key);
-    const files = this.files.filter(item => !includes(keys, item.key));
+    const keys = targets.map(item => item.key)
+    const files = this.files.filter(item => !includes(keys, item.key))
     await this.setState({
       files
-    });
+    })
 
     if (this.component.state.project) {
-      const fileNames = targets.map(item => item.name);
-      await deleteFile(this.component.state.project.id, ...fileNames);
+      const fileNames = targets.map(item => item.name)
+      await deleteFile(this.component.state.project.id, ...fileNames)
     }
   }
 
@@ -225,13 +225,13 @@ export default class FileView {
         !file.options.isTrashed &&
         file.key !== newFile.key &&
         file.name === newFile.name
-    );
+    )
 
     if (conflict) {
       // TODO: FileDialog instead of.
       // 一時的に "強制上書き" にする
-      console.log(newFile);
-      return conflict;
+      console.log(newFile)
+      return conflict
       // if (confirm(this.component.props.localization.common.conflict)) {
       //   return conflict;
       // } else {
@@ -239,6 +239,6 @@ export default class FileView {
       // }
     }
 
-    return null;
+    return null
   }
 }

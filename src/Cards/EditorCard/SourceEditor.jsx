@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import beautify from 'js-beautify';
-import { Pos } from 'codemirror';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import beautify from 'js-beautify'
+import { Pos } from 'codemirror'
 
-import LineWidget from './LineWidget';
-import Editor from './Editor';
-import MenuBar from './MenuBar';
-import AssetPane from './AssetPane';
-import ErrorPane from './ErrorPane';
+import LineWidget from './LineWidget'
+import Editor from './Editor'
+import MenuBar from './MenuBar'
+import AssetPane from './AssetPane'
+import ErrorPane from './ErrorPane'
 // import zenkakuToHankaku from './zenkakuToHankaku';
-import foldAsset from './foldAsset';
-import { withTheme } from '@material-ui/core';
-import preserveTrailingSpaceBeautify from '../../utils/preserveTrailingSpaceBeautify';
+import foldAsset from './foldAsset'
+import { withTheme } from '@material-ui/core'
+import preserveTrailingSpaceBeautify from '../../utils/preserveTrailingSpaceBeautify'
 
 const cn = {
   root: style({
@@ -41,7 +41,7 @@ const cn = {
   blank: style({
     flex: '1 1 auto'
   })
-};
+}
 
 @withTheme()
 export default class SourceEditor extends PureComponent {
@@ -65,7 +65,7 @@ export default class SourceEditor extends PureComponent {
     filePathToBack: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object
-  };
+  }
 
   state = {
     file: null,
@@ -77,56 +77,56 @@ export default class SourceEditor extends PureComponent {
     loading: false,
     snippets: [],
     showLineWidget: true
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.fileView !== this.props.fileView && this.state.file) {
       this.setState({
         snippets: this.props.getConfig('snippets')(this.state.file)
-      });
+      })
     }
 
     if (this.props.filePath && this.props.filePath !== prevProps.filePath) {
-      this.handleUpdateFile();
+      this.handleUpdateFile()
     }
   }
 
   componentDidMount() {
     if (this.props.filePath) {
-      this.handleUpdateFile();
+      this.handleUpdateFile()
     }
   }
 
   handleCodemirror = codemirror => {
-    this.codemirror = codemirror;
+    this.codemirror = codemirror
     // アセットの入力で全角文字を使うので, この仕様は消している
     // this.codemirror.on('beforeChange', zenkakuToHankaku);
     const onChange = cm => {
       this.setState({
         hasHistory: cm.historySize().undo > 0,
         hasChanged: cm.getValue('\n') !== this.state.file.text
-      });
-    };
-    this.codemirror.on('change', onChange);
-    this.codemirror.on('swapDoc', onChange);
-    this.codemirror.on('swapDoc', this.foldAll);
-    this.foldAll(codemirror);
-    this.forceUpdate();
-  };
+      })
+    }
+    this.codemirror.on('change', onChange)
+    this.codemirror.on('swapDoc', onChange)
+    this.codemirror.on('swapDoc', this.foldAll)
+    this.foldAll(codemirror)
+    this.forceUpdate()
+  }
 
   foldAll = cm => {
-    const opt = { rangeFinder: foldAsset };
+    const opt = { rangeFinder: foldAsset }
     for (let line = cm.lineCount() - 1; line >= 0; line--) {
-      cm.foldCode(new Pos(line, 0), opt, 'fold');
+      cm.foldCode(new Pos(line, 0), opt, 'fold')
     }
-  };
+  }
 
   handleUpdateFile() {
-    const { filePath, findFile } = this.props;
-    const file = findFile(filePath);
+    const { filePath, findFile } = this.props
+    const file = findFile(filePath)
 
     if (file && file !== this.state.file) {
-      this.setFile(file);
+      this.setFile(file)
     }
   }
 
@@ -135,121 +135,121 @@ export default class SourceEditor extends PureComponent {
       file,
       showHint: !file.is('json'),
       snippets: this.props.getConfig('snippets')(file)
-    });
+    })
   }
 
   runApp = async href => {
-    const { file } = this.state;
-    if (!this.codemirror || !file) return;
+    const { file } = this.state
+    if (!this.codemirror || !file) return
 
-    this.beautify(this.codemirror); // Auto beautify
-    const text = this.codemirror.getValue();
+    this.beautify(this.codemirror) // Auto beautify
+    const text = this.codemirror.getValue()
 
-    this.setState({ loading: true, babelError: null });
+    this.setState({ loading: true, babelError: null })
 
     // Like a watching
     try {
-      const nextFile = file.set({ text });
-      await nextFile.babel();
-      await this.props.putFile(file, nextFile);
+      const nextFile = file.set({ text })
+      await nextFile.babel()
+      await this.props.putFile(file, nextFile)
 
       // 再読み込み
-      this.props.setLocation(href);
+      this.props.setLocation(href)
     } catch (error) {
       this.props.globalEvent.emit('message.editor', {
         data: { value: file.name }
-      }); // もう一度ファイルを開かせる
+      }) // もう一度ファイルを開かせる
 
       this.setState({
         babelError: error
-      });
-      console.info(error);
+      })
+      console.info(error)
     }
 
-    this.setState({ loading: false });
-  };
+    this.setState({ loading: false })
+  }
 
   handleUndo = () => {
-    this.codemirror.undo();
-  };
+    this.codemirror.undo()
+  }
 
   handleRestore = () => {
-    const { file } = this.state;
-    const cm = this.codemirror;
-    if (!file || !cm) return;
-    const { left, top } = cm.getScrollInfo();
-    this.codemirror.scrollTo(left, top);
+    const { file } = this.state
+    const cm = this.codemirror
+    if (!file || !cm) return
+    const { left, top } = cm.getScrollInfo()
+    this.codemirror.scrollTo(left, top)
 
     // 変更を加える前の状態(前回保存したところ)に戻す
     while (cm.historySize().undo > 0) {
-      cm.undo(); // ひとつ前に戻す
+      cm.undo() // ひとつ前に戻す
       if (cm.getValue() === file.text) {
         // 前回の保存内容と同じになった
-        break;
+        break
       }
     }
 
     if (cm.getValue() !== file.text) {
       // 履歴を遡っても同じにはならなかった(履歴が混在している)
-      cm.clearHistory();
-      cm.setValue(file.text);
+      cm.clearHistory()
+      cm.setValue(file.text)
     }
-    this.codemirror.scrollTo(left, top);
-    this.runApp();
-  };
+    this.codemirror.scrollTo(left, top)
+    this.runApp()
+  }
 
   beautify = () => {
-    const { fileView } = this.props;
-    const { file } = this.state;
-    const prevValue = this.codemirror.getValue();
+    const { fileView } = this.props
+    const { file } = this.state
+    const prevValue = this.codemirror.getValue()
     const setValueWithoutHistory = replacement => {
       // undo => beautify => setValue することで history を 1 つに
-      const { left, top } = this.codemirror.getScrollInfo();
-      this.codemirror.undo();
-      this.codemirror.setValue(replacement);
-      this.codemirror.scrollTo(left, top);
-    };
+      const { left, top } = this.codemirror.getScrollInfo()
+      this.codemirror.undo()
+      this.codemirror.setValue(replacement)
+      this.codemirror.scrollTo(left, top)
+    }
 
     // import .jsbeautifyrc
-    let configs = {};
+    let configs = {}
     try {
-      const runCommand = fileView.getFileByFullPath('.jsbeautifyrc');
+      const runCommand = fileView.getFileByFullPath('.jsbeautifyrc')
       if (runCommand) {
-        configs = JSON.parse(runCommand.text);
+        configs = JSON.parse(runCommand.text)
       }
     } catch (error) {
-      console.info(error);
+      console.info(error)
     }
 
     if (file.is('javascript') || file.is('json')) {
       setValueWithoutHistory(
         preserveTrailingSpaceBeautify(prevValue, configs.js || {})
-      );
+      )
     } else if (file.is('html')) {
-      setValueWithoutHistory(beautify.html(prevValue, configs.html || {}));
+      setValueWithoutHistory(beautify.html(prevValue, configs.html || {}))
     } else if (file.is('css')) {
-      setValueWithoutHistory(beautify.css(prevValue, configs.css || {}));
+      setValueWithoutHistory(beautify.css(prevValue, configs.css || {}))
     }
-  };
+  }
 
   setValue(value) {
-    const { left, top } = this.codemirror.getScrollInfo();
-    this.codemirror.setValue(value);
-    this.codemirror.scrollTo(left, top);
+    const { left, top } = this.codemirror.getScrollInfo()
+    this.codemirror.setValue(value)
+    this.codemirror.scrollTo(left, top)
   }
 
   setShowLineWidget = showLineWidget => {
     this.setState({
       showLineWidget
-    });
-  };
+    })
+  }
 
   render() {
-    const { localization } = this.props;
-    const { file, showHint } = this.state;
+    const { localization } = this.props
+    const { file, showHint } = this.state
 
     if (!file) {
-      return null;
+      return null
     }
 
     // const snippets = this.props.getConfig('snippets')(file);
@@ -258,21 +258,21 @@ export default class SourceEditor extends PureComponent {
       'Ctrl-Enter': () => {
         // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
         // それをやり過ごしてから実行する
-        window.setTimeout(this.runApp, 10);
+        window.setTimeout(this.runApp, 10)
       },
       'Ctrl-Alt-B': () => {
         // Key Binding された操作の直後にカーソルが先頭に戻ってしまう(?)ため,
         // それをやり過ごしてから実行する
-        window.setTimeout(this.beautify, 10);
+        window.setTimeout(this.beautify, 10)
       }
-    };
+    }
     const foldOptions = {
       widget: ' ... ',
       minFoldSize: 1,
       scanUp: false
-    };
+    }
     if (file.is('javascript')) {
-      foldOptions.rangeFinder = foldAsset;
+      foldOptions.rangeFinder = foldAsset
     }
 
     return (
@@ -338,6 +338,6 @@ export default class SourceEditor extends PureComponent {
           />
         )}
       </div>
-    );
+    )
   }
 }

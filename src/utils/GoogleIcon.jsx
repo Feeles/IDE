@@ -1,18 +1,18 @@
-import React from 'react';
-import SvgIcon from '@material-ui/core/SvgIcon';
+import React from 'react'
+import SvgIcon from '@material-ui/core/SvgIcon'
 
-GoogleIcon.propTypes = {};
+GoogleIcon.propTypes = {}
 
 export default function GoogleIcon(props) {
   const style = {
     width: 48,
     height: 48,
     margin: 0
-  };
+  }
   return (
     <SvgIcon viewBox="0 0 46 46" {...props} style={style}>
       {/* Generator: Sketch 3.3.3 (12081) - http://www.bohemiancoding.com/sketch
-      */}
+       */}
       <title>btn_google_dark_normal_ios</title>
       <desc>Created with Sketch.</desc>
       <defs>
@@ -124,5 +124,5 @@ export default function GoogleIcon(props) {
         </g>
       </g>
     </SvgIcon>
-  );
+  )
 }

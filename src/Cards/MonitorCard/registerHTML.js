@@ -1,5 +1,5 @@
-import screenJs from '../../lib/screen';
-import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
+import screenJs from '../../lib/screen'
+import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime'
 
 /**
  * @param html:String
@@ -17,63 +17,63 @@ import regeneratorRuntimePolyfill from 'raw-loader!regenerator-runtime/runtime';
  * 6. regeneratorRuntime
  */
 export default async (html, findFile, env) => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
 
   const appendScript = (lastNode => text => {
-    const script = doc.createElement('script');
-    script.type = 'text/javascript';
-    script.text = text;
-    doc.head.insertBefore(script, lastNode && lastNode.nextSibling);
+    const script = doc.createElement('script')
+    script.type = 'text/javascript'
+    script.text = text
+    doc.head.insertBefore(script, lastNode && lastNode.nextSibling)
 
-    lastNode = script;
-  })(doc.head.firstChild);
+    lastNode = script
+  })(doc.head.firstChild)
 
   // 0. window.feeles と 環境変数 env のエクスポート
-  appendScript(`window.feeles = { env: ${JSON.stringify(env)} };`);
+  appendScript(`window.feeles = { env: ${JSON.stringify(env)} };`)
 
   // 1. headタグの一番上に screenJs を埋め込む
-  appendScript(screenJs(env.MODULE));
+  appendScript(screenJs(env.MODULE))
 
   // 2. src 属性を BinaryFile の Data URL に差し替える
-  const binaries = [...doc.images];
+  const binaries = [...doc.images]
   for (const node of binaries) {
-    const file = findFile(node.getAttribute('src'));
-    if (!file) continue;
+    const file = findFile(node.getAttribute('src'))
+    if (!file) continue
 
-    const dataURL = await file.toDataURL();
-    node.setAttribute('src', dataURL);
+    const dataURL = await file.toDataURL()
+    node.setAttribute('src', dataURL)
   }
 
   // 2.1 link 要素の href 属性を Data URL に差し替える
   for (const node of [...doc.querySelectorAll('link')]) {
-    const file = findFile(node.getAttribute('href'));
-    if (!file) continue;
+    const file = findFile(node.getAttribute('href'))
+    if (!file) continue
 
     if (file.is('css') && file.text.indexOf('url') >= 0) {
       const replaced = file.set({
         text: await replaceUrls(file.text, findFile)
-      });
-      node.setAttribute('href', await replaced.toDataURL());
+      })
+      node.setAttribute('href', await replaced.toDataURL())
     } else {
-      node.setAttribute('href', await file.toDataURL());
+      node.setAttribute('href', await file.toDataURL())
     }
   }
 
   // 4. スクリプトタグの src 属性を requirejs を Data URL に差し替える
   for (const node of [...doc.scripts]) {
-    if (node.type && node.type !== 'text/javascript') continue;
-    const file = findFile(node.getAttribute('src'));
-    if (!file) continue;
+    if (node.type && node.type !== 'text/javascript') continue
+    const file = findFile(node.getAttribute('src'))
+    if (!file) continue
 
     if (env.MODULE) {
       const dataURL =
         'data:text/javascript;charset=UTF-8,' +
-        encodeURIComponent(requireTemplate(file.moduleName));
-      node.setAttribute('src', dataURL);
+        encodeURIComponent(requireTemplate(file.moduleName))
+      node.setAttribute('src', dataURL)
     } else {
-      node.text = file.text;
-      node.removeAttribute('src');
+      node.text = file.text
+      node.removeAttribute('src')
     }
   }
 
@@ -81,34 +81,34 @@ export default async (html, findFile, env) => {
   for (const node of [...doc.links]) {
     if (node.getAttribute('target') === '_blank') {
       // 別タブで開くリンクはリプレイスしない
-      continue;
+      continue
     }
-    const href = node.getAttribute('href') || '';
-    node.setAttribute('href', '#');
-    node.setAttribute('onclick', `feeles.replace('${href}')`);
+    const href = node.getAttribute('href') || ''
+    node.setAttribute('href', '#')
+    node.setAttribute('onclick', `feeles.replace('${href}')`)
   }
 
   // 6. regeneratorRuntime
-  appendScript(regeneratorRuntimePolyfill);
+  appendScript(regeneratorRuntimePolyfill)
 
-  return doc.documentElement.outerHTML;
-};
+  return doc.documentElement.outerHTML
+}
 
-const requireTemplate = src => `requirejs(['${src}'])`;
+const requireTemplate = src => `requirejs(['${src}'])`
 
 const replaceUrls = async (text, findFile) => {
-  const regExp = /url\(.*\)/g;
-  const matches = text.match(regExp);
-  if (!matches) return text;
+  const regExp = /url\(.*\)/g
+  const matches = text.match(regExp)
+  if (!matches) return text
 
   for (const token of matches) {
-    const path = token.substr(4, token.length - 5);
-    const file = findFile(path);
+    const path = token.substr(4, token.length - 5)
+    const file = findFile(path)
     if (file) {
-      const dataURL = await file.toDataURL();
-      text = text.replace(token, `url(${dataURL})`);
+      const dataURL = await file.toDataURL()
+      text = text.replace(token, `url(${dataURL})`)
     }
   }
 
-  return text;
-};
+  return text
+}

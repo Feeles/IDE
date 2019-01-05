@@ -1,5 +1,5 @@
 export default function validateType(name, mimeType) {
-  return types.has(name) && types.get(name).test(mimeType);
+  return types.has(name) && types.get(name).test(mimeType)
 }
 
 const mimes = new Map([
@@ -14,7 +14,7 @@ const mimes = new Map([
   ['glsl', /^text\/(x-)?glsl/i],
   ['image', /^image\/.*$/i],
   ['audio', /^audio\/.*$/i]
-]);
+])
 
 const metas = [
   [
@@ -41,6 +41,6 @@ const metas = [
 ].map(([key, regExps]) => [
   key,
   new RegExp(regExps.map(regExp => regExp.source).join('|'), 'i')
-]);
+])
 
-const types = new Map([...mimes, ...metas]);
+const types = new Map([...mimes, ...metas])

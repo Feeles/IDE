@@ -1,5 +1,5 @@
-import test from 'ava';
-import preserveTrailingSpaceBeautify from './preserveTrailingSpaceBeautify';
+import test from 'ava'
+import preserveTrailingSpaceBeautify from './preserveTrailingSpaceBeautify'
 
 test('preserveTrailingSpaceBeautify', t => {
   const input = `
@@ -13,7 +13,7 @@ function () {
 	}
 	
 }
-			`.trimLeft();
+			`.trimLeft()
   const output = `
 function() {
 	
@@ -26,11 +26,11 @@ function() {
 	}
 	
 }
-`.trimLeft();
+`.trimLeft()
   const options = {
     indent_with_tabs: true,
     end_with_newline: true,
     brace_style: 'collapse-preserve-inline'
-  };
-  t.is(preserveTrailingSpaceBeautify(input, options), output);
-});
+  }
+  t.is(preserveTrailingSpaceBeautify(input, options), output)
+})

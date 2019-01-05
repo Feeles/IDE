@@ -1,24 +1,24 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import AutoComplete from '../../jsx/IntegrationReactSelect';
-import Paper from '@material-ui/core/Paper';
-import ActionSearch from '@material-ui/icons/Search';
-import Button from '@material-ui/core/Button';
-import ActionDeleteForever from '@material-ui/icons/DeleteForever';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import AutoComplete from '../../jsx/IntegrationReactSelect'
+import Paper from '@material-ui/core/Paper'
+import ActionSearch from '@material-ui/icons/Search'
+import Button from '@material-ui/core/Button'
+import ActionDeleteForever from '@material-ui/icons/DeleteForever'
 
-import TrashBox from './TrashBox';
-import search, { getOptions } from './search';
-import DesktopFile from './DesktopFile';
+import TrashBox from './TrashBox'
+import search, { getOptions } from './search'
+import DesktopFile from './DesktopFile'
 
-const SearchBarHeight = 40;
+const SearchBarHeight = 40
 
 const cn = {
   icon: style({
     marginTop: 4
   })
-};
+}
 const getCn = props => ({
   root: style({
     display: 'flex',
@@ -43,7 +43,7 @@ const getCn = props => ({
     height: SearchBarHeight,
     marginLeft: props.theme.spacing.unit
   })
-});
+})
 
 @withTheme()
 export default class SearchBar extends PureComponent {
@@ -56,57 +56,57 @@ export default class SearchBar extends PureComponent {
     onOpen: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     showTrashes: false,
     query: ''
-  };
+  }
 
   componentDidMount() {
-    this.handleUpdate('');
+    this.handleUpdate('')
   }
 
   handleUpdate = (value, context) => {
-    const query = typeof value === 'object' ? value.value : value;
+    const query = typeof value === 'object' ? value.value : value
     if (!query && context) {
       if (context.action !== 'input-change') {
         // react-select は value="" でイベント発火することがある
-        return;
+        return
       }
     }
-    const { filterRef } = this.props;
+    const { filterRef } = this.props
 
-    const options = getOptions(query);
-    filterRef(file => search(file, query, options));
+    const options = getOptions(query)
+    filterRef(file => search(file, query, options))
 
     this.setState({
       query,
       showTrashes: options.showTrashes
-    });
-  };
+    })
+  }
 
   handleTrashBoxTap = () => {
-    const { query, showTrashes } = this.state;
+    const { query, showTrashes } = this.state
 
     if (!showTrashes) {
-      this.handleUpdate(':trash ' + query);
+      this.handleUpdate(':trash ' + query)
     } else {
-      this.handleUpdate(query.replace(/(^|\s):trash(\s|$)/g, '$1'));
+      this.handleUpdate(query.replace(/(^|\s):trash(\s|$)/g, '$1'))
     }
-  };
+  }
 
   render() {
-    const dcn = getCn(this.props);
-    const { putFile, onOpen, deleteAll, localization } = this.props;
-    const { showTrashes, query } = this.state;
+    const dcn = getCn(this.props)
+    const { putFile, onOpen, deleteAll, localization } = this.props
+    const { showTrashes, query } = this.state
     const fileNames = this.props.files
       .map(f => f.moduleName)
       .filter(s => s)
       .map(s => ({
         value: s,
         label: s
-      }));
+      }))
 
     return (
       <div className={dcn.root}>
@@ -137,6 +137,6 @@ export default class SearchBar extends PureComponent {
           </Button>
         ) : null}
       </div>
-    );
+    )
   }
 }

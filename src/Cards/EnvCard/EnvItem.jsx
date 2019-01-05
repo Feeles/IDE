@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import TextField from '@material-ui/core/TextField'
+import Checkbox from '@material-ui/core/Checkbox'
 
-import EditableLabel from '../../jsx/EditableLabel';
+import EditableLabel from '../../jsx/EditableLabel'
 
 const cn = {
   root: style({
@@ -37,7 +37,7 @@ const cn = {
   stringField: style({
     width: 200
   })
-};
+}
 
 export default class EnvItem extends PureComponent {
   static propTypes = {
@@ -45,37 +45,37 @@ export default class EnvItem extends PureComponent {
     itemKey: PropTypes.any.isRequired,
     updateEnv: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired
-  };
+  }
 
   changeKey = key => {
-    const { itemKey, updateEnv } = this.props;
-    const [...item] = this.props.item;
+    const { itemKey, updateEnv } = this.props
+    const [...item] = this.props.item
 
     updateEnv({
       [itemKey]: undefined,
       [key]: item
-    });
-  };
+    })
+  }
 
   changeValue = value => {
-    const { itemKey, updateEnv } = this.props;
-    const [, type, tooltip] = this.props.item;
+    const { itemKey, updateEnv } = this.props
+    const [, type, tooltip] = this.props.item
 
-    const item = [value, type, tooltip];
-    updateEnv({ [itemKey]: item });
-  };
+    const item = [value, type, tooltip]
+    updateEnv({ [itemKey]: item })
+  }
 
   changeTooltip = tooltip => {
-    const { itemKey, updateEnv } = this.props;
-    const [value, type] = this.props.item;
+    const { itemKey, updateEnv } = this.props
+    const [value, type] = this.props.item
 
-    const item = [value, type, tooltip];
-    updateEnv({ [itemKey]: item });
-  };
+    const item = [value, type, tooltip]
+    updateEnv({ [itemKey]: item })
+  }
 
   render() {
-    const { itemKey, localization } = this.props;
-    const [value, type, tooltip] = this.props.item;
+    const { itemKey, localization } = this.props
+    const [value, type, tooltip] = this.props.item
 
     return (
       <div className={cn.root}>
@@ -97,7 +97,7 @@ export default class EnvItem extends PureComponent {
           onEditEnd={this.changeTooltip}
         />
       </div>
-    );
+    )
   }
 }
 
@@ -110,7 +110,7 @@ const Configurable = props => {
           defaultChecked={props.value}
           onCheck={(e, value) => props.onChange(value)}
         />
-      );
+      )
     case 'number':
       return (
         <TextField
@@ -119,13 +119,13 @@ const Configurable = props => {
           defaultValue={props.value}
           // inputStyle={{ textAlign: 'right' }}
           onChange={e => {
-            const float = parseFloat(e.target.value);
+            const float = parseFloat(e.target.value)
             if (!isNaN(float)) {
-              props.onChange(float);
+              props.onChange(float)
             }
           }}
         />
-      );
+      )
     case 'string':
       return (
         <TextField
@@ -135,14 +135,14 @@ const Configurable = props => {
           defaultValue={props.value}
           onChange={e => props.onChange(e.target.value)}
         />
-      );
+      )
     default:
-      return null;
+      return null
   }
-};
+}
 
 Configurable.propTypes = {
   type: PropTypes.string.isRequired,
   value: PropTypes.any.isRequired,
   onChange: PropTypes.func.isRequired
-};
+}

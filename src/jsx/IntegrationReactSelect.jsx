@@ -1,17 +1,17 @@
 /* eslint-disable react/prop-types, react/jsx-handler-names */
-import React from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import Select from 'react-select';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import NoSsr from '@material-ui/core/NoSsr';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
-import MenuItem from '@material-ui/core/MenuItem';
-import CancelIcon from '@material-ui/icons/Cancel';
-import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import React from 'react'
+import PropTypes from 'prop-types'
+import classNames from 'classnames'
+import Select from 'react-select'
+import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import NoSsr from '@material-ui/core/NoSsr'
+import TextField from '@material-ui/core/TextField'
+import Paper from '@material-ui/core/Paper'
+import Chip from '@material-ui/core/Chip'
+import MenuItem from '@material-ui/core/MenuItem'
+import CancelIcon from '@material-ui/icons/Cancel'
+import { emphasize } from '@material-ui/core/styles/colorManipulator'
 
 const styles = theme => ({
   root: {
@@ -59,7 +59,7 @@ const styles = theme => ({
   divider: {
     height: theme.spacing.unit * 2
   }
-});
+})
 
 function NoOptionsMessage(props) {
   return (
@@ -70,11 +70,11 @@ function NoOptionsMessage(props) {
     >
       {props.children}
     </Typography>
-  );
+  )
 }
 
 function inputComponent({ inputRef, ...props }) {
-  return <div ref={inputRef} {...props} />;
+  return <div ref={inputRef} {...props} />
 }
 
 function Control(props) {
@@ -92,7 +92,7 @@ function Control(props) {
       }}
       {...props.selectProps.textFieldProps}
     />
-  );
+  )
 }
 
 function Option(props) {
@@ -108,7 +108,7 @@ function Option(props) {
     >
       {props.children}
     </MenuItem>
-  );
+  )
 }
 
 function Placeholder(props) {
@@ -120,7 +120,7 @@ function Placeholder(props) {
     >
       {props.children}
     </Typography>
-  );
+  )
 }
 
 function SingleValue(props) {
@@ -131,7 +131,7 @@ function SingleValue(props) {
     >
       {props.children}
     </Typography>
-  );
+  )
 }
 
 function ValueContainer(props) {
@@ -139,7 +139,7 @@ function ValueContainer(props) {
     <div className={props.selectProps.classes.valueContainer}>
       {props.children}
     </div>
-  );
+  )
 }
 
 function MultiValue(props) {
@@ -153,7 +153,7 @@ function MultiValue(props) {
       onDelete={props.removeProps.onClick}
       deleteIcon={<CancelIcon {...props.removeProps} />}
     />
-  );
+  )
 }
 
 function Menu(props) {
@@ -165,7 +165,7 @@ function Menu(props) {
     >
       {props.children}
     </Paper>
-  );
+  )
 }
 
 const components = {
@@ -177,7 +177,7 @@ const components = {
   Placeholder,
   SingleValue,
   ValueContainer
-};
+}
 
 class IntegrationReactSelect extends React.Component {
   render() {
@@ -188,7 +188,7 @@ class IntegrationReactSelect extends React.Component {
       value,
       onChange,
       placeholder
-    } = this.props;
+    } = this.props
 
     const selectStyles = {
       input: base => ({
@@ -198,10 +198,10 @@ class IntegrationReactSelect extends React.Component {
           font: 'inherit'
         }
       })
-    };
+    }
 
     if (!suggestions) {
-      debugger;
+      debugger
     }
 
     return (
@@ -220,7 +220,7 @@ class IntegrationReactSelect extends React.Component {
           />
         </NoSsr>
       </div>
-    );
+    )
   }
 }
 
@@ -231,6 +231,6 @@ IntegrationReactSelect.propTypes = {
   placeholder: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
-};
+}
 
-export default withStyles(styles, { withTheme: true })(IntegrationReactSelect);
+export default withStyles(styles, { withTheme: true })(IntegrationReactSelect)

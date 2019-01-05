@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style, classes } from 'typestyle';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MuiMenu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Button from '@material-ui/core/Button';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import ActionLanguage from '@material-ui/icons/Language';
-import NavigationMenu from '@material-ui/icons/Menu';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style, classes } from 'typestyle'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import IconButton from '@material-ui/core/IconButton'
+import MuiMenu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Switch from '@material-ui/core/Switch'
+import ActionLanguage from '@material-ui/icons/Language'
+import NavigationMenu from '@material-ui/icons/Menu'
 
-import { acceptedLanguages } from '../localization/';
+import { acceptedLanguages } from '../localization/'
 
 const cn = {
   root: style({
@@ -32,7 +32,7 @@ const cn = {
   blank: style({
     flex: 1
   })
-};
+}
 
 const getCn = props => ({
   leftIcon: style({
@@ -43,7 +43,7 @@ const getCn = props => ({
   contrastColor: style({
     color: props.theme.palette.primary.contrastText
   })
-});
+})
 
 @withTheme()
 export default class Menu extends PureComponent {
@@ -60,58 +60,58 @@ export default class Menu extends PureComponent {
     showAll: PropTypes.bool.isRequired,
     toggleShowAll: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     overrideTitle: null,
     open: false,
     anchorEl: null
-  };
+  }
 
   get filesForPublishing() {
     // i18n 設定の固定:
     // 1. i18n/ll_CC/ 以下のファイルを取得
-    const prefix = `i18n/${this.props.localization.ll_CC}/`;
+    const prefix = `i18n/${this.props.localization.ll_CC}/`
     const currentLocales = this.props.files.filter(file =>
       file.name.startsWith(prefix)
-    );
+    )
 
     // 2. i18n/ 以下のファイルをすべて削除し、
     const withoutI18n = this.props.files.filter(
       file => !file.name.startsWith('i18n/')
-    );
+    )
 
     // 3. i18n/ll_CC/ 以下のファイルをルートに追加する
     const intoRoot = currentLocales.map(file => {
-      const [, name] = file.name.split(prefix);
-      return file.set({ name });
-    });
-    return withoutI18n.concat(intoRoot);
+      const [, name] = file.name.split(prefix)
+      return file.set({ name })
+    })
+    return withoutI18n.concat(intoRoot)
   }
 
   handleSetTitle = event => {
-    this.setState({ overrideTitle: event.data.value });
-  };
+    this.setState({ overrideTitle: event.data.value })
+  }
 
   componentDidMount() {
-    this.props.globalEvent.on('message.menuTitle', this.handleSetTitle);
+    this.props.globalEvent.on('message.menuTitle', this.handleSetTitle)
   }
 
   handleLanguage = event => {
     this.setState({
       anchorEl: event.currentTarget
-    });
-  };
+    })
+  }
 
   handleCloseMenu = () => {
     this.setState({
       anchorEl: null
-    });
-  };
+    })
+  }
 
   render() {
-    const dcn = getCn(this.props);
-    const { localization, setLocalization } = this.props;
+    const dcn = getCn(this.props)
+    const { localization, setLocalization } = this.props
 
     const title =
       this.props.project &&
@@ -125,7 +125,7 @@ export default class Menu extends PureComponent {
             {localization.cloneDialog.setTitle}
           </span>
         </Button>
-      ));
+      ))
     return (
       <AppBar className={cn.root} position="relative">
         <Toolbar>
@@ -170,6 +170,6 @@ export default class Menu extends PureComponent {
           </MuiMenu>
         </Toolbar>
       </AppBar>
-    );
+    )
   }
 }

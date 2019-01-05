@@ -133,4 +133,4 @@ export default {
   mediaCard: {
     title: ''
   }
-};
+}

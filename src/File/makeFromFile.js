@@ -1,4 +1,4 @@
-import { BinaryFile, SourceFile, validateType } from './';
+import { BinaryFile, SourceFile, validateType } from './'
 
 /**
  * @param file File|Blob
@@ -6,11 +6,11 @@ import { BinaryFile, SourceFile, validateType } from './';
  */
 export default function makeFromFile(file) {
   if (validateType('text', file.type)) {
-    return SourceFile.load(file);
+    return SourceFile.load(file)
   }
   if (validateType('blob', file.type)) {
-    return BinaryFile.load(file);
+    return BinaryFile.load(file)
   }
 
-  return Promise.reject(`Unknown File Type ${file.type}`);
+  return Promise.reject(`Unknown File Type ${file.type}`)
 }

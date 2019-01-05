@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react';
-import { style } from 'typestyle';
-import PropTypes from 'prop-types';
-import Card from '../CardWindow';
-import CardHeader from '@material-ui/core/CardHeader';
+import React, { PureComponent } from 'react'
+import { style } from 'typestyle'
+import PropTypes from 'prop-types'
+import Card from '../CardWindow'
+import CardHeader from '@material-ui/core/CardHeader'
 
-import CardFloatingBar from '../CardFloatingBar';
-import { SourceFile } from '../../File/';
-import EditFile from '../EditFile';
-import resolveOrigin from '../../utils/resolveOrigin';
+import CardFloatingBar from '../CardFloatingBar'
+import { SourceFile } from '../../File/'
+import EditFile from '../EditFile'
+import resolveOrigin from '../../utils/resolveOrigin'
 
 const classes = {
   block: style({
     whiteSpace: 'inherit'
   })
-};
+}
 
 export default class CustomizeCard extends PureComponent {
   static propTypes = {
@@ -22,10 +22,10 @@ export default class CustomizeCard extends PureComponent {
     findFile: PropTypes.func.isRequired,
     addFile: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   componentDidMount() {
-    const file = this.props.findFile(name);
+    const file = this.props.findFile(name)
 
     if (!file) {
       this.props.addFile(
@@ -34,19 +34,19 @@ export default class CustomizeCard extends PureComponent {
           name: 'feeles/codemirror.css',
           text: ''
         })
-      );
+      )
     }
   }
 
   renderBlock(title, href) {
-    const { localization } = this.props;
+    const { localization } = this.props
 
     const subtitle = [
       <span key={1}>{title + ' - '}</span>,
       <a key={2} href={href} target="blank">
         {resolveOrigin(href)}
       </a>
-    ];
+    ]
 
     return (
       <CardHeader className={classes.block} title={title} subtitle={subtitle}>
@@ -56,11 +56,11 @@ export default class CustomizeCard extends PureComponent {
           localization={localization}
         />
       </CardHeader>
-    );
+    )
   }
 
   render() {
-    const { localization } = this.props;
+    const { localization } = this.props
 
     return (
       <Card {...this.props.cardPropsBag}>
@@ -72,6 +72,6 @@ export default class CustomizeCard extends PureComponent {
           'http://codemirror.net/doc/manual.html#styling'
         )}
       </Card>
-    );
+    )
   }
 }

@@ -1,12 +1,12 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import red from '@material-ui/core/colors/red';
-import ActionRestore from '@material-ui/icons/Restore';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
+import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import red from '@material-ui/core/colors/red'
+import ActionRestore from '@material-ui/icons/Restore'
 
 const cn = {
   dialogRoot: style({
@@ -41,7 +41,7 @@ const cn = {
     color: red['500'],
     fontFamily: 'Consolas, "Liberation Mono", Menlo, Courier, monospace'
   })
-};
+}
 const getCn = (props, state) => ({
   root: style({
     borderTopWidth: 3,
@@ -57,7 +57,7 @@ const getCn = (props, state) => ({
     overflow: 'scroll',
     cursor: 'pointer'
   })
-});
+})
 
 @withTheme()
 export default class ErrorPane extends PureComponent {
@@ -67,33 +67,33 @@ export default class ErrorPane extends PureComponent {
     localization: PropTypes.object.isRequired,
     onRestore: PropTypes.func.isRequired,
     canRestore: PropTypes.bool.isRequired
-  };
+  }
 
   state = {
     show: false,
     expanded: false
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.error !== this.props.error) {
       this.setState({
         show: !!this.props.error
-      });
+      })
     }
   }
 
   handleClose = () => {
-    this.setState({ show: false });
-  };
+    this.setState({ show: false })
+  }
 
   handleRestore = () => {
     this.setState({ show: false }, () => {
-      this.props.onRestore();
-    });
-  };
+      this.props.onRestore()
+    })
+  }
 
   renderAsDialog() {
-    const { localization, canRestore } = this.props;
+    const { localization, canRestore } = this.props
 
     return (
       <Paper key="error" elevation={2} className={cn.error}>
@@ -118,11 +118,11 @@ export default class ErrorPane extends PureComponent {
         </Button>
         <div className={cn.blank} />
       </Paper>
-    );
+    )
   }
 
   renderAsDock(className) {
-    const { expanded } = this.state;
+    const { expanded } = this.state
     return (
       <div
         className={className}
@@ -132,12 +132,12 @@ export default class ErrorPane extends PureComponent {
           {this.props.error && this.props.error.message}
         </pre>
       </div>
-    );
+    )
   }
 
   render() {
-    const dcn = getCn(this.props, this.state);
-    const { show } = this.state;
+    const dcn = getCn(this.props, this.state)
+    const { show } = this.state
 
     return (
       <div className={dcn.root}>
@@ -156,6 +156,6 @@ export default class ErrorPane extends PureComponent {
           {show ? this.renderAsDialog() : null}
         </CSSTransitionGroup>
       </div>
-    );
+    )
   }
 }

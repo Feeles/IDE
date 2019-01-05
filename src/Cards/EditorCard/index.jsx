@@ -1,12 +1,12 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import Button from '@material-ui/core/Button';
-import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import Button from '@material-ui/core/Button'
+import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline'
 
-import Card from '../CardWindow';
-import SourceEditor from './SourceEditor';
+import Card from '../CardWindow'
+import SourceEditor from './SourceEditor'
 
 const cn = {
   largeIcon: style({
@@ -18,7 +18,7 @@ const cn = {
     height: 80,
     padding: 20
   })
-};
+}
 const getCn = props => ({
   noFileBg: style({
     flex: '1 1 auto',
@@ -27,27 +27,27 @@ const getCn = props => ({
     justifyContent: 'center',
     backgroundColor: props.theme.palette.primary.main
   })
-});
+})
 
 export class Tab {
   constructor({ label, filePath, iconUrl, tabs }) {
-    this.label = label;
-    this.iconUrl = iconUrl;
+    this.label = label
+    this.iconUrl = iconUrl
     if (filePath) {
-      this.filePath = filePath;
+      this.filePath = filePath
     } else if (tabs) {
-      this.tabs = tabs.map(props => new Tab(props));
+      this.tabs = tabs.map(props => new Tab(props))
     }
   }
 
   static find(tabs, filePath) {
     for (const tab of tabs) {
-      if (tab.filePath === filePath) return tab;
+      if (tab.filePath === filePath) return tab
     }
     for (const tab of tabs) {
       if (Array.isArray(tab.tabs)) {
-        const found = Tab.find(tab.tabs, filePath);
-        if (found) return found;
+        const found = Tab.find(tab.tabs, filePath)
+        if (found) return found
       }
     }
   }
@@ -75,32 +75,32 @@ export default class EditorCard extends PureComponent {
     setCardVisibility: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object
-  };
+  }
 
   state = {
     filePath: '', // 現在開いているファイルの名前. 空文字の場合は何も開いていない
     tabs: [], // プルダウンメニューの中で表示するファイルのリスト
     label: '', // このファイルの呼び名（タブから取得する）
     filePathToBack: '' // 「〇〇の改造を終わる」ボタンを表示して、このファイルに移動する
-  };
+  }
 
   componentDidMount() {
-    const { globalEvent } = this.props;
-    globalEvent.on('message.editor', this.handleEditor);
+    const { globalEvent } = this.props
+    globalEvent.on('message.editor', this.handleEditor)
     // init.fileName があるとき Mount 後に開いておく
     try {
-      const { init } = this.props.cardProps.EditorCard;
+      const { init } = this.props.cardProps.EditorCard
       if (init) {
         new Promise(resolve => {
           if (Array.isArray(init.tabs)) {
-            const tabs = init.tabs.map(seed => new Tab(seed));
-            this.setState({ tabs }, resolve);
+            const tabs = init.tabs.map(seed => new Tab(seed))
+            this.setState({ tabs }, resolve)
           } else {
-            resolve();
+            resolve()
           }
         }).then(() => {
-          this.openFile(init.filePath || init.fileName); // 後方互換性
-        });
+          this.openFile(init.filePath || init.fileName) // 後方互換性
+        })
       }
     } catch (e) {
       // continue regardless of error
@@ -108,19 +108,19 @@ export default class EditorCard extends PureComponent {
   }
 
   openFile = (filePath, options = {}) => {
-    if (!filePath || filePath === this.state.filePath) return;
+    if (!filePath || filePath === this.state.filePath) return
 
-    const file = this.props.findFile(filePath); // file type を知るために探す
-    if (!file) return; // ファイルが見つからなかった
+    const file = this.props.findFile(filePath) // file type を知るために探す
+    if (!file) return // ファイルが見つからなかった
     if (file.is('text')) {
       // テキストの場合は EditorCard で open
 
-      let tabs = this.state.tabs;
-      const existTab = Tab.find(tabs, filePath);
+      let tabs = this.state.tabs
+      const existTab = Tab.find(tabs, filePath)
       if (!existTab) {
         // 開こうとしているファイルを tabs の先頭に追加
-        const tab = new Tab({ filePath, label: file.plain + file.ext });
-        tabs = [tab].concat(tabs);
+        const tab = new Tab({ filePath, label: file.plain + file.ext })
+        tabs = [tab].concat(tabs)
       }
       this.setState({
         filePath,
@@ -131,36 +131,36 @@ export default class EditorCard extends PureComponent {
           ? existTab.label
           : file.plain,
         filePathToBack: options.showBackButton ? this.state.filePath : ''
-      });
+      })
 
-      this.props.setCardVisibility('EditorCard', true);
+      this.props.setCardVisibility('EditorCard', true)
       // タブの選択が変化したら EditorCard にスクロールする
-      this.props.scrollToCard('EditorCard');
+      this.props.scrollToCard('EditorCard')
     } else {
       // BinaryFile の場合は別タブで開く
       try {
-        window.open(file.blobURL, '_blank');
+        window.open(file.blobURL, '_blank')
       } catch (e) {
         // continue regardless of error
       }
     }
-  };
+  }
 
   setLocation = href => {
-    this.props.setLocation(href);
-    this.props.scrollToCard('MonitorCard');
-  };
+    this.props.setLocation(href)
+    this.props.scrollToCard('MonitorCard')
+  }
 
   handleEditor = event => {
-    const { value, options } = event.data;
+    const { value, options } = event.data
     if (value) {
       // feeles.openEditor()
-      this.openFile(value, options);
+      this.openFile(value, options)
     } else {
       // feeles.closeEditor()
-      this.props.setCardVisibility('EditorCard', false);
+      this.props.setCardVisibility('EditorCard', false)
     }
-  };
+  }
 
   renderBackground(className) {
     return (
@@ -174,21 +174,21 @@ export default class EditorCard extends PureComponent {
           <AVPlayCircleOutline className={cn.largeIcon} />
         </Button>
       </div>
-    );
+    )
   }
 
-  getFiles = () => this.props.files;
+  getFiles = () => this.props.files
 
   render() {
-    const { filePath } = this.state;
+    const { filePath } = this.state
 
-    const dcn = getCn(this.props);
+    const dcn = getCn(this.props)
     if (!filePath) {
       return (
         <Card {...this.props.cardPropsBag} fit>
           {this.renderBackground(dcn.noFileBg)}
         </Card>
-      );
+      )
     }
 
     const {
@@ -199,7 +199,7 @@ export default class EditorCard extends PureComponent {
       getConfig,
       reboot,
       cardPropsBag
-    } = this.props;
+    } = this.props
 
     return (
       <Card {...cardPropsBag} fit width={640}>
@@ -224,9 +224,9 @@ export default class EditorCard extends PureComponent {
           asset={this.props.asset}
         />
       </Card>
-    );
+    )
   }
 }
 
-export { default as Preview } from './Preview';
-export { default as SourceEditor } from './SourceEditor';
+export { default as Preview } from './Preview'
+export { default as SourceEditor } from './SourceEditor'

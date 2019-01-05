@@ -1,17 +1,17 @@
-const regExp = /[！-～”’、。ー]/;
+const regExp = /[！-～”’、。ー]/
 
-let userWasCanceled = false;
+let userWasCanceled = false
 
 export default function zenkakuToHankaku(cm, change) {
   if (
     userWasCanceled ||
     (change.origin !== '+input' && change.origin !== '*compose')
   )
-    return;
+    return
 
   // 全角の数字・記号が含まれているかどうか
-  const hasZenkaku = regExp.test(change.text.join());
-  if (!hasZenkaku) return;
+  const hasZenkaku = regExp.test(change.text.join())
+  if (!hasZenkaku) return
 
   // 半角に変換する
   const text = change.text.map(text => {
@@ -21,13 +21,13 @@ export default function zenkakuToHankaku(cm, change) {
         if (regExp.test(char)) {
           const hankaku = char
             .replace(/[！-～]/, function(s) {
-              return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
+              return String.fromCharCode(s.charCodeAt(0) - 0xfee0)
             })
             .replace(/”/, '"')
             .replace(/’/, `'`)
             .replace(/、/, ',')
             .replace(/。/, '.')
-            .replace(/ー/, '-');
+            .replace(/ー/, '-')
           // 置換するか聞く
           if (
             !userWasCanceled &&
@@ -37,17 +37,17 @@ export default function zenkakuToHankaku(cm, change) {
           ) {
             alert(
               '次からは、キーボードの【全角/半角】または【英数】キーを押して、半角入力にしておきましょう！'
-            );
-            return hankaku;
+            )
+            return hankaku
           } else {
             // キャンセルされたらもう聞かない
-            userWasCanceled = true;
+            userWasCanceled = true
           }
         }
-        return char;
+        return char
       })
-      .join('');
-  });
+      .join('')
+  })
 
-  change.update(change.from, change.to, text);
+  change.update(change.from, change.to, text)
 }

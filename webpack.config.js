@@ -1,16 +1,16 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FeelesWebpackPlugin = require('./src/feeles-webpack-plugin');
-const OpenBrowserPlugin = require('open-browser-webpack-plugin');
-const HappyPack = require('happypack');
-const VersioningWebpackPlugin = require('./versioning-webpack-plugin');
+const webpack = require('webpack')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const FeelesWebpackPlugin = require('./src/feeles-webpack-plugin')
+const OpenBrowserPlugin = require('open-browser-webpack-plugin')
+const HappyPack = require('happypack')
+const VersioningWebpackPlugin = require('./versioning-webpack-plugin')
 
-const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p';
-const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__';
-const version = require('./version');
+const exportVarName = process.env.EXPORT_VAR_NAME || 'h4p'
+const cssPrefix = process.env.CSS_PREFIX || exportVarName + '__'
+const version = require('./version')
 // 8080 は CodeConnection for Minecraft で決め打ちされているので…
-const port = process.env.PORT || 8081;
+const port = process.env.PORT || 8081
 
 const config = {
   mode: process.env.NODE_ENV || 'development',
@@ -80,22 +80,22 @@ const config = {
       'Access-Control-Allow-Methods': '*'
     }
   }
-};
+}
 
 if (process.env.NODE_ENV !== 'production') {
   // for Development:
-  config.devtool = 'eval';
+  config.devtool = 'eval'
 } else {
-  config.devtool = 'cheap-module-source-map';
+  config.devtool = 'cheap-module-source-map'
   config.plugins.push(
     // https://medium.com/webpack/webpack-3-official-release-15fd2dd8f07b
     new webpack.optimize.ModuleConcatenationPlugin()
-  );
+  )
 }
 
 // Upload to Azure Blob Storage
 if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
-  config.plugins.push(new VersioningWebpackPlugin());
+  config.plugins.push(new VersioningWebpackPlugin())
 }
 
 module.exports = async () => {
@@ -104,6 +104,6 @@ module.exports = async () => {
       CORE_VERSION: JSON.stringify(await version.nextVersion()),
       CORE_CDN_URL: JSON.stringify(await version.nextUrl('h4p.js'))
     })
-  );
-  return config;
-};
+  )
+  return config
+}

@@ -1,19 +1,19 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import PropTypes from 'prop-types';
-import { style, classes } from 'typestyle';
-import { url } from 'csx';
-import Popover from '@material-ui/core/Popover';
-import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Typography from '@material-ui/core/Typography';
-import Add from '@material-ui/icons/Add';
-import Description from '@material-ui/icons/Description';
-import { moduleDir } from './AssetPane';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import PropTypes from 'prop-types'
+import { style, classes } from 'typestyle'
+import { url } from 'csx'
+import Popover from '@material-ui/core/Popover'
+import Button from '@material-ui/core/Button'
+import ButtonBase from '@material-ui/core/ButtonBase'
+import Typography from '@material-ui/core/Typography'
+import Add from '@material-ui/icons/Add'
+import Description from '@material-ui/icons/Description'
+import { moduleDir } from './AssetPane'
 
-const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:'];
-const iconSize = 48;
+const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:']
+const iconSize = 48
 
 const cn = {
   mainButton: style({
@@ -56,7 +56,7 @@ const cn = {
     flexWrap: 'nowrap',
     justifyContent: 'flex-start'
   })
-};
+}
 const getCn = ({ theme }) => ({
   root: style({
     position: 'relative',
@@ -101,7 +101,7 @@ const getCn = ({ theme }) => ({
     borderColor: '#4A90E2',
     backgroundColor: theme.palette.grey[400]
   })
-});
+})
 
 @withTheme()
 export default class AssetButton extends PureComponent {
@@ -121,18 +121,18 @@ export default class AssetButton extends PureComponent {
     localization: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object.isRequired
-  };
+  }
 
   static defaultProps = {
     name: '',
     description: ''
-  };
+  }
 
   state = {
     anchorEl: null,
     backgroundStyle: {},
     selectedIndex: 0 // 選択中の variation
-  };
+  }
 
   get selected() {
     const {
@@ -143,7 +143,7 @@ export default class AssetButton extends PureComponent {
       moduleCode,
       filePath,
       variations
-    } = this.props;
+    } = this.props
 
     return variations
       ? variations[this.state.selectedIndex]
@@ -154,99 +154,99 @@ export default class AssetButton extends PureComponent {
           insertCode,
           moduleCode,
           filePath
-        };
+        }
   }
 
   get filePathToOpen() {
     // 最初から存在するファイルにアクセス => filePath
     // 追加してからアクセス => asset.module[name]
-    const { filePath, asset, name } = this.props;
-    return filePath || (asset.module[name] ? `${moduleDir}/${name}.js` : null);
+    const { filePath, asset, name } = this.props
+    return filePath || (asset.module[name] ? `${moduleDir}/${name}.js` : null)
   }
 
   get filePathToOpenSelected() {
     // 最初から存在するファイルにアクセス => filePath
     // 追加してからアクセス => asset.module[name]
-    const selected = this.selected;
+    const selected = this.selected
     return (
       selected.filePath ||
       (this.props.asset.module[selected.name]
         ? `${moduleDir}/${selected.name}.js`
         : null)
-    );
+    )
   }
 
   handleOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    this.setState({ anchorEl: event.currentTarget })
+  }
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+    this.setState({ anchorEl: null })
+  }
 
   updateImage() {
-    let backgroundImage = '';
-    const { iconUrl } = this.props;
+    let backgroundImage = ''
+    const { iconUrl } = this.props
 
     if (iconUrl) {
       if (protocols.some(p => iconUrl.indexOf(p) === 0)) {
-        backgroundImage = url(iconUrl);
+        backgroundImage = url(iconUrl)
       } else {
-        const file = this.props.findFile(iconUrl);
+        const file = this.props.findFile(iconUrl)
         if (file) {
-          backgroundImage = url(file.blobURL);
+          backgroundImage = url(file.blobURL)
         }
       }
     }
     if (backgroundImage !== this.state.backgroundStyle.backgroundImage) {
       this.setState({
         backgroundStyle: { backgroundImage }
-      });
+      })
     }
   }
 
   componentDidMount() {
-    this.updateImage();
+    this.updateImage()
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.iconUrl !== this.props.iconUrl) {
-      this.updateImage();
+      this.updateImage()
     }
   }
 
   handleInsertAsset = () => {
-    const { insertCode } = this.props;
-    this.handleClose();
-    this.props.insertAsset({ insertCode });
-  };
+    const { insertCode } = this.props
+    this.handleClose()
+    this.props.insertAsset({ insertCode })
+  }
 
   handleInsertAssetSelected = () => {
-    this.handleClose();
-    this.props.insertAsset(this.selected);
-  };
+    this.handleClose()
+    this.props.insertAsset(this.selected)
+  }
 
   handleOpenFile = () => {
-    this.handleClose();
+    this.handleClose()
     this.props.openFile({
       name: this.props.name,
       filePath: this.filePathToOpen
-    });
-  };
+    })
+  }
 
   handleOpenFileSelected = () => {
-    this.handleClose();
+    this.handleClose()
     this.props.openFile({
       name: this.selected.name,
       filePath: this.filePathToOpenSelected
-    });
-  };
+    })
+  }
 
   render() {
-    const dcn = getCn(this.props);
-    const { localization, variations } = this.props;
-    const { selectedIndex } = this.state;
-    const selected = this.selected; // Popover の中は選択中のバリエーションに切り替わる
+    const dcn = getCn(this.props)
+    const { localization, variations } = this.props
+    const { selectedIndex } = this.state
+    const selected = this.selected // Popover の中は選択中のバリエーションに切り替わる
 
     return (
       <>
@@ -328,6 +328,6 @@ export default class AssetButton extends PureComponent {
           </div>
         </Popover>
       </>
-    );
+    )
   }
 }

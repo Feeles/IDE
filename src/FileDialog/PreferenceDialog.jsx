@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TextField from '@material-ui/core/TextField';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogActions from '@material-ui/core/DialogActions'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableRow from '@material-ui/core/TableRow'
+import TableCell from '@material-ui/core/TableCell'
+import TextField from '@material-ui/core/TextField'
 
-import { Confirm, Abort } from './Buttons';
+import { Confirm, Abort } from './Buttons'
 
 const cn = {
   root: style({
@@ -20,40 +20,40 @@ const cn = {
   left: style({
     textAlign: 'right'
   })
-};
+}
 
 export default class RenameDialog extends Component {
   static propTypes = {
     resolve: PropTypes.func.isRequired,
     onRequestClose: PropTypes.func.isRequired,
     content: PropTypes.any
-  };
+  }
 
   state = {
     changed: false,
     name: this.props.content.name,
     type: this.props.content.type
-  };
+  }
 
   confirm = () => {
-    const { onRequestClose, resolve } = this.props;
-    const { changed, name, type } = this.state;
+    const { onRequestClose, resolve } = this.props
+    const { changed, name, type } = this.state
 
-    resolve(changed ? { name, type } : {});
-    onRequestClose();
-  };
+    resolve(changed ? { name, type } : {})
+    onRequestClose()
+  }
 
   handleNameChange = (event, name) => {
-    this.setState({ changed: true, name });
-  };
+    this.setState({ changed: true, name })
+  }
 
   handleTypeChange = (event, type) => {
-    this.setState({ changed: true, type });
-  };
+    this.setState({ changed: true, type })
+  }
 
   render() {
-    const { onRequestClose } = this.props;
-    const { changed, name, type } = this.state;
+    const { onRequestClose } = this.props
+    const { changed, name, type } = this.state
 
     return (
       <Dialog open className={cn.root} onClose={onRequestClose}>
@@ -91,6 +91,6 @@ export default class RenameDialog extends Component {
           </Confirm>
         </DialogActions>
       </Dialog>
-    );
+    )
   }
 }

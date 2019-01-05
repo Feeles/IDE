@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { SrcDocEnabled } from './setSrcDoc';
-import ErrorMessage from './ErrorMessage';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { SrcDocEnabled } from './setSrcDoc'
+import ErrorMessage from './ErrorMessage'
 
-const Padding = 1;
-const ScaleChangeMin = 0.02;
+const Padding = 1
+const ScaleChangeMin = 0.02
 
 export default class Screen extends PureComponent {
   static propTypes = {
@@ -19,90 +19,90 @@ export default class Screen extends PureComponent {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     isFullScreen: PropTypes.bool.isRequired
-  };
+  }
 
   static defaultProps = {
     animation: false,
     display: false,
     error: null,
     isFullScreen: false
-  };
+  }
 
   state = {
     loading: false
-  };
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.reboot !== this.props.reboot) {
       if (!this.props.reboot) {
         this.setState({ loading: true }, () => {
           setTimeout(() => {
-            this.setState({ loading: false });
-          }, 250);
-        });
+            this.setState({ loading: false })
+          }, 250)
+        })
       }
     }
     if (this.iframe) {
-      this.iframe.width = `${this.props.width}px`;
-      this.iframe.height = `${this.props.height}px`;
+      this.iframe.width = `${this.props.width}px`
+      this.iframe.height = `${this.props.height}px`
     }
   }
 
-  _scale = 0;
+  _scale = 0
   handleUpdate = () => {
-    const { width, height } = this.props;
+    const { width, height } = this.props
 
     if (
       this.iframe &&
       this.iframe.parentNode &&
       this.iframe.parentNode.parentNode
     ) {
-      const rect = this.iframe.parentNode.getBoundingClientRect();
-      const containerWidth = Math.max(0, rect.width - Padding);
-      const containerHeight = Math.max(0, rect.height - Padding);
+      const rect = this.iframe.parentNode.getBoundingClientRect()
+      const containerWidth = Math.max(0, rect.width - Padding)
+      const containerHeight = Math.max(0, rect.height - Padding)
 
       const scale =
         containerHeight / containerWidth > height / width
           ? containerWidth / width
-          : containerHeight / height;
+          : containerHeight / height
 
       if (Math.abs(this._scale - scale) >= ScaleChangeMin) {
-        this.iframe.style.transform = `scale(${scale})`;
-        this._scale = scale;
+        this.iframe.style.transform = `scale(${scale})`
+        this._scale = scale
       }
     }
     if (this.iframe) {
-      requestAnimationFrame(this.handleUpdate);
+      requestAnimationFrame(this.handleUpdate)
     }
-  };
+  }
 
   handleFrame = ref => {
-    this.iframe = ref;
-    this.props.frameRef(ref);
+    this.iframe = ref
+    this.props.frameRef(ref)
 
-    this._scale = 0;
+    this._scale = 0
     if (this.iframe) {
-      requestAnimationFrame(this.handleUpdate);
+      requestAnimationFrame(this.handleUpdate)
     }
-  };
+  }
 
   handleClickReload = event => {
-    this.props.setLocation();
-    event.stopPropagation();
-  };
+    this.props.setLocation()
+    event.stopPropagation()
+  }
 
   handleClickExit = event => {
-    this.props.toggleFullScreen();
-    event.stopPropagation();
-  };
+    this.props.toggleFullScreen()
+    event.stopPropagation()
+  }
 
   render() {
-    const { display } = this.props;
-    const { loading } = this.state;
+    const { display } = this.props
+    const { loading } = this.state
 
     const sandbox = SrcDocEnabled
       ? 'allow-scripts allow-modals allow-popups'
-      : 'allow-scripts allow-modals allow-popups allow-same-origin';
+      : 'allow-scripts allow-modals allow-popups allow-same-origin'
 
     // Screen は Popout されることもあるので, CSS の class は使えない
     const styles = {
@@ -140,7 +140,7 @@ export default class Screen extends PureComponent {
         cursor: 'pointer',
         height: '10vh'
       }
-    };
+    }
 
     return (
       <div style={styles.root}>
@@ -180,6 +180,6 @@ export default class Screen extends PureComponent {
           ) : null}
         </div>
       </div>
-    );
+    )
   }
 }

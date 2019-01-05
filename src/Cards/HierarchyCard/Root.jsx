@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import { emphasize, fade } from '@material-ui/core/styles/colorManipulator';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import { emphasize, fade } from '@material-ui/core/styles/colorManipulator'
 
-import DirCard from './DirCard';
-import getHierarchy from './getHierarchy';
+import DirCard from './DirCard'
+import getHierarchy from './getHierarchy'
 
 const getCn = props => ({
   root: style({
@@ -20,7 +20,7 @@ const getCn = props => ({
       0.07
     )
   })
-});
+})
 
 @withTheme()
 export default class Root extends PureComponent {
@@ -34,11 +34,11 @@ export default class Root extends PureComponent {
     handleNativeDrop: PropTypes.func.isRequired,
     openFileDialog: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired
-  };
+  }
 
   render() {
-    const dcn = getCn(this.props);
-    const { files } = this.props;
+    const dcn = getCn(this.props)
+    const { files } = this.props
 
     const transfer = {
       isDirOpened: this.props.isDirOpened,
@@ -48,12 +48,12 @@ export default class Root extends PureComponent {
       handleNativeDrop: this.props.handleNativeDrop,
       openFileDialog: this.props.openFileDialog,
       putFile: this.props.putFile
-    };
+    }
 
     return (
       <div className={dcn.root}>
         <DirCard dir={getHierarchy(files)} {...transfer} isRoot />
       </div>
-    );
+    )
   }
 }

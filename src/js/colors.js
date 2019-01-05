@@ -17,4 +17,4 @@ export {
   // red, (for error color)
   teal,
   yellow
-} from '@material-ui/core/colors';
+} from '@material-ui/core/colors'

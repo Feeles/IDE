@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import TextField from '@material-ui/core/TextField';
-import CodeMirror from 'codemirror';
-import 'codemirror/mode/meta';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogActions from '@material-ui/core/DialogActions'
+import TextField from '@material-ui/core/TextField'
+import CodeMirror from 'codemirror'
+import 'codemirror/mode/meta'
 
-import { SourceFile } from '../File/';
-import { Confirm, Abort } from './Buttons';
+import { SourceFile } from '../File/'
+import { Confirm, Abort } from './Buttons'
 
 const getSeed = type => {
   if (type === 'application/json') {
-    return '{}';
+    return '{}'
   }
-  return '\n'.repeat(30);
-};
+  return '\n'.repeat(30)
+}
 
 export default class AddDialog extends Component {
   static propTypes = {
@@ -24,17 +24,17 @@ export default class AddDialog extends Component {
     reject: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     onRequestClose: PropTypes.func.isRequired
-  };
+  }
 
   state = {
     name: ''
-  };
+  }
 
   handleAdd = () => {
-    const { name } = this.state;
+    const { name } = this.state
     const { mime } = CodeMirror.findModeByFileName(name) || {
       mime: 'text/plain'
-    };
+    }
 
     this.props.resolve(
       new SourceFile({
@@ -42,17 +42,17 @@ export default class AddDialog extends Component {
         type: mime,
         text: getSeed(mime)
       })
-    );
+    )
 
-    this.props.onRequestClose();
-  };
+    this.props.onRequestClose()
+  }
 
   handleUpdateName = (event, name) => {
-    this.setState({ name });
-  };
+    this.setState({ name })
+  }
 
   render() {
-    const { localization } = this.props;
+    const { localization } = this.props
 
     return (
       <Dialog open onClose={this.props.onRequestClose}>
@@ -75,6 +75,6 @@ export default class AddDialog extends Component {
           </Confirm>
         </DialogActions>
       </Dialog>
-    );
+    )
   }
 }

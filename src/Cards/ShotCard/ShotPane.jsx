@@ -1,20 +1,20 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style, classes } from 'typestyle';
-import { deg, rotateY, translateX } from 'csx';
-import beautify from 'js-beautify';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import AvStop from '@material-ui/icons/Stop';
-import red from '@material-ui/core/colors/red';
-import ContentReply from '@material-ui/icons/Reply';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style, classes } from 'typestyle'
+import { deg, rotateY, translateX } from 'csx'
+import beautify from 'js-beautify'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import AvStop from '@material-ui/icons/Stop'
+import red from '@material-ui/core/colors/red'
+import ContentReply from '@material-ui/icons/Reply'
 
-import CardFloatingBar from '../CardFloatingBar';
-import { SourceFile } from '../../File/';
-import Editor from '../EditorCard/Editor';
-import excessiveCare from './excessiveCare';
+import CardFloatingBar from '../CardFloatingBar'
+import { SourceFile } from '../../File/'
+import Editor from '../EditorCard/Editor'
+import excessiveCare from './excessiveCare'
 
 const cn = {
   root: style({
@@ -47,7 +47,7 @@ const cn = {
   blank: style({
     flex: 1
   })
-};
+}
 const getCn = (props, state) => ({
   editor: style({
     position: 'relative',
@@ -59,7 +59,7 @@ const getCn = (props, state) => ({
     opacity: state.shooting ? 0 : 1,
     transition: props.theme.transitions.create()
   })
-});
+})
 
 @withTheme()
 export default class ShotPane extends PureComponent {
@@ -75,7 +75,7 @@ export default class ShotPane extends PureComponent {
     completes: PropTypes.array,
     globalEvent: PropTypes.object.isRequired,
     handleSetLinkObjects: PropTypes.func.isRequired
-  };
+  }
 
   state = {
     shooting: false,
@@ -85,121 +85,121 @@ export default class ShotPane extends PureComponent {
     canRestore: false,
     file: this.props.file || SourceFile.shot(''),
     cardAnchorEl: null
-  };
+  }
 
   componentDidMount() {
-    this.codeMirror.on('beforeChange', excessiveCare);
-    this.codeMirror.on('change', this.handleChange);
-    this.codeMirror.on('swapDoc', this.handleChange);
-    this.codeMirror.on('viewportChange', this.handleViewportChange);
-    this.codeMirror.on('swapDoc', this.handleViewportChange);
-    this.handleViewportChange(this.codeMirror);
-    this.props.globalEvent.on('message.runCode', this.handleShot);
+    this.codeMirror.on('beforeChange', excessiveCare)
+    this.codeMirror.on('change', this.handleChange)
+    this.codeMirror.on('swapDoc', this.handleChange)
+    this.codeMirror.on('viewportChange', this.handleViewportChange)
+    this.codeMirror.on('swapDoc', this.handleViewportChange)
+    this.handleViewportChange(this.codeMirror)
+    this.props.globalEvent.on('message.runCode', this.handleShot)
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.file !== this.props.file) {
-      const file = this.props.file || SourceFile.shot('');
-      this.setState({ file });
+      const file = this.props.file || SourceFile.shot('')
+      this.setState({ file })
     }
 
     if (!prevState.shooting && this.state.shooting) {
       // shooting アニメーションをもとにもどす
       setTimeout(() => {
-        this.setState({ shooting: false });
-      }, 1000);
+        this.setState({ shooting: false })
+      }, 1000)
     }
     if (prevState.height !== this.state.height) {
       setTimeout(() => {
         // 表示可能領域が変わったので、トランジション後に再描画する
         if (this.codeMirror) {
-          this.codeMirror.refresh();
+          this.codeMirror.refresh()
         }
-      }, 300);
+      }, 300)
     }
 
     // ShotCard の中にある最も下の要素を取得する
-    const cardAnchorEl = document.querySelector('#ShotCard-BottomAnchor');
+    const cardAnchorEl = document.querySelector('#ShotCard-BottomAnchor')
     if (!prevState.cardAnchorEl && cardAnchorEl) {
-      this.setState({ cardAnchorEl });
+      this.setState({ cardAnchorEl })
     }
   }
 
   componentWillUnmount() {
-    this.props.globalEvent.off('message.runCode', this.handleShot);
+    this.props.globalEvent.off('message.runCode', this.handleShot)
   }
 
   handleShot = async () => {
-    if (this.state.shooting) return;
-    await this.shotCode();
-    this.setState({ shooting: true });
-  };
+    if (this.state.shooting) return
+    await this.shotCode()
+    this.setState({ shooting: true })
+  }
 
   handleChange = cm => {
-    const canRestore = cm.getValue() !== this.state.file.text;
-    this.setState({ canRestore });
-  };
+    const canRestore = cm.getValue() !== this.state.file.text
+    this.setState({ canRestore })
+  }
 
   handleRestore = () => {
-    this.codeMirror.setValue(this.state.file.text);
-  };
+    this.codeMirror.setValue(this.state.file.text)
+  }
 
   async shotCode() {
     let text = this.codeMirror
       ? this.codeMirror.getValue('\n')
-      : this.state.file.text;
+      : this.state.file.text
 
     // コードのフォーマット
     if (this.props.loadConfig('feelesrc').formatOnSendCode || false) {
       // import .jsbeautifyrc
-      let configs = this.props.loadConfig('jsbeautifyrc');
-      const formatted = beautify(text, configs.js || {});
-      this.codeMirror.setValue(formatted);
+      let configs = this.props.loadConfig('jsbeautifyrc')
+      const formatted = beautify(text, configs.js || {})
+      this.codeMirror.setValue(formatted)
     }
 
     // コードをファイルにする
-    const name = this.state.file.name;
-    const file = SourceFile.shot(text, name);
+    const name = this.state.file.name
+    const file = SourceFile.shot(text, name)
     // frame に shot をおくる
     const request = {
       query: 'shot',
       value: file.serialize()
-    };
-    this.props.globalEvent.emit('postMessage', request);
+    }
+    this.props.globalEvent.emit('postMessage', request)
   }
 
   handleViewportChange = cm => {
-    const lastLine = cm.lastLine() + 1;
-    let height = cm.heightAtLine(lastLine, 'local');
+    const lastLine = cm.lastLine() + 1
+    let height = cm.heightAtLine(lastLine, 'local')
     // もしエディタの描画領域が広過ぎて ShotCard が画面からはみ出すなら, height を更新しない
-    const { cardAnchorEl } = this.state;
+    const { cardAnchorEl } = this.state
     if (cardAnchorEl) {
-      const { offsetParent, offsetTop } = cardAnchorEl;
-      const appendedHeight = height - this.state.height;
+      const { offsetParent, offsetTop } = cardAnchorEl
+      const appendedHeight = height - this.state.height
       const containerHeight =
         offsetParent.clientHeight -
         parseInt(offsetParent.style.paddingTop, 10) -
-        parseInt(offsetParent.style.paddingBottom, 10);
+        parseInt(offsetParent.style.paddingBottom, 10)
       if (offsetTop + appendedHeight >= containerHeight) {
-        return;
+        return
       }
     }
 
-    this.setState({ height });
-  };
+    this.setState({ height })
+  }
 
   render() {
-    const dcn = getCn(this.props, this.state);
-    const { localization, getConfig, loadConfig } = this.props;
+    const dcn = getCn(this.props, this.state)
+    const { localization, getConfig, loadConfig } = this.props
 
-    const { shooting } = this.state;
+    const { shooting } = this.state
 
     // TODO: Enter で実行か Shift-Enter で実行か
-    const { sendCodeOnEnter } = loadConfig('feelesrc');
-    const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter';
+    const { sendCodeOnEnter } = loadConfig('feelesrc')
+    const shootKey = sendCodeOnEnter ? 'Enter' : 'Ctrl-Enter'
     const extraKeys = {
       [shootKey]: this.handleShot
-    };
+    }
 
     return (
       <>
@@ -250,6 +250,6 @@ export default class ShotPane extends PureComponent {
           />
         </div>
       </>
-    );
+    )
   }
 }

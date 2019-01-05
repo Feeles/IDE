@@ -5,22 +5,22 @@
  */
 /* eslint-disable */
 
-var getPrototypeOf = require('./getPrototypeOf');
+var getPrototypeOf = require('./getPrototypeOf')
 
-var setPrototypeOf = require('./setPrototypeOf');
+var setPrototypeOf = require('./setPrototypeOf')
 
-var isNativeFunction = require('./isNativeFunction');
+var isNativeFunction = require('./isNativeFunction')
 
-var construct = require('./construct');
+var construct = require('./construct')
 
 function _wrapNativeSuper(Class) {
   //   var _cache = typeof Map === 'function' ? new Map() : undefined;
 
   module.exports = _wrapNativeSuper = function _wrapNativeSuper(Class) {
-    if (Class === null || !isNativeFunction(Class)) return Class;
+    if (Class === null || !isNativeFunction(Class)) return Class
 
     if (typeof Class !== 'function') {
-      throw new TypeError('Super expression must either be null or a function');
+      throw new TypeError('Super expression must either be null or a function')
     }
 
     // if (typeof _cache !== 'undefined') {
@@ -30,7 +30,7 @@ function _wrapNativeSuper(Class) {
     // }
 
     function Wrapper() {
-      return construct(Class, arguments, getPrototypeOf(this).constructor);
+      return construct(Class, arguments, getPrototypeOf(this).constructor)
     }
 
     Wrapper.prototype = Object.create(Class.prototype, {
@@ -40,11 +40,11 @@ function _wrapNativeSuper(Class) {
         writable: true,
         configurable: true
       }
-    });
-    return setPrototypeOf(Wrapper, Class);
-  };
+    })
+    return setPrototypeOf(Wrapper, Class)
+  }
 
-  return _wrapNativeSuper(Class);
+  return _wrapNativeSuper(Class)
 }
 
-module.exports = _wrapNativeSuper;
+module.exports = _wrapNativeSuper

@@ -1,13 +1,13 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import { DropTarget } from 'react-dnd';
-import { NativeTypes } from 'react-dnd-html5-backend';
-import includes from 'lodash/includes';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import { DropTarget } from 'react-dnd'
+import { NativeTypes } from 'react-dnd-html5-backend'
+import includes from 'lodash/includes'
 
-import FileCard from './FileCard';
-import DragTypes from '../../utils/dragTypes';
+import FileCard from './FileCard'
+import DragTypes from '../../utils/dragTypes'
 
 const cn = {
   root: style({
@@ -17,7 +17,7 @@ const cn = {
     paddingBottom: 80,
     paddingLeft: 16
   })
-};
+}
 const getCn = props => ({
   dir: style({
     display: 'flex',
@@ -62,33 +62,33 @@ const getCn = props => ({
     paddingLeft: props.theme.spacing.unit * 2,
     color: props.theme.palette.primary.contrastText
   })
-});
+})
 
 const spec = {
   drop(props, monitor) {
     if (monitor.getDropResult()) {
-      return;
+      return
     }
-    const { files } = monitor.getItem();
+    const { files } = monitor.getItem()
     switch (monitor.getItemType()) {
       case DragTypes.File:
         files
           .filter(file => !includes(props.dir.files, file))
-          .forEach(file => props.handleFileMove(file, props.dir));
-        break;
+          .forEach(file => props.handleFileMove(file, props.dir))
+        break
       case NativeTypes.FILE:
-        props.handleNativeDrop(files, props.dir);
-        break;
+        props.handleNativeDrop(files, props.dir)
+        break
     }
-    return {};
+    return {}
   }
-};
+}
 
 const collect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver({ shallow: true }),
   dragSource: monitor.getItem()
-});
+})
 
 @DropTarget([DragTypes.File, NativeTypes.FILE], spec, collect)
 @withTheme()
@@ -108,14 +108,14 @@ export default class DirCard extends PureComponent {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     dragSource: PropTypes.object
-  };
+  }
 
   static defaultProps = {
     isRoot: false
-  };
+  }
 
   render() {
-    const dcn = getCn(this.props);
+    const dcn = getCn(this.props)
     const {
       isRoot,
       isDirOpened,
@@ -124,8 +124,8 @@ export default class DirCard extends PureComponent {
       dragSource,
 
       connectDropTarget
-    } = this.props;
-    const cd = this.props.dir;
+    } = this.props
+    const cd = this.props.dir
 
     const transfer = {
       isDirOpened: this.props.isDirOpened,
@@ -140,7 +140,7 @@ export default class DirCard extends PureComponent {
       connectDropTarget: connectDropTarget,
       isOver: isOver,
       dragSource: dragSource
-    };
+    }
 
     return connectDropTarget(
       <div className={isRoot ? cn.root : dcn.dir}>
@@ -166,7 +166,7 @@ export default class DirCard extends PureComponent {
           </div>
         )}
       </div>
-    );
+    )
   }
 }
 
@@ -175,10 +175,10 @@ export const DirCloser = withTheme()(props => {
     <div className={props.classes.closer} onClick={props.onClick}>
       <span className={props.classes.closerLabel}>../</span>
     </div>
-  );
-});
+  )
+})
 
 DirCloser.propTypes = {
   classes: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired
-};
+}

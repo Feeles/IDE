@@ -1,16 +1,16 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import { DragSource } from 'react-dnd';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import EditorDragHandle from '@material-ui/icons/DragHandle';
-import ActionSettings from '@material-ui/icons/Settings';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import { DragSource } from 'react-dnd'
+import Paper from '@material-ui/core/Paper'
+import IconButton from '@material-ui/core/IconButton'
+import EditorDragHandle from '@material-ui/icons/DragHandle'
+import ActionSettings from '@material-ui/icons/Settings'
 
-import Filename from './Filename';
-import { PreferenceDialog } from '../../FileDialog/';
-import DragTypes from '../../utils/dragTypes';
+import Filename from './Filename'
+import { PreferenceDialog } from '../../FileDialog/'
+import DragTypes from '../../utils/dragTypes'
 
 const cn = {
   container: style({
@@ -19,7 +19,7 @@ const cn = {
     justifyContent: 'space-between',
     alignItems: 'center'
   })
-};
+}
 const getCn = props => ({
   root: style({
     marginTop: 4,
@@ -45,7 +45,7 @@ const getCn = props => ({
     height: props.theme.spacing.unit * 3,
     marginRight: props.theme.spacing.unit
   })
-});
+})
 
 @withTheme()
 class FileCard extends PureComponent {
@@ -59,32 +59,32 @@ class FileCard extends PureComponent {
     connectDragSource: PropTypes.func.isRequired,
     connectDragPreview: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired
-  };
+  }
 
   handleConfirmSettings = async event => {
-    event.stopPropagation();
-    const { file, openFileDialog, putFile } = this.props;
+    event.stopPropagation()
+    const { file, openFileDialog, putFile } = this.props
 
-    const change = await openFileDialog(PreferenceDialog, { content: file });
+    const change = await openFileDialog(PreferenceDialog, { content: file })
     if (change) {
-      putFile(file, file.set(change));
+      putFile(file, file.set(change))
     }
-  };
+  }
 
   handleNameChange = (event, name) => {
-    const { file, putFile } = this.props;
+    const { file, putFile } = this.props
 
-    return putFile(file, file.rename(name));
-  };
+    return putFile(file, file.rename(name))
+  }
 
   render() {
-    const dcn = getCn(this.props);
+    const dcn = getCn(this.props)
     const {
       file,
       handleFileSelect,
       connectDragSource,
       connectDragPreview
-    } = this.props;
+    } = this.props
 
     return connectDragPreview(
       <div className={dcn.root}>
@@ -102,20 +102,20 @@ class FileCard extends PureComponent {
           </IconButton>
         </Paper>
       </div>
-    );
+    )
   }
 }
 
 const spec = {
   beginDrag(props) {
-    return { files: [props.file] };
+    return { files: [props.file] }
   }
-};
+}
 
 const collect = (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
   isDragging: monitor.isDragging()
-});
+})
 
-export default DragSource(DragTypes.File, spec, collect)(FileCard);
+export default DragSource(DragTypes.File, spec, collect)(FileCard)

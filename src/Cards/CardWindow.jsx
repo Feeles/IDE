@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style, classes } from 'typestyle';
-import Card from '@material-ui/core/Card';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style, classes } from 'typestyle'
+import Card from '@material-ui/core/Card'
 
 const cn = {
   flex: style({
@@ -10,7 +10,7 @@ const cn = {
   max: style({
     maxHeight: '100%'
   })
-};
+}
 const getCn = props => ({
   root: style({
     position: 'relative',
@@ -33,7 +33,7 @@ const getCn = props => ({
     position: 'relative',
     overflow: 'visible' // position: sticky のために必要
   })
-});
+})
 
 export default class CardWindow extends PureComponent {
   static propTypes = {
@@ -45,28 +45,28 @@ export default class CardWindow extends PureComponent {
     width: PropTypes.number.isRequired,
     showAll: PropTypes.bool.isRequired,
     footer: PropTypes.node
-  };
+  }
 
   static defaultProps = {
     visible: false,
     fit: false,
     width: 480,
     footer: null
-  };
+  }
 
   get cardProps() {
     const props = {
       ...this.props
-    };
-    for (const key in CardWindow.propTypes) {
-      delete props[key];
     }
-    return props;
+    for (const key in CardWindow.propTypes) {
+      delete props[key]
+    }
+    return props
   }
 
   render() {
-    const dcn = getCn(this.props);
-    const { fit } = this.props;
+    const dcn = getCn(this.props)
+    const { fit } = this.props
 
     return (
       <div
@@ -82,6 +82,6 @@ export default class CardWindow extends PureComponent {
         {this.props.footer || null}
         <div id={`${this.props.name}-BottomAnchor`} />
       </div>
-    );
+    )
   }
 }

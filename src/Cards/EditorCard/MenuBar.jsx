@@ -1,28 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import Button from '@material-ui/core/Button';
-import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace';
-import Layers from '@material-ui/icons/Layers';
-import LayersClear from '@material-ui/icons/LayersClear';
-import Check from '@material-ui/icons/Check';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import Button from '@material-ui/core/Button'
+import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace'
+import Layers from '@material-ui/icons/Layers'
+import LayersClear from '@material-ui/icons/LayersClear'
+import Check from '@material-ui/icons/Check'
 
-import PlayMenu from './PlayMenu';
-import CardFloatingBar from '../CardFloatingBar';
-import { IconButton, withTheme } from '@material-ui/core';
-import SelectTab from './SelectTab';
+import PlayMenu from './PlayMenu'
+import CardFloatingBar from '../CardFloatingBar'
+import { IconButton, withTheme } from '@material-ui/core'
+import SelectTab from './SelectTab'
 
 const cn = {
   blank: style({
     flex: '1 1 auto'
   })
-};
+}
 
 const getCn = props => ({
   icon: style({
     color: props.theme.typography.button.color
   })
-});
+})
 
 @withTheme()
 export default class MenuBar extends React.Component {
@@ -42,22 +42,22 @@ export default class MenuBar extends React.Component {
     label: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   toggleLineWidget = () => {
-    const { showLineWidget } = this.props;
-    this.props.setShowLineWidget(!showLineWidget);
-  };
+    const { showLineWidget } = this.props
+    this.props.setShowLineWidget(!showLineWidget)
+  }
 
   handleBack = () => {
-    this.props.runApp();
+    this.props.runApp()
     this.props.globalEvent.emit('message.editor', {
       data: { value: this.props.filePathToBack }
-    });
-  };
+    })
+  }
 
   render() {
-    const dcn = getCn(this.props);
+    const dcn = getCn(this.props)
 
     return (
       <CardFloatingBar>
@@ -101,6 +101,6 @@ export default class MenuBar extends React.Component {
           hasChanged={this.props.hasChanged}
         />
       </CardFloatingBar>
-    );
+    )
   }
 }

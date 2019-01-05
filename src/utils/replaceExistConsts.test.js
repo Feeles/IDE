@@ -1,5 +1,5 @@
-import test from 'ava';
-import replaceExistConsts from './replaceExistConsts';
+import test from 'ava'
+import replaceExistConsts from './replaceExistConsts'
 
 test('replaceExistConsts item', t => {
   const code = `
@@ -35,7 +35,7 @@ async function gameFunc() {
 
 export default gameFunc;
 
-`;
+`
   const asset = `// ここからスライム
 const item1 = new RPGObject(('▼ スキン', Skin.スライム));
 item1.family = ('▼ ファミリー', Family.ドクリツ);
@@ -46,7 +46,7 @@ item1.endless(async (self, count) => {
     await self.attack(); // こうげきする
     /*+ じどう*/
 });
-// ここまでスライム`;
+// ここまでスライム`
   const answer = `// ここからスライム
 const item2 = new RPGObject(('▼ スキン', Skin.スライム));
 item2.family = ('▼ ファミリー', Family.ドクリツ);
@@ -57,9 +57,9 @@ item2.endless(async (self, count) => {
     await self.attack(); // こうげきする
     /*+ じどう*/
 });
-// ここまでスライム`;
-  t.is(replaceExistConsts(code, asset), answer);
-});
+// ここまでスライム`
+  t.is(replaceExistConsts(code, asset), answer)
+})
 
 test('replaceExistConsts maps', t => {
   const code = `
@@ -82,7 +82,7 @@ async function maps() {
 }
 
 export default maps;
-`;
+`
   const asset = `
 const map1 = Hack.createMap(\`
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
@@ -96,7 +96,7 @@ const map1 = Hack.createMap(\`
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
 \`);
-    Hack.maps.map1 = map1;`;
+    Hack.maps.map1 = map1;`
   const answer = `
 const map2 = Hack.createMap(\`
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
@@ -110,6 +110,6 @@ const map2 = Hack.createMap(\`
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
 322 322 322 322 322 322 322 322 322 322 322 322 322 322 322
 \`);
-    Hack.maps.map2 = map2;`;
-  t.is(replaceExistConsts(code, asset), answer);
-});
+    Hack.maps.map2 = map2;`
+  t.is(replaceExistConsts(code, asset), answer)
+})

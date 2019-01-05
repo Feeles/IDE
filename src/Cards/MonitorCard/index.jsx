@@ -1,22 +1,22 @@
-import React, { PureComponent } from 'react';
-import { style, classes } from 'typestyle';
-import { percent } from 'csx';
-import PropTypes from 'prop-types';
-import Card from '../CardWindow';
-import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import NavigationRefresh from '@material-ui/icons/Refresh';
-import NavigationFullscreen from '@material-ui/icons/Fullscreen';
-import ActionSettings from '@material-ui/icons/Settings';
-import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
-import DeviceDevices from '@material-ui/icons/Devices';
-import ImagePhotoCamera from '@material-ui/icons/PhotoCamera';
+import React, { PureComponent } from 'react'
+import { style, classes } from 'typestyle'
+import { percent } from 'csx'
+import PropTypes from 'prop-types'
+import Card from '../CardWindow'
+import CardMedia from '@material-ui/core/CardMedia'
+import IconButton from '@material-ui/core/IconButton'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import NavigationRefresh from '@material-ui/icons/Refresh'
+import NavigationFullscreen from '@material-ui/icons/Fullscreen'
+import ActionSettings from '@material-ui/icons/Settings'
+import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
+import DeviceDevices from '@material-ui/icons/Devices'
+import ImagePhotoCamera from '@material-ui/icons/PhotoCamera'
 
-import CardFloatingBar from '../CardFloatingBar';
-import Monitor from './Monitor';
-import ResolveProgress from './ResolveProgress';
+import CardFloatingBar from '../CardFloatingBar'
+import Monitor from './Monitor'
+import ResolveProgress from './ResolveProgress'
 
 const frameSizes = [
   [480, 320],
@@ -28,12 +28,12 @@ const frameSizes = [
   [1280, 720],
   [1280, 800],
   [1920, 1080]
-];
+]
 
-const by = 'x';
+const by = 'x'
 const getContainerStyle = (frameWidth, frameHeight) => ({
   paddingTop: percent((frameHeight / frameWidth) * 100)
-});
+})
 
 const cn = {
   flexible: style({
@@ -56,7 +56,7 @@ const cn = {
   blank: style({
     flex: 1
   })
-};
+}
 
 export default class MonitorCard extends PureComponent {
   static propTypes = {
@@ -79,7 +79,7 @@ export default class MonitorCard extends PureComponent {
     putFile: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     frameWidth: 300,
@@ -88,75 +88,75 @@ export default class MonitorCard extends PureComponent {
     processing: false,
     statusLabel: null,
     anchorEl: null
-  };
+  }
 
   componentDidMount() {
     try {
-      const { frame } = this.props.cardProps.MonitorCard;
+      const { frame } = this.props.cardProps.MonitorCard
       if (frame && Array.isArray(frame.size)) {
-        const [frameWidth, frameHeight] = frame.size;
-        this.changeSize(frameWidth, frameHeight);
+        const [frameWidth, frameHeight] = frame.size
+        this.changeSize(frameWidth, frameHeight)
       }
     } catch (e) {
       // continue regardless of error
     }
-    this.props.globalEvent.on('message.statusLabel', this.setStatusLabel);
+    this.props.globalEvent.on('message.statusLabel', this.setStatusLabel)
   }
 
   setStatusLabel = ({ data }) => {
-    const { value } = data;
+    const { value } = data
     if (typeof value !== 'string')
-      throw new TypeError(`Cannot make statusLabel ${value}`);
+      throw new TypeError(`Cannot make statusLabel ${value}`)
     this.setState({
       statusLabel: value
-    });
-  };
+    })
+  }
 
   changeSize(frameWidth, frameHeight) {
     this.setState({
       frameWidth,
       frameHeight,
       containerStyle: getContainerStyle(frameWidth, frameHeight)
-    });
+    })
   }
 
   renderMenuItem([w, h]) {
-    const value = w + by + h;
+    const value = w + by + h
     return (
       <MenuItem key={value} onClick={() => this.changeSize(w, h)}>
         {value}
       </MenuItem>
-    );
+    )
   }
 
   handleScreenShot = async () => {
-    if (this.state.processing) return;
-    this.setState({ processing: true });
+    if (this.state.processing) return
+    this.setState({ processing: true })
     // Monitor にスクリーンショットを撮るようリクエスト
     const request = {
       query: 'capture',
       type: 'image/jpeg',
       requestedBy: 'user-action' // ユーザーがリクエストしたことを表す
-    };
-    await this.props.globalEvent.emitAsync('postMessage', request);
+    }
+    await this.props.globalEvent.emitAsync('postMessage', request)
     // capture がおわったら, processing state を元に戻す
-    this.setState({ processing: false });
-  };
+    this.setState({ processing: false })
+  }
 
   handleSettings = event => {
     this.setState({
       anchorEl: event.currentTarget
-    });
-  };
+    })
+  }
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+    this.setState({ anchorEl: null })
+  }
 
   render() {
-    const sizeValue = this.state.frameWidth + by + this.state.frameHeight;
-    const { localization, showAll, loadConfig } = this.props;
-    const feelesrc = loadConfig('feelesrc');
+    const sizeValue = this.state.frameWidth + by + this.state.frameHeight
+    const { localization, showAll, loadConfig } = this.props
+    const feelesrc = loadConfig('feelesrc')
 
     return (
       <Card {...this.props.cardPropsBag}>
@@ -244,6 +244,6 @@ export default class MonitorCard extends PureComponent {
           </MenuItem>
         </Menu>
       </Card>
-    );
+    )
   }
 }

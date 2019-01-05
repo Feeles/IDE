@@ -1,18 +1,18 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import Button from '@material-ui/core/Button';
-import Popover from '@material-ui/core/Popover';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
-import NavigationRefresh from '@material-ui/icons/Refresh';
-import NavigationArrowDropDown from '@material-ui/icons/ArrowDropDown';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import Button from '@material-ui/core/Button'
+import Popover from '@material-ui/core/Popover'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import Divider from '@material-ui/core/Divider'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import AVPlayCircleOutline from '@material-ui/icons/PlayCircleOutline'
+import NavigationRefresh from '@material-ui/icons/Refresh'
+import NavigationArrowDropDown from '@material-ui/icons/ArrowDropDown'
+import { fade } from '@material-ui/core/styles/colorManipulator'
 
 const cn = {
   currentSecondaryText: style({
@@ -28,7 +28,7 @@ const cn = {
     fontSize: '.8rem',
     opacity: 0.6
   })
-};
+}
 const getCn = props => ({
   dropDown: style({
     marginLeft: props.theme.spacing.unit,
@@ -41,7 +41,7 @@ const getCn = props => ({
     marginBottom: -8,
     backgroundColor: fade(props.theme.palette.primary.main, 0.1)
   })
-});
+})
 
 @withTheme()
 export default class PlayMenu extends PureComponent {
@@ -52,7 +52,7 @@ export default class PlayMenu extends PureComponent {
     href: PropTypes.string.isRequired,
     localization: PropTypes.object.isRequired,
     hasChanged: PropTypes.bool.isRequired
-  };
+  }
 
   state = {
     open: false,
@@ -60,57 +60,57 @@ export default class PlayMenu extends PureComponent {
     // [...{ title, href(name) }]
     entries: [],
     hasMultiEntry: false
-  };
+  }
 
   componentDidMount() {
-    this.handleUpdate();
+    this.handleUpdate()
   }
 
   componentDidUpdate() {
-    this.handleUpdate();
+    this.handleUpdate()
   }
 
   handleUpdate() {
-    const files = this.props.getFiles().filter(file => file.is('html'));
+    const files = this.props.getFiles().filter(file => file.is('html'))
     this.setState({
       hasMultiEntry: files.length > 1
-    });
+    })
   }
 
   handlePlay = event => {
-    const files = this.props.getFiles().filter(file => file.is('html'));
-    const parser = new DOMParser();
+    const files = this.props.getFiles().filter(file => file.is('html'))
+    const parser = new DOMParser()
     const entries = files
       .map(file => {
-        const doc = parser.parseFromString(file.text, 'text/html');
-        const titleNode = doc.querySelector('title');
-        const title = titleNode && titleNode.textContent;
+        const doc = parser.parseFromString(file.text, 'text/html')
+        const titleNode = doc.querySelector('title')
+        const title = titleNode && titleNode.textContent
         return {
           title: title || file.name,
           href: file.name
-        };
+        }
       })
-      .sort((a, b) => (a.title > b.title ? 1 : -1));
+      .sort((a, b) => (a.title > b.title ? 1 : -1))
 
     this.setState({
       open: true,
       anchorEl: event.currentTarget,
       entries
-    });
-  };
+    })
+  }
 
   handleItemTouchTap = (event, menuItem) => {
-    this.props.runApp(menuItem.props.value);
+    this.props.runApp(menuItem.props.value)
     this.setState({
       open: false
-    });
-  };
+    })
+  }
 
   handleRequestClose = () => {
     this.setState({
       open: false
-    });
-  };
+    })
+  }
 
   renderMenu = entry => {
     return (
@@ -118,16 +118,16 @@ export default class PlayMenu extends PureComponent {
         <span>{entry.title}</span>
         <span style={cn.href}>{entry.href}</span>
       </MenuItem>
-    );
-  };
+    )
+  }
 
   render() {
-    const dcn = getCn(this.props);
-    const { localization } = this.props;
+    const dcn = getCn(this.props)
+    const { localization } = this.props
 
     const current = this.state.entries.find(
       item => item.href === this.props.href
-    );
+    )
 
     return (
       <>
@@ -183,6 +183,6 @@ export default class PlayMenu extends PureComponent {
           </Menu>
         </Popover>
       </>
-    );
+    )
   }
 }

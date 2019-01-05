@@ -15,7 +15,7 @@ module.exports = {
   proseWrap: 'preserve',
 
   // Whether to add a semicolon at the end of every line
-  semi: true,
+  semi: false,
 
   // If true, will use single instead of double quotes
   singleQuote: true,
@@ -32,4 +32,4 @@ module.exports = {
 
   // Indent lines with tabs
   useTabs: false
-};
+}

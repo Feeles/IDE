@@ -20,7 +20,7 @@ module.exports = {
     indent: ['off', 2],
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
-    semi: ['error', 'always'],
+    semi: 'off',
     'no-console': 'off',
     'no-debugger': 'off',
     'no-useless-escape': 'warn',
@@ -29,4 +29,4 @@ module.exports = {
     'react/jsx-key': 'warn',
     'react/prop-types': 'off' // state のプロパティにエラーを吐いてしまう(バグ？)
   }
-};
+}

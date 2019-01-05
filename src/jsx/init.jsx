@@ -1,19 +1,19 @@
 /*global CSS_PREFIX*/
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import RootComponent from './RootComponent';
+import RootComponent from './RootComponent'
 
 export default async (props = {}) => {
   window.addEventListener('beforeunload', event => {
     if (process.env.NODE_ENV === 'production') {
-      event.returnValue = `Stop! You can't return later!`;
-      return event.returnValue;
+      event.returnValue = `Stop! You can't return later!`
+      return event.returnValue
     }
-  });
+  })
 
   props.rootElement =
-    props.rootElement || document.querySelector(`.${CSS_PREFIX}app`);
+    props.rootElement || document.querySelector(`.${CSS_PREFIX}app`)
 
-  ReactDOM.render(<RootComponent {...props} />, props.rootElement);
-};
+  ReactDOM.render(<RootComponent {...props} />, props.rootElement)
+}

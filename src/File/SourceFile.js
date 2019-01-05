@@ -1,9 +1,9 @@
-import md5 from 'md5';
-import { parse } from './JSON6';
+import md5 from 'md5'
+import { parse } from './JSON6'
 
-import _File from './_File';
-import configs from './configs';
-import { encode, decode } from './sanitizeHTML';
+import _File from './_File'
+import configs from './configs'
+import { encode, decode } from './sanitizeHTML'
 
 export default class SourceFile extends _File {
   static defaultProps = {
@@ -11,96 +11,96 @@ export default class SourceFile extends _File {
     text: '',
     json: null,
     sign: null
-  };
+  }
 
   static defaultOptions = {
     isTrashed: false
-  };
+  }
 
-  static visible = _File.visible.concat('text', 'isScript');
+  static visible = _File.visible.concat('text', 'isScript')
 
   constructor(props) {
     if (props.composed && !props.text) {
-      let text = '';
+      let text = ''
       try {
         // base64 encode された文字列の展開
-        text = decodeURIComponent(escape(atob(props.composed)));
+        text = decodeURIComponent(escape(atob(props.composed)))
       } catch (e) {
         // 旧仕様（sanitizeHTML）で compose された文字列の展開 (backword compatibility)
-        text = decode(props.composed);
+        text = decode(props.composed)
       }
-      props = { ...props, text };
+      props = { ...props, text }
     }
 
-    super(props);
+    super(props)
   }
 
   get text() {
-    return this.props.text;
+    return this.props.text
   }
 
   get isScript() {
-    return this.is('javascript');
+    return this.is('javascript')
   }
 
-  static blobCache = new WeakMap();
+  static blobCache = new WeakMap()
   get blob() {
-    const { blobCache } = this.constructor;
+    const { blobCache } = this.constructor
     if (blobCache.has(this)) {
-      return blobCache.get(this);
+      return blobCache.get(this)
     }
-    const blob = new Blob([this.text], { type: this.type });
-    blobCache.set(this, blob);
-    return blob;
+    const blob = new Blob([this.text], { type: this.type })
+    blobCache.set(this, blob)
+    return blob
   }
 
   get json() {
     if (!this._json) {
       const model = Array.from(configs.values()).find(config =>
         config.test.test(this.name)
-      );
-      const defaultValue = model ? model.defaultValue : {};
+      )
+      const defaultValue = model ? model.defaultValue : {}
       try {
-        this._json = { ...defaultValue, ...parse(this.text) };
+        this._json = { ...defaultValue, ...parse(this.text) }
       } catch (e) {
-        return {};
+        return {}
       }
     }
-    return this._json;
+    return this._json
   }
 
-  _hash = null;
+  _hash = null
   get hash() {
-    return (this._hash = this._hash || md5(this.text));
+    return (this._hash = this._hash || md5(this.text))
   }
 
   set(change) {
     if (!change.text && this.hash) {
-      change.hash = this.hash;
+      change.hash = this.hash
     }
-    const seed = { ...this.serialize(), ...change };
-    seed.key = this.key;
-    seed.lastModified = Date.now();
+    const seed = { ...this.serialize(), ...change }
+    seed.key = this.key
+    seed.lastModified = Date.now()
 
-    return new this.constructor(seed);
+    return new this.constructor(seed)
   }
 
   compose() {
-    const serialized = this.serialize();
-    delete serialized.text;
-    serialized.composed = encode(this.text);
+    const serialized = this.serialize()
+    delete serialized.text
+    serialized.composed = encode(this.text)
     if (this.sign && this.sign === this.credit) {
       const credits = this.credits.concat({
         ...this.sign,
         timestamp: Date.now(),
         hash: this.hash
-      });
-      serialized.credits = JSON.stringify(credits);
+      })
+      serialized.credits = JSON.stringify(credits)
     } else {
-      serialized.credits = JSON.stringify(this.credits);
+      serialized.credits = JSON.stringify(this.credits)
     }
 
-    return Promise.resolve(serialized);
+    return Promise.resolve(serialized)
   }
 
   /**
@@ -109,7 +109,7 @@ export default class SourceFile extends _File {
    */
   static load(file) {
     return new Promise(resolve => {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onload = e => {
         resolve(
           new SourceFile({
@@ -118,14 +118,14 @@ export default class SourceFile extends _File {
             text: e.target.result,
             lastModified: file.lastModified
           })
-        );
-      };
-      reader.readAsText(file);
-    });
+        )
+      }
+      reader.readAsText(file)
+    })
   }
 
   static shot(text, name = '') {
-    return new SourceFile({ type: 'text/javascript', name, text });
+    return new SourceFile({ type: 'text/javascript', name, text })
   }
 
   static html() {
@@ -138,11 +138,11 @@ export default class SourceFile extends _File {
     <body style="background-color: white;">
       File Not Found
     </body>
-</html>`;
+</html>`
     return new SourceFile({
       name: '404.html',
       type: 'text/html',
       text
-    });
+    })
   }
 }

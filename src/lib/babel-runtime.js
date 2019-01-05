@@ -65,4 +65,4 @@ module.exports =
   // require('./amd-loader!@babel/runtime/helpers/wrapNativeSuper') +
   require('./amd-loader!./wrapNativeSuper?@babel/runtime/helpers/wrapNativeSuper') +
   require('./amd-loader!@babel/runtime/regenerator?@babel/runtime/regenerator') +
-  require('./amd-loader!regenerator-runtime/runtime?regenerator-runtime');
+  require('./amd-loader!regenerator-runtime/runtime?regenerator-runtime')

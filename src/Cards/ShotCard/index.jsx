@@ -1,12 +1,12 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import Card from '@material-ui/core/Card';
-import CardWindow from '../CardWindow';
-import uniq from 'lodash/uniq';
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import Card from '@material-ui/core/Card'
+import CardWindow from '../CardWindow'
+import uniq from 'lodash/uniq'
 
-import ShotPane from './ShotPane';
-import Snippet from '../../File/Snippet';
+import ShotPane from './ShotPane'
+import Snippet from '../../File/Snippet'
 
 const scrapbox = {
   url: title => `https://scrapbox.io/hackforplay/${encodeURIComponent(title)}`,
@@ -16,7 +16,7 @@ const scrapbox = {
     `https://scrapbox.io/api/pages/hackforplay/${encodeURIComponent(
       title
     )}/icon`
-};
+}
 
 const cn = {
   hintFlexbox: style({
@@ -58,7 +58,7 @@ const cn = {
   cardIcon: style({
     width: '100%'
   })
-};
+}
 
 export default class ShotCard extends PureComponent {
   static propTypes = {
@@ -71,39 +71,39 @@ export default class ShotCard extends PureComponent {
     getConfig: PropTypes.func.isRequired,
     loadConfig: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired
-  };
+  }
 
   state = {
     file: null,
     completes: [],
     footer: null
-  };
+  }
 
   componentDidMount() {
-    const { globalEvent } = this.props;
-    globalEvent.on('message.code', this.handleCode);
-    globalEvent.on('message.complete', this.handleComplete);
+    const { globalEvent } = this.props
+    globalEvent.on('message.code', this.handleCode)
+    globalEvent.on('message.complete', this.handleComplete)
   }
 
   handleCode = event => {
-    const { value } = event.data;
+    const { value } = event.data
     if (value) {
       // feeles.openCode()
-      const file = this.props.findFile(value);
+      const file = this.props.findFile(value)
       this.setState({
         file,
         completes: this.props.getConfig('snippets')(file)
-      });
-      this.props.setCardVisibility('ShotCard', true);
+      })
+      this.props.setCardVisibility('ShotCard', true)
     } else {
       // feeles.closeCode()
-      this.props.setCardVisibility('ShotCard', false);
+      this.props.setCardVisibility('ShotCard', false)
     }
-  };
+  }
 
   handleComplete = event => {
-    const { value } = event.data;
-    if (!Array.isArray(value)) return;
+    const { value } = event.data
+    if (!Array.isArray(value)) return
 
     const snippets = value.map(
       item =>
@@ -112,24 +112,24 @@ export default class ShotCard extends PureComponent {
           fileKey: '',
           ...(item || {})
         })
-    );
+    )
 
     const completes = this.state.file
       ? this.props
           .getConfig('snippets')()
           .concat(snippets)
-      : snippets;
+      : snippets
     this.setState({
       completes
-    });
-  };
+    })
+  }
 
   handleSetLinkObjects = (linkObjects = []) => {
-    const titles = linkObjects.map(obj => obj.linkText);
+    const titles = linkObjects.map(obj => obj.linkText)
     this.setState({
       footer: this.renderFooter(uniq(titles))
-    });
-  };
+    })
+  }
 
   renderFooter(titles) {
     return titles.length > 0 ? (
@@ -164,11 +164,11 @@ export default class ShotCard extends PureComponent {
             .concat(<div key="$lastcard" />)}
         </div>
       </div>
-    ) : null;
+    ) : null
   }
 
   render() {
-    const { visible } = this.props.cardPropsBag;
+    const { visible } = this.props.cardPropsBag
 
     return (
       <CardWindow {...this.props.cardPropsBag} footer={this.state.footer}>
@@ -187,6 +187,6 @@ export default class ShotCard extends PureComponent {
           />
         ) : null}
       </CardWindow>
-    );
+    )
   }
 }

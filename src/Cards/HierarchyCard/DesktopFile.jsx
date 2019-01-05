@@ -1,18 +1,18 @@
-import React, { PureComponent } from 'react';
-import { withTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { style } from 'typestyle';
-import IconButton from '@material-ui/core/IconButton';
-import { DropTarget } from 'react-dnd';
-import HardwareComputer from '@material-ui/icons/Computer';
+import React, { PureComponent } from 'react'
+import { withTheme } from '@material-ui/core/styles'
+import PropTypes from 'prop-types'
+import { style } from 'typestyle'
+import IconButton from '@material-ui/core/IconButton'
+import { DropTarget } from 'react-dnd'
+import HardwareComputer from '@material-ui/icons/Computer'
 
-import DragTypes from '../../utils/dragTypes';
+import DragTypes from '../../utils/dragTypes'
 
 const cn = {
   input: style({
     display: 'none'
   })
-};
+}
 const getCn = props => ({
   icon: style({
     borderWidth: 0,
@@ -24,7 +24,7 @@ const getCn = props => ({
       ? props.theme.palette.disabledColor
       : 'transparent'
   })
-});
+})
 
 @withTheme()
 class _DesktopFile extends PureComponent {
@@ -35,15 +35,15 @@ class _DesktopFile extends PureComponent {
 
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired
-  };
+  }
 
   handleChange = event => {
-    this.props.onOpen(Array.from(event.target.files));
-  };
+    this.props.onOpen(Array.from(event.target.files))
+  }
 
   render() {
-    const dcn = getCn(this.props);
-    const { connectDropTarget } = this.props;
+    const dcn = getCn(this.props)
+    const { connectDropTarget } = this.props
 
     return connectDropTarget(
       <div>
@@ -61,26 +61,26 @@ class _DesktopFile extends PureComponent {
           <HardwareComputer />
         </IconButton>
       </div>
-    );
+    )
   }
 }
 
 const spec = {
   drop(props, monitor, component) {
-    const { files } = monitor.getItem();
+    const { files } = monitor.getItem()
 
     files.reduce((p, c) => {
-      return p.then(() => component.props.saveAs(c));
-    }, Promise.resolve());
+      return p.then(() => component.props.saveAs(c))
+    }, Promise.resolve())
 
-    return {};
+    return {}
   }
-};
+}
 
 const collect = (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver({ shallow: true })
-});
+})
 
-const DesktopFile = DropTarget(DragTypes.File, spec, collect)(_DesktopFile);
-export default DesktopFile;
+const DesktopFile = DropTarget(DragTypes.File, spec, collect)(_DesktopFile)
+export default DesktopFile
