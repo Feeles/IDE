@@ -2,10 +2,19 @@ language: node_js
 dist: trusty
 sudo: false
 node_js:
-  - "8"
-install:
-  - npm install
-script:
-  - npm run build
+  - '8'
+
+deploy:
+  provider: script
+  script: npx semantic-release
+  skip_cleanup: true
+  on:
+    repo: teramotodaiki/feeles-ide
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(master|release.*)$ # "master" or "releaseから始まる任意のブランチ" のみデプロイ
+
 notifications:
-  slack: hackforplay:3ZXJmUzsYmjM86Ty3oXOvqpC
+  slack:
+    rooms:
+      - hackforplay:3ZXJmUzsYmjM86Ty3oXOvqpC
+    on_success: never
