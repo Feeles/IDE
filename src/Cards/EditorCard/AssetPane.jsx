@@ -424,6 +424,23 @@ export default class AssetPane extends PureComponent {
     })
   }
 
+  /**
+   * そのアセットを動作させるためにインストールする必要があるアセット(自分自身を含む)を列挙する
+   * 重複を除くために, 同じ配列 _ignoreList に要素を追加していく (動的計画法, 深さ優先探索)
+   */
+  getDependencies = (name, _ignoreList = []) => {
+    const mod = this.props.asset.module[name]
+    if (!mod) return _ignoreList
+    _ignoreList.push(name)
+    for (const dependency of extractAssetNames(mod.code)) {
+      if (!includes(_ignoreList, dependency)) {
+        // 新しいアセットが見つかったら, 再帰的に依存アセットを探す
+        this.getDependencies(dependency, _ignoreList)
+      }
+    }
+    return _ignoreList
+  }
+
   executeCallback = ({ type, payload }) => {
     switch (type) {
       case 'insertAsset':
@@ -451,8 +468,10 @@ export default class AssetPane extends PureComponent {
     // module が存在するなら先に install
     const mod = asset.module[name]
     if (mod) {
+      // 依存アセットもここで同時にインストール
+      const dependencies = this.getDependencies(name)
       // インストール後に runApp
-      this.installAssetModules([name], {
+      this.installAssetModules(dependencies, {
         type: 'runApp'
       })
     } else {
@@ -465,8 +484,10 @@ export default class AssetPane extends PureComponent {
     // module が存在するなら先に install
     const mod = asset.module[name]
     if (mod) {
+      // 依存アセットもここで同時にインストール
+      const dependencies = this.getDependencies(name)
       // インストール後に insertAsset
-      this.installAssetModules([name], {
+      this.installAssetModules(dependencies, {
         type: 'insertAsset',
         payload: { insertCode }
       })
