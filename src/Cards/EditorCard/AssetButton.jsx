@@ -224,9 +224,9 @@ export default class AssetButton extends PureComponent {
   }
 
   handleInsertAsset = () => {
-    const { insertCode } = this.props
+    const { name, insertCode } = this.props
     this.handleClose()
-    this.props.insertAsset({ insertCode })
+    this.props.insertAsset({ name, insertCode })
   }
 
   handleInsertAssetSelected = () => {
