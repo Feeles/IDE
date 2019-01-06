@@ -74,7 +74,6 @@ const mdComponents = [
           color="primary"
           key={props.key}
           href={props.href}
-          labelPosition="before"
           target="_blank"
           className={cn.containedButton}
         >
