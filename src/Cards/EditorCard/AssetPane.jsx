@@ -1,22 +1,28 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, Fragment } from 'react'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { style, classes } from 'typestyle'
 import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'
 import { fade } from '@material-ui/core/styles/colorManipulator'
+import ArrowBack from '@material-ui/icons/ArrowBack'
+import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import { Pos } from 'codemirror'
-import { includes, intersection, forEach } from 'lodash'
+import { includes, intersection, forEach, uniqBy } from 'lodash'
+import ReactResizeDetector from 'react-resize-detector'
 
 import { assetRegExp } from '../../utils/keywords'
 import replaceExistConsts from '../../utils/replaceExistConsts'
 import AssetButton from './AssetButton'
 import SourceFile from '../../File/SourceFile'
+import extractAssetNames from './extractAssetNames'
+import AssetLink from './AssetLink'
 
 const paneHeight = 80 // %
-export const moduleDir = 'modules'
-const autoloadFile = 'autoload.js'
-const iconSize = 48
+export const pathToInstall = 'modules' // 後方互換性のために変更しない (TODO: feelesrc で上書きできるように)
+const pathToAutoload = 'autoload.js' // 後方互換性のために変更しない (TODO: feelesrc で上書きできるように)
+export const iconSize = 48
 
 const cn = {
   in: style({
@@ -36,6 +42,15 @@ const cn = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center'
+  }),
+  assetLinkContainer: style({
+    display: 'flex',
+    paddingRight: 64
+  }),
+  assetLinkButton: style({
+    padding: 8,
+    margin: 4,
+    marginRight: 0
   })
 }
 const getCn = ({ theme }) => ({
@@ -123,7 +138,8 @@ export default class AssetPane extends PureComponent {
     putFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired,
-    asset: PropTypes.object.isRequired
+    asset: PropTypes.object.isRequired,
+    filePathToBack: PropTypes.string.isRequired
   }
 
   state = {
@@ -131,6 +147,8 @@ export default class AssetPane extends PureComponent {
     assetLineNumber: 0,
     activeCategoryIndex: -1,
     scopeIndexes: [],
+    assetNamesOfLinks: [],
+    linkOnly: false, // 全てのアセットを表示するモード.全ての色を一画面に表示.「中に入れる」ボタンはない
     // オートインストール
     installingFileName: null, // インストール中のモジュール名
     callback: {
@@ -149,9 +167,11 @@ export default class AssetPane extends PureComponent {
     cm.on('update', this.handleRenderWidget)
     cm.on('beforeChange', this.handleIndexReplacement)
     cm.on('change', this.handleIndentLine)
+    cm.on('swapDoc', this.updateAssetLink)
 
     this.handleUpdateWidget(cm)
     this.handleRenderWidget(cm)
+    this.updateAssetLink(cm)
     this.props.globalEvent.on('message.install', this.handleInstallMessage)
   }
 
@@ -198,14 +218,25 @@ export default class AssetPane extends PureComponent {
     cm.setCursor(new Pos(end.line - 1, 0))
     // Pane をとじる
     this.handleClose()
-    // 実行 (UIが固まらないように時間をおいている)
+    // 新しいアセットが更新された可能性が高いので, アセットのリンクを更新
+    this.updateAssetLink(cm)
+    // 実行
     this.props.runApp()
+  }
+
+  updateAssetLink = cm => {
+    // ソースコードに含まれるキーワードを抜き出して Scrapbox 風のリンクを表示する
+    const { asset } = this.props
+    const assetNamesOfLinks = extractAssetNames(cm.getValue()).filter(
+      assetName => Boolean(asset.module[assetName])
+    )
+    this.setState({ assetNamesOfLinks })
   }
 
   handleUpdateWidget = cm => {
     this._widgets.clear()
     for (const [line, text] of cm
-      .getValue('\n')
+      .getValue()
       .split('\n')
       .entries()) {
       this.updateWidget(cm, line, text)
@@ -305,7 +336,8 @@ export default class AssetPane extends PureComponent {
 
   handleClose = () => {
     this.setState({
-      show: false
+      show: false,
+      linkOnly: false
     })
   }
 
@@ -315,7 +347,7 @@ export default class AssetPane extends PureComponent {
       data: {
         value: filePath,
         options: {
-          showBackButton: true, // アセットのコードを閉じて以前のファイルに戻るボタンを表示する
+          showBackButton: Boolean(label), // アセットのコードを閉じて以前のファイルに戻るボタンを表示する
           label // ↑そのボタンを、この名前で「${label}の改造をおわる」と表示
         }
       }
@@ -329,7 +361,7 @@ export default class AssetPane extends PureComponent {
   installModule = (moduleName, callback) => {
     if (this.state.installingFileName) return // すでに別のモジュールをインストール中
     const { asset, files } = this.props
-    const localModuleName = `${moduleDir}/${moduleName}`
+    const localModuleName = `${pathToInstall}/${moduleName}`
     const localFilePath = `${localModuleName}.js`
     const existFile = files.find(file => file.name === localFilePath)
     if (existFile) {
@@ -352,7 +384,7 @@ export default class AssetPane extends PureComponent {
     })
 
     // autoload.js の更新
-    const autoload = files.find(file => file.name === autoloadFile)
+    const autoload = files.find(file => file.name === pathToAutoload)
     if (autoload) {
       let text = autoload.text
       if (text && text.substr(-1) !== '\n') text += '\n'
@@ -430,77 +462,193 @@ export default class AssetPane extends PureComponent {
     }
   }
 
+  handleAssetLinkClick = ({ name }) =>
+    this.openFile({
+      filePath: `${pathToInstall}/${name}.js`,
+      label: name
+    })
+
+  handleBackButtonClick = () => {
+    // 保存＆実行して戻る
+    this.props.runApp()
+    this.openFile({
+      filePath: this.props.filePathToBack
+    })
+  }
+
+  handleMoreButtonClick = () =>
+    this.setState({
+      show: true,
+      linkOnly: true,
+      activeCategoryIndex: 0
+    })
+
+  renderAssetButtons(assetButtons) {
+    const { linkOnly } = this.state
+    if (linkOnly) {
+      // 全てのバリエーションを並べる
+      return assetButtons.map(assetButton =>
+        assetButton.variations ? (
+          <Fragment key={assetButton.name + '-container'}>
+            {this.renderAssetButtons(assetButton.variations)}
+          </Fragment>
+        ) : (
+          <AssetButton
+            key={assetButton.name}
+            name={assetButton.name}
+            description={assetButton.description}
+            iconUrl={assetButton.iconUrl}
+            insertCode={assetButton.insertCode}
+            moduleCode={assetButton.moduleCode}
+            filePath={assetButton.filePath}
+            insertAsset={this.handleInsertAsset}
+            openFile={this.handleOpenFile}
+            findFile={this.props.findFile}
+            localization={this.props.localization}
+            globalEvent={this.props.globalEvent}
+            asset={this.props.asset}
+            linkOnly={linkOnly}
+          />
+        )
+      )
+    } else {
+      // クリックでバリエーションを展開する
+      return assetButtons.map(assetButton => (
+        <AssetButton
+          key={assetButton.name}
+          name={assetButton.name}
+          description={assetButton.description}
+          iconUrl={assetButton.iconUrl}
+          insertCode={assetButton.insertCode}
+          moduleCode={assetButton.moduleCode}
+          filePath={assetButton.filePath}
+          variations={assetButton.variations}
+          insertAsset={this.handleInsertAsset}
+          openFile={this.handleOpenFile}
+          findFile={this.props.findFile}
+          localization={this.props.localization}
+          globalEvent={this.props.globalEvent}
+          asset={this.props.asset}
+          linkOnly={linkOnly}
+        />
+      ))
+    }
+  }
+
   render() {
     const dcn = getCn(this.props)
     const {
       localization,
-      asset: { scopes, categories, buttons }
+      asset: { scopes, categories, buttons },
+      filePathToBack
     } = this.props
-    const { show, activeCategoryIndex, scopeIndexes } = this.state
+    const {
+      show,
+      activeCategoryIndex,
+      scopeIndexes,
+      assetNamesOfLinks,
+      linkOnly
+    } = this.state
 
     const showingScopes = scopes.filter((_, i) => includes(scopeIndexes, i))
 
-    const showingButtons = buttons
-      .filter(
-        b => b.scopes === null || intersection(b.scopes, scopeIndexes).length
-      )
-      .filter(b => b.category === activeCategoryIndex)
+    const _showingButtons = buttons.filter(
+      b => b.category === activeCategoryIndex
+    )
+    const showingButtons = linkOnly
+      ? uniqBy(_showingButtons, assetButton => assetButton.name).filter(
+          assetButton => Boolean(this.props.asset.module[assetButton.name])
+        ) // リンクのみ表示の場合, スコープを無視するが, 代わりにアセット名で一意にする
+      : _showingButtons.filter(
+          b => b.scopes === null || intersection(b.scopes, scopeIndexes).length
+        ) // スコープが被っているものに絞る
 
     return (
-      <div className={classes(dcn.root, show ? cn.in : cn.out)}>
-        {categories.length ? (
-          <div className={dcn.categoryWrapper}>
-            {categories.map((cat, i) => (
-              <div
-                key={i}
-                className={classes(
-                  dcn.category,
-                  i === activeCategoryIndex && dcn.active
-                )}
-                onClick={() => this.setState({ activeCategoryIndex: i })}
-              >
-                <span>{cat.name}</span>
-                <img src={cat.iconUrl} alt="" />
-              </div>
-            ))}
-          </div>
-        ) : null}
-        <div className={dcn.scopeWrapper}>
-          <span className={dcn.scope}>
-            {'+ ' + showingScopes.map(scope => scope.name).join(' ')}
-          </span>
-          <span>{localization.editorCard.selectedScope}</span>
+      <>
+        {/* Scrapbox 風のアセットのリンク */}
+        <div className={cn.assetLinkContainer}>
+          {filePathToBack ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={cn.assetLinkButton}
+              onClick={this.handleBackButtonClick}
+            >
+              <ArrowBack fontSize="large" className={cn.assetLinkButtonIcon} />
+            </Button>
+          ) : null}
+          <ReactResizeDetector
+            handleWidth
+            refreshMode="throttle"
+            refreshRate={500}
+          >
+            {width => (
+              <>
+                {assetNamesOfLinks
+                  .slice(0, Math.floor((width - 64) / (iconSize + 22)) - 1) // 表示限界を計算
+                  .map(assetName => (
+                    <AssetLink
+                      key={assetName}
+                      name={assetName}
+                      asset={this.props.asset}
+                      className={cn.assetLinkButton}
+                      onClick={this.handleAssetLinkClick}
+                    />
+                  ))}
+              </>
+            )}
+          </ReactResizeDetector>
+          {filePathToBack ? null : (
+            <Button
+              variant="outlined"
+              className={cn.assetLinkButton}
+              onClick={this.handleMoreButtonClick}
+            >
+              <MoreHoriz fontSize="large" className={cn.assetLinkButtonIcon} />
+            </Button>
+          )}
         </div>
-        <IconButton
-          aria-label="Close"
-          className={dcn.closer}
-          onClick={this.handleClose}
-        >
-          <Close fontSize="large" />
-        </IconButton>
-        <div className={dcn.scroller}>
-          <div className={cn.wrapper}>
-            {showingButtons.map((b, i) => (
-              <AssetButton
-                key={`${activeCategoryIndex}-${i}`} // 別ページでインスタンスを使い回すことはできない
-                name={b.name}
-                description={b.description}
-                iconUrl={b.iconUrl}
-                insertCode={b.insertCode}
-                moduleCode={b.moduleCode}
-                filePath={b.filePath}
-                variations={b.variations}
-                insertAsset={this.handleInsertAsset}
-                openFile={this.handleOpenFile}
-                findFile={this.props.findFile}
-                localization={this.props.localization}
-                globalEvent={this.props.globalEvent}
-                asset={this.props.asset}
-              />
-            ))}
+        {/* 画面全体のアセット一覧 */}
+        <div className={classes(dcn.root, show ? cn.in : cn.out)}>
+          {categories.length ? (
+            <div className={dcn.categoryWrapper}>
+              {categories.map((cat, i) => (
+                <div
+                  key={i}
+                  className={classes(
+                    dcn.category,
+                    i === activeCategoryIndex && dcn.active
+                  )}
+                  onClick={() => this.setState({ activeCategoryIndex: i })}
+                >
+                  <span>{cat.name}</span>
+                  <img src={cat.iconUrl} alt="" />
+                </div>
+              ))}
+            </div>
+          ) : null}
+          {linkOnly ? null : (
+            <div className={dcn.scopeWrapper}>
+              <span className={dcn.scope}>
+                {'+ ' + showingScopes.map(scope => scope.name).join(' ')}
+              </span>
+              <span>{localization.editorCard.selectedScope}</span>
+            </div>
+          )}
+          <IconButton
+            aria-label="Close"
+            className={dcn.closer}
+            onClick={this.handleClose}
+          >
+            <Close fontSize="large" />
+          </IconButton>
+          <div className={dcn.scroller}>
+            <div className={cn.wrapper}>
+              {this.renderAssetButtons(showingButtons)}
+            </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 }

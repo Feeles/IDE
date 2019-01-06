@@ -10,7 +10,7 @@ import ButtonBase from '@material-ui/core/ButtonBase'
 import Typography from '@material-ui/core/Typography'
 import Add from '@material-ui/icons/Add'
 import Description from '@material-ui/icons/Description'
-import { moduleDir } from './AssetPane'
+import { pathToInstall } from './AssetPane'
 
 const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:']
 const iconSize = 48
@@ -120,7 +120,8 @@ export default class AssetButton extends PureComponent {
     findFile: PropTypes.func.isRequired,
     localization: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired,
-    asset: PropTypes.object.isRequired
+    asset: PropTypes.object.isRequired,
+    linkOnly: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
@@ -161,7 +162,9 @@ export default class AssetButton extends PureComponent {
     // 最初から存在するファイルにアクセス => filePath
     // 追加してからアクセス => asset.module[name]
     const { filePath, asset, name } = this.props
-    return filePath || (asset.module[name] ? `${moduleDir}/${name}.js` : null)
+    return (
+      filePath || (asset.module[name] ? `${pathToInstall}/${name}.js` : null)
+    )
   }
 
   get filePathToOpenSelected() {
@@ -171,13 +174,18 @@ export default class AssetButton extends PureComponent {
     return (
       selected.filePath ||
       (this.props.asset.module[selected.name]
-        ? `${moduleDir}/${selected.name}.js`
+        ? `${pathToInstall}/${selected.name}.js`
         : null)
     )
   }
 
   handleOpen = event => {
-    this.setState({ anchorEl: event.currentTarget })
+    // リンクのみ表示なら「改造する」, そうでなければ Popover を開く
+    if (this.props.linkOnly) {
+      this.handleOpenFile()
+    } else {
+      this.setState({ anchorEl: event.currentTarget })
+    }
   }
 
   handleClose = () => {
@@ -244,7 +252,7 @@ export default class AssetButton extends PureComponent {
 
   render() {
     const dcn = getCn(this.props)
-    const { localization, variations } = this.props
+    const { localization, variations, linkOnly } = this.props
     const { selectedIndex } = this.state
     const selected = this.selected // Popover の中は選択中のバリエーションに切り替わる
 
@@ -259,74 +267,78 @@ export default class AssetButton extends PureComponent {
           >
             <span className={cn.label}>{this.props.name}</span>
           </ButtonBase>
-          <div className={cn.actions}>
-            <ButtonBase
-              focusRipple
-              disabled={!this.props.insertCode}
-              className={classes(dcn.button, cn.iconButton)}
-              onClick={this.handleInsertAsset}
-            >
-              <Add />
-            </ButtonBase>
-            <ButtonBase
-              focusRipple
-              disabled={!this.filePathToOpen}
-              className={classes(dcn.button, cn.iconButton)}
-              onClick={this.handleOpenFile}
-            >
-              <Description />
-            </ButtonBase>
-          </div>
-        </div>
-        <Popover
-          open={Boolean(this.state.anchorEl)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          anchorEl={this.state.anchorEl}
-          classes={cn.popoverClasses}
-          onClose={this.handleClose}
-        >
-          <Typography variant="h5">{selected.name}</Typography>
-          <Typography variant="body1" gutterBottom>
-            {selected.description}
-          </Typography>
-          {variations && (
-            <div className={cn.variationWrapper}>
-              {variations.map((child, i) => (
-                <div
-                  key={i}
-                  className={classes(
-                    dcn.variation,
-                    selectedIndex === i && dcn.selected
-                  )}
-                  onClick={() => this.setState({ selectedIndex: i })}
-                >
-                  <img src={child.iconUrl} alt={child.name} />
-                </div>
-              ))}
+          {linkOnly ? null : (
+            <div className={cn.actions}>
+              <ButtonBase
+                focusRipple
+                disabled={!this.props.insertCode}
+                className={classes(dcn.button, cn.iconButton)}
+                onClick={this.handleInsertAsset}
+              >
+                <Add />
+              </ButtonBase>
+              <ButtonBase
+                focusRipple
+                disabled={!this.filePathToOpen}
+                className={classes(dcn.button, cn.iconButton)}
+                onClick={this.handleOpenFile}
+              >
+                <Description />
+              </ButtonBase>
             </div>
           )}
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={!selected.insertCode}
-              onClick={this.handleInsertAssetSelected}
-            >
-              <Add />
-              {localization.editorCard.insert}
-            </Button>
-            <span className={cn.blank} />
-            <Button
-              variant="outlined"
-              color="primary"
-              disabled={!this.filePathToOpenSelected}
-              onClick={this.handleOpenFileSelected}
-            >
-              <Description />
-              {localization.editorCard.edit(selected.name)}
-            </Button>
-          </div>
-        </Popover>
+        </div>
+        {linkOnly ? null : (
+          <Popover
+            open={Boolean(this.state.anchorEl)}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            anchorEl={this.state.anchorEl}
+            classes={cn.popoverClasses}
+            onClose={this.handleClose}
+          >
+            <Typography variant="h5">{selected.name}</Typography>
+            <Typography variant="body1" gutterBottom>
+              {selected.description}
+            </Typography>
+            {variations && (
+              <div className={cn.variationWrapper}>
+                {variations.map((child, i) => (
+                  <div
+                    key={i}
+                    className={classes(
+                      dcn.variation,
+                      selectedIndex === i && dcn.selected
+                    )}
+                    onClick={() => this.setState({ selectedIndex: i })}
+                  >
+                    <img src={child.iconUrl} alt={child.name} />
+                  </div>
+                ))}
+              </div>
+            )}
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={!selected.insertCode}
+                onClick={this.handleInsertAssetSelected}
+              >
+                <Add />
+                {localization.editorCard.insert}
+              </Button>
+              <span className={cn.blank} />
+              <Button
+                variant="outlined"
+                color="primary"
+                disabled={!this.filePathToOpenSelected}
+                onClick={this.handleOpenFileSelected}
+              >
+                <Description />
+                {localization.editorCard.edit(selected.name)}
+              </Button>
+            </div>
+          </Popover>
+        )}
       </>
     )
   }
