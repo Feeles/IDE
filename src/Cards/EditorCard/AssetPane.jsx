@@ -9,7 +9,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator'
 import Home from '@material-ui/icons/Home'
 import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import { Pos } from 'codemirror'
-import { includes, intersection, forEach, uniqBy } from 'lodash'
+import { includes, intersection, forEach, uniqBy, differenceWith } from 'lodash'
 import ReactResizeDetector from 'react-resize-detector'
 
 import { assetRegExp } from '../../utils/keywords'
@@ -151,7 +151,7 @@ export default class AssetPane extends PureComponent {
     assetNamesOfLinks: [],
     linkOnly: false, // 全てのアセットを表示するモード.全ての色を一画面に表示.「中に入れる」ボタンはない
     // オートインストール
-    installingFileName: null, // インストール中のモジュール名
+    installingFileNames: null, // インストール中のモジュール名
     callback: {
       // インストール後の挙動
       type: '', // insertAsset | openFile | runApp
@@ -183,14 +183,15 @@ export default class AssetPane extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const { files } = this.props
-    const { installingFileName, callback } = this.state
+    const { installingFileNames, callback } = this.state
     // オートインストールの完了待ち
-    if (installingFileName && prevProps.files !== this.props.files) {
-      if (files.some(file => file.name === installingFileName)) {
-        // 発見したので待ち状態を初期化してコールバックを実行
+    if (installingFileNames && prevProps.files !== this.props.files) {
+      const all = files.map(file => file.name)
+      if (installingFileNames.every(filePath => includes(all, filePath))) {
+        // 全てのファイルが含まれているので, 待ち状態を初期化してコールバックを実行
         this.setState(
           {
-            installingFileName: null,
+            installingFileNames: null,
             callback: { type: '', payload: null }
           },
           () => this.executeCallback(callback)
@@ -360,43 +361,48 @@ export default class AssetPane extends PureComponent {
   /**
    * アセットに含まれるモジュールをプロジェクトにコピーする
    */
-  installModule = (moduleName, callback) => {
-    if (this.state.installingFileName) {
+  installAssetModules = (assetNames, callback) => {
+    if (this.state.installingFileNames) {
       // すでに別のモジュールをインストール中
-      this._pendingInstallModule.push([moduleName, callback]) // 前回コールされた installModule の終了を待ってから実行する
+      this._pendingInstallModule.push([assetNames, callback]) // 前回コールされた installModule の終了を待ってから実行する
       return
     }
-
     const { asset, files } = this.props
-    const localModuleName = `${pathToInstall}/${moduleName}`
-    const localFilePath = `${localModuleName}.js`
-    const existFile = files.find(file => file.name === localFilePath)
-    if (existFile) {
-      // すでにインストールされている
+
+    // module が存在するかどうか
+    for (const assetName of assetNames) {
+      const mod = asset.module[assetName]
+      if (!mod) throw new Error(`${assetName} is not exist in asset.module`) // TODO: 例外処理
+    }
+
+    const toPath = name => `${pathToInstall}/${name}.js`
+
+    const notInstalled = differenceWith(
+      assetNames,
+      files,
+      (assetName, file) => toPath(assetName) === file.name
+    )
+    if (notInstalled.length === 0) {
+      // すでに全部インストールされている
       this.executeCallback(callback)
       return
     }
-    const mod = asset.module[moduleName]
-    if (!mod) throw new Error(`${moduleName} is not exist in module`) // TODO: 例外処理
 
     // まずコールバックを設定してからファイルをコピー
-    this.setState({ installingFileName: localFilePath, callback }, () => {
-      this.props.putFile(
-        new SourceFile({
-          type: 'text/javascript',
-          name: localFilePath,
-          text: mod.code
-        })
+    const installingFileNames = assetNames.map(toPath)
+    this.setState({ installingFileNames, callback }, async () => {
+      const autoload = this.props.files.find(
+        file => file.name === pathToAutoload
       )
-    })
+      if (!autoload) throw new Error(`${pathToAutoload} is not found`)
 
-    // autoload.js の更新
-    const autoload = files.find(file => file.name === pathToAutoload)
-    if (autoload) {
+      // autoload.js の更新
       let text = autoload.text
       if (text && text.substr(-1) !== '\n') text += '\n'
-      text += `import '${localModuleName}';\n`
-      this.props.putFile(
+      for (const assetName of notInstalled) {
+        text += `import '${pathToInstall}/${assetName}'\n`
+      }
+      await this.props.putFile(
         autoload,
         new SourceFile({
           type: autoload.type,
@@ -404,7 +410,18 @@ export default class AssetPane extends PureComponent {
           text
         })
       )
-    }
+      // ファイルのコピー
+      for (const assetName of assetNames) {
+        const mod = asset.module[assetName]
+        await this.props.putFile(
+          new SourceFile({
+            type: 'text/javascript',
+            name: toPath(assetName),
+            text: mod.code
+          })
+        )
+      }
+    })
   }
 
   executeCallback = ({ type, payload }) => {
@@ -422,7 +439,7 @@ export default class AssetPane extends PureComponent {
     // pending 状態のインストールを実行
     const next = this._pendingInstallModule.shift()
     if (next) {
-      this.installModule.apply(this, next)
+      this.installAssetModules.apply(this, next)
     }
   }
 
@@ -435,7 +452,7 @@ export default class AssetPane extends PureComponent {
     const mod = asset.module[name]
     if (mod) {
       // インストール後に runApp
-      this.installModule(name, {
+      this.installAssetModules([name], {
         type: 'runApp'
       })
     } else {
@@ -449,7 +466,7 @@ export default class AssetPane extends PureComponent {
     const mod = asset.module[name]
     if (mod) {
       // インストール後に insertAsset
-      this.installModule(name, {
+      this.installAssetModules([name], {
         type: 'insertAsset',
         payload: { insertCode }
       })
@@ -464,7 +481,7 @@ export default class AssetPane extends PureComponent {
     const mod = asset.module[name]
     if (mod) {
       // インストール後に openFile
-      this.installModule(name, {
+      this.installAssetModules([name], {
         type: 'openFile',
         payload: { filePath, label: name }
       })
