@@ -1,6 +1,6 @@
 import includes from 'lodash/includes'
 
-const regex = /(rule\.つくる|\S\.しょうかんする|\S\.へんしんする)\(['"]([^'"]+)['"]/g
+const regex = /(rule\.つくる\(|\S\.しょうかんする\(|\S\.へんしんする\(|\.skill = )['"]([^'"]+)['"]/g
 const errorMessage = 'extractAssetNames allows only string at first argument'
 
 export default function extractAssetNames(code = '') {

@@ -41,6 +41,11 @@ rule.ゲームがはじまったとき(async function() {
     assetNames: ['プレイヤー', '青色のスライム']
   },
   {
+    // skill
+    code: `this.skill = 'ビーム'`,
+    assetNames: ['ビーム']
+  },
+  {
     code: '',
     assetNames: []
   }
