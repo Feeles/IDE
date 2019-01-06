@@ -24,6 +24,15 @@ const cn = {
 const getCn = props => ({
   icon: style({
     color: props.theme.typography.button.color
+  }),
+  editorMenuContainer: style({
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: props.theme.spacing.unit,
+    paddingTop: 0
+  }),
+  button: style({
+    marginRight: props.theme.spacing.unit
   })
 })
 
@@ -67,48 +76,61 @@ export default class MenuBar extends React.Component {
     const showBackButton = filePath !== filePathToBack
 
     return (
-      <CardFloatingBar>
-        {this.props.localization.editorCard.title}
-        {iconUrl ? <img src={iconUrl} alt="" className={cn.icon} /> : null}
-        <Button
-          variant="text"
-          disabled={!this.props.hasHistory}
-          onClick={this.props.handleUndo}
-        >
-          <HardwareKeyboardBackspace />
-          {this.props.localization.editorCard.undo}
-        </Button>
-        {showBackButton ? null : (
-          <SelectTab
-            filePath={filePath}
-            tabs={this.props.tabs}
-            globalEvent={this.props.globalEvent}
-            localization={this.props.localization}
-          />
-        )}
-        <IconButton onClick={this.toggleLineWidget}>
-          {this.props.showLineWidget ? (
-            <Layers className={dcn.icon} fontSize="small" />
-          ) : (
-            <LayersClear fontSize="small" />
+      <>
+        <CardFloatingBar>
+          {this.props.localization.editorCard.title}
+          {iconUrl ? <img src={iconUrl} alt="" className={cn.icon} /> : null}
+          <div className={cn.blank} />
+          {showBackButton ? null : (
+            <SelectTab
+              filePath={filePath}
+              tabs={this.props.tabs}
+              globalEvent={this.props.globalEvent}
+              localization={this.props.localization}
+              className={dcn.button}
+            />
           )}
-        </IconButton>
-        <div className={cn.blank} />
-        {showBackButton ? (
-          <Button variant="contained" color="primary" onClick={this.handleBack}>
-            <Check />
-            {this.props.localization.editorCard.stopEditing(this.props.label)}
+          {showBackButton ? (
+            <Button
+              variant="contained"
+              size="small"
+              color="primary"
+              onClick={this.handleBack}
+              className={dcn.button}
+            >
+              <Check />
+              {this.props.localization.editorCard.stopEditing(this.props.label)}
+            </Button>
+          ) : null}
+          <PlayMenu
+            getFiles={this.props.getFiles}
+            runApp={this.props.runApp}
+            href={this.props.href}
+            localization={this.props.localization}
+            hasChanged={this.props.hasChanged}
+          />
+        </CardFloatingBar>
+        <div className={dcn.editorMenuContainer}>
+          <Button
+            variant="outlined"
+            size="small"
+            disabled={!this.props.hasHistory}
+            onClick={this.props.handleUndo}
+            className={dcn.button}
+          >
+            <HardwareKeyboardBackspace />
+            {this.props.localization.editorCard.undo}
           </Button>
-        ) : null}
-        <div className={cn.blank} />
-        <PlayMenu
-          getFiles={this.props.getFiles}
-          runApp={this.props.runApp}
-          href={this.props.href}
-          localization={this.props.localization}
-          hasChanged={this.props.hasChanged}
-        />
-      </CardFloatingBar>
+          <div className={cn.blank} />
+          <IconButton onClick={this.toggleLineWidget}>
+            {this.props.showLineWidget ? (
+              <Layers className={dcn.icon} fontSize="small" />
+            ) : (
+              <LayersClear fontSize="small" />
+            )}
+          </IconButton>
+        </div>
+      </>
     )
   }
 }

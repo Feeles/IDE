@@ -43,6 +43,7 @@ Icon.propTypes = {
 
 export default class SelectTab extends React.Component {
   static propTypes = {
+    className: PropTypes.string.isRequired,
     localization: PropTypes.object.isRequired,
     tabs: PropTypes.array.isRequired,
     filePath: PropTypes.string.isRequired,
@@ -76,7 +77,11 @@ export default class SelectTab extends React.Component {
 
     return (
       <>
-        <Button variant="text" onClick={this.handleClick}>
+        <Button
+          variant="text"
+          onClick={this.handleClick}
+          className={this.props.className}
+        >
           {selected ? <Icon iconUrl={selected.iconUrl} /> : null}
           <ArrowDropDown />
         </Button>
