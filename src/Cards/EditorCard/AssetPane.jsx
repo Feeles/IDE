@@ -9,7 +9,16 @@ import { fade } from '@material-ui/core/styles/colorManipulator'
 import Home from '@material-ui/icons/Home'
 import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import { Pos } from 'codemirror'
-import { includes, intersection, forEach, uniqBy, differenceWith } from 'lodash'
+import {
+  includes,
+  intersection,
+  forEach,
+  uniq,
+  uniqBy,
+  differenceWith,
+  debounce,
+  flatten
+} from 'lodash'
 import ReactResizeDetector from 'react-resize-detector'
 
 import { assetRegExp } from '../../utils/keywords'
@@ -460,6 +469,7 @@ export default class AssetPane extends PureComponent {
     }
   }
 
+  _pendingAssetsToInstall = []
   handleInstallMessage = event => {
     const {
       data: { value: name }
@@ -468,16 +478,33 @@ export default class AssetPane extends PureComponent {
     // module が存在するなら先に install
     const mod = asset.module[name]
     if (mod) {
-      // 依存アセットもここで同時にインストール
-      const dependencies = this.getDependencies(name)
-      // インストール後に runApp
-      this.installAssetModules(dependencies, {
-        type: 'runApp'
-      })
+      this._pendingAssetsToInstall.push(name) // ここでは pending list に入れるだけ
+      this.installAssetsFromMessage() // この関数でインストールする
     } else {
       // そもそもアセットの名前を間違えているかも知れない
     }
   }
+
+  installAssetsFromMessage = debounce(
+    (() => {
+      // install message を一定時間 debounce して, 一度にインストール
+      const { length } = this._pendingAssetsToInstall
+      if (length <= 0) return // ない
+
+      const assetNames = uniq(
+        flatten(
+          this._pendingAssetsToInstall
+            .splice(0, length) // pending list から削除
+            .map(assetName => this.getDependencies(assetName)) // 依存アセットもここで同時にインストール
+        )
+      )
+      // インストール後に runApp
+      this.installAssetModules(assetNames, {
+        type: 'runApp'
+      })
+    }).bind(this),
+    16
+  )
 
   handleInsertAsset = ({ name, insertCode }) => {
     const { asset } = this.props
