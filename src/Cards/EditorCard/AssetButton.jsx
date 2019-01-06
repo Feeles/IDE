@@ -238,7 +238,8 @@ export default class AssetButton extends PureComponent {
     this.handleClose()
     this.props.openFile({
       name: this.props.name,
-      filePath: this.filePathToOpen
+      filePath: this.filePathToOpen,
+      iconUrl: this.props.iconUrl
     })
   }
 
@@ -246,7 +247,8 @@ export default class AssetButton extends PureComponent {
     this.handleClose()
     this.props.openFile({
       name: this.selected.name,
-      filePath: this.filePathToOpenSelected
+      filePath: this.filePathToOpenSelected,
+      iconUrl: this.selected.iconUrl
     })
   }
 
