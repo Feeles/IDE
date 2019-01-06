@@ -46,8 +46,17 @@ rule.ゲームがはじまったとき(async function() {
   }
 ]
 
+const invalids = [
+  {
+    code: {}
+  }
+]
+
 test('extractAssetNames', t => {
   for (const { code, assetNames } of cases) {
     t.deepEqual(extractAssetNames(code), assetNames)
+  }
+  for (const { code } of invalids) {
+    t.throws(() => extractAssetNames(code))
   }
 })

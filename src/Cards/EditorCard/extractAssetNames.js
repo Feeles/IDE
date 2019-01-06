@@ -1,8 +1,10 @@
 import includes from 'lodash/includes'
 
 const regex = /(rule\.つくる|\S\.しょうかんする|\S\.へんしんする)\(['"]([^'"]+)['"]/g
+const errorMessage = 'extractAssetNames allows only string at first argument'
 
 export default function extractAssetNames(code = '') {
+  if (typeof code !== 'string') throw new TypeError(errorMessage)
   const assetNames = []
   let result
   regex.lastIndex = 0 // 正規表現のマッチを初期化
