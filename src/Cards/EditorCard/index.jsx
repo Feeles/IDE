@@ -80,7 +80,8 @@ export default class EditorCard extends PureComponent {
   state = {
     filePath: '', // 現在開いているファイルの名前. 空文字の場合は何も開いていない
     tabs: [], // プルダウンメニューの中で表示するファイルのリスト
-    label: '', // このファイルの呼び名（タブから取得する）
+    label: '', // このファイルの呼び名（アセットから取得する）
+    iconUrl: '', // このファイルのアイコン（アセットから取得する）
     filePathToBack: '' // 最初に表示するファイルのパス. ホーム
   }
 
@@ -110,6 +111,7 @@ export default class EditorCard extends PureComponent {
   }
 
   openFile = (filePath, options = {}) => {
+    console.log(options)
     if (!filePath || filePath === this.state.filePath) return
 
     const file = this.props.findFile(filePath) // file type を知るために探す
@@ -131,7 +133,8 @@ export default class EditorCard extends PureComponent {
           ? options.label + ''
           : existTab
           ? existTab.label
-          : file.plain
+          : file.plain,
+        iconUrl: options.iconUrl || ''
       })
 
       this.props.setCardVisibility('EditorCard', true)
@@ -220,6 +223,7 @@ export default class EditorCard extends PureComponent {
           putFile={putFile}
           tabs={this.state.tabs}
           label={this.state.label}
+          iconUrl={this.state.iconUrl}
           filePathToBack={this.state.filePathToBack}
           globalEvent={this.props.globalEvent}
           asset={this.props.asset}

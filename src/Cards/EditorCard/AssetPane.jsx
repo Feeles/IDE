@@ -353,14 +353,15 @@ export default class AssetPane extends PureComponent {
     })
   }
 
-  openFile = ({ filePath, label }) => {
+  openFile = ({ filePath, label, iconUrl }) => {
     if (!filePath) return
     this.props.globalEvent.emit('message.editor', {
       data: {
         value: filePath,
         options: {
           showBackButton: Boolean(label), // アセットのコードを閉じて以前のファイルに戻るボタンを表示する
-          label // ↑そのボタンを、この名前で「${label}の改造をおわる」と表示
+          label, // ↑そのボタンを、この名前で「${label}の改造をおわる」と表示
+          iconUrl
         }
       }
     })
@@ -523,7 +524,7 @@ export default class AssetPane extends PureComponent {
     }
   }
 
-  handleOpenFile = ({ name, filePath }) => {
+  handleOpenFile = ({ name, filePath, iconUrl }) => {
     const { asset } = this.props
     // module が存在するなら先に install
     const mod = asset.module[name]
@@ -531,17 +532,21 @@ export default class AssetPane extends PureComponent {
       // インストール後に openFile
       this.installAssetModules([name], {
         type: 'openFile',
-        payload: { filePath, label: name }
+        payload: { filePath, label: name, iconUrl }
       })
     } else {
       // 開けるかどうか試す
-      this.openFile({ filePath, label: name })
+      this.openFile({ filePath, label: name, iconUrl })
     }
   }
 
-  handleAssetLinkClick = ({ name }) => {
+  handleAssetLinkClick = ({ name, iconUrl }) => {
     // もしそのアセットがインストールされていなければ、インストールしてから開く
-    this.handleOpenFile({ name, filePath: `${pathToInstall}/${name}.js` })
+    this.handleOpenFile({
+      name,
+      filePath: `${pathToInstall}/${name}.js`,
+      iconUrl
+    })
   }
 
   handleBackButtonClick = () => {

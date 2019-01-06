@@ -15,6 +15,9 @@ import SelectTab from './SelectTab'
 const cn = {
   blank: style({
     flex: '1 1 auto'
+  }),
+  icon: style({
+    height: 44
   })
 }
 
@@ -40,6 +43,7 @@ export default class MenuBar extends React.Component {
     showLineWidget: PropTypes.bool.isRequired,
     setShowLineWidget: PropTypes.func.isRequired,
     label: PropTypes.string.isRequired,
+    iconUrl: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired
   }
@@ -58,13 +62,14 @@ export default class MenuBar extends React.Component {
 
   render() {
     const dcn = getCn(this.props)
-    const { filePath, filePathToBack } = this.props
+    const { filePath, filePathToBack, iconUrl } = this.props
 
     const showBackButton = filePath !== filePathToBack
 
     return (
       <CardFloatingBar>
         {this.props.localization.editorCard.title}
+        {iconUrl ? <img src={iconUrl} alt="" className={cn.icon} /> : null}
         <Button
           variant="text"
           disabled={!this.props.hasHistory}

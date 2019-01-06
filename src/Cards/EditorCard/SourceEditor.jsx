@@ -62,6 +62,7 @@ export default class SourceEditor extends PureComponent {
     putFile: PropTypes.func.isRequired,
     tabs: PropTypes.array.isRequired,
     label: PropTypes.string.isRequired,
+    iconUrl: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object
@@ -290,6 +291,7 @@ export default class SourceEditor extends PureComponent {
           showLineWidget={this.state.showLineWidget}
           setShowLineWidget={this.setShowLineWidget}
           label={this.props.label}
+          iconUrl={this.props.iconUrl}
           filePathToBack={this.props.filePathToBack}
           globalEvent={this.props.globalEvent}
         />

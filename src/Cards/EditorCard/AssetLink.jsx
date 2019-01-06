@@ -42,8 +42,9 @@ export default class AssetLink extends React.Component {
   }
 
   handleClick = () => {
-    const { name } = this.props
-    this.props.onClick({ name })
+    const { name, iconUrl } = this.state
+    if (!name) return
+    this.props.onClick({ name, iconUrl })
   }
 
   render() {
