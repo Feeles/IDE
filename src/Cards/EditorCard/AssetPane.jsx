@@ -20,6 +20,7 @@ import {
   flatten
 } from 'lodash'
 import ReactResizeDetector from 'react-resize-detector'
+import Collapse from '@material-ui/core/Collapse'
 
 import { assetRegExp } from '../../utils/keywords'
 import replaceExistConsts from '../../utils/replaceExistConsts'
@@ -52,10 +53,14 @@ const cn = {
     flexWrap: 'wrap',
     justifyContent: 'center'
   }),
-  assetLinkContainer: style({
-    display: 'flex',
-    paddingRight: 64
-  }),
+  assetLinkContainerClasses: {
+    wrapperInner: style({
+      width: '100%',
+      display: 'flex',
+      paddingRight: 64
+    })
+  },
+
   assetLinkButton: style({
     padding: 8,
     margin: 4,
@@ -149,7 +154,8 @@ export default class AssetPane extends PureComponent {
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object.isRequired,
     filePath: PropTypes.string.isRequired,
-    filePathToBack: PropTypes.string.isRequired
+    filePathToBack: PropTypes.string.isRequired,
+    isExpandingEditorCard: PropTypes.bool.isRequired
   }
 
   state = {
@@ -650,7 +656,12 @@ export default class AssetPane extends PureComponent {
     return (
       <>
         {/* Scrapbox 風のアセットのリンク */}
-        <div className={cn.assetLinkContainer}>
+        <Collapse
+          in={!this.props.isExpandingEditorCard}
+          classes={cn.assetLinkContainerClasses}
+          mountOnEnter
+          unmountOnExit
+        >
           {showBackButton ? (
             <Button
               variant="contained"
@@ -691,7 +702,7 @@ export default class AssetPane extends PureComponent {
               <MoreHoriz fontSize="large" className={cn.assetLinkButtonIcon} />
             </Button>
           )}
-        </div>
+        </Collapse>
         {/* 画面全体のアセット一覧 */}
         <div className={classes(dcn.root, show ? cn.in : cn.out)}>
           {categories.length ? (

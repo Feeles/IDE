@@ -22,7 +22,7 @@ const getCn = props => ({
     height: '100%',
     direction: 'ltr',
     flex: '0 0 auto',
-    flexBasis: props.visible ? '50%' : 0,
+    flexBasis: props.visible ? props.flexBasis : 0,
     padding: props.visible ? '16px 20px 16px 0' : 0,
     overflow: props.visible ? 'initial' : 'hidden'
   }),
@@ -42,16 +42,16 @@ export default class CardWindow extends PureComponent {
     order: PropTypes.number.isRequired,
     cardProps: PropTypes.object.isRequired,
     fit: PropTypes.bool.isRequired,
-    width: PropTypes.number.isRequired,
     showAll: PropTypes.bool.isRequired,
-    footer: PropTypes.node
+    footer: PropTypes.node,
+    flexBasis: PropTypes.string.isRequired
   }
 
   static defaultProps = {
     visible: false,
     fit: false,
-    width: 480,
-    footer: null
+    footer: null,
+    flexBasis: '50%'
   }
 
   get cardProps() {

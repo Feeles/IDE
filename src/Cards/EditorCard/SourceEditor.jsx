@@ -65,7 +65,9 @@ export default class SourceEditor extends PureComponent {
     iconUrl: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
     globalEvent: PropTypes.object.isRequired,
-    asset: PropTypes.object
+    asset: PropTypes.object,
+    isExpandingEditorCard: PropTypes.bool.isRequired,
+    setExpandingEditorCard: PropTypes.func.isRequired
   }
 
   state = {
@@ -294,6 +296,8 @@ export default class SourceEditor extends PureComponent {
           iconUrl={this.props.iconUrl}
           filePathToBack={this.props.filePathToBack}
           globalEvent={this.props.globalEvent}
+          isExpandingEditorCard={this.props.isExpandingEditorCard}
+          setExpandingEditorCard={this.props.setExpandingEditorCard}
         />
         {this.state.loading ? (
           <LinearProgress color="primary" className={cn.progress} />
@@ -331,6 +335,8 @@ export default class SourceEditor extends PureComponent {
             asset={this.props.asset}
             filePath={this.props.filePath}
             filePathToBack={this.props.filePathToBack}
+            isExpandingEditorCard={this.props.isExpandingEditorCard}
+            setExpandingEditorCard={this.props.setExpandingEditorCard}
           />
         )}
         {this.codemirror && (

@@ -74,7 +74,9 @@ export default class EditorCard extends PureComponent {
     cardProps: PropTypes.object.isRequired,
     setCardVisibility: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired,
-    asset: PropTypes.object
+    asset: PropTypes.object,
+    isExpandingEditorCard: PropTypes.bool.isRequired,
+    setExpandingEditorCard: PropTypes.func.isRequired
   }
 
   state = {
@@ -206,7 +208,11 @@ export default class EditorCard extends PureComponent {
     } = this.props
 
     return (
-      <Card {...cardPropsBag} fit width={640}>
+      <Card
+        {...cardPropsBag}
+        fit
+        flexBasis={this.props.isExpandingEditorCard ? '75%' : '50%'}
+      >
         <SourceEditor
           fileView={this.props.fileView}
           filePath={filePath}
@@ -227,6 +233,8 @@ export default class EditorCard extends PureComponent {
           filePathToBack={this.state.filePathToBack}
           globalEvent={this.props.globalEvent}
           asset={this.props.asset}
+          isExpandingEditorCard={this.props.isExpandingEditorCard}
+          setExpandingEditorCard={this.props.setExpandingEditorCard}
         />
       </Card>
     )

@@ -3,9 +3,12 @@ import PropTypes from 'prop-types'
 import { style } from 'typestyle'
 import Button from '@material-ui/core/Button'
 import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace'
+import Fullscreen from '@material-ui/icons/Fullscreen'
+import FullscreenExit from '@material-ui/icons/FullscreenExit'
 import Layers from '@material-ui/icons/Layers'
 import LayersClear from '@material-ui/icons/LayersClear'
 import Check from '@material-ui/icons/Check'
+import Collapse from '@material-ui/core/Collapse'
 
 import PlayMenu from './PlayMenu'
 import CardFloatingBar from '../CardFloatingBar'
@@ -25,14 +28,17 @@ const getCn = props => ({
   icon: style({
     color: props.theme.typography.button.color
   }),
-  editorMenuContainer: style({
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: props.theme.spacing.unit,
-    paddingTop: 0
-  }),
+  editorMenuContainerClasses: {
+    wrapperInner: style({
+      display: 'flex',
+      justifyContent: 'space-between',
+      padding: props.isExpandingEditorCard ? 0 : props.theme.spacing.unit,
+      paddingTop: 0
+    })
+  },
   button: style({
-    marginRight: props.theme.spacing.unit
+    marginRight: props.theme.spacing.unit,
+    minWidth: 32
   })
 })
 
@@ -54,7 +60,9 @@ export default class MenuBar extends React.Component {
     label: PropTypes.string.isRequired,
     iconUrl: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    isExpandingEditorCard: PropTypes.bool.isRequired,
+    setExpandingEditorCard: PropTypes.func.isRequired
   }
 
   toggleLineWidget = () => {
@@ -69,9 +77,18 @@ export default class MenuBar extends React.Component {
     })
   }
 
+  toggleExpandingEditorCard = () => {
+    this.props.setExpandingEditorCard(!this.props.isExpandingEditorCard)
+  }
+
   render() {
     const dcn = getCn(this.props)
-    const { filePath, filePathToBack, iconUrl } = this.props
+    const {
+      filePath,
+      filePathToBack,
+      iconUrl,
+      isExpandingEditorCard
+    } = this.props
 
     const showBackButton = filePath !== filePathToBack
 
@@ -81,6 +98,15 @@ export default class MenuBar extends React.Component {
           {this.props.localization.editorCard.title}
           {iconUrl ? <img src={iconUrl} alt="" className={cn.icon} /> : null}
           <div className={cn.blank} />
+          <Button
+            variant={isExpandingEditorCard ? 'contained' : 'outlined'}
+            color="primary"
+            size="small"
+            className={dcn.button}
+            onClick={this.toggleExpandingEditorCard}
+          >
+            {isExpandingEditorCard ? <FullscreenExit /> : <Fullscreen />}
+          </Button>
           {showBackButton ? null : (
             <SelectTab
               filePath={filePath}
@@ -110,7 +136,10 @@ export default class MenuBar extends React.Component {
             hasChanged={this.props.hasChanged}
           />
         </CardFloatingBar>
-        <div className={dcn.editorMenuContainer}>
+        <Collapse
+          in={!isExpandingEditorCard}
+          classes={dcn.editorMenuContainerClasses}
+        >
           <Button
             variant="outlined"
             size="small"
@@ -129,7 +158,7 @@ export default class MenuBar extends React.Component {
               <LayersClear fontSize="small" />
             )}
           </IconButton>
-        </div>
+        </Collapse>
       </>
     )
   }

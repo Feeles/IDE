@@ -58,7 +58,9 @@ export default class CardContainer extends PureComponent {
     saveAs: PropTypes.func.isRequired,
     showNotice: PropTypes.func.isRequired,
     globalEvent: PropTypes.object.isRequired,
-    asset: PropTypes.object
+    asset: PropTypes.object,
+    isExpandingEditorCard: PropTypes.bool.isRequired,
+    setExpandingEditorCard: PropTypes.func.isRequired
   }
 
   state = {
@@ -149,7 +151,9 @@ export default class CardContainer extends PureComponent {
       reboot: this.props.reboot,
       saveAs: this.props.saveAs,
       isFullScreen: this.props.monitorType === MonitorTypes.FullScreen,
-      asset: this.props.asset
+      asset: this.props.asset,
+      isExpandingEditorCard: this.props.isExpandingEditorCard,
+      setExpandingEditorCard: this.props.setExpandingEditorCard
     }
 
     return (

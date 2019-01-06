@@ -78,7 +78,8 @@ export default class MonitorCard extends PureComponent {
     findFile: PropTypes.func.isRequired,
     putFile: PropTypes.func.isRequired,
     saveAs: PropTypes.func.isRequired,
-    globalEvent: PropTypes.object.isRequired
+    globalEvent: PropTypes.object.isRequired,
+    isExpandingEditorCard: PropTypes.bool.isRequired
   }
 
   state = {
@@ -159,7 +160,10 @@ export default class MonitorCard extends PureComponent {
     const feelesrc = loadConfig('feelesrc')
 
     return (
-      <Card {...this.props.cardPropsBag}>
+      <Card
+        {...this.props.cardPropsBag}
+        flexBasis={this.props.isExpandingEditorCard ? '25%' : '50%'}
+      >
         <CardFloatingBar>
           <span>{this.props.localization.monitorCard.title}</span>
           <div className={cn.blank} />

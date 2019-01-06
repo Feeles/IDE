@@ -101,7 +101,9 @@ export default class Main extends Component {
     // card =(emit)=> globalEvent =(on)=> card
     globalEvent: new EventEmitter({ wildcard: true }),
     // Asset definition exactly using
-    asset: null
+    asset: null,
+
+    isExpandingEditorCard: false // 集中執筆モード的な
   }
 
   get rootWidth() {
@@ -467,6 +469,9 @@ export default class Main extends Component {
     })
   }
 
+  setExpandingEditorCard = isExpandingEditorCard =>
+    this.setState({ isExpandingEditorCard })
+
   render() {
     if (this.componentWillMountCompat) {
       // render よりも先に呼ばれるライフサイクルメソッドがないので,
@@ -542,6 +547,8 @@ export default class Main extends Component {
           ref={this.handleContainerRef}
           globalEvent={this.state.globalEvent}
           asset={this.state.asset}
+          isExpandingEditorCard={this.state.isExpandingEditorCard}
+          setExpandingEditorCard={this.setExpandingEditorCard}
         />
         <FileDialog
           ref={this.handleFileDialog}
