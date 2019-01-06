@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import Close from '@material-ui/icons/Close'
 import { fade } from '@material-ui/core/styles/colorManipulator'
-import ArrowBack from '@material-ui/icons/ArrowBack'
+import Home from '@material-ui/icons/Home'
 import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import { Pos } from 'codemirror'
 import { includes, intersection, forEach, uniqBy } from 'lodash'
@@ -139,6 +139,7 @@ export default class AssetPane extends PureComponent {
     localization: PropTypes.object.isRequired,
     globalEvent: PropTypes.object.isRequired,
     asset: PropTypes.object.isRequired,
+    filePath: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired
   }
 
@@ -550,6 +551,7 @@ export default class AssetPane extends PureComponent {
     const {
       localization,
       asset: { scopes, categories, buttons },
+      filePath,
       filePathToBack
     } = this.props
     const {
@@ -573,18 +575,20 @@ export default class AssetPane extends PureComponent {
           b => b.scopes === null || intersection(b.scopes, scopeIndexes).length
         ) // スコープが被っているものに絞る
 
+    const showBackButton = filePath !== filePathToBack
+
     return (
       <>
         {/* Scrapbox 風のアセットのリンク */}
         <div className={cn.assetLinkContainer}>
-          {filePathToBack ? (
+          {showBackButton ? (
             <Button
               variant="contained"
               color="primary"
               className={cn.assetLinkButton}
               onClick={this.handleBackButtonClick}
             >
-              <ArrowBack fontSize="large" className={cn.assetLinkButtonIcon} />
+              <Home fontSize="large" className={cn.assetLinkButtonIcon} />
             </Button>
           ) : null}
           <ReactResizeDetector
@@ -608,7 +612,7 @@ export default class AssetPane extends PureComponent {
               </>
             )}
           </ReactResizeDetector>
-          {filePathToBack ? null : (
+          {showBackButton ? null : (
             <Button
               variant="outlined"
               className={cn.assetLinkButton}

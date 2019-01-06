@@ -58,6 +58,9 @@ export default class MenuBar extends React.Component {
 
   render() {
     const dcn = getCn(this.props)
+    const { filePath, filePathToBack } = this.props
+
+    const showBackButton = filePath !== filePathToBack
 
     return (
       <CardFloatingBar>
@@ -70,14 +73,14 @@ export default class MenuBar extends React.Component {
           <HardwareKeyboardBackspace />
           {this.props.localization.editorCard.undo}
         </Button>
-        {!this.props.filePathToBack ? (
+        {showBackButton ? null : (
           <SelectTab
-            filePath={this.props.filePath}
+            filePath={filePath}
             tabs={this.props.tabs}
             globalEvent={this.props.globalEvent}
             localization={this.props.localization}
           />
-        ) : null}
+        )}
         <IconButton onClick={this.toggleLineWidget}>
           {this.props.showLineWidget ? (
             <Layers className={dcn.icon} fontSize="small" />
@@ -86,7 +89,7 @@ export default class MenuBar extends React.Component {
           )}
         </IconButton>
         <div className={cn.blank} />
-        {this.props.filePathToBack ? (
+        {showBackButton ? (
           <Button variant="contained" color="primary" onClick={this.handleBack}>
             <Check />
             {this.props.localization.editorCard.stopEditing(this.props.label)}

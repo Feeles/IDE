@@ -327,6 +327,7 @@ export default class SourceEditor extends PureComponent {
             localization={localization}
             globalEvent={this.props.globalEvent}
             asset={this.props.asset}
+            filePath={this.props.filePath}
             filePathToBack={this.props.filePathToBack}
           />
         )}

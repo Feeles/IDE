@@ -81,7 +81,7 @@ export default class EditorCard extends PureComponent {
     filePath: '', // 現在開いているファイルの名前. 空文字の場合は何も開いていない
     tabs: [], // プルダウンメニューの中で表示するファイルのリスト
     label: '', // このファイルの呼び名（タブから取得する）
-    filePathToBack: '' // 「〇〇の改造を終わる」ボタンを表示して、このファイルに移動する
+    filePathToBack: '' // 最初に表示するファイルのパス. ホーム
   }
 
   componentDidMount() {
@@ -99,7 +99,9 @@ export default class EditorCard extends PureComponent {
             resolve()
           }
         }).then(() => {
-          this.openFile(init.filePath || init.fileName) // 後方互換性
+          const filePath = init.filePath || init.fileName // 後方互換性
+          this.setState({ filePathToBack: filePath }) // ホームに設定
+          this.openFile(filePath)
         })
       }
     } catch (e) {
@@ -129,8 +131,7 @@ export default class EditorCard extends PureComponent {
           ? options.label + ''
           : existTab
           ? existTab.label
-          : file.plain,
-        filePathToBack: options.showBackButton ? this.state.filePath : ''
+          : file.plain
       })
 
       this.props.setCardVisibility('EditorCard', true)
