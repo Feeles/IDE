@@ -159,6 +159,7 @@ export default class AssetPane extends PureComponent {
   }
 
   _widgets = new Map()
+  _pendingInstallModule = []
 
   componentDidMount() {
     const cm = this.props.codemirror
@@ -359,7 +360,12 @@ export default class AssetPane extends PureComponent {
    * アセットに含まれるモジュールをプロジェクトにコピーする
    */
   installModule = (moduleName, callback) => {
-    if (this.state.installingFileName) return // すでに別のモジュールをインストール中
+    if (this.state.installingFileName) {
+      // すでに別のモジュールをインストール中
+      this._pendingInstallModule.push([moduleName, callback]) // 前回コールされた installModule の終了を待ってから実行する
+      return
+    }
+
     const { asset, files } = this.props
     const localModuleName = `${pathToInstall}/${moduleName}`
     const localFilePath = `${localModuleName}.js`
@@ -370,7 +376,7 @@ export default class AssetPane extends PureComponent {
       return
     }
     const mod = asset.module[moduleName]
-    if (!mod) return alert(`${moduleName} is not exist in module`) // TODO: 例外処理
+    if (!mod) throw new Error(`${moduleName} is not exist in module`) // TODO: 例外処理
 
     // まずコールバックを設定してからファイルをコピー
     this.setState({ installingFileName: localFilePath, callback }, () => {
@@ -411,6 +417,11 @@ export default class AssetPane extends PureComponent {
       case 'runApp':
         this.props.runApp()
         break
+    }
+    // pending 状態のインストールを実行
+    const next = this._pendingInstallModule.shift()
+    if (next) {
+      this.installModule.apply(this, next)
     }
   }
 
@@ -462,11 +473,10 @@ export default class AssetPane extends PureComponent {
     }
   }
 
-  handleAssetLinkClick = ({ name }) =>
-    this.openFile({
-      filePath: `${pathToInstall}/${name}.js`,
-      label: name
-    })
+  handleAssetLinkClick = ({ name }) => {
+    // もしそのアセットがインストールされていなければ、インストールしてから開く
+    this.handleOpenFile({ name, filePath: `${pathToInstall}/${name}.js` })
+  }
 
   handleBackButtonClick = () => {
     // 保存＆実行して戻る
