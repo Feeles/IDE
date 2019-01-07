@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import { style, classes } from 'typestyle'
+import { style } from 'typestyle'
 import { CSSTransition } from 'react-transition-group'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
@@ -96,11 +96,7 @@ export default class ErrorPane extends PureComponent {
     const { localization, canRestore } = this.props
 
     return (
-      <Paper
-        key="error"
-        elevation={2}
-        className={classes(cn.error, cn.dialogRoot)}
-      >
+      <Paper key="error" elevation={2} className={cn.error}>
         <Button
           variant="text"
           color="primary"
@@ -157,7 +153,7 @@ export default class ErrorPane extends PureComponent {
           timeout={{ enter: 1000, exit: 500 }}
           unmountOnExit
         >
-          {this.renderAsDialog()}
+          <div className={cn.dialogRoot}>{this.renderAsDialog()}</div>
         </CSSTransition>
       </div>
     )
