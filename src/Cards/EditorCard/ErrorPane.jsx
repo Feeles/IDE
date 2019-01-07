@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
-import { style } from 'typestyle'
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
+import { style, classes } from 'typestyle'
+import { CSSTransition } from 'react-transition-group'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import red from '@material-ui/core/colors/red'
@@ -96,7 +96,11 @@ export default class ErrorPane extends PureComponent {
     const { localization, canRestore } = this.props
 
     return (
-      <Paper key="error" elevation={2} className={cn.error}>
+      <Paper
+        key="error"
+        elevation={2}
+        className={classes(cn.error, cn.dialogRoot)}
+      >
         <Button
           variant="text"
           color="primary"
@@ -142,19 +146,19 @@ export default class ErrorPane extends PureComponent {
     return (
       <div className={dcn.root}>
         {this.renderAsDock(dcn.message)}
-        <CSSTransitionGroup
-          transitionName={{
+        <CSSTransition
+          in={show}
+          classNames={{
             enter: 'zoomInUp',
             enterActive: 'animated',
-            leave: 'fadeOut',
-            leaveActive: 'animated'
+            exit: 'fadeOut',
+            exitActive: 'animated'
           }}
-          transitionEnterTimeout={1000}
-          transitionLeaveTimeout={500}
-          className={cn.dialogRoot}
+          timeout={{ enter: 1000, exit: 500 }}
+          unmountOnExit
         >
-          {show ? this.renderAsDialog() : null}
-        </CSSTransitionGroup>
+          {this.renderAsDialog()}
+        </CSSTransition>
       </div>
     )
   }
