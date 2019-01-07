@@ -101,10 +101,6 @@ if (process.env.AZURE_STORAGE_CONNECTION_STRING) {
 module.exports = async () => {
   config.plugins.push(
     new webpack.DefinePlugin({
-      ROLLBAR_TOKEN: JSON.stringify(process.env.ROLLBAR_TOKEN),
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-      GIT_TAG: JSON.stringify(process.env.TRAVIS_TAG), // current git tag from Travis CI
-
       CORE_VERSION: JSON.stringify(await version.nextVersion()),
       CORE_CDN_URL: JSON.stringify(await version.nextUrl('h4p.js'))
     })
