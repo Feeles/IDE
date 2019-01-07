@@ -1,5 +1,5 @@
 const redis = require('redis')
-const promisify = require('es6-promisify')
+const { promisify } = require('es6-promisify')
 
 // RedisClient instance and Promised API
 const client = redis.createClient({
