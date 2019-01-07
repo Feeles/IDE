@@ -1,5 +1,7 @@
 # HackforPlay Open Source 🏫  
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Feeles/IDE.svg)](https://greenkeeper.io/)
+
 ![Build Status](https://travis-ci.org/Feeles/IDE.svg?branch=master)
 
 > Original (日本語) <https://github.com/Feeles/IDE/blob/master/README-ja.md>
