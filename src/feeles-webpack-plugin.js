@@ -36,7 +36,7 @@ class MountFile {
 
     return {
       name: toPOSIX(mountName),
-      type: mime.lookup(absolutePath),
+      type: mime.getType(absolutePath),
       lastModified: Date.parse(this.timestamp),
       composed,
 
