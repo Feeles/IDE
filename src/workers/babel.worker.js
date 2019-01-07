@@ -32,9 +32,10 @@ const prefix = `
 self.addEventListener("message", function (event) {
   try {
     // Transpile the code
-    var result = Babel.transform(event.data.code, ${JSON.stringify(
+    var options = Object.assign({}, event.data.options, ${JSON.stringify(
       babelConfig
     )});
+    var result = Babel.transform(event.data.code, options);
     // Send result
     self.postMessage({
       id: event.data.id,

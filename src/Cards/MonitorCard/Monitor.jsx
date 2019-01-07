@@ -299,7 +299,8 @@ export default class Monitor extends PureComponent {
         const result = await file.babel()
         reply({ value: result.text })
       } catch (error) {
-        reply({ error })
+        reply({ ...error })
+        this.setState({ error })
       }
     } else if (data.value.indexOf('http') === 0) {
       try {
