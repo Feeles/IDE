@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const mime = require('mime')
 const unorm = require('unorm')
-const promisify = require('es6-promisify')
+const { promisify } = require('es6-promisify')
 
 const readFile = promisify(fs.readFile)
 const stat = promisify(fs.stat)
@@ -36,7 +36,7 @@ class MountFile {
 
     return {
       name: toPOSIX(mountName),
-      type: mime.lookup(absolutePath),
+      type: mime.getType(absolutePath),
       lastModified: Date.parse(this.timestamp),
       composed,
 
