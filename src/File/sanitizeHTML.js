@@ -11,7 +11,6 @@ export function encode(text) {
   // 内容に HTML コメントが含まれている
   if (commentRegExp.test(text)) {
     text = text.replace(commentRegExp, hit => {
-      console.log(hit)
       return `-->${hit}<!--`
     })
   }

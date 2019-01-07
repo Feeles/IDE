@@ -14,8 +14,6 @@ const rollbar =
     }
   })
 
-console.log(rollbar)
-
 export const log = (...args) => rollbar && rollbar.log(...args)
 export const debug = (...args) => rollbar && rollbar.debug(...args)
 export const info = (...args) => rollbar && rollbar.info(...args)

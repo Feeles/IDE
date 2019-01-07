@@ -113,7 +113,6 @@ export default class EditorCard extends PureComponent {
   }
 
   openFile = (filePath, options = {}) => {
-    console.log(options)
     if (!filePath || filePath === this.state.filePath) return
 
     const file = this.props.findFile(filePath) // file type を知るために探す
