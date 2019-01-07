@@ -1,4 +1,5 @@
 import BabelWorker from '../workers/babel.worker'
+import * as Rollbar from '../utils/rollbar'
 
 // WebWorker instance
 const worker = new BabelWorker()
@@ -22,6 +23,7 @@ worker.addEventListener('message', event => {
     const { loc, message } = error
     const babelError = new Error(message, file.name, loc && loc.line)
     reject(babelError)
+    Rollbar.error(babelError)
   } else {
     resolve(
       file.set({
