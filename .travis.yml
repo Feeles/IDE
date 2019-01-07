@@ -6,7 +6,7 @@ node_js:
 cache: npm
 deploy:
   provider: script
-  script: npx semantic-release
+  script: npm run semantic-release
   skip_cleanup: true
   on:
     repo: Feeles/IDE
