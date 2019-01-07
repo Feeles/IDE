@@ -3,7 +3,6 @@ import { style, classes } from 'typestyle'
 import { percent } from 'csx'
 import PropTypes from 'prop-types'
 import Card from '../CardWindow'
-import CardMedia from '@material-ui/core/CardMedia'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -57,7 +56,6 @@ const cn = {
     flex: 1
   })
 }
-
 export default class MonitorCard extends PureComponent {
   static propTypes = {
     cardPropsBag: PropTypes.object.isRequired,
@@ -199,7 +197,7 @@ export default class MonitorCard extends PureComponent {
             </IconButton>
           ) : null}
         </CardFloatingBar>
-        <CardMedia
+        <div
           className={classes(
             cn.flexible,
             this.props.isPopout && cn.popout,
@@ -228,7 +226,7 @@ export default class MonitorCard extends PureComponent {
               globalEvent={this.props.globalEvent}
             />
           </div>
-        </CardMedia>
+        </div>
         <Menu
           anchorEl={this.state.anchorEl}
           open={!!this.state.anchorEl}
