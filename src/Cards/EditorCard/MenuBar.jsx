@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { style } from 'typestyle'
-import { Button, Collapse, IconButton, withTheme } from '@material-ui/core'
+import { Button, withTheme } from '@material-ui/core'
 import {
   Home,
   KeyboardBackspace,
@@ -31,7 +31,7 @@ const getCn = props => ({
   }),
   button: style({
     marginRight: props.theme.spacing.unit,
-    minWidth: 32
+    minWidth: 40 // 縦長にはならないように
   })
 })
 
@@ -105,13 +105,18 @@ export default class MenuBar extends React.Component {
             <KeyboardBackspace />
             {this.props.localization.editorCard.undo}
           </Button>
-          <IconButton onClick={this.toggleLineWidget}>
+          <Button
+            variant="outlined"
+            size="small"
+            className={dcn.button}
+            onClick={this.toggleLineWidget}
+          >
             {this.props.showLineWidget ? (
               <Layers className={dcn.icon} fontSize="small" />
             ) : (
               <LayersClear fontSize="small" />
             )}
-          </IconButton>
+          </Button>
           <Button
             variant={isExpandingEditorCard ? 'contained' : 'outlined'}
             color="primary"
