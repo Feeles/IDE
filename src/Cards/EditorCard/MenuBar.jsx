@@ -8,8 +8,7 @@ import {
   Fullscreen,
   FullscreenExit,
   Layers,
-  LayersClear,
-  Check
+  LayersClear
 } from '@material-ui/icons'
 
 import PlayMenu from './PlayMenu'
