@@ -155,7 +155,8 @@ export default class AssetPane extends PureComponent {
     asset: PropTypes.object.isRequired,
     filePath: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
-    isExpandingEditorCard: PropTypes.bool.isRequired
+    isExpandingEditorCard: PropTypes.bool.isRequired,
+    saveFileIfNeeded: PropTypes.func.isRequired
   }
 
   state = {
@@ -546,7 +547,8 @@ export default class AssetPane extends PureComponent {
     }
   }
 
-  handleAssetLinkClick = ({ name, iconUrl }) => {
+  handleAssetLinkClick = async ({ name, iconUrl }) => {
+    await this.props.saveFileIfNeeded() // リンクで移動する前に変更を保存する
     // もしそのアセットがインストールされていなければ、インストールしてから開く
     this.handleOpenFile({
       name,
