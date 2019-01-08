@@ -2,12 +2,9 @@ import React, { PureComponent, Fragment } from 'react'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { style, classes } from 'typestyle'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
-import Close from '@material-ui/icons/Close'
+import { IconButton, Button, Collapse } from '@material-ui/core'
+import { Close, MoreHoriz, Home } from '@material-ui/icons'
 import { fade } from '@material-ui/core/styles/colorManipulator'
-import Home from '@material-ui/icons/Home'
-import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import { Pos } from 'codemirror'
 import {
   includes,
@@ -20,7 +17,6 @@ import {
   flatten
 } from 'lodash'
 import ReactResizeDetector from 'react-resize-detector'
-import Collapse from '@material-ui/core/Collapse'
 
 import { assetRegExp } from '../../utils/keywords'
 import replaceExistConsts from '../../utils/replaceExistConsts'
