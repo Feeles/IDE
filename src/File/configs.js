@@ -64,7 +64,7 @@ export default new Map([
         const scopes = Object.keys(snippets)
         return file =>
           scopes
-            .filter(scope => file.is(scope))
+            .filter(scope => file && file.is(scope))
             .map(scope => snippets[scope])
             .reduce((p, c) => p.concat(c), [])
       }
