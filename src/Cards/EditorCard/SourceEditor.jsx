@@ -337,6 +337,7 @@ export default class SourceEditor extends PureComponent {
         />
         {this.codemirror && this.props.asset && (
           <AssetPane
+            label={this.props.label}
             codemirror={this.codemirror}
             files={this.props.files}
             findFile={this.props.findFile}

@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { style, classes } from 'typestyle'
-import { IconButton, Button, Collapse } from '@material-ui/core'
+import { IconButton, Button, Collapse, Tooltip } from '@material-ui/core'
 import { Close, MoreHoriz, Home } from '@material-ui/icons'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import { Pos } from 'codemirror'
@@ -139,6 +139,7 @@ const getCn = ({ theme }) => ({
 @withTheme()
 export default class AssetPane extends PureComponent {
   static propTypes = {
+    label: PropTypes.string.isRequired,
     codemirror: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
     runApp: PropTypes.func.isRequired,
@@ -659,14 +660,20 @@ export default class AssetPane extends PureComponent {
           unmountOnExit
         >
           {showBackButton ? (
-            <Button
-              variant="contained"
-              color="primary"
-              className={cn.assetLinkButton}
-              onClick={this.handleBackButtonClick}
+            <Tooltip
+              title={this.props.localization.editorCard.stopEditing(
+                this.props.label
+              )}
             >
-              <Home fontSize="large" className={cn.assetLinkButtonIcon} />
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={cn.assetLinkButton}
+                onClick={this.handleBackButtonClick}
+              >
+                <Home fontSize="large" className={cn.assetLinkButtonIcon} />
+              </Button>
+            </Tooltip>
           ) : null}
           <ReactResizeDetector
             handleWidth
