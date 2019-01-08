@@ -29,14 +29,6 @@ const getCn = props => ({
   icon: style({
     color: props.theme.typography.button.color
   }),
-  editorMenuContainerClasses: {
-    wrapperInner: style({
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: props.isExpandingEditorCard ? 0 : props.theme.spacing.unit,
-      paddingTop: 0
-    })
-  },
   button: style({
     marginRight: props.theme.spacing.unit,
     minWidth: 32
@@ -104,6 +96,23 @@ export default class MenuBar extends React.Component {
           ) : null}
           <div className={cn.blank} />
           <Button
+            variant="outlined"
+            size="small"
+            disabled={!this.props.hasHistory}
+            onClick={this.props.handleUndo}
+            className={dcn.button}
+          >
+            <KeyboardBackspace />
+            {this.props.localization.editorCard.undo}
+          </Button>
+          <IconButton onClick={this.toggleLineWidget}>
+            {this.props.showLineWidget ? (
+              <Layers className={dcn.icon} fontSize="small" />
+            ) : (
+              <LayersClear fontSize="small" />
+            )}
+          </IconButton>
+          <Button
             variant={isExpandingEditorCard ? 'contained' : 'outlined'}
             color="primary"
             size="small"
@@ -129,29 +138,6 @@ export default class MenuBar extends React.Component {
             hasChanged={this.props.hasChanged}
           />
         </CardFloatingBar>
-        <Collapse
-          in={!isExpandingEditorCard}
-          classes={dcn.editorMenuContainerClasses}
-        >
-          <Button
-            variant="outlined"
-            size="small"
-            disabled={!this.props.hasHistory}
-            onClick={this.props.handleUndo}
-            className={dcn.button}
-          >
-            <KeyboardBackspace />
-            {this.props.localization.editorCard.undo}
-          </Button>
-          <div className={cn.blank} />
-          <IconButton onClick={this.toggleLineWidget}>
-            {this.props.showLineWidget ? (
-              <Layers className={dcn.icon} fontSize="small" />
-            ) : (
-              <LayersClear fontSize="small" />
-            )}
-          </IconButton>
-        </Collapse>
       </>
     )
   }
