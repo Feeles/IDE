@@ -650,11 +650,13 @@ export default class AssetPane extends PureComponent {
 
     const showBackButton = filePath !== filePathToBack
 
+    const showLinkAssets = assetNamesOfLinks.length > 0 || showBackButton // アセットがあれば表示 (=> 古いキットでは出てこない) || アセットがなくても, Home にいなければ表示 (=> もどるボタンは常に使える)
+
     return (
       <>
         {/* Scrapbox 風のアセットのリンク */}
         <Collapse
-          in={!this.props.isExpandingEditorCard}
+          in={showLinkAssets}
           classes={cn.assetLinkContainerClasses}
           mountOnEnter
           unmountOnExit
