@@ -19,6 +19,12 @@ const cn = {
   mainButton: style({
     width: 80,
     height: 80,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch'
+  }),
+  mainIcon: style({
+    flex: 1,
     backgroundSize: 'contain',
     backgroundPosition: '50% 50%',
     backgroundRepeat: 'no-repeat'
@@ -39,11 +45,6 @@ const cn = {
     })
   },
   label: style({
-    position: 'absolute',
-    bottom: 0,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
     fontSize: 10,
     fontWeight: 600
   }),
@@ -264,9 +265,9 @@ export default class AssetButton extends PureComponent {
           <ButtonBase
             focusRipple
             className={classes(dcn.button, cn.mainButton)}
-            style={this.state.backgroundStyle}
             onClick={this.handleOpen}
           >
+            <div className={cn.mainIcon} style={this.state.backgroundStyle} />
             <span className={cn.label}>{this.props.name}</span>
           </ButtonBase>
           {linkOnly ? null : (
