@@ -2,12 +2,9 @@ import React, { PureComponent, Fragment } from 'react'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { style, classes } from 'typestyle'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
-import Close from '@material-ui/icons/Close'
+import { IconButton, Button, Collapse, Tooltip } from '@material-ui/core'
+import { Close, MoreHoriz, Home } from '@material-ui/icons'
 import { fade } from '@material-ui/core/styles/colorManipulator'
-import Home from '@material-ui/icons/Home'
-import MoreHoriz from '@material-ui/icons/MoreHoriz'
 import { Pos } from 'codemirror'
 import {
   includes,
@@ -20,19 +17,17 @@ import {
   flatten
 } from 'lodash'
 import ReactResizeDetector from 'react-resize-detector'
-import Collapse from '@material-ui/core/Collapse'
 
 import { assetRegExp } from '../../utils/keywords'
 import replaceExistConsts from '../../utils/replaceExistConsts'
 import AssetButton from './AssetButton'
 import SourceFile from '../../File/SourceFile'
 import extractAssetNames from './extractAssetNames'
-import AssetLink from './AssetLink'
+import AssetLink, { assetLinkWidth } from './AssetLink'
 
 const paneHeight = 80 // %
 export const pathToInstall = 'modules' // 後方互換性のために変更しない (TODO: feelesrc で上書きできるように)
 const pathToAutoload = 'autoload.js' // 後方互換性のために変更しない (TODO: feelesrc で上書きできるように)
-export const iconSize = 48
 
 const cn = {
   in: style({
@@ -60,11 +55,11 @@ const cn = {
       paddingRight: 64
     })
   },
-
   assetLinkButton: style({
-    padding: 8,
     margin: 4,
-    marginRight: 0
+    marginRight: 0,
+    width: assetLinkWidth,
+    minWidth: assetLinkWidth // ButtonBase の minWidth を打ち消す
   })
 }
 const getCn = ({ theme }) => ({
@@ -130,8 +125,8 @@ const getCn = ({ theme }) => ({
     justifyContent: 'space-around',
     $nest: {
       '&>img': {
-        maxWidth: iconSize,
-        height: iconSize
+        maxWidth: 48,
+        height: 48
       }
     }
   }),
@@ -144,6 +139,7 @@ const getCn = ({ theme }) => ({
 @withTheme()
 export default class AssetPane extends PureComponent {
   static propTypes = {
+    label: PropTypes.string.isRequired,
     codemirror: PropTypes.object.isRequired,
     theme: PropTypes.object.isRequired,
     runApp: PropTypes.func.isRequired,
@@ -155,7 +151,8 @@ export default class AssetPane extends PureComponent {
     asset: PropTypes.object.isRequired,
     filePath: PropTypes.string.isRequired,
     filePathToBack: PropTypes.string.isRequired,
-    isExpandingEditorCard: PropTypes.bool.isRequired
+    isExpandingEditorCard: PropTypes.bool.isRequired,
+    saveFileIfNeeded: PropTypes.func.isRequired
   }
 
   state = {
@@ -359,8 +356,10 @@ export default class AssetPane extends PureComponent {
     })
   }
 
-  openFile = ({ filePath, label, iconUrl }) => {
+  openFile = async ({ filePath, label, iconUrl }) => {
     if (!filePath) return
+    await this.props.saveFileIfNeeded() // リンクで移動する前に変更を保存する
+
     this.props.globalEvent.emit('message.editor', {
       data: {
         value: filePath,
@@ -556,8 +555,6 @@ export default class AssetPane extends PureComponent {
   }
 
   handleBackButtonClick = () => {
-    // 保存＆実行して戻る
-    this.props.runApp()
     this.openFile({
       filePath: this.props.filePathToBack
     })
@@ -653,24 +650,32 @@ export default class AssetPane extends PureComponent {
 
     const showBackButton = filePath !== filePathToBack
 
+    const showLinkAssets = assetNamesOfLinks.length > 0 || showBackButton // アセットがあれば表示 (=> 古いキットでは出てこない) || アセットがなくても, Home にいなければ表示 (=> もどるボタンは常に使える)
+
     return (
       <>
         {/* Scrapbox 風のアセットのリンク */}
         <Collapse
-          in={!this.props.isExpandingEditorCard}
+          in={showLinkAssets}
           classes={cn.assetLinkContainerClasses}
           mountOnEnter
           unmountOnExit
         >
           {showBackButton ? (
-            <Button
-              variant="contained"
-              color="primary"
-              className={cn.assetLinkButton}
-              onClick={this.handleBackButtonClick}
+            <Tooltip
+              title={this.props.localization.editorCard.stopEditing(
+                this.props.label
+              )}
             >
-              <Home fontSize="large" className={cn.assetLinkButtonIcon} />
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={cn.assetLinkButton}
+                onClick={this.handleBackButtonClick}
+              >
+                <Home fontSize="large" className={cn.assetLinkButtonIcon} />
+              </Button>
+            </Tooltip>
           ) : null}
           <ReactResizeDetector
             handleWidth
@@ -680,7 +685,7 @@ export default class AssetPane extends PureComponent {
             {width => (
               <>
                 {assetNamesOfLinks
-                  .slice(0, Math.floor((width - 64) / (iconSize + 22)) - 1) // 表示限界を計算
+                  .slice(0, Math.floor((width - 64) / assetLinkWidth) - 1) // 表示限界を計算
                   .map(assetName => (
                     <AssetLink
                       key={assetName}
@@ -688,6 +693,7 @@ export default class AssetPane extends PureComponent {
                       asset={this.props.asset}
                       className={cn.assetLinkButton}
                       onClick={this.handleAssetLinkClick}
+                      localization={this.props.localization}
                     />
                   ))}
               </>

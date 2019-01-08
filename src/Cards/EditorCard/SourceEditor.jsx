@@ -247,6 +247,18 @@ export default class SourceEditor extends PureComponent {
     })
   }
 
+  saveFileIfNeeded = async () => {
+    const cm = this.codemirror
+    const { file } = this.state
+    if (!cm || !file) return
+    const text = cm.getValue() // 現在のコード
+    if (file.text == text) return // 変わっていない
+
+    const nextFile = file.set({ text })
+    await nextFile.babel()
+    await this.props.putFile(file, nextFile)
+  }
+
   render() {
     const { localization } = this.props
     const { file, showHint } = this.state
@@ -325,6 +337,7 @@ export default class SourceEditor extends PureComponent {
         />
         {this.codemirror && this.props.asset && (
           <AssetPane
+            label={this.props.label}
             codemirror={this.codemirror}
             files={this.props.files}
             findFile={this.props.findFile}
@@ -337,6 +350,7 @@ export default class SourceEditor extends PureComponent {
             filePathToBack={this.props.filePathToBack}
             isExpandingEditorCard={this.props.isExpandingEditorCard}
             setExpandingEditorCard={this.props.setExpandingEditorCard}
+            saveFileIfNeeded={this.saveFileIfNeeded}
           />
         )}
         {this.codemirror && (

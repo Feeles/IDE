@@ -19,6 +19,12 @@ const cn = {
   mainButton: style({
     width: 80,
     height: 80,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch'
+  }),
+  mainIcon: style({
+    flex: 1,
     backgroundSize: 'contain',
     backgroundPosition: '50% 50%',
     backgroundRepeat: 'no-repeat'
@@ -39,11 +45,6 @@ const cn = {
     })
   },
   label: style({
-    position: 'absolute',
-    bottom: 0,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
     fontSize: 10,
     fontWeight: 600
   }),
@@ -192,35 +193,19 @@ export default class AssetButton extends PureComponent {
     this.setState({ anchorEl: null })
   }
 
-  updateImage() {
-    let backgroundImage = ''
-    const { iconUrl } = this.props
-
-    if (iconUrl) {
-      if (protocols.some(p => iconUrl.indexOf(p) === 0)) {
-        backgroundImage = url(iconUrl)
-      } else {
-        const file = this.props.findFile(iconUrl)
-        if (file) {
-          backgroundImage = url(file.blobURL)
+  static getDerivedStateFromProps(props, state) {
+    if (props.iconUrl) {
+      const backgroundImage = url(props.iconUrl)
+      if (
+        backgroundImage &&
+        backgroundImage !== state.backgroundStyle.backgroundImage
+      ) {
+        return {
+          backgroundStyle: { backgroundImage }
         }
       }
     }
-    if (backgroundImage !== this.state.backgroundStyle.backgroundImage) {
-      this.setState({
-        backgroundStyle: { backgroundImage }
-      })
-    }
-  }
-
-  componentDidMount() {
-    this.updateImage()
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.iconUrl !== this.props.iconUrl) {
-      this.updateImage()
-    }
+    return null
   }
 
   handleInsertAsset = () => {
@@ -264,9 +249,9 @@ export default class AssetButton extends PureComponent {
           <ButtonBase
             focusRipple
             className={classes(dcn.button, cn.mainButton)}
-            style={this.state.backgroundStyle}
             onClick={this.handleOpen}
           >
+            <div className={cn.mainIcon} style={this.state.backgroundStyle} />
             <span className={cn.label}>{this.props.name}</span>
           </ButtonBase>
           {linkOnly ? null : (

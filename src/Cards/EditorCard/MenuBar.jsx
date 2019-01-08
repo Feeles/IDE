@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { style } from 'typestyle'
-import Button from '@material-ui/core/Button'
-import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace'
-import Fullscreen from '@material-ui/icons/Fullscreen'
-import FullscreenExit from '@material-ui/icons/FullscreenExit'
-import Layers from '@material-ui/icons/Layers'
-import LayersClear from '@material-ui/icons/LayersClear'
-import Check from '@material-ui/icons/Check'
-import Collapse from '@material-ui/core/Collapse'
+import { Button, withTheme } from '@material-ui/core'
+import {
+  Home,
+  KeyboardBackspace,
+  Fullscreen,
+  FullscreenExit,
+  Layers,
+  LayersClear
+} from '@material-ui/icons'
 
 import PlayMenu from './PlayMenu'
 import CardFloatingBar from '../CardFloatingBar'
-import { IconButton, withTheme } from '@material-ui/core'
 import SelectTab from './SelectTab'
 
 const cn = {
@@ -20,7 +20,8 @@ const cn = {
     flex: '1 1 auto'
   }),
   icon: style({
-    height: 44
+    width: 44,
+    alignSelf: 'center'
   })
 }
 
@@ -28,17 +29,9 @@ const getCn = props => ({
   icon: style({
     color: props.theme.typography.button.color
   }),
-  editorMenuContainerClasses: {
-    wrapperInner: style({
-      display: 'flex',
-      justifyContent: 'space-between',
-      padding: props.isExpandingEditorCard ? 0 : props.theme.spacing.unit,
-      paddingTop: 0
-    })
-  },
   button: style({
     marginRight: props.theme.spacing.unit,
-    minWidth: 32
+    minWidth: 40 // 縦長にはならないように
   })
 })
 
@@ -96,8 +89,34 @@ export default class MenuBar extends React.Component {
       <>
         <CardFloatingBar>
           {this.props.localization.editorCard.title}
-          {iconUrl ? <img src={iconUrl} alt="" className={cn.icon} /> : null}
+          {iconUrl ? (
+            <img src={iconUrl} alt="" className={cn.icon} />
+          ) : !showBackButton ? (
+            <Home fontSize="large" className={cn.icon} />
+          ) : null}
           <div className={cn.blank} />
+          <Button
+            variant="outlined"
+            size="small"
+            disabled={!this.props.hasHistory}
+            onClick={this.props.handleUndo}
+            className={dcn.button}
+          >
+            <KeyboardBackspace />
+            {this.props.localization.editorCard.undo}
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            className={dcn.button}
+            onClick={this.toggleLineWidget}
+          >
+            {this.props.showLineWidget ? (
+              <Layers className={dcn.icon} fontSize="small" />
+            ) : (
+              <LayersClear fontSize="small" />
+            )}
+          </Button>
           <Button
             variant={isExpandingEditorCard ? 'contained' : 'outlined'}
             color="primary"
@@ -116,18 +135,6 @@ export default class MenuBar extends React.Component {
               className={dcn.button}
             />
           )}
-          {showBackButton ? (
-            <Button
-              variant="contained"
-              size="small"
-              color="primary"
-              onClick={this.handleBack}
-              className={dcn.button}
-            >
-              <Check />
-              {this.props.localization.editorCard.stopEditing(this.props.label)}
-            </Button>
-          ) : null}
           <PlayMenu
             getFiles={this.props.getFiles}
             runApp={this.props.runApp}
@@ -136,29 +143,6 @@ export default class MenuBar extends React.Component {
             hasChanged={this.props.hasChanged}
           />
         </CardFloatingBar>
-        <Collapse
-          in={!isExpandingEditorCard}
-          classes={dcn.editorMenuContainerClasses}
-        >
-          <Button
-            variant="outlined"
-            size="small"
-            disabled={!this.props.hasHistory}
-            onClick={this.props.handleUndo}
-            className={dcn.button}
-          >
-            <HardwareKeyboardBackspace />
-            {this.props.localization.editorCard.undo}
-          </Button>
-          <div className={cn.blank} />
-          <IconButton onClick={this.toggleLineWidget}>
-            {this.props.showLineWidget ? (
-              <Layers className={dcn.icon} fontSize="small" />
-            ) : (
-              <LayersClear fontSize="small" />
-            )}
-          </IconButton>
-        </Collapse>
       </>
     )
   }
