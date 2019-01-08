@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { style } from 'typestyle'
 import { Button, Collapse, IconButton, withTheme } from '@material-ui/core'
 import {
+  Home,
   KeyboardBackspace,
   Fullscreen,
   FullscreenExit,
@@ -20,7 +21,8 @@ const cn = {
     flex: '1 1 auto'
   }),
   icon: style({
-    height: 44
+    width: 44,
+    alignSelf: 'center'
   })
 }
 
@@ -96,7 +98,11 @@ export default class MenuBar extends React.Component {
       <>
         <CardFloatingBar>
           {this.props.localization.editorCard.title}
-          {iconUrl ? <img src={iconUrl} alt="" className={cn.icon} /> : null}
+          {iconUrl ? (
+            <img src={iconUrl} alt="" className={cn.icon} />
+          ) : !showBackButton ? (
+            <Home fontSize="large" className={cn.icon} />
+          ) : null}
           <div className={cn.blank} />
           <Button
             variant={isExpandingEditorCard ? 'contained' : 'outlined'}
