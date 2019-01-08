@@ -134,6 +134,7 @@ export default class SourceEditor extends PureComponent {
   }
 
   setFile(file) {
+    if (!file) return
     this.setState({
       file,
       showHint: !file.is('json'),
@@ -204,6 +205,7 @@ export default class SourceEditor extends PureComponent {
   beautify = () => {
     const { fileView } = this.props
     const { file } = this.state
+    if (!file) return
     const prevValue = this.codemirror.getValue()
     const setValueWithoutHistory = replacement => {
       // undo => beautify => setValue することで history を 1 つに
