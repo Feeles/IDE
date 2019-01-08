@@ -122,18 +122,6 @@ export default class MenuBar extends React.Component {
               className={dcn.button}
             />
           )}
-          {showBackButton ? (
-            <Button
-              variant="contained"
-              size="small"
-              color="primary"
-              onClick={this.handleBack}
-              className={dcn.button}
-            >
-              <Check />
-              {this.props.localization.editorCard.stopEditing(this.props.label)}
-            </Button>
-          ) : null}
           <PlayMenu
             getFiles={this.props.getFiles}
             runApp={this.props.runApp}
