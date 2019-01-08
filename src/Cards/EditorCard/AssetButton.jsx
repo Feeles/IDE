@@ -193,35 +193,28 @@ export default class AssetButton extends PureComponent {
     this.setState({ anchorEl: null })
   }
 
-  updateImage() {
+  static getDerivedStateFromProps(props, state) {
     let backgroundImage = ''
-    const { iconUrl } = this.props
 
-    if (iconUrl) {
-      if (protocols.some(p => iconUrl.indexOf(p) === 0)) {
-        backgroundImage = url(iconUrl)
+    if (props.iconUrl) {
+      if (protocols.some(p => props.iconUrl.indexOf(p) === 0)) {
+        backgroundImage = url(props.iconUrl)
       } else {
-        const file = this.props.findFile(iconUrl)
+        const file = props.findFile(props.iconUrl)
         if (file) {
           backgroundImage = url(file.blobURL)
         }
       }
     }
-    if (backgroundImage !== this.state.backgroundStyle.backgroundImage) {
-      this.setState({
+    if (
+      backgroundImage &&
+      backgroundImage !== state.backgroundStyle.backgroundImage
+    ) {
+      return {
         backgroundStyle: { backgroundImage }
-      })
+      }
     }
-  }
-
-  componentDidMount() {
-    this.updateImage()
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.iconUrl !== this.props.iconUrl) {
-      this.updateImage()
-    }
+    return null
   }
 
   handleInsertAsset = () => {
