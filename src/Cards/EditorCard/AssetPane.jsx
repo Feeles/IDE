@@ -691,6 +691,7 @@ export default class AssetPane extends PureComponent {
                       asset={this.props.asset}
                       className={cn.assetLinkButton}
                       onClick={this.handleAssetLinkClick}
+                      localization={this.props.localization}
                     />
                   ))}
               </>

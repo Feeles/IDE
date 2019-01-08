@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { style, classes } from 'typestyle'
-import { Button } from '@material-ui/core'
+import { Button, Tooltip } from '@material-ui/core'
 
 import findAssetButton from './findAssetButton'
 
@@ -25,7 +25,8 @@ export default class AssetLink extends React.Component {
     name: PropTypes.string.isRequired,
     asset: PropTypes.any.isRequired,
     className: PropTypes.string.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    localization: PropTypes.object.isRequired
   }
 
   state = {
@@ -59,13 +60,15 @@ export default class AssetLink extends React.Component {
     const { iconUrl } = this.state
 
     return (
-      <Button
-        variant="outlined"
-        className={classes(className, cn.button)}
-        onClick={this.handleClick}
-      >
-        <img src={iconUrl} alt={name} className={cn.icon} />
-      </Button>
+      <Tooltip title={this.props.localization.editorCard.edit(name)}>
+        <Button
+          variant="outlined"
+          className={classes(className, cn.button)}
+          onClick={this.handleClick}
+        >
+          <img src={iconUrl} alt={name} className={cn.icon} />
+        </Button>
+      </Tooltip>
     )
   }
 }
