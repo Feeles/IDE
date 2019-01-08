@@ -194,24 +194,15 @@ export default class AssetButton extends PureComponent {
   }
 
   static getDerivedStateFromProps(props, state) {
-    let backgroundImage = ''
-
     if (props.iconUrl) {
-      if (protocols.some(p => props.iconUrl.indexOf(p) === 0)) {
-        backgroundImage = url(props.iconUrl)
-      } else {
-        const file = props.findFile(props.iconUrl)
-        if (file) {
-          backgroundImage = url(file.blobURL)
+      const backgroundImage = url(props.iconUrl)
+      if (
+        backgroundImage &&
+        backgroundImage !== state.backgroundStyle.backgroundImage
+      ) {
+        return {
+          backgroundStyle: { backgroundImage }
         }
-      }
-    }
-    if (
-      backgroundImage &&
-      backgroundImage !== state.backgroundStyle.backgroundImage
-    ) {
-      return {
-        backgroundStyle: { backgroundImage }
       }
     }
     return null
