@@ -360,8 +360,10 @@ export default class AssetPane extends PureComponent {
     })
   }
 
-  openFile = ({ filePath, label, iconUrl }) => {
+  openFile = async ({ filePath, label, iconUrl }) => {
     if (!filePath) return
+    await this.props.saveFileIfNeeded() // リンクで移動する前に変更を保存する
+
     this.props.globalEvent.emit('message.editor', {
       data: {
         value: filePath,
@@ -547,8 +549,7 @@ export default class AssetPane extends PureComponent {
     }
   }
 
-  handleAssetLinkClick = async ({ name, iconUrl }) => {
-    await this.props.saveFileIfNeeded() // リンクで移動する前に変更を保存する
+  handleAssetLinkClick = ({ name, iconUrl }) => {
     // もしそのアセットがインストールされていなければ、インストールしてから開く
     this.handleOpenFile({
       name,
@@ -558,8 +559,6 @@ export default class AssetPane extends PureComponent {
   }
 
   handleBackButtonClick = () => {
-    // 保存＆実行して戻る
-    this.props.runApp()
     this.openFile({
       filePath: this.props.filePathToBack
     })
