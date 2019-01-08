@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react'
+import { Button, Paper, Zoom } from '@material-ui/core'
 import { withTheme } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import { style } from 'typestyle'
-import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
-import Button from '@material-ui/core/Button'
-import Paper from '@material-ui/core/Paper'
 import red from '@material-ui/core/colors/red'
 import ActionRestore from '@material-ui/icons/Restore'
 
@@ -96,28 +94,30 @@ export default class ErrorPane extends PureComponent {
     const { localization, canRestore } = this.props
 
     return (
-      <Paper key="error" elevation={2} className={cn.error}>
-        <Button
-          variant="text"
-          color="primary"
-          className={cn.close}
-          onClick={this.handleClose}
-        >
-          {localization.common.close}
-        </Button>
-        <h2 className={cn.heading}>{localization.editorCard.error}</h2>
-        <div className={cn.blank} />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this.handleRestore}
-          disabled={!canRestore}
-        >
-          <ActionRestore />
-          {localization.editorCard.restore}
-        </Button>
-        <div className={cn.blank} />
-      </Paper>
+      <div className={cn.dialogRoot}>
+        <Paper key="error" elevation={2} className={cn.error}>
+          <Button
+            variant="text"
+            color="primary"
+            className={cn.close}
+            onClick={this.handleClose}
+          >
+            {localization.common.close}
+          </Button>
+          <h2 className={cn.heading}>{localization.editorCard.error}</h2>
+          <div className={cn.blank} />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleRestore}
+            disabled={!canRestore}
+          >
+            <ActionRestore />
+            {localization.editorCard.restore}
+          </Button>
+          <div className={cn.blank} />
+        </Paper>
+      </div>
     )
   }
 
@@ -142,19 +142,7 @@ export default class ErrorPane extends PureComponent {
     return (
       <div className={dcn.root}>
         {this.renderAsDock(dcn.message)}
-        <CSSTransitionGroup
-          transitionName={{
-            enter: 'zoomInUp',
-            enterActive: 'animated',
-            leave: 'fadeOut',
-            leaveActive: 'animated'
-          }}
-          transitionEnterTimeout={1000}
-          transitionLeaveTimeout={500}
-          className={cn.dialogRoot}
-        >
-          {show ? this.renderAsDialog() : null}
-        </CSSTransitionGroup>
+        <Zoom in={show}>{this.renderAsDialog()}</Zoom>
       </div>
     )
   }
