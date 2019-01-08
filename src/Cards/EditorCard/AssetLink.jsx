@@ -1,12 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { style } from 'typestyle'
+import { style, classes } from 'typestyle'
 import { Button } from '@material-ui/core'
 
-import { iconSize } from './AssetPane'
 import findAssetButton from './findAssetButton'
 
-const cn = {
+const iconSize = 48
+const padding = 2
+export const assetLinkWidth = iconSize + padding * 2
+
+export const cn = {
+  button: style({
+    minWidth: assetLinkWidth,
+    padding
+  }),
   icon: style({
     maxHeight: iconSize,
     width: iconSize
@@ -54,7 +61,7 @@ export default class AssetLink extends React.Component {
     return (
       <Button
         variant="outlined"
-        className={className}
+        className={classes(className, cn.button)}
         onClick={this.handleClick}
       >
         <img src={iconUrl} alt={name} className={cn.icon} />

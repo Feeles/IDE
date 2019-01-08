@@ -27,12 +27,11 @@ import replaceExistConsts from '../../utils/replaceExistConsts'
 import AssetButton from './AssetButton'
 import SourceFile from '../../File/SourceFile'
 import extractAssetNames from './extractAssetNames'
-import AssetLink from './AssetLink'
+import AssetLink, { assetLinkWidth } from './AssetLink'
 
 const paneHeight = 80 // %
 export const pathToInstall = 'modules' // 後方互換性のために変更しない (TODO: feelesrc で上書きできるように)
 const pathToAutoload = 'autoload.js' // 後方互換性のために変更しない (TODO: feelesrc で上書きできるように)
-export const iconSize = 48
 
 const cn = {
   in: style({
@@ -60,11 +59,11 @@ const cn = {
       paddingRight: 64
     })
   },
-
   assetLinkButton: style({
-    padding: 8,
     margin: 4,
-    marginRight: 0
+    marginRight: 0,
+    width: assetLinkWidth,
+    minWidth: assetLinkWidth // ButtonBase の minWidth を打ち消す
   })
 }
 const getCn = ({ theme }) => ({
@@ -130,8 +129,8 @@ const getCn = ({ theme }) => ({
     justifyContent: 'space-around',
     $nest: {
       '&>img': {
-        maxWidth: iconSize,
-        height: iconSize
+        maxWidth: 48,
+        height: 48
       }
     }
   }),
@@ -681,7 +680,7 @@ export default class AssetPane extends PureComponent {
             {width => (
               <>
                 {assetNamesOfLinks
-                  .slice(0, Math.floor((width - 64) / (iconSize + 22)) - 1) // 表示限界を計算
+                  .slice(0, Math.floor((width - 64) / assetLinkWidth) - 1) // 表示限界を計算
                   .map(assetName => (
                     <AssetLink
                       key={assetName}
