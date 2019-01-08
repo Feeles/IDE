@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { style } from 'typestyle'
-import Button from '@material-ui/core/Button'
-import HardwareKeyboardBackspace from '@material-ui/icons/KeyboardBackspace'
-import Fullscreen from '@material-ui/icons/Fullscreen'
-import FullscreenExit from '@material-ui/icons/FullscreenExit'
-import Layers from '@material-ui/icons/Layers'
-import LayersClear from '@material-ui/icons/LayersClear'
-import Check from '@material-ui/icons/Check'
-import Collapse from '@material-ui/core/Collapse'
+import { Button, Collapse, IconButton, withTheme } from '@material-ui/core'
+import {
+  KeyboardBackspace,
+  Fullscreen,
+  FullscreenExit,
+  Layers,
+  LayersClear,
+  Check
+} from '@material-ui/icons'
 
 import PlayMenu from './PlayMenu'
 import CardFloatingBar from '../CardFloatingBar'
-import { IconButton, withTheme } from '@material-ui/core'
 import SelectTab from './SelectTab'
 
 const cn = {
@@ -147,7 +147,7 @@ export default class MenuBar extends React.Component {
             onClick={this.props.handleUndo}
             className={dcn.button}
           >
-            <HardwareKeyboardBackspace />
+            <KeyboardBackspace />
             {this.props.localization.editorCard.undo}
           </Button>
           <div className={cn.blank} />
