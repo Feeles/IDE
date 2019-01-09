@@ -131,6 +131,9 @@ function getCompleteNames(files, from, prefix = '') {
 }
 
 function startWith(text, needle) {
+  if (typeof text !== 'string' || typeof needle !== 'string') {
+    return false // fix patch of https://rollbar.com/HackforPlay/portal/items/1308
+  }
   return text.toLowerCase().indexOf(needle.toLowerCase()) === 0
 }
 
