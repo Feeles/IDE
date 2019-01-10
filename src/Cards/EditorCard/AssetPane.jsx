@@ -192,6 +192,7 @@ export default class AssetPane extends PureComponent {
     this.handleRenderWidget(cm)
     this.updateAssetLink(cm)
     this.props.globalEvent.on('message.install', this.handleInstallMessage)
+    this.installAssetsFromCodeMirror(cm)
   }
 
   componentWillUnmount() {
@@ -523,6 +524,20 @@ export default class AssetPane extends PureComponent {
     }).bind(this),
     16
   )
+
+  installAssetsFromCodeMirror = cm => {
+    if (!cm) return
+    const code = cm.getValue()
+    if (!code) return
+    const assetNames = uniq(
+      flatten(
+        extractAssetNames(code).map(assetName =>
+          this.getDependencies(assetName)
+        )
+      )
+    )
+    this.installAssetModules(assetNames)
+  }
 
   handleInsertAsset = ({ name, insertCode }) => {
     const { asset } = this.props
