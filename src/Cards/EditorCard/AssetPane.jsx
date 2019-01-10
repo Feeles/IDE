@@ -14,7 +14,8 @@ import {
   uniqBy,
   differenceWith,
   debounce,
-  flatten
+  flatten,
+  without
 } from 'lodash'
 import ReactResizeDetector from 'react-resize-detector'
 
@@ -133,6 +134,9 @@ const getCn = ({ theme }) => ({
   active: style({
     color: theme.palette.common.white,
     borderBottomColor: theme.palette.common.white
+  }),
+  previousLinkButton: style({
+    borderColor: theme.palette.primary.main
   })
 })
 
@@ -162,6 +166,7 @@ export default class AssetPane extends PureComponent {
     scopeIndexes: [],
     assetNamesOfLinks: [],
     linkOnly: false, // 全てのアセットを表示するモード.全ての色を一画面に表示.「中に入れる」ボタンはない
+    previousLabel: '', // リンクで移動する前の label を保持する (Home='')
     // オートインストール
     installingFileNames: null, // インストール中のモジュール名
     callback: {
@@ -194,7 +199,7 @@ export default class AssetPane extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { files } = this.props
+    const { files, label } = this.props
     const { installingFileNames, callback } = this.state
     // オートインストールの完了待ち
     if (installingFileNames && prevProps.files !== this.props.files) {
@@ -209,6 +214,13 @@ export default class AssetPane extends PureComponent {
           () => this.executeCallback(callback)
         )
       }
+    }
+    // previousLabel: ラベルが変わったとき, 前回の label を保持
+    if (label !== prevProps.label) {
+      const wasInHome = prevProps.filePath === prevProps.filePathToBack
+      this.setState({
+        previousLabel: wasInHome ? '' : prevProps.label
+      })
     }
   }
 
@@ -632,7 +644,8 @@ export default class AssetPane extends PureComponent {
       activeCategoryIndex,
       scopeIndexes,
       assetNamesOfLinks,
-      linkOnly
+      linkOnly,
+      previousLabel
     } = this.state
 
     const showingScopes = scopes.filter((_, i) => includes(scopeIndexes, i))
@@ -651,6 +664,13 @@ export default class AssetPane extends PureComponent {
     const showBackButton = filePath !== filePathToBack
 
     const showLinkAssets = assetNamesOfLinks.length > 0 || showBackButton // アセットがあれば表示 (=> 古いキットでは出てこない) || アセットがなくても, Home にいなければ表示 (=> もどるボタンは常に使える)
+
+    // アセットリンクの表示限界個数を求める
+    const calcMaxLength = width =>
+      Math.floor(
+        (width - 64) / assetLinkWidth - // slaask の分だけ引いた全体 width / リンク１個分の width
+          (previousLabel ? 2 : 1) // 直前のアセットへのリンクと, Home or More リンクの分を引く
+      )
 
     return (
       <>
@@ -677,6 +697,16 @@ export default class AssetPane extends PureComponent {
               </Button>
             </Tooltip>
           ) : null}
+          {previousLabel ? (
+            <AssetLink
+              key={previousLabel}
+              name={previousLabel}
+              asset={this.props.asset}
+              className={classes(cn.assetLinkButton, dcn.previousLinkButton)}
+              onClick={this.handleAssetLinkClick}
+              localization={this.props.localization}
+            />
+          ) : null}
           <ReactResizeDetector
             handleWidth
             refreshMode="throttle"
@@ -684,8 +714,8 @@ export default class AssetPane extends PureComponent {
           >
             {width => (
               <>
-                {assetNamesOfLinks
-                  .slice(0, Math.floor((width - 64) / assetLinkWidth) - 1) // 表示限界を計算
+                {without(assetNamesOfLinks, previousLabel)
+                  .slice(0, calcMaxLength(width)) // 表示限界を計算
                   .map(assetName => (
                     <AssetLink
                       key={assetName}
