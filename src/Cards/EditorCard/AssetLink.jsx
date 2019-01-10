@@ -38,12 +38,11 @@ export default class AssetLink extends React.Component {
     if (props.name !== state.name) {
       // まだ計算されていない
       const assetButton = findAssetButton(props.asset, props.name)
-      if (!assetButton) {
-        throw new Error(`Asset button not found: ${props.name}`)
-      }
-      return {
-        name: props.name,
-        iconUrl: assetButton.iconUrl
+      if (assetButton) {
+        return {
+          name: props.name,
+          iconUrl: assetButton.iconUrl
+        }
       }
     }
     return null
@@ -64,9 +63,14 @@ export default class AssetLink extends React.Component {
         <Button
           variant="outlined"
           className={classes(className, cn.button)}
+          disabled={!this.state.name}
           onClick={this.handleClick}
         >
-          <img src={iconUrl} alt={name} className={cn.icon} />
+          {this.state.iconUrl ? (
+            <img src={iconUrl} alt={name} className={cn.icon} />
+          ) : (
+            <span className={cn.icon}>{name}</span>
+          )}
         </Button>
       </Tooltip>
     )
