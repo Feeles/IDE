@@ -12,7 +12,6 @@ import Add from '@material-ui/icons/Add'
 import Description from '@material-ui/icons/Description'
 import { pathToInstall } from './AssetPane'
 
-const protocols = ['https:', 'http:', 'data:', 'file:', 'blob:']
 const iconSize = 48
 
 const cn = {
