@@ -13,7 +13,7 @@ const rollbar = new Rollabr({
   captureUncaught: false, // ユーザーのコードを送信するだけなのでキャプチャしない
   captureUnhandledRejections: false, // ユーザーのコードを送信するだけなのでキャプチャしない
   filterTelemetry(e) {
-    // Any event that matches the test is *not* added to the queue.
+    // Any event that matches the test is *not* added to the queue
     return (
       e.type === 'network' &&
       (e.body.subtype === 'xhr' || e.body.subtype === 'fetch') &&
