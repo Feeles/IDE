@@ -388,7 +388,7 @@ export default class AssetPane extends PureComponent {
   /**
    * アセットに含まれるモジュールをプロジェクトにコピーする
    */
-  installAssetModules = (assetNames, callback) => {
+  installAssetModules = (assetNames, callback = {}) => {
     if (this.state.installingFileNames) {
       // すでに別のモジュールをインストール中
       this._pendingInstallModule.push([assetNames, callback]) // 前回コールされた installModule の終了を待ってから実行する
