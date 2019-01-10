@@ -12,6 +12,14 @@ const rollbar = new Rollabr({
   accessToken: '46185b6c483d46bea0cd066075b5cc0e', // [CAUTION] Used in Feeles/IDE as raw string
   captureUncaught: false, // ユーザーのコードを送信するだけなのでキャプチャしない
   captureUnhandledRejections: false, // ユーザーのコードを送信するだけなのでキャプチャしない
+  filterTelemetry(e) {
+    // Any event that matches the test is *not* added to the queue.
+    return (
+      e.type === 'network' &&
+      (e.body.subtype === 'xhr' || e.body.subtype === 'fetch') &&
+      /^https?:\/\/\w+\.googleapis\.com/.test(e.body.url) // GCP/Firebase のリクエストを除外
+    )
+  },
   payload: {
     environment: NODE_ENV
   }
