@@ -11,6 +11,7 @@ import setSrcDoc from './setSrcDoc'
 import registerHTML from './registerHTML'
 import uniqueId from '../../utils/uniqueId'
 import { getPrimaryUser } from '../../database/'
+import cloneError from '../../utils/cloneError'
 
 import fetchPonyfill from 'fetch-ponyfill'
 const fetch =
@@ -299,7 +300,7 @@ export default class Monitor extends PureComponent {
         const result = await file.babel()
         reply({ value: result.text })
       } catch (error) {
-        reply({ ...error })
+        reply(cloneError(error))
         this.setState({ error })
       }
     } else if (data.value.indexOf('http') === 0) {
@@ -307,8 +308,8 @@ export default class Monitor extends PureComponent {
         const response = await fetch(data.value)
         const text = await response.text()
         reply({ value: text })
-      } catch (e) {
-        reply({ error: e })
+      } catch (error) {
+        reply(cloneError(error))
       }
     } else {
       reply({ error: true })
@@ -330,8 +331,8 @@ export default class Monitor extends PureComponent {
           reply({ value: fileReader.result })
         }
         fileReader.readAsDataURL(blob)
-      } catch (e) {
-        reply({ error: e })
+      } catch (error) {
+        reply(cloneError(error))
       }
     } else {
       reply({ error: true })
@@ -348,8 +349,8 @@ export default class Monitor extends PureComponent {
         } else {
           reply({ error: true })
         }
-      } catch (e) {
-        reply({ error: e })
+      } catch (error) {
+        reply(cloneError(error))
       }
     } else {
       const file = this.props.findFile(data.value)
@@ -476,7 +477,7 @@ export default class Monitor extends PureComponent {
       reply({
         type: 'error',
         event: {
-          error: event.error
+          error: cloneError(event.error)
         }
       })
     }
